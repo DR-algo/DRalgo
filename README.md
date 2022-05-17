@@ -11,7 +11,7 @@ To load DRalgo the following commands need to be executed from the root director
 
 	SetDirectory[NotebookDirectory[]]; 
 	$LoadGroupMath=True;
-	<<DRalgo.m
+	<<DRalgo`
 
 ### Dependencies
 
