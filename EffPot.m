@@ -222,7 +222,7 @@ ToExpression[StringReplace[ToString[StandardForm[Join[\[Mu]ijEP\[Phi],\[Mu]ijVec
 (*
 	Rotates to a diagonal-mass basis.
 *)
-RotateTensorsUSPostVeV[DScalarsp_,DVectorsp_]:=Module[{DS=DScalarsp,DV=DVectorsp},
+RotateTensorsUSPostVEV[DScalarsp_,DVectorsp_]:=Module[{DS=DScalarsp,DV=DVectorsp},
 DS=DS//SparseArray;
 DV=DV//SparseArray;
 
@@ -233,6 +233,34 @@ Gvvs\[Phi]=Activate@TensorContract[Inactive@TensorProduct[DV,DV,DS,Gvvs\[Phi]],{
 gvvv\[Phi]=Activate@TensorContract[Inactive@TensorProduct[DV,DV,DV,gvvv\[Phi]],{{1,7},{3,8},{5,9}}];
 \[Mu]ijVec\[Phi]=Activate@TensorContract[Inactive@TensorProduct[DV,DV,\[Mu]ijVec\[Phi]],{{1,5},{3,6}}]//Simplify;
 \[Mu]ijEP\[Phi]=Activate@TensorContract[Inactive@TensorProduct[DS,DS,\[Mu]ijEP\[Phi]],{{1,5},{3,6}}]//Simplify;
+
+
+If[DiagonalMatrixQAE[\[Mu]ijVec\[Phi]]==False,
+Print["The Vector Mass-Matrix is not Diagonal"];
+];
+
+
+If[DiagonalMatrixQAE[\[Mu]ijEP\[Phi]]==False,
+Print["The Vector Mass-Matrix is not Diagonal"];
+];
+
+];
+
+
+(*
+	Rotates to a diagonal-mass basis.
+*)
+RotateTensorsCustomMass[DScalarsp_,DVectorsp_,\[Mu]ijVecI_,\[Mu]ijEPI_]:=Module[{DS=DScalarsp,DV=DVectorsp},
+DS=DS//SparseArray;
+DV=DV//SparseArray;
+
+\[Lambda]4\[Phi]=Activate@TensorContract[Inactive@TensorProduct[DS,DS,DS,DS,\[Lambda]4\[Phi]],{{1,9},{3,10},{5,11},{7,12}}];
+\[Lambda]3\[Phi]=Activate@TensorContract[Inactive@TensorProduct[DS,DS,DS,\[Lambda]3\[Phi]],{{1,7},{3,8},{5,9}}];
+gvss\[Phi]=Activate@TensorContract[Inactive@TensorProduct[DV,DS,DS,gvss\[Phi]],{{1,7},{3,8},{5,9}}];
+Gvvs\[Phi]=Activate@TensorContract[Inactive@TensorProduct[DV,DV,DS,Gvvs\[Phi]],{{1,7},{3,8},{5,9}}];
+gvvv\[Phi]=Activate@TensorContract[Inactive@TensorProduct[DV,DV,DV,gvvv\[Phi]],{{1,7},{3,8},{5,9}}];
+\[Mu]ijVec\[Phi]=\[Mu]ijVecI;
+\[Mu]ijEP\[Phi]=\[Mu]ijEPI;
 
 
 If[DiagonalMatrixQAE[\[Mu]ijVec\[Phi]]==False,

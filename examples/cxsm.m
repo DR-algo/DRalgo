@@ -122,6 +122,9 @@ PrintCouplings[]
 PrintTemporalScalarCouplings[]
 
 
+PrintTensorDRalgo[][[8]]//ArrayRules
+
+
 PrintDebyeMass["LO"]
 PrintDebyeMass["NLO"]
 

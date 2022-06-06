@@ -56,7 +56,7 @@ VQuartic=\[Lambda]*QuarticTerm1;
 (*Dimensional Reduction*)
 
 
-ImportModelDRalgo[Group,\[Mu]ij,\[Lambda]4,\[Lambda]3,gvss,gvvv,Ysff,YsffC,gvff,\[Mu]IJ,\[Mu]IJC,\[Lambda]1,Verbose->False];
+ImportModelDRalgo[Group,gvvv,gvff,gvss,\[Lambda]1,\[Lambda]3,\[Lambda]4,\[Mu]ij,\[Mu]IJ,\[Mu]IJC,Ysff,YsffC,Verbose->False];
 PerformDRhard[]
 PrintCouplings[]
 

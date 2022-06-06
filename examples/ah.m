@@ -12,7 +12,7 @@ $LoadGroupMath=True;
 (*Abelian Higgs*)
 
 
-(* ::Section:: *)
+(* ::Section::Closed:: *)
 (*Model*)
 
 
@@ -112,6 +112,10 @@ PrintScalarMassUS["NLO"]
 
 
 BetaFunctions3DUS[]
+
+
+PrintPressureUS["LO"]
+PrintPressureUS["NLO"]
 
 
 (* ::Text:: *)

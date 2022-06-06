@@ -1031,6 +1031,50 @@ ContriSE=ContriSETemp+Transpose[ContriSETemp,{2,1,3,4}]+Transpose[ContriSETemp,{
 
 
 (*
+	Calculates Scalar quartics in the soft theory
+*)
+ScalarSextic[]:=Module[{},
+If[verbose,Print["Calculating Scalar Sextic"]];
+
+\[CapitalLambda]\[Lambda] =Flatten[\[Lambda]4,{{1},{2},{3,4}}] . Flatten[\[Lambda]4,{1,2}]//SparseArray;
+\[CapitalLambda]\[Lambda]6tem=Flatten[\[Lambda]4 . \[Lambda]4,{{1},{2},{4},{5},{3,6}}];
+\[CapitalLambda]\[Lambda]6tot=\[CapitalLambda]\[Lambda]6tem . Flatten[\[Lambda]4,{1,2}];
+Prefac=-Zeta[3]/(128 \[Pi]^4 T^2);
+SymHelp=Table[\[CapitalLambda]\[Lambda]6tot["NonzeroPositions"][[i]]->\[CapitalLambda]\[Lambda]6tot["NonzeroValues"][[i]],{i,1,Length[\[CapitalLambda]\[Lambda]6tot["NonzeroPositions"]]}];
+ContriSS=Prefac*SymmetrizedArray[SymHelp,Dimensions[\[CapitalLambda]\[Lambda]6tot],Symmetric[{1,2,3,4,5,6}]]//SparseArray//SimplifySparse;
+
+
+\[CapitalLambda]\[Lambda]6tem=Flatten[Transpose[HabijV,{1,4,3,2}] . HabijV,{{2},{3},{5},{6},{1,4}}];
+\[CapitalLambda]\[Lambda]6tot=\[CapitalLambda]\[Lambda]6tem . Flatten[HabijV,{{1,2},{3},{4}}];
+Prefac=-3*Zeta[3]/(128 \[Pi]^4 T^2);
+SymHelp=Table[\[CapitalLambda]\[Lambda]6tot["NonzeroPositions"][[i]]->\[CapitalLambda]\[Lambda]6tot["NonzeroValues"][[i]],{i,1,Length[\[CapitalLambda]\[Lambda]6tot["NonzeroPositions"]]}];
+ContriVV=Prefac*SymmetrizedArray[SymHelp,Dimensions[\[CapitalLambda]\[Lambda]6tot],Symmetric[{1,2,3,4,5,6}]]//SparseArray//SimplifySparse;
+
+
+YTemp=Transpose[Transpose[Simplify[ Activate @ TensorContract[
+        Inactive[TensorProduct][Ysff,YsffC], {{3, 5}}]],{1,3,2,4}],{1,2,4,3}]//SparseArray;
+\[CapitalLambda]\[Lambda]6tot1=Table[Tr[a . b . c . d . e . f],{a,Ysff},{b,YsffC},{c,Ysff},{d,YsffC},{e,Ysff},{f,YsffC}]//SparseArray;
+\[CapitalLambda]\[Lambda]6totC=Table[Tr[a . b . c . d . e . f],{a,YsffC},{b,Ysff},{c,YsffC},{d,Ysff},{e,YsffC},{f,Ysff}]//SparseArray;
+\[CapitalLambda]\[Lambda]6tot=\[CapitalLambda]\[Lambda]6tot1+ \[CapitalLambda]\[Lambda]6totC;
+Prefac=((7 Zeta[3])/(64 \[Pi]^4 T^2));
+SymHelp=Table[\[CapitalLambda]\[Lambda]6tot["NonzeroPositions"][[i]]->\[CapitalLambda]\[Lambda]6tot["NonzeroValues"][[i]],{i,1,Length[\[CapitalLambda]\[Lambda]6tot["NonzeroPositions"]]}];
+ContriFF=Prefac*SymmetrizedArray[SymHelp,Dimensions[\[CapitalLambda]\[Lambda]6tot],Symmetric[{1,2,3,4,5,6}]]//SparseArray//SimplifySparse;
+
+Print[TensorSymmetry[ContriFF]];
+Print[TensorSymmetry[ContriSS]];
+Print[TensorSymmetry[ContriVV]];
+
+ContriSETemp=-0*ZijS . \[Lambda]6;
+ContriSE=ContriSETemp+Transpose[ContriSETemp,{2,1,3,4,5,6}]+Transpose[ContriSETemp,{3,1,2,4,5,6}]+Transpose[ContriSETemp,{4,1,2,3,5,6}]+Transpose[ContriSETemp,{5,1,2,3,4,6}]+Transpose[ContriSETemp,{6,1,2,3,5,4}]//SimplifySparse;
+
+(*Minus sign from matching*)
+\[Lambda]6D=ContriSE- ContriSS- ContriVV- ContriFF//SimplifySparse; 
+
+];
+
+
+
+(*
 	Calculates Scalar-Vector gauge couplings in the soft theory.
 *)
 TransverseSSVV[]:=Module[{},
@@ -1985,6 +2029,26 @@ HelpSolveCubicL=Table[{Delete[HelpList,1][[a]]->HelpVarMod[[a]]},{a,1,Delete[Hel
 
 ];
 
+If[mode>=3,
+If[verbose,Print["Calculating Sextic Tensor"]];
+
+(*
+	Scalar sextic couplings
+*)
+HelpList=DeleteDuplicates@Flatten@SimplifySparse[T^2 (\[Lambda]6+\[Lambda]6D)]//Sort;
+HelpVar=Table[ \[Lambda]6d[a],{a,1,Delete[HelpList,1]//Length}];
+HelpVarMod=RelationsBVariables[HelpList,HelpVar];
+HelpSolveSextic=Table[{Delete[HelpList,1][[a]]->HelpVarMod[[a]]},{a,1,Delete[HelpList,1]//Length}]//Flatten//Simplify;
+\[Lambda]6DS=T^2 (\[Lambda]6+\[Lambda]6D)//SimplifySparse//Normal//ReplaceAll[#,HelpSolveSextic]&//SparseArray;
+
+Print[HelpSolveSextic];
+
+If[Length[SparseArray[\[Lambda]3DS]["NonzeroValues"]]!=Length[SparseArray[\[Lambda]4]["NonzeroValues"]],
+Print["Detected 1-loop Scalar Quartics not defined at tree-level"];
+Print["Please Check if you defined all couplings allowed by symmetry"];
+];
+]
+
 (*
 	Debye masses
 *)
@@ -2047,7 +2111,11 @@ Print["Please Check if you defined all couplings allowed by symmetry"];
 ];
 
 If[mode>=1,
+If[mode>=3,
+IdentMat=List/@Join[HelpSolveCubicS,HelpSolveVecT,HelpSolveVecL,HelpSolveQuarticL,HelpSolveVectorMass,HelpSolveMass,HelpSolveCubicL,HelpSolveTadpole,HelpSolveQuartic,HelpSolveSextic]/.{b_->a_}:>a->b//Flatten[#,1]&;
+,
 IdentMat=List/@Join[HelpSolveCubicS,HelpSolveVecT,HelpSolveVecL,HelpSolveQuarticL,HelpSolveVectorMass,HelpSolveMass,HelpSolveCubicL,HelpSolveTadpole,HelpSolveQuartic]/.{b_->a_}:>a->b//Flatten[#,1]&;
+];
 ,
 IdentMat=List/@Join[HelpSolveVectorMass,HelpSolveMass]/.{b_->a_}:>a->b//Flatten[#,1]&;
 ];
