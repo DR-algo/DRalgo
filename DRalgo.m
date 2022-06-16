@@ -40,7 +40,7 @@ AppendTo[result,Row[{
 	TexFor[" DRDRDRDRDRDRDRDRDRDRDRDRDRDRD"]}]];
 AppendTo[result,Row[{"Version: "//TexFor,"1.0 beta (16-05-2022)"//TexFor}]];
 AppendTo[result,Row[{"Authors: "//TexFor,"Andreas Ekstedt, Philipp Schicho, Tuomas V.I. Tenkanen"//TexFor}]];
-AppendTo[result,Row[{"Reference: "//TexFor,"2205.xxxxx [hep-ph]"//TexFor}]];
+AppendTo[result,Row[{"Reference: "//TexFor,"2205.08815 [hep-ph]"//TexFor}]];
 AppendTo[result,Row[{"Repository link: "//TexFor,
 	Hyperlink[Mouseover[TexFor["github.com/DR-algo/DRalgo"],Style["github.com/DR-algo/DRalgo",Bold]],
 	"https://github.com/DR-algo/DRalgo"]}]];
