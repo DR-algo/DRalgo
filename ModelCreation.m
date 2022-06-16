@@ -620,6 +620,11 @@ SparseArray[GradH[PotentialP,ScalarVariables]]//GradH[#,ScalarVariables]&//GradH
 ];
 
 
+GradSextic[PotentialI_]:=Module[{PotentialP=PotentialI},
+GradQuartic[PotentialP]//GradH[#,ScalarVariables]&//GradH[#,ScalarVariables]&//SparseArray
+];
+
+
 GradCubic[PotentialI_]:=Module[{PotentialP=PotentialI},
 SparseArray[GradH[PotentialP,ScalarVariables]]//GradH[#,ScalarVariables]&//GradH[#,ScalarVariables]&//SparseArray
 ];

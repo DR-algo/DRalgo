@@ -241,6 +241,34 @@ Ggvvv=-ContriAnomVV;
 
 
 (*
+	Prints higher-order couplings.
+*)
+PrintCouplingsEffective[]:=Module[{},
+If[verbose,Print["Printing higher-dimension couplings"]];
+
+
+
+
+(*Scalar Sextic*);
+VarGauge=Join[\[Lambda]6//Normal//Variables]//DeleteDuplicates;
+SubGauge=Table[c->Symbol[ToString[c]<>ToString["3d"]],{c,VarGauge}];
+\[Lambda]6p=\[Lambda]6//Normal//ReplaceAll[#,SubGauge]&;
+SolVar=\[Lambda]6DS-\[Lambda]6p//Normal;
+SexticVar=\[Lambda]6p//Normal//Variables;
+ResScalp=Reduce[SolVar==0,SexticVar]//ToRules[#]&;
+SolveTemp=SexticVar/.ResScalp;
+ResScal=Table[{SexticVar[[i]]->SolveTemp[[i]]},{i,1,Length@SexticVar}]//Flatten[#,1]&//ReplaceAll[#,IdentMatEff]&//Simplify;
+
+
+(*Printing Result*)
+PrintPre=Join[ResScal]//Normal//FullSimplify//DeleteDuplicates;
+
+ToExpression[StringReplace[ToString[StandardForm[PrintPre]],"DRalgo`Private`"->""]]
+
+];
+
+
+(*
 	Prints effective couplings in the soft theory. The module calculates all tensors in the soft theory and matches them with corresponding tensors in the original 4d theory.
 *)
 PrintCouplings[]:=Module[{},
@@ -422,9 +450,16 @@ ContriVV=Simplify[ Activate @ TensorContract[SelfEnergyVV2, {{1, 4},{3,5}}]];
 SelfEnergyFF=-T^2/(12);
 ContriFF=1/2SelfEnergyFF( Ysij+YsijC);
 
+
+If[mode>=3,
+(*Minus signs from the matching*)
+ContriSS\[Lambda]6=T^4/1152*TensorContract[\[Lambda]6,{{1,2},{3,4}}];
+
+aS3D=\[Mu]ij-ContriSS-ContriVV-ContriFF+ContriSS\[Lambda]6//Normal//FullSimplify//Expand;
+,
 (*Minus signs from the matching*)
 aS3D=\[Mu]ij-ContriSS-ContriVV-ContriFF//Normal//FullSimplify//Expand;
-
+];
 ];
 
 
@@ -661,9 +696,30 @@ SolVar=\[Beta]\[Lambda]1-\[Lambda]4p//Normal;
 QuarticVar=\[Lambda]4p//Normal//Variables;
 ResTadpole=Solve[SolVar==0,QuarticVar]/.SubGauge2//Flatten[#,1]&;
 
+(*Effective couplings*)
+If[mode>=3,
+
+(* 
+	Scalar-cubic couplings
+*)
+
+VarGauge=Join[\[Lambda]6//Normal//Variables]//DeleteDuplicates;
+SubGauge=Table[c->Symbol[ToString[c]<>ToString["temp"]],{c,VarGauge}];
+SubGauge2=Table[Symbol[ToString[c]<>ToString["temp"]]->c,{c,VarGauge}];
+
+\[Lambda]6p=\[Lambda]6//Normal//ReplaceAll[#,SubGauge]&;
+SolVar=\[Beta]\[Lambda]6ijklnm-\[Lambda]6p//Normal;
+SexticVar=\[Lambda]6p//Normal//Variables;
+ResSextic=Solve[SolVar==0,SexticVar]/.SubGauge2//Flatten[#,1]&;
+
+
 
 (*Printing Result*)
+PrintPre=Join[ResGauge,ResGaugeNA,ResScal,ResCubic,ResYuk,ResMass,ResMassF,ResTadpole,ResSextic]//Normal//FullSimplify//DeleteDuplicates;
+,
+(*Printing Result*)
 PrintPre=Join[ResGauge,ResGaugeNA,ResScal,ResCubic,ResYuk,ResMass,ResMassF,ResTadpole]//Normal//FullSimplify//DeleteDuplicates;
+];
 
 ToExpression[StringReplace[ToString[StandardForm[PrintPre]],"DRalgo`Private`"->""]]
 
@@ -912,6 +968,32 @@ ContriAnomFF=-(\[Gamma]IJF . \[Mu]IJFC+Transpose[\[Gamma]IJF . \[Mu]IJFC]);
 \[Beta]\[Mu]IJFC=   ContriSS+  ContriVV+  ContriAnomFF//Simplify//SparseArray;
 Z\[Mu]IJFC=\[Beta]\[Mu]IJFC/2//SparseArray;
 
+
+
+
+If[mode>=3,
+(*Effective higher-order couplings*)
+
+(*Scalar sextic operator*)
+(*Scalar loops*)
+
+(*Scalar loop with mixed \[Lambda]6 and \[Lambda]4 vertices*)
+\[CapitalLambda]\[Lambda]6tot=Flatten[\[Lambda]4,{{1},{2},{3,4}}] . Flatten[\[Lambda]6,{1,2}]//SimplifySparse;
+Prefac=15/2*1/(16 \[Pi]^2);
+SymHelp=Symmetrize[\[CapitalLambda]\[Lambda]6tot,Symmetric]//SparseArray;
+ContriSSS=Prefac*SymHelp;
+
+(*Field-strength renormalization*)
+
+ContriSETemp=-1/2*\[Gamma]ij . \[Lambda]6;
+ContriSE=6*Symmetrize[ContriSETemp,Symmetric]//SparseArray//SimplifySparse;
+
+(*Minus sign from matching*)
+\[Beta]\[Lambda]6ijklnm=-2*(ContriSE+ContriSSS)//SparseArray; 
+];
+
+
+
 ]
 
 ];
@@ -1023,8 +1105,66 @@ ContriFF=CouplingFF*Simplify[Yhelp+Transpose[Yhelp,{1,2,4,3}]+Transpose[Yhelp,{1
 ContriSETemp=-ZijS . \[Lambda]4;
 ContriSE=ContriSETemp+Transpose[ContriSETemp,{2,1,3,4}]+Transpose[ContriSETemp,{3,1,2,4}]+Transpose[ContriSETemp,{4,1,2,3}]//Simplify;
 
+If[mode>=3,
+(*Minus sign from matching*)
+ContriSS\[Lambda]6=-T^2/24*TensorContract[\[Lambda]6,{1,2}];
+\[Lambda]3D=- ContriSS- ContriVV+  ContriSE- ContriFF-ContriSS\[Lambda]6; 
+,
 (*Minus sign from matching*)
 \[Lambda]3D=- ContriSS- ContriVV+  ContriSE- ContriFF; 
+];
+
+
+
+];
+
+
+
+(*
+	Calculates Scalar quartics in the soft theory
+*)
+ScalarSextic[]:=Module[{},
+If[verbose,Print["Calculating Scalar Sextic"]];
+
+(*Scalar loops*)
+\[CapitalLambda]\[Lambda]6tem=Flatten[\[Lambda]4 . \[Lambda]4,{{1},{2},{4},{5},{3,6}}];
+\[CapitalLambda]\[Lambda]6tot=\[CapitalLambda]\[Lambda]6tem . Flatten[\[Lambda]4,{1,2}];
+Prefac=-Zeta[3]15/(128 \[Pi]^4 T^2);
+ContriSS=Prefac*Symmetrize[\[CapitalLambda]\[Lambda]6tot,Symmetric]//SparseArray//SimplifySparse;
+
+
+(*Scalar loop with mixed \[Lambda]6 and \[Lambda]4 vertices*)
+\[CapitalLambda]\[Lambda]6tot=Flatten[\[Lambda]4,{{1},{2},{3,4}}] . Flatten[\[Lambda]6,{1,2}]//SimplifySparse;
+Prefac=15/2*1/(16 \[Pi]^2)Lb;
+SymHelp=Symmetrize[\[CapitalLambda]\[Lambda]6tot,Symmetric]//SparseArray;
+ContriSSS=Prefac*SymHelp;
+
+(*Vector loops*)
+\[CapitalLambda]\[Lambda]6tem=Flatten[Transpose[HabijV,{1,4,3,2}] . HabijV,{{2},{3},{5},{6},{1,4}}];
+\[CapitalLambda]\[Lambda]6tot=\[CapitalLambda]\[Lambda]6tem . Flatten[HabijV,{{1,2},{3},{4}}];
+Prefac=3*15*Zeta[3]/(128 \[Pi]^4 T^2);
+ContriVV=Prefac*Symmetrize[\[CapitalLambda]\[Lambda]6tot,Symmetric]//SparseArray//SimplifySparse;
+
+
+(*Fermion loops*)
+\[CapitalLambda]\[Lambda]6tot1=Table[Tr[a . b . c . d . e . f],{a,Ysff},{b,YsffC},{c,Ysff},{d,YsffC},{e,Ysff},{f,YsffC}]//SparseArray;
+\[CapitalLambda]\[Lambda]6totC=Table[Tr[a . b . c . d . e . f],{a,YsffC},{b,Ysff},{c,YsffC},{d,Ysff},{e,YsffC},{f,Ysff}]//SparseArray;
+\[CapitalLambda]\[Lambda]6tot=\[CapitalLambda]\[Lambda]6tot1+ \[CapitalLambda]\[Lambda]6totC;
+Prefac=((7 Zeta[3])*15*4/(64 \[Pi]^4 T^2));
+ContriFF=Prefac*Symmetrize[\[CapitalLambda]\[Lambda]6tot,Symmetric]//SparseArray//SimplifySparse;
+
+
+(*Field-strength renormalization*)
+
+ContriSETemp=-ZijS . \[Lambda]6;
+ContriSE=6*Symmetrize[ContriSETemp,Symmetric]//SparseArray//SimplifySparse;
+
+
+(*Minus sign from matching*)
+\[Lambda]6D=ContriSE- ContriSS- ContriVV- ContriFF-ContriSSS//SparseArray; 
+
+
+
 
 ];
 
@@ -1588,7 +1728,18 @@ VFFv=1/2*I1Temp*TensorContract[HabIJFnF,{{1,2},{3,4}}];
 
 ContriMass=1/2Tr[\[Mu]ij]*T^2/12;
 
-ToExpression[StringReplace[ToString[StandardForm[ContriMass+Vss+Vssv+Vvs+Vvv+Vvvv+Vggv+VFFs+VFFv//FullSimplify]],"DRalgo`Private`"->""]]
+
+If[mode>=3,
+(*Contribution from higher-dimensional operators*)
+VSS\[Lambda]6=1/82944*T^6*TensorContract[\[Lambda]6,{{1,2},{3,4},{5,6}}];
+,
+VSS\[Lambda]6=0;
+];
+
+
+
+
+ToExpression[StringReplace[ToString[StandardForm[ContriMass+Vss+Vssv+Vvs+Vvv+Vvvv+Vggv+VFFs+VFFv+VSS\[Lambda]6//FullSimplify]],"DRalgo`Private`"->""]]
 ];
 
 
@@ -1893,7 +2044,7 @@ If[verbose,Print["Calculating Quartic Tensor"]];
 (*
 	Scalar quartic couplings
 *)
-HelpList=DeleteDuplicates@Flatten@SimplifySparse[T(\[Lambda]4+\[Lambda]3D)]//Sort;
+HelpList=DeleteDuplicates@Flatten[T(\[Lambda]4+\[Lambda]3D)]//Sort//Simplify;
 HelpVarMod=RelationsBVariables3[HelpList]//ReplaceAll[#,\[Lambda]VL[v1_]->\[Lambda][v1]]&;
 HelpSolveQuartic=Table[{Delete[HelpList,1][[a]]->HelpVarMod[[a]]},{a,1,Delete[HelpList,1]//Length}]//Flatten//Simplify;
 \[Lambda]3DS=T(\[Lambda]4+\[Lambda]3D)//SimplifySparse//Normal//ReplaceAll[#,HelpSolveQuartic]&//SparseArray;
@@ -1985,9 +2136,27 @@ HelpSolveCubicL=Table[{Delete[HelpList,1][[a]]->HelpVarMod[[a]]},{a,1,Delete[Hel
 
 ];
 
+If[mode>=3,
+If[verbose,Print["Calculating Sextic Tensor"]];
+
+(*
+	Scalar sextic couplings
+*)
+HelpList=DeleteDuplicates@Flatten[T^2 (\[Lambda]6+\[Lambda]6D)]//Sort//Simplify;
+HelpVar=Table[ \[Lambda]6d[a],{a,1,Delete[HelpList,1]//Length}];
+HelpVarMod=RelationsBVariables[HelpList,HelpVar];
+HelpSolveSextic=Table[{Delete[HelpList,1][[a]]->HelpVarMod[[a]]},{a,1,Delete[HelpList,1]//Length}]//Flatten;
+\[Lambda]6DS=T^2 (\[Lambda]6+\[Lambda]6D)//Normal//Simplify//ReplaceAll[#,HelpSolveSextic]&//SparseArray;
+
+If[Length[SparseArray[\[Lambda]6DS]["NonzeroValues"]]!=Length[SparseArray[\[Lambda]6]["NonzeroValues"]],
+Print["Detected 1-loop Scalar Sextic not defined at tree-level"];
+Print["Please Check if you defined all couplings allowed by symmetry"];
+];
+];
+
 (*
 	Debye masses
-*)
+*);
 If[mode>=2,
 HelpList=DeleteDuplicates@FullSimplify[Flatten[ xLO aV3D+ xNLO \[Mu]VabNLO]]//Sort;
 HelpVar=Table[ \[Mu]ijV[a],{a,1,Delete[HelpList,1]//Length}];
@@ -2050,6 +2219,9 @@ If[mode>=1,
 IdentMat=List/@Join[HelpSolveCubicS,HelpSolveVecT,HelpSolveVecL,HelpSolveQuarticL,HelpSolveVectorMass,HelpSolveMass,HelpSolveCubicL,HelpSolveTadpole,HelpSolveQuartic]/.{b_->a_}:>a->b//Flatten[#,1]&;
 ,
 IdentMat=List/@Join[HelpSolveVectorMass,HelpSolveMass]/.{b_->a_}:>a->b//Flatten[#,1]&;
+];
+If[mode>=3,
+IdentMatEff=List/@Join[HelpSolveSextic]/.{b_->a_}:>a->b//Flatten[#,1]&;
 ];
 ];
 

@@ -15,7 +15,7 @@ $LoadGroupMath=True;
 (*See 1106.0034 [hep-ph] for a review*)
 
 
-(* ::Section:: *)
+(* ::Section::Closed:: *)
 (*Model*)
 
 
@@ -85,18 +85,25 @@ Ysff=-GradYukawa[yt*YukawaDoublet[[1]]];
 YsffC=SparseArray[Simplify[Conjugate[Ysff]//Normal,Assumptions->{yt>0}]];
 
 
+Dim6Term=MassTerm1^3;
+
+
+\[Lambda]6=c6 GradSextic[Dim6Term];
+
+
 (* ::Section:: *)
 (*Dimensional Reduction*)
 
 
-ImportModelDRalgo[Group,gvvv,gvff,gvss,\[Lambda]1,\[Lambda]3,\[Lambda]4,\[Mu]ij,\[Mu]IJ,\[Mu]IJC,Ysff,YsffC,Verbose->False];
-PosFermion=PrintFermionRepPositions[];
-FermionMat=Table[{nF,i},{i,PosFermion}];
-DefineNF[FermionMat]
+ImportModelDRalgo[Group,gvvv,gvff,gvss,\[Lambda]1,\[Lambda]3,\[Lambda]4,\[Mu]ij,\[Mu]IJ,\[Mu]IJC,Ysff,YsffC,Verbose->False,Mode->3];
+DefineDim6[\[Lambda]6]
 PerformDRhard[]
 
 
 PrintCouplings[]
+
+
+PrintCouplingsEffective[]
 
 
 PrintScalarMass["LO"]
@@ -111,6 +118,9 @@ PrintTemporalScalarCouplings[]
 
 
 BetaFunctions4D[]
+
+
+c6/.BetaFunctions4D[]//Expand
 
 
 PrintPressure["LO"]
@@ -146,29 +156,6 @@ PrintScalarMassUS["NLO"]
 
 
 BetaFunctions3DUS[]
-
-
-PrintPressureUS["LO"]
-PrintPressureUS["NLO"]
-
-
-(* ::Text:: *)
-(*Symmetric - phase pressure*)
-
-
-DefineNewTensorsUS[\[Mu]ij,\[Lambda]4,\[Lambda]3,gvss,gvvv]; \[CurlyPhi]vev={0,0,0,0}//SparseArray; DefineVEVS[\[CurlyPhi]vev];
-PrintTensorsVEV[];
-
-
-CalculatePotentialUS[];
-
-
-PrintEffectivePotential["LO"]
-PrintEffectivePotential["NLO"]
-PrintEffectivePotential["NNLO"]
-
-
-
 
 
 (* ::Text:: *)

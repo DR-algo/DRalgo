@@ -78,7 +78,8 @@ PrintConstants::usage="Prints constants used in the matching"
 PrintGenericBasis::usage="Rewrites the results in a different basis"
 PrintTensorsVEV::usage="Prints background-field dependent couplings and masses"
 DefineVEVS::usuage="Defines background fields for scalars"
-RotateTensorsUSPostVeV::usuage="Rotate the field basis. Both for scalar and vector."
+RotateTensorsUSPostVEV::usuage="Rotate the field basis. Both for scalar and vector."
+RotateTensorsCustomMass::usuage="Creates custom field-dependent masses"
 DefineGroup::usuage="Loads the group and names Debye masses"
 PerformDRsoft::usage="Perform the reduction from soft to supersoft"
 CalculatePotentialUS::usage="Calculates the effective potential"
@@ -87,6 +88,7 @@ AllocateTensors::usage="Creates gauge generators"
 GradQuartic::usage="Creates Quartic tensors"
 GradCubic::usage="Creates Cubic tensors"
 GradTadpole::usage="Creates Tadpole tensors"
+GradSextic::usage="Creates dim 6 tensors"
 GradMass::usage="Creates Mass tensors"
 CreateInvariant::usage="Creates an invariant"
 CreateInvariantYukawa::usage="Creates Yukawa Tensor"
@@ -101,6 +103,9 @@ GradMassFermion::usuage="Creates Fermion Invariants"
 CreateInvariantFermion::usuage="Creates Fermion Invariants"
 SaveModelDRalgo::usuage="Saves a model to a file"
 LoadModelDRalgo::usuage="Loads a model from file"
+DefineDim6::usuage="Defines a dimension 6 operator"
+PrintPressureUS::usuage="Calculates the preassure in the ultrasoft theory"
+PrintCouplingsEffective::usuage="Prints higher-order couplings"
 
 (* end of public functions*)
 
@@ -124,7 +129,7 @@ Print["Please Cite GroupMath: Comput.Phys.Commun. 267 (2021) 108085 \[Bullet] e-
 	Mode=2 calculates everything, Mode=1 only calculates LO masses and couplings
 	 Mode=0 only calculates LO masses
 *)
-Options[ImportModelDRalgo] = {Verbose -> False,Mode->2}
+Options[ImportModelDRalgo] = {Verbose -> False,Mode->2,Dim6->False}
 
 
 Begin["`Private`"]
@@ -168,6 +173,7 @@ gvff=gvffP//SparseArray//SimplifySparse;
 ns=Length[gvss[[1]]];
 nv=Length[gvvv];
 nf=Length[gvff[[1]]];
+\[Lambda]6=EmptyArray[{ns,ns,ns,ns,ns,ns}];
 
 (*Options*)
 verbose = OptionValue[Verbose];
@@ -179,6 +185,18 @@ CT=False; (*Checks if counter-terms have already been calculated*)
 DefineGroup[GroupP]; (*Names Debye masses*)
 GroupDR=GroupP; (*For saving purposes*)
 CreateHelpTensors[] (*Creates recurring tensors*)
+];
+
+
+(*
+	Defines a \[Phi]^6 operator
+*)
+DefineDim6[\[Lambda]6I_]:=Module[{\[Lambda]6P=\[Lambda]6I},
+If[mode>=3,
+\[Lambda]6=\[Lambda]6P//SparseArray;
+,
+Print["Please set mode=3 to use this feature"];
+];
 ];
 
 
@@ -239,6 +257,12 @@ SymmetricPhaseEnergy[];
 ];
 
 
+If[mode>=3,
+(*Calculates effective dim 6 operators*)
+ScalarSextic[];
+];
+
+
 (*
 	This step takes all calculations and removes redundancies. For example, if one element is (g^4 Lb)
 	and another 3(g^4 Lb), the function replaces element 2 by three times the first element. This also
@@ -273,6 +297,7 @@ ScalarMassSS[];
 
 If[mode>=2,
 ScalarMass2LoopSS[];
+SymmetricPhaseEnergyUS[];
 ];
 
 
@@ -388,7 +413,7 @@ t4F=Table[i*j*k*l,{i,YukVar},{j,YukVar},{k,YukVar},{l,YukVar}]//Flatten[#]&//Del
 t4FG=Table[i*j*k*l,{i,YukVar},{j,YukVar},{k,GaugeVar},{l,GaugeVar}]//Flatten[#]&//DeleteDuplicates;
 basPre=Join[varHelp,t2,t3G,t3F,t4,t4F,t4FG];
 
-basDR=Table[i*j*k,{i,basPre},{j,AuxVar},{k,{1,T}}]//Flatten[#]&//DeleteDuplicates;
+basDR=Table[i*j*k,{i,basPre},{j,AuxVar},{k,{1,T,T^2}}]//Flatten[#]&//DeleteDuplicates;
 ]
 
 
