@@ -13,14 +13,17 @@ Public release of
 ## Installation
 
 To load DRalgo,
-place the package in the `$UserBaseDirectory/Applications` folder and
+place the content of the package folder in
+`$UserBaseDirectory/Applications/DRalgo` and
 execute the following commands:
 
 	SetDirectory[NotebookDirectory[]]; 
 	$LoadGroupMath=True;
 	<<DRalgo`
 
-Alternatively load the package within the root directory.
+Alternatively place the package content into `/DRalgo`
+and load it
+within the root directory.
 
 ### Dependencies
 
