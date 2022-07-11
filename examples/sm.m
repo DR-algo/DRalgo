@@ -15,7 +15,7 @@ $LoadGroupMath=True;
 (*See 1106.0034 [hep-ph] for a review*)
 
 
-(* ::Section:: *)
+(* ::Section::Closed:: *)
 (*Model*)
 
 
@@ -171,6 +171,9 @@ PrintEffectivePotential["NNLO"]
 
 
 
+CounterTerms4D[]
+
+
 (* ::Text:: *)
 (*2 - Loop Effective potential*)
 
@@ -214,6 +217,12 @@ CalculatePotentialUS[];
 PrintEffectivePotential["LO"]
 PrintEffectivePotential["NLO"]
 PrintEffectivePotential["NNLO"]
+
+
+
+
+
+
 
 
 

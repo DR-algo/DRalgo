@@ -40,7 +40,7 @@ AppendTo[result,Row[{
 	TexFor[" DRDRDRDRDRDRDRDRDRDRDRDRDRDRD"]}]];
 AppendTo[result,Row[{"Version: "//TexFor,"1.0 beta (16-05-2022)"//TexFor}]];
 AppendTo[result,Row[{"Authors: "//TexFor,"Andreas Ekstedt, Philipp Schicho, Tuomas V.I. Tenkanen"//TexFor}]];
-AppendTo[result,Row[{"Reference: "//TexFor,"2205.08815 [hep-ph]"//TexFor}]];
+AppendTo[result,Row[{"Reference: "//TexFor,"2205.xxxxx [hep-ph]"//TexFor}]];
 AppendTo[result,Row[{"Repository link: "//TexFor,
 	Hyperlink[Mouseover[TexFor["github.com/DR-algo/DRalgo"],Style["github.com/DR-algo/DRalgo",Bold]],
 	"https://github.com/DR-algo/DRalgo"]}]];
@@ -106,6 +106,7 @@ LoadModelDRalgo::usuage="Loads a model from file"
 DefineDim6::usuage="Defines a dimension 6 operator"
 PrintPressureUS::usuage="Calculates the preassure in the ultrasoft theory"
 PrintCouplingsEffective::usuage="Prints higher-order couplings"
+CounterTerms4D::usuage="Prints 4d CounterTerms"
 
 (* end of public functions*)
 
@@ -232,7 +233,6 @@ ScalarMass[];
 VectorMass[];
 ];
 
-
 If[mode>=1,
 CreateBasisVanDeVis[];
 
@@ -256,7 +256,6 @@ TadPole2Loop[];
 SymmetricPhaseEnergy[];
 ];
 
-
 If[mode>=3,
 (*Calculates effective dim 6 operators*)
 ScalarSextic[];
@@ -268,7 +267,9 @@ ScalarSextic[];
 	and another 3(g^4 Lb), the function replaces element 2 by three times the first element. This also
 	works for linear combinations of elements.
 *)
+
 IdentifyTensorsDRalgo[];
+
 ];
 
 
@@ -367,8 +368,12 @@ Mat
 *)
 RelationsBVariables[list_,listVar_]:=Module[{L=list,LV=listVar},
 LVTemp=LV;
-Mat=ConstantArray[0,{Length[Delete[L,1]],Length[Delete[L,1]]}];(*Linear-dependency matrix*)
-Mat1=OverallFac[Delete[L,1],Mat];
+If[L[[1]]==0,
+	L=Delete[L,1];
+];
+
+Mat=ConstantArray[0,{Length[L],Length[L]}];(*Linear-dependency matrix*)
+Mat1=OverallFac[L,Mat];
 TempVar=ConstantArray[0,{Length[LV]}];
 For[i=1,i<Length[LV],i++,
 For[j=i+1,j<Length[LV]+1,j++,
@@ -429,15 +434,20 @@ RelationsBVariables3[list_]:=Module[{L=list},
 (*Creates a vector-basis*)
 
 (*One could say that v3 and v2 are identical. With v3 being almost twice as identical as v2*)
-Lp=Delete[HelpList,1]; (*First element is always 0*)
-varHelp=HelpList//Variables;
+If[L[[1]]==0&&Length[L]>1,
+	Lp=Delete[L,1];
+,
+	Lp=L;
+];
+
+
+varHelp=Lp//Variables;
 varFix=#->0&/@varHelp; (*Trick to ensure that vectors are expanded properly*)
 
 (*
 Expands all elements in Lp in terms of basDR.
 *)
-setVecs=Table[Coefficient[i,basDR],{i,Lp}]/.varFix; 
-      
+setVecs=Table[Coefficient[i,basDR],{i,Lp}]/.varFix;  
 (*Delete columns with only 0s*)
 setVecs=Transpose[DeleteCases[Transpose[setVecs], {0 ..}, Infinity]];
 

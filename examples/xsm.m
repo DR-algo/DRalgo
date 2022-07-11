@@ -167,6 +167,12 @@ PrintScalarMassUS["NLO"]
 BetaFunctions3DUS[]
 
 
+PrintTemporalScalarCouplings[]
+
+
+PrintTadpolesUS["LO"]
+
+
 PerformDRsoft[{5}];
 
 
@@ -174,10 +180,32 @@ PrintCouplingsUS[]
 
 
 PrintScalarMassUS["LO"]
-PrintScalarMassUS["LO"]
+PrintScalarMassUS["NLO"]
 
 
 BetaFunctions3DUS[]
+
+
+PerformDRsoft[{1,2,3,4}]
+
+
+PrintCouplingsUS[]
+
+
+PrintScalarMassUS["LO"]
+
+
+PrintTadpolesUS["LO"]
+
+
+BetaFunctions3DUS[]
+
+
+PrintPressureUS["LO"]
+PrintPressureUS["NLO"]
+
+
+CounterTerms4D[]
 
 
 (* ::Section:: *)
