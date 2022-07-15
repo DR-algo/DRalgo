@@ -130,17 +130,8 @@ BetaFunctions4D[]
 PrintCouplings[]//Simplify
 
 
-(4\[Pi])^2 m1/.BetaFunctions4D[]
-
-
-(4\[Pi])^2  \[Mu]m3d/.PrintCouplings[]
-1/T^(3/2) (4\[Pi])^2  \[Mu]33d/.PrintCouplings[]//Expand
-1/T^(2/2) (4\[Pi])^2  \[Lambda]\[Sigma]3d/.PrintCouplings[]//Expand
-1/T^(2/2) (4\[Pi])^2  \[Lambda]m3d/.PrintCouplings[]//Expand
-
-
 PrintTadpoles["LO"]
-\[Mu]13d/.PrintTadpoles["NLO"]
+PrintTadpoles["NLO"]
 
 
 PrintTemporalScalarCouplings[]

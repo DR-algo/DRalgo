@@ -123,9 +123,10 @@ PrintScalarMass["NLO"]
 BetaFunctions4D[]
 
 
+PrintTadpoles["LO"]
+PrintTadpoles["NLO"]
+
+
 PrintPressure["LO"]
 PrintPressure["NLO"]
 PrintPressure["NNLO"]
-
-
-

@@ -71,7 +71,7 @@ VQuartic=\[Lambda]/24 MassTerm^2;
 \[Lambda]4=GradQuartic[VQuartic];
 
 
-(* ::Section::Closed:: *)
+(* ::Section:: *)
 (*Dimensional Reduction*)
 
 
@@ -96,6 +96,9 @@ PrintTadpoles["NLO"]
 PrintPressure["LO"]
 PrintPressure["NLO"]
 PrintPressure["NNLO"]
+
+
+
 
 
 

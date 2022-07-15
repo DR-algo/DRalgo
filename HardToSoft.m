@@ -447,7 +447,6 @@ ResScalp=Reduce[helpMass==0,var]//ToRules[#]&;
 SolveTemp=var/.ResScalp;
 SolMassPre=Table[{var[[i]]->SolveTemp[[i]]},{i,1,Length@var}]//Flatten[#,1]&//ReplaceAll[#,IdentMat]&;
 
-
 SolTadpole=SolMassPre;
 If[opt=="All",
 SolTadpole=SolMassPre/.xLO->1/.xNLO->1;

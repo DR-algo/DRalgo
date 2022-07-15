@@ -15,7 +15,7 @@ $LoadGroupMath=True;
 (*see 0811.0393 [hep-ph]*)
 
 
-(* ::Section:: *)
+(* ::Section::Closed:: *)
 (*Model*)
 
 
@@ -122,9 +122,6 @@ PrintCouplings[]
 PrintTemporalScalarCouplings[]
 
 
-PrintTensorDRalgo[][[8]]//ArrayRules
-
-
 PrintDebyeMass["LO"]
 PrintDebyeMass["NLO"]
 
@@ -144,3 +141,7 @@ PrintScalarMassUS["NLO"]
 
 
 BetaFunctions3DUS[]
+
+
+PrintPressureUS["LO"]
+PrintPressureUS["NLO"]
