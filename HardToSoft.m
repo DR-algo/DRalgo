@@ -435,7 +435,7 @@ ToExpression[StringReplace[ToString[StandardForm[Join[SolMass]]],"DRalgo`Private
 	Prints 1-loop and 2-loop effective tadpoles in the soft theory.
 *)
 PrintTadpoles[optP_]:=Module[{opt=optP},
-If[verbose,Print["Printing Scalar Masses"]];
+If[verbose,Print["Printing Tadpoles"]];
 
 VarGauge=Join[\[Lambda]1//Normal//Variables]//DeleteDuplicates;
 SubGauge=Table[c->Symbol[ToString[c]<>ToString["3d"]],{c,VarGauge}];
