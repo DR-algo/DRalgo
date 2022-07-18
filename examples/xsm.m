@@ -15,7 +15,7 @@ $LoadGroupMath=True;
 (*see 2102.11145 [hep-ph]*)
 
 
-(* ::Section::Closed:: *)
+(* ::Section:: *)
 (*Model*)
 
 
@@ -130,8 +130,17 @@ BetaFunctions4D[]
 PrintCouplings[]//Simplify
 
 
+(4\[Pi])^2 m1/.BetaFunctions4D[]
+
+
+(4\[Pi])^2  \[Mu]m3d/.PrintCouplings[]
+1/T^(3/2) (4\[Pi])^2  \[Mu]33d/.PrintCouplings[]//Expand
+1/T^(2/2) (4\[Pi])^2  \[Lambda]\[Sigma]3d/.PrintCouplings[]//Expand
+1/T^(2/2) (4\[Pi])^2  \[Lambda]m3d/.PrintCouplings[]//Expand
+
+
 PrintTadpoles["LO"]
-PrintTadpoles["NLO"]
+\[Mu]13d/.PrintTadpoles["NLO"]
 
 
 PrintTemporalScalarCouplings[]
@@ -158,12 +167,6 @@ PrintScalarMassUS["NLO"]
 BetaFunctions3DUS[]
 
 
-PrintTemporalScalarCouplings[]
-
-
-PrintTadpolesUS["LO"]
-
-
 PerformDRsoft[{5}];
 
 
@@ -171,145 +174,7 @@ PrintCouplingsUS[]
 
 
 PrintScalarMassUS["LO"]
-PrintScalarMassUS["NLO"]
-
-
-BetaFunctions3DUS[]
-
-
-PerformDRsoft[{1,2,3,4}]
-
-
-PrintCouplingsUS[]
-
-
 PrintScalarMassUS["LO"]
 
 
-PrintTadpolesUS["LO"]
-
-
 BetaFunctions3DUS[]
-
-
-PrintPressureUS["LO"]
-PrintPressureUS["NLO"]
-
-
-CounterTerms4D[]
-
-
-(* ::Section:: *)
-(*Effective potential*)
-
-
-DefineNewTensorsUS[\[Mu]ij,\[Lambda]4,\[Lambda]3,gvss,gvvv]; \[CurlyPhi]vev={0,0,0,\[CurlyPhi],s}//SparseArray; DefineVEVS[\[CurlyPhi]vev];
-PrintTensorsVEV[];
-
-
-(*The vector-mass matrix is not diagonal. Let's first diagonalize this matrix*)
-
-
-MassMatrix=PrintTensorsVEV[];
-VectorMass=MassMatrix[[2]]//Normal;
-VectorEigenvectors=Simplify[
-    Transpose[Normalize/@Eigenvectors[VectorMass[[11;;12,11;;12]]]],
-Assumptions->{g1>0,g2>0,\[CurlyPhi]>0,Y\[Phi]>0}]; DVRot={{IdentityMatrix[10],0},{0,VectorEigenvectors}}//ArrayFlatten//Simplify;
-
-
-(*We now need to diagonalize the scalar-mass matrix*)
-
-
-PrintTensorsVEV[][[1]]//Normal
-
-
-ScalarMass=MassMatrix[[1]]//Normal;
-
-
-(*We see that the scalar-masses are quite complicated. So it is easier to do the rotation to the diagonal basis by hand.*)
-
-
-(*If we only want the 1-loop effective potential it suffices to use the following method:*)
-
-
-DSRot={{IdentityMatrix[5]}}//ArrayFlatten//Simplify;
-
-
-\[Mu]vecDia=Simplify[Transpose[DVRot] . VectorMass . DVRot,
-Assumptions->{g1>0,g2>0,\[CurlyPhi]>0,Y\[Phi]>0}];
-
-
-\[Mu]ijDiag={{ScalarMass[[1;;3,1;;3]],0},{0,DiagonalMatrix[Eigenvalues[ScalarMass[[4;;5,4;;5]]]]}}//ArrayFlatten//Simplify//FullSimplify;
-
-
-DiagonalMatrixQAE[\[Mu]ijDiag]
-
-
-RotateTensorsCustomMass[DSRot,DVRot,\[Mu]vecDia,\[Mu]ijDiag];
-
-
-CalculatePotentialUS[];
-
-
-PrintEffectivePotential["LO"]
-
-
-PrintEffectivePotential["NLO"]
-
-
-(*If we want the 2-loop effective potential we also need the scalar-mass diagonalization matrix:*)
-
-
-(*Since the masses are quite complicated it is useful to use the replacement*)
-
-
-HelpReplace={ScalarMass[[4;;5,4;;5]][[1,1]]->M11,ScalarMass[[4;;5,4;;5]][[1,2]]->M12,ScalarMass[[4;;5,4;;5]][[2,1]]->M12,ScalarMass[[4;;5,4;;5]][[2,2]]->M22};
-
-
-ScalarMassHelp=ScalarMass[[4;;5,4;;5]]//ReplaceAll[#,HelpReplace]&;
-
-
-HelpRevert=HelpReplace/.(a_->b_)->(b->a);
-
-
-ScalarEigenvectors=FullSimplify[
-    Transpose[Normalize/@Eigenvectors[ScalarMassHelp]]];
-
-
-(*Since we know that the matrix should be SO(2), let's write it as*)
-
-
-ScalDiaMatrix={{c\[Theta],-s\[Theta]},{s\[Theta],c\[Theta]}};
-
-
-(*We can then write the total rotation matrix as (first 3 components are already diagonal)*)
-
-
- DSRot={{IdentityMatrix[3],0},{0,ScalDiaMatrix}}//ArrayFlatten
-
-
-(*We might as well simplify the scalar masses as well*)
-
-
-DiagonalMatrix[Eigenvalues[ScalarMass[[4;;5,4;;5]]]]
-
-
-\[Mu]ijDiag={{ScalarMass[[1;;3,1;;3]],0},{0,DiagonalMatrix[{\[Mu]S11,\[Mu]S22}]}}//ArrayFlatten//Simplify//FullSimplify
-
-
-(*And finally we get the effective potential from*)
-
-
-RotateTensorsCustomMass[DSRot,DVRot,\[Mu]vecDia,\[Mu]ijDiag];
-
-
-CalculatePotentialUS[];
-
-
-PrintEffectivePotential["LO"]/.{c\[Theta]->1,s\[Theta]->0}//Simplify (*The replacement rule is just because the rotation should not act on the tree-level potential*)
-
-
-PrintEffectivePotential["NLO"]
-
-
-PrintEffectivePotential["NNLO"]
