@@ -140,7 +140,7 @@ HiggsB0={{{0,0},{0},0},"R"}; (*This is the U1(1) Temporal Scalar*)
 RepScalar={HiggsG0,HiggsA0,HiggsB0,Higgs\[CapitalSigma],HiggsDoublet};
 
 
-{gvvv2,gvff,gvss2,\[Lambda]1,\[Lambda]3,\[Lambda]4,\[Mu]ij,\[Mu]IJC,\[Mu]IJ,Ysff,YsffC}=AllocateTensors[Group,RepAdjoint,CouplingName,{},RepScalar];
+{gvvv2,gvff,gvss2,\[Lambda]1,\[Lambda]3,\[Lambda]4,\[Mu]ij,\[Mu]IJ,\[Mu]IJC,Ysff,YsffC}=AllocateTensors[Group,RepAdjoint,CouplingName,{},RepScalar];
 
 
 PosScalarsNew=PrintScalarRepPositions[]; (*The position of the new scalar reps*)
