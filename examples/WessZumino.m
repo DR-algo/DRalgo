@@ -15,7 +15,7 @@ $LoadGroupMath=True;
 (*See 0303260 [hep-th]*)
 
 
-(* ::Section::Closed:: *)
+(* ::Section:: *)
 (*Model*)
 
 
@@ -121,12 +121,3 @@ PrintScalarMass["NLO"]
 
 
 BetaFunctions4D[]
-
-
-PrintTadpoles["LO"]
-PrintTadpoles["NLO"]
-
-
-PrintPressure["LO"]
-PrintPressure["NLO"]
-PrintPressure["NNLO"]
