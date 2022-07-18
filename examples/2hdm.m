@@ -15,7 +15,7 @@ $LoadGroupMath=True;
 (*See 1106.0034 [hep-ph] for a review*)
 
 
-(* ::Section:: *)
+(* ::Section::Closed:: *)
 (*Model*)
 
 
@@ -162,6 +162,10 @@ PrintScalarMassUS["NLO"]
 
 
 BetaFunctions3DUS[]
+
+
+PrintPressureUS["LO"]
+PrintPressureUS["NLO"]
 
 
 (* ::Section:: *)

@@ -18,6 +18,68 @@
 
 
 (*
+	Prints the result from SymmEnergy.
+*)
+PrintPressureUS[optP_]:=Module[{opt=optP},
+SymmPrint=Switch[opt,"LO",SymmEnergyUS[[1]],"NLO",SymmEnergyUS[[2]]];
+
+
+(*Printing Result*)
+ToExpression[StringReplace[ToString[StandardForm[SymmPrint]],"DRalgo`Private`"->""]]
+];
+
+
+(*
+	Calculates the preassure in the ultrasoft theory. Only the preassure in the symmetric
+	phae is calculated.
+*)
+SymmetricPhaseEnergyUS[]:=Module[{},
+(*
+	Counterterms are needed to calculate
+	SymmetricPhaseNLO and SymmetricPhaseNNLO
+*)
+(*The minus signs is a convention to get the pressure*)
+Tot={-SymmetricPhaseUSLO[],-SymmetricPhaseUSNLO[]};
+SymmEnergyUS=Tot;
+];
+
+
+(*
+	Calculates the 1-loop pressure in the ultrasoft theory.
+*)
+SymmetricPhaseUSLO[]:=Module[{},
+If[verbose,Print["Calculating Leading-Order \!\(\*SuperscriptBox[\(T\), \(4\)]\) Terms"]];
+
+ContriScalars=Sum[-1/(12 \[Pi]) \[Mu]ijL[[i,i]]^3,{i,1,Length[\[Mu]ijL]}];
+
+ToExpression[StringReplace[ToString[StandardForm[ContriScalars]],"DRalgo`Private`"->""]]
+];
+
+
+
+(*
+	Calculates the 2-loop pressure in the ultrasoft theory.
+*)
+SymmetricPhaseUSNLO[]:=Module[{},
+If[verbose,Print["Calculating NLO \!\(\*SuperscriptBox[\(T\), \(4\)]\) Terms"]];
+(*Definitions*)
+fSSV[x_,y_]:=(4 (x^2+y^2) Log[\[Mu]3/(x+y)]+4 Sqrt[x^2] Sqrt[y^2]+x^2+y^2)/(32 \[Pi]^2);
+
+I1Temp=1/(16^2 \[Pi]);
+Vss=1/8*I1Temp*TensorContract[\[Mu]ijL . \[Lambda]KTotal . \[Mu]ijL,{{1,2},{3,4}}];
+
+ssv=1/4 TensorProduct[gvssVTot,gvssVTot];
+Vssv=Sum[ssv[[a,i,j,a,i,j]]fSSV[\[Mu]ijL[[i,i]],\[Mu]ijL[[j,j]]],{a,nv},{i,nSH},{j,nSH}];
+
+
+VNLO= Vss+Vssv;
+
+ToExpression[StringReplace[ToString[StandardForm[VNLO]],"DRalgo`Private`"->""]]
+];
+
+
+
+(*
 	Prints all the couplings in the supersoft theory.	
 *)
 
@@ -44,7 +106,7 @@ HelpSolveNASS=Table[{Delete[HelpList,1][[a]]->HelpVarMod[[a]]},{a,1,Delete[HelpL
 IdentMatNASS=List/@HelpSolveNASS/.{b_->a_}:>a->b//Flatten[#,1]&;
 
 VarGauge=Table[Symbol[ToString[c]<>ToString["3d"]],{c,GaugeCouplingNames}];
-SubGauge=Table[c->Symbol[ToString[c]<>ToString["SS"]],{c,VarGauge}];
+SubGauge=Table[c->Symbol[ToString[c]<>ToString["US"]],{c,VarGauge}];
 
 
 A1=\[Lambda]VecNASS//Normal;
@@ -77,19 +139,17 @@ ResGauge=Table[List[Sol1[[c]]]/.{b_->a_}:>b^2->a,{c,1,Length[Sol1]}];
 
 (* Scalar Quartics*)
 QuarticVar=\[Lambda]4S//Normal//Variables;
-SubGauge=Table[c->Symbol[ToString[c]<>ToString["SS"]],{c,QuarticVar}];
+SubGauge=Table[c->Symbol[ToString[c]<>ToString["US"]],{c,QuarticVar}];
 NonZeroPos=SparseArray[\[Lambda]4S]["NonzeroPositions"];
 SolVar=Extract[\[Lambda]4S-\[Lambda]3DSS,{#}]&/@NonZeroPos//DeleteDuplicates;
-
 ResScalp=Reduce[SolVar==0,QuarticVar]//ToRules[#]&;
 SolveTemp=QuarticVar/.ResScalp;
 ResScal=Table[{ReplaceAll[QuarticVar[[i]],SubGauge]->SolveTemp[[i]]},{i,1,Length@QuarticVar}]//Flatten[#,1]&//ReplaceAll[#,IdentMatSS]&;
 
 
-
 (* Scalar Cubics*)
 VarGauge=Join[\[Lambda]3CLight//Normal//Variables]//DeleteDuplicates;
-SubGauge=Table[c->Symbol[ToString[c]<>ToString["SS"]],{c,VarGauge}];
+SubGauge=Table[c->Symbol[ToString[c]<>ToString["US"]],{c,VarGauge}];
 \[Lambda]3p=\[Lambda]3CLight//Normal//ReplaceAll[#,SubGauge]&;
 SolVar=\[Lambda]3CSRedSS-\[Lambda]3p//Normal;
 CubicVar=\[Lambda]3p//Normal//Variables;
@@ -100,6 +160,7 @@ ResCubicSS=Solve[SolVar==0,CubicVar]/.IdentMatSS//Flatten[#,1]&;
 
 (*Printing Result*)
 PrintPre=Join[ResScal,ResGauge,ResGaugeNASS,ResCubicSS]//Normal//FullSimplify//DeleteDuplicates;
+PrintPre=DeleteCases[PrintPre,0->0];
 
 ToExpression[StringReplace[ToString[StandardForm[PrintPre]],"DRalgo`Private`"->""]]
 
@@ -176,19 +237,20 @@ ContriSE=Simplify[Table[Sum[ZSij[[i,l]]\[Lambda]3CLight[[l,j,k]]+ZSij[[j,l]]\[La
 ScalarMass2LoopSS[]:=Module[{},
 If[verbose,Print["Calculating 2-Loop Scalar Mass"]];
 
-Contri1=-1/(16 \[Pi]^2)1/2Simplify[Table[Sum[ \[Lambda]K[[a,b,i,n]]\[Lambda]K[[a,b,n,j]](1/2+Log[\[Mu]3/( \[Mu]ijL[[a,a]]+ \[Mu]ijL[[b,b]])]),{a,1,nSH},{b,1,nSH},{n,1,nSL}],{i,1,nSL},{j,1,nSL}]];
-Contri2=1/(16 \[Pi]^2)*(-1/2)Simplify[Table[Sum[\[Lambda]K[[n,m,i,j]]gAvss[[a,n,l]]gAvss[[a,l,m]](1/2+2Log[\[Mu]3/(2 \[Mu]ijL[[n,n]])]),{a,1,nv},{l,1,nSH},{n,1,nSH},{m,1,nSH}],{i,1,nSL},{j,1,nSL}]];
-Contri3=1/(16 \[Pi]^2)*(1/4)Simplify[Table[Sum[HabijVL[[a,b,i,j]]gAvss[[a,n,l]]gAvss[[b,l,n]](-Log[\[Mu]3/(2 \[Mu]ijL[[n,n]])]),{a,1,nv},{b,1,nv},{l,1,nSH},{n,1,nSH}],{i,1,nSL},{j,1,nSL}]];
+Contri1=-1/(16 \[Pi]^2)1/2Simplify[Table[Sum[ \[Lambda]K[[a,b,i,n]]\[Lambda]K[[a,b,n,j]](1/2+Log[\[Mu]3US/( \[Mu]ijL[[a,a]]+ \[Mu]ijL[[b,b]])]),{a,1,nSH},{b,1,nSH},{n,1,nSL}],{i,1,nSL},{j,1,nSL}]];
+Contri2=1/(16 \[Pi]^2)*(-1/2)Simplify[Table[Sum[\[Lambda]K[[n,m,i,j]]gAvss[[a,n,l]]gAvss[[a,l,m]](1/2+2Log[\[Mu]3US/(2 \[Mu]ijL[[n,n]])]),{a,1,nv},{l,1,nSH},{n,1,nSH},{m,1,nSH}],{i,1,nSL},{j,1,nSL}]];
+Contri3=1/(16 \[Pi]^2)*(1/4)Simplify[Table[Sum[HabijVL[[a,b,i,j]]gAvss[[a,n,l]]gAvss[[b,l,n]](-Log[\[Mu]3US/(2 \[Mu]ijL[[n,n]])]),{a,1,nv},{b,1,nv},{l,1,nSH},{n,1,nSH}],{i,1,nSL},{j,1,nSL}]];
 Contri4=1/4*(1/(16 \[Pi]^2))Simplify[Table[Sum[\[Lambda]K[[a,b,i,j]]\[Lambda]4K[[a,b,c,c]]\[Mu]ijL[[c,c]]/(\[Mu]ijL[[a,a]]+\[Mu]ijL[[b,b]]),{a,1,nSH},{b,1,nSH},{c,1,nSH}],{i,1,nSL},{j,1,nSL}]];
-Contri5=-1/(16 \[Pi]^2)/3!Simplify[Table[Sum[ \[Lambda]x[[i,a,b,n]]\[Lambda]x[[j,a,b,n]](1/2+Log[\[Mu]3/( \[Mu]ijL[[a,a]]+ \[Mu]ijL[[b,b]]+ \[Mu]ijL[[n,n]])]),{a,1,nSH},{b,1,nSH},{n,1,nSH}],{i,1,nSL},{j,1,nSL}]];
-Contri6=-1/(16 \[Pi]^2)/2Simplify[Table[Sum[ \[Lambda]y[[i,a,b,n]]\[Lambda]y[[j,a,b,n]](1/2+Log[\[Mu]3/( \[Mu]ijL[[n,n]])]),{a,1,nSL},{b,1,nSL},{n,1,nSH}],{i,1,nSL},{j,1,nSL}]];
+Contri5=-1/(16 \[Pi]^2)/3!Simplify[Table[Sum[ \[Lambda]x[[i,a,b,n]]\[Lambda]x[[j,a,b,n]](1/2+Log[\[Mu]3US/( \[Mu]ijL[[a,a]]+ \[Mu]ijL[[b,b]]+ \[Mu]ijL[[n,n]])]),{a,1,nSH},{b,1,nSH},{n,1,nSH}],{i,1,nSL},{j,1,nSL}]];
+Contri6=-1/(16 \[Pi]^2)/2Simplify[Table[Sum[ \[Lambda]y[[i,a,b,n]]\[Lambda]y[[j,a,b,n]](1/2+Log[\[Mu]3US/( \[Mu]ijL[[n,n]])]),{a,1,nSL},{b,1,nSL},{n,1,nSH}],{i,1,nSL},{j,1,nSL}]];
 Contri7=(1/(16 \[Pi]^2))/2Simplify[Table[Sum[\[Lambda]y[[i,j,a,b]]\[Lambda]x[[a,b,c,c]]\[Mu]ijL[[c,c]]/(\[Mu]ijL[[b,b]]),{a,1,nSL},{b,1,nSH},{c,1,nSH}],{i,1,nSL},{j,1,nSL}]];
 Coupling=-1/4*1/(4 \[Pi])^2;
 ContriMix1=Coupling*Simplify[Table[Sum[(\[Mu]ijL[[n,n]])\[Mu]ijL[[m,m]]^-2 \[Mu]ijL[[l,l]]\[Lambda]x[[i,n,n,m]]\[Lambda]x[[j,l,l,m]],{l,1,nSH},{m,1,nSH},{n,1,nSH}],{i,1,nSL},{j,1,nSL}]];
 ContriMix2=-Simplify[Table[Sum[(\[Mu]ijMix[[i,m]])\[Mu]ijL[[m,m]]^-2 \[Mu]ijMix[[j,m]],{m,1,nSH}],{i,1,nSL},{j,1,nSL}]];
 
-ContriC1=-1/2Simplify[Table[Sum[MassHelp1[\[Mu]ijLS[[jj,jj]],\[Mu]ijLS[[ii,ii]],\[Mu]ijLS[[kk,kk]],\[Mu]ijLS[[ll,ll]],\[Mu]ijLS[[mm,mm]]] \[Lambda]3CTot[[i,jj,ii]]\[Lambda]3CTot[[j,kk,ll]]\[Lambda]3CTot[[jj,mm,kk]]\[Lambda]3CTot[[ii,mm,ll]],{jj,1,ns},{ii,1,ns},{mm,1,ns},{kk,1,ns},{ll,1,ns}],{i,LightScalar[[;;,1]]},{j,LightScalar[[;;,1]]}]];
 
+(*Check signs*)
+ContriC1=-1/2Simplify[Table[Sum[MassHelp1[\[Mu]ijLS[[jj,jj]],\[Mu]ijLS[[ii,ii]],\[Mu]ijLS[[kk,kk]],\[Mu]ijLS[[ll,ll]],\[Mu]ijLS[[mm,mm]]] \[Lambda]3CTot[[i,jj,ii]]\[Lambda]3CTot[[j,kk,ll]]\[Lambda]3CTot[[jj,mm,kk]]\[Lambda]3CTot[[ii,mm,ll]],{jj,1,ns},{ii,1,ns},{mm,1,ns},{kk,1,ns},{ll,1,ns}],{i,LightScalar[[;;,1]]},{j,LightScalar[[;;,1]]}]];
 ContriC2=1/2*Simplify[Table[Sum[MassHelp2[\[Mu]ijLS[[ii,ii]],\[Mu]ijLS[[jj,jj]],\[Mu]ijLS[[mm,mm]],\[Mu]ijLS[[nn,nn]]] \[Lambda]4Tot[[i,ii,nn,mm]]\[Lambda]3CTot[[mm,nn,jj]]\[Lambda]3CTot[[j,ii,jj]],{jj,1,ns},{ii,1,ns},{mm,1,ns},{nn,1,ns}],{i,LightScalar[[;;,1]]},{j,LightScalar[[;;,1]]}]];
 ContriC3=1/2*Simplify[Table[Sum[MassHelp2[\[Mu]ijLS[[ii,ii]],\[Mu]ijLS[[jj,jj]],\[Mu]ijLS[[mm,mm]],\[Mu]ijLS[[nn,nn]]] \[Lambda]4Tot[[j,ii,nn,mm]]\[Lambda]3CTot[[mm,nn,jj]]\[Lambda]3CTot[[i,ii,jj]],{jj,1,ns},{ii,1,ns},{mm,1,ns},{nn,1,ns}],{i,LightScalar[[;;,1]]},{j,LightScalar[[;;,1]]}]];
 ContriC4=-1/4*Simplify[Table[Sum[MassHelp2[\[Mu]ijLS[[ii,ii]],\[Mu]ijLS[[jj,jj]],\[Mu]ijLS[[mm,mm]],\[Mu]ijLS[[nn,nn]]] \[Lambda]4Tot[[i,j,ii,jj]]\[Lambda]3CTot[[mm,jj,nn]]\[Lambda]3CTot[[mm,ii,nn]],{jj,1,ns},{ii,1,ns},{mm,1,ns},{nn,1,ns}],{i,LightScalar[[;;,1]]},{j,LightScalar[[;;,1]]}]];
@@ -211,18 +273,18 @@ ContriF=-Table[Sum[ZSij[[i,n]]\[Mu]ijTemp[[n,j]]+ZSij[[j,n]]\[Mu]ijTemp[[n,i]],{
 	These functions appear in the matching.
 *)
 MassHelp1[0,0,0,0,0]:=0
-MassHelp1[x_,0,0,0,0]:=1/(16 \[Pi]^2 x^2)
-MassHelp1[0,x_,0,0,0]:=1/(16 \[Pi]^2 x^2)
-MassHelp1[0,0,x_,0,0]:=1/(16 \[Pi]^2 x^2)
-MassHelp1[0,0,0,x_,0]:=1/(16 \[Pi]^2 x^2)
-MassHelp1[y_,y_,w_,z_,t_]:=1/(16 \[Pi]^2 (t+w+y) (t+y+z))
-MassHelp1[x_,y_,z_,z_,t_]:=1/(16 \[Pi]^2 (t+x+z) (t+y+z))
-MassHelp1[0,y_,0,0,t_]:=1/(16 \[Pi]^2 (t) (t+y))
-MassHelp1[x_,y_,w_,z_,t_]:=(Log[\[Mu]/(t+w+x)]-Log[\[Mu]/(t+w+y)]-Log[\[Mu]/(t+x+z)]+Log[\[Mu]/(t+y+z)])/(16 \[Pi]^2 (w-z) (x-y))
-MassHelp1[0,y_,0,z_,0]:=-((2 Log[\[Mu]/y]-2 Log[\[Mu]/(y+z)]+2 Log[\[Mu]/z]+1)/(32 \[Pi]^2 y z))
-MassHelp1[x_,0,w_,0,0]:=-((2 Log[\[Mu]/x]-2 Log[\[Mu]/(x+w)]+2 Log[\[Mu]/w]+1)/(32 \[Pi]^2 x w))
-MassHelp1[0,y_,w_,0,0]:=-((2 Log[\[Mu]/y]-2 Log[\[Mu]/(y+w)]+2 Log[\[Mu]/w]+1)/(32 \[Pi]^2 y w))
-MassHelp1[x_,0,0,z_,0]:=-((2 Log[\[Mu]/x]-2 Log[\[Mu]/(x+z)]+2 Log[\[Mu]/z]+1)/(32 \[Pi]^2 x z))
+MassHelp1[x_,0,0,0,0]:=1/(16 \[Pi]^2 x^4)
+MassHelp1[0,x_,0,0,0]:=1/(16 \[Pi]^2 x^4)
+MassHelp1[0,0,x_,0,0]:=1/(16 \[Pi]^2 x^4)
+MassHelp1[0,0,0,x_,0]:=1/(16 \[Pi]^2 x^4)
+MassHelp1[y_,y_,w_,z_,t_]:=1/(16 \[Pi]^2 (t^2+w^2+y^2) (t^2+y^2+z^2))
+MassHelp1[x_,y_,z_,z_,t_]:=1/(16 \[Pi]^2 (t^2+x^2+z^2) (t^2+y^2+z^2))
+MassHelp1[0,y_,0,0,t_]:=1/(16 \[Pi]^2 (t^2) (t^2+y^2))
+MassHelp1[x_,y_,w_,z_,t_]:=(Log[\[Mu]3US/(t+w+x)]-Log[\[Mu]3US/(t+w+y)]-Log[\[Mu]3US/(t+x+z)]+Log[\[Mu]3US/(t+y+z)])/(16 \[Pi]^2 (w^2-z^2) (x^2-y^2))
+MassHelp1[0,y_,0,z_,0]:=-((2 Log[\[Mu]3US/y]-2 Log[\[Mu]3US/(y+z)]+2 Log[\[Mu]3US/z]+1)/(32 \[Pi]^2 y^2 z^2))
+MassHelp1[x_,0,w_,0,0]:=-((2 Log[\[Mu]3US/x]-2 Log[\[Mu]3US/(x+w)]+2 Log[\[Mu]3US/w]+1)/(32 \[Pi]^2 x^2 w^2))
+MassHelp1[0,y_,w_,0,0]:=-((2 Log[\[Mu]3US/y]-2 Log[\[Mu]3US/(y+w)]+2 Log[\[Mu]3US/w]+1)/(32 \[Pi]^2 y^2 w^2))
+MassHelp1[x_,0,0,z_,0]:=-((2 Log[\[Mu]3US/x]-2 Log[\[Mu]3US/(x+z)]+2 Log[\[Mu]3US/z]+1)/(32 \[Pi]^2 x^2 z^2))
 
 
 (*
@@ -239,11 +301,11 @@ MassHelpTriangle[x_,y_,z_]:=1/(4 \[Pi] (x+y) (x+z) (y+z))
 	These functions appear in the matching.
 *)
 MassHelp2[0,0,0,0]:=0
-MassHelp2[0,0,z_,t_]:=1/(16 \[Pi]^2 (t+z))
-MassHelp2[x_,0,0,0]:=(-(2 Log[\[Mu]/x])-1)/(32 \[Pi]^2 x)
-MassHelp2[0,y_,0,0]:=(-(2 Log[\[Mu]/y])-1)/(32 \[Pi]^2 y)
-MassHelp2[y_,y_,z_,t_]:=1/(16 \[Pi]^2 (t+y+z))
-MassHelp2[x_,y_,z_,t_]:=(Log[\[Mu]/(t+y+z)]-Log[\[Mu]/(t+x+z)])/(16 \[Pi]^2 (x-y))
+MassHelp2[0,0,z_,t_]:=1/(16 \[Pi]^2 (t^2+z^2))
+MassHelp2[x_,0,0,0]:=(-(2 Log[\[Mu]3US/x])-1)/(32 \[Pi]^2 x^2)
+MassHelp2[0,y_,0,0]:=(-(2 Log[\[Mu]3US/y])-1)/(32 \[Pi]^2 y^2)
+MassHelp2[y_,y_,z_,t_]:=1/(16 \[Pi]^2 (t^2+y^2+z^2))
+MassHelp2[x_,y_,z_,t_]:=(Log[\[Mu]3US/(t+y+z)]-Log[\[Mu]3US/(t+x+z)])/(16 \[Pi]^2 (x^2-y^2))
 
 
 (*
@@ -301,28 +363,34 @@ If[verbose,Print["Identifying Components"]];
 (*Quartic Tensor*)
 
 
-
 HelpList=DeleteDuplicates@SparseArray[Simplify@Flatten[ (\[Lambda]4S+\[Lambda]3DSS)]]//Sort;
-HelpVar=Table[\[Lambda]SS[a],{a,1,Delete[HelpList,1]//Length}];
+If[HelpList[[1]]==0&&Length[HelpList]>1,
+	HelpList=Delete[HelpList,1];
+];
+HelpVar=Table[\[Lambda]SS[a],{a,1,HelpList//Length}];
 HelpVarMod=RelationsBVariables[HelpList,HelpVar];
- HelpSolveQuarticS=Table[{Delete[HelpList,1][[a]]->HelpVarMod[[a]]},{a,1,Delete[HelpList,1]//Length}]//Flatten;
+HelpSolveQuarticS=Table[{HelpList[[a]]->HelpVarMod[[a]]},{a,1,HelpList//Length}]//Flatten;
 \[Lambda]3DSS=(\[Lambda]4S+\[Lambda]3DSS)//Normal//Simplify//ReplaceAll[#,HelpSolveQuarticS]&//SparseArray;
-
 
 
 (*Cubic Tensor*)
 HelpList=DeleteDuplicates@SparseArray[Flatten@Simplify[(\[Lambda]3CSSS+\[Lambda]3CLight)]]//Sort//FullSimplify;
-HelpVar=Table[cSSSS[a],{a,1,Delete[HelpList,1]//Length}];
+If[HelpList[[1]]==0&&Length[HelpList]>1,
+	HelpList=Delete[HelpList,1];
+];
+HelpVar=Table[cSSSS[a],{a,1,HelpList//Length}];
 HelpVarMod=RelationsBVariables[HelpList,HelpVar];
-HelpSolveCubicSSS=Table[{Delete[HelpList,1][[a]]->HelpVarMod[[a]]},{a,1,Delete[HelpList,1]//Length}]//Flatten//Simplify;
+HelpSolveCubicSSS=Table[{HelpList[[a]]->HelpVarMod[[a]]},{a,1,HelpList//Length}]//Flatten//Simplify;
 \[Lambda]3CSRedSS=(\[Lambda]3CSSS+\[Lambda]3CLight)//Normal//Simplify//FullSimplify//ReplaceAll[#,HelpSolveCubicSSS]&//SparseArray;
-
 (*Scalar-Vector Tensor*)
 
 HelpList=DeleteDuplicates@Simplify@Flatten[(HabijVL+GvvssTSS)]//Sort;
-HelpVar=Table[ \[Lambda]VTSS[a],{a,1,Delete[HelpList,1]//Length}];
+If[HelpList[[1]]==0&&Length[HelpList]>1,
+	HelpList=Delete[HelpList,1];
+];
+HelpVar=Table[ \[Lambda]VTSS[a],{a,1,HelpList//Length}];
 HelpVarMod=RelationsBVariables[HelpList,HelpVar];
-HelpSolveVecTS=Table[{Delete[HelpList,1][[a]]->HelpVarMod[[a]]},{a,1,Delete[HelpList,1]//Length}]//Flatten;
+HelpSolveVecTS=Table[{HelpList[[a]]->HelpVarMod[[a]]},{a,1,HelpList//Length}]//Flatten;
 \[Lambda]KVecTSS= (HabijVL+GvvssTSS)//Normal//Simplify//ReplaceAll[#,HelpSolveVecTS]&//SparseArray;
 
 
@@ -330,29 +398,37 @@ HelpSolveVecTS=Table[{Delete[HelpList,1][[a]]->HelpVarMod[[a]]},{a,1,Delete[Help
 If[mode>=2,
 
 HelpList=DeleteDuplicates@Flatten@Simplify[ xLO \[Mu]ijLight+xLO \[Mu]ijSSLO+xNLO(\[Mu]ijSSNLO+\[Mu]ijSSNLO2)]//Sort;
-HelpVar=Table[ \[Mu]ijSS[a],{a,1,Delete[HelpList,1]//Length}];
+If[HelpList[[1]]==0&&Length[HelpList]>1,
+	HelpList=Delete[HelpList,1];
+];
+HelpVar=Table[ \[Mu]ijSS[a],{a,1,HelpList//Length}];
 HelpVarMod=RelationsBVariables[HelpList,HelpVar];
-HelpSolveMassS=Table[{Delete[HelpList,1][[a]]->HelpVarMod[[a]]},{a,1,Delete[HelpList,1]//Length}]//Simplify//Flatten;
+HelpSolveMassS=Table[{HelpList[[a]]->HelpVarMod[[a]]},{a,1,HelpList//Length}]//Simplify//Flatten;
 \[Mu]ijSNLOSS=xLO \[Mu]ijLight+xLO \[Mu]ijSSLO+xNLO(\[Mu]ijSSNLO+\[Mu]ijSSNLO2)//Normal//Simplify//ReplaceAll[#,HelpSolveMassS]&//SparseArray;
 ,
 HelpList=DeleteDuplicates@Flatten@Simplify[ xLO \[Mu]ijLight+xLO \[Mu]ijSSLO]//Sort;
-HelpVar=Table[ \[Mu]ijSS[a],{a,1,Delete[HelpList,1]//Length}];
+If[HelpList[[1]]==0&&Length[HelpList]>1,
+	HelpList=Delete[HelpList,1];
+];
+HelpVar=Table[ \[Mu]ijSS[a],{a,1,HelpList//Length}];
 HelpVarMod=RelationsBVariables[HelpList,HelpVar];
-HelpSolveMassS=Table[{Delete[HelpList,1][[a]]->HelpVarMod[[a]]},{a,1,Delete[HelpList,1]//Length}]//Simplify//Flatten;
+HelpSolveMassS=Table[{HelpList[[a]]->HelpVarMod[[a]]},{a,1,HelpList//Length}]//Simplify//Flatten;
 \[Mu]ijSNLOSS=xLO \[Mu]ijLight+xLO \[Mu]ijSSLO//Normal//Simplify//ReplaceAll[#,HelpSolveMassS]&//SparseArray;
 ];
 
 (*Scalar Tadpoles*)
 HelpList=DeleteDuplicates@Flatten@Simplify[ TadPoleLightSS]//Sort;
-HelpVar=Table[ dSS[a],{a,1,Delete[HelpList,1]//Length}];
+If[HelpList[[1]]==0&&Length[HelpList]>1,
+	HelpList=Delete[HelpList,1];
+];
+HelpVar=Table[ dSS[a],{a,1,HelpList//Length}];
 HelpVarMod=RelationsBVariables[HelpList,HelpVar];
-HelpSolveTadpoleSS=Table[{Delete[HelpList,1][[a]]->HelpVarMod[[a]]},{a,1,Delete[HelpList,1]//Length}]//Flatten;
+HelpSolveTadpoleSS=Table[{HelpList[[a]]->HelpVarMod[[a]]},{a,1,HelpList//Length}]//Flatten;
 TadPoleSSSLO=TadPoleLightSS//Normal//Simplify//ReplaceAll[#,HelpSolveTadpoleSS]&//SparseArray;
 
 
 
 IdentMatSS=List/@Join[HelpSolveQuarticS,HelpSolveVecTS,HelpSolveMassS,HelpSolveCubicSSS,HelpSolveTadpoleSS]/.{b_->a_}:>a->b//Flatten[#,1]&;
-
 
 ];
 
@@ -367,7 +443,7 @@ PrintTadpolesUS[optP_]:=Module[{opt=optP},
 If[verbose,Print["Printing Scalar Masses"]];
 
 VarGauge=Join[TadPoleLight//Normal//Variables]//DeleteDuplicates;
-SubGauge=Table[c->Symbol[ToString[c]<>ToString["SS"]],{c,VarGauge}];
+SubGauge=Table[c->Symbol[ToString[c]<>ToString["US"]],{c,VarGauge}];
 
 
 \[Lambda]1p=TadPoleLight//Normal//ReplaceAll[#,SubGauge]&;
@@ -389,7 +465,7 @@ PrintScalarMassUS[optP_]:=Module[{opt=optP},
 If[verbose,Print["Printing Scalar Masses"]];
 
 VarGauge=Join[\[Mu]ijLight//Normal//Variables]//DeleteDuplicates;
-SubGauge=Table[c->Symbol[ToString[c]<>ToString["SS"]],{c,VarGauge}];
+SubGauge=Table[c->Symbol[ToString[c]<>ToString["US"]],{c,VarGauge}];
 
 \[Mu]ijp=\[Mu]ijLight//Normal//ReplaceAll[#,SubGauge]&;
 var=Normal[\[Mu]ijp]//Variables;
@@ -619,7 +695,6 @@ ZLij=-ContriSS/2;
 PrepareSoftToSuperSoft[ListHardI_]:=Module[{ListP=ListHardI},
 
 (*Fix for Non-diagonal Debye masses*)
-
 (*************************)
 
 (*
@@ -676,16 +751,27 @@ If[HScal,
 \[Lambda]4Light=Table[\[Lambda]3DSp[[a,b,c,d]],{a,LightScalar[[;;,1]]},{b,LightScalar[[;;,1]]},{c,LightScalar[[;;,1]]},{d,LightScalar[[;;,1]]}]//SparseArray; (*Light-scalar part of scalar quartic*)
 \[Lambda]4Heavy=Table[\[Lambda]3DSp[[a,b,c,d]],{a,HeavyScalars[[;;,1]]},{b,HeavyScalars[[;;,1]]},{c,HeavyScalars[[;;,1]]},{d,HeavyScalars[[;;,1]]}]//SparseArray; (*Heavy-scalar part of scalar quartic*)
 \[Lambda]KHeavy=Table[\[Lambda]KVec[[a,b,c,d]],{a,1,nv},{b,1,nv},{c,HeavyScalars[[;;,1]]},{d,HeavyScalars[[;;,1]]}]//SparseArray;  (*Heavy-scalar part of the scalar-temporalScal couplings*)
-A1=Delete[\[Lambda]4Heavy//ArrayRules//ReplaceAll[#,{x_,y_,z_,w_}->{x+nv,y+nv,z+nv,w+nv}]&,-1];
+
+
+A1=Delete[\[Lambda]4Heavy//ArrayRules,-1]//ReplaceAll[#,{x_,y_,z_,w_}->{x+nv,y+nv,z+nv,w+nv}]&;
+A2=ReplaceAll[Delete[\[Lambda]KHeavy//ArrayRules,-1],({x_,y_,z_,w_}->a_)->{x,y,z+nv,w+nv}->a];
+A3=Delete[\[Lambda]AAS//ArrayRules,-1];
+
+
+\[Lambda]KTotal=SymmetrizedArray[Join[A1,A2,A3],{nSH,nSH,nSH,nSH},Symmetric[{1,2,3,4}]]//SparseArray; (*Total heavy-scalar tensors: Heavy scalars+Temporal scalars*)
+
+(*A1=Delete[\[Lambda]4Heavy//ArrayRules//ReplaceAll[#,{x_,y_,z_,w_}->{x+nv,y+nv,z+nv,w+nv}]&,-1];
 A2=Delete[\[Lambda]KHeavy//ArrayRules//ReplaceAll[#,{x_,y_,z_,w_}->{x,y,z+nv,w+nv}]&,-1];
-\[Lambda]KTotal=SymmetrizedArray[Join[A1,A2],{nSH,nSH,nSH,nSH},Symmetric[{1,2,3,4}]]//SparseArray; (*Total heavy-scalar tensors: Heavy scalars+Temporal scalars*)
+A3=Delete[\[Lambda]AAS//ArrayRules,-1];
+\[Lambda]KTotal=SymmetrizedArray[Join[A1,A2,A3],{nSH,nSH,nSH,nSH},Symmetric[{1,2,3,4}]]//SparseArray; (*Total heavy-scalar tensors: Heavy scalars+Temporal scalars*)
+*)
 
 (*TadPoles*)
 VarTadpole=Join[\[Lambda]1//Normal//Variables]//DeleteDuplicates;
 SubTadpole=Table[c->Symbol[ToString[c]<>ToString["3d"]],{c,VarTadpole}];
 
-TadPoleLight=Table[\[Lambda]1[[a]],{a,LightScalar[[;;,1]]}]//ReplaceAll[#,SubMass]&//SparseArray;
-TadPoleTemp=Table[\[Lambda]1[[a]],{a,HeavyScalars[[;;,1]]}]//ReplaceAll[#,SubMass]&//SparseArray;
+TadPoleLight=Table[\[Lambda]1[[a]],{a,LightScalar[[;;,1]]}]//ReplaceAll[#,SubTadpole]&//SparseArray;
+TadPoleTemp=Table[\[Lambda]1[[a]],{a,HeavyScalars[[;;,1]]}]//ReplaceAll[#,SubTadpole]&//SparseArray;
 
 
 If[Length[TadPoleTemp//ArrayRules]==1,
@@ -788,7 +874,8 @@ ToExpression[StringReplace[ToString[StandardForm[Join[\[Lambda]K,\[Lambda]4S,\[L
 
 ,
 \[Lambda]3CTot=\[Lambda]3CSRed//SparseArray;
-\[Lambda]KTotal=SymmetrizedArray[{{1,1,1,1}->0},{nSH,nSH,nSH,nSH},Symmetric[{1,2,3,4}]]//SparseArray;
+A3=Delete[\[Lambda]AAS//ArrayRules,-1];
+\[Lambda]KTotal=SymmetrizedArray[A3,{nSH,nSH,nSH,nSH},Symmetric[{1,2,3,4}]]//SparseArray;
 \[Lambda]3Cx=SymmetrizedArray[{{1,1,1}->0},{nSL,nSH,nSH},Symmetric[{2,3}]]//SparseArray;
 \[Lambda]3Cx=Table[\[Lambda]vvsLS[[b,c,a]],{a,LightScalar[[;;,1]]},{b,1,nv},{c,nv}]//SparseArray;
 \[Lambda]3CHeavy=SymmetrizedArray[{{1,1,1}->0},{nSH,nSH,nSH},Symmetric[{1,2,3}]]//SparseArray;
@@ -838,6 +925,8 @@ gvssL=Table[gvss[[a,c,d]],{a,1,nv},{c,LightScalar[[;;,1]]},{d,LightScalar[[;;,1]
 gAvss=gvssVTot//SparseArray;
 
 
+
+
 ToExpression[StringReplace[ToString[StandardForm[Join[\[Lambda]K,\[Lambda]4S,\[Lambda]4K,gAvss,gvssL,\[Mu]ijL]]],"DRalgo`Private`"->""]];
 ];
 
@@ -853,7 +942,7 @@ If[verbose,Print["Finding SuperSoft \[Beta]-functions"]];
 
 
 VarGauge=Join[\[Mu]ijLight//Normal//Variables]//DeleteDuplicates;
-SubGauge=Table[c->Symbol[ToString[c]<>ToString["SS"]],{c,VarGauge}];
+SubGauge=Table[c->Symbol[ToString[c]<>ToString["US"]],{c,VarGauge}];
 
 (*This is the epsilon pole of the 3d sunset diagram. This is the only divergence in 3d.*)
 I111=1/(4)1/(16 \[Pi]^2);
@@ -878,27 +967,57 @@ Coeff=(-1)1/4*(20/4);
 Contri6=Coeff*Flatten[GabcdV2] . Flatten[HabijVL,{1,2}];
 
 
-VarGauge=GaugeCouplingNames;
-SubGauge=Table[c->Symbol[ToString[c]<>ToString["3d"]],{c,VarGauge}];
+SubGauge=Table[c->Symbol[ToString[c]<>ToString["3d"]],{c,GaugeCouplingNames}];
 
 \[Delta]\[Mu]3dS=Contri1+  Contri2+ Contri3+ Contri4+Contri5+ Contri6;(*Sum of all the diagrams*)
-
-\[Beta]\[Mu]3ijS=4*I111* \[Delta]\[Mu]3dS //ReplaceAll[#,SubGauge]&//Simplify; (*The scalar-mass counter-term*)
+\[Beta]\[Mu]3ijS=4*I111* \[Delta]\[Mu]3dS//Normal //ReplaceAll[#,SubGauge]&//Simplify; (*The scalar-mass counter-term*)
 
 (* Scalar Mass*)
-VarGauge=Join[\[Mu]ij//Normal//Variables]//DeleteDuplicates;
+VarGauge=Join[\[Mu]ijLight//Normal//Variables]//DeleteDuplicates;
 SubGauge=Table[c->Symbol[ToString[c]<>ToString["temp"]],{c,VarGauge}];
-SubGauge2=Table[Symbol[ToString[c]<>ToString["temp"]]->c,{c,VarGauge}];
+SubGauge2=Table[Symbol[ToString[c]<>ToString["temp"]]->Symbol[ToString[c]<>ToString["US"]],{c,VarGauge}];
+
+
+GaugeHelp=Table[Symbol[ToString[c]<>ToString["3d"]],{c,GaugeCouplingNames}];
+VarUS=Join[{\[Lambda]3CLight//Normal//Variables,\[Lambda]4Light//Normal//Variables,GaugeHelp//Normal//Variables}]//DeleteDuplicates//Flatten[#,1]&;
+SubUS=Table[c->Symbol[ToString[c]<>ToString["US"]],{c,VarUS}];
 
 
 \[Lambda]4p=\[Mu]ijLight//Normal//ReplaceAll[#,SubGauge]&//SparseArray;
 SolVar=\[Beta]\[Mu]3ijS-\[Lambda]4p//Normal;
 QuarticVar=\[Lambda]4p//Normal//Variables;
-ResMass=Solve[SolVar==0,QuarticVar]/.SubGauge2//Flatten[#,1]&; (*Finds the beta-function for each scalar mass*)
+ResMass=Solve[SolVar==0,QuarticVar]/.SubGauge2/.SubUS//Flatten[#,1]&; (*Finds the beta-function for each scalar mass*)
 
 
 (*Printing Result*)
 PrintPre=ResMass//Normal//FullSimplify//DeleteDuplicates;
+
+
+
+
+(*Tadpoles*)
+\[CapitalLambda]gHelp=TensorContract[HabijL,{{1,2}}]//SimplifySparse; 
+Contri10=1/3!*I111*Activate@TensorContract[Inactive@TensorProduct[\[Lambda]4Light//SparseArray,\[Lambda]3CLight//SparseArray],{{2,5},{3,6},{4,7}}];
+Contri11=1/2*I111*2Activate@TensorContract[Inactive@TensorProduct[\[Lambda]3CLight//SparseArray,\[CapitalLambda]gHelp//SparseArray],{{2,4},{3,5}}];
+
+VarGauge=GaugeCouplingNames;
+SubGauge=Table[c->Symbol[ToString[c]<>ToString["3d"]],{c,VarGauge}];
+
+\[Delta]\[Mu]Tadpole3dUS=Contri10+Contri11//Normal//ReplaceAll[#,SubGauge]&//SparseArray;(*Same deal for tadpoles*)
+\[Beta]\[Mu]TadpoleUS=4*\[Delta]\[Mu]Tadpole3dUS //Simplify;
+
+VarGauge=Join[TadPoleLight//Normal//Variables]//DeleteDuplicates;
+SubGauge=Table[c->Symbol[ToString[c]<>ToString["temp"]],{c,VarGauge}];
+SubGauge2=Table[Symbol[ToString[c]<>ToString["temp"]]->Symbol[ToString[c]<>ToString["US"]],{c,VarGauge}];
+
+\[Lambda]4p=TadPoleLight//Normal//ReplaceAll[#,SubGauge]&//SparseArray;
+SolVar=\[Beta]\[Mu]TadpoleUS-\[Lambda]4p//Normal;
+QuarticVar=\[Lambda]4p//Normal//Variables;
+ResTadpole=Solve[SolVar==0,QuarticVar]/.SubGauge2/.SubUS//Flatten[#,1]&; (*Finds the beta-function for each scalar mass*)
+
+
+(*Printing Result*)
+PrintPre=Join[PrintPre,ResTadpole]//Normal//FullSimplify//DeleteDuplicates;
 
 ToExpression[StringReplace[ToString[StandardForm[PrintPre]],"DRalgo`Private`"->""]]
 

@@ -39,6 +39,7 @@ SymmetricPhaseEnergy[]:=Module[{},
 	Counterterms are needed to calculate
 	SymmetricPhaseNLO and SymmetricPhaseNNLO
 *)
+
 CounterTerm[]; 
 
 (*The minus signs is a convention to get the pressure*)
@@ -53,8 +54,16 @@ SymmEnergy=Tot;
 TadPole[]:=Module[{},
 If[verbose,Print["Calculating 1-Loop Tadpoles"]];
 
-ContriS=-1/2 T^2/12 TensorContract[\[Lambda]3,{{2,3}}]; (*One-loop bubble. Minus sign from feynman rule*)
-TadPoleLO=-  ContriS; (*Minus sign from matching*)
+(*One-loop bubble. Minus sign from feynman rule*)
+ContriS=-1/2 T^2/12 TensorContract[\[Lambda]3,{{2,3}}]; 
+
+(*Fermion-mass insertion*)
+fac=-(T^2/12);
+Temp1=Activate@TensorContract[Inactive@TensorProduct[Ysff,\[Mu]IJFC],{{2,4},{3,5}}];
+Temp1C=Activate@TensorContract[Inactive@TensorProduct[YsffC,\[Mu]IJF],{{2,4},{3,5}}];
+ContriFF=1/2fac*(-1)^2*(Temp1+Temp1C);
+
+TadPoleLO=-  ContriS-ContriFF; (*Minus sign from matching*)
 ];
 
 
@@ -99,13 +108,40 @@ Contri3=(-2)/2* I2p IF1p Activate@TensorContract[Inactive@TensorProduct[\[Lambda
 (*Scalar Mass insertion*)
 Contri4=1/2*I2p*Activate@TensorContract[Inactive@TensorProduct[\[Lambda]3,\[Mu]ij],{{2,4},{3,5}}];
 
+
+(*Fermion Mass insertion*)
+Yhelp1=\[Mu]IJF . \[Mu]IJFC . \[Mu]IJF;
+Yhelp2=\[Mu]IJFC . \[Mu]IJF . \[Mu]IJFC;
+Contri71=Activate@TensorContract[Inactive@TensorProduct[YsffC,Yhelp1],{{2,4},{3,5}}];
+Contri72=Activate@TensorContract[Inactive@TensorProduct[Ysff,Yhelp2],{{2,4},{3,5}}];
+Contri7=-IF2p(Contri71+Contri72);
+
+(*Fermion-mass contributions*)
+YHelp2=Activate@TensorContract[Inactive@TensorProduct[YsffC,Ysff],{{1,4},{2,5}}];
+YHelpC2=Activate@TensorContract[Inactive@TensorProduct[Ysff,YsffC],{{1,4},{2,5}}];
+Temp1=Activate@TensorContract[Inactive@TensorProduct[Ysff,\[Mu]IJFC,YHelp2],{{2,4},{5,7},{3,6}}];
+Temp1C=Activate@TensorContract[Inactive@TensorProduct[YsffC,\[Mu]IJF,YHelpC2],{{2,4},{5,7},{3,6}}];
+Contri5=-(-1)(IF1p IF2p-IF2p I1p)(Temp1C+Temp1);
+FHelp=TensorContract[HabIJF,{1,2}];
+Temp1=Activate@TensorContract[Inactive@TensorProduct[Ysff,\[Mu]IJFC,FHelp],{{2,4},{5,6},{3,7}}];
+Temp1C=Activate@TensorContract[Inactive@TensorProduct[YsffC,\[Mu]IJF,FHelp],{{2,4},{5,6},{3,7}}];
+Contri6=-(D-2)(IF1p IF2p-IF2p I1p)(Temp1+Temp1C);
+
 (*Counterterm contribution*)
 ContriCTS=-1/2 I1p \[Epsilon]^-1 ( TensorContract[Z\[Lambda]ijk,{{2,3}}]+1/2Activate@TensorContract[Inactive@TensorProduct[\[Gamma]ij,\[Lambda]3],{{2,3},{4,5}}]);
+
+temp1=Activate@TensorContract[Inactive@TensorProduct[ZYsij,\[Mu]IJFC],{{2,4},{3,5}}];
+temp2=Activate@TensorContract[Inactive@TensorProduct[ZYsijC,\[Mu]IJF],{{2,4},{3,5}}];
+temp3=Activate@TensorContract[Inactive@TensorProduct[Ysff,Z\[Mu]IJFC],{{2,4},{3,5}}];
+temp4=Activate@TensorContract[Inactive@TensorProduct[YsffC,Z\[Mu]IJF],{{2,4},{3,5}}];
+temp5=1/2Activate@TensorContract[Inactive@TensorProduct[\[Gamma]ij,Ysff,\[Mu]IJFC],{{2,3},{4,6},{5,7}}];
+temp6=1/2Activate@TensorContract[Inactive@TensorProduct[\[Gamma]ij,YsffC,\[Mu]IJF],{{2,3},{4,6},{5,7}}];
+ContriCTFF=1/2*2*IF1p*\[Epsilon]^-1 (-1)^2*(temp1+temp2+temp3+temp4+temp5+temp6);
 
 (*Self-Energy correction*)
 ContriF=-TadPoleLO . ZijS;
 
-Tot=ContriF-Contri1-Contri2-Contri3-ContriCTS-Contri4//Normal; (*minus signs from matching*)
+Tot=ContriF-Contri1-Contri2-Contri3-ContriCTS-Contri4-ContriCTFF-Contri5-Contri6-Contri7//Normal; (*minus signs from matching*)
 
 TadPoleNLO=Series[(Tot)/.D->4-2\[Epsilon]/.\[Epsilon]bp->(1/\[Epsilon]+Lb)^-1/.\[Epsilon]b->(1/\[Epsilon]+Lbb)^-1/.\[Epsilon]BF->(1/\[Epsilon]+LBF)^-1/.\[Epsilon]F->(1/\[Epsilon]+LFF)^-1/.\[Epsilon]FB->(1/\[Epsilon]+LFB)^-1/.\[Epsilon]bbM->(1/\[Epsilon]+LbbM)^-1,{\[Epsilon],0,0}]/.ReplaceLb//Normal//Coefficient[#,\[Epsilon],0]&//Simplify//FullSimplify;
 
@@ -241,6 +277,34 @@ Ggvvv=-ContriAnomVV;
 
 
 (*
+	Prints higher-order couplings.
+*)
+PrintCouplingsEffective[]:=Module[{},
+If[verbose,Print["Printing higher-dimension couplings"]];
+
+
+
+
+(*Scalar Sextic*);
+VarGauge=Join[\[Lambda]6//Normal//Variables]//DeleteDuplicates;
+SubGauge=Table[c->Symbol[ToString[c]<>ToString["3d"]],{c,VarGauge}];
+\[Lambda]6p=\[Lambda]6//Normal//ReplaceAll[#,SubGauge]&;
+SolVar=\[Lambda]6DS-\[Lambda]6p//Normal;
+SexticVar=\[Lambda]6p//Normal//Variables;
+ResScalp=Reduce[SolVar==0,SexticVar]//ToRules[#]&;
+SolveTemp=SexticVar/.ResScalp;
+ResScal=Table[{SexticVar[[i]]->SolveTemp[[i]]},{i,1,Length@SexticVar}]//Flatten[#,1]&//ReplaceAll[#,IdentMatEff]&//Simplify;
+
+
+(*Printing Result*)
+PrintPre=Join[ResScal]//Normal//FullSimplify//DeleteDuplicates;
+
+ToExpression[StringReplace[ToString[StandardForm[PrintPre]],"DRalgo`Private`"->""]]
+
+];
+
+
+(*
 	Prints effective couplings in the soft theory. The module calculates all tensors in the soft theory and matches them with corresponding tensors in the original 4d theory.
 *)
 PrintCouplings[]:=Module[{},
@@ -371,7 +435,7 @@ ToExpression[StringReplace[ToString[StandardForm[Join[SolMass]]],"DRalgo`Private
 	Prints 1-loop and 2-loop effective tadpoles in the soft theory.
 *)
 PrintTadpoles[optP_]:=Module[{opt=optP},
-If[verbose,Print["Printing Scalar Masses"]];
+If[verbose,Print["Printing Tadpoles"]];
 
 VarGauge=Join[\[Lambda]1//Normal//Variables]//DeleteDuplicates;
 SubGauge=Table[c->Symbol[ToString[c]<>ToString["3d"]],{c,VarGauge}];
@@ -382,7 +446,6 @@ helpMass=Normal[\[Lambda]1p-TadPoleS];
 ResScalp=Reduce[helpMass==0,var]//ToRules[#]&;
 SolveTemp=var/.ResScalp;
 SolMassPre=Table[{var[[i]]->SolveTemp[[i]]},{i,1,Length@var}]//Flatten[#,1]&//ReplaceAll[#,IdentMat]&;
-
 
 SolTadpole=SolMassPre;
 If[opt=="All",
@@ -422,9 +485,16 @@ ContriVV=Simplify[ Activate @ TensorContract[SelfEnergyVV2, {{1, 4},{3,5}}]];
 SelfEnergyFF=-T^2/(12);
 ContriFF=1/2SelfEnergyFF( Ysij+YsijC);
 
+
+If[mode>=3,
+(*Minus signs from the matching*)
+ContriSS\[Lambda]6=T^4/1152*TensorContract[\[Lambda]6,{{1,2},{3,4}}];
+
+aS3D=\[Mu]ij-ContriSS-ContriVV-ContriFF+ContriSS\[Lambda]6//Normal//FullSimplify//Expand;
+,
 (*Minus signs from the matching*)
 aS3D=\[Mu]ij-ContriSS-ContriVV-ContriFF//Normal//FullSimplify//Expand;
-
+];
 ];
 
 
@@ -529,6 +599,7 @@ BetaFunctions4D[]:=Module[{},
 If[verbose,Print["Finding \[Beta]-functions"]];
 CounterTerm[];
 
+
 (*To make the comparisons easier*)
 VarGauge=GaugeCouplingNames//Variables;
 SubGauge=Table[c->Symbol[ToString[c]<>ToString["temp"]],{c,VarGauge}];
@@ -550,7 +621,6 @@ A2Mod=A2/.RepVar3D;
 
 Sol1=Solve[A2Mod==A1,Var3D]//Flatten[#,1]&//FullSimplify;
 ResGauge=Table[List[Sol1[[c]]]/.{b_->a_}:>b^2->a,{c,1,Length[Sol1]}]/.SubGauge2;
-
 
 (* 
 	Non-abelian couplings
@@ -580,8 +650,11 @@ SubGauge2=Table[Symbol[ToString[c]<>ToString["temp"]]->c,{c,VarGauge}];
 
 HelpList=DeleteDuplicates@Flatten@SimplifySparse[\[Beta]\[Lambda]ijkl]//Sort;
 HelpVarMod=RelationsBVariables3[HelpList]//ReplaceAll[#,\[Lambda]VL[v1_]->\[Lambda]Beta[v1]]&;
-HelpSolve\[Beta]=Table[{Delete[HelpList,1][[a]]->HelpVarMod[[a]]},{a,1,Delete[HelpList,1]//Length}]//Flatten//Simplify;
-HelpSolve\[Beta]2=Table[{HelpVarMod[[a]]->Delete[HelpList,1][[a]]},{a,1,Delete[HelpList,1]//Length}]//Flatten//Simplify;
+If[HelpList[[1]]==0&&Length[HelpList]>1,
+	HelpList=Delete[HelpList,1];
+];
+HelpSolve\[Beta]=Table[{HelpList[[a]]->HelpVarMod[[a]]},{a,1,HelpList//Length}]//Flatten//Simplify;
+HelpSolve\[Beta]2=Table[{HelpVarMod[[a]]->HelpList[[a]]},{a,1,HelpList//Length}]//Flatten//Simplify;
 \[Lambda]4\[Beta]=\[Beta]\[Lambda]ijkl//SimplifySparse//Normal//ReplaceAll[#,HelpSolve\[Beta]]&//SparseArray;
 
 \[Lambda]4p=\[Lambda]4//Normal//ReplaceAll[#,SubGauge]&;
@@ -594,7 +667,6 @@ ResScal=Table[{QuarticVar[[i]]->SolveTemp[[i]]},{i,1,Length@QuarticVar}]/.SubGau
 (* 
 	Scalar-cubic couplings
 *)
-
 VarGauge=Join[\[Lambda]3//Normal//Variables]//DeleteDuplicates;
 SubGauge=Table[c->Symbol[ToString[c]<>ToString["temp"]],{c,VarGauge}];
 SubGauge2=Table[Symbol[ToString[c]<>ToString["temp"]]->c,{c,VarGauge}];
@@ -649,9 +721,11 @@ ResMassF=Solve[SolVar==0,QuarticVar]/.SubGauge2//Flatten[#,1]&;
 (* 
 	Scalar tadpoles
 *)
+(*Scalar Mass insertion*)
+Contri4=1/2*I2p*Activate@TensorContract[Inactive@TensorProduct[\[Lambda]3,\[Mu]ij],{{2,4},{3,5}}];
 
-\[Beta]\[Lambda]1=1/(16 \[Pi]^2)*Activate@TensorContract[Inactive@TensorProduct[\[Lambda]3,\[Mu]ij],{{2,4},{3,5}}];
 
+(*Fermion Mass insertion*)
 VarGauge=Join[\[Lambda]1//Normal//Variables]//DeleteDuplicates;
 SubGauge=Table[c->Symbol[ToString[c]<>ToString["temp"]],{c,VarGauge}];
 SubGauge2=Table[Symbol[ToString[c]<>ToString["temp"]]->c,{c,VarGauge}];
@@ -661,9 +735,30 @@ SolVar=\[Beta]\[Lambda]1-\[Lambda]4p//Normal;
 QuarticVar=\[Lambda]4p//Normal//Variables;
 ResTadpole=Solve[SolVar==0,QuarticVar]/.SubGauge2//Flatten[#,1]&;
 
+(*Effective couplings*)
+If[mode>=3,
+
+(* 
+	Scalar-cubic couplings
+*)
+
+VarGauge=Join[\[Lambda]6//Normal//Variables]//DeleteDuplicates;
+SubGauge=Table[c->Symbol[ToString[c]<>ToString["temp"]],{c,VarGauge}];
+SubGauge2=Table[Symbol[ToString[c]<>ToString["temp"]]->c,{c,VarGauge}];
+
+\[Lambda]6p=\[Lambda]6//Normal//ReplaceAll[#,SubGauge]&;
+SolVar=\[Beta]\[Lambda]6ijklnm-\[Lambda]6p//Normal;
+SexticVar=\[Lambda]6p//Normal//Variables;
+ResSextic=Solve[SolVar==0,SexticVar]/.SubGauge2//Flatten[#,1]&;
+
+
 
 (*Printing Result*)
+PrintPre=Join[ResGauge,ResGaugeNA,ResScal,ResCubic,ResYuk,ResMass,ResMassF,ResTadpole,ResSextic]//Normal//FullSimplify//DeleteDuplicates;
+,
+(*Printing Result*)
 PrintPre=Join[ResGauge,ResGaugeNA,ResScal,ResCubic,ResYuk,ResMass,ResMassF,ResTadpole]//Normal//FullSimplify//DeleteDuplicates;
+];
 
 ToExpression[StringReplace[ToString[StandardForm[PrintPre]],"DRalgo`Private`"->""]]
 
@@ -679,6 +774,7 @@ CounterTerm[]:=Module[{},
 (*Only performs the calculation once*)
 If[CT==False,
 CT=True;
+CreateBasisVanDeVis[];
 If[verbose,Print["Calculating CounterTerms"]];
 \[Kappa]=1/(16 \[Pi]^2);
 
@@ -881,6 +977,7 @@ ContriSE= \[Gamma]ab . gvff;
 \[Beta]gvff=(I 3 Contri2- ContriSE)//Simplify//SparseArray; (*beta function*)
 Zgvff=\[Beta]gvff/2//SparseArray;(*Renormalization-constant*)
 
+
 (*
 	Fermion-mass renormalization.
 *)
@@ -911,6 +1008,49 @@ ContriAnomFF=-(\[Gamma]IJF . \[Mu]IJFC+Transpose[\[Gamma]IJF . \[Mu]IJFC]);
 
 \[Beta]\[Mu]IJFC=   ContriSS+  ContriVV+  ContriAnomFF//Simplify//SparseArray;
 Z\[Mu]IJFC=\[Beta]\[Mu]IJFC/2//SparseArray;
+
+
+(*
+	Tadpole renormalization
+*)
+Contri4=1/2*I2p*Activate@TensorContract[Inactive@TensorProduct[\[Lambda]3,\[Mu]ij],{{2,4},{3,5}}];
+
+
+(*Fermion Mass insertion*)
+Yhelp1=\[Mu]IJF . \[Mu]IJFC . \[Mu]IJF;
+Yhelp2=\[Mu]IJFC . \[Mu]IJF . \[Mu]IJFC;
+Contri71=Activate@TensorContract[Inactive@TensorProduct[YsffC,Yhelp1],{{2,4},{3,5}}];
+Contri72=Activate@TensorContract[Inactive@TensorProduct[Ysff,Yhelp2],{{2,4},{3,5}}];
+ContriF=-1/(16 \[Pi]^2)*2(Contri71+Contri72);
+
+ContriS=1/(16 \[Pi]^2)*Activate@TensorContract[Inactive@TensorProduct[\[Lambda]3,\[Mu]ij],{{2,4},{3,5}}];
+
+\[Beta]\[Lambda]1=ContriF+ContriS;
+Z\[Lambda]1=\[Beta]\[Lambda]1/2;
+
+
+If[mode>=3,
+(*Effective higher-order couplings*)
+
+(*Scalar sextic operator*)
+(*Scalar loops*)
+
+(*Scalar loop with mixed \[Lambda]6 and \[Lambda]4 vertices*)
+\[CapitalLambda]\[Lambda]6tot=Flatten[\[Lambda]4,{{1},{2},{3,4}}] . Flatten[\[Lambda]6,{1,2}]//SimplifySparse;
+Prefac=15/2*1/(16 \[Pi]^2);
+SymHelp=Symmetrize[\[CapitalLambda]\[Lambda]6tot,Symmetric]//SparseArray;
+ContriSSS=Prefac*SymHelp;
+
+(*Field-strength renormalization*)
+
+ContriSETemp=-1/2*\[Gamma]ij . \[Lambda]6;
+ContriSE=6*Symmetrize[ContriSETemp,Symmetric]//SparseArray//SimplifySparse;
+
+(*Minus sign from matching*)
+\[Beta]\[Lambda]6ijklnm=-2*(ContriSE+ContriSSS)//SparseArray; 
+];
+
+
 
 ]
 
@@ -1023,8 +1163,66 @@ ContriFF=CouplingFF*Simplify[Yhelp+Transpose[Yhelp,{1,2,4,3}]+Transpose[Yhelp,{1
 ContriSETemp=-ZijS . \[Lambda]4;
 ContriSE=ContriSETemp+Transpose[ContriSETemp,{2,1,3,4}]+Transpose[ContriSETemp,{3,1,2,4}]+Transpose[ContriSETemp,{4,1,2,3}]//Simplify;
 
+If[mode>=3,
+(*Minus sign from matching*)
+ContriSS\[Lambda]6=-T^2/24*TensorContract[\[Lambda]6,{1,2}];
+\[Lambda]3D=- ContriSS- ContriVV+  ContriSE- ContriFF-ContriSS\[Lambda]6; 
+,
 (*Minus sign from matching*)
 \[Lambda]3D=- ContriSS- ContriVV+  ContriSE- ContriFF; 
+];
+
+
+
+];
+
+
+
+(*
+	Calculates Scalar quartics in the soft theory
+*)
+ScalarSextic[]:=Module[{},
+If[verbose,Print["Calculating Scalar Sextic"]];
+
+(*Scalar loops*)
+\[CapitalLambda]\[Lambda]6tem=Flatten[\[Lambda]4 . \[Lambda]4,{{1},{2},{4},{5},{3,6}}];
+\[CapitalLambda]\[Lambda]6tot=\[CapitalLambda]\[Lambda]6tem . Flatten[\[Lambda]4,{1,2}];
+Prefac=-Zeta[3]15/(128 \[Pi]^4 T^2);
+ContriSS=Prefac*Symmetrize[\[CapitalLambda]\[Lambda]6tot,Symmetric]//SparseArray//SimplifySparse;
+
+
+(*Scalar loop with mixed \[Lambda]6 and \[Lambda]4 vertices*)
+\[CapitalLambda]\[Lambda]6tot=Flatten[\[Lambda]4,{{1},{2},{3,4}}] . Flatten[\[Lambda]6,{1,2}]//SimplifySparse;
+Prefac=15/2*1/(16 \[Pi]^2)Lb;
+SymHelp=Symmetrize[\[CapitalLambda]\[Lambda]6tot,Symmetric]//SparseArray;
+ContriSSS=Prefac*SymHelp;
+
+(*Vector loops*)
+\[CapitalLambda]\[Lambda]6tem=Flatten[Transpose[HabijV,{1,4,3,2}] . HabijV,{{2},{3},{5},{6},{1,4}}];
+\[CapitalLambda]\[Lambda]6tot=\[CapitalLambda]\[Lambda]6tem . Flatten[HabijV,{{1,2},{3},{4}}];
+Prefac=3*15*Zeta[3]/(128 \[Pi]^4 T^2);
+ContriVV=Prefac*Symmetrize[\[CapitalLambda]\[Lambda]6tot,Symmetric]//SparseArray//SimplifySparse;
+
+
+(*Fermion loops*)
+\[CapitalLambda]\[Lambda]6tot1=Table[Tr[a . b . c . d . e . f],{a,Ysff},{b,YsffC},{c,Ysff},{d,YsffC},{e,Ysff},{f,YsffC}]//SparseArray;
+\[CapitalLambda]\[Lambda]6totC=Table[Tr[a . b . c . d . e . f],{a,YsffC},{b,Ysff},{c,YsffC},{d,Ysff},{e,YsffC},{f,Ysff}]//SparseArray;
+\[CapitalLambda]\[Lambda]6tot=\[CapitalLambda]\[Lambda]6tot1+ \[CapitalLambda]\[Lambda]6totC;
+Prefac=((7 Zeta[3])*15*4/(64 \[Pi]^4 T^2));
+ContriFF=Prefac*Symmetrize[\[CapitalLambda]\[Lambda]6tot,Symmetric]//SparseArray//SimplifySparse;
+
+
+(*Field-strength renormalization*)
+
+ContriSETemp=-ZijS . \[Lambda]6;
+ContriSE=6*Symmetrize[ContriSETemp,Symmetric]//SparseArray//SimplifySparse;
+
+
+(*Minus sign from matching*)
+\[Lambda]6D=ContriSE- ContriSS- ContriVV- ContriFF-ContriSSS//SparseArray; 
+
+
+
 
 ];
 
@@ -1510,16 +1708,29 @@ ContriNAS= ContriS1+1 ContriS3+ ContriS4+ ContriS5+ ContriS6//Normal;
 
 
 (*
+	Comparing symbolic with numeric tensors
+*)
+CompareTensors[mat1I_,mat2I_]:=Module[{mat1P=mat1I,mat2P=mat2I},
+VarMat1=#->RandomInteger[10000]&/@(Normal[mat1P]//Variables);
+VarMat2=#->RandomInteger[10000]&/@(Normal[mat2P]//Variables);
+mat1P=Normal[mat1P]/.VarMat1;
+mat2P=Normal[mat2P]/.VarMat2;
+Return[mat1P==mat2P]
+];
+
+
+(*
 	Calculates the 1-loop pressure in the soft theory.
 *)
 SymmetricPhaseLO[]:=Module[{},
 If[verbose,Print["Calculating Leading-Order \!\(\*SuperscriptBox[\(T\), \(4\)]\) Terms"]];
 
+
 (*Scalar Contribution*)
 TestQ=NumericQ[#]&/@Flatten[gvss]//Normal;
 Test2=ConstantArray[True,Length[TestQ]];
 If[TestQ==Test2,
-If[gvss==EmptyArray[{nv,nf,nf}]&&Ysff==EmptyArray[{ns,nf,nf}]&&\[Mu]ij==EmptyArray[{ns,ns}]&&\[Lambda]4==EmptyArray[{ns,ns,ns,ns}]&&\[Lambda]3==EmptyArray[{ns,ns,ns}]&&\[Lambda]1==EmptyArray[{ns}],
+If[CompareTensors[gvss,EmptyArray[{nv,nf,nf}]]&&CompareTensors[Ysff,EmptyArray[{ns,nf,nf}]]&&CompareTensors[\[Mu]ij,EmptyArray[{ns,ns}]]&&CompareTensors[\[Lambda]4,EmptyArray[{ns,ns,ns,ns}]]&&CompareTensors[\[Lambda]3,EmptyArray[{ns,ns,ns}]]&&CompareTensors[\[Lambda]1,EmptyArray[{ns}]],
 ContriScalars=0;
 ,
 ContriScalars=Sum[-( (\[Pi]^2)/90) T^4,{a,1,ns}];
@@ -1528,10 +1739,11 @@ ContriScalars=Sum[-( (\[Pi]^2)/90) T^4,{a,1,ns}];
 ];
 
 (*Vector contribution*)
+
 TestQ=NumericQ[#]&/@Flatten[{gvss,gvff}//Flatten[#,1]&]//Normal;
 Test2=ConstantArray[True,Length[TestQ]];
 If[TestQ==Test2,
-If[gvss==EmptyArray[{nv,nf,nf}]&&gvvv==EmptyArray[{nv,nv,nv}]&&gvss==EmptyArray[{nv,ns,vs}],
+If[CompareTensors[gvss,EmptyArray[{nv,nf,nf}]]&&CompareTensors[gvvv,EmptyArray[{nv,nv,nv}]]&&CompareTensors[gvff,EmptyArray[{nv,nf,nf}]],
 ContriVectors=0;
 ,
 ContriVectors=Sum[-( (\[Pi]^2)/90) T^4*2,{a,1,nv}];
@@ -1544,14 +1756,13 @@ TestQ=NumericQ[#]&/@Flatten[gvff]//Normal;
 Test2=ConstantArray[True,Length[TestQ]];
 
 If[TestQ==Test2,
-If[gvff==EmptyArray[{nv,nf,nf}]&&Ysff==EmptyArray[{ns,nf,nf}]&&\[Mu]IJF==EmptyArray[{nf,nf}],
+If[CompareTensors[gvff,EmptyArray[{nv,nf,nf}]]&&CompareTensors[Ysff,EmptyArray[{ns,nf,nf}]]&&CompareTensors[\[Mu]IJF,EmptyArray[{nf,nf}]],
 ContriFermions=0;
 ,
 ContriFermions=Sum[-7 \[Pi]^2/720 T^4*2*NFMat[[a,a]],{a,1,nf}];
 ];,
 ContriFermions=Sum[-7 \[Pi]^2/720 T^4*2*NFMat[[a,a]],{a,1,nf}];
 ];
-
 
 ToExpression[StringReplace[ToString[StandardForm[ContriScalars+ContriVectors+ContriFermions]],"DRalgo`Private`"->""]]
 ];
@@ -1586,9 +1797,23 @@ HabIJFnF=HabIJF . NFMat;
 (************************)
 VFFv=1/2*I1Temp*TensorContract[HabIJFnF,{{1,2},{3,4}}];
 
+
+
 ContriMass=1/2Tr[\[Mu]ij]*T^2/12;
 
-ToExpression[StringReplace[ToString[StandardForm[ContriMass+Vss+Vssv+Vvs+Vvv+Vvvv+Vggv+VFFs+VFFv//FullSimplify]],"DRalgo`Private`"->""]]
+ContriMassFermion=1/2*T^2/12 Tr[\[Mu]IJF . \[Mu]IJFC];
+
+If[mode>=3,
+(*Contribution from higher-dimensional operators*)
+VSS\[Lambda]6=1/82944*T^6*TensorContract[\[Lambda]6,{{1,2},{3,4},{5,6}}];
+,
+VSS\[Lambda]6=0;
+];
+
+
+
+
+ToExpression[StringReplace[ToString[StandardForm[ContriMass+ContriMassFermion+Vss+Vssv+Vvs+Vvv+Vvvv+Vggv+VFFs+VFFv+VSS\[Lambda]6//FullSimplify]],"DRalgo`Private`"->""]]
 ];
 
 
@@ -1811,7 +2036,7 @@ VFFvZ=1/2*\[Epsilon]^-1*V2FFV*Tr[Flatten[Temp,{{1,3},{2,4}}]];
 
 (*
 	Contribution from Scalar Mass
-	*)
+*)
 \[Lambda]Help=TensorContract[\[Lambda]4,{3,4}];
 V\[Mu]SS=Tr[\[Lambda]Help . \[Mu]ij]/4* I1p I2p*(-1);
 V\[Mu]FFS=-2*1/2 IF1p I2p*Tr[Ysij . \[Mu]ij]*(-1);
@@ -1821,6 +2046,10 @@ VLOtoNNLO=-1/4Tr[\[Mu]ij . \[Mu]ij]*1/(16 (\[Pi]^2) ) Lb*(-1);
 
 ContriMass=VLOtoNNLO+ VLOtoNLOCT+V\[Mu]SS+V\[Mu]FFS+ V\[Mu]SV;
 
+(*
+	Contribution from Fermion Mass
+*)
+VLOtoNNLOF=1/2*Tr[\[Mu]IJ . \[Mu]IJC . \[Mu]IJ . \[Mu]IJC]*1/(16 (\[Pi]^2) ) Lf;
 
 (*Result*)
 DiaCT=SerEnergyHelp[VssvZ+  VvsZ+ VssZ+ VvvZ+ VvvvZ+ VggvZ+ VFFsZ  +   VFFvZ]//Simplify;
@@ -1833,8 +2062,8 @@ DiaFermionVector= SerEnergyHelp[ HFFFVVV+  HFFVVFF +  KGaugeFF +  KVVFFFF+ KFFFV
 DiaScalarVector=SerEnergyHelp[HSSSVVV+  EVVSS+ GSSVVS+ KGaugeSS+ KGaugeS+ KVVSSSS+   JSSSVV+  HSSVVSS]//Simplify;
 DiaPureVector= SerEnergyHelp[HGauge+  KGauge+ KGhost]//Simplify;
 DiaFermionScalarVector=SerEnergyHelp[KVVFFSS]//Simplify;
-
-DiaTot=ContriMass+DiaCT+DiaFermionScalarVector+DiaPureVector+DiaScalarVector+DiaFermionVector+DiaYukawaVector+DiaYukawaScalar\[Lambda]+DiaScalar\[Lambda]+DiaScalarVector\[Lambda]+DiaYukawaScalar;
+DiaFermionMass=VLOtoNNLOF;
+DiaTot=VLOtoNNLOF+ContriMass+DiaCT+DiaFermionScalarVector+DiaPureVector+DiaScalarVector+DiaFermionVector+DiaYukawaVector+DiaYukawaScalar\[Lambda]+DiaScalar\[Lambda]+DiaScalarVector\[Lambda]+DiaYukawaScalar;
 
 AE=Series[DiaTot/.D->4-2\[Epsilon]/.\[Epsilon]bp->(1/\[Epsilon]+Lb)^-1/.\[Epsilon]b->(1/\[Epsilon]+Lbb)^-1/.\[Epsilon]BF->(1/\[Epsilon]+LBF)^-1/.\[Epsilon]F->(1/\[Epsilon]+LFF)^-1/.\[Epsilon]FB->(1/\[Epsilon]+LFB)^-1/.\[Epsilon]bbM->(1/\[Epsilon]+LbbM)^-1/.ReplaceLb,{\[Epsilon],0,0}]//Normal;
 
@@ -1889,13 +2118,15 @@ IdentifyTensorsDRalgo[]:=Module[{},
 
 If[mode>=1,
 If[verbose,Print["Calculating Quartic Tensor"]];
-
 (*
 	Scalar quartic couplings
 *)
-HelpList=DeleteDuplicates@Flatten@SimplifySparse[T(\[Lambda]4+\[Lambda]3D)]//Sort;
+HelpList=DeleteDuplicates@Flatten[T(\[Lambda]4+\[Lambda]3D)]//Sort//Simplify;
 HelpVarMod=RelationsBVariables3[HelpList]//ReplaceAll[#,\[Lambda]VL[v1_]->\[Lambda][v1]]&;
-HelpSolveQuartic=Table[{Delete[HelpList,1][[a]]->HelpVarMod[[a]]},{a,1,Delete[HelpList,1]//Length}]//Flatten//Simplify;
+If[HelpList[[1]]==0&&Length[HelpList]>1,
+	HelpList=Delete[HelpList,1];
+];
+HelpSolveQuartic=Table[{HelpList[[a]]->HelpVarMod[[a]]},{a,1,HelpList//Length}]//Flatten//Simplify;
 \[Lambda]3DS=T(\[Lambda]4+\[Lambda]3D)//SimplifySparse//Normal//ReplaceAll[#,HelpSolveQuartic]&//SparseArray;
 
 
@@ -1985,9 +2216,27 @@ HelpSolveCubicL=Table[{Delete[HelpList,1][[a]]->HelpVarMod[[a]]},{a,1,Delete[Hel
 
 ];
 
+If[mode>=3,
+If[verbose,Print["Calculating Sextic Tensor"]];
+
+(*
+	Scalar sextic couplings
+*)
+HelpList=DeleteDuplicates@Flatten[T^2 (\[Lambda]6+\[Lambda]6D)]//Sort//Simplify;
+HelpVar=Table[ \[Lambda]6d[a],{a,1,Delete[HelpList,1]//Length}];
+HelpVarMod=RelationsBVariables[HelpList,HelpVar];
+HelpSolveSextic=Table[{Delete[HelpList,1][[a]]->HelpVarMod[[a]]},{a,1,Delete[HelpList,1]//Length}]//Flatten;
+\[Lambda]6DS=T^2 (\[Lambda]6+\[Lambda]6D)//Normal//Simplify//ReplaceAll[#,HelpSolveSextic]&//SparseArray;
+
+If[Length[SparseArray[\[Lambda]6DS]["NonzeroValues"]]!=Length[SparseArray[\[Lambda]6]["NonzeroValues"]],
+Print["Detected 1-loop Scalar Sextic not defined at tree-level"];
+Print["Please Check if you defined all couplings allowed by symmetry"];
+];
+];
+
 (*
 	Debye masses
-*)
+*);
 If[mode>=2,
 HelpList=DeleteDuplicates@FullSimplify[Flatten[ xLO aV3D+ xNLO \[Mu]VabNLO]]//Sort;
 HelpVar=Table[ \[Mu]ijV[a],{a,1,Delete[HelpList,1]//Length}];
@@ -2050,6 +2299,9 @@ If[mode>=1,
 IdentMat=List/@Join[HelpSolveCubicS,HelpSolveVecT,HelpSolveVecL,HelpSolveQuarticL,HelpSolveVectorMass,HelpSolveMass,HelpSolveCubicL,HelpSolveTadpole,HelpSolveQuartic]/.{b_->a_}:>a->b//Flatten[#,1]&;
 ,
 IdentMat=List/@Join[HelpSolveVectorMass,HelpSolveMass]/.{b_->a_}:>a->b//Flatten[#,1]&;
+];
+If[mode>=3,
+IdentMatEff=List/@Join[HelpSolveSextic]/.{b_->a_}:>a->b//Flatten[#,1]&;
 ];
 ];
 
@@ -2172,5 +2424,180 @@ SolInvariants=Solve[Sol1==Sol2&&Sol3==Sol4&&Sol5==Sol6,Sol5//Variables][[1]];
 SolInvariants=Solve[Sol1==Sol2,Sol1//Variables][[1]];
 ];
 Return[SolInvariants]
+
+];
+
+
+(*
+	Prints Counterterms of 4d couplings and masses.
+*)
+CounterTerms4D[]:=Module[{},
+If[verbose,Print["Finding \[Beta]-functions"]];
+CounterTerm[];
+
+
+(*To make the comparisons easier*)
+VarGauge=GaugeCouplingNames//Variables;
+SubGauge=Table[c->Symbol[ToString[c]<>ToString["temp"]],{c,VarGauge}];
+SubGauge2=Table[Symbol[ToString[c]<>ToString["temp"]]->c,{c,VarGauge}];
+
+(* 
+	Gauge couplings
+*)
+(*Anomalous-dimension contributions*)
+
+A1=TensorContract[\[Beta]vvss//Normal,{{3,4}}];
+A2=TensorContract[HabijV,{{3,4}}]//Normal//ReplaceAll[#,SubGauge]&;
+(*Trick to avoid problems when kinetic mixing*)
+A1=DiagonalMatrix[Diagonal[A1]];
+A2=DiagonalMatrix[Diagonal[A2]];
+(*end of trick*)
+Var3D=VarGauge//ReplaceAll[#,SubGauge]&//Variables;
+RepVar3D=#->Sqrt[#]&/@Var3D;
+A2Mod=A2/.RepVar3D;
+
+Sol1=Solve[A2Mod==A1,Var3D]//Flatten[#,1]&//FullSimplify;
+ResGauge=Table[List[Sol1[[c]]]/.{b_->a_}:>b^2->a,{c,1,Length[Sol1]}]/.SubGauge2;
+
+(* 
+	Non-abelian couplings
+*)
+
+GabcdTemp=(\[Beta]gvvv . gvvv+gvvv . \[Beta]gvvv)//SparseArray;
+GabVTree=TensorContract[GabcdV,{{2,3}}]//Normal;
+GabVLoop=TensorContract[GabcdTemp,{{2,3}}]//Normal;
+
+A1=GabVLoop//Normal;
+A2=GabVTree//Normal//ReplaceAll[#,SubGauge]&;
+Var3D=A2//Variables;
+RepVar3D=#->Sqrt[#]&/@Var3D;
+A2Mod=A2/.RepVar3D;
+Sol1=Solve[A2Mod==A1,Var3D]//Flatten[#,1]&//FullSimplify;
+ResGaugeNA=Table[List[Sol1[[c]]]/.{b_->a_}:>b^2->a,{c,1,Length[Sol1]}]/.SubGauge2//Simplify;
+
+
+(* 
+	Scalar-quartic couplings
+*)
+
+VarGauge=Join[\[Lambda]4//Normal//Variables]//DeleteDuplicates;
+SubGauge=Table[c->Symbol[ToString[c]<>ToString["temp"]],{c,VarGauge}];
+SubGauge2=Table[Symbol[ToString[c]<>ToString["temp"]]->c,{c,VarGauge}];
+
+
+HelpList=DeleteDuplicates@Flatten@SimplifySparse[\[Beta]\[Lambda]ijkl]//Sort;
+HelpVarMod=RelationsBVariables3[HelpList]//ReplaceAll[#,\[Lambda]VL[v1_]->\[Lambda]Beta[v1]]&;
+If[HelpList[[1]]==0&&Length[HelpList]>1,
+	HelpList=Delete[HelpList,1];
+];
+HelpSolve\[Beta]=Table[{HelpList[[a]]->HelpVarMod[[a]]},{a,1,HelpList//Length}]//Flatten//Simplify;
+HelpSolve\[Beta]2=Table[{HelpVarMod[[a]]->HelpList[[a]]},{a,1,HelpList//Length}]//Flatten//Simplify;
+\[Lambda]4\[Beta]=\[Beta]\[Lambda]ijkl//SimplifySparse//Normal//ReplaceAll[#,HelpSolve\[Beta]]&//SparseArray;
+
+\[Lambda]4p=\[Lambda]4//Normal//ReplaceAll[#,SubGauge]&;
+SolVar=\[Lambda]4\[Beta]-\[Lambda]4p//Normal;
+QuarticVar=\[Lambda]4p//Normal//Variables;
+ResScalp=Reduce[SolVar==0,QuarticVar]//ToRules[#]&;
+SolveTemp=QuarticVar/.ResScalp;
+ResScal=Table[{QuarticVar[[i]]->SolveTemp[[i]]},{i,1,Length@QuarticVar}]/.SubGauge2//Flatten[#,1]&//ReplaceAll[#,HelpSolve\[Beta]2]&//Simplify;
+
+(* 
+	Scalar-cubic couplings
+*)
+VarGauge=Join[\[Lambda]3//Normal//Variables]//DeleteDuplicates;
+SubGauge=Table[c->Symbol[ToString[c]<>ToString["temp"]],{c,VarGauge}];
+SubGauge2=Table[Symbol[ToString[c]<>ToString["temp"]]->c,{c,VarGauge}];
+
+\[Lambda]3p=\[Lambda]3//Normal//ReplaceAll[#,SubGauge]&;
+SolVar=\[Beta]\[Lambda]ijk-\[Lambda]3p//Normal;
+CubicVar=\[Lambda]3p//Normal//Variables;
+ResCubic=Solve[SolVar==0,CubicVar]/.SubGauge2//Flatten[#,1]&;
+
+(* 
+	Yukawa couplings
+*)
+VarGauge=Join[Ysff//Normal//Variables]//DeleteDuplicates;
+SubGauge=Table[c->Symbol[ToString[c]<>ToString["temp"]],{c,VarGauge}];
+SubGauge2=Table[Symbol[ToString[c]<>ToString["temp"]]->c,{c,VarGauge}];
+
+\[Lambda]4p=Ysff//Normal//ReplaceAll[#,SubGauge]&;
+SolVar=\[Beta]Ysij-\[Lambda]4p//Normal;
+QuarticVar=\[Lambda]4p//Normal//Variables;
+ResYuk=Solve[SolVar==0,QuarticVar]/.SubGauge2//Flatten[#,1]&;
+
+
+
+(* 
+	Scalar masses
+*)
+
+VarGauge=Join[\[Mu]ij//Normal//Variables]//DeleteDuplicates;
+SubGauge=Table[c->Symbol[ToString[c]<>ToString["temp"]],{c,VarGauge}];
+SubGauge2=Table[Symbol[ToString[c]<>ToString["temp"]]->c,{c,VarGauge}];
+
+\[Lambda]4p=\[Mu]ij//Normal//ReplaceAll[#,SubGauge]&;
+SolVar=\[Beta]mij-\[Lambda]4p//Normal;
+QuarticVar=\[Lambda]4p//Normal//Variables;
+ResMass=Solve[SolVar==0,QuarticVar]/.SubGauge2//Flatten[#,1]&;
+
+(* 
+	Fermion masses
+*)
+
+VarGauge=Join[\[Mu]IJF//Normal//Variables]//DeleteDuplicates;
+SubGauge=Table[c->Symbol[ToString[c]<>ToString["temp"]],{c,VarGauge}];
+SubGauge2=Table[Symbol[ToString[c]<>ToString["temp"]]->c,{c,VarGauge}];
+
+\[Lambda]4p=\[Mu]IJF//Normal//ReplaceAll[#,SubGauge]&;
+SolVar=\[Beta]\[Mu]IJF-\[Lambda]4p//Normal;
+QuarticVar=\[Lambda]4p//Normal//Variables;
+ResMassF=Solve[SolVar==0,QuarticVar]/.SubGauge2//Flatten[#,1]&;
+
+
+
+(* 
+	Scalar tadpoles
+*)
+(*Scalar Mass insertion*)
+Contri4=1/2*I2p*Activate@TensorContract[Inactive@TensorProduct[\[Lambda]3,\[Mu]ij],{{2,4},{3,5}}];
+
+
+(*Fermion Mass insertion*)
+VarGauge=Join[\[Lambda]1//Normal//Variables]//DeleteDuplicates;
+SubGauge=Table[c->Symbol[ToString[c]<>ToString["temp"]],{c,VarGauge}];
+SubGauge2=Table[Symbol[ToString[c]<>ToString["temp"]]->c,{c,VarGauge}];
+
+\[Lambda]4p=\[Lambda]1//Normal//ReplaceAll[#,SubGauge]&;
+SolVar=\[Beta]\[Lambda]1-\[Lambda]4p//Normal;
+QuarticVar=\[Lambda]4p//Normal//Variables;
+ResTadpole=Solve[SolVar==0,QuarticVar]/.SubGauge2//Flatten[#,1]&;
+
+(*Effective couplings*)
+If[mode>=3,
+
+(* 
+	Scalar-cubic couplings
+*)
+
+VarGauge=Join[\[Lambda]6//Normal//Variables]//DeleteDuplicates;
+SubGauge=Table[c->Symbol[ToString[c]<>ToString["temp"]],{c,VarGauge}];
+SubGauge2=Table[Symbol[ToString[c]<>ToString["temp"]]->c,{c,VarGauge}];
+
+\[Lambda]6p=\[Lambda]6//Normal//ReplaceAll[#,SubGauge]&;
+SolVar=\[Beta]\[Lambda]6ijklnm-\[Lambda]6p//Normal;
+SexticVar=\[Lambda]6p//Normal//Variables;
+ResSextic=Solve[SolVar==0,SexticVar]/.SubGauge2//Flatten[#,1]&;
+
+
+
+(*Printing Result*)
+PrintPre=Join[ResGauge,ResGaugeNA,ResScal,ResCubic,ResYuk,ResMass,ResMassF,ResTadpole,ResSextic]//Normal//FullSimplify//DeleteDuplicates;
+,
+(*Printing Result*)
+PrintPre=Join[ResGauge,ResGaugeNA,ResScal,ResCubic,ResYuk,ResMass,ResMassF,ResTadpole]//Normal//FullSimplify//DeleteDuplicates;
+];
+
+PrintPre=ReplaceAll[PrintPre,(a_->b_):>a->b/(2 \[Epsilon])];
+ToExpression[StringReplace[ToString[StandardForm[PrintPre]],"DRalgo`Private`"->""]]
 
 ];
