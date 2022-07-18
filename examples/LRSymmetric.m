@@ -15,10 +15,7 @@ $LoadGroupMath=True;
 (*See 1811.06869 [hep-ph]*)
 
 
-(*Note that quartics might be off by a factor of 2. *)
-
-
-(* ::Section:: *)
+(* ::Section::Closed:: *)
 (*Model*)
 
 
@@ -167,7 +164,7 @@ YsffC=SparseArray[Simplify[Conjugate[Ysff]//Normal,Assumptions->{yt1>0,yt2>0}]];
 (*Dimensional Reduction*)
 
 
-ImportModelDRalgo[Group,gvvv,gvff,gvss,\[Lambda]1,\[Lambda]3,\[Lambda]4,\[Mu]ij,\[Mu]IJ,\[Mu]IJC,Ysff,YsffC,Verbose->True,Mode->2];
+ImportModelDRalgo[Group,gvvv,gvff,gvss,\[Lambda]1,\[Lambda]3,\[Lambda]4,\[Mu]ij,\[Mu]IJ,\[Mu]IJC,Ysff,YsffC,Verbose->False,Mode->2];
 PerformDRhard[]
 
 

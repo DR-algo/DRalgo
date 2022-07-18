@@ -12,7 +12,7 @@ $LoadGroupMath=True;
 (*SM+2 real singlets*)
 
 
-(* ::Section:: *)
+(* ::Section::Closed:: *)
 (*Model*)
 
 
@@ -157,22 +157,19 @@ PerformDRhard[]
 BetaFunctions4D[]
 
 
-PrintCouplings[];
+PrintCouplings[]
 
 
 PrintTadpoles["LO"]
 
 
-\[Lambda]Tad23d/.PrintTadpoles["NLO"]/.PrintGenericBasis[]//Simplify
+PrintTemporalScalarCouplings[]
 
 
-PrintTemporalScalarCouplings[];
-
-
-PrintDebyeMass["LO"];
-PrintDebyeMass["NLO"];
-PrintScalarMass["LO"];
-PrintScalarMass["LO"];
+PrintDebyeMass["LO"]
+PrintDebyeMass["NLO"]
+PrintScalarMass["LO"]
+PrintScalarMass["LO"]
 
 
 PrintPressure["LO"]
@@ -193,20 +190,20 @@ PrintCouplingsUS[]
 PrintTadpolesUS["LO"]
 
 
-PrintScalarMassUS["LO"]//Simplify;
+PrintScalarMassUS["LO"]//Simplify
 
 
 (* ::Text:: *)
 (*2 Scalars active:*)
 
 
-PerformDRsoft[{6}];
+PerformDRsoft[{6}]
 
 
 PrintCouplingsUS[]
 
 
-PrintScalarMassUS["LO"]//Simplify;
+PrintScalarMassUS["LO"]//Simplify
 
 
 (* ::Text:: *)
