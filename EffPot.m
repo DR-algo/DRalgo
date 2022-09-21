@@ -26,8 +26,31 @@ gvvvEP=gvvvP//SparseArray;
 gvssEP=gvssP//SparseArray;
 \[Lambda]4EP=\[Lambda]4P//SparseArray;
 \[Lambda]3EP=\[Lambda]3P//SparseArray;
-ns=Length[gvssEP[[1]]];
-nv=Length[gvvvEP];
+nsEP=Length[gvssEP[[1]]];
+nvEP=Length[gvvvEP];
+
+];
+
+
+(*
+	Defines parameters directly that are used by the effective potential
+*)
+DefineTensorsUS[]:=Module[{},
+(*We only need to modify the gauge couplings*)
+SubGauge=Table[c->Symbol[ToString[c]<>ToString["3dUS"]],{c,GaugeCouplingNames}];
+gvvvEP=gvvv//Normal//ReplaceAll[#,SubGauge]&//SparseArray;
+
+(*We only need to modify the gauge couplings*)
+VarGauge=Table[Symbol[ToString[c]<>ToString["3d"]],{c,GaugeCouplingNames}];
+SubGauge=Table[c->Symbol[ToString[c]<>ToString["US"]],{c,VarGauge}];
+gvssEP=gvssL//Normal//ReplaceAll[#,SubGauge]&//SparseArray;
+
+\[Mu]ijEP=\[Mu]ijSNLOSS//SparseArray;
+\[Lambda]4EP=\[Lambda]3DSS//SparseArray;
+\[Lambda]3EP=\[Lambda]3CSRedSS//SparseArray;
+nsEP=Length[gvssEP[[1]]];
+nvEP=Length[gvvvEP];
+
 
 ];
 
@@ -158,21 +181,21 @@ aS=Table[\[Mu]ijEP\[Phi][[i,i]],{i,1,ns}]//SparseArray;
 av=Table[\[Mu]ijVec\[Phi][[i,i]],{i,1,nv}]//SparseArray;
 (*Potential*)
 ss=1/8 TensorProduct[\[Lambda]4\[Phi]];
-Vss=Sum[ss[[j,j,k,k]]fss[aS[[j]],aS[[k]]],{j,ns},{k,ns}];
+Vss=Sum[ss[[j,j,k,k]]fss[aS[[j]],aS[[k]]],{j,nsEP},{k,nsEP}];
 sss=1/12 TensorProduct[\[Lambda]3\[Phi],\[Lambda]3\[Phi]];
-Vsss=Sum[sss[[i,j,k,i,j,k]]fsss[aS[[i]],aS[[j]],aS[[k]]],{j,ns},{k,ns},{i,ns}];
+Vsss=Sum[sss[[i,j,k,i,j,k]]fsss[aS[[i]],aS[[j]],aS[[k]]],{j,nsEP},{k,nsEP},{i,nsEP}];
 vvs=1/4 TensorProduct[Gvvs\[Phi],Gvvs\[Phi]];
-Vvvs=Sum[vvs[[a,b,i,a,b,i]]fvvs[av[[a]],av[[b]],aS[[i]]],{a,nv},{b,nv},{i,ns}];
+Vvvs=Sum[vvs[[a,b,i,a,b,i]]fvvs[av[[a]],av[[b]],aS[[i]]],{a,nvEP},{b,nvEP},{i,nsEP}];
 ssv=1/4 TensorProduct[gvss\[Phi],gvss\[Phi]];
-Vssv=Sum[ssv[[a,i,j,a,i,j]]fssv[aS[[i]],aS[[j]],av[[a]]],{a,nv},{j,ns},{i,ns}];
+Vssv=Sum[ssv[[a,i,j,a,i,j]]fssv[aS[[i]],aS[[j]],av[[a]]],{a,nvEP},{j,nsEP},{i,nsEP}];
 vs=1/2 TensorProduct[gvss\[Phi],gvss\[Phi]];
-Vvs=Sum[vs[[a,i,j,a,i,j]]fvs[aS[[i]],av[[a]]],{a,nv},{j,ns},{i,ns}];
+Vvs=Sum[vs[[a,i,j,a,i,j]]fvs[aS[[i]],av[[a]]],{a,nvEP},{j,nsEP},{i,nsEP}];
 vv=1/4 TensorProduct[gvvv\[Phi],gvvv\[Phi]];
-Vvv=Sum[vv[[a,b,c,a,b,c]]fvv[av[[a]],av[[b]]],{a,nv},{b,nv},{c,nv}];
+Vvv=Sum[vv[[a,b,c,a,b,c]]fvv[av[[a]],av[[b]]],{a,nvEP},{b,nvEP},{c,nvEP}];
 vvv=1/12 TensorProduct[gvvv\[Phi],gvvv\[Phi]];
-Vvvv=Sum[vvv[[a,b,c,a,b,c]]fvvv[av[[a]],av[[b]],av[[b]]],{a,nv},{b,nv},{c,nv}];
+Vvvv=Sum[vvv[[a,b,c,a,b,c]]fvvv[av[[a]],av[[b]],av[[b]]],{a,nvEP},{b,nvEP},{c,nvEP}];
 ggv=1/4 TensorProduct[gvvv\[Phi],gvvv\[Phi]];
-V\[Eta]\[Eta]v=Sum[ggv[[a,b,c,a,b,c]]f\[Eta]\[Eta]v[0,0,av[[b]]],{a,nv},{b,nv},{c,nv}];
+V\[Eta]\[Eta]v=Sum[ggv[[a,b,c,a,b,c]]f\[Eta]\[Eta]v[0,0,av[[b]]],{a,nvEP},{b,nvEP},{c,nvEP}];
 
 VNNLO= Vss+ Vsss+ Vvvs+ Vssv+ Vvs+ Vvvv+ Vvv+ V\[Eta]\[Eta]v;
 
@@ -187,8 +210,8 @@ If[verbose==True,Print["Calculating the 1-Loop Effective Potential"]];
 
 ALog[x_]:=-(x^(3/2)/(12 \[Pi]));
 
-V1=Sum[ALog[\[Mu]ijEP\[Phi][[i,i]]],{i,1,ns}];
-V2=2*Sum[ALog[\[Mu]ijVec\[Phi][[i,i]]],{i,1,nv}];
+V1=Sum[ALog[\[Mu]ijEP\[Phi][[i,i]]],{i,1,nsEP}];
+V2=2*Sum[ALog[\[Mu]ijVec\[Phi][[i,i]]],{i,1,nvEP}];
 
 VNLO=V1+V2;
 ];
