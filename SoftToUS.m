@@ -83,6 +83,13 @@ ToExpression[StringReplace[ToString[StandardForm[VNLO]],"DRalgo`Private`"->""]]
 	Prints all the couplings in the supersoft theory.	
 *)
 
+
+
+
+(*
+	Prints all the couplings in the supersoft theory.	
+*)
+
 PrintCouplingsUS[]:=Module[{},
 
 (*Non-Abelian Couplings*)
@@ -959,17 +966,17 @@ Contri3=Coeff *Flatten[\[Lambda]4Light,{{1},{2,3,4}}] . Flatten[\[Lambda]4Light,
 Coeff=1/2*((1+1/2));
 Contri4=Coeff *Flatten[HabijVL,{{3},{1,2,4}}] . Flatten[HabijVL,{{1,2,4},{3}}];
 
-Coeff=(-1/4) /2;
+Coeff=(-1)(-1/4) /2;
 GabcdV2=TensorContract[GabcdV,{2,4}];
 Contri5=Coeff*Flatten[GabcdV2] . Flatten[HabijVL,{1,2}];
  
-Coeff=(-1)1/4*(20/4);
+Coeff=(-1)(-1)1/4*(20/4);
 Contri6=Coeff*Flatten[GabcdV2] . Flatten[HabijVL,{1,2}];
 
 
 SubGauge=Table[c->Symbol[ToString[c]<>ToString["3d"]],{c,GaugeCouplingNames}];
 
-\[Delta]\[Mu]3dS=Contri1+  Contri2+ Contri3+ Contri4+Contri5+ Contri6;(*Sum of all the diagrams*)
+\[Delta]\[Mu]3dS=Contri1+   Contri2+ Contri3+  Contri4+ Contri5+  Contri6;(*Sum of all the diagrams*)
 \[Beta]\[Mu]3ijS=4*I111* \[Delta]\[Mu]3dS//Normal //ReplaceAll[#,SubGauge]&//Simplify; (*The scalar-mass counter-term*)
 
 (* Scalar Mass*)
