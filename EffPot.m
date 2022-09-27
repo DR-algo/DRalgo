@@ -40,17 +40,18 @@ DefineTensorsUS[]:=Module[{},
 SubGauge=Table[c->Symbol[ToString[c]<>ToString["3dUS"]],{c,GaugeCouplingNames}];
 gvvvEP=gvvv//Normal//ReplaceAll[#,SubGauge]&//SparseArray;
 
+
+\[Lambda]4EP=\[Lambda]4Light//Normal//ReplaceAll[#,SubGauge]&//SparseArray;
+\[Lambda]3EP=\[Lambda]3CLight//Normal//ReplaceAll[#,SubGauge]&//SparseArray;
+\[Mu]ijEP=\[Mu]ijLight//Normal//ReplaceAll[#,SubGauge]&//SparseArray;
+
 (*We only need to modify the gauge couplings*)
 VarGauge=Table[Symbol[ToString[c]<>ToString["3d"]],{c,GaugeCouplingNames}];
 SubGauge=Table[c->Symbol[ToString[c]<>ToString["US"]],{c,VarGauge}];
 gvssEP=gvssL//Normal//ReplaceAll[#,SubGauge]&//SparseArray;
 
-\[Mu]ijEP=\[Mu]ijSNLOSS//SparseArray;
-\[Lambda]4EP=\[Lambda]3DSS//SparseArray;
-\[Lambda]3EP=\[Lambda]3CSRedSS//SparseArray;
 nsEP=Length[gvssEP[[1]]];
 nvEP=Length[gvvvEP];
-
 
 ];
 
@@ -177,8 +178,8 @@ f\[Eta]\[Eta]v[0,0,0]:=0;
 
 f\[Eta]\[Eta]v[0,0,z]:=(z (Log[Q/Sqrt[z]]+1/2))/(32 \[Pi]^2);
 
-aS=Table[\[Mu]ijEP\[Phi][[i,i]],{i,1,ns}]//SparseArray;
-av=Table[\[Mu]ijVec\[Phi][[i,i]],{i,1,nv}]//SparseArray;
+aS=Table[\[Mu]ijEP\[Phi][[i,i]],{i,1,nsEP}]//SparseArray;
+av=Table[\[Mu]ijVec\[Phi][[i,i]],{i,1,nvEP}]//SparseArray;
 (*Potential*)
 ss=1/8 TensorProduct[\[Lambda]4\[Phi]];
 Vss=Sum[ss[[j,j,k,k]]fss[aS[[j]],aS[[k]]],{j,nsEP},{k,nsEP}];
