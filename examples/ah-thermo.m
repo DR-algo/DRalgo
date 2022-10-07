@@ -265,8 +265,8 @@ PrintScalarMassUS[]
 
 (* to get ultra soft theory parameters: *)
 
-bar\[Lambda]h3d=\[Lambda]3dSS/.PrintCouplingsUS[]/.\[Lambda]3d->\[Lambda]h3d/.\[Lambda]VL[1]->h33d/.\[Mu]sqU1->mDsq3d/.sub2;
-bargsq3d=g13dSS^2/.PrintCouplingsUS[]/.g13d^2->gsq3d;
+bar\[Lambda]h3d=\[Lambda]3dUS/.PrintCouplingsUS[]/.\[Lambda]3d->\[Lambda]h3d/.\[Lambda]VL[1]->h33d/.\[Mu]sqU1->mDsq3d/.sub2;
+bargsq3d=g13dUS^2/.PrintCouplingsUS[]/.g13d^2->gsq3d;
 
 PrintScalarMassUS["LO"];
 

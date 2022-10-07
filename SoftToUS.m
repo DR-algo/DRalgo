@@ -212,6 +212,9 @@ ZSij=-(ContriSS+ContriSS2)/2;
 ScalarCubicsSS[]:=Module[{},
 If[verbose,Print["Calculating Scalar Cubic Couplings"]];
 
+If[Length[\[Lambda]3//Normal//Variables]==0,
+\[Lambda]3CSSS=0;
+,
 Temp=-Simplify[Table[Sum[1/(\[Mu]ijL[[n,n]]^2)\[Lambda]3Cy[[i,j,n]]\[Lambda]3CHeavy[[k,l,n]],{n,1,nSH},{m,1,nSH}],{k,1,nSH},{l,1,nSH},{i,1,nSL},{j,1,nSL}]]//SparseArray;
 \[Lambda]KTemp=\[Lambda]K+Temp;
 
@@ -234,6 +237,7 @@ ContriSE=Simplify[Table[Sum[ZSij[[i,l]]\[Lambda]3CLight[[l,j,k]]+ZSij[[j,l]]\[La
 
 
 \[Lambda]3CSSS=-Contri3-Contri1-Contri2-ContriSE-ContriMixed;
+];
 
 ];
 
@@ -256,20 +260,23 @@ ContriMix1=Coupling*Simplify[Table[Sum[(\[Mu]ijL[[n,n]])\[Mu]ijL[[m,m]]^-2 \[Mu]
 ContriMix2=-Simplify[Table[Sum[(\[Mu]ijMix[[i,m]])\[Mu]ijL[[m,m]]^-2 \[Mu]ijMix[[j,m]],{m,1,nSH}],{i,1,nSL},{j,1,nSL}]];
 
 
+If[Length[\[Lambda]3//Normal//Variables]==0,
+ContriC1=0;
+ContriC2=0;
+ContriC3=0;
+ContriC4=0;
+\[Mu]ijSSNLO2=0;
+,
 (*Check signs*)
 ContriC1=-1/2Simplify[Table[Sum[MassHelp1[\[Mu]ijLS[[jj,jj]],\[Mu]ijLS[[ii,ii]],\[Mu]ijLS[[kk,kk]],\[Mu]ijLS[[ll,ll]],\[Mu]ijLS[[mm,mm]]] \[Lambda]3CTot[[i,jj,ii]]\[Lambda]3CTot[[j,kk,ll]]\[Lambda]3CTot[[jj,mm,kk]]\[Lambda]3CTot[[ii,mm,ll]],{jj,1,ns},{ii,1,ns},{mm,1,ns},{kk,1,ns},{ll,1,ns}],{i,LightScalar[[;;,1]]},{j,LightScalar[[;;,1]]}]];
 ContriC2=1/2*Simplify[Table[Sum[MassHelp2[\[Mu]ijLS[[ii,ii]],\[Mu]ijLS[[jj,jj]],\[Mu]ijLS[[mm,mm]],\[Mu]ijLS[[nn,nn]]] \[Lambda]4Tot[[i,ii,nn,mm]]\[Lambda]3CTot[[mm,nn,jj]]\[Lambda]3CTot[[j,ii,jj]],{jj,1,ns},{ii,1,ns},{mm,1,ns},{nn,1,ns}],{i,LightScalar[[;;,1]]},{j,LightScalar[[;;,1]]}]];
 ContriC3=1/2*Simplify[Table[Sum[MassHelp2[\[Mu]ijLS[[ii,ii]],\[Mu]ijLS[[jj,jj]],\[Mu]ijLS[[mm,mm]],\[Mu]ijLS[[nn,nn]]] \[Lambda]4Tot[[j,ii,nn,mm]]\[Lambda]3CTot[[mm,nn,jj]]\[Lambda]3CTot[[i,ii,jj]],{jj,1,ns},{ii,1,ns},{mm,1,ns},{nn,1,ns}],{i,LightScalar[[;;,1]]},{j,LightScalar[[;;,1]]}]];
 ContriC4=-1/4*Simplify[Table[Sum[MassHelp2[\[Mu]ijLS[[ii,ii]],\[Mu]ijLS[[jj,jj]],\[Mu]ijLS[[mm,mm]],\[Mu]ijLS[[nn,nn]]] \[Lambda]4Tot[[i,j,ii,jj]]\[Lambda]3CTot[[mm,jj,nn]]\[Lambda]3CTot[[mm,ii,nn]],{jj,1,ns},{ii,1,ns},{mm,1,ns},{nn,1,ns}],{i,LightScalar[[;;,1]]},{j,LightScalar[[;;,1]]}]];
-
+\[Mu]ijSSNLO2=(ContriC1+ContriC2+ContriC3+ContriC4)//Simplify//SparseArray;
+];
 
 \[Mu]ijTemp=\[Mu]ijLight+\[Mu]ijSSLO;
 ContriF=-Table[Sum[ZSij[[i,n]]\[Mu]ijTemp[[n,j]]+ZSij[[j,n]]\[Mu]ijTemp[[n,i]],{n,1,nSL}],{i,1,nSL},{j,1,nSL}];
-
-          
-
-
-\[Mu]ijSSNLO2=(ContriC1+ContriC2+ContriC3+ContriC4)//Simplify//SparseArray;
 \[Mu]ijSSNLO=(Contri1+Contri2+Contri3+ Contri4+Contri5+Contri6+Contri7+ContriMix1+ContriMix2+ContriF)//Simplify//SparseArray;
 
 ];
@@ -573,13 +580,13 @@ ScalarQuarticSS[]:=Module[{},
 If[verbose,Print["Calculating Scalar Quartics"]];
 
 ContriTLTemp1=Simplify[Table[Sum[(1/(\[Mu]ijL[[n,n]]^2))\[Lambda]3Cy[[i,j,n]]\[Lambda]3Cy[[k,l,n]],{n,1,nSH}],{i,1,nSL},{j,1,nSL},{k,1,nSL},{l,1,nSL}]];
-
 ContriTLTemp2=Simplify[Table[Sum[1/(\[Mu]ijL[[n,n]]^2)\[Mu]HEff[[n,m]]1/(\[Mu]ijL[[m,m]]^2)\[Lambda]3Cy[[i,j,n]]\[Lambda]3Cy[[k,l,m]],{n,1,nSH},{m,1,nSH}],{i,1,nSL},{j,1,nSL},{k,1,nSL},{l,1,nSL}]];
 ContriTLTemp=ContriTLTemp1+ContriTLTemp1//Simplify;
 ContriTL=Table[ContriTLTemp[[i,j,k,l]]+ContriTLTemp[[i,k,j,l]]+ContriTLTemp[[i,l,j,k]],{i,1,nSL},{j,1,nSL},{k,1,nSL},{l,1,nSL}];
-(*TadPole*)
-Temp=-Simplify[Table[Sum[1/(\[Mu]ijL[[n,n]]^2)1/(\[Mu]ijL[[m,m]]^2)TadPoleHeavySS[[m]](\[Lambda]K[[n,m,i,j]]\[Lambda]3Cy[[k,l,n]]+\[Lambda]K[[n,m,k,l]]\[Lambda]3Cy[[j,i,n]]),{n,1,nSH},{m,1,nSH}],{i,1,nSL},{j,1,nSL},{k,1,nSL},{l,1,nSL}]]//Simplify;
-ContriTadpole=Table[Temp[[i,j,k,l]]+Temp[[i,k,j,l]]+Temp[[i,l,j,k]],{i,1,nSL},{j,1,nSL},{k,1,nSL},{l,1,nSL}];
+
+CouplingSE=-Inactivate[TensorProduct[ZSij,\[Lambda]4S]];
+ContriSETemp=Simplify[Activate @ TensorContract[CouplingSE, {{2,3}}]]//SparseArray;
+ContriSE=ContriSETemp+Transpose[ContriSETemp,{2,1,3,4}]+Transpose[ContriSETemp,{3,1,2,4}]+Transpose[ContriSETemp,{4,1,2,3}]//Simplify;
 
 (*Maybe include Cubics later*)
 Temp=0*Simplify[Table[Sum[(1/(\[Mu]ijL[[n,n]]^2))\[Lambda]3Cy[[i,j,n]]\[Lambda]3CHeavy[[k,l,n]],{n,1,nSH}],{k,1,nSH},{l,1,nSH},{i,1,nSL},{j,1,nSL}]];
@@ -587,6 +594,7 @@ Temp=0*Simplify[Table[Sum[(1/(\[Mu]ijL[[n,n]]^2))\[Lambda]3Cy[[i,j,n]]\[Lambda]3
 Temp=0*Simplify[Table[Sum[(1/(\[Mu]ijL[[n,n]]^2))\[Lambda]3Cy[[i,j,n]]\[Lambda]3Cx[[k,l,n]],{n,1,nSH}],{i,1,nSL},{j,1,nSL},{k,1,nSL},{l,1,nSH}]];
 \[Lambda]yEff=\[Lambda]y-Temp//SparseArray;
 \[Lambda]yEff2=Table[\[Lambda]y[[i,j,k,l]]-Temp[[i,j,k,l]]-Temp[[i,k,j,l]]-Temp[[k,j,i,l]],{i,1,nSL},{j,1,nSL},{k,1,nSL},{l,1,nSH}]//SparseArray;
+
 
 (*Loop level*)
 CouplingSSSS=1/2*1/(4 \[Pi])TensorProduct[\[Lambda]KEff,\[Lambda]KEff];
@@ -600,6 +608,15 @@ Temp=Simplify[Table[Sum[1/(\[Mu]ijL[[m,m]]^2)\[Mu]ijL[[n,n]](CouplingSSSS[[i,j,k
 ContriSS3=Table[Temp[[i,j,k,l]]+Temp[[i,j,l,k]]+Temp[[i,l,k,k]]+Temp[[l,j,k,i]],{i,1,nSL},{j,1,nSL},{k,1,nSL},{l,1,nSL}]//SparseArray;
 Temp=-Simplify[Table[Sum[1/(\[Mu]ijL[[m,m]]^2)1/(\[Mu]ijL[[n,n]]^2)\[Lambda]yEff2[[i,j,k,m]]\[Lambda]3Cx[[l,m,n]]TadPoleHeavySS[[n]],{n,1,nSH},{m,1,nSH}],{i,1,nSL},{j,1,nSL},{k,1,nSL},{l,1,nSL}]]//SparseArray;
 CouplingSSTadpole=Table[Temp[[i,j,k,l]]+Temp[[i,j,l,k]]+Temp[[i,l,k,k]]+Temp[[l,j,k,i]],{i,1,nSL},{j,1,nSL},{k,1,nSL},{l,1,nSL}]//SparseArray;
+
+
+If[Length[\[Lambda]3//Normal//Variables]==0,
+\[Lambda]3DSS=ContriSE-ContriTL- ContriSS-ContriSS2-ContriSS3-CouplingSSTadpole;
+,
+(*TadPole*)
+Temp=-Simplify[Table[Sum[1/(\[Mu]ijL[[n,n]]^2)1/(\[Mu]ijL[[m,m]]^2)TadPoleHeavySS[[m]](\[Lambda]K[[n,m,i,j]]\[Lambda]3Cy[[k,l,n]]+\[Lambda]K[[n,m,k,l]]\[Lambda]3Cy[[j,i,n]]),{n,1,nSH},{m,1,nSH}],{i,1,nSL},{j,1,nSL},{k,1,nSL},{l,1,nSL}]]//Simplify;
+ContriTadpole=Table[Temp[[i,j,k,l]]+Temp[[i,k,j,l]]+Temp[[i,l,j,k]],{i,1,nSL},{j,1,nSL},{k,1,nSL},{l,1,nSL}];
+
 
 MassHelp5[x_]:=-(1/(4 \[Pi] x^3));
 MassHelp4[x_,y_,z_]:=1/(4 \[Pi] (x+y) (x+z) (y+z));
@@ -633,12 +650,9 @@ ContriCubic9=Table[(ContriSSSSTemp[[i,j,k,t]])+(ContriSSSSTemp[[i,k,j,t]])+(Cont
 ContriSSSSTemp=-Table[Sum[\[Lambda]4S[[i,j,n,m]]\[Lambda]3Cy[[k,n,l]]\[Lambda]3Cx[[t,m,l]] MassHelp5[\[Mu]ijL[[l,l]]],{n,1,nSL},{m,1,nSL},{l,nv+1,nSH}],{i,1,nSL},{j,1,nSL},{k,1,nSL},{t,1,nSL}]//Simplify//SparseArray;
 ContriCubic10=Table[(ContriSSSSTemp[[i,j,k,t]])+(ContriSSSSTemp[[i,k,j,t]])+(ContriSSSSTemp[[i,t,k,j]])+(ContriSSSSTemp[[k,t,i,j]])+(ContriSSSSTemp[[k,j,i,t]])+(ContriSSSSTemp[[j,t,i,k]]),{i,1,nSL},{j,1,nSL},{k,1,nSL},{t,1,nSL}];
 
-
-CouplingSE=-Inactivate[TensorProduct[ZSij,\[Lambda]4S]];
-ContriSETemp=Simplify[Activate @ TensorContract[CouplingSE, {{2,3}}]]//SparseArray;
-ContriSE=ContriSETemp+Transpose[ContriSETemp,{2,1,3,4}]+Transpose[ContriSETemp,{3,1,2,4}]+Transpose[ContriSETemp,{4,1,2,3}]//Simplify;
-
 \[Lambda]3DSS=ContriSE-ContriTL-CouplingSSTadpole- ContriSS-ContriSS2-ContriSS3-ContriCubic1-ContriCubic2-ContriCubic3-ContriCubic4-ContriCubic5-ContriCubic6-ContriCubic7-ContriCubic8-ContriCubic9-ContriCubic10;
+];
+
 ];
 
 
@@ -646,7 +660,8 @@ ContriSE=ContriSETemp+Transpose[ContriSETemp,{2,1,3,4}]+Transpose[ContriSETemp,{
 	Calculates non-abelian couplings in the ultrasoft theory.
 *)
 NonAbelianCouplingSS[]:=Module[{},
-ContriAnomVV= Simplify[Table[Sum[ ZLij[[c,d]]gvvvSS[[a,b,d]],{d,1,nv}],{a,1,nv},{b,1,nv},{c,1,nv}]];
+ContriAnomVV= gvvvSS . Transpose[ZLij]//SimplifySparse;
+(*Simplify[Table[Sum[ ZLij[[c,d]]gvvvSS[[a,b,d]],{d,1,nv}],{a,1,nv},{b,1,nv},{c,1,nv}]];*)
 GgvvvSS=-ContriAnomVV;
 ];
 
@@ -657,22 +672,10 @@ GgvvvSS=-ContriAnomVV;
 ScalarVectorCouplingSS[]:=Module[{},
 If[verbose,Print["Calculating Vector-Scalar Couplings"]];
 
-(*Cubic contribution*)
-VarGauge=GaugeCouplingNames;
-SubGauge=Table[c->Symbol[ToString[c]<>ToString["3d"]],{c,VarGauge}];
-gvssM=gvss//Normal//ReplaceAll[#,SubGauge]&//SparseArray;
-HabijM=Transpose[Activate @ TensorContract[
-        Inactive[TensorProduct][gvssM,gvssM], { {3, 5}}],{1,3,2,4}]//SparseArray;
-HabijMV=HabijM+Transpose[HabijM,{2,1,3,4}]//SparseArray;
-MassTemp=Table[MassHelpTriangle[\[Mu]ijLS[[n,n]],\[Mu]ijLS[[l,l]],\[Mu]ijLS[[m,m]]],{n,1,ns},{m,1,ns},{l,1,ns}]//SparseArray;
 
-ContriC1=Table[Sum[\[Lambda]3CTot[[i,l,n]]\[Lambda]3CTot[[j,l,m]]MassTemp[[l,m,n]]HabijMV[[a,b,n,m]],{n,1,ns},{m,1,ns},{l,1,ns}],{a,1,nv},{b,1,nv},{i,LightScalar[[;;,1]]},{j,LightScalar[[;;,1]]}]//SparseArray;
 (* Self-Energy contribution*)
-
-
-
-ContriSEVector=-Simplify[Table[Sum[ZLij[[a,c]](HabijVL[[c,b,i,j]])+ZLij[[b,c]](HabijVL[[a,c,i,j]]),{c,1,nv}],{a,1,nv},{b,1,nv},{i,1,nSL},{j,1,nSL}]];
-ContriSEScalar=-Simplify[Table[Sum[ZSij[[i,k]](HabijVL[[a,b,k,j]])+ZSij[[j,k]](HabijVL[[a,b,i,k]]),{k,1,nSL}],{a,1,nv},{b,1,nv},{i,1,nSL},{j,1,nSL}]];
+ContriSEVector=-ZLij . HabijVL-Transpose[ZLij . HabijVL,{2,1,3,4}];
+(*ContriSEVector=-Simplify[Table[Sum[ZLij[[a,c]](HabijVL[[c,b,i,j]])+ZLij[[b,c]](HabijVL[[a,c,i,j]]),{c,1,nv}],{a,1,nv},{b,1,nv},{i,1,nSL},{j,1,nSL}]];*)
 
 
 GvvssTSS= ContriSEVector//Simplify;
