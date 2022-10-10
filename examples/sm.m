@@ -153,28 +153,6 @@ PrintPressureUS["NLO"]
 
 
 (* ::Text:: *)
-(*Symmetric - phase pressure*)
-
-
-DefineNewTensorsUS[\[Mu]ij,\[Lambda]4,\[Lambda]3,gvss,gvvv]; \[CurlyPhi]vev={v,0,0,0}//SparseArray; DefineVEVS[\[CurlyPhi]vev];
-PrintTensorsVEV[];
-
-
-CalculatePotentialUS[];
-
-
-PrintEffectivePotential["LO"]
-PrintEffectivePotential["NLO"]
-PrintEffectivePotential["NNLO"]
-
-
-
-
-
-CounterTerms4D[]
-
-
-(* ::Text:: *)
 (*2 - Loop Effective potential*)
 
 
@@ -217,6 +195,9 @@ CalculatePotentialUS[];
 PrintEffectivePotential["LO"]
 PrintEffectivePotential["NLO"]
 PrintEffectivePotential["NNLO"]
+
+
+
 
 
 
