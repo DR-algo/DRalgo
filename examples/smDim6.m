@@ -42,7 +42,7 @@ Rep5={{{0,0},{0},Ye/2},"R"};
 RepFermion1Gen={Rep1,Rep2,Rep3,Rep4,Rep5};*)
 
 
-RepFermion3Gen={RepFermion1Gen}//Flatten[#,1]&;
+RepFermion3Gen={RepFermion1Gen,RepFermion1Gen,RepFermion1Gen}//Flatten[#,1]&;
 
 
 (* ::Text:: *)

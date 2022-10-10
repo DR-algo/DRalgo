@@ -107,6 +107,7 @@ DefineDim6::usuage="Defines a dimension 6 operator"
 PrintPressureUS::usuage="Calculates the preassure in the ultrasoft theory"
 PrintCouplingsEffective::usuage="Prints higher-order couplings"
 CounterTerms4D::usuage="Prints 4d CounterTerms"
+DefineTensorsUS::usuage="Uses ultrasoft couplings to construct the potential"
 
 (* end of public functions*)
 

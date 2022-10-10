@@ -5,7 +5,7 @@
 
 SetDirectory[NotebookDirectory[]];
 $LoadGroupMath=True;
-<<../DRalgo.m
+<<..//DRalgo.m
 
 
 (* ::Chapter:: *)
@@ -177,6 +177,9 @@ PrintScalarMassUS["NLO"]
 BetaFunctions3DUS[]
 
 
+PrintTensorUSDRalgo[]
+
+
 PerformDRsoft[{1,2,3,4}]
 
 
@@ -203,7 +206,31 @@ CounterTerms4D[]
 (*Effective potential*)
 
 
-DefineNewTensorsUS[\[Mu]ij,\[Lambda]4,\[Lambda]3,gvss,gvvv]; \[CurlyPhi]vev={0,0,0,\[CurlyPhi],s}//SparseArray; DefineVEVS[\[CurlyPhi]vev];
+(*There are two options to define your model*)
+
+
+(*First, if you have used "PerformDRsoft[{1,2,3,4}]" the couplings can be defined with the command:*)
+
+
+DefineTensorsUS[]
+
+
+(*Second, you can define your custom model as below (here just taking the original model as an example)*)
+
+
+DefineNewTensorsUS[\[Mu]ij,\[Lambda]4,\[Lambda]3,gvss,gvvv];
+
+
+(*Do calculate the effective potential we first need to define a VeV*)
+
+
+\[CurlyPhi]vev={\[CurlyPhi],0,0,0,s}//SparseArray; 
+DefineVEVS[\[CurlyPhi]vev];
+
+
+(*The field dependent masses are*)
+
+
 PrintTensorsVEV[];
 
 
