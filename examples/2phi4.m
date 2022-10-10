@@ -12,7 +12,7 @@ $LoadGroupMath=True;
 (*2 phi 4*)
 
 
-(* ::Section::Closed:: *)
+(* ::Section:: *)
 (*Model*)
 
 
@@ -158,7 +158,7 @@ V3dNLO=PrintEffectivePotential["NLO"]
 V3dNNLO=PrintEffectivePotential["NNLO"]
 
 
-(* ::Subsubsection:: *)
+(* ::Subsubsection::Closed:: *)
 (*1 Scalar active:*)
 
 

@@ -1,6 +1,6 @@
 (* ::Package:: *)
 
-(*Quit[];*)
+Quit[];
 
 
 SetDirectory[NotebookDirectory[]];
@@ -96,12 +96,6 @@ PrintTadpoles["NLO"]
 PrintPressure["LO"]
 PrintPressure["NLO"]
 PrintPressure["NNLO"]
-
-
-
-
-
-
 
 
 

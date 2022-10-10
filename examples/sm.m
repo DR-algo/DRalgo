@@ -1,6 +1,6 @@
 (* ::Package:: *)
 
-(*Quit[];*)
+Quit[];
 
 
 SetDirectory[NotebookDirectory[]];
@@ -195,12 +195,6 @@ CalculatePotentialUS[];
 PrintEffectivePotential["LO"]
 PrintEffectivePotential["NLO"]
 PrintEffectivePotential["NNLO"]
-
-
-
-
-
-
 
 
 

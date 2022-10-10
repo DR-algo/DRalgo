@@ -183,6 +183,3 @@ PrintScalarMass["NLO"]
 
 PrintDebyeMass["LO"]
 PrintDebyeMass["NLO"]
-
-
-
