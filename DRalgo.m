@@ -132,6 +132,7 @@ Print["Please Cite GroupMath: Comput.Phys.Commun. 267 (2021) 108085 \[Bullet] e-
 	 Mode=0 only calculates LO masses
 *)
 Options[ImportModelDRalgo] = {Verbose -> False,Mode->2,Dim6->False}
+Options[PerformDRsoft] = {IncludeCubics -> True}
 
 
 Begin["`Private`"]
@@ -281,7 +282,10 @@ IdentifyTensorsDRalgo[];
 	By default all Debye-vectors (temporal-vectors) are integrated out.
 *)
 
-PerformDRsoft[ListHardP_]:=Module[{ListHardI=ListHardP},
+PerformDRsoft[ListHardP_,OptionsPattern[]]:=Module[{ListHardI=ListHardP},
+(*Options*)
+cubicTrue=OptionValue[IncludeCubics];
+
 PrepareSoftToSuperSoft[ListHardI];
 
 CreateHelpTensorsSS[];
@@ -301,7 +305,6 @@ If[mode>=2,
 ScalarMass2LoopSS[];
 SymmetricPhaseEnergyUS[];
 ];
-
 
 (*
 	This step takes all calculations and removes redundancies. For example, if one element is (g^4 Lb)
@@ -647,6 +650,9 @@ Return[ImportFile]
 
 
 {HabijL,HabijVL,HabijA,HabijVA,\[Lambda]3Cx,\[Lambda]3Cy,\[Lambda]3CLight,\[Lambda]3CHeavy,\[Mu]IJF,\[Mu]IJFC,\[Mu]VabNLO,\[Mu]abDef,GroupMathCleared}
+
+
+{cubicTrue};
 
 
 End[]

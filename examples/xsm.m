@@ -145,7 +145,7 @@ PrintScalarMass["LO"]//Simplify
 PrintScalarMass["NLO"]//Simplify
 
 
-PerformDRsoft[{}];
+PerformDRsoft[{}]
 
 
 PrintCouplingsUS[]
@@ -267,9 +267,6 @@ Assumptions->{g1>0,g2>0,\[CurlyPhi]>0,Y\[Phi]>0}];
 
 
 \[Mu]ijDiag={{ScalarMass[[1;;3,1;;3]],0},{0,DiagonalMatrix[Eigenvalues[ScalarMass[[4;;5,4;;5]]]]}}//ArrayFlatten//Simplify//FullSimplify;
-
-
-DiagonalMatrixQAE[\[Mu]ijDiag]
 
 
 RotateTensorsCustomMass[DSRot,DVRot,\[Mu]vecDia,\[Mu]ijDiag];

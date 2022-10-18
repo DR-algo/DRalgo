@@ -15,7 +15,7 @@ $LoadGroupMath=True;
 (*See 1106.0034 [hep-ph] for a review*)
 
 
-(* ::Section::Closed:: *)
+(* ::Section:: *)
 (*Model*)
 
 
@@ -42,7 +42,7 @@ Rep5={{{0,0},{0},Ye/2},"R"};
 RepFermion1Gen={Rep1,Rep2,Rep3,Rep4,Rep5};*)
 
 
-RepFermion3Gen={RepFermion1Gen}//Flatten[#,1]&;
+RepFermion3Gen={RepFermion1Gen,RepFermion1Gen,RepFermion1Gen}//Flatten[#,1]&;
 
 
 (* ::Text:: *)
@@ -75,24 +75,49 @@ VQuartic=\[Lambda]1H*QuarticTerm1;
 \[Lambda]4=GradQuartic[VQuartic];
 
 
-InputInv={{1,1,2},{False,False,True}}; 
-YukawaDoublet=CreateInvariantYukawa[Group,RepScalar,RepFermion3Gen,InputInv]//Simplify;
+(* ::Subtitle:: *)
+(*General Quark Couplings*)
 
 
-Ysff=-GradYukawa[yt*YukawaDoublet[[1]]];
+UpQuarks=ToString[#]&/@{t,c,u}
+DownQuarks=ToString[#]&/@{b,s,d};
 
 
-YsffC=SparseArray[Simplify[Conjugate[Ysff]//Normal,Assumptions->{yt>0}]];
+TopCouplings=Table[ToExpression@StringJoin[{"y",i,j}],{i,UpQuarks},{j,UpQuarks}]
+
+
+DownCouplings=Table[ToExpression@StringJoin[{"y",i,j}],{i,UpQuarks},{j,DownQuarks}]
+
+
+(*Assumes that all couplings are positive for simplicity*)
+
+
+VarAsum=#>0&/@Variables@Total[Union[TopCouplings,DownCouplings],-1]
+
+
+(* ::Subsection:: *)
+(*Up Yukawas*)
+
+
+UpYukawas=Table[
+TopCouplings[[i,j]]CreateInvariantYukawa[Group,RepScalar,RepFermion3Gen,{{1,1+(i-1)*5,2+(j-1)*5},{False,False,True}}]//Simplify,{i,1,3},{j,1,3}];
+
+
+DownYukawas=Table[
+DownCouplings[[i,j]]CreateInvariantYukawa[Group,RepScalar,RepFermion3Gen,{{1,1+(i-1)*5,3+(j-1)*5},{False,False,True}}]//Simplify,{i,1,3},{j,1,3}];
+
+
+Ysff=-GradYukawa[Total[UpYukawas+DownYukawas,-1]];
+
+
+YsffC=SparseArray[Simplify[Conjugate[Ysff]//Normal,Assumptions->VarAsum]];
 
 
 (* ::Section:: *)
 (*Dimensional Reduction*)
 
 
-ImportModelDRalgo[Group,gvvv,gvff,gvss,\[Lambda]1,\[Lambda]3,\[Lambda]4,\[Mu]ij,\[Mu]IJ,\[Mu]IJC,Ysff,YsffC,Verbose->False];
-PosFermion=PrintFermionRepPositions[];
-FermionMat=Table[{nF,i},{i,PosFermion}];
-DefineNF[FermionMat]
+ImportModelDRalgo[Group,gvvv,gvff,gvss,\[Lambda]1,\[Lambda]3,\[Lambda]4,\[Mu]ij,\[Mu]IJ,\[Mu]IJC,Ysff,YsffC,Verbose->True];
 PerformDRhard[]
 
 

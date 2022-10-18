@@ -16,7 +16,7 @@ $GroupMathMultipleModels=True; (*Put this if you want to create multiple model-f
 (*See 1802.10500 [hep-ph], *)
 
 
-(* ::Section:: *)
+(* ::Section::Closed:: *)
 (*Model*)
 
 
