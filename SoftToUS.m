@@ -416,6 +416,7 @@ HelpSolveQuarticS=Table[{HelpList[[a]]->HelpVarMod[[a]]},{a,1,HelpList//Length}]
 \[Lambda]3DSS=(\[Lambda]4S+\[Lambda]3DSS)//Normal//Simplify//ReplaceAll[#,HelpSolveQuarticS]&//SparseArray;
 
 
+
 (*Cubic Tensor*)
 HelpList=DeleteDuplicates@SparseArray[Flatten@Simplify[(\[Lambda]3CSSS+\[Lambda]3CLight)]]//Sort//FullSimplify;
 If[HelpList[[1]]==0&&Length[HelpList]>1,
@@ -625,7 +626,6 @@ CouplingSSSS=1/2*1/(4 \[Pi])TensorProduct[\[Lambda]KEff,\[Lambda]KEff]//SparseAr
 Temp=Table[Sum[1/(\[Mu]ijL[[n,n]]+\[Mu]ijL[[m,m]])(CouplingSSSS[[n,m,i,j,n,m,k,l]]),{n,1,nSH},{m,1,nSH}],{i,1,nSL},{j,1,nSL},{k,1,nSL},{l,1,nSL}]//SparseArray;
 ContriSS=Table[Temp[[i,j,k,l]]+Temp[[i,k,j,l]]+Temp[[i,l,j,k]],{i,1,nSL},{j,1,nSL},{k,1,nSL},{l,1,nSL}]//SimplifySparse;
 *)
-
 MassVec=Table[\[Mu]ijL[[n,n]],{n,1,nSH}];
 TensHelp=Table[1/(n+m),{n,MassVec},{m,MassVec}]//SparseArray//Flatten[#,{1,2}]&;
 AE2=Flatten[\[Lambda]KEff,{{1,2}}]//SparseArray;
@@ -646,7 +646,6 @@ Temp=Simplify[Table[Sum[1/(\[Mu]ijL[[m,m]]^2)\[Mu]ijL[[n,n]](CouplingSSSS[[i,j,k
 ContriSS3=Table[Temp[[i,j,k,l]]+Temp[[i,j,l,k]]+Temp[[i,l,k,j]]+Temp[[l,j,k,i]],{i,1,nSL},{j,1,nSL},{k,1,nSL},{l,1,nSL}]//SparseArray;
 *)
 
-
 MassVec=Table[\[Mu]ijL[[n,n]],{n,1,nSH}];
 
 TensHelp=Table[1/(n),{n,MassVec}]//SparseArray;
@@ -661,21 +660,21 @@ ContriSS3=-1/(4 \[Pi])*1/2*4*Symmetrize[\[Lambda]yEff2 . TensHelp3,Symmetric[{1,
 
 ];
 
-If[Length[\[Lambda]3//Normal//Variables]==0||cubicTrue==False,
-\[Lambda]3DSS=-ContriSS-ContriSS2-ContriSS3;
-,
 ContriSETemp=ZSij . \[Lambda]4S//SparseArray;
-ContriSE=ContriSETemp+Transpose[ContriSETemp,{2,1,3,4}]+Transpose[ContriSETemp,{3,1,2,4}]+Transpose[ContriSETemp,{4,1,2,3}]//Simplify;
-	
-
-Temp=-Simplify[Table[Sum[1/(\[Mu]ijL[[m,m]]^2)1/(\[Mu]ijL[[n,n]]^2)\[Lambda]yEff2[[i,j,k,m]]\[Lambda]3Cx[[l,m,n]]TadPoleHeavySS[[n]],{n,1,nSH},{m,1,nSH}],{i,1,nSL},{j,1,nSL},{k,1,nSL},{l,1,nSL}]]//SparseArray;
-CouplingSSTadpole=Table[Temp[[i,j,k,l]]+Temp[[i,j,l,k]]+Temp[[i,l,k,k]]+Temp[[l,j,k,i]],{i,1,nSL},{j,1,nSL},{k,1,nSL},{l,1,nSL}]//SparseArray;
-
+ContriSE=ContriSETemp+Transpose[ContriSETemp,{2,1,3,4}]+Transpose[ContriSETemp,{3,1,2,4}]+Transpose[ContriSETemp,{4,1,2,3}]//SparseArray//SimplifySparse;
 
 ContriTLTemp1=Simplify[Table[Sum[(1/(\[Mu]ijL[[n,n]]^2))\[Lambda]3Cy[[i,j,n]]\[Lambda]3Cy[[k,l,n]],{n,1,nSH}],{i,1,nSL},{j,1,nSL},{k,1,nSL},{l,1,nSL}]];
 ContriTLTemp2=Simplify[Table[Sum[1/(\[Mu]ijL[[n,n]]^2)\[Mu]HEff[[n,m]]1/(\[Mu]ijL[[m,m]]^2)\[Lambda]3Cy[[i,j,n]]\[Lambda]3Cy[[k,l,m]],{n,1,nSH},{m,1,nSH}],{i,1,nSL},{j,1,nSL},{k,1,nSL},{l,1,nSL}]];
 ContriTLTemp=ContriTLTemp1+ContriTLTemp1//Simplify;
 ContriTL=Table[ContriTLTemp[[i,j,k,l]]+ContriTLTemp[[i,k,j,l]]+ContriTLTemp[[i,l,j,k]],{i,1,nSL},{j,1,nSL},{k,1,nSL},{l,1,nSL}];
+
+(*If[Length[\[Lambda]3//Normal//Variables]==0||cubicTrue==False,*)		
+If[cubicTrue==False,
+\[Lambda]3DSS=ContriSE-ContriSS-ContriSS2-ContriSS3-ContriTL;
+,
+Temp=-Simplify[Table[Sum[1/(\[Mu]ijL[[m,m]]^2)1/(\[Mu]ijL[[n,n]]^2)\[Lambda]yEff2[[i,j,k,m]]\[Lambda]3Cx[[l,m,n]]TadPoleHeavySS[[n]],{n,1,nSH},{m,1,nSH}],{i,1,nSL},{j,1,nSL},{k,1,nSL},{l,1,nSL}]]//SparseArray;
+CouplingSSTadpole=Table[Temp[[i,j,k,l]]+Temp[[i,j,l,k]]+Temp[[i,l,k,k]]+Temp[[l,j,k,i]],{i,1,nSL},{j,1,nSL},{k,1,nSL},{l,1,nSL}]//SparseArray;
+
 
 (*TadPole*)
 Temp=-Simplify[Table[Sum[1/(\[Mu]ijL[[n,n]]^2)1/(\[Mu]ijL[[m,m]]^2)TadPoleHeavySS[[m]](\[Lambda]K[[n,m,i,j]]\[Lambda]3Cy[[k,l,n]]+\[Lambda]K[[n,m,k,l]]\[Lambda]3Cy[[j,i,n]]),{n,1,nSH},{m,1,nSH}],{i,1,nSL},{j,1,nSL},{k,1,nSL},{l,1,nSL}]]//Simplify;
@@ -980,15 +979,11 @@ SubGauge=Table[c->Symbol[ToString[c]<>ToString["3d"]],{c,VarGauge}];
 
 gvssVec=gvvv//Normal//ReplaceAll[#,SubGauge]&//SparseArray;
 gvssVTot=gvssVec//SparseArray; 
-
 gvssL=Table[gvss[[a,c,d]],{a,1,nv},{c,LightScalar[[;;,1]]},{d,LightScalar[[;;,1]]}]//Normal//ReplaceAll[#,SubGauge]&//SparseArray;
 
 
 \[Mu]ijL=Sqrt[\[Mu]abDef]//Normal//SparseArray;
-
-
 \[Mu]ijLight=\[Mu]ijSNLOP//Normal//SparseArray;
-
 
 
 

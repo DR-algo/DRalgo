@@ -15,7 +15,7 @@ $LoadGroupMath=True;
 (*See 1106.0034 [hep-ph] for a review*)
 
 
-(* ::Section::Closed:: *)
+(* ::Section:: *)
 (*Model*)
 
 
@@ -110,9 +110,6 @@ PrintDebyeMass["NLO"]
 PrintTemporalScalarCouplings[]
 
 
-BetaFunctions4D[]
-
-
 PrintPressure["LO"]
 PrintPressure["NLO"]
 PrintPressure["NNLO"]
@@ -195,12 +192,6 @@ CalculatePotentialUS[];
 PrintEffectivePotential["LO"]
 PrintEffectivePotential["NLO"]
 PrintEffectivePotential["NNLO"]
-
-
-
-
-
-
 
 
 

@@ -132,7 +132,7 @@ Print["Please Cite GroupMath: Comput.Phys.Commun. 267 (2021) 108085 \[Bullet] e-
 	 Mode=0 only calculates LO masses
 *)
 Options[ImportModelDRalgo] = {Verbose -> False,Mode->2,Dim6->False}
-Options[PerformDRsoft] = {IncludeCubics -> True}
+Options[PerformDRsoft] = {IncludeCubics -> False}
 
 
 Begin["`Private`"]
@@ -287,7 +287,6 @@ PerformDRsoft[ListHardP_,OptionsPattern[]]:=Module[{ListHardI=ListHardP},
 cubicTrue=OptionValue[IncludeCubics];
 
 PrepareSoftToSuperSoft[ListHardI];
-
 CreateHelpTensorsSS[];
 
 ScalarSelfEnergySS[];
@@ -297,10 +296,7 @@ VectorSelfEnergySS[];
 ScalarVectorCouplingSS[];
 ScalarQuarticSS[];
 ScalarCubicsSS[];
-
-
 ScalarMassSS[];
-
 If[mode>=2,
 ScalarMass2LoopSS[];
 SymmetricPhaseEnergyUS[];

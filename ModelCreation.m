@@ -54,26 +54,23 @@ Components[[i]]=Components[[i-1]]+SizeGroupsMod[[i-1]]
 {i,2,Length[GroupP]+1}
 ];
 
+Do[
+Components[[i]]=Components[[i-1]]+SizeGroupsMod[[i-1]]
+,
+{i,2,Length[GroupP]+1}
+];
+
 
 CouplingArray=ConstantArray[0,{TotalComponents,TotalComponents}];
 Do[
-If[DynkinIndex[GroupP[[i]],RepNameP[[i]]]==0,
-PreFac=1; (*Special case for U1s*)
-,
-If[Length[GroupP]==1,
-PreFac=DynkinIndex[GroupP[[i]],RepNameP[[i]]]; (*Special case for models with a single group*)
-,
-PreFac=DynkinIndex[GroupP[[i]],RepNameP[[i]]]*Total[Delete[SizeGroups,i]];
-];
-];
 (*Multiplies the relevant copupling-constant for each group*)
-CouplingArray[[Components[[i]];;Components[[i+1]]-1,Components[[i]];;Components[[i+1]]-1]]=CouplingNameP[[i]]*IdentityMatrix[SizeGroupsMod[[i]]]/PreFac;
+CouplingArray[[Components[[i]];;Components[[i+1]]-1,Components[[i]];;Components[[i+1]]-1]]=CouplingNameP[[i]]*IdentityMatrix[SizeGroupsMod[[i]]];
 ,
 {i,1,Length[GroupP]}
 ];
 (*Structure constants*)
-fabc=-I Table[Tr[CouplingArray[[a,a]](gen[[b]] . gen[[c]]-gen[[c]] . gen[[b]]) . gen[[a]]],{a,1,TotalComponents},{b,1,TotalComponents},{c,1,TotalComponents}]//SparseArray;
-
+Temp=I GaugeRep[GroupP]//SparseArray;
+fabc=Table[ Temp[[a]] CouplingArray[[a,a]],{a,1,TotalComponents}]//SparseArray;
 
 (*Fix for non-numerical U1s*)
 PosU1=Position[GroupP,{}]//Flatten[#]&;

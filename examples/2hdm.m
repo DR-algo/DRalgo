@@ -134,7 +134,7 @@ PrintTemporalScalarCouplings[]
 (*Two active doublets:*)
 
 
-PerformDRsoft[{}];
+PerformDRsoft[{},IncludeCubics->False];
 
 
 PrintCouplingsUS[]//Simplify

@@ -638,7 +638,6 @@ A2Mod=A2/.RepVar3D;
 Sol1=Solve[A2Mod==A1,Var3D]//Flatten[#,1]&//FullSimplify;
 ResGaugeNA=Table[List[Sol1[[c]]]/.{b_->a_}:>b^2->a,{c,1,Length[Sol1]}]/.SubGauge2//Simplify;
 
-
 (* 
 	Scalar-quartic couplings
 *)
