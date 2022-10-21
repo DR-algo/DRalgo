@@ -212,7 +212,7 @@ ZSij=-(ContriSS+ContriSS2)/2;
 ScalarCubicsSS[]:=Module[{},
 If[verbose,Print["Calculating Scalar Cubic Couplings"]];
 
-If[Length[\[Lambda]3//Normal//Variables]==0,
+If[Length[\[Lambda]3//Normal//Variables]==0||cubicTrue==False,
 \[Lambda]3CSSS=0;
 ,
 Temp=-Simplify[Table[Sum[1/(\[Mu]ijL[[n,n]]^2)\[Lambda]3Cy[[i,j,n]]\[Lambda]3CHeavy[[k,l,n]],{n,1,nSH},{m,1,nSH}],{k,1,nSH},{l,1,nSH},{i,1,nSL},{j,1,nSL}]]//SparseArray;
@@ -289,7 +289,7 @@ ContriMix1=Coupling*Simplify[Table[Sum[(\[Mu]ijL[[n,n]])\[Mu]ijL[[m,m]]^-2 \[Mu]
 ContriMix2=-Simplify[Table[Sum[(\[Mu]ijMix[[i,m]])\[Mu]ijL[[m,m]]^-2 \[Mu]ijMix[[j,m]],{m,1,nSH}],{i,1,nSL},{j,1,nSL}]];
 
 
-If[Length[\[Lambda]3//Normal//Variables]==0,
+If[Length[\[Lambda]3//Normal//Variables]==0||cubicTrue==False,
 ContriC1=0;
 ContriC2=0;
 ContriC3=0;
@@ -406,7 +406,7 @@ If[verbose,Print["Identifying Components"]];
 (*Quartic Tensor*)
 
 
-HelpList=DeleteDuplicates@SparseArray[Simplify@Flatten[ (\[Lambda]4S+\[Lambda]3DSS)]]//Sort;
+HelpList=DeleteDuplicates@SparseArray[Simplify@Normal@Flatten[ (\[Lambda]4S+\[Lambda]3DSS)]]//Sort;
 If[HelpList[[1]]==0&&Length[HelpList]>1,
 	HelpList=Delete[HelpList,1];
 ];
@@ -660,6 +660,10 @@ ContriSS3=-1/(4 \[Pi])*1/2*4*Symmetrize[\[Lambda]yEff2 . TensHelp3,Symmetric[{1,
 
 ];
 
+	
+If[Length[\[Lambda]3//Normal//Variables]==0||cubicTrue==False,
+\[Lambda]3DSS=-ContriSS-ContriSS2-ContriSS3;
+,
 ContriSETemp=ZSij . \[Lambda]4S//SparseArray;
 ContriSE=ContriSETemp+Transpose[ContriSETemp,{2,1,3,4}]+Transpose[ContriSETemp,{3,1,2,4}]+Transpose[ContriSETemp,{4,1,2,3}]//SparseArray//SimplifySparse;
 
@@ -668,10 +672,7 @@ ContriTLTemp2=Simplify[Table[Sum[1/(\[Mu]ijL[[n,n]]^2)\[Mu]HEff[[n,m]]1/(\[Mu]ij
 ContriTLTemp=ContriTLTemp1+ContriTLTemp1//Simplify;
 ContriTL=Table[ContriTLTemp[[i,j,k,l]]+ContriTLTemp[[i,k,j,l]]+ContriTLTemp[[i,l,j,k]],{i,1,nSL},{j,1,nSL},{k,1,nSL},{l,1,nSL}];
 
-(*If[Length[\[Lambda]3//Normal//Variables]==0||cubicTrue==False,*)		
-If[cubicTrue==False,
-\[Lambda]3DSS=ContriSE-ContriSS-ContriSS2-ContriSS3-ContriTL;
-,
+
 Temp=-Simplify[Table[Sum[1/(\[Mu]ijL[[m,m]]^2)1/(\[Mu]ijL[[n,n]]^2)\[Lambda]yEff2[[i,j,k,m]]\[Lambda]3Cx[[l,m,n]]TadPoleHeavySS[[n]],{n,1,nSH},{m,1,nSH}],{i,1,nSL},{j,1,nSL},{k,1,nSL},{l,1,nSL}]]//SparseArray;
 CouplingSSTadpole=Table[Temp[[i,j,k,l]]+Temp[[i,j,l,k]]+Temp[[i,l,k,k]]+Temp[[l,j,k,i]],{i,1,nSL},{j,1,nSL},{k,1,nSL},{l,1,nSL}]//SparseArray;
 

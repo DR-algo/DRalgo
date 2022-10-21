@@ -40,9 +40,14 @@ DefineTensorsUS[]:=Module[{},
 SubGauge=Table[c->Symbol[ToString[c]<>ToString["3dUS"]],{c,GaugeCouplingNames}];
 gvvvEP=gvvv//Normal//ReplaceAll[#,SubGauge]&//SparseArray;
 
-
+(*We only need to modify the gauge couplings*)
+SubGauge=Table[c->Symbol[ToString[c]<>ToString["3dUS"]],{c,Variables[Normal[\[Lambda]4Light]]}];
 \[Lambda]4EP=\[Lambda]4Light//Normal//ReplaceAll[#,SubGauge]&//SparseArray;
+(*We only need to modify the gauge couplings*)
+SubGauge=Table[c->Symbol[ToString[c]<>ToString["3dUS"]],{c,Variables[Normal[\[Lambda]3CLight]]}];
 \[Lambda]3EP=\[Lambda]3CLight//Normal//ReplaceAll[#,SubGauge]&//SparseArray;
+(*We only need to modify the gauge couplings*)
+SubGauge=Table[c->Symbol[ToString[c]<>ToString["3dUS"]],{c,Variables[Normal[\[Mu]ijLight]]}];
 \[Mu]ijEP=\[Mu]ijLight//Normal//ReplaceAll[#,SubGauge]&//SparseArray;
 
 (*We only need to modify the gauge couplings*)
@@ -333,22 +338,14 @@ gvvv\[Phi]=Transpose[DV] . gvvv\[Phi] . DV//Activate@TensorContract[Inactive@Ten
 \[Mu]ijVec\[Phi]=Activate@TensorContract[Inactive@TensorProduct[DV,DV,\[Mu]ijVec\[Phi]],{{1,5},{3,6}}]//SimplifySparse;
 \[Mu]ijEP\[Phi]=Activate@TensorContract[Inactive@TensorProduct[DS,DS,\[Mu]ijEP\[Phi]],{{1,5},{3,6}}]//SimplifySparse;
 
-(*\[Lambda]4\[Phi]=Activate@TensorContract[Inactive@TensorProduct[DS,DS,DS,DS,\[Lambda]4\[Phi]],{{1,9},{3,10},{5,11},{7,12}}];
-\[Lambda]3\[Phi]=Activate@TensorContract[Inactive@TensorProduct[DS,DS,DS,\[Lambda]3\[Phi]],{{1,7},{3,8},{5,9}}];
-gvss\[Phi]=Activate@TensorContract[Inactive@TensorProduct[DV,DS,DS,gvss\[Phi]],{{1,7},{3,8},{5,9}}];
-Gvvs\[Phi]=Activate@TensorContract[Inactive@TensorProduct[DV,DV,DS,Gvvs\[Phi]],{{1,7},{3,8},{5,9}}];
-gvvv\[Phi]=Activate@TensorContract[Inactive@TensorProduct[DV,DV,DV,gvvv\[Phi]],{{1,7},{3,8},{5,9}}];
-\[Mu]ijVec\[Phi]=Activate@TensorContract[Inactive@TensorProduct[DV,DV,\[Mu]ijVec\[Phi]],{{1,5},{3,6}}]//Simplify;
-\[Mu]ijEP\[Phi]=Activate@TensorContract[Inactive@TensorProduct[DS,DS,\[Mu]ijEP\[Phi]],{{1,5},{3,6}}]//Simplify;
-*)
 
 If[DiagonalMatrixQAE[\[Mu]ijVec\[Phi]]==False,
-Print["The Vector Mass-Matrix is not Diagonal"];
+Print["The Vector mass-Matrix is not diagonal"];
 ];
 
 
 If[DiagonalMatrixQAE[\[Mu]ijEP\[Phi]]==False,
-Print["The Vector Mass-Matrix is not Diagonal"];
+Print["The Scalar mass-Matrix is not diagonal"];
 ];
 
 ];
@@ -361,22 +358,23 @@ RotateTensorsCustomMass[DScalarsp_,DVectorsp_,\[Mu]ijVecI_,\[Mu]ijEPI_]:=Module[
 DS=DS//SparseArray;
 DV=DV//SparseArray;
 
-\[Lambda]4\[Phi]=Activate@TensorContract[Inactive@TensorProduct[DS,DS,DS,DS,\[Lambda]4\[Phi]],{{1,9},{3,10},{5,11},{7,12}}];
-\[Lambda]3\[Phi]=Activate@TensorContract[Inactive@TensorProduct[DS,DS,DS,\[Lambda]3\[Phi]],{{1,7},{3,8},{5,9}}];
-gvss\[Phi]=Activate@TensorContract[Inactive@TensorProduct[DV,DS,DS,gvss\[Phi]],{{1,7},{3,8},{5,9}}];
-Gvvs\[Phi]=Activate@TensorContract[Inactive@TensorProduct[DV,DV,DS,Gvvs\[Phi]],{{1,7},{3,8},{5,9}}];
-gvvv\[Phi]=Activate@TensorContract[Inactive@TensorProduct[DV,DV,DV,gvvv\[Phi]],{{1,7},{3,8},{5,9}}];
-\[Mu]ijVec\[Phi]=\[Mu]ijVecI;
-\[Mu]ijEP\[Phi]=\[Mu]ijEPI;
+\[Phi]Vev=DS . \[Phi]Vev//SimplifySparse;
+\[Lambda]4\[Phi]=Transpose[DS] . \[Lambda]4\[Phi] . DS//Activate@TensorContract[Inactive@TensorProduct[DS,#],{{1,4}}]&//Transpose[#,{2,1,3,4}]&//Activate@TensorContract[Inactive@TensorProduct[DS,#],{{1,5}}]&//Transpose[#,{3,2,1,4}]&//SimplifySparse;
+\[Lambda]3\[Phi]=Transpose[DS] . \[Lambda]3\[Phi] . DS//Activate@TensorContract[Inactive@TensorProduct[DS,#],{{1,4}}]&//Transpose[#,{2,1,3}]&//SimplifySparse;
+gvss\[Phi]=Transpose[DV] . gvss\[Phi] . DS//Activate@TensorContract[Inactive@TensorProduct[DS,#],{{1,4}}]&//Transpose[#,{2,1,3}]&//SimplifySparse;
+Gvvs\[Phi]=Transpose[DV] . Gvvs\[Phi] . DS//Activate@TensorContract[Inactive@TensorProduct[DV,#],{{1,4}}]&//Transpose[#,{2,1,3}]&//SimplifySparse;
+gvvv\[Phi]=Transpose[DV] . gvvv\[Phi] . DV//Activate@TensorContract[Inactive@TensorProduct[DV,#],{{1,4}}]&//Transpose[#,{2,1,3}]&//SimplifySparse;
+\[Mu]ijVec\[Phi]=Activate@TensorContract[Inactive@TensorProduct[DV,DV,\[Mu]ijVec\[Phi]],{{1,5},{3,6}}]//SimplifySparse;
+\[Mu]ijEP\[Phi]=Activate@TensorContract[Inactive@TensorProduct[DS,DS,\[Mu]ijEP\[Phi]],{{1,5},{3,6}}]//SimplifySparse;
 
 
 If[DiagonalMatrixQAE[\[Mu]ijVec\[Phi]]==False,
-Print["The Vector Mass-Matrix is not Diagonal"];
+Print["The Vector mass-Matrix is not diagonal"];
 ];
 
 
 If[DiagonalMatrixQAE[\[Mu]ijEP\[Phi]]==False,
-Print["The Vector Mass-Matrix is not Diagonal"];
+Print["The Scalar mass-Matrix is not diagonal"];
 ];
 
 ];
