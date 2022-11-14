@@ -38,7 +38,7 @@ AppendTo[result,Row[{
 	TexFor["DRDRDRDRDRDRDRDRDRDRDRDRDRDR "],
 	TexFor["DRalgo"],
 	TexFor[" DRDRDRDRDRDRDRDRDRDRDRDRDRDRD"]}]];
-AppendTo[result,Row[{"Version: "//TexFor,"1.01 beta (16-05-2022)"//TexFor}]];
+AppendTo[result,Row[{"Version: "//TexFor,"1.02 beta (16-05-2022)"//TexFor}]];
 AppendTo[result,Row[{"Authors: "//TexFor,"Andreas Ekstedt, Philipp Schicho, Tuomas V.I. Tenkanen"//TexFor}]];
 AppendTo[result,Row[{"Reference: "//TexFor,"2205.08815 [hep-ph]"//TexFor}]];
 AppendTo[result,Row[{"Repository link: "//TexFor,
@@ -132,7 +132,6 @@ Print["Please Cite GroupMath: Comput.Phys.Commun. 267 (2021) 108085 \[Bullet] e-
 	 Mode=0 only calculates LO masses
 *)
 Options[ImportModelDRalgo] = {Verbose -> False,Mode->2,Dim6->False}
-Options[PerformDRsoft] = {IncludeCubics -> False}
 
 
 Begin["`Private`"]
@@ -282,9 +281,8 @@ IdentifyTensorsDRalgo[];
 	By default all Debye-vectors (temporal-vectors) are integrated out.
 *)
 
-PerformDRsoft[ListHardP_,OptionsPattern[]]:=Module[{ListHardI=ListHardP},
+PerformDRsoft[ListHardP_]:=Module[{ListHardI=ListHardP},
 (*Options*)
-cubicTrue=OptionValue[IncludeCubics];
 
 PrepareSoftToSuperSoft[ListHardI];
 CreateHelpTensorsSS[];
@@ -646,9 +644,6 @@ Return[ImportFile]
 
 
 {HabijL,HabijVL,HabijA,HabijVA,\[Lambda]3Cx,\[Lambda]3Cy,\[Lambda]3CLight,\[Lambda]3CHeavy,\[Mu]IJF,\[Mu]IJFC,\[Mu]VabNLO,\[Mu]abDef,GroupMathCleared}
-
-
-{cubicTrue};
 
 
 End[]

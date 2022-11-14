@@ -605,7 +605,6 @@ VarGauge=GaugeCouplingNames//Variables;
 SubGauge=Table[c->Symbol[ToString[c]<>ToString["temp"]],{c,VarGauge}];
 SubGauge2=Table[Symbol[ToString[c]<>ToString["temp"]]->c,{c,VarGauge}];
 
-
 (* 
 	Gauge couplings
 *)
@@ -687,8 +686,6 @@ SolVar=\[Beta]Ysij-\[Lambda]4p//Normal;
 QuarticVar=\[Lambda]4p//Normal//Variables;
 ResYuk=Solve[SolVar==0,QuarticVar]/.SubGauge2//Flatten[#,1]&;
 
-
-
 (* 
 	Scalar masses
 *)
@@ -720,11 +717,9 @@ ResMassF=Solve[SolVar==0,QuarticVar]/.SubGauge2//Flatten[#,1]&;
 (* 
 	Scalar tadpoles
 *)
-(*Scalar Mass insertion*)
-Contri4=1/2*I2p*Activate@TensorContract[Inactive@TensorProduct[\[Lambda]3,\[Mu]ij],{{2,4},{3,5}}];
-
-
-(*Fermion Mass insertion*)
+If[Length[\[Lambda]1//Normal//Variables]==0,
+ResTadpole={};
+,
 VarGauge=Join[\[Lambda]1//Normal//Variables]//DeleteDuplicates;
 SubGauge=Table[c->Symbol[ToString[c]<>ToString["temp"]],{c,VarGauge}];
 SubGauge2=Table[Symbol[ToString[c]<>ToString["temp"]]->c,{c,VarGauge}];
@@ -733,7 +728,7 @@ SubGauge2=Table[Symbol[ToString[c]<>ToString["temp"]]->c,{c,VarGauge}];
 SolVar=\[Beta]\[Lambda]1-\[Lambda]4p//Normal;
 QuarticVar=\[Lambda]4p//Normal//Variables;
 ResTadpole=Solve[SolVar==0,QuarticVar]/.SubGauge2//Flatten[#,1]&;
-
+];
 (*Effective couplings*)
 If[mode>=3,
 
@@ -2258,7 +2253,6 @@ If[DiagonalMatrixQAE[Normal[\[Mu]ijVNLO]]==False,Print["Off-Diagonal Debye Matri
 *)
 If[mode>=2,
 RGRunningHardToSoft[]; (*Runs from the hard to the soft scale in the effective theory*)
-
 HelpList=DeleteDuplicates@Flatten@Simplify[ xLO aS3D+xNLO (\[Mu]SijNLO+Contri\[Beta]SoftToHard)]//Sort;
 HelpVar=Table[ \[Mu]ijS[a],{a,1,Delete[HelpList,1]//Length}];
 HelpVarMod=RelationsBVariables[HelpList,HelpVar];
