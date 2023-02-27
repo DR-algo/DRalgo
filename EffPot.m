@@ -40,9 +40,14 @@ DefineTensorsUS[]:=Module[{},
 SubGauge=Table[c->Symbol[ToString[c]<>ToString["3dUS"]],{c,GaugeCouplingNames}];
 gvvvEP=gvvv//Normal//ReplaceAll[#,SubGauge]&//SparseArray;
 
-
+(*We only need to modify the gauge couplings*)
+SubGauge=Table[c->Symbol[ToString[c]<>ToString["3dUS"]],{c,Variables[Normal[\[Lambda]4Light]]}];
 \[Lambda]4EP=\[Lambda]4Light//Normal//ReplaceAll[#,SubGauge]&//SparseArray;
+(*We only need to modify the gauge couplings*)
+SubGauge=Table[c->Symbol[ToString[c]<>ToString["3dUS"]],{c,Variables[Normal[\[Lambda]3CLight]]}];
 \[Lambda]3EP=\[Lambda]3CLight//Normal//ReplaceAll[#,SubGauge]&//SparseArray;
+(*We only need to modify the gauge couplings*)
+SubGauge=Table[c->Symbol[ToString[c]<>ToString["3dUS"]],{c,Variables[Normal[\[Mu]ijLight]]}];
 \[Mu]ijEP=\[Mu]ijLight//Normal//ReplaceAll[#,SubGauge]&//SparseArray;
 
 (*We only need to modify the gauge couplings*)
@@ -78,14 +83,14 @@ DefineVEVS[\[Phi]Vecp_]:=Module[{\[Phi]Vec=\[Phi]Vecp},
 
 HabijVEP=Transpose[Activate@TensorContract[Inactive@TensorProduct[gvssEP,gvssEP],{{3,5}}],{1,3,2,4}]+Transpose[Transpose[Activate@TensorContract[Inactive@TensorProduct[gvssEP,gvssEP],{{3,5}}],{1,3,2,4}],{2,1,3,4}];
 
-\[Phi]Vev=\[Phi]Vec;
-\[Mu]ijEP\[Phi]=\[Mu]ijEP+1/2 Activate@TensorContract[Inactive@TensorProduct[\[Lambda]4EP,\[Phi]Vec,\[Phi]Vec],{{3,5},{4,6}}]+ Activate@TensorContract[Inactive@TensorProduct[\[Lambda]3EP,\[Phi]Vec],{{3,4}}];
-\[Mu]ijVec\[Phi]=-1/2 Activate@TensorContract[Inactive@TensorProduct[HabijVEP,\[Phi]Vec,\[Phi]Vec],{{3,5},{4,6}}];
+\[Phi]Vev=\[Phi]Vecp//SparseArray;
+\[Mu]ijEP\[Phi]=\[Mu]ijEP+1/2 Activate@TensorContract[Inactive@TensorProduct[\[Lambda]4EP,\[Phi]Vec,\[Phi]Vec],{{3,5},{4,6}}]+ Activate@TensorContract[Inactive@TensorProduct[\[Lambda]3EP,\[Phi]Vec],{{3,4}}]//SparseArray;
+\[Mu]ijVec\[Phi]=-1/2 Activate@TensorContract[Inactive@TensorProduct[HabijVEP,\[Phi]Vec,\[Phi]Vec],{{3,5},{4,6}}]//SparseArray;
 Gvvs\[Phi]=-Activate@TensorContract[Inactive@TensorProduct[HabijVEP,\[Phi]Vec],{{4,5}}];
 \[Lambda]3\[Phi]=\[Lambda]3EP+Activate@TensorContract[Inactive@TensorProduct[\[Lambda]4EP,\[Phi]Vec],{{4,5}}];
-\[Lambda]4\[Phi]=\[Lambda]4EP;
-gvvv\[Phi]=gvvvEP;
-gvss\[Phi]=gvssEP;
+\[Lambda]4\[Phi]=\[Lambda]4EP//SparseArray;
+gvvv\[Phi]=gvvvEP//SparseArray;
+gvss\[Phi]=gvssEP//SparseArray;
 
 If[DiagonalMatrixQAE[\[Mu]ijVec\[Phi]]==False,
 Print["The Vector Mass-Matrix is not Diagonal"];
@@ -99,10 +104,42 @@ Print["The Scalar Mass-Matrix is not Diagonal"];
 ];
 
 
+Options[CalculatePotentialUS] = {CustomMasses -> False}
+
+
+(*
+	Calculates the effective potential with custom masses
+*)
+CalculatePotentialUS[ScalMassI_,VecMassI_,OptionsPattern[]]:=Module[{ScalMassP=ScalMassI,VecMassP=VecMassI},
+
+CustomMass= OptionValue[CustomMasses];
+If[CustomMass==True,
+\[Mu]ijEP\[Phi]=ScalMassP//SparseArray;
+\[Mu]ijVec\[Phi]=VecMassP//SparseArray;
+
+If[DiagonalMatrixQAE[\[Mu]ijEP\[Phi]]==True && DiagonalMatrixQAE[\[Mu]ijVec\[Phi]]==True,
+CalculateLOPotentialSS[];
+CalculateNLOPotentialSS[];
+
+VTot={VLO,VNLO};
+,
+Print["The Mass matrices are not diagonal. Please rotate to the mass-basis using RotateTensorsUSPostVeV[]"];
+];
+,
+Print["Please set CustomMasses->True"]
+];
+
+
+];
+
+
 (*
 	Calculates the effective potential.
 *)
-CalculatePotentialUS[]:=Module[{},
+CalculatePotentialUS[OptionsPattern[]]:=Module[{},
+
+CustomMass= OptionValue[CustomMasses];
+If[CustomMass==False,
 If[DiagonalMatrixQAE[\[Mu]ijEP\[Phi]]==True && DiagonalMatrixQAE[\[Mu]ijVec\[Phi]]==True,
 CalculateLOPotentialSS[];
 CalculateNLOPotentialSS[];
@@ -112,6 +149,11 @@ VTot={VLO,VNLO,VNNLO};
 ,
 Print["The Mass matrices are not diagonal. Please rotate to the mass-basis using RotateTensorsUSPostVeV[]"];
 ];
+,
+Print["Please supply scalar and vector mass matrices"]
+];
+
+
 ];
 
 
@@ -138,7 +180,7 @@ If[verbose==True,Print["Calculating the 2-Loop Effective Potential"]];
 (*The notation follows Martin's convention*)
 (*Please see arXiv:1808.07615*)
 
-Q=\[Mu]3; (*RG scale*)
+Q=\[Mu]3US; (*RG scale*)
 
 (*Definitions*)
 \[Sigma]=1/(16 \[Pi]^2);
@@ -173,7 +215,7 @@ fvvv[0,y_,0]:=fvvv[y,0,0];
 fvvv[0,0,z_]:=fvvv[z,0,0];
 fvvv[0,0,0]:=0;
 f\[Eta]\[Eta]v[x_,y_,z_]:=2 1/(4z) (\[CapitalLambda][x,y,z]I2[x,y,z]-(x-y)^2 I2[x,y,0]-z A[x]A[y]+(x-y+z) A[x]A[z]+(y-x+z)A[y]A[z]-(x-y)A[0](A[x]-A[y]));
-f\[Eta]\[Eta]v[x_,y_,0]:=-((T^2 (x+4 Sqrt[x] Sqrt[y]+y+4 (x+y) Log[Q/(Sqrt[x]+Sqrt[y])]))/(64 \[Pi]^2));
+f\[Eta]\[Eta]v[x_,y_,0]:=-(((x+4 Sqrt[x] Sqrt[y]+y+4 (x+y) Log[Q/(Sqrt[x]+Sqrt[y])]))/(64 \[Pi]^2));
 f\[Eta]\[Eta]v[0,0,0]:=0;
 
 f\[Eta]\[Eta]v[0,0,z]:=(z (Log[Q/Sqrt[z]]+1/2))/(32 \[Pi]^2);
@@ -224,9 +266,9 @@ VNLO=V1+V2;
 CalculateLOPotentialSS[]:=Module[{},
 If[verbose==True,Print["Calculating the Tree-Level Effective Potential"]];
 
-V1=Activate@TensorContract[Inactive@TensorProduct[\[Lambda]4\[Phi],\[Phi]Vev,\[Phi]Vev,\[Phi]Vev,\[Phi]Vev],{{1,5},{2,6},{3,7},{4,8}}];
-V2=Activate@TensorContract[Inactive@TensorProduct[\[Mu]ijEP,\[Phi]Vev,\[Phi]Vev],{{1,3},{2,4}}];
-V3=Activate@TensorContract[Inactive@TensorProduct[\[Lambda]3EP,\[Phi]Vev,\[Phi]Vev,\[Phi]Vev],{{1,4},{2,5},{3,6}}];
+V1=\[Lambda]4EP . \[Phi]Vev . \[Phi]Vev . \[Phi]Vev . \[Phi]Vev;
+V2=\[Mu]ijEP . \[Phi]Vev . \[Phi]Vev;
+V3=\[Lambda]3EP . \[Phi]Vev . \[Phi]Vev . \[Phi]Vev;
 
 VLO=1/4! V1+V2/2!+V3/3!;
 ];
@@ -250,22 +292,22 @@ RotateTensorsUSPostVEV[DScalarsp_,DVectorsp_]:=Module[{DS=DScalarsp,DV=DVectorsp
 DS=DS//SparseArray;
 DV=DV//SparseArray;
 
-\[Lambda]4\[Phi]=Activate@TensorContract[Inactive@TensorProduct[DS,DS,DS,DS,\[Lambda]4\[Phi]],{{1,9},{3,10},{5,11},{7,12}}];
-\[Lambda]3\[Phi]=Activate@TensorContract[Inactive@TensorProduct[DS,DS,DS,\[Lambda]3\[Phi]],{{1,7},{3,8},{5,9}}];
-gvss\[Phi]=Activate@TensorContract[Inactive@TensorProduct[DV,DS,DS,gvss\[Phi]],{{1,7},{3,8},{5,9}}];
-Gvvs\[Phi]=Activate@TensorContract[Inactive@TensorProduct[DV,DV,DS,Gvvs\[Phi]],{{1,7},{3,8},{5,9}}];
-gvvv\[Phi]=Activate@TensorContract[Inactive@TensorProduct[DV,DV,DV,gvvv\[Phi]],{{1,7},{3,8},{5,9}}];
-\[Mu]ijVec\[Phi]=Activate@TensorContract[Inactive@TensorProduct[DV,DV,\[Mu]ijVec\[Phi]],{{1,5},{3,6}}]//Simplify;
-\[Mu]ijEP\[Phi]=Activate@TensorContract[Inactive@TensorProduct[DS,DS,\[Mu]ijEP\[Phi]],{{1,5},{3,6}}]//Simplify;
+\[Lambda]4\[Phi]=Transpose[DS] . \[Lambda]4\[Phi] . DS//Activate@TensorContract[Inactive@TensorProduct[DS,#],{{1,4}}]&//Transpose[#,{2,1,3,4}]&//Activate@TensorContract[Inactive@TensorProduct[DS,#],{{1,5}}]&//Transpose[#,{3,2,1,4}]&//SimplifySparse;
+\[Lambda]3\[Phi]=Transpose[DS] . \[Lambda]3\[Phi] . DS//Activate@TensorContract[Inactive@TensorProduct[DS,#],{{1,4}}]&//Transpose[#,{2,1,3}]&//SimplifySparse;
+gvss\[Phi]=Transpose[DV] . gvss\[Phi] . DS//Activate@TensorContract[Inactive@TensorProduct[DS,#],{{1,4}}]&//Transpose[#,{2,1,3}]&//SimplifySparse;
+Gvvs\[Phi]=Transpose[DV] . Gvvs\[Phi] . DS//Activate@TensorContract[Inactive@TensorProduct[DV,#],{{1,4}}]&//Transpose[#,{2,1,3}]&//SimplifySparse;
+gvvv\[Phi]=Transpose[DV] . gvvv\[Phi] . DV//Activate@TensorContract[Inactive@TensorProduct[DV,#],{{1,4}}]&//Transpose[#,{2,1,3}]&//SimplifySparse;
+\[Mu]ijVec\[Phi]=Activate@TensorContract[Inactive@TensorProduct[DV,DV,\[Mu]ijVec\[Phi]],{{1,5},{3,6}}]//SimplifySparse;
+\[Mu]ijEP\[Phi]=Activate@TensorContract[Inactive@TensorProduct[DS,DS,\[Mu]ijEP\[Phi]],{{1,5},{3,6}}]//SimplifySparse;
 
 
 If[DiagonalMatrixQAE[\[Mu]ijVec\[Phi]]==False,
-Print["The Vector Mass-Matrix is not Diagonal"];
+Print["The Vector mass-Matrix is not diagonal"];
 ];
 
 
 If[DiagonalMatrixQAE[\[Mu]ijEP\[Phi]]==False,
-Print["The Vector Mass-Matrix is not Diagonal"];
+Print["The Scalar mass-Matrix is not diagonal"];
 ];
 
 ];
@@ -274,26 +316,27 @@ Print["The Vector Mass-Matrix is not Diagonal"];
 (*
 	Rotates to a diagonal-mass basis.
 *)
-RotateTensorsCustomMass[DScalarsp_,DVectorsp_,\[Mu]ijVecI_,\[Mu]ijEPI_]:=Module[{DS=DScalarsp,DV=DVectorsp},
+RotateTensorsCustomMass[DScalarsp_,DVectorsp_,ScalarMass_,vectorMass_]:=Module[{DS=DScalarsp,DV=DVectorsp},
 DS=DS//SparseArray;
 DV=DV//SparseArray;
 
-\[Lambda]4\[Phi]=Activate@TensorContract[Inactive@TensorProduct[DS,DS,DS,DS,\[Lambda]4\[Phi]],{{1,9},{3,10},{5,11},{7,12}}];
-\[Lambda]3\[Phi]=Activate@TensorContract[Inactive@TensorProduct[DS,DS,DS,\[Lambda]3\[Phi]],{{1,7},{3,8},{5,9}}];
-gvss\[Phi]=Activate@TensorContract[Inactive@TensorProduct[DV,DS,DS,gvss\[Phi]],{{1,7},{3,8},{5,9}}];
-Gvvs\[Phi]=Activate@TensorContract[Inactive@TensorProduct[DV,DV,DS,Gvvs\[Phi]],{{1,7},{3,8},{5,9}}];
-gvvv\[Phi]=Activate@TensorContract[Inactive@TensorProduct[DV,DV,DV,gvvv\[Phi]],{{1,7},{3,8},{5,9}}];
-\[Mu]ijVec\[Phi]=\[Mu]ijVecI;
-\[Mu]ijEP\[Phi]=\[Mu]ijEPI;
+\[Lambda]4\[Phi]=Transpose[DS] . \[Lambda]4\[Phi] . DS//Activate@TensorContract[Inactive@TensorProduct[DS,#],{{1,4}}]&//Transpose[#,{2,1,3,4}]&//Activate@TensorContract[Inactive@TensorProduct[DS,#],{{1,5}}]&//Transpose[#,{3,2,1,4}]&//SimplifySparse;
+\[Lambda]3\[Phi]=Transpose[DS] . \[Lambda]3\[Phi] . DS//Activate@TensorContract[Inactive@TensorProduct[DS,#],{{1,4}}]&//Transpose[#,{2,1,3}]&//SimplifySparse;
+gvss\[Phi]=Transpose[DV] . gvss\[Phi] . DS//Activate@TensorContract[Inactive@TensorProduct[DS,#],{{1,4}}]&//Transpose[#,{2,1,3}]&//SimplifySparse;
+Gvvs\[Phi]=Transpose[DV] . Gvvs\[Phi] . DS//Activate@TensorContract[Inactive@TensorProduct[DV,#],{{1,4}}]&//Transpose[#,{2,1,3}]&//SimplifySparse;
+gvvv\[Phi]=Transpose[DV] . gvvv\[Phi] . DV//Activate@TensorContract[Inactive@TensorProduct[DV,#],{{1,4}}]&//Transpose[#,{2,1,3}]&//SimplifySparse;
+
+\[Mu]ijVec\[Phi]=vectorMass//SparseArray;
+\[Mu]ijEP\[Phi]=ScalarMass//SparseArray;
 
 
 If[DiagonalMatrixQAE[\[Mu]ijVec\[Phi]]==False,
-Print["The Vector Mass-Matrix is not Diagonal"];
+Print["The Vector mass-Matrix is not diagonal"];
 ];
 
 
 If[DiagonalMatrixQAE[\[Mu]ijEP\[Phi]]==False,
-Print["The Vector Mass-Matrix is not Diagonal"];
+Print["The Scalar mass-Matrix is not diagonal"];
 ];
 
 ];

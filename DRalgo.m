@@ -38,7 +38,7 @@ AppendTo[result,Row[{
 	TexFor["DRDRDRDRDRDRDRDRDRDRDRDRDRDR "],
 	TexFor["DRalgo"],
 	TexFor[" DRDRDRDRDRDRDRDRDRDRDRDRDRDRD"]}]];
-AppendTo[result,Row[{"Version: "//TexFor,"1.01 beta (16-05-2022)"//TexFor}]];
+AppendTo[result,Row[{"Version: "//TexFor,"1.02 beta (16-05-2022)"//TexFor}]];
 AppendTo[result,Row[{"Authors: "//TexFor,"Andreas Ekstedt, Philipp Schicho, Tuomas V.I. Tenkanen"//TexFor}]];
 AppendTo[result,Row[{"Reference: "//TexFor,"2205.08815 [hep-ph]"//TexFor}]];
 AppendTo[result,Row[{"Repository link: "//TexFor,
@@ -282,8 +282,9 @@ IdentifyTensorsDRalgo[];
 *)
 
 PerformDRsoft[ListHardP_]:=Module[{ListHardI=ListHardP},
-PrepareSoftToSuperSoft[ListHardI];
+(*Options*)
 
+PrepareSoftToSuperSoft[ListHardI];
 CreateHelpTensorsSS[];
 
 ScalarSelfEnergySS[];
@@ -293,15 +294,11 @@ VectorSelfEnergySS[];
 ScalarVectorCouplingSS[];
 ScalarQuarticSS[];
 ScalarCubicsSS[];
-
-
 ScalarMassSS[];
-
 If[mode>=2,
 ScalarMass2LoopSS[];
 SymmetricPhaseEnergyUS[];
 ];
-
 
 (*
 	This step takes all calculations and removes redundancies. For example, if one element is (g^4 Lb)

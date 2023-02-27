@@ -215,26 +215,41 @@ If[verbose,Print["Calculating Scalar Cubic Couplings"]];
 If[Length[\[Lambda]3//Normal//Variables]==0,
 \[Lambda]3CSSS=0;
 ,
-Temp=-Simplify[Table[Sum[1/(\[Mu]ijL[[n,n]]^2)\[Lambda]3Cy[[i,j,n]]\[Lambda]3CHeavy[[k,l,n]],{n,1,nSH},{m,1,nSH}],{k,1,nSH},{l,1,nSH},{i,1,nSL},{j,1,nSL}]]//SparseArray;
+MassVec=Table[\[Mu]ijL[[n,n]],{n,1,nSH}];
+
+TensHelp=Table[1/n^2,{n,MassVec}]//SparseArray;
+TensHelp2=TensorProduct[\[Lambda]3Cy,\[Lambda]3CHeavy]//DiagonalTensor2[#,3,6]&;
+Temp=-TensHelp . TensHelp2//Flatten[#,{{3},{4},{1},{2}}]&;
 \[Lambda]KTemp=\[Lambda]K+Temp;
 
-
-Temp=-Simplify[Table[Sum[1/(\[Mu]ijL[[n,n]]^2)\[Lambda]3Cx[[i,jj,n]]\[Lambda]3Cy[[k,l,n]],{n,1,nSH}],{i,1,nSL},{k,1,nSL},{l,1,nSL},{jj,1,nSH}]];
+TensHelp=Table[1/n^2,{n,MassVec}]//SparseArray;
+TensHelp2=TensorProduct[\[Lambda]3Cx,\[Lambda]3Cy]//DiagonalTensor2[#,3,6]&;
+Temp=-TensHelp . TensHelp2//Transpose[#,{1,4,3,2}]&;
+Temp=3Symmetrize[Temp,Symmetric[{1,2,3}]]//SparseArray//SimplifySparse;
 \[Lambda]yTemp=\[Lambda]y+Temp;
 
-Contri1Pre=1/(4 \[Pi]) /2Simplify[Table[Sum[\[Lambda]KTemp[[ii,jj,i,j]]\[Lambda]3Cx[[k,ii,jj]]1/(\[Mu]ijL[[ii,ii]]+\[Mu]ijL[[jj,jj]]),{ii,1,nSH},{jj,1,nSH}],{i,1,nSL},{j,1,nSL},{k,1,nSL}]];
-Contri1=Contri1Pre+Transpose[Contri1Pre,{3,2,1}]+Transpose[Contri1Pre,{1,3,2}];
+TensHelp=Table[1/(n+m),{n,MassVec},{m,MassVec}]//SparseArray;
+TensHelp2=TensorProduct[\[Lambda]KTemp,\[Lambda]3Cx]//DiagonalTensor2[#,1,6]&//DiagonalTensor2[#,2,6]&;
+Contri1Pre=Total[TensHelp TensHelp2,-4];
+Contri1=1/(4 \[Pi]) /2*3*Symmetrize[Contri1Pre,Symmetric[{1,2,3}]]//SparseArray//SimplifySparse;
 
-Contri2Pre=1/(4 \[Pi]) Simplify[Table[Sum[\[Lambda]yTemp[[i,j,ii,jj]]\[Lambda]3Cy[[k,ii,jj]]1/(\[Mu]ijL[[jj,jj]]),{ii,1,nSL},{jj,1,nSH}],{i,1,nSL},{j,1,nSL},{k,1,nSL}]];
-Contri2=Contri2Pre+Transpose[Contri2Pre,{3,2,1}]+Transpose[Contri2Pre,{1,3,2}];
+TensHelp=Table[1/(n),{n,MassVec}]//SparseArray;
+TensHelp2=TensorProduct[\[Lambda]yTemp,\[Lambda]3Cy]//TensorProduct[#,{3,6}]&//DiagonalTensor2[#,4,7]&;
+Contri2Pre=TensHelp . TensHelp2;
+Contri2=1/(4 \[Pi])*3*Symmetrize[Contri2Pre,Symmetric[{1,2,3}]]//SparseArray//SimplifySparse;
 
-MassTemp=Table[MassHelpTriangle[\[Mu]ijLS[[n,n]],\[Mu]ijLS[[l,l]],\[Mu]ijLS[[m,m]]],{n,1,ns},{m,1,ns},{l,1,ns}]//SparseArray;
-Contri3Pre=-Table[Sum[\[Lambda]3CTot[[i,n,m]]\[Lambda]3CTot[[j,l,n]]\[Lambda]3CTot[[k,l,m]]MassTemp[[l,m,n]],{l,1,ns},{m,1,ns},{n,1,ns}],{i,LightScalar[[;;,1]]},{j,LightScalar[[;;,1]]},{k,LightScalar[[;;,1]]}];
-Contri3=Contri3Pre+Transpose[Contri3Pre,{3,2,1}]+Transpose[Contri3Pre,{1,3,2}];
+MassVec2=Table[\[Mu]ijLS[[n,n]],{n,1,ns}];
+TensHelp=Table[MassHelpTriangle[n,m,l],{n,MassVec2},{m,MassVec2},{l,MassVec2}]//SparseArray;
+TensHelp2=TensorProduct[\[Lambda]3CTot,\[Lambda]3CTot]//DiagonalTensor2[#,2,6]&//TensorProduct[#,\[Lambda]3CTot]&//DiagonalTensor2[#,5,7]&//DiagonalTensor2[#,3,7]&;
+Contri3Pre=Total[TensHelp TensHelp2,-4][[LightScalar[[;;,1]],LightScalar[[;;,1]],LightScalar[[;;,1]]]];
+Contri3=-3*Symmetrize[Contri3Pre,Symmetric[{1,2,3}]]//SparseArray//SimplifySparse;
 
-ContriMixed=-1/(4 \[Pi])*1/2* Simplify[Table[Sum[(\[Mu]ijL[[m,m]])/\[Mu]ijL[[l,l]]^2(\[Lambda]3Cy[[i,j,l]]*\[Lambda]x[[k,m,m,l]]+\[Lambda]3Cy[[i,k,l]]*\[Lambda]x[[j,m,m,l]]+\[Lambda]3Cy[[k,j,l]]*\[Lambda]x[[i,m,m,l]]),{l,1,nSH},{m,1,nSH}],{i,1,nSL},{j,1,nSL},{k,1,nSL}]];
-ContriSE=Simplify[Table[Sum[ZSij[[i,l]]\[Lambda]3CLight[[l,j,k]]+ZSij[[j,l]]\[Lambda]3CLight[[l,i,k]]+ZSij[[k,l]]\[Lambda]3CLight[[l,j,i]],{l,1,nSL}],{i,1,nSL},{j,1,nSL},{k,1,nSL}]];
+TensHelp=Table[n/m^2,{n,MassVec},{m,MassVec}]//SparseArray;
+TensHelp2=TensorProduct[\[Lambda]3Cy,\[Lambda]x]//DiagonalTensor2[#,5,6]&//DiagonalTensor2[#,4,6]&;
+Temp=TensHelp . TensHelp2//TensorContract[#,{{1,2}}]&;
+ContriMixed=-1/(4 \[Pi])*1/2*3 Symmetrize[Temp,Symmetric[{1,2,3}]]//SparseArray//SimplifySparse;
 
+ContriSE=3 Symmetrize[ZSij . \[Lambda]3CLight,Symmetric[{1,2,3}]]//SparseArray//SimplifySparse;
 
 \[Lambda]3CSSS=-Contri3-Contri1-Contri2-ContriSE-ContriMixed;
 ];
@@ -248,19 +263,58 @@ ContriSE=Simplify[Table[Sum[ZSij[[i,l]]\[Lambda]3CLight[[l,j,k]]+ZSij[[j,l]]\[La
 ScalarMass2LoopSS[]:=Module[{},
 If[verbose,Print["Calculating 2-Loop Scalar Mass"]];
 
+MassVector=Table[\[Mu]ijL[[n,n]],{n,1,nSH}];
+
+TensHelp=Table[(1/2+Log[\[Mu]3/( a+b)]),{a,MassVector},{b,MassVector}]//SparseArray;
+AE1=\[Lambda]K . Transpose[\[Lambda]K,{4,2,3,1}]//DiagonalTensor[#,1,4]&//DiagonalTensor[#,1,5]&;
+Contri1=-1/(16 \[Pi]^2)1/2AE1 . TensHelp//TensorContract[#,{2,4}]&;
+
+MassHelp=Table[(1/2+2Log[\[Mu]3/(2 a)]),{a,MassVector}]//SparseArray;
+TensHelp=Transpose[Transpose[gAvss,{2,1,3}],{1,3,2}] . gAvss//TensorContract[#,{1,3}]&;
+TensHelp2=MassHelp TensHelp . \[Lambda]K//TensorContract[#,{1,2}]&;
+Contri2=1/(16 \[Pi]^2)*(1/2)TensHelp2;
+
+MassHelp=Table[(-Log[\[Mu]3/(2 a)]),{a,MassVector}]//SparseArray;
+TensHelp=gAvss . Transpose[gAvss,{2,1,3}]//SparseArray //DiagonalTensor[#,2,4]&//Transpose[#,{3,2,1}]&;
+TensHelp2=TensHelp . MassHelp . HabijVL//TensorContract[#,{1,2}]&;
+Contri3=1/(16 \[Pi]^2)*(1/4)TensHelp2;
+
+MassHelp=Table[1/(a+b),{a,MassVector},{b,MassVector}]//SparseArray;
+TensHelp=TensorProduct[DiagonalTensor[\[Lambda]4K,3,4] . MassVector,MassHelp]//DiagonalTensor[#,1,3]&//DiagonalTensor[#,1,3]&;
+Contri4=1/4*(1/(16 \[Pi]^2))*TensHelp . \[Lambda]K//TensorContract[#,{1,2}]&;
+
+(*
 Contri1=-1/(16 \[Pi]^2)1/2Simplify[Table[Sum[ \[Lambda]K[[a,b,i,n]]\[Lambda]K[[a,b,n,j]](1/2+Log[\[Mu]3US/( \[Mu]ijL[[a,a]]+ \[Mu]ijL[[b,b]])]),{a,1,nSH},{b,1,nSH},{n,1,nSL}],{i,1,nSL},{j,1,nSL}]];
 Contri2=1/(16 \[Pi]^2)*(-1/2)Simplify[Table[Sum[\[Lambda]K[[n,m,i,j]]gAvss[[a,n,l]]gAvss[[a,l,m]](1/2+2Log[\[Mu]3US/(2 \[Mu]ijL[[n,n]])]),{a,1,nv},{l,1,nSH},{n,1,nSH},{m,1,nSH}],{i,1,nSL},{j,1,nSL}]];
 Contri3=1/(16 \[Pi]^2)*(1/4)Simplify[Table[Sum[HabijVL[[a,b,i,j]]gAvss[[a,n,l]]gAvss[[b,l,n]](-Log[\[Mu]3US/(2 \[Mu]ijL[[n,n]])]),{a,1,nv},{b,1,nv},{l,1,nSH},{n,1,nSH}],{i,1,nSL},{j,1,nSL}]];
 Contri4=1/4*(1/(16 \[Pi]^2))Simplify[Table[Sum[\[Lambda]K[[a,b,i,j]]\[Lambda]4K[[a,b,c,c]]\[Mu]ijL[[c,c]]/(\[Mu]ijL[[a,a]]+\[Mu]ijL[[b,b]]),{a,1,nSH},{b,1,nSH},{c,1,nSH}],{i,1,nSL},{j,1,nSL}]];
-Contri5=-1/(16 \[Pi]^2)/3!Simplify[Table[Sum[ \[Lambda]x[[i,a,b,n]]\[Lambda]x[[j,a,b,n]](1/2+Log[\[Mu]3US/( \[Mu]ijL[[a,a]]+ \[Mu]ijL[[b,b]]+ \[Mu]ijL[[n,n]])]),{a,1,nSH},{b,1,nSH},{n,1,nSH}],{i,1,nSL},{j,1,nSL}]];
-Contri6=-1/(16 \[Pi]^2)/2Simplify[Table[Sum[ \[Lambda]y[[i,a,b,n]]\[Lambda]y[[j,a,b,n]](1/2+Log[\[Mu]3US/( \[Mu]ijL[[n,n]])]),{a,1,nSL},{b,1,nSL},{n,1,nSH}],{i,1,nSL},{j,1,nSL}]];
-Contri7=(1/(16 \[Pi]^2))/2Simplify[Table[Sum[\[Lambda]y[[i,j,a,b]]\[Lambda]x[[a,b,c,c]]\[Mu]ijL[[c,c]]/(\[Mu]ijL[[b,b]]),{a,1,nSL},{b,1,nSH},{c,1,nSH}],{i,1,nSL},{j,1,nSL}]];
-Coupling=-1/4*1/(4 \[Pi])^2;
-ContriMix1=Coupling*Simplify[Table[Sum[(\[Mu]ijL[[n,n]])\[Mu]ijL[[m,m]]^-2 \[Mu]ijL[[l,l]]\[Lambda]x[[i,n,n,m]]\[Lambda]x[[j,l,l,m]],{l,1,nSH},{m,1,nSH},{n,1,nSH}],{i,1,nSL},{j,1,nSL}]];
+*)
+
+If[Length[\[Lambda]x//Normal//Variables]==0&&Length[\[Lambda]y//Normal//Variables]==0,
+Contri5=0;
+Contri6=0;
+Contri7=0;
+,
+TensHelp=Table[(1/2+Log[\[Mu]3/(a+b+n)]) ,{a,MassVector},{b,MassVector},{n,MassVector}]//SparseArray;
+TensHelp2=TensorProduct[\[Lambda]x,\[Lambda]x]//DiagonalTensor2[#,2,6]&//DiagonalTensor2[#,3,6]&//DiagonalTensor2[#,4,6]&;
+Contri5=-1/(16 \[Pi]^2)/3!*Total[TensHelp TensHelp2,-3];
+
+TensHelp=Table[(1/2+Log[\[Mu]3/(a)]) ,{a,MassVector}]//SparseArray;
+TensHelp2=TensorProduct[\[Lambda]y,\[Lambda]y]//TensorContract[#,{2,6}]&//TensorContract[#,{2,5}]&//DiagonalTensor2[#,2,4]&;
+Contri6=-1/(16 \[Pi]^2)/2!*Total[TensHelp TensHelp2,-3];
+
+TensHelp=Table[c/b ,{c,MassVector},{b,MassVector}]//SparseArray;
+TensHelp2=Transpose[\[Lambda]y,{1,2,4,3}] . \[Lambda]x//DiagonalTensor2[#,3,4]&//DiagonalTensor2[#,4,5]&;
+Contri7=(1/(16 \[Pi]^2))/2*Total[TensHelp TensHelp2,-3];
+
+];
+TensHelp=Table[n/m^2*l ,{n,MassVector},{m,MassVector},{l,MassVector}]//SparseArray;
+TensHelp2=TensorProduct[DiagonalTensor2[\[Lambda]x,2,3],DiagonalTensor2[\[Lambda]x,2,3]]//DiagonalTensor2[#,3,6]&//Flatten[#,{{2},{1},{4}}]&;
+ContriMix1=-1/4*1/(4 \[Pi])^2*Total[TensHelp TensHelp2,-3];
+
 ContriMix2=-Simplify[Table[Sum[(\[Mu]ijMix[[i,m]])\[Mu]ijL[[m,m]]^-2 \[Mu]ijMix[[j,m]],{m,1,nSH}],{i,1,nSL},{j,1,nSL}]];
 
-
-If[Length[\[Lambda]3//Normal//Variables]==0,
+If[Length[\[Lambda]3//Normal//Variables]||nv>=nSH,
 ContriC1=0;
 ContriC2=0;
 ContriC3=0;
@@ -268,15 +322,28 @@ ContriC4=0;
 \[Mu]ijSSNLO2=0;
 ,
 (*Check signs*)
-ContriC1=-1/2Simplify[Table[Sum[MassHelp1[\[Mu]ijLS[[jj,jj]],\[Mu]ijLS[[ii,ii]],\[Mu]ijLS[[kk,kk]],\[Mu]ijLS[[ll,ll]],\[Mu]ijLS[[mm,mm]]] \[Lambda]3CTot[[i,jj,ii]]\[Lambda]3CTot[[j,kk,ll]]\[Lambda]3CTot[[jj,mm,kk]]\[Lambda]3CTot[[ii,mm,ll]],{jj,1,ns},{ii,1,ns},{mm,1,ns},{kk,1,ns},{ll,1,ns}],{i,LightScalar[[;;,1]]},{j,LightScalar[[;;,1]]}]];
-ContriC2=1/2*Simplify[Table[Sum[MassHelp2[\[Mu]ijLS[[ii,ii]],\[Mu]ijLS[[jj,jj]],\[Mu]ijLS[[mm,mm]],\[Mu]ijLS[[nn,nn]]] \[Lambda]4Tot[[i,ii,nn,mm]]\[Lambda]3CTot[[mm,nn,jj]]\[Lambda]3CTot[[j,ii,jj]],{jj,1,ns},{ii,1,ns},{mm,1,ns},{nn,1,ns}],{i,LightScalar[[;;,1]]},{j,LightScalar[[;;,1]]}]];
-ContriC3=1/2*Simplify[Table[Sum[MassHelp2[\[Mu]ijLS[[ii,ii]],\[Mu]ijLS[[jj,jj]],\[Mu]ijLS[[mm,mm]],\[Mu]ijLS[[nn,nn]]] \[Lambda]4Tot[[j,ii,nn,mm]]\[Lambda]3CTot[[mm,nn,jj]]\[Lambda]3CTot[[i,ii,jj]],{jj,1,ns},{ii,1,ns},{mm,1,ns},{nn,1,ns}],{i,LightScalar[[;;,1]]},{j,LightScalar[[;;,1]]}]];
-ContriC4=-1/4*Simplify[Table[Sum[MassHelp2[\[Mu]ijLS[[ii,ii]],\[Mu]ijLS[[jj,jj]],\[Mu]ijLS[[mm,mm]],\[Mu]ijLS[[nn,nn]]] \[Lambda]4Tot[[i,j,ii,jj]]\[Lambda]3CTot[[mm,jj,nn]]\[Lambda]3CTot[[mm,ii,nn]],{jj,1,ns},{ii,1,ns},{mm,1,ns},{nn,1,ns}],{i,LightScalar[[;;,1]]},{j,LightScalar[[;;,1]]}]];
-\[Mu]ijSSNLO2=(ContriC1+ContriC2+ContriC3+ContriC4)//Simplify//SparseArray;
+MassVector=Table[\[Mu]ijLS[[n,n]],{n,1,ns}];
+TensHelp=Table[MassHelp1[j,i,k,l,m]  ,{j,MassVector},{i,MassVector},{k,MassVector},{l,MassVector},{m,MassVector}]//SparseArray//SimplifySparse&;
+TensHelp2=TensorProduct[\[Lambda]3CTot,\[Lambda]3CTot]//DiagonalTensor2[#,1,4]&//TensorProduct[#,\[Lambda]3CTot]&//DiagonalTensor2[#,2,6]&//DiagonalTensor2[#,4,6]&;
+TensHelp3=TensorProduct[TensHelp2,\[Lambda]3CTot]//DiagonalTensor2[#,4,7]&//DiagonalTensor2[#,5,7]&;
+ContriC1=-1/2*Total[TensHelp TensHelp3,-3][[LightScalar[[;;,1]],LightScalar[[;;,1]]]]//SimplifySparse;
+
+TensHelp=Table[MassHelp2[i,j,m,n]  ,{i,MassVector},{j,MassVector},{m,MassVector},{n,MassVector}]//SparseArray//SimplifySparse;
+TensHelp2=TensorProduct[\[Lambda]4Tot,\[Lambda]3CTot]//DiagonalTensor2[#,4,6]&//DiagonalTensor2[#,4,5]&;
+TensHelp3=TensorProduct[TensHelp2,\[Lambda]3CTot]//DiagonalTensor2[#,4,7]&//DiagonalTensor2[#,5,7]&;
+ContriC2=1/2*Total[TensHelp TensHelp3,-3][[LightScalar[[;;,1]],LightScalar[[;;,1]]]]//SimplifySparse;
+
+TensHelp=Table[MassHelp2[i,j,m,n]  ,{i,MassVector},{j,MassVector},{m,MassVector},{n,MassVector}]//SparseArray//SimplifySparse;
+TensHelp2=TensorProduct[\[Lambda]3CTot,\[Lambda]3CTot]//DiagonalTensor2[#,3,4]&//DiagonalTensor2[#,3,4]&;
+TensHelp3=TensorProduct[TensHelp2,\[Lambda]4Tot]//DiagonalTensor2[#,3,5]&//DiagonalTensor2[#,4,7]&;
+ContriC4=-1/4*Total[TensHelp TensHelp3,-3][[LightScalar[[;;,1]],LightScalar[[;;,1]]]]//SimplifySparse;
+
+\[Mu]ijSSNLO2=(ContriC1+2*ContriC2+ContriC4)//Simplify//SparseArray;
 ];
 
-\[Mu]ijTemp=\[Mu]ijLight+\[Mu]ijSSLO;
-ContriF=-Table[Sum[ZSij[[i,n]]\[Mu]ijTemp[[n,j]]+ZSij[[j,n]]\[Mu]ijTemp[[n,i]],{n,1,nSL}],{i,1,nSL},{j,1,nSL}];
+\[Mu]ijTemp=\[Mu]ijLight+\[Mu]ijSSLO//SparseArray;
+ContriF=-ZSij . \[Mu]ijTemp-\[Mu]ijTemp . ZSij;
+
 \[Mu]ijSSNLO=(Contri1+Contri2+Contri3+ Contri4+Contri5+Contri6+Contri7+ContriMix1+ContriMix2+ContriF)//Simplify//SparseArray;
 
 ];
@@ -294,11 +361,11 @@ MassHelp1[0,0,0,x_,0]:=1/(16 \[Pi]^2 x^4)
 MassHelp1[y_,y_,w_,z_,t_]:=1/(16 \[Pi]^2 (t^2+w^2+y^2) (t^2+y^2+z^2))
 MassHelp1[x_,y_,z_,z_,t_]:=1/(16 \[Pi]^2 (t^2+x^2+z^2) (t^2+y^2+z^2))
 MassHelp1[0,y_,0,0,t_]:=1/(16 \[Pi]^2 (t^2) (t^2+y^2))
-MassHelp1[x_,y_,w_,z_,t_]:=(Log[\[Mu]3US/(t+w+x)]-Log[\[Mu]3US/(t+w+y)]-Log[\[Mu]3US/(t+x+z)]+Log[\[Mu]3US/(t+y+z)])/(16 \[Pi]^2 (w^2-z^2) (x^2-y^2))
-MassHelp1[0,y_,0,z_,0]:=-((2 Log[\[Mu]3US/y]-2 Log[\[Mu]3US/(y+z)]+2 Log[\[Mu]3US/z]+1)/(32 \[Pi]^2 y^2 z^2))
-MassHelp1[x_,0,w_,0,0]:=-((2 Log[\[Mu]3US/x]-2 Log[\[Mu]3US/(x+w)]+2 Log[\[Mu]3US/w]+1)/(32 \[Pi]^2 x^2 w^2))
-MassHelp1[0,y_,w_,0,0]:=-((2 Log[\[Mu]3US/y]-2 Log[\[Mu]3US/(y+w)]+2 Log[\[Mu]3US/w]+1)/(32 \[Pi]^2 y^2 w^2))
-MassHelp1[x_,0,0,z_,0]:=-((2 Log[\[Mu]3US/x]-2 Log[\[Mu]3US/(x+z)]+2 Log[\[Mu]3US/z]+1)/(32 \[Pi]^2 x^2 z^2))
+MassHelp1[x_,y_,w_,z_,t_]:=(Log[\[Mu]3/(t+w+x)]-Log[\[Mu]3/(t+w+y)]-Log[\[Mu]3/(t+x+z)]+Log[\[Mu]3/(t+y+z)])/(16 \[Pi]^2 (w^2-z^2) (x^2-y^2))
+MassHelp1[0,y_,0,z_,0]:=-((2 Log[\[Mu]3/y]-2 Log[\[Mu]3/(y+z)]+2 Log[\[Mu]3/z]+1)/(32 \[Pi]^2 y^2 z^2))
+MassHelp1[x_,0,w_,0,0]:=-((2 Log[\[Mu]3/x]-2 Log[\[Mu]3/(x+w)]+2 Log[\[Mu]3/w]+1)/(32 \[Pi]^2 x^2 w^2))
+MassHelp1[0,y_,w_,0,0]:=-((2 Log[\[Mu]3/y]-2 Log[\[Mu]3/(y+w)]+2 Log[\[Mu]3/w]+1)/(32 \[Pi]^2 y^2 w^2))
+MassHelp1[x_,0,0,z_,0]:=-((2 Log[\[Mu]3/x]-2 Log[\[Mu]3/(x+z)]+2 Log[\[Mu]3/z]+1)/(32 \[Pi]^2 x^2 z^2))
 
 
 (*
@@ -316,10 +383,10 @@ MassHelpTriangle[x_,y_,z_]:=1/(4 \[Pi] (x+y) (x+z) (y+z))
 *)
 MassHelp2[0,0,0,0]:=0
 MassHelp2[0,0,z_,t_]:=1/(16 \[Pi]^2 (t^2+z^2))
-MassHelp2[x_,0,0,0]:=(-(2 Log[\[Mu]3US/x])-1)/(32 \[Pi]^2 x^2)
-MassHelp2[0,y_,0,0]:=(-(2 Log[\[Mu]3US/y])-1)/(32 \[Pi]^2 y^2)
+MassHelp2[x_,0,0,0]:=(-(2 Log[\[Mu]3/x])-1)/(32 \[Pi]^2 x^2)
+MassHelp2[0,y_,0,0]:=(-(2 Log[\[Mu]3/y])-1)/(32 \[Pi]^2 y^2)
 MassHelp2[y_,y_,z_,t_]:=1/(16 \[Pi]^2 (t^2+y^2+z^2))
-MassHelp2[x_,y_,z_,t_]:=(Log[\[Mu]3US/(t+y+z)]-Log[\[Mu]3US/(t+x+z)])/(16 \[Pi]^2 (x^2-y^2))
+MassHelp2[x_,y_,z_,t_]:=(Log[\[Mu]3/(t+y+z)]-Log[\[Mu]3/(t+x+z)])/(16 \[Pi]^2 (x^2-y^2))
 
 
 (*
@@ -377,7 +444,7 @@ If[verbose,Print["Identifying Components"]];
 (*Quartic Tensor*)
 
 
-HelpList=DeleteDuplicates@SparseArray[Simplify@Flatten[ (\[Lambda]4S+\[Lambda]3DSS)]]//Sort;
+HelpList=DeleteDuplicates@SparseArray[Simplify@Normal@Flatten[ (\[Lambda]4S+\[Lambda]3DSS)]]//Sort;
 If[HelpList[[1]]==0&&Length[HelpList]>1,
 	HelpList=Delete[HelpList,1];
 ];
@@ -385,6 +452,7 @@ HelpVar=Table[\[Lambda]SS[a],{a,1,HelpList//Length}];
 HelpVarMod=RelationsBVariables[HelpList,HelpVar];
 HelpSolveQuarticS=Table[{HelpList[[a]]->HelpVarMod[[a]]},{a,1,HelpList//Length}]//Flatten;
 \[Lambda]3DSS=(\[Lambda]4S+\[Lambda]3DSS)//Normal//Simplify//ReplaceAll[#,HelpSolveQuarticS]&//SparseArray;
+
 
 
 (*Cubic Tensor*)
@@ -410,7 +478,6 @@ HelpSolveVecTS=Table[{HelpList[[a]]->HelpVarMod[[a]]},{a,1,HelpList//Length}]//F
 
 (*Scalar Mass*)
 If[mode>=2,
-
 HelpList=DeleteDuplicates@Flatten@Simplify[ xLO \[Mu]ijLight+xLO \[Mu]ijSSLO+xNLO(\[Mu]ijSSNLO+\[Mu]ijSSNLO2)]//Sort;
 If[HelpList[[1]]==0&&Length[HelpList]>1,
 	HelpList=Delete[HelpList,1];
@@ -579,78 +646,142 @@ ContriTL=Table[ContriTLTemp[[i,j,k,l]]+ContriTLTemp[[i,k,j,l]]+ContriTLTemp[[i,l
 ScalarQuarticSS[]:=Module[{},
 If[verbose,Print["Calculating Scalar Quartics"]];
 
-ContriTLTemp1=Simplify[Table[Sum[(1/(\[Mu]ijL[[n,n]]^2))\[Lambda]3Cy[[i,j,n]]\[Lambda]3Cy[[k,l,n]],{n,1,nSH}],{i,1,nSL},{j,1,nSL},{k,1,nSL},{l,1,nSL}]];
-ContriTLTemp2=Simplify[Table[Sum[1/(\[Mu]ijL[[n,n]]^2)\[Mu]HEff[[n,m]]1/(\[Mu]ijL[[m,m]]^2)\[Lambda]3Cy[[i,j,n]]\[Lambda]3Cy[[k,l,m]],{n,1,nSH},{m,1,nSH}],{i,1,nSL},{j,1,nSL},{k,1,nSL},{l,1,nSL}]];
-ContriTLTemp=ContriTLTemp1+ContriTLTemp1//Simplify;
-ContriTL=Table[ContriTLTemp[[i,j,k,l]]+ContriTLTemp[[i,k,j,l]]+ContriTLTemp[[i,l,j,k]],{i,1,nSL},{j,1,nSL},{k,1,nSL},{l,1,nSL}];
 
-CouplingSE=-Inactivate[TensorProduct[ZSij,\[Lambda]4S]];
-ContriSETemp=Simplify[Activate @ TensorContract[CouplingSE, {{2,3}}]]//SparseArray;
-ContriSE=ContriSETemp+Transpose[ContriSETemp,{2,1,3,4}]+Transpose[ContriSETemp,{3,1,2,4}]+Transpose[ContriSETemp,{4,1,2,3}]//Simplify;
 
 (*Maybe include Cubics later*)
-Temp=0*Simplify[Table[Sum[(1/(\[Mu]ijL[[n,n]]^2))\[Lambda]3Cy[[i,j,n]]\[Lambda]3CHeavy[[k,l,n]],{n,1,nSH}],{k,1,nSH},{l,1,nSH},{i,1,nSL},{j,1,nSL}]];
-\[Lambda]KEff=\[Lambda]K-Temp//SparseArray;
-Temp=0*Simplify[Table[Sum[(1/(\[Mu]ijL[[n,n]]^2))\[Lambda]3Cy[[i,j,n]]\[Lambda]3Cx[[k,l,n]],{n,1,nSH}],{i,1,nSL},{j,1,nSL},{k,1,nSL},{l,1,nSH}]];
-\[Lambda]yEff=\[Lambda]y-Temp//SparseArray;
-\[Lambda]yEff2=Table[\[Lambda]y[[i,j,k,l]]-Temp[[i,j,k,l]]-Temp[[i,k,j,l]]-Temp[[k,j,i,l]],{i,1,nSL},{j,1,nSL},{k,1,nSL},{l,1,nSH}]//SparseArray;
-
+(*Temp=0*Simplify[Table[Sum[(1/(\[Mu]ijL[[n,n]]^2))\[Lambda]3Cy[[i,j,n]]\[Lambda]3CHeavy[[k,l,n]],{n,1,nSH}],{k,1,nSH},{l,1,nSH},{i,1,nSL},{j,1,nSL}]];*)
+\[Lambda]KEff=\[Lambda]K//SparseArray;
+(*Temp=0*Simplify[Table[Sum[(1/(\[Mu]ijL[[n,n]]^2))\[Lambda]3Cy[[i,j,n]]\[Lambda]3Cx[[k,l,n]],{n,1,nSH}],{i,1,nSL},{j,1,nSL},{k,1,nSL},{l,1,nSH}]];*)
+\[Lambda]yEff=\[Lambda]y//SparseArray;
+(*\[Lambda]yEff2=Table[\[Lambda]y[[i,j,k,l]]-0*Temp[[i,j,k,l]]-0*Temp[[i,k,j,l]]-0*Temp[[k,j,i,l]],{i,1,nSL},{j,1,nSL},{k,1,nSL},{l,1,nSH}]//SparseArray;*)
+\[Lambda]yEff2=\[Lambda]y;
 
 (*Loop level*)
-CouplingSSSS=1/2*1/(4 \[Pi])TensorProduct[\[Lambda]KEff,\[Lambda]KEff];
-Temp=Table[Sum[1/(\[Mu]ijL[[n,n]]+\[Mu]ijL[[m,m]])(CouplingSSSS[[n,m,i,j,n,m,k,l]]),{n,1,nSH},{m,1,nSH}],{i,1,nSL},{j,1,nSL},{k,1,nSL},{l,1,nSL}]//SparseArray;
-ContriSS=Table[Temp[[i,j,k,l]]+Temp[[i,k,j,l]]+Temp[[i,l,j,k]],{i,1,nSL},{j,1,nSL},{k,1,nSL},{l,1,nSL}];
-CouplingSSSS=1/(4 \[Pi])TensorProduct[\[Lambda]yEff,\[Lambda]yEff];
-Temp=Simplify[Table[Sum[1/(\[Mu]ijL[[m,m]])(CouplingSSSS[[i,j,n,m,k,l,n,m]]),{n,1,nSL},{m,1,nSH}],{i,1,nSL},{j,1,nSL},{k,1,nSL},{l,1,nSL}]]//SparseArray;
-ContriSS2=Table[Temp[[i,j,k,l]]+Temp[[i,k,j,l]]+Temp[[i,l,j,k]],{i,1,nSL},{j,1,nSL},{k,1,nSL},{l,1,nSL}];
-CouplingSSSS=-1/(4 \[Pi])*1/2TensorProduct[\[Lambda]yEff2,\[Lambda]x]//SparseArray;
-Temp=Simplify[Table[Sum[1/(\[Mu]ijL[[m,m]]^2)\[Mu]ijL[[n,n]](CouplingSSSS[[i,j,k,m,l,n,n,m]]),{n,1,nSH},{m,1,nSH}],{i,1,nSL},{j,1,nSL},{k,1,nSL},{l,1,nSL}]];
-ContriSS3=Table[Temp[[i,j,k,l]]+Temp[[i,j,l,k]]+Temp[[i,l,k,k]]+Temp[[l,j,k,i]],{i,1,nSL},{j,1,nSL},{k,1,nSL},{l,1,nSL}]//SparseArray;
-Temp=-Simplify[Table[Sum[1/(\[Mu]ijL[[m,m]]^2)1/(\[Mu]ijL[[n,n]]^2)\[Lambda]yEff2[[i,j,k,m]]\[Lambda]3Cx[[l,m,n]]TadPoleHeavySS[[n]],{n,1,nSH},{m,1,nSH}],{i,1,nSL},{j,1,nSL},{k,1,nSL},{l,1,nSL}]]//SparseArray;
-CouplingSSTadpole=Table[Temp[[i,j,k,l]]+Temp[[i,j,l,k]]+Temp[[i,l,k,k]]+Temp[[l,j,k,i]],{i,1,nSL},{j,1,nSL},{k,1,nSL},{l,1,nSL}]//SparseArray;
+MassVec=Table[\[Mu]ijL[[n,n]],{n,1,nSH}];
+TensHelp=Table[1/(n+m),{n,MassVec},{m,MassVec}]//SparseArray//Flatten[#,{1,2}]&;
+AE2=Flatten[\[Lambda]KEff,{{1,2}}]//SparseArray;
+Temp=1/2*1/(4 \[Pi])*Transpose[AE2,{3,2,1}] . (TensHelp\[NonBreakingSpace]AE2)//SparseArray;
+ContriSS=3Symmetrize[Temp,Symmetric[{1,2,3,4}]]//SparseArray//SimplifySparse;
 
 
-If[Length[\[Lambda]3//Normal//Variables]==0,
-\[Lambda]3DSS=ContriSE-ContriTL- ContriSS-ContriSS2-ContriSS3-CouplingSSTadpole;
+If[Length[\[Lambda]y//Normal//Variables]==0,
+ContriSS2=EmptyArray[{nSL,nSL,nSL,nSL}];
+ContriSS3=EmptyArray[{nSL,nSL,nSL,nSL}];
 ,
+MassVec=Table[\[Mu]ijL[[n,n]],{n,1,nSH}];
+TensHelp=Table[1/(n),{n,MassVec}]//SparseArray;
+AE2=TensHelp Transpose[\[Lambda]yEff,{4,2,3,1 }]//Flatten[#,{2,1}]& ;
+Temp=1/(4 \[Pi]) Transpose[Flatten[\[Lambda]yEff,{3,4}],{3,2,1}] . AE2;
+ContriSS2=3Symmetrize[Temp,Symmetric[{1,2,3,4}]]//SparseArray//SimplifySparse;
+
+TensHelp=Table[n/m^2,{m,MassVec},{n,MassVec}]//SparseArray;
+TensHelp2=Transpose[\[Lambda]x,{4,2,3,1}]//Table[i,{i,#}]&//Table[#[[i,i]],{i,1,Length[#]}]&//SparseArray;
+TensHelp3=TensHelp . TensHelp2//Table[i,{i,#}]&//Table[#[[i,i]],{i,1,Length[#]}]&//SparseArray;
+ContriSS3=-1/(4 \[Pi])*1/2*4*Symmetrize[\[Lambda]yEff2 . TensHelp3,Symmetric[{1,2,3,4}]]//SparseArray//SimplifySparse;
+
+];
+
+	
+If[Length[\[Lambda]3//Normal//Variables]==0,
+\[Lambda]3DSS=-ContriSS-ContriSS2-ContriSS3;
+,
+ContriSETemp=ZSij . \[Lambda]4S//SparseArray;
+ContriSE=ContriSETemp+Transpose[ContriSETemp,{2,1,3,4}]+Transpose[ContriSETemp,{3,1,2,4}]+Transpose[ContriSETemp,{4,1,2,3}]//SparseArray//SimplifySparse;
+
+TensHelp=Table[1/(n^2),{n,MassVec}]//SparseArray;
+TensHelp2=TensorProduct[\[Lambda]3Cy,\[Lambda]3Cy]//DiagonalTensor2[#,3,6]&;
+ContriTLTemp1=TensHelp . TensHelp2;
+TensHelp=Table[1/(n^2*m^2),{n,MassVec},{m,MassVec}]//SparseArray;
+TensHelp=\[Mu]HEff TensHelp;
+ContriTLTemp2=\[Lambda]3Cy . TensHelp . Transpose[\[Lambda]3Cy,{3,2,1}];
+ContriTL=3 Symmetrize[ContriTLTemp1+ContriTLTemp2,Symmetric[{1,2,3,4}]]//SparseArray//SimplifySparse;
+
+TensHelp=Table[1/(n^2*m^2),{n,MassVec},{m,MassVec}]//SparseArray;
+TensHelp2=TensorProduct[\[Lambda]yEff2,\[Lambda]3Cx,TadPoleHeavySS]//DiagonalTensor2[#,4,6]&//DiagonalTensor2[#,6,7]&;
+Temp=-TensHelp . TensHelp2//TensorContract[#,{1,2}]&;
+CouplingSSTadpole=4 Symmetrize[Temp,Symmetric[{1,2,3,4}]]//SparseArray//SimplifySparse;
+
+
 (*TadPole*)
-Temp=-Simplify[Table[Sum[1/(\[Mu]ijL[[n,n]]^2)1/(\[Mu]ijL[[m,m]]^2)TadPoleHeavySS[[m]](\[Lambda]K[[n,m,i,j]]\[Lambda]3Cy[[k,l,n]]+\[Lambda]K[[n,m,k,l]]\[Lambda]3Cy[[j,i,n]]),{n,1,nSH},{m,1,nSH}],{i,1,nSL},{j,1,nSL},{k,1,nSL},{l,1,nSL}]]//Simplify;
-ContriTadpole=Table[Temp[[i,j,k,l]]+Temp[[i,k,j,l]]+Temp[[i,l,j,k]],{i,1,nSL},{j,1,nSL},{k,1,nSL},{l,1,nSL}];
+TensHelp=Table[1/(n^2*m^2),{n,MassVec},{m,MassVec}]//SparseArray;
+TensHelp2=TensorProduct[\[Lambda]K,\[Lambda]3Cy,TadPoleHeavySS]//DiagonalTensor2[#,1,7]&//DiagonalTensor2[#,2,7]&;
+Temp=-TensHelp . TensHelp2//TensorContract[#,{1,2}]&;
+ContriTadpole=2*3 Symmetrize[Temp,Symmetric[{1,2,3,4}]]//SparseArray//SimplifySparse;
 
-
+Clear[MassHelp,MassHelp5,MassHelp2,MassHelp3];
 MassHelp5[x_]:=-(1/(4 \[Pi] x^3));
 MassHelp4[x_,y_,z_]:=1/(4 \[Pi] (x+y) (x+z) (y+z));
 MassHelp[x_,y_,w_,z_]:=(w+x+y+z)/(4 \[Pi] (w+x) (w+y) (w+z) (x+y) (x+z) (y+z));
 MassHelp2[w_,z_]:=-((w^2+w z+z^2)/(4 \[Pi] w^3 z^3 (w+z)));
 MassHelp3[w_]:=1/(4 \[Pi] w^5);
 
-ContriSSSSTemp=Table[Sum[\[Lambda]3Cx[[i,n,m]]\[Lambda]3Cx[[j,m,l]]\[Lambda]3Cx[[k,l,o]]\[Lambda]3Cx[[t,n,o]] MassHelp[\[Mu]ijL[[n,n]],\[Mu]ijL[[m,m]],\[Mu]ijL[[l,l]],\[Mu]ijL[[o,o]]],{n,nv+1,nSH},{m,nv+1,nSH},{l,nv+1,nSH},{o,nv+1,nSH}],{i,1,nSL},{j,1,nSL},{k,1,nSL},{t,1,nSL}]//Simplify;
-ContriCubic1=2Table[ContriSSSSTemp[[i,j,k,t]]+ContriSSSSTemp[[i,k,j,t]]+ContriSSSSTemp[[i,t,k,j]],{i,1,nSL},{j,1,nSL},{k,1,nSL},{t,1,nSL}];
-ContriSSSSTemp=Table[Sum[\[Lambda]3Cy[[i,m,n]]\[Lambda]3Cy[[j,m,l]]\[Lambda]3Cx[[k,l,o]]\[Lambda]3Cx[[t,n,o]] MassHelp[\[Mu]ijL[[n,n]],0,\[Mu]ijL[[l,l]],\[Mu]ijL[[o,o]]],{n,nv+1,nSH},{m,1,nSL},{l,nv+1,nSH},{o,nv+1,nSH}],{i,1,nSL},{j,1,nSL},{k,1,nSL},{t,1,nSL}]//Simplify;
-ContriCubic2=Table[(ContriSSSSTemp[[i,j,k,t]]+ContriSSSSTemp[[j,i,k,t]])+(ContriSSSSTemp[[i,k,j,t]]+ContriSSSSTemp[[k,i,j,t]])+(ContriSSSSTemp[[i,t,k,j]]+ContriSSSSTemp[[t,i,k,j]])+(ContriSSSSTemp[[k,t,i,j]]+ContriSSSSTemp[[t,k,i,j]])+(ContriSSSSTemp[[k,j,i,t]]+ContriSSSSTemp[[j,k,i,t]])+(ContriSSSSTemp[[j,t,i,k]]+ContriSSSSTemp[[t,j,i,k]]),{i,1,nSL},{j,1,nSL},{k,1,nSL},{t,1,nSL}];
+If[nSH>nv,
+MassVec2=Table[\[Mu]ijL[[n,n]],{n,nv+1,nSH}];
+TensHelp=Table[MassHelp[n,m,l,o],{l,MassVec2},{m,MassVec2},{n,MassVec2},{o,MassVec2}]//SparseArray;
+TensHelp=Delete[TensHelp//ArrayRules,-1]//ReplaceAll[#,{x_,y_,z_,w_}->{x+nv,y+nv,z+nv,w+nv}]&//SparseArray;
+TensHelp2=TensorProduct[\[Lambda]3Cx,\[Lambda]3Cx]//DiagonalTensor2[#,3,5]&//TensorProduct[#,\[Lambda]3Cx]&//DiagonalTensor2[#,5,7]&//TensorProduct[#,\[Lambda]3Cx]&//DiagonalTensor2[#,7,10]&//DiagonalTensor2[#,5,9]&;
+ContriSSSSTemp=Total[TensHelp TensHelp2,-5];
+ContriCubic1=2*3 Symmetrize[ContriSSSSTemp,Symmetric[{1,2,3,4}]]//SparseArray//SimplifySparse;
+
+TensHelp=Table[MassHelp[n,0,l,o],{l,MassVec2},{n,MassVec2},{o,MassVec2}]//SparseArray;
+TensHelp=Delete[TensHelp//ArrayRules,-1]//ReplaceAll[#,{x_,y_,z_}->{x+nv,y+nv,z+nv}]&//SparseArray;
+TensHelp2=TensorProduct[\[Lambda]3Cy,\[Lambda]3Cy]//TensorContract[#,{2,5}]&//TensorProduct[#,\[Lambda]3Cx]&//DiagonalTensor2[#,4,6]&//TensorProduct[#,\[Lambda]3Cx]&//DiagonalTensor2[#,6,9]&//DiagonalTensor2[#,4,8]&;
+ContriSSSSTemp=Total[TensHelp TensHelp2,-5];
+ContriCubic2=12 Symmetrize[ContriSSSSTemp,Symmetric[{1,2,3,4}]]//SparseArray//SimplifySparse;
  
-ContriSSSSTemp=Table[Sum[\[Lambda]3Cy[[i,m,n]]\[Lambda]3CLight[[j,m,l]]\[Lambda]3Cy[[k,l,o]]\[Lambda]3Cx[[t,n,o]] MassHelp2[\[Mu]ijL[[n,n]],\[Mu]ijL[[o,o]]],{n,nv+1,nSH},{m,1,nSL},{l,1,nSL},{o,nv+1,nSH}],{i,1,nSL},{j,1,nSL},{k,1,nSL},{t,1,nSL}]//Simplify//SparseArray;
-ContriCubic3H=2Table[ContriSSSSTemp[[i,j,k,t]]+ContriSSSSTemp[[k,j,t,i]]+ContriSSSSTemp[[t,j,t,k]],{i,1,nSL},{j,1,nSL},{k,1,nSL},{t,1,nSL}];
-ContriCubic3=Table[ContriCubic3H[[i,j,k,t]]+ContriCubic3H[[j,i,k,t]]+ContriCubic3H[[i,k,j,t]]+ContriCubic3H[[i,t,k,j]],{i,1,nSL},{j,1,nSL},{k,1,nSL},{t,1,nSL}];
-ContriSSSSTemp=Table[Sum[\[Lambda]3Cy[[i,m,n]]\[Lambda]3Cy[[j,m,l]]\[Lambda]3Cy[[k,o,l]]\[Lambda]3Cy[[t,o,n]] MassHelp2[\[Mu]ijL[[n,n]],\[Mu]ijL[[l,l]]],{n,nv+1,nSH},{m,1,nSL},{l,nv+1,nSH},{o,1,nSL}],{i,1,nSL},{j,1,nSL},{k,1,nSL},{t,1,nSL}]//Simplify//SparseArray;
-ContriCubic3H=Table[ContriSSSSTemp[[i,j,k,t]]+ContriSSSSTemp[[j,i,k,t]],{i,1,nSL},{j,1,nSL},{k,1,nSL},{t,1,nSL}];
-ContriCubic4=Table[ContriCubic3H[[i,j,k,t]]+ContriCubic3H[[i,k,j,t]]+ContriCubic3H[[i,t,k,j]],{i,1,nSL},{j,1,nSL},{k,1,nSL},{t,1,nSL}];
-ContriSSSSTemp=Table[Sum[\[Lambda]3Cy[[i,m,n]]\[Lambda]3CLight[[j,m,l]]\[Lambda]3CLight[[k,l,o]]\[Lambda]3Cy[[t,o,n]] MassHelp3[\[Mu]ijL[[n,n]]],{n,nv+1,nSH},{m,1,nSL},{l,1,nSL},{o,1,nSL}],{i,1,nSL},{j,1,nSL},{k,1,nSL},{t,1,nSL}]//Simplify//SparseArray;
-ContriCubic5=2Table[ContriSSSSTemp[[i,j,k,t]]+ContriSSSSTemp[[i,k,j,t]]+ContriSSSSTemp[[i,t,k,j]],{i,1,nSL},{j,1,nSL},{k,1,nSL},{t,1,nSL}];
+TensHelp=Table[MassHelp2[n,o],{n,MassVec2},{o,MassVec2}]//SparseArray;
+TensHelp=Delete[TensHelp//ArrayRules,-1]//ReplaceAll[#,{x_,y_}->{x+nv,y+nv}]&//SparseArray;
+TensHelp2=Transpose[\[Lambda]3Cy,{3,2,1}] . \[Lambda]3CLight . \[Lambda]3Cy//TensorProduct[#,\[Lambda]3Cx]&//DiagonalTensor2[#,1,8]&//DiagonalTensor2[#,5,7]&;
+ContriSSSSTemp=Total[TensHelp TensHelp2,-5];
+ContriCubic3=4! Symmetrize[ContriSSSSTemp,Symmetric[{1,2,3,4}]]//SparseArray//SimplifySparse;
 
+TensHelp=Table[MassHelp2[n,o],{n,MassVec2},{o,MassVec2}]//SparseArray;
+TensHelp=Delete[TensHelp//ArrayRules,-1]//ReplaceAll[#,{x_,y_}->{x+nv,y+nv}]&//SparseArray;
+TensHelp2=TensorProduct[Transpose[\[Lambda]3Cy,{3,2,1}] . \[Lambda]3Cy, Transpose[\[Lambda]3Cy,{3,2,1}] . \[Lambda]3Cy]//DiagonalTensor2[#,1,8]&//DiagonalTensor2[#,4,5]&;
+ContriSSSSTemp=Total[TensHelp TensHelp2,-5];
+ContriCubic4=3! Symmetrize[ContriSSSSTemp,Symmetric[{1,2,3,4}]]//SparseArray//SimplifySparse;
 
-ContriSSSSTemp=-Table[Sum[\[Lambda]K[[n,m,i,j]]\[Lambda]3Cx[[k,n,l]]\[Lambda]3Cx[[t,m,l]] MassHelp4[\[Mu]ijL[[n,n]],\[Mu]ijL[[m,m]],\[Mu]ijL[[l,l]]],{n,nv+1,nSH},{m,nv+1,nSH},{l,nv+1,nSH}],{i,1,nSL},{j,1,nSL},{k,1,nSL},{t,1,nSL}]//Simplify//SparseArray;
-ContriCubic6=Table[(ContriSSSSTemp[[i,j,k,t]])+(ContriSSSSTemp[[i,k,j,t]])+(ContriSSSSTemp[[i,t,k,j]])+(ContriSSSSTemp[[k,t,i,j]])+(ContriSSSSTemp[[k,j,i,t]])+(ContriSSSSTemp[[j,t,i,k]]),{i,1,nSL},{j,1,nSL},{k,1,nSL},{t,1,nSL}];
-ContriSSSSTemp=-Table[Sum[\[Lambda]K[[n,m,i,j]]\[Lambda]3Cy[[k,l,n]]\[Lambda]3Cy[[t,l,m]] MassHelp4[\[Mu]ijL[[n,n]],\[Mu]ijL[[m,m]],0],{n,nv+1,nSH},{m,nv+1,nSH},{l,1,nSL}],{i,1,nSL},{j,1,nSL},{k,1,nSL},{t,1,nSL}]//Simplify//SparseArray;
-ContriCubic7=Table[(ContriSSSSTemp[[i,j,k,t]])+(ContriSSSSTemp[[i,k,j,t]])+(ContriSSSSTemp[[i,t,k,j]])+(ContriSSSSTemp[[k,t,i,j]])+(ContriSSSSTemp[[k,j,i,t]])+(ContriSSSSTemp[[j,t,i,k]]),{i,1,nSL},{j,1,nSL},{k,1,nSL},{t,1,nSL}];
-ContriSSSSTemp=-Table[Sum[\[Lambda]y[[i,j,n,m]]\[Lambda]3CLight[[k,l,n]]\[Lambda]3Cy[[t,l,m]] MassHelp5[\[Mu]ijL[[m,m]]],{n,1,nSL},{m,nv+1,nSH},{l,1,nSL}],{i,1,nSL},{j,1,nSL},{k,1,nSL},{t,1,nSL}]//Simplify//SparseArray;
-ContriCubic8=Table[(ContriSSSSTemp[[i,j,k,t]])+(ContriSSSSTemp[[i,k,j,t]])+(ContriSSSSTemp[[i,t,k,j]])+(ContriSSSSTemp[[k,t,i,j]])+(ContriSSSSTemp[[k,j,i,t]])+(ContriSSSSTemp[[j,t,i,k]]),{i,1,nSL},{j,1,nSL},{k,1,nSL},{t,1,nSL}];
-ContriSSSSTemp=-Table[Sum[\[Lambda]y[[i,j,n,m]]\[Lambda]3Cy[[k,n,l]]\[Lambda]3Cx[[t,l,m]] MassHelp4[\[Mu]ijL[[l,l]],\[Mu]ijL[[m,m]],0],{n,1,nSL},{m,nv+1,nSH},{l,nv+1,nSH}],{i,1,nSL},{j,1,nSL},{k,1,nSL},{t,1,nSL}]//Simplify//SparseArray;
-ContriCubic9=Table[(ContriSSSSTemp[[i,j,k,t]])+(ContriSSSSTemp[[i,k,j,t]])+(ContriSSSSTemp[[i,t,k,j]])+(ContriSSSSTemp[[k,t,i,j]])+(ContriSSSSTemp[[k,j,i,t]])+(ContriSSSSTemp[[j,t,i,k]]),{i,1,nSL},{j,1,nSL},{k,1,nSL},{t,1,nSL}];
+TensHelp=Table[MassHelp3[n],{n,MassVec2}]//SparseArray;
+TensHelp=ReplaceAll[#,{y_}->{y+nv}]&/@Delete[TensHelp//ArrayRules,-1]//SparseArray;
+TensHelp2=Transpose[\[Lambda]3Cy,{3,2,1}] . \[Lambda]3CLight . \[Lambda]3CLight . \[Lambda]3Cy//DiagonalTensor2[#,1,6]&;
+ContriSSSSTemp=TensHelp . TensHelp2;
+ContriCubic5=3! Symmetrize[ContriSSSSTemp,Symmetric[{1,2,3,4}]]//SparseArray//SimplifySparse;
+
+TensHelp=Table[MassHelp4[n,m,l],{n,MassVec2},{m,MassVec2},{l,MassVec2}]//SparseArray;
+TensHelp=Delete[TensHelp//ArrayRules,-1]//ReplaceAll[#,{x_,y_,z_}->{x+nv,y+nv,z+nv}]&//SparseArray;
+TensHelp2=TensorProduct[\[Lambda]K,\[Lambda]3Cx]//DiagonalTensor2[#,1,6]&//TensorProduct[#,\[Lambda]3Cx]&//DiagonalTensor2[#,2,8]&//DiagonalTensor2[#,6,8]&;
+ContriSSSSTemp=Total[TensHelp TensHelp2,-5];
+ContriCubic6=-3! Symmetrize[ContriSSSSTemp,Symmetric[{1,2,3,4}]]//SparseArray//SimplifySparse;
+
+TensHelp=Table[MassHelp4[n,m,0],{n,MassVec2},{m,MassVec2}]//SparseArray;
+TensHelp=Delete[TensHelp//ArrayRules,-1]//ReplaceAll[#,{x_,y_}->{x+nv,y+nv}]&//SparseArray;
+TensHelp2=Transpose[\[Lambda]3Cy,{3,2,1}] . \[Lambda]3Cy//TensorProduct[\[Lambda]K,#]&//DiagonalTensor2[#,1,5]&//DiagonalTensor2[#,2,7]&;
+ContriSSSSTemp=Total[TensHelp TensHelp2,-5];
+ContriCubic7=-3! Symmetrize[ContriSSSSTemp,Symmetric[{1,2,3,4}]]//SparseArray//SimplifySparse;
+
+TensHelp=Table[MassHelp5[n],{n,MassVec2}]//SparseArray;
+TensHelp=ReplaceAll[#,{y_}->{y+nv}]&/@Delete[TensHelp//ArrayRules,-1]//SparseArray;
+TensHelp2=\[Lambda]3CLight . \[Lambda]3Cy//TensorProduct[\[Lambda]y,#]&//TensorContract[#,{3,5}]&//DiagonalTensor2[#,3,6]&;
+ContriSSSSTemp=TensHelp . TensHelp2;
+ContriCubic8=-3! Symmetrize[ContriSSSSTemp,Symmetric[{1,2,3,4}]]//SparseArray//SimplifySparse;
+
+TensHelp=Table[MassHelp4[n,m,0],{n,MassVec2},{m,MassVec2}]//SparseArray;
+TensHelp=Delete[TensHelp//ArrayRules,-1]//ReplaceAll[#,{x_,y_}->{x+nv,y+nv}]&//SparseArray;
+TensHelp2=Transpose[\[Lambda]y,{1,2,4,3}] . \[Lambda]3Cy//TensorProduct[#,\[Lambda]3Cx]&//DiagonalTensor2[#,3,8]&//DiagonalTensor2[#,5,7]&;
+ContriSSSSTemp=Total[TensHelp TensHelp2,-5];
+ContriCubic9=-3! Symmetrize[ContriSSSSTemp,Symmetric[{1,2,3,4}]]//SparseArray//SimplifySparse;
+
+(*
 ContriSSSSTemp=-Table[Sum[\[Lambda]4S[[i,j,n,m]]\[Lambda]3Cy[[k,n,l]]\[Lambda]3Cx[[t,m,l]] MassHelp5[\[Mu]ijL[[l,l]]],{n,1,nSL},{m,1,nSL},{l,nv+1,nSH}],{i,1,nSL},{j,1,nSL},{k,1,nSL},{t,1,nSL}]//Simplify//SparseArray;
 ContriCubic10=Table[(ContriSSSSTemp[[i,j,k,t]])+(ContriSSSSTemp[[i,k,j,t]])+(ContriSSSSTemp[[i,t,k,j]])+(ContriSSSSTemp[[k,t,i,j]])+(ContriSSSSTemp[[k,j,i,t]])+(ContriSSSSTemp[[j,t,i,k]]),{i,1,nSL},{j,1,nSL},{k,1,nSL},{t,1,nSL}];
+*)
+\[Lambda]3DSS=ContriSE-ContriTL-CouplingSSTadpole- ContriSS-ContriSS2-ContriSS3-ContriCubic1-ContriCubic2-ContriCubic3-ContriCubic4-ContriCubic5-ContriCubic6-ContriCubic7-ContriCubic8-ContriCubic9;
 
-\[Lambda]3DSS=ContriSE-ContriTL-CouplingSSTadpole- ContriSS-ContriSS2-ContriSS3-ContriCubic1-ContriCubic2-ContriCubic3-ContriCubic4-ContriCubic5-ContriCubic6-ContriCubic7-ContriCubic8-ContriCubic9-ContriCubic10;
+,
+
+\[Lambda]3DSS=ContriSE-ContriTL-CouplingSSTadpole- ContriSS-ContriSS2-ContriSS3;
+];
+
 ];
 
 ];
@@ -711,9 +842,7 @@ PrepareSoftToSuperSoft[ListHardI_]:=Module[{ListP=ListHardI},
 	Here we take the "Damn the torpedo, full speed ahead" approach.
 *)
 
-
 HeavyScalars=Transpose[List@ListP]; (*The list of all heavy scalars*)
-
 
 (*
 	Renames 4d couplings to 3d ones
@@ -721,19 +850,14 @@ HeavyScalars=Transpose[List@ListP]; (*The list of all heavy scalars*)
 
 VarQuartic=Join[\[Lambda]4//Normal//Variables]//DeleteDuplicates;
 SubQuartic=Table[c->Symbol[ToString[c]<>ToString["3d"]],{c,VarQuartic}];
-
 \[Lambda]3DSp= \[Lambda]4//Normal//ReplaceAll[#,SubQuartic]&//SparseArray;
-
 
 VarCubic=Join[\[Lambda]3//Normal//Variables]//DeleteDuplicates;
 SubCubic=Table[c->Symbol[ToString[c]<>ToString["3d"]],{c,VarCubic}];
-
-\[Lambda]3CSRed=\[Lambda]3//Normal//ReplaceAll[#,SubCubic]&//SparseArray;
-
+\[Lambda]3CSRedUS=\[Lambda]3//Normal//ReplaceAll[#,SubCubic]&//SparseArray;
 
 VarMass=Join[\[Mu]ij//Normal//Variables]//DeleteDuplicates;
 SubMass=Table[c->Symbol[ToString[c]<>ToString["3d"]],{c,VarMass}];
-
 \[Mu]ijSNLOP=\[Mu]ij//Normal//ReplaceAll[#,SubMass]&//SparseArray;
 
 
@@ -766,15 +890,7 @@ If[HScal,
 A1=Delete[\[Lambda]4Heavy//ArrayRules,-1]//ReplaceAll[#,{x_,y_,z_,w_}->{x+nv,y+nv,z+nv,w+nv}]&;
 A2=ReplaceAll[Delete[\[Lambda]KHeavy//ArrayRules,-1],({x_,y_,z_,w_}->a_)->{x,y,z+nv,w+nv}->a];
 A3=Delete[\[Lambda]AAS//ArrayRules,-1];
-
-
 \[Lambda]KTotal=SymmetrizedArray[Join[A1,A2,A3],{nSH,nSH,nSH,nSH},Symmetric[{1,2,3,4}]]//SparseArray; (*Total heavy-scalar tensors: Heavy scalars+Temporal scalars*)
-
-(*A1=Delete[\[Lambda]4Heavy//ArrayRules//ReplaceAll[#,{x_,y_,z_,w_}->{x+nv,y+nv,z+nv,w+nv}]&,-1];
-A2=Delete[\[Lambda]KHeavy//ArrayRules//ReplaceAll[#,{x_,y_,z_,w_}->{x,y,z+nv,w+nv}]&,-1];
-A3=Delete[\[Lambda]AAS//ArrayRules,-1];
-\[Lambda]KTotal=SymmetrizedArray[Join[A1,A2,A3],{nSH,nSH,nSH,nSH},Symmetric[{1,2,3,4}]]//SparseArray; (*Total heavy-scalar tensors: Heavy scalars+Temporal scalars*)
-*)
 
 (*TadPoles*)
 VarTadpole=Join[\[Lambda]1//Normal//Variables]//DeleteDuplicates;
@@ -809,9 +925,9 @@ If[Length[\[Lambda]y1//ArrayRules]==1,
 
 
 (*Mixed Cubic tensors*)
-\[Lambda]3CLight=Table[\[Lambda]3CSRed[[a,b,c]],{a,LightScalar[[;;,1]]},{b,LightScalar[[;;,1]]},{c,LightScalar[[;;,1]]}]//SparseArray;
-\[Lambda]3CHeavy1=Table[\[Lambda]3CSRed[[a,b,c]],{a,HeavyScalars[[;;,1]]},{b,HeavyScalars[[;;,1]]},{c,HeavyScalars[[;;,1]]}]//SparseArray;
-\[Lambda]3CTot=\[Lambda]3CSRed//SparseArray;
+\[Lambda]3CLight=Table[\[Lambda]3CSRedUS[[a,b,c]],{a,LightScalar[[;;,1]]},{b,LightScalar[[;;,1]]},{c,LightScalar[[;;,1]]}]//SparseArray;
+\[Lambda]3CHeavy1=Table[\[Lambda]3CSRedUS[[a,b,c]],{a,HeavyScalars[[;;,1]]},{b,HeavyScalars[[;;,1]]},{c,HeavyScalars[[;;,1]]}]//SparseArray;
+\[Lambda]3CTot=\[Lambda]3CSRedUS//SparseArray;
 
 If[Length[\[Lambda]3CHeavy1//ArrayRules]==1,
 \[Lambda]3CHeavy=SymmetrizedArray[{{1,1,1}->0},{nSH,nSH,nSH},Symmetric[{2,3}]]//SparseArray;
@@ -820,8 +936,8 @@ If[Length[\[Lambda]3CHeavy1//ArrayRules]==1,
 ];
 
 
-\[Lambda]3Cx1=Table[\[Lambda]3CSRed[[a,b,c]],{a,LightScalar[[;;,1]]},{b,HeavyScalars[[;;,1]]},{c,HeavyScalars[[;;,1]]}]//SparseArray;
-\[Lambda]3Cy1=Table[\[Lambda]3CSRed[[a,b,c]],{a,LightScalar[[;;,1]]},{b,LightScalar[[;;,1]]},{c,HeavyScalars[[;;,1]]}]//SparseArray;
+\[Lambda]3Cx1=Table[\[Lambda]3CSRedUS[[a,b,c]],{a,LightScalar[[;;,1]]},{b,HeavyScalars[[;;,1]]},{c,HeavyScalars[[;;,1]]}]//SparseArray;
+\[Lambda]3Cy1=Table[\[Lambda]3CSRedUS[[a,b,c]],{a,LightScalar[[;;,1]]},{b,LightScalar[[;;,1]]},{c,HeavyScalars[[;;,1]]}]//SparseArray;
 
 
 If[Length[\[Lambda]3Cx1//ArrayRules]==1,
@@ -883,7 +999,7 @@ gAvss=gvssVTot//SparseArray;
 ToExpression[StringReplace[ToString[StandardForm[Join[\[Lambda]K,\[Lambda]4S,\[Lambda]4K,\[Lambda]x,\[Lambda]y,gAvss,gvssL,\[Mu]ijL]]],"DRalgo`Private`"->""]];
 
 ,
-\[Lambda]3CTot=\[Lambda]3CSRed//SparseArray;
+\[Lambda]3CTot=\[Lambda]3CSRedUS//SparseArray;
 A3=Delete[\[Lambda]AAS//ArrayRules,-1];
 \[Lambda]KTotal=SymmetrizedArray[A3,{nSH,nSH,nSH,nSH},Symmetric[{1,2,3,4}]]//SparseArray;
 \[Lambda]3Cx=SymmetrizedArray[{{1,1,1}->0},{nSL,nSH,nSH},Symmetric[{2,3}]]//SparseArray;
@@ -893,7 +1009,7 @@ A3=Delete[\[Lambda]AAS//ArrayRules,-1];
 \[Lambda]x=SymmetrizedArray[{{1,1,1,1}->0},{nSL,nSH,nSH,nSH},Symmetric[{2,3,4}]]//SparseArray;
 \[Lambda]y=SymmetrizedArray[{{1,1,1,1}->0},{nSL,nSL,nSL,nSH},Symmetric[{1,2,3}]]//SparseArray;
 \[Mu]ijMix=SymmetrizedArray[{{1,1}->0},{nSL,nSH},Symmetric[{1}]]//SparseArray;
-\[Lambda]3CLight=Table[\[Lambda]3CSRed[[a,b,c]],{a,LightScalar[[;;,1]]},{b,LightScalar[[;;,1]]},{c,LightScalar[[;;,1]]}]//SparseArray;
+\[Lambda]3CLight=Table[\[Lambda]3CSRedUS[[a,b,c]],{a,LightScalar[[;;,1]]},{b,LightScalar[[;;,1]]},{c,LightScalar[[;;,1]]}]//SparseArray;
 \[Lambda]4Light=Table[\[Lambda]3DSp[[a,b,c,d]],{a,LightScalar[[;;,1]]},{b,LightScalar[[;;,1]]},{c,LightScalar[[;;,1]]},{d,LightScalar[[;;,1]]}]//SparseArray;
 
 (*TadPoles*)
@@ -903,41 +1019,24 @@ SubTadpole=Table[c->Symbol[ToString[c]<>ToString["3d"]],{c,VarTadpole}];
 TadPoleLight=Table[\[Lambda]1[[a]],{a,LightScalar[[;;,1]]}]//ReplaceAll[#,SubTadpole]&//SparseArray;
 TadPoleHeavy=SymmetrizedArray[{{1}->0},{nSH},Symmetric[{1}]]//SparseArray;
 
-
-
-
 \[Lambda]KVLight=Table[\[Lambda]KVec[[a,b,c,d]],{a,1,nv},{b,1,nv},{c,LightScalar[[;;,1]]},{d,LightScalar[[;;,1]]}]//SparseArray;
 \[Lambda]kVTot=\[Lambda]KVLight//SparseArray;
 
 VarGauge=GaugeCouplingNames;
 SubGauge=Table[c->Symbol[ToString[c]<>ToString["3d"]],{c,VarGauge}];
 
-
-
 gvssVec=gvvv//Normal//ReplaceAll[#,SubGauge]&//SparseArray;
 gvssVTot=gvssVec//SparseArray; 
-
 gvssL=Table[gvss[[a,c,d]],{a,1,nv},{c,LightScalar[[;;,1]]},{d,LightScalar[[;;,1]]}]//Normal//ReplaceAll[#,SubGauge]&//SparseArray;
 
-
 \[Mu]ijL=Sqrt[\[Mu]abDef]//Normal//SparseArray;
-
-
 \[Mu]ijLight=\[Mu]ijSNLOP//Normal//SparseArray;
-
-
-
-
 
 \[Lambda]K=\[Lambda]kVTot//SparseArray;
 \[Lambda]4S=\[Lambda]4Light//SparseArray;
 \[Lambda]4K=\[Lambda]KTotal//SparseArray;
 gAvss=gvssVTot//SparseArray;
 
-
-
-
-ToExpression[StringReplace[ToString[StandardForm[Join[\[Lambda]K,\[Lambda]4S,\[Lambda]4K,gAvss,gvssL,\[Mu]ijL]]],"DRalgo`Private`"->""]];
 ];
 
 
@@ -982,6 +1081,7 @@ SubGauge=Table[c->Symbol[ToString[c]<>ToString["3d"]],{c,GaugeCouplingNames}];
 \[Delta]\[Mu]3dS=Contri1+   Contri2+ Contri3+  Contri4+ Contri5+  Contri6;(*Sum of all the diagrams*)
 \[Beta]\[Mu]3ijS=4*I111* \[Delta]\[Mu]3dS//Normal //ReplaceAll[#,SubGauge]&//Simplify; (*The scalar-mass counter-term*)
 
+(*Printing Result*)
 (* Scalar Mass*)
 VarGauge=Join[\[Mu]ijLight//Normal//Variables]//DeleteDuplicates;
 SubGauge=Table[c->Symbol[ToString[c]<>ToString["temp"]],{c,VarGauge}];
@@ -1025,14 +1125,15 @@ SolVar=\[Beta]\[Mu]TadpoleUS-\[Lambda]4p//Normal;
 QuarticVar=\[Lambda]4p//Normal//Variables;
 ResTadpole=Solve[SolVar==0,QuarticVar]/.SubGauge2/.SubUS//Flatten[#,1]&; (*Finds the beta-function for each scalar mass*)
 
-
-(*Printing Result*)
 PrintPre=Join[PrintPre,ResTadpole]//Normal//FullSimplify//DeleteDuplicates;
 
 ToExpression[StringReplace[ToString[StandardForm[PrintPre]],"DRalgo`Private`"->""]]
 
 
 ];
+
+
+{Contri\[Beta]UltraSoftToSoft,ContriTadPoleUltraSoftToSoft};
 
 
 (*
@@ -1075,3 +1176,28 @@ HelpSolveEffectiveHardM=Table[{Delete[HelpList,1][[a]]->HelpVarMod[[a]]},{a,1,De
 \[Mu]HEff=HeavyScalarMass//Normal//Simplify//ReplaceAll[#,HelpSolveEffectiveHardM]&//SparseArray;
 
 ];
+
+
+DiagonalTensor2[s_SparseArray,a_Integer,b_Integer] := With[
+    {
+    s1=Flatten[s,{{a},{b}}]
+    },
+     Table[i,{i,s1}]//Table[#[[i,i]],{i,1,Length[#]}]&//SparseArray
+    ]
+
+
+DiagonalTensor[s_SparseArray,a_Integer,b_Integer]:= Module[{},
+If[a==1&&b==2,
+    PermTens=Table[i,{i,s}]//Table[#[[i,i]],{i,1,Length[#]}]&//SparseArray
+,
+If[a==1,
+   PermTens=Transpose[s,b<->2];
+    PermTens=Table[i,{i,PermTens}]//Table[#[[i,i]],{i,1,Length[#]}]&//SparseArray;
+   Transpose[PermTens,(b-1)<->1]
+,
+	   PermTens=Transpose[s,a<->1]//Transpose[#,b<->2]&;
+    PermTens=Table[i,{i,PermTens}]//Table[#[[i,i]],{i,1,Length[#]}]&//SparseArray;
+   Transpose[PermTens,(a-1)<->1]//Transpose[#,(b-1)<->2]&
+]
+]
+    ]
