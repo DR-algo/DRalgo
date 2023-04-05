@@ -103,14 +103,14 @@ GabVTree=TensorContract[Temp,{{2,3}}]//Normal;
 GabVLoop=TensorContract[GabcdTemp,{{2,3}}]//Normal;
 
 
-
-
 HelpList=DeleteDuplicates@Flatten@FullSimplify[GabVTree+GabVLoop ]//Sort; (*Adds the tree-level result*)
 HelpVar=Table[ \[Lambda]VNASS[a],{a,1,Delete[HelpList,1]//Length}];
 HelpVarMod=RelationsBVariables[HelpList,HelpVar]; (*Finds a minimal basis of couplings*)
 HelpSolveNASS=Table[{Delete[HelpList,1][[a]]->HelpVarMod[[a]]},{a,1,Delete[HelpList,1]//Length}]//Flatten;
 \[Lambda]VecNASS=GabVTree+GabVLoop//Normal//FullSimplify//ReplaceAll[#,HelpSolveNASS]&//SparseArray;
 IdentMatNASS=List/@HelpSolveNASS/.{b_->a_}:>a->b//Flatten[#,1]&;
+
+
 
 VarGauge=Table[Symbol[ToString[c]<>ToString["3d"]],{c,GaugeCouplingNames}];
 SubGauge=Table[c->Symbol[ToString[c]<>ToString["US"]],{c,VarGauge}];
@@ -791,7 +791,7 @@ ContriCubic10=Table[(ContriSSSSTemp[[i,j,k,t]])+(ContriSSSSTemp[[i,k,j,t]])+(Con
 	Calculates non-abelian couplings in the ultrasoft theory.
 *)
 NonAbelianCouplingSS[]:=Module[{},
-ContriAnomVV= gvvvSS . Transpose[ZLij]//SimplifySparse;
+ContriAnomVV= gvvvSS . Transpose[ZLij]//SparseArray//SimplifySparse;
 (*Simplify[Table[Sum[ ZLij[[c,d]]gvvvSS[[a,b,d]],{d,1,nv}],{a,1,nv},{b,1,nv},{c,1,nv}]];*)
 GgvvvSS=-ContriAnomVV;
 ];
@@ -1173,7 +1173,7 @@ HelpList=DeleteDuplicates@Flatten@Simplify[ HeavyScalarMass]//Sort;
 HelpVar=Table[ \[Mu]H[a],{a,1,Delete[HelpList,1]//Length}];
 HelpVarMod=RelationsBVariables[HelpList,HelpVar];
 HelpSolveEffectiveHardM=Table[{Delete[HelpList,1][[a]]->HelpVarMod[[a]]},{a,1,Delete[HelpList,1]//Length}]//Flatten;
-\[Mu]HEff=HeavyScalarMass//Normal//Simplify//ReplaceAll[#,HelpSolveEffectiveHardM]&//SparseArray;
+\[Mu]HEff=HeavyScalarMass//Normal//ReplaceAll[#,HelpSolveEffectiveHardM]&//SparseArray;
 
 ];
 
