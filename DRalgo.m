@@ -2,18 +2,20 @@
 
 (* ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ *)
 
-(* :Title: DRalgo                                                          	*)
+(* :Title: DRalgo
+*)
 
 (*
        This software is covered by the GNU General Public License 3.
-       Copyright (C) 2021-2022 Andreas Ekstedt
-       Copyright (C) 2021-2022 Philipp Schicho
-       Copyright (C) 2021-2022 Tuomas V.I. Tenkanen
+       Copyright (C) 2021-2023 Andreas Ekstedt
+       Copyright (C) 2021-2023 Philipp Schicho
+       Copyright (C) 2021-2023 Tuomas V.I. Tenkanen
 
 *)
 
 (* :Summary:	DRalgo is an algorithm that constructs
-				the effective high-temperature field theory for generic models.	*)	
+                the effective high-temperature field theory for generic models.
+*)
 
 (* ------------------------------------------------------------------------ *)
 
@@ -22,8 +24,8 @@ BeginPackage["DRalgo`"] (* digital history: at its early days in 2021, DRalgo wa
 
 
 Unprotect@Definition;
-Definition[x_Symbol] /; StringMatchQ[Context[x], "Package`" ~~ ___] := 
-    StringReplace[ToString@FullDefinition[x], 
+Definition[x_Symbol] /; StringMatchQ[Context[x], "Package`" ~~ ___] :=
+    StringReplace[ToString@FullDefinition[x],
         (WordCharacter .. ~~ DigitCharacter ... ~~ "`") .. ~~ s_ :> s
     ];
 Protect@Definition;
@@ -39,11 +41,19 @@ AppendTo[result,Row[{
 	TexFor["DRalgo"],
 	TexFor[" DRDRDRDRDRDRDRDRDRDRDRDRDRDRD"]}]];
 AppendTo[result,Row[{"Version: "//TexFor,"1.02 beta (16-05-2022)"//TexFor}]];
-AppendTo[result,Row[{"Authors: "//TexFor,"Andreas Ekstedt, Philipp Schicho, Tuomas V.I. Tenkanen"//TexFor}]];
-AppendTo[result,Row[{"Reference: "//TexFor,"2205.08815 [hep-ph]"//TexFor}]];
+AppendTo[result,Row[{"Authors: "//TexFor,
+    Hyperlink["Andreas Ekstedt","https://inspirehep.net/authors/1799400"],", "//TexFor,
+    Hyperlink["Philipp Schicho","https://inspirehep.net/authors/1639147"],", "//TexFor,
+    Hyperlink["Tuomas V.I. Tenkanen","https://inspirehep.net/authors/1507627"]//TexFor}
+    ]];
+AppendTo[result,Row[{"Reference: "//TexFor,
+        Hyperlink["2205.08815 [hep-ph]","https://arxiv.org/abs/2205.08815"]//TexFor}]];
 AppendTo[result,Row[{"Repository link: "//TexFor,
 	Hyperlink[Mouseover[TexFor["github.com/DR-algo/DRalgo"],Style["github.com/DR-algo/DRalgo",Bold]],
 	"https://github.com/DR-algo/DRalgo"]}]];
+AppendTo[result,Row[{"Existing model files: "//TexFor,
+	Hyperlink[Mouseover[TexFor["DRalgo/examples"],Style["DRalgo/examples",Bold]],
+	"https://github.com/DR-algo/DRalgo/tree/main/examples"]}]];
 (* DRalgoLoad=Import[FileNameJoin[{DirectoryName[$InputFileName],"logo.eps"}],ImageSize->{200.,300.}]; *)
 DRalgoLoad=Image[CompressedData["1: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"],"Byte",ColorSpace->"RGB",Interleaving->True];
 
