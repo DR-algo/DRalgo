@@ -819,12 +819,10 @@ Calculates non-abelian couplings from ghost-renormalization.
 NonAbelianCoupling[]:=Module[{},
 
 	fac=3/4 Lb/(16 \[Pi]^2);
-	ContriVVV=fac*Table[-Tr[a . b],{a,gvvv},{b,gvvv}]//SimplifySparse;
-
+	ContriVVV=fac*Table[-Tr[a . b],{a,gvvv},{b,gvvv}]//SparseArray//SimplifySparse;
 	Zab\[Eta]=-1/2(ContriVVV);
-(*This contraction should be sped up*)
 
-	ContriAnomVV= gvvv . ZabT+Zab\[Eta] . gvvv+Table[Zab\[Eta] . a,{a,gvvv}];
+	ContriAnomVV= gvvv . ZabT+Zab\[Eta] . gvvv+Table[Zab\[Eta] . a,{a,gvvv}]//SparseArray;
 	Ggvvv=-ContriAnomVV;
 
 ];
@@ -925,7 +923,7 @@ If[verbose,Print["Calculating Scalar Quartic"]];
 	ContriVV=1/(16 \[Pi]^2)(3 Lb-2)/2*ContriVVTemp2;
 
 	CouplingFF=2*1/(16 \[Pi]^2)(2 Lf)(-1)*1/4;
-	ContriFF=CouplingFF*12Symmetrize[Yhelp,Symmetric[{1,2,3,4}]]//SparseArray//SimplifySparse;
+	ContriFF=CouplingFF*12*Symmetrize[Yhelp,Symmetric[{1,2,3,4}]]//SparseArray//SimplifySparse;
 
 	ContriSETemp=-ZijS . \[Lambda]4;
 	ContriSE=ContriSETemp+Transpose[ContriSETemp,{2,1,3,4}]+Transpose[ContriSETemp,{3,1,2,4}]+Transpose[ContriSETemp,{4,1,2,3}]//Simplify;
@@ -1762,7 +1760,7 @@ If[verbose,Print["Calculating CounterTerms"]];
 ];
 
 
-(* ::Section:: *)
+(* ::Section::Closed:: *)
 (*Printing the results*)
 
 
@@ -1849,10 +1847,9 @@ If[verbose,Print["Printing 3D vector and quartic couplings in terms of 4D coupli
 	A2Mod=A2/.RepVar3D;
 	Sol1=Solve[A2Mod==A1,Var3D]/.IdentMat//Flatten[#,1]&//FullSimplify;
 	ResGauge=Table[List[Sol1[[c]]]/.{b_->a_}:>b^2->a,{c,1,Length[Sol1]}];
-
+	
 
 (*Non-Abelian Couplings*)
-
 	NonAbelianCoupling[];
 
 	GabcdTemp=Ggvvv . gvvv+gvvv . Ggvvv;
@@ -1879,13 +1876,13 @@ If[verbose,Print["Printing 3D vector and quartic couplings in terms of 4D coupli
 (*Scalar quartics*)
 	VarGauge=Join[\[Lambda]4//Normal//Variables]//DeleteDuplicates;
 	SubGauge=Table[c->Symbol[ToString[c]<>ToString["3d"]],{c,VarGauge}];
-	\[Lambda]4p=\[Lambda]4//Normal//ReplaceAll[#,SubGauge]&;
-	SolVar=\[Lambda]3DS-\[Lambda]4p//Normal;
-	QuarticVar=\[Lambda]4p//Normal//Variables;
+	SolVar=SparseArray[\[Lambda]3DS-\[Lambda]4]["NonzeroValues"]//DeleteDuplicates//ReplaceAll[#,SubGauge]&;
+	QuarticVar=\[Lambda]4//Normal//ReplaceAll[#,SubGauge]&//Variables;
 	ResScalp=Reduce[SolVar==0,QuarticVar]//ToRules[#]&;
 	SolveTemp=QuarticVar/.ResScalp;
 	ResScal=Table[{QuarticVar[[i]]->SolveTemp[[i]]},{i,1,Length@QuarticVar}]//Flatten[#,1]&//ReplaceAll[#,IdentMat]&//Simplify;
 
+	
 (* Scalar Cubics*)
 
 	VarGauge=Join[\[Lambda]3//Normal//Variables]//DeleteDuplicates;

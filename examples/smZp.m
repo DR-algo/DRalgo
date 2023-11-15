@@ -15,7 +15,7 @@ $LoadGroupMath=True;
 (*See 0212073 [hep-ph]*)
 
 
-(* ::Section:: *)
+(* ::Section::Closed:: *)
 (*Model*)
 
 

@@ -208,7 +208,7 @@ VQuartic5=h3*MassTerm1;
 \[Lambda]KComparep=\[Lambda]KCompare[[PosScalarsNew[[2]],PosScalarsNew[[2]],PosScalarsNew[[4]],PosScalarsNew[[4]]]];
 
 
-\[Lambda]KDRalgo=PrintTensorDRalgo[][[3]][[PosGaugeDRalgo[[2]],PosGaugeDRalgo[[2]],PosScalarsDRalgo[[2]],PosScalarsDRalgo[[2]]]];
+\[Lambda]KDRalgo=PrintTensorDRalgo[3][[PosGaugeDRalgo[[2]],PosGaugeDRalgo[[2]],PosScalarsDRalgo[[2]],PosScalarsDRalgo[[2]]]];
 
 
 CompareInvariants[\[Lambda]KComparep,\[Lambda]KDRalgo]
@@ -235,7 +235,7 @@ CompareInvariants[\[Lambda]KComparep,\[Lambda]KDRalgo]
 \[Lambda]KComparep=\[Lambda]KCompare[[PosScalarsNew[[1]],PosScalarsNew[[1]],PosScalarsNew[[5]],PosScalarsNew[[5]]]];
 
 
-\[Lambda]KDRalgo=PrintTensorDRalgo[][[3]][[PosGaugeDRalgo[[1]],PosGaugeDRalgo[[1]],PosScalarsDRalgo[[1]],PosScalarsDRalgo[[1]]]];
+\[Lambda]KDRalgo=PrintTensorDRalgo[3][[PosGaugeDRalgo[[1]],PosGaugeDRalgo[[1]],PosScalarsDRalgo[[1]],PosScalarsDRalgo[[1]]]];
 
 
 CompareInvariants[\[Lambda]KComparep,\[Lambda]KDRalgo]//Expand
@@ -262,7 +262,7 @@ CompareInvariants[\[Lambda]KComparep,\[Lambda]KDRalgo]//Expand
 \[Lambda]KComparep=\[Lambda]KCompare[[PosScalarsNew[[2]],PosScalarsNew[[3]],PosScalarsNew[[5]],PosScalarsNew[[5]]]];
 
 
-\[Lambda]KDRalgo=PrintTensorDRalgo[][[3]][[PosGaugeDRalgo[[2]],PosGaugeDRalgo[[3]],PosScalarsDRalgo[[1]],PosScalarsDRalgo[[1]]]];
+\[Lambda]KDRalgo=PrintTensorDRalgo[3][[PosGaugeDRalgo[[2]],PosGaugeDRalgo[[3]],PosScalarsDRalgo[[1]],PosScalarsDRalgo[[1]]]];
 
 
 I*Sqrt[3]^(-1/2)*h3pp/.CompareInvariants[\[Lambda]KComparep,\[Lambda]KDRalgo]//Expand
@@ -289,7 +289,7 @@ I*Sqrt[3]^(-1/2)*h3pp/.CompareInvariants[\[Lambda]KComparep,\[Lambda]KDRalgo]//E
 \[Lambda]KComparep=\[Lambda]KCompare[[PosScalarsNew[[3]],PosScalarsNew[[3]],PosScalarsNew[[5]],PosScalarsNew[[5]]]];
 
 
-\[Lambda]KDRalgo=PrintTensorDRalgo[][[3]][[PosGaugeDRalgo[[3]],PosGaugeDRalgo[[3]],PosScalarsDRalgo[[1]],PosScalarsDRalgo[[1]]]];
+\[Lambda]KDRalgo=PrintTensorDRalgo[3][[PosGaugeDRalgo[[3]],PosGaugeDRalgo[[3]],PosScalarsDRalgo[[1]],PosScalarsDRalgo[[1]]]];
 
 
 CompareInvariants[\[Lambda]KComparep,\[Lambda]KDRalgo]
@@ -316,7 +316,7 @@ CompareInvariants[\[Lambda]KComparep,\[Lambda]KDRalgo]
 \[Lambda]KComparep=\[Lambda]KCompare[[PosScalarsNew[[2]],PosScalarsNew[[2]],PosScalarsNew[[5]],PosScalarsNew[[5]]]];
 
 
-\[Lambda]KDRalgo=PrintTensorDRalgo[][[3]][[PosGaugeDRalgo[[2]],PosGaugeDRalgo[[2]],PosScalarsDRalgo[[1]],PosScalarsDRalgo[[1]]]];
+\[Lambda]KDRalgo=PrintTensorDRalgo[3][[PosGaugeDRalgo[[2]],PosGaugeDRalgo[[2]],PosScalarsDRalgo[[1]],PosScalarsDRalgo[[1]]]];
 
 
 CompareInvariants[\[Lambda]KComparep,\[Lambda]KDRalgo]

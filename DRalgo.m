@@ -38,7 +38,7 @@ AppendTo[result,Row[{
 	TexFor["DRDRDRDRDRDRDRDRDRDRDRDRDRDR "],
 	TexFor["DRalgo"],
 	TexFor[" DRDRDRDRDRDRDRDRDRDRDRDRDRDRD"]}]];
-AppendTo[result,Row[{"Version: "//TexFor,"1.03 (11-10-2023)"//TexFor}]];
+AppendTo[result,Row[{"Version: "//TexFor,"1.1 (11-10-2023)"//TexFor}]];
 AppendTo[result,Row[{"Authors: "//TexFor,
     Hyperlink["Andreas Ekstedt","https://inspirehep.net/authors/1799400"],", "//TexFor,
     Hyperlink["Philipp Schicho","https://inspirehep.net/authors/1639147"],", "//TexFor,
@@ -60,7 +60,7 @@ Print[Grid[{{Image[DRalgoLoad,ImageSize->140],Row[result,"\n",BaseStyle->(FontFa
 
 
 
-(* ::Section:: *)
+(* ::Section::Closed:: *)
 (*List of public functions*)
 
 
@@ -161,7 +161,7 @@ Get[FileNameJoin[{$DRalgoDic,"ModelCreation.m"}]];(*Loads Effective Potential Fu
 Get[FileNameJoin[{$DRalgoDic,"HEFT.m"}]];(*Loads Higgs-Effective field theory Functions*)
 
 
-(* ::Section:: *)
+(* ::Section::Closed:: *)
 (*Initialization*)
 
 
