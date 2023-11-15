@@ -5,10 +5,10 @@
 (* :Title: SoftToUS                                                         *)
 
 (*
-       This software is covered by the GNU General Public License 3.
-       Copyright (C) 2021-2022 Andreas Ekstedt
-       Copyright (C) 2021-2022 Philipp Schicho
-       Copyright (C) 2021-2022 Tuomas V.I. Tenkanen
+      	This software is covered by the GNU General Public License 3.
+       	Copyright (C) 2021-2023 Andreas Ekstedt
+       	Copyright (C) 2021-2023 Philipp Schicho
+       	Copyright (C) 2021-2023 Tuomas V.I. Tenkanen
 
 *)
 
