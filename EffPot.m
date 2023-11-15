@@ -206,7 +206,7 @@ CalculatePotentialUS[ScalMassI_,VecMassI_,OptionsPattern[]]:=Module[{ScalMassP=S
 ];
 
 
-Options[CalculatePotentialUS] = {CustomMasses -> False,PerturbativeDiagonalization->False}
+	Options[CalculatePotentialUS] = {CustomMasses -> False,PerturbativeDiagonalization->False}
 
 
 (*
@@ -255,11 +255,18 @@ CalculatePotentialUS[OptionsPattern[]]:=Module[{},
 (*
 	Prints the effective potential.
 *)
-PrintEffectivePotential[optP_]:=Module[{opt=optP},
-	EffPotPrint=Switch[opt,"LO",VTot[[1]],"NLO",VTot[[2]],"NNLO",VTot[[3]]];
+PrintEffectivePotential[]:=Module[{},
+	EffPotPrint=VTot[[1]]+VTot[[2]]+VTot[[3]];
 
 (*Printing Result*)
-	ToExpression[StringReplace[ToString[StandardForm[EffPotPrint]],"DRalgo`Private`"->""]]
+	OutputFormatDR[EffPotPrint]
+];
+
+PrintEffectivePotential[optP_]:=Module[{opt=optP},
+	EffPotPrint=Switch[opt,"LO",VTot[[1]],"NLO",VTot[[2]],"NNLO",VTot[[3]],__,VTot[[1]]+VTot[[2]]+VTot[[3]]];
+
+(*Printing Result*)
+	OutputFormatDR[EffPotPrint]
 ];
 
 

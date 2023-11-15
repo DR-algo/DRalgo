@@ -67,9 +67,6 @@ PrintConstants[]
 PrintScalarMass["LO"]
 
 
-Sqrt[2*12]*100/Sqrt[(3*0.42^2+4*0.003)]
-
-
 PrintScalarMass["NLO"]
 
 

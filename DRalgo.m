@@ -144,7 +144,7 @@ Print["Please Cite GroupMath: Comput.Phys.Commun. 267 (2021) 108085 \[Bullet] e-
 	Mode=2 calculates everything, Mode=1 only calculates LO masses and couplings
 	 Mode=0 only calculates LO masses
 *)
-Options[ImportModelDRalgo] = {Verbose -> False,Mode->2,Dim6->False}
+Options[ImportModelDRalgo] = {Verbose -> False,Mode->2,Dim6->False,Normalization4D->False}
 
 
 Begin["`Private`"]
@@ -161,7 +161,7 @@ Get[FileNameJoin[{$DRalgoDic,"ModelCreation.m"}]];(*Loads Effective Potential Fu
 Get[FileNameJoin[{$DRalgoDic,"HEFT.m"}]];(*Loads Higgs-Effective field theory Functions*)
 
 
-(* ::Section::Closed:: *)
+(* ::Section:: *)
 (*Initialization*)
 
 
@@ -199,6 +199,7 @@ If[ Global`$LoadGroupMath,
 	verbose = OptionValue[Verbose];
 	mode = OptionValue[Mode]; (*If 2 everthing is calculated. And if 2 only 1-loop contributions are calculated*)
 	NFMat=IdentityMatrix[nf]//SparseArray; (*This matrix is only relevant if the user wants an arbitrary number of fermion families*)
+	normalization4D=OptionValue[Normalization4D];
 (*End of Options*)
 
 	CT=False; (*Checks if counter-terms have already been calculated*)

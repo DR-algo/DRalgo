@@ -5,10 +5,10 @@
 (* :Title: HEFT                                                          	*)
 
 (*
-      	This software is covered by the GNU General Public License 3.
-       	Copyright (C) 2021-2023 Andreas Ekstedt
-       	Copyright (C) 2021-2023 Philipp Schicho
-       	Copyright (C) 2021-2023 Tuomas V.I. Tenkanen
+       This software is covered by the GNU General Public License 3.
+       Copyright (C) 2021-2022 Andreas Ekstedt
+       Copyright (C) 2021-2022 Philipp Schicho
+       Copyright (C) 2021-2022 Tuomas V.I. Tenkanen
 
 *)
 
@@ -279,7 +279,7 @@ ScalarSelfEnergyHET[]:=Module[{},
 If[verbose,Print["Calculating Scalar Self-Energy"]];
 
 (*Scalar-scalar bubble*)
-	\[Lambda]3IJi=\[Lambda]3[[;;,;;,LightScalarHET]]//HeavyTensor[#,{nsEP,nsEP,nHETSlight}]&;
+	\[Lambda]3IJi=\[Lambda]3\[Phi][[;;,;;,LightScalarHET]]//HeavyTensor[#,{nsEP,nsEP,nHETSlight}]&;
 	TensHelp=Table[LSS[i,a],{i,asF},{a,asF}]//SparseArray;
 	Temp=TensorProduct[TensHelp,\[Lambda]3IJi]//DiagonalTensor[#,2,3]&//DiagonalTensor[#,2,3]&;
 	ContriSS=1/2*Contract[\[Lambda]3IJi,Temp,{{1,4},{2,5}}]//SimplifySparse;
