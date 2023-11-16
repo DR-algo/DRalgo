@@ -168,37 +168,33 @@ PrintPressureUS["LO"]
 PrintPressureUS["NLO"]
 
 
-(* ::Section:: *)
+(* ::Chapter:: *)
 (*Saving the model*)
 
 
-(*result={};
+result={};
 AppendTo[result,Row[{
 	TexFor["DRDRDRDRDRDRDRDRDRDRDRDRDRDR "],
 	TexFor["DRalgo"],
 	TexFor[" DRDRDRDRDRDRDRDRDRDRDRDRDRDRD"]}]];
-	AppendTo[result,Row[{"Model: "//TexFor,"Two-Higgs doublet model. See hep-ph:1106.0034 for further details"//TexFor}]];
+AppendTo[result,Row[{"Model: "//TexFor,"Two-Higgs doublet model. See hep-ph:1106.0034 for further details"//TexFor}]];
 AppendTo[result,Row[{"Version: "//TexFor,"1.0 beta (16-05-2022)"//TexFor}]];
 AppendTo[result,Row[{"Authors: "//TexFor,"Andreas Ekstedt, Philipp Schicho, Tuomas V.I. Tenkanen"//TexFor}]];
-AppendTo[result,Row[{"Reference: "//TexFor,"2205.xxxxx [hep-ph]"//TexFor}]];
+AppendTo[result,Row[{"Reference: "//TexFor,"2205.08815 [hep-ph]"//TexFor}]];
 AppendTo[result,Row[{"Repository link: "//TexFor,
 	Hyperlink[Mouseover[TexFor["github.com/DR-algo/DRalgo"],Style["github.com/DR-algo/DRalgo",Bold]],
 	"https://github.com/DR-algo/DRalgo"]}]];
-AppendTo[result,Style["DRDRDRDRDRDRDRDRDRDRDRDRDRDRDRDRDRDRDRDRDRDRDRDRDRDRDRDRDRDRDRDRD",{GrayLevel[0.3]}]];*)
+AppendTo[result,Style["DRDRDRDRDRDRDRDRDRDRDRDRDRDRDRDRDRDRDRDRDRDRDRDRDRDRDRDRDRDRDRDRD",{GrayLevel[0.3]}]];
 
 
-(*ModelInfo=result;*)
+ModelInfo=result;
+SaveModelDRalgo[ModelInfo,"2hdm.txt"]
 
 
-(*SaveModelDRalgo[ModelInfo,"2hdm.txt"]*)
-
-
-(* ::Section:: *)
+(* ::Chapter::Closed:: *)
 (*Loading the model*)
 
 
-(*{Group,gvvv,gvff,gvss,\[Lambda]1,\[Lambda]3,\[Lambda]4,\[Mu]ij,\[Mu]IJ,\[Mu]IJC,Ysff,YsffC}=LoadModelDRalgo["2hdm.txt"];*)
-
-
-(*ImportModelDRalgo[Group,gvvv,gvff,gvss,\[Lambda]1,\[Lambda]3,\[Lambda]4,\[Mu]ij,\[Mu]IJ,\[Mu]IJC,Ysff,YsffC,Verbose->False];
-PerformDRhard[]*)
+{Group,gvvv,gvff,gvss,\[Lambda]1,\[Lambda]3,\[Lambda]4,\[Mu]ij,\[Mu]IJ,\[Mu]IJC,Ysff,YsffC}=LoadModelDRalgo["2hdm.txt"];
+ImportModelDRalgo[Group,gvvv,gvff,gvss,\[Lambda]1,\[Lambda]3,\[Lambda]4,\[Mu]ij,\[Mu]IJ,\[Mu]IJC,Ysff,YsffC,Verbose->False];
+PerformDRhard[]
