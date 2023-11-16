@@ -15,7 +15,7 @@ $LoadGroupMath=True;
 (*See 1802.10500 [hep-ph], *)
 
 
-(* ::Section::Closed:: *)
+(* ::Section:: *)
 (*Model*)
 
 
@@ -116,17 +116,24 @@ PrintCouplingsUS[]
 
 
 (* ::Section:: *)
-(*Integrate out triplet in a higgs - effective - type theory*)
+(*Integrate out triplet in a Higgs Effective-type Theory (HET)*)
 
 
-(*we here do the computations in the ultrasoft theory*)
+(*
+Computations are done in the ultrasoft theory
+*)
+UseUltraSoftTheory[];
 
 
-(*The idea with HEFT-like theories is that the Higgs', or any other scalar's, vev contribute substationally to the heavy particles mass*)
-(*thus the Higgs-vev contribution must be kept when integrating out the heavy particle*)
+(*
+In HEFT-like theories the vev of the Higgs or any other scalar
+contributes substationally to the heavy particles mass.
+Thus, the Higgs-vev contribution must be kept when integrating out the heavy particle.
+*)
 
 
-UseUltraSoftTheory[]; \[CurlyPhi]vev={0,0,0,\[CurlyPhi],0,0,0}//SparseArray; DefineVEVS[\[CurlyPhi]vev];
+\[CurlyPhi]vev={0,0,0,\[CurlyPhi],0,0,0}//SparseArray;
+DefineVEVS[\[CurlyPhi]vev];
 
 
 PrintTensorsVEV[1]//Normal
@@ -150,7 +157,11 @@ PrepareHET[{},{9,10,11}]
 CalculatePotentialHET[]
 
 
-(*When integrating out SU(2) bosons the LO potential is the same, but we get a \[Phi]^3 term at NLO; this term is responsible for a barrier in models with radiative symmetry breaking*)
+(*
+When integrating out SU(2) bosons the LO potential is the same,
+but we get a \[Phi]^3 term at NLO; this term is responsible for
+a barrier in models with radiative symmetry breaking
+*)
 
 
 PrintActionHET["LO"]
@@ -159,16 +170,19 @@ PrintActionHET["LO"]
 PrintActionHET["NLO"]
 
 
-(*We also get a contribution at NNLO*)
-
-
-(*The SU(2) gauge bosons also change the scalar fields' kinetic term, printed below is the Z factor*)
-(*that is PrintScalarKineticHET[][[i,j]]=\[Delta]Z^ij; (\[Delta]^ij+2 \[Delta]Z^ij)\!\(
-\*SubscriptBox[\(\[Del]\), \(\[Mu]\)]\(R[i]\)\) \[Del]^\[Mu]R[j]*)
-
-
-(*Notice that the kinetic term is different for the Higgs components; this reflects that \[CurlyPhi]!=0 breaks the symmetry; so the Higgs and Goldstone terms become different*)
-
+(*
+The SU(2) gauge bosons also change the scalar fields' kinetic term,
+printed below is the Z factor
+*)
+(*
+that is PrintScalarKineticHET[][[i,j]]=\[Delta]Z^ij; (\[Delta]^ij+2 \[Delta]Z^ij)\!\(
+\*SubscriptBox[\(\[Del]\), \(\[Mu]\)]\(R[i]\)\) \[Del]^\[Mu]R[j]
+*)
+(*
+Notice that the kinetic term is different for the Higgs components;
+this reflects that \[CurlyPhi]!=0 breaks the symmetry;
+so the Higgs and Goldstone terms become different
+*)
 
 PrintScalarKineticHET[]//Normal
 
@@ -181,7 +195,9 @@ PrintScalarKineticHET[]//Normal
 (*Integrating out Triplet bosons*)
 
 
-(*We can likewise integrate out the triplet scalars*)
+(*
+Integrate out the triplet scalars
+*)
 
 
  (*In our case the triplet sclaars live on 5,6,7*)
