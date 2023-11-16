@@ -143,9 +143,11 @@ PrintTensorsVEV[1]//Normal
 (*Integrating out SU (2) bosons*)
 
 
-(*Here PrepareHET[{Scalar_indices},{Scalar_vector}] tells the code what particles
+(*
+Here PrepareHET[{Scalar_indices},{Scalar_vector}] tells the code what particles
 you want to integrate out. This functions similar to PerformDRsoft[{}], and the indices
-can be found with the PrintScalarRepPositions[] and PrintGaugeRepPositions[] commands*)
+can be found with the PrintScalarRepPositions[] and PrintGaugeRepPositions[] commands
+*)
 
 
  (*In our case the SU(2) bosons live on 9,10,11*)
@@ -193,10 +195,8 @@ PrintScalarKineticHET[]//Normal
 
 (*
 Integrate out the triplet scalars
+In our case the triplet sclaars live on 5,6,7
 *)
-
-
- (*In our case the triplet sclaars live on 5,6,7*)
 
 
 PrepareHET[{5,6,7},{}]
