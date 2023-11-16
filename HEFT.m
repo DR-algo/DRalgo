@@ -125,7 +125,7 @@ PrepareHET[HardScalarI_,HardSVectorI_]:=Module[{ListScalar=HardScalarI,ListVecto
 ];
 
 
-(* ::Section::Closed:: *)
+(* ::Section:: *)
 (*Effective potential*)
 
 
@@ -235,7 +235,7 @@ If[verbose==True,Print["Calculating the 2-Loop Effective Potential"]];
 	Prints the effective potential.
 *)
 PrintActionHET[optP_]:=Module[{opt=optP},
-	EffActionPrint=Switch[opt,"LO",VTotHET[[1]],"NLO",VTotHET[[2]],"NNLO",VTotHET[[3]]];
+	EffActionPrint=Switch[opt,"LO",VTotHET[[1]]+VTotHET[[2]],"NLO",VTotHET[[3]]];
 
 (*Printing Result*)
 	OutputFormatDR[EffActionPrint]

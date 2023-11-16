@@ -136,6 +136,14 @@ PrintTensorsVEV[1]//Normal
 (*Integrating out SU (2) bosons*)
 
 
+(*Here PrepareHET[{Scalar_indices},{Scalar_vector}] tells the code what particles
+you want to integrate out. This functions similar to PerformDRsoft[{}], and the indices
+can be found with the PrintScalarRepPositions[] and PrintGaugeRepPositions[] commands*)
+
+
+ (*In our case the SU(2) bosons live on 9,10,11*)
+
+
 PrepareHET[{},{9,10,11}]
 
 
@@ -154,12 +162,6 @@ PrintActionHET["NLO"]
 (*We also get a contribution at NNLO*)
 
 
-PrintActionHET["NNLO"]
-
-
-\[Del]\[AliasDelimiter]
-
-
 (*The SU(2) gauge bosons also change the scalar fields' kinetic term, printed below is the Z factor*)
 (*that is PrintScalarKineticHET[][[i,j]]=\[Delta]Z^ij; (\[Delta]^ij+2 \[Delta]Z^ij)\!\(
 \*SubscriptBox[\(\[Del]\), \(\[Mu]\)]\(R[i]\)\) \[Del]^\[Mu]R[j]*)
@@ -171,11 +173,18 @@ PrintActionHET["NNLO"]
 PrintScalarKineticHET[]//Normal
 
 
+
+
+
+
 (* ::Chapter:: *)
 (*Integrating out Triplet bosons*)
 
 
 (*We can likewise integrate out the triplet scalars*)
+
+
+ (*In our case the triplet sclaars live on 5,6,7*)
 
 
 PrepareHET[{5,6,7},{}]
@@ -188,9 +197,6 @@ PrintActionHET["LO"]
 
 
 PrintActionHET["NLO"]
-
-
-PrintActionHET["NNLO"]
 
 
 PrintScalarKineticHET[]//Normal

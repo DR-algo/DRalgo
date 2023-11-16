@@ -161,7 +161,7 @@ Get[FileNameJoin[{$DRalgoDic,"ModelCreation.m"}]];(*Loads Effective Potential Fu
 Get[FileNameJoin[{$DRalgoDic,"HEFT.m"}]];(*Loads Higgs-Effective field theory Functions*)
 
 
-(* ::Section::Closed:: *)
+(* ::Section:: *)
 (*Initialization*)
 
 

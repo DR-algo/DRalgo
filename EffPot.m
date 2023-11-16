@@ -17,7 +17,7 @@
 (* ------------------------------------------------------------------------ *)
 
 
-(* ::Section:: *)
+(* ::Section::Closed:: *)
 (*Definition of model*)
 
 
@@ -177,7 +177,7 @@ DefineVEVS[\[Phi]Vecp_]:=Module[{\[Phi]Vec=\[Phi]Vecp},
 ];
 
 
-(* ::Section:: *)
+(* ::Section::Closed:: *)
 (*Calculation of the effective potential*)
 
 
@@ -451,7 +451,7 @@ RotateTensorsCustomMass[DScalarsp_,DVectorsp_,ScalarMass_,vectorMass_]:=Module[{
 ];
 
 
-(* ::Section:: *)
+(* ::Section::Closed:: *)
 (*Scalar master integrals*)
 
 
