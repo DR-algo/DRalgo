@@ -739,9 +739,3 @@ Export["./ah-thermo-python-plots/latentList1.dat",latentList1]
 Export["./ah-thermo-python-plots/TcList2.dat",TcList2]
 Export["./ah-thermo-python-plots/phicTcList2.dat",phicTcList2]
 Export["./ah-thermo-python-plots/latentList2.dat",latentList2]
-
-
-
-
-
-

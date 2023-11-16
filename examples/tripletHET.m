@@ -187,10 +187,6 @@ so the Higgs and Goldstone terms become different
 PrintScalarKineticHET[]//Normal
 
 
-
-
-
-
 (* ::Chapter:: *)
 (*Integrating out Triplet bosons*)
 

@@ -16,23 +16,41 @@ $LoadGroupMath=True;
 (*Model for Standard-Model like theory*)
 
 
-Group={"SU3","SU2","U1"}; (*This specifies the gauge group. So for the Standard Model SU3xSU2xU1 *)
+(*
+This specifies the gauge group. So for the Standard Model SU3xSU2xU1
+*)
+Group={"SU3","SU2","U1"}; 
 
 
-(*To add particles we need to specifiy the representation*)
-(*This is done by giving Dynking indices. For a particular rep: Rep={DynkinSU3,DynkinSU2,DynkinU1};*)
+(*
+To add particles we need to specifiy the representation
+This is done by giving Dynking indices.
+For a particular rep: Rep={DynkinSU3,DynkinSU2,DynkinU1};
+*)
 
 
-(*These Dynkin indices can be found in various group theory books, and also the paper by Slansky*)
-(*Yet for practical purposes they are directly given by GroupMath. See the accompanying "RepNames.m" file*)
+(*
+These Dynkin indices can be found in various group theory books,
+and also the paper by Slansky
+Yet for practical purposes they are directly given by GroupMath.
+See the accompanying "RepNames.m" file
+*)
 
 
-RepVector={{1,1},{2},0}; (*For the vector bosons we have a colour octed {1,1}, a Weak Triplet {2}, and no charge under U1*)
+(*
+For the vector bosons we have a colour octed {1,1},
+a Weak Triplet {2}, and no charge under U1
+*)
+RepVector={{1,1},{2},0}; 
 
 
-HiggsDoublet={{{0,0},{1},1/2},"C"}; (*The Higgs doublet is uncharged under colour {0,0}, transforms as a doublet under SU2 {2}*)
-									(* and has Hypercharge 1/2*)
-									(*The Higgs is complex "C". For a real representation a "R" should be given*)
+(*
+The Higgs doublet is uncharged under colour {0,0},
+transforms as a doublet under SU2 {2} and has Hypercharge 1/2
+The Higgs is complex "C".
+For a real representation a "R" should be given
+*)
+HiggsDoublet={{{0,0},{1},1/2},"C"};
 
 
 Rdoublet={{{1,0},{1},1/6},"C"}; 
@@ -45,7 +63,9 @@ RepScalar={HiggsDoublet,Rdoublet,SSinglet};
 CouplingName={gs,gw,gY};
 
 
-(*We now need to specify the fermions*)
+(*
+We now need to specify the fermions
+*)
 
 
 Rep1={{{1,0},{1},1/6},"L"};  (*QL- Left-handed quark doublet with hypercharge 1/6*)
@@ -64,8 +84,11 @@ Rep5={{{0,0},{0},Ye/2},"R"};
 RepFermion1Gen={Rep1,Rep2,Rep3,Rep4,Rep5};*)
 
 
-(*W can then stack the generations together if we want multiple generations. In this case 3*)
-(*See the manual for how to create an arbitrary number of NF generations*)
+(*
+We can then stack the generations together if we want multiple generations.
+In this case 3
+See the manual for how to create an arbitrary number of NF generations
+*)
 
 
 RepFermion3Gen={RepFermion1Gen,RepFermion1Gen,RepFermion1Gen}//Flatten[#,1]&; 
@@ -75,8 +98,11 @@ RepFermion3Gen={RepFermion1Gen,RepFermion1Gen,RepFermion1Gen}//Flatten[#,1]&;
 (*The input for the gauge interactions toDRalgo are then given by*)
 
 
-(*The tensors on the left-hand side are used in many applications. For example general 2-loop beta functions*)
-(*and two/three loop effective potentials for any models*)
+(*
+The tensors on the left-hand side are used in many applications.
+For example general 2-loop beta functions
+and two/three loop effective potentials for any models
+*)
 
 
 {gvvv,gvff,gvss,\[Lambda]1,\[Lambda]3,\[Lambda]4,\[Mu]ij,\[Mu]IJ,\[Mu]IJC,Ysff,YsffC}=AllocateTensors[Group,RepVector,CouplingName,RepFermion3Gen,RepScalar];
@@ -86,11 +112,18 @@ RepFermion3Gen={RepFermion1Gen,RepFermion1Gen,RepFermion1Gen}//Flatten[#,1]&;
 (*Specifying the scalar potential :*)
 
 
-(*You don't have to use DRalgo to define your model. You can also write down everything yourself, or import*)
-(*the result from another code.*)
+(*
+You don't have to use DRalgo to define your model.
+You can also write down everything yourself,
+or import the result from another code.
+*)
 
 
-(*Let us start with the mass. To get a mass term with two Higgs fields we specify that we want two RepScalar[[1]] fields*)
+(*
+Let us start with the mass.
+To get a mass term with two Higgs fields we specify that
+we want two RepScalar[[1]] fields
+*)
 
 
 RepScalar={HiggsDoublet,Rdoublet,SSinglet};
@@ -108,18 +141,27 @@ InputInv={{3,3},{True,False}};
 MassTerm3=CreateInvariant[Group,RepScalar,InputInv][[1]]//Simplify;
 
 
-(*To create the mass matrix we then add all our mass terms together*)
+(*
+To create the mass matrix we then add all our mass terms together
+*)
 
 
 VMass=m2*MassTerm1+\[Mu]R*MassTerm2+\[Mu]S*MassTerm3;
 
 
-\[Mu]ij=GradMass[VMass]//Simplify//SparseArray; (*GradMass[] takes the Lagrangian terms and extracts the mass matrix*)
+(*
+GradMass[] takes the Lagrangian terms and extracts the mass matrix
+*)
+\[Mu]ij=GradMass[VMass]//Simplify//SparseArray; 
 
 
-(*Let us now move on to quartic couplings*)
-(*We can either define these by writing InputInv={{1,1,1,1},{True,True,False,False}}; as above*)
-(*Or, since we already have the mass terms we can just use those.*)
+(*
+Let us now move on to quartic couplings
+We can either define these by writing
+InputInv={{1,1,1,1},{True,True,False,False}};
+as above.
+Or, since we already have the mass terms we can just use those.
+*)
 
 
 QuarticTerm1=\[Lambda]H*MassTerm1^2;
@@ -147,20 +189,34 @@ InputInv={{2,2,3,3},{True,False,True,False}};
 QuarticTerm7=gRS CreateInvariant[Group,RepScalar,InputInv][[2]]//Simplify;
 
 
-(*If we have a a Higgs doublet: \[CapitalPsi]=1/(Sqrt[2])(\[Phi]1+\[ImaginaryI]\[Psi]1,\[Phi]2+\[ImaginaryI] \[Psi]2) the code stores this as (\[Phi]1,\[Phi]2,\[Psi]1,\[Psi]2)*)
+(*
+If we have
+a Higgs doublet: \[CapitalPsi]=1/(Sqrt[2])(\[Phi]1+\[ImaginaryI]\[Psi]1,\[Phi]2+\[ImaginaryI] \[Psi]2)
+the code stores this as (\[Phi]1,\[Phi]2,\[Psi]1,\[Psi]2)
+*)
 
 
-VQuartic=QuarticTerm1+QuarticTerm2+QuarticTerm3+0*(QuarticTerm4+QuarticTerm5+QuarticTerm6+QuarticTerm7); (*We then add all quartic terms together*)
+(*
+We then add all quartic terms together
+*)
+VQuartic=QuarticTerm1+QuarticTerm2+QuarticTerm3+0*(QuarticTerm4+QuarticTerm5+QuarticTerm6+QuarticTerm7);
 
 
-\[Lambda]4=GradQuartic[VQuartic]; (*GradQuartic[] then extracts the quartic couplings*)
+(*
+GradQuartic[] then extracts the quartic couplings
+*)
+\[Lambda]4=GradQuartic[VQuartic]; 
 
 
-(*To define a Yukawa-coupling we need to specify the Scalar+First fermion+Second fermion*)
-(*So for a \[CapitalPsi]^+ QL^+ tR term we would write:*)
+(*
+To define a Yukawa-coupling we need to specify the Scalar+First fermion+Second fermion.
+So for a \[CapitalPsi]^+ QL^+ tR term we would write:
+*)
 
 
-(*We now need to specify the fermions*)
+(*
+We now need to specify the fermions
+*)
 
 
 InputInv={{1,1,2},{False,False,True}};  
@@ -179,25 +235,37 @@ InputInv={{3,2,5},{True,True,True}};
 YukawaTerm4=yY*CreateInvariantYukawa[Group,RepScalar,RepFermion3Gen,InputInv][[1]]//Simplify;
 
 
-Ysff=-GradYukawa[YukawaDoublet+YukawaTerm2+YukawaTerm3+YukawaTerm4]; (*GradYukawa[] then extracts the Yukawa coupling*)
+(*
+GradYukawa[] then extracts the Yukawa coupling
+*)
+Ysff=-GradYukawa[YukawaDoublet+YukawaTerm2+YukawaTerm3+YukawaTerm4];
 
 
-YsffC=SparseArray[Simplify[Conjugate[Ysff]//Normal,Assumptions->{yt>0,y\[CapitalTheta]>0,y\[CapitalOmega]>0,yY>0}]]; (*YsffC is always the complex conjugate of Ysff*)
+(*
+YsffC is always the complex conjugate of Ysff
+*)
+YsffC=SparseArray[Simplify[Conjugate[Ysff]//Normal,Assumptions->{yt>0,y\[CapitalTheta]>0,y\[CapitalOmega]>0,yY>0}]];
 
 
 (* ::Section:: *)
 (*Dimensional Reduction*)
 
 
-(*We can now find the effective couplings. Verbose->False turns of messages*)
-(*1-loop thermal masses: Mode->0; 1-loop masses and couplings: Mode->1; 2-loop masses and couplings: Mode->2*)
-(*Dimension 6 operators: Mode->3*)
+(*
+We can now find the effective couplings. Verbose->False turns of messages
+1-loop thermal masses: Mode->0;
+1-loop masses and couplings: Mode->1;
+2-loop masses and couplings: Mode->2
+Dimension 6 operators: Mode->3
+*)
 
 
 ImportModelDRalgo[Group,gvvv,gvff,gvss,\[Lambda]1,\[Lambda]3,\[Lambda]4,\[Mu]ij,\[Mu]IJ,\[Mu]IJC,Ysff,YsffC,Verbose->True,Mode->2];
 
 
-(*PerformDRhard[]  performs the matching from 4d to 3d*)
+(*
+PerformDRhard[]  performs the matching from 4d to 3d
+*)
 
 
 PerformDRhard[] 
@@ -293,13 +361,17 @@ Table[AnomDim4D["F",{a,b}],{a,PosFermion},{b,PosFermion}]
 (*Integrating out the temporal component*)
 
 
-(*We can also integrate out the temporal vector component by writing PerformDRsoft[{}]*)
+(*
+We can also integrate out the temporal vector component by writing PerformDRsoft[{}]
+*)
 
 
 PerformDRsoft[{},IncludeCubics->"False"]
 
 
-(*The resulting theory is known as the "ultrasoft" theory and all the commands are as above*)
+(*
+The resulting theory is known as the "ultrasoft" theory and all the commands are as above
+*)
 
 
 PrintCouplingsUS[]
@@ -314,7 +386,10 @@ PrintScalarMassUS["NLO"]
 BetaFunctions3DUS[]
 
 
-(*In addition, if there are heavy scalars, these can also be integrated out simultaneously with the temporal vector bosons*)
+(*
+In addition, if there are heavy scalars,
+these can also be integrated out simultaneously with the temporal vector bosons
+*)
 
 
 CommunicatingRowAndColumns[matrix_]:=Module[{allIndices,idxs,continue,newIdxs,newGroup,result},
@@ -353,16 +428,23 @@ vev[[1]]=\[Phi];
 vev[[5]]=0;
 
 
-(*There are two options to define your model*)
+(*
+There are two options to define your model
+*)
 
 
-(*First, if you have used for example "PerformDRsoft[{}]" the couplings can be defined with the command:*)
+(*
+First, if you have used for example "PerformDRsoft[{}]" the couplings can be
+defined with the command:
+*)
 
 
 DefineTensorsUS[]
 
 
-(*Second, you can define your custom model by writing "DefineNewTensorsUS[\[Mu]ij,\[Lambda]4,\[Lambda]3,gvss,gvvv];"(here just taking the original model as an example)*)
+(*
+Second, you can define your custom model by writing "DefineNewTensorsUS[\[Mu]ij,\[Lambda]4,\[Lambda]3,gvss,gvvv];"(here just taking the original model as an example)
+*)
 
 
 DefineNewTensorsUS[\[Mu]ij,\[Lambda]4,\[Lambda]3,gvss,gvvv];
@@ -371,16 +453,22 @@ DefineNewTensorsUS[\[Mu]ij,\[Lambda]4,\[Lambda]3,gvss,gvvv];
 PrintTensorsVEV[];
 
 
-(*The vector-mass matrix is not diagonal. This can be seen by looking at*)
+(*
+The vector-mass matrix is not diagonal. This can be seen by looking at
+*)
 
 
 PrintTensorsVEV[][[2]]//Normal
 
 
-(*So the problem is the A^3-B mixing as usual.*)
+(*
+So the problem is the A^3-B mixing as usual.
+*)
 
 
-(*We can diagonalize the mass-matrix via*)
+(*
+We can diagonalize the mass-matrix via
+*)
 
 
 MassMatrix=PrintTensorsVEV[];
@@ -399,31 +487,44 @@ PrintTensorsVEV[][[2]]//Normal
 (*Calculating the potential*)
 
 
-(*After the massmatrices are diagonal, the potential is given by CalculatePotentialUS[];*)
+(*
+After the massmatrices are diagonal, the potential is given by CalculatePotentialUS[];
+*)
 
 
 CalculatePotentialUS[]
 
 
-(*We can first give the tree-level potential*)
+(*
+We can first give the tree-level potential
+*)
 
 
 PrintEffectivePotential["LO"]
 
 
-(*Next the 1-loop potential*)
+(*
+Next the 1-loop potential
+*)
 
 
 PrintEffectivePotential["NLO"]
 
 
-(*We can set the hypercharge coupling to zero to make the result neater*)
+(*
+We can set the hypercharge coupling to zero to make the result neater
+*)
 
 
 PrintEffectivePotential["NLO"]/.gY3dUS->0
 
 
-(*And finally, the two-loop effective potential is given by*)
+(*
+And finally, the two-loop effective potential is given by
+*)
 
 
 PrintEffectivePotential["NNLO"]/.gY3dUS->0
+
+
+

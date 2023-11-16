@@ -191,15 +191,3 @@ CalculatePotentialUS[];
 PrintEffectivePotential["LO"]
 PrintEffectivePotential["NLO"]
 PrintEffectivePotential["NNLO"]
-
-
-
-
-
-
-
-
-
-
-
-

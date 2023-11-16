@@ -219,15 +219,3 @@ PrintEffectivePotential["NNLO"]
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
