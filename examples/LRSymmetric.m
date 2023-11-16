@@ -15,7 +15,7 @@ $LoadGroupMath=True;
 (*See 1811.06869 [hep-ph]*)
 
 
-(* ::Section::Closed:: *)
+(* ::Section:: *)
 (*Model*)
 
 
@@ -183,12 +183,3 @@ PrintScalarMass["NLO"]
 
 PrintDebyeMass["LO"]
 PrintDebyeMass["NLO"]
-
-
-
-
-
-
-
-
-

@@ -15,7 +15,7 @@ $LoadGroupMath=True;
 (*See 2101.05528 [hep-th] for further details and for independent calculations*)
 
 
-(* ::Section:: *)
+(* ::Section::Closed:: *)
 (*Model*)
 
 
@@ -96,18 +96,4 @@ PrintTadpoles["NLO"]
 PrintPressure["LO"]
 PrintPressure["NLO"]
 PrintPressure["NNLO"]
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 

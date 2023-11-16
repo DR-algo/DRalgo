@@ -160,7 +160,7 @@ PrintTensorsVEV[];
 (*The vector-mass matrix is not diagonal. This can be seen by looking at*)
 
 
-PrintTensorsVEV[][[2]]//Normal
+PrintTensorsVEV[2]//Normal
 
 
 (*So the problem is the A^3-B mixing as usual.*)
@@ -169,8 +169,7 @@ PrintTensorsVEV[][[2]]//Normal
 (*We can diagonalize the mass-matrix via*)
 
 
-MassMatrix=PrintTensorsVEV[];
-VectorMass=MassMatrix[[2]]//Normal;
+VectorMass=PrintTensorsVEV[2]//Normal;
 VectorEigenvectors=FullSimplify[
     Transpose[Normalize/@Eigenvectors[VectorMass[[11;;12,11;;12]]]],
 Assumptions->{gw>0,gY>0,\[CurlyPhi]>0}]; DVRot={{IdentityMatrix[10],0},{0,VectorEigenvectors}}//ArrayFlatten; DSRot=IdentityMatrix[4];
@@ -180,7 +179,7 @@ RotateTensorsUSPostVEV[DSRot,DVRot];
 (*We now see the new diagonal masses by writing*)
 
 
-PrintTensorsVEV[][[2]]//Normal//Simplify;
+PrintTensorsVEV[2]//Normal//Simplify;
 
 
 (*The effective potential is now given by*)
@@ -192,6 +191,3 @@ CalculatePotentialUS[];
 PrintEffectivePotential["LO"]
 PrintEffectivePotential["NLO"]
 PrintEffectivePotential["NNLO"]
-
-
-

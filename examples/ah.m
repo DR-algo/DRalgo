@@ -67,9 +67,6 @@ PrintConstants[]
 PrintScalarMass["LO"]
 
 
-Sqrt[2*12]*100/Sqrt[(3*0.42^2+4*0.003)]
-
-
 PrintScalarMass["NLO"]
 
 
@@ -139,33 +136,31 @@ PrintEffectivePotential["NLO"]
 PrintEffectivePotential["NNLO"]
 
 
-(* ::Section:: *)
+(* ::Chapter:: *)
 (*Saving the model*)
 
 
-(*result={};
+result={};
 AppendTo[result,Row[{
 	TexFor["DRDRDRDRDRDRDRDRDRDRDRDRDRDR "],
 	TexFor["DRalgo"],
 	TexFor[" DRDRDRDRDRDRDRDRDRDRDRDRDRDRD"]}]];
-	AppendTo[result,Row[{"Model: "//TexFor,"Abelian Higgs. See hep-ph:9709418 for further details"//TexFor}]];
+AppendTo[result,Row[{"Model: "//TexFor,"Abelian Higgs. See hep-ph:9709418 for further details"//TexFor}]];
 AppendTo[result,Row[{"Version: "//TexFor,"1.0 beta (16-05-2022)"//TexFor}]];
 AppendTo[result,Row[{"Authors: "//TexFor,"Andreas Ekstedt, Philipp Schicho, Tuomas V.I. Tenkanen"//TexFor}]];
-AppendTo[result,Row[{"Reference: "//TexFor,"2205.xxxxx [hep-ph]"//TexFor}]];
+AppendTo[result,Row[{"Reference: "//TexFor,"2205.08815 [hep-ph]"//TexFor}]];
 AppendTo[result,Row[{"Repository link: "//TexFor,
 	Hyperlink[Mouseover[TexFor["github.com/DR-algo/DRalgo"],Style["github.com/DR-algo/DRalgo",Bold]],
 	"https://github.com/DR-algo/DRalgo"]}]];
-AppendTo[result,Style["DRDRDRDRDRDRDRDRDRDRDRDRDRDRDRDRDRDRDRDRDRDRDRDRDRDRDRDRDRDRDRDRD",{GrayLevel[0.3]}]];*)
+AppendTo[result,Style["DRDRDRDRDRDRDRDRDRDRDRDRDRDRDRDRDRDRDRDRDRDRDRDRDRDRDRDRDRDRDRDRD",{GrayLevel[0.3]}]];
 
 
-(*ModelInfo=result;*)
+ModelInfo=result;
+SaveModelDRalgo[ModelInfo,"ah.txt"]
 
 
-(*SaveModelDRalgo[ModelInfo,"ah.txt"]*)
-
-
-(* ::Section:: *)
+(* ::Chapter::Closed:: *)
 (*Loading the model*)
 
 
-(*{Group,gvvv,gvff,gvss,\[Lambda]1,\[Lambda]3,\[Lambda]4,\[Mu]ij,\[Mu]IJ,\[Mu]IJC,Ysff,YsffC}=LoadModelDRalgo["ah.txt"];*)
+{Group,gvvv,gvff,gvss,\[Lambda]1,\[Lambda]3,\[Lambda]4,\[Mu]ij,\[Mu]IJ,\[Mu]IJC,Ysff,YsffC}=LoadModelDRalgo["ah.txt"];

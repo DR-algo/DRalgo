@@ -196,9 +196,6 @@ PrintPressureUS["LO"]
 PrintPressureUS["NLO"]
 
 
-CounterTerms4D[]
-
-
 (* ::Section:: *)
 (*Effective potential*)
 
@@ -235,9 +232,8 @@ PrintTensorsVEV[];
 (*If we only want the 1 - loop/tree - level effective potential*)
 
 
-MassMatrix=PrintTensorsVEV[];
-ScalarMass=PrintTensorsVEV[][[1]]//Normal;
-VectorMass=MassMatrix[[2]]//Normal;
+ScalarMass=PrintTensorsVEV[1]//Normal;
+VectorMass=PrintTensorsVEV[2]//Normal;
 
 
 ScalarMassDiag=Eigenvalues[ScalarMass]//DiagonalMatrix[#]&//Simplify;
@@ -264,9 +260,8 @@ DefineNewTensorsUS[\[Mu]ij,\[Lambda]4,\[Lambda]3,gvss,gvvv];
 DefineVEVS[\[CurlyPhi]vev];
 
 
-MassMatrix=PrintTensorsVEV[];
-ScalarMass=PrintTensorsVEV[][[1]]//Normal;
-VectorMass=MassMatrix[[2]]//Normal;
+ScalarMass=PrintTensorsVEV[1]//Normal;
+VectorMass=PrintTensorsVEV[2];
 
 
 (*If we want the 2-loop effective potential we also need the scalar-mass diagonalization matrix:*)
