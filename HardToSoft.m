@@ -1760,7 +1760,7 @@ If[verbose,Print["Calculating CounterTerms"]];
 ];
 
 
-(* ::Section::Closed:: *)
+(* ::Section:: *)
 (*Printing the results*)
 
 
