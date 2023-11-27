@@ -148,71 +148,69 @@ ScalarRepP[[j]][[1]][[i]]=1;
 ,{i,PosU1}],{j,1,Length[ScalarRepP]}];
 (*The above takes care of cases with arbitrary U1 charges*)
 
-If[Length[ScalarRepP]<1,
-gvssP=SparseArray[{{1,1,1}->0},{TotalComponents,1,1}]//SparseArray;
-,
+	If[Length[ScalarRepP]<1,
+		gvssP=SparseArray[{{1,1,1}->0},{TotalComponents,1,1}]//SparseArray;
+	,
 
-gvssP=ScalarRepCreation[GroupP,ScalarRepP[[1]]];
+		gvssP=ScalarRepCreation[GroupP,ScalarRepP[[1]]];
 (*Arbitrary U1 charges*)
-Do[
-If[NumericQ[ChargeU1[[1]][[i]]]==False,
-h=PosU1Components[[i+1-PosU1[[1]]]];
-gvssP[[h]]=gvssP[[h]]*ChargeU1[[1,i]];
-]
-,{i,PosU1}];
+		Do[
+			If[NumericQ[ChargeU1[[1]][[i]]]==False,
+				h=PosU1Components[[i+1-PosU1[[1]]]];
+				gvssP[[h]]=gvssP[[h]]*ChargeU1[[1,i]];
+			];
+		,{i,PosU1}];
 (*********************)
 (*********************)
 
-If[Length[ScalarRepP]>1,
-Do[
-Temp=ScalarRepCreation[GroupP,ScalarRepP[[i]]];
+		If[Length[ScalarRepP]>1,
+			Do[
+				Temp=ScalarRepCreation[GroupP,ScalarRepP[[i]]];
+
 
 (*********************)
 (*Arbitrary U1 charges*)
-Do[
-If[NumericQ[ChargeU1[[i]][[j]]]==False,
-h=PosU1Components[[j+1-PosU1[[1]]]];
-Temp[[h]]=Temp[[h]]*ChargeU1[[i,j]];
-]
-,{j,PosU1}];
+				Do[
+					If[NumericQ[ChargeU1[[i]][[j]]]==False,
+						h=PosU1Components[[j+1-PosU1[[1]]]];
+						Temp[[h]]=Temp[[h]]*ChargeU1[[i,j]];
+					];
+				,{j,PosU1}];
 (*********************)
 
 
-gvssTemp=Table[ArrayFlatten[{{gvssP[[a]],0},{0,Temp[[a]]}}],{a,1,Length[gvssP]}]; (*Stack scalar reps on the diagonal*)
-gvssP=gvssTemp;
-,
-{i,2,Length[ScalarRepP]}]
+			gvssTemp=Table[ArrayFlatten[{{gvssP[[a]],0},{0,Temp[[a]]}}],{a,1,Length[gvssP]}]; (*Stack scalar reps on the diagonal*)
+			gvssP=gvssTemp;
+			,{i,2,Length[ScalarRepP]}];
+		];
+	];
 
-];
-];
 
-gvssTemp=Table[CouplingArray[[a,a]]gvssP[[a]],{a,1,Length[gvssP]}];
-gvssP=gvssTemp//SparseArray;
+	gvssTemp=Table[CouplingArray[[a,a]]gvssP[[a]],{a,1,Length[gvssP]}];
+	gvssP=gvssTemp//SparseArray;
 
 (* Creates All tensors*)
 (*By default all tensors barring gauge ones are empty*)
-nsP=Length[gvssP[[1]]];
-nvP=Length[fabc];
-nfP=Length[gvffP[[1]]];
-\[Lambda]1P=EmptyArray[{nsP}];
-\[Lambda]3P=EmptyArray[{nsP,nsP,nsP}];
-\[Lambda]4P=EmptyArray[{nsP,nsP,nsP,nsP}];
-\[Mu]ijP=EmptyArray[{nsP,nsP}];
-\[Mu]IJCP=EmptyArray[{nfP,nfP}];
-\[Mu]IJP=EmptyArray[{nfP,nfP}];
-YsffP=EmptyArray[{nsP,nfP,nfP}];
-YsffCP=EmptyArray[{nsP,nfP,nfP}];
+	nsP=Length[gvssP[[1]]];
+	nvP=Length[fabc];
+	nfP=Length[gvffP[[1]]];
+	\[Lambda]1P=EmptyArray[{nsP}];
+	\[Lambda]3P=EmptyArray[{nsP,nsP,nsP}];
+	\[Lambda]4P=EmptyArray[{nsP,nsP,nsP,nsP}];
+	\[Mu]ijP=EmptyArray[{nsP,nsP}];
+	\[Mu]IJCP=EmptyArray[{nfP,nfP}];
+	\[Mu]IJP=EmptyArray[{nfP,nfP}];
+	YsffP=EmptyArray[{nsP,nfP,nfP}];
+	YsffCP=EmptyArray[{nsP,nfP,nfP}];
 (* Returns*)
 
 (*Creates variables for constructing invariants. Basically naming all components*)
-CreateScalarComponents[GroupP,ScalarRepP];
-CreateFermionComponents[GroupP,FermionRepP];
+	CreateScalarComponents[GroupP,ScalarRepP];
+	CreateFermionComponents[GroupP,FermionRepP];
 
+	GaugeCouplingNames=CouplingNameI;
 
-
-GaugeCouplingNames=CouplingNameI;
-
-Return[Join[{fabc//SparseArray//SimplifySparse,gvffP//SparseArray//SimplifySparse,gvssP//SparseArray//SimplifySparse,\[Lambda]1P//SparseArray,\[Lambda]3P//SparseArray,\[Lambda]4P//SparseArray,\[Mu]ijP//SparseArray,\[Mu]IJP//SparseArray,\[Mu]IJCP//SparseArray,YsffP//SparseArray,YsffCP//SparseArray}]];
+	Return[Join[{fabc//SparseArray//SimplifySparse,gvffP//SparseArray//SimplifySparse,gvssP//SparseArray//SimplifySparse,\[Lambda]1P//SparseArray,\[Lambda]3P//SparseArray,\[Lambda]4P//SparseArray,\[Mu]ijP//SparseArray,\[Mu]IJP//SparseArray,\[Mu]IJCP//SparseArray,YsffP//SparseArray,YsffCP//SparseArray}]];
 ];
 
 
@@ -223,17 +221,21 @@ Return[Join[{fabc//SparseArray//SimplifySparse,gvffP//SparseArray//SimplifySpars
 	Creates representation matrices for scalars. It is possible for the representation to be either real or complex.
 *)
 ScalarRepCreation[GroupI_,ScalarRepI_]:=Module[{GroupP=GroupI,ScalarRepP=ScalarRepI},
-Temp=RepMatrices[GroupP,ScalarRepP[[1]]];
-If[ScalarRepP[[2]]=="C",
-(*For complex representations we need to rewrite everything in a real basis*)
-help=- Table[{{Im[Temp[[a]]],Re[Temp[[a]]]},{-Re[Temp[[a]]],Im[Temp[[a]]]}}//ArrayFlatten,{a,1,Length[Temp]}]//ArrayFlatten;
-,
- (*By default real representation matrices are not anti-symmetric. So we need to change basis*)
-U=RotationToRealBasis[GroupP,ScalarRepP[[1]]];
-help=   I  U . # . ConjugateTranspose[U]&/@Temp;
-
-];
-Return[help]
+	Temp=RepMatrices[GroupP,ScalarRepP[[1]]];
+	If[ScalarRepP[[2]]=="C",
+	(*For complex representations we need to rewrite everything in a real basis*)
+		help=- Table[{{Im[Temp[[a]]],Re[Temp[[a]]]},{-Re[Temp[[a]]],Im[Temp[[a]]]}}//ArrayFlatten,{a,1,Length[Temp]}]//ArrayFlatten;
+	,
+		If[ScalarRepP[[2]]=="A",
+		(*If the representation is the adjoint we choose to give the normal structure constants*)
+			help=I GaugeRep[GroupP]//SparseArray;
+		,
+		 (*By default real representation matrices are not anti-symmetric. So we need to change basis*)
+			U=RotationToRealBasis[GroupP,ScalarRepP[[1]]];
+			help=   I  U . # . ConjugateTranspose[U]&/@Temp;
+		];
+	];
+	Return[help]
 ];
 
 
@@ -296,17 +298,17 @@ Return[P]
 
 
 PrintGaugeRepPositions[]:=Module[{},
-Return[GaugeIndices]
+	Return[GaugeIndices]
 ];
 
 
 PrintFermionRepPositions[]:=Module[{},
-Return[FermionVariablesIndices]
+	Return[FermionVariablesIndices]
 ];
 
 
 PrintScalarRepPositions[]:=Module[{},
-Return[ScalarVariablesIndices]
+	Return[ScalarVariablesIndices]
 ];
 
 
@@ -315,62 +317,53 @@ Return[ScalarVariablesIndices]
 *)
 CreateScalarComponents[GroupI_,ScalarRepI_]:=Module[{GroupP=GroupI,ScalarRepP=ScalarRepI},
 
-GroupHelp=DeleteCases[GroupP,{}]; (*Removes all U1 factors since they don't have individual components*)
-PosU1=Position[GroupP,{}];(*Position of all U1:s*)
-ScalarComponents=ConstantArray[0,{Length[ScalarRepP]}];(*Contains all subsitution rules*)
-ScalarComponentsC=ConstantArray[0,{Length[ScalarRepP]}];(*Conjugated components*)
-ScalarVariables=ConstantArray[0,{Length[ScalarRepP]}]; (*Names of all components*)
-ScalarVariablesIndices=ConstantArray[0,{Length[ScalarRepP]}]; (*Position of every scalar rep*);
+	GroupHelp=DeleteCases[GroupP,{}]; (*Removes all U1 factors since they don't have individual components*)
+	PosU1=Position[GroupP,{}];(*Position of all U1:s*)
+	ScalarComponents=ConstantArray[0,{Length[ScalarRepP]}];(*Contains all subsitution rules*)
+	ScalarComponentsC=ConstantArray[0,{Length[ScalarRepP]}];(*Conjugated components*)
+	ScalarVariables=ConstantArray[0,{Length[ScalarRepP]}]; (*Names of all components*)
+	ScalarVariablesIndices=ConstantArray[0,{Length[ScalarRepP]}]; (*Position of every scalar rep*);
 
-Do[
-SizeRep=DimR[GroupHelp,ScalarRepP[[i]][[1]]//Delete[#,PosU1]&];
+	Do[
+		SizeRep=DimR[GroupHelp,ScalarRepP[[i]][[1]]//Delete[#,PosU1]&];
 (*By default GroupMath creates invariants with names a[x], b[x], ...*)
-If[ScalarRepP[[i]][[2]]=="C",
+		If[ScalarRepP[[i]][[2]]=="C",
 (*\[Phi] are real components and \[Psi] ar the imagionary ones*)
-ScalarComponents[[i]]=Array[a[##]->1/Sqrt[2]Symbol[ToString[\[Phi]]<>ToString[i]][##]+I 1/Sqrt[2] Symbol[ToString[\[Psi]]<>ToString[i]][##]&,SizeRep]//Flatten[#]&;
-ScalarComponentsC[[i]]=Array[a[##]->1/Sqrt[2] Symbol[ ToString[\[Phi]]<>ToString[i]][##]-I 1/Sqrt[2] Symbol[ToString[\[Psi]]<>ToString[i]][##]&,SizeRep]//Flatten[#]&;
-ScalarVariables[[i]]={#}&/@Flatten[ScalarComponents[[i]]]/.{a_->b_}->b//Variables;
-If[i==1,
-ScalarVariablesIndices[[i]]=1;;(Length[ScalarVariables[[i]]]);
-,
-helpInd=ScalarVariablesIndices[[i-1]]/.(a_;;b_)-> b;
-ScalarVariablesIndices[[i]]=(helpInd+1);;(helpInd+Length[ScalarVariables[[i]]]);
-];
-,
+			ScalarComponents[[i]]=Array[a[##]->1/Sqrt[2]Symbol[ToString[\[Phi]]<>ToString[i]][##]+I 1/Sqrt[2] Symbol[ToString[\[Psi]]<>ToString[i]][##]&,SizeRep]//Flatten[#]&;
+			ScalarComponentsC[[i]]=Array[a[##]->1/Sqrt[2] Symbol[ ToString[\[Phi]]<>ToString[i]][##]-I 1/Sqrt[2] Symbol[ToString[\[Psi]]<>ToString[i]][##]&,SizeRep]//Flatten[#]&;
+			ScalarVariables[[i]]={#}&/@Flatten[ScalarComponents[[i]]]/.{a_->b_}->b//Variables;
+			If[i==1,
+				ScalarVariablesIndices[[i]]=1;;(Length[ScalarVariables[[i]]]);
+			,
+				helpInd=ScalarVariablesIndices[[i-1]]/.(a_;;b_)-> b;
+				ScalarVariablesIndices[[i]]=(helpInd+1);;(helpInd+Length[ScalarVariables[[i]]]);
+			];
+		,
 (*For a real rep we need to rotate it to a real basis*)
-If[ScalarRepP[[i]][[2]]=="R",
-RotMat=RotationToRealBasis[GroupP,ScalarRepP[[i]][[1]]]; (*Maps to a real basis*)
-Components=Array[Symbol[ToString[\[Phi]]<>ToString[i]][##]&,SizeRep]//Flatten[#]&;
-BasisChange=MapThread[Rule,{Components,ConjugateTranspose[RotMat] . Components}];
-,
-(*This option should be removed*)
-RotMat1=RotationToRealBasis[GroupP,ScalarRepP[[i]][[1]]]; (*Maps to a real basis*)
-RotMat=RotateToAdjBasis[GroupP,ScalarRepP[[i]][[1]]]; (*Maps to an adjoint basis. Only for simple reps*)
-Components=Array[Symbol[ToString[\[Phi]]<>ToString[i]][##]&,SizeRep]//Flatten[#]&;
-BasisChange=MapThread[Rule,{Components,ConjugateTranspose[RotMat1] . RotMat . Components}];
-];
-
-ScalarComponents[[i]]=Array[a[##]->Symbol[ToString[\[Phi]]<>ToString[i]][##]&,SizeRep]//Flatten[#]&//ReplaceAll[#,BasisChange]&;
-ScalarComponentsC[[i]]=Array[a[##]->Symbol[ToString[\[Phi]]<>ToString[i]][##]&,SizeRep]//Flatten[#]&//ReplaceAll[#,BasisChange]&;
-ScalarVariables[[i]]={#}&/@Flatten[ScalarComponents[[i]]]/.{a_->b_}->b//Variables;
-If[i==1,
-ScalarVariablesIndices[[i]]=1;;(Length[ScalarVariables[[i]]]);
-,
-helpInd=ScalarVariablesIndices[[i-1]]/.(a_;;b_)-> b;
-ScalarVariablesIndices[[i]]=(helpInd+1);;(helpInd+Length[ScalarVariables[[i]]]);
-];
-];
-,
-{i,1,Length[ScalarRepI]}];
+			RotMat=RotationToRealBasis[GroupP,ScalarRepP[[i]][[1]]]; (*Maps to a real basis*)
+			Components=Array[Symbol[ToString[\[Phi]]<>ToString[i]][##]&,SizeRep]//Flatten[#]&;
+			BasisChange=MapThread[Rule,{Components,ConjugateTranspose[RotMat] . Components}];
+			
+			ScalarComponents[[i]]=Array[a[##]->Symbol[ToString[\[Phi]]<>ToString[i]][##]&,SizeRep]//Flatten[#]&//ReplaceAll[#,BasisChange]&;
+			ScalarComponentsC[[i]]=Array[a[##]->Symbol[ToString[\[Phi]]<>ToString[i]][##]&,SizeRep]//Flatten[#]&//ReplaceAll[#,BasisChange]&;
+			ScalarVariables[[i]]={#}&/@Flatten[ScalarComponents[[i]]]/.{a_->b_}->b//Variables;
+			If[i==1,
+					ScalarVariablesIndices[[i]]=1;;(Length[ScalarVariables[[i]]]);
+			,
+				helpInd=ScalarVariablesIndices[[i-1]]/.(a_;;b_)-> b;
+				ScalarVariablesIndices[[i]]=(helpInd+1);;(helpInd+Length[ScalarVariables[[i]]]);
+			];
+		];
+	,{i,1,Length[ScalarRepI]}];
 
 
 (*Check if the group only contains U1s*)
-If[Total[Length[#]&/@GroupP]<1,
+	If[Total[Length[#]&/@GroupP]<1,
 (*If the group only contains U1s the components don't have an index. so a[x]-> a. This is fixed below*)
-ScalarComponents=ScalarComponents//ReplaceAll[#,a[1]->a]&; 
-ScalarComponentsC=ScalarComponentsC//ReplaceAll[#,a[1]->a]&;
-];
-ScalarVariables=ScalarVariables//Flatten[#]&;
+		ScalarComponents=ScalarComponents//ReplaceAll[#,a[1]->a]&; 
+		ScalarComponentsC=ScalarComponentsC//ReplaceAll[#,a[1]->a]&;
+	];
+	ScalarVariables=ScalarVariables//Flatten[#]&;
 ];
 
 
