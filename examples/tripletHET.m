@@ -145,7 +145,7 @@ PrintTensorsVEV[1]//Normal
 
 (*
 PrepareHET[{Scalar_indices},{vector_indices}]
-indicates which particles are integrate out.
+indicates which particles are integrated out.
 This functions similar to PerformDRsoft[{}], and the indices
 can be found with the commands
 PrintScalarRepPositions[] and 
@@ -253,7 +253,7 @@ PrintTensorsVEV[1]//Normal
 
 (*
 PrepareHET[{Scalar_indices},{vector_indices}]
-indicates which particles are integrate out.
+indicates which particles are integrated out.
 This functions similar to PerformDRsoft[{}], and the indices
 can be found with the commands
 PrintScalarRepPositions[] and 
