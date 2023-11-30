@@ -95,11 +95,15 @@ UseSoftTheory[]:=Module[{},
 	,
 		A1=ReplaceAll[Delete[gvvv//ArrayRules,-1],{x_,y_,z_}->{x,y+ns,z+ns}];
 		A2=Delete[gvssTEMP//ArrayRules,-1];
-		gvssEP=Join[A1,A2]//SparseArray;
+		gvssEP=SparseArray[Join[A1,A2],{nv,nSH,nSH}];
 	];
 	
 	nsEP=Length[gvssEP[[1]]];
 	nvEP=Length[gvvvEP];
+	
+	Print["The theory now has ", nsEP, " scalar degrees of freedom"];
+	
+
 
 ];
 
@@ -129,6 +133,8 @@ UseUltraSoftTheory[]:=Module[{},
 
 	nsEP=Length[gvssEP[[1]]];
 	nvEP=Length[gvvvEP];
+	
+	Print["The theory now has ", nsEP, " scalar degrees of freedom"];
 
 ];
 
@@ -153,10 +159,14 @@ DiagonalMatrixQAE[matI_]:=Module[{matP=matI},
 *)
 DefineVEVS[\[Phi]Vecp_]:=Module[{\[Phi]Vec=\[Phi]Vecp},
 
-	If[Length[\[Phi]Vecp]!=nsEP,Print["Wrong dimension on the vacuum expectation value"]];
+	If[Length[\[Phi]Vec]!=nsEP,
+		Print["Wrong dimension on the vacuum expectation value"];
+		Print["Setting all unspecified VeVs to zero"];
+		\[Phi]Vec=SparseArray[\[Phi]Vec//ArrayRules,{nsEP}];
+	];
 	
 	HabijVEP=Transpose[Activate@TensorContract[Inactive@TensorProduct[gvssEP,gvssEP],{{3,5}}],{1,3,2,4}]+Transpose[Transpose[Activate@TensorContract[Inactive@TensorProduct[gvssEP,gvssEP],{{3,5}}],{1,3,2,4}],{2,1,3,4}];
-	\[Phi]Vev=\[Phi]Vecp//SparseArray;
+	\[Phi]Vev=\[Phi]Vec//SparseArray;
 	\[Mu]ij\[Phi]=\[Mu]ijEP+1/2 Activate@TensorContract[Inactive@TensorProduct[\[Lambda]4EP,\[Phi]Vec,\[Phi]Vec],{{3,5},{4,6}}]+ Activate@TensorContract[Inactive@TensorProduct[\[Lambda]3EP,\[Phi]Vec],{{3,4}}]//SparseArray;
 	\[Mu]ab\[Phi]=-1/2 Activate@TensorContract[Inactive@TensorProduct[HabijVEP,\[Phi]Vec,\[Phi]Vec],{{3,5},{4,6}}]//SparseArray;
 	Gvvs\[Phi]=-Activate@TensorContract[Inactive@TensorProduct[HabijVEP,\[Phi]Vec],{{4,5}}];

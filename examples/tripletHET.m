@@ -15,7 +15,7 @@ $LoadGroupMath=True;
 (*See 1802.10500 [hep-ph], *)
 
 
-(* ::Section:: *)
+(* ::Section::Closed:: *)
 (*Model*)
 
 
@@ -144,13 +144,18 @@ PrintTensorsVEV[1]//Normal
 
 
 (*
-Here PrepareHET[{Scalar_indices},{Scalar_vector}] tells the code what particles
-you want to integrate out. This functions similar to PerformDRsoft[{}], and the indices
-can be found with the PrintScalarRepPositions[] and PrintGaugeRepPositions[] commands
+PrepareHET[{Scalar_indices},{vector_indices}]
+indicates which particles are integrated out.
+This functions similar to PerformDRsoft[{}], and the indices
+can be found with the commands
+PrintScalarRepPositions[] and 
+PrintGaugeRepPositions[]
 *)
 
 
- (*In our case the SU(2) bosons live on 9,10,11*)
+(*
+In our case the SU(2) bosons live on 9,10,11
+*)
 
 
 PrepareHET[{},{9,10,11}]
@@ -195,7 +200,7 @@ PrintScalarKineticHET[]//Normal
 
 (*
 Integrate out the triplet scalars
-In our case the triplet sclaars live on 5,6,7
+In our case the triplet scalars live on 5,6,7
 *)
 
 
@@ -210,5 +215,92 @@ PrintActionHET["LO"]
 
 PrintActionHET["NLO"]
 
+
+PrintScalarKineticHET[]//Normal
+
+
+(* ::Title:: *)
+(*Keeping temporal gauge bosons*)
+
+
+(* ::Section:: *)
+(*Integrate out triplet in a Higgs Effective-type Theory (HET)*)
+
+
+(*
+Computations are done in the soft theory
+*)
+UseSoftTheory[];
+
+
+(*
+In HEFT-like theories the vev of the Higgs or any other scalar
+contributes substationally to the heavy particles mass.
+Thus, the Higgs-vev contribution must be kept when integrating out the heavy particle.
+*)
+
+
+\[CurlyPhi]vev={0,0,0,\[CurlyPhi]}//SparseArray;
+DefineVEVS[\[CurlyPhi]vev];
+
+
+PrintTensorsVEV[1]//Normal
+
+
+(* ::Chapter:: *)
+(*Integrating out SU (2) bosons + Gauge temporal scalars*)
+
+
+(*
+PrepareHET[{Scalar_indices},{vector_indices}]
+indicates which particles are integrated out.
+This functions similar to PerformDRsoft[{}], and the indices
+can be found with the commands
+PrintScalarRepPositions[] and 
+PrintGaugeRepPositions[]
+*)
+
+
+(*
+In our case
+SU(2) bosons live on 9,10,11
+U(1) temporal scalars on 8
+SU(2) temporal scalars on 9,10,11
+SU(3) temporal scalars on 12,...,19
+*)
+
+
+PrepareHET[{8,9,10,11,12,13,14,15,16,17,18,19},{9,10,11}]
+
+
+CalculatePotentialHET[]
+
+
+(*
+When integrating out SU(2) bosons the LO potential is the same,
+but we get a \[Phi]^3 term at NLO; this term is responsible for
+a barrier in models with radiative symmetry breaking
+*)
+
+
+PrintActionHET["LO"]
+
+
+PrintActionHET["NLO"]
+
+
+(*
+The SU(2) gauge bosons also change the scalar fields' kinetic term,
+printed below is the Z factor
+*)
+(*
+that is PrintScalarKineticHET[][[i,j]]=\[Delta]Z^ij; (\[Delta]^ij+2 \[Delta]Z^ij)\!\(
+\*SubscriptBox[\(\[Del]\), \(\[Mu]\)]\(R[i]\)\) \[Del]^\[Mu]R[j]
+*)
+(*
+Notice that the kinetic term is different for the Higgs components;
+this reflects that \[CurlyPhi]!=0 breaks the symmetry;
+so the Higgs and Goldstone terms become different
+*)
 
 PrintScalarKineticHET[]//Normal
