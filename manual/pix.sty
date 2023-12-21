@@ -1,0 +1,3015 @@
+%
+% pix.sty
+% Selected axodraw plots
+%
+% (C) by authors:
+%     Kajantie, Laine, Rummukainen, Schicho, Schroeder
+%
+%%%
+%%% new commands: general
+%%%
+%% selected ones from Kajantie/Laine/Rummukainen
+\newcommand{\la}[1]{\label{#1}}
+%\newcommand{\la}[1]
+%{\mbox{\lefteqn{\mbox{\,\,\,\small\em\protect{#1}}}}\label{#1}}
+\newcommand{\be}{\begin{equation}}
+\newcommand{\ee}{\end{equation}}
+\newcommand{\ba}{\begin{eqnarray}}
+\newcommand{\ea}{\end{eqnarray}}
+\newcommand{\rmi}[1]{{\mbox{\scriptsize #1}}}
+\newcommand{\fig}{fig.~}
+\newcommand{\figs}{figs.~}
+\newcommand{\eq}{eq.~}
+\newcommand{\eqs}{eqs.~}
+\newcommand{\se}{sec.~}
+\newcommand{\ses}{secs.~}
+\newcommand{\nr}[1]{(\ref{#1})}
+\newcommand{\tr}{{\rm Tr\,}}
+\newcommand{\nn}{\nonumber \\}
+\newcommand{\fr}[2]{{\frac{#1}{#2}}}
+\newcommand{\msbar}{{\overline{\mbox{\rm MS}}}}
+\newcommand{\lambdamsbar}{{\Lambda_{\overline{\rm MS}}}}
+\renewcommand{\vec}[1]{{\bf #1}}
+%% added by YS
+\renewcommand{\(}{\left(}
+\renewcommand{\)}{\right)}
+\newcommand{\lb}{\left\{}
+\newcommand{\rb}{\right\}}
+\newcommand{\lk}{\left[}
+\newcommand{\rk}{\right]}
+\newcommand{\ld}{\left.}
+\newcommand{\rd}{\right.}
+\renewcommand{\d}{\delta}
+\newcommand{\e}{\epsilon}
+\renewcommand{\l}{\lambda}
+\newcommand{\6}{\partial}
+\newcommand{\Av}[1]{\left\langle #1 \right\rangle}
+\newcommand{\bG}{{\beta_G}}
+\newcommand{\sfr}[2]{{\scriptstyle \frac{#1}{#2}\,}}
+\newcommand{\stapel}[2]{\lb\begin{array}{l}#1\\#2\end{array}\rd}
+\newcommand{\diff}[2]{\(\begin{array}{c}#1\\#2\end{array}\)}
+\newcommand{\order}[1]{{\cal O}\(#1\)\vphantom{\fr12}}
+\newcommand{\hp}{\hphantom}
+\newcommand{\mb}{{\bar\mu}}
+\newcommand{\Lb}{{\bar\Lambda}}
+\newcommand{\tinyMSbar}{{\overline{\mbox{\tiny\rm{MS}}}}}
+\newcommand{\sy}[3]{{\textstyle #1\frac{#2}{#3}}}
+\newcommand{\tfr}[2]{{\textstyle \frac{#1}{#2}\,}}
+\def\plus{\oplus}
+\newcommand{\sm}[1]{\,{\scriptstyle #1}\,}
+\renewcommand{\ss}{\scriptstyle}
+\newcommand{\ts}{\textstyle}
+\newcommand{\atn}{\arctan}
+\newcommand{\dilog}{{\rm Li}_2}
+\newcommand{\clausen}{{\rm Cl}_2}
+
+
+%%%
+%%% new commands: picture sizes
+%%%
+\newcommand{\pis}[1]{\;\parbox[c]{20pt}{\begin{picture}(20,30)(0,0)
+\SetWidth{1.0}\SetScale{1.0} #1 \end{picture}}\;}
+\newcommand{\pic}[1]{\;\parbox[c]{30pt}{\begin{picture}(30,30)(0,0)
+\SetWidth{1.0}\SetScale{1.0} #1 \end{picture}}\;}
+\newcommand{\pib}[1]{\;\parbox[c]{36pt}{\begin{picture}(22.5,30)(0,0)
+\SetWidth{1.0}\SetScale{1.0} #1 \end{picture}}\;}
+\newcommand{\picb}[1]{\;\parbox[c]{45pt}{\begin{picture}(45,30)(0,0)
+\SetWidth{1.0}\SetScale{1.0} #1 \end{picture}}\;}
+\newcommand{\picc}[1]{\;\parbox[c]{60pt}{\begin{picture}(60,30)(0,0)
+\SetWidth{1.0}\SetScale{1.0} #1 \end{picture}}\;}
+\newcommand{\piccb}[1]{\;\parbox[c]{75pt}{\begin{picture}(75,30)(0,0)
+\SetWidth{1.0}\SetScale{1.0} #1 \end{picture}}\;}
+\newcommand{\piccc}[1]{\;\parbox[c]{90pt}{\begin{picture}(90,30)(0,0)
+\SetWidth{1.0}\SetScale{1.0} #1 \end{picture}}\;}
+\newcommand{\picccc}[1]{\;\parbox[c]{120pt}{\begin{picture}(120,30)(0,0)
+\SetWidth{1.0}\SetScale{1.0} #1 \end{picture}}\;}
+
+%%%
+%%% new commands: axodraw line styles
+%%%
+\def\Lwidth{1}
+\special{! /Ldensity {0.25} def}
+\special{! /pi {3.14159} def}
+\newcommand*{\Agl}[1]{\csname Agl\romannumeral#1\endcsname}
+\newcommand*{\Lgl}[1]{\csname Lgl\romannumeral#1\endcsname}
+\newcommand*{\Age}[1]{\csname Age\romannumeral#1\endcsname}
+\newcommand*{\Lge}[1]{\csname Lge\romannumeral#1\endcsname}
+\newcommand*{\Asr}[1]{\csname Asr\romannumeral#1\endcsname}
+\newcommand*{\Lsr}[1]{\csname Lsr\romannumeral#1\endcsname}
+\newcommand*{\Aer}[1]{\csname Aer\romannumeral#1\endcsname}
+\newcommand*{\Ler}[1]{\csname Ler\romannumeral#1\endcsname}
+\newcommand*{\Asc}[1]{\csname Asc\romannumeral#1\endcsname}
+\newcommand*{\Acs}[1]{\csname Acs\romannumeral#1\endcsname}
+\newcommand*{\Lsc}[1]{\csname Lsc\romannumeral#1\endcsname}
+\newcommand*{\Lcs}[1]{\csname Lcs\romannumeral#1\endcsname}
+\newcommand*{\Ase}[1]{\Asai}
+\newcommand*{\Lse}[1]{\Lsai}
+\newcommand*{\Asa}[1]{\Asai}
+\newcommand*{\Lsa}[1]{\Lsai}
+\newcommand*{\Agh}[1]{\Aghi}
+\newcommand*{\Ahg}[1]{\Ahgi}
+\newcommand*{\Lgh}[1]{\Lghi}
+\newcommand*{\Lhg}[1]{\Lhgi}
+
+%% gluons as lines
+%\def\Agl(#1,#2)(#3,#4,#5){\CArc(#1,#2)(#3,#4,#5)}
+%\def\Lgl(#1,#2)(#3,#4){\Line(#1,#2)(#3,#4)}
+%% gluons as wiggles
+%\def\Agl(#1,#2)(#3,#4,#5){\PhotonArc(#1,#2)(#3,#4,#5){\Lwidth}
+%{6.283 #3 mul 360 div #4 #5 sub #4 #5 sub mul sqrt mul Ldensity mul}}
+%\def\Lgl(#1,#2)(#3,#4){\Photon(#1,#2)(#3,#4){\Lwidth}
+%{#1 #3 sub #1 #3 sub mul #2 #4 sub #2 #4 sub mul add sqrt Ldensity mul}}
+\def\Agli(#1,#2)(#3,#4,#5){
+  \PhotonArc(#1,#2)(#3,#4,#5){\Lwidth}
+  {2 pi mul #3 mul 360 div #4 #5 sub #4 #5 sub mul sqrt mul Ldensity mul 2 div}}
+\def\Lgli(#1,#2)(#3,#4){
+  \Photon(#1,#2)(#3,#4){\Lwidth}
+  {#1 #3 sub #1 #3 sub mul #2 #4 sub #2 #4 sub mul add sqrt Ldensity mul 2 div}}
+\def\Aglii(#1,#2)(#3,#4,#5){
+  \ZigZagArc(#1,#2)(#3,#4,#5){\Lwidth}
+  {2 pi mul #3 mul 360 div #4 #5 sub #4 #5 sub mul sqrt mul Ldensity mul}}
+\def\Lglii(#1,#2)(#3,#4){
+  \ZigZag(#1,#2)(#3,#4){\Lwidth}
+  {#1 #3 sub #1 #3 sub mul #2 #4 sub #2 #4 sub mul add sqrt Ldensity mul}}
+\def\Agliii(#1,#2)(#3,#4,#5){
+  \GluonArc(#1,#2)(#3,#4,#5){\Lwidth}
+  {2 pi mul #3 mul 360 div #4 #5 sub #4 #5 sub mul sqrt mul Ldensity mul}}
+\def\Lgliii(#1,#2)(#3,#4){
+  \Gluon(#1,#2)(#3,#4){\Lwidth}
+  {#1 #3 sub #1 #3 sub mul #2 #4 sub #2 #4 sub mul add sqrt Ldensity mul}}
+
+\def\Agei(#1,#2)(#3,#4,#5){
+  \PhotonArc(#1,#2)(#3,#4,#5){\Lwidth}
+  {2 pi mul #3 mul 360 div #4 #5 sub #4 #5 sub mul sqrt mul Ldensity mul 2 div}}
+\def\Lgei(#1,#2)(#3,#4){
+  \Photon(#1,#2)(#3,#4){\Lwidth}
+  {#1 #3 sub #1 #3 sub mul #2 #4 sub #2 #4 sub mul add sqrt Ldensity mul 2 div}
+%  \Vertex(#1,#2){2.0\Lwidth}
+  }
+\def\Ageii(#1,#2)(#3,#4,#5){
+  \ZigZagArc(#1,#2)(#3,#4,#5){\Lwidth}
+  {2 pi mul #3 mul 360 div #4 #5 sub #4 #5 sub mul sqrt mul Ldensity mul}}
+\def\Lgeii(#1,#2)(#3,#4){
+  \ZigZag(#1,#2)(#3,#4){\Lwidth}
+  {#1 #3 sub #1 #3 sub mul #2 #4 sub #2 #4 sub mul add sqrt Ldensity mul}
+%  \Vertex(#1,#2){2.0\Lwidth}
+  }
+\def\Ageiii(#1,#2)(#3,#4,#5){
+  \GluonArc(#1,#2)(#3,#4,#5){\Lwidth}
+  {2 pi mul #3 mul 360 div #4 #5 sub #4 #5 sub mul sqrt mul Ldensity mul}}
+\def\Lgeiii(#1,#2)(#3,#4){
+  \Gluon(#1,#2)(#3,#4){\Lwidth}
+  {#1 #3 sub #1 #3 sub mul #2 #4 sub #2 #4 sub mul add sqrt Ldensity mul}
+%  \Vertex(#1,#2){2.0\Lwidth}
+  }
+%% ghosts as dots with arrow
+\def\Aghi(#1,#2)(#3,#4,#5){\DashArrowArc(#1,#2)(#3,#4,#5){1}}
+\def\Ahgi(#1,#2)(#3,#4,#5){\DashArrowArcn(#1,#2)(#3,#5,#4){1}}
+\def\Lghi(#1,#2)(#3,#4){\DashArrowLine(#1,#2)(#3,#4){1}}
+\def\Lhgi(#1,#2)(#3,#4){\DashArrowLine(#3,#4)(#1,#2){1}}
+
+%% ghosts as dots (for lines too small for an arrow)
+\def\Ahh(#1,#2)(#3,#4,#5){\DashCArc(#1,#2)(#3,#4,#5){1}}
+\def\Lhh(#1,#2)(#3,#4){\DashLine(#1,#2)(#3,#4){1}}
+%% quarks as lines with arrow
+\def\Aqu(#1,#2)(#3,#4,#5){\ArrowArc(#1,#2)(#3,#4,#5)}
+\def\Auq(#1,#2)(#3,#4,#5){\ArrowArcn(#1,#2)(#3,#5,#4)}
+\def\Lqu(#1,#2)(#3,#4){\ArrowLine(#1,#2)(#3,#4)}
+\def\Luq(#1,#2)(#3,#4){\ArrowLine(#3,#4)(#1,#2)}
+\def\Aquu(#1,#2)(#3,#4,#5){\ArrowArc(#1,#2)(#3,#4,#5)}
+\def\Aqud(#1,#2)(#3,#4,#5){\ArrowArc(#1,#2)(#3,#4,#5)}
+\def\Auqu(#1,#2)(#3,#4,#5){\ArrowArcn(#1,#2)(#3,#5,#4)}
+\def\Auqd(#1,#2)(#3,#4,#5){\ArrowArcn(#1,#2)(#3,#5,#4)}
+\def\Lquu(#1,#2)(#3,#4){\ArrowLine(#1,#2)(#3,#4)}
+\def\Lqud(#1,#2)(#3,#4){\ArrowLine(#1,#2)(#3,#4)}
+\def\Luqu(#1,#2)(#3,#4){\ArrowLine(#3,#4)(#1,#2)}
+\def\Luqd(#1,#2)(#3,#4){\ArrowLine(#3,#4)(#1,#2)}
+%% leptons
+\def\Aqul(#1,#2)(#3,#4,#5){\ArrowArc(#1,#2)(#3,#4,#5)}
+\def\Aque(#1,#2)(#3,#4,#5){\ArrowArc(#1,#2)(#3,#4,#5)}
+\def\Auql(#1,#2)(#3,#4,#5){\ArrowArcn(#1,#2)(#3,#5,#4)}
+\def\Auqe(#1,#2)(#3,#4,#5){\ArrowArcn(#1,#2)(#3,#5,#4)}
+\def\Lqul(#1,#2)(#3,#4){\ArrowLine(#1,#2)(#3,#4)}
+\def\Lque(#1,#2)(#3,#4){\ArrowLine(#1,#2)(#3,#4)}
+\def\Luql(#1,#2)(#3,#4){\ArrowLine(#3,#4)(#1,#2)}
+\def\Luqe(#1,#2)(#3,#4){\ArrowLine(#3,#4)(#1,#2)}
+%% quarks as lines (for lines too small for an arrow)
+\def\Aqq(#1,#2)(#3,#4,#5){\CArc(#1,#2)(#3,#4,#5)}
+\def\Lqq(#1,#2)(#3,#4){\Line(#1,#2)(#3,#4)}
+%% adjoint scalars as lines
+\def\Asai(#1,#2)(#3,#4,#5){\CArc(#1,#2)(#3,#4,#5)}
+\def\Lsai(#1,#2)(#3,#4){\Line(#1,#2)(#3,#4)}
+\def\Asaii(#1,#2)(#3,#4,#5){\DashDoubleArc(#1,#2)(#3,#4,#5){1.5}{3}}
+\def\Lsaii(#1,#2)(#3,#4){\DashDoubleLine(#1,#2)(#3,#4){1.5}{3}}
+%% real scalars as lines
+\def\Asri(#1,#2)(#3,#4,#5){\DoubleArc(#1,#2)(#3,#4,#5){1.5}}
+\def\Lsri(#1,#2)(#3,#4){\DoubleLine(#1,#2)(#3,#4){1.5}}
+\def\Asrii(#1,#2)(#3,#4,#5){\DashArc(#1,#2)(#3,#4,#5){1.5}}
+\def\Lsrii(#1,#2)(#3,#4){\DashLine(#1,#2)(#3,#4){1.5}}
+\def\Aeri(#1,#2)(#3,#4,#5){\DoubleArc(#1,#2)(#3,#4,#5){1.5}}
+\def\Leri(#1,#2)(#3,#4){\DoubleLine(#1,#2)(#3,#4){1.5}}
+%\def\Lcs(#1,#2)(#3,#4){\Line(#3,#4)(#1,#2)}
+%% scalars as dashes
+%\def\Asc(#1,#2)(#3,#4,#5){\DashCArc(#1,#2)(#3,#4,#5){3}}
+%\def\Lsc(#1,#2)(#3,#4){\DashLine(#1,#2)(#3,#4){3}}
+%% complex (charged) scalars as dashes and double with arrow
+\def\Asci(#1,#2)(#3,#4,#5){\DashArrowArc(#1,#2)(#3,#4,#5){3}}
+\def\Acsi(#1,#2)(#3,#4,#5){\DashArrowArcn(#1,#2)(#3,#5,#4){3}}
+\def\Lsci(#1,#2)(#3,#4){\DashArrowLine(#1,#2)(#3,#4){3}}
+\def\Lcsi(#1,#2)(#3,#4){\DashArrowLine(#3,#4)(#1,#2){3}}
+\def\Ascii(#1,#2)(#3,#4,#5){\Arc[arrow,dash,dsize=2,double,
+  arrowscale=.7](#1,#2)(#3,#4,#5)}
+\def\Acsii(#1,#2)(#3,#4,#5){\Arc[arrow,dash,dsize=2,double,
+  flip,arrowscale=.7](#1,#2)(#3,#4,#5)}
+\def\Lscii(#1,#2)(#3,#4){\Line[arrow,double,dash,dsize=2,arrowscale=.7](#1,#2)(#3,#4)}
+\def\Lcsii(#1,#2)(#3,#4){\Line[arrow,double,dash,dsize=2,arrowscale=.7](#3,#4)(#1,#2)}
+%% wilson lines as double lines
+\def\Awe(#1,#2)(#3,#4,#5){\DoubleArc(#1,#2)(#3,#4,#5){1.5}}
+\def\Awl(#1,#2)(#3,#4,#5){\DoubleArc(#1,#2)(#3,#4,#5){1.5}}
+\def\Lwe(#1,#2)(#3,#4){\DoubleLine(#1,#2)(#3,#4){1.5}}
+\def\Lwl(#1,#2)(#3,#4){\DoubleLine(#1,#2)(#3,#4){1.5}}
+%% xx as dashes
+\def\Axx(#1,#2)(#3,#4,#5){\DashCArc(#1,#2)(#3,#4,#5){3}}
+\def\Lxx(#1,#2)(#3,#4){\DashLine(#1,#2)(#3,#4){3}}
+%% ge as dashes
+%\def\Age(#1,#2)(#3,#4,#5){\DashCArc(#1,#2)(#3,#4,#5){3}}
+%\def\Lge(#1,#2)(#3,#4){\DashLine(#1,#2)(#3,#4){3}}
+%% zz as fat lines
+\def\Azz(#1,#2)(#3,#4,#5){{\SetWidth{4.0}\CArc(#1,#2)(#3,#4,#5)\SetWidth{1.0}}}
+\def\Lzz(#1,#2)(#3,#4){{\SetWidth{4.0}\Line(#1,#2)(#3,#4)\SetWidth{1.0}}}
+
+%% rt-propagators
+\def\rrarc(#1,#2)(#3,#4,#5){
+  \DoubleLine(
+    #1 #3 4 sub #4 #5 #4 sub abs 2 div add cos mul add,
+    #2 #3 4 sub #4 #5 #4 sub abs 2 div add sin mul add
+    )(
+    #1 #3 4 add #4 #5 #4 sub abs 2 div add cos mul add,
+    #2 #3 4 add #4 #5 #4 sub abs 2 div add sin mul add
+  ){1.5}
+}
+\def\rrline(#1,#2)(#3,#4){
+%  \Vertex(#1 #3 #1 sub 2 div add,#2 #4 #2 sub 2 div add){2}
+  \DoubleLine(
+%    #1 #3 #1 sub abs 2 div add,
+%    #2 #4 #2 sub abs 2 div add
+    #1 #3 #1 sub 2 div add 4 #4 #2 sub #3 #1 sub atan 90 add cos mul add,
+    #2 #4 #2 sub 2 div add 4 #4 #2 sub #3 #1 sub atan 90 add sin mul add
+    )(
+    #1 #3 #1 sub 2 div add 4 #4 #2 sub #3 #1 sub atan 90 add cos mul sub,
+    #2 #4 #2 sub 2 div add 4 #4 #2 sub #3 #1 sub atan 90 add sin mul sub
+  ){1.5}
+}
+\def\rarc(#1,#2)(#3,#4,#5){%
+  {\SetArrowStroke{0.6}
+  \Arc[arrow,arrowpos=0.5,arrowscale=0.8](#1,#2)(#3,
+    #4 #5 #4 sub 2 div add 1 sub,
+    #4 #5 #4 sub 2 div add 1 add)
+}}
+\def\aarc(#1,#2)(#3,#4,#5){%
+  {\SetArrowStroke{0.6}
+  \Arc[arrow,arrowpos=0.5,flip,arrowscale=0.8](#1,#2)(#3,
+    #4 #5 #4 sub 2 div add 1 sub,
+    #4 #5 #4 sub 2 div add 1 add)
+}}
+
+\def\rline(#1,#2)(#3,#4){%
+  {\SetArrowStroke{0.6}
+  \Line[arrow,arrowpos=0.5,arrowscale=0.8](
+    #1 #3 #1 sub 2 div add 1 #4 #2 sub #3 #1 sub atan cos mul sub,
+    #2 #4 #2 sub 2 div add 1 #4 #2 sub #3 #1 sub atan sin mul sub
+    )(
+    #1 #3 #1 sub 2 div add 1 #4 #2 sub #3 #1 sub atan cos mul add,
+    #2 #4 #2 sub 2 div add 1 #4 #2 sub #3 #1 sub atan sin mul add
+)}}
+
+
+\def\Aqur(#1,#2)(#3,#4,#5){
+  \ArrowArc(#1,#2)(#3,#4,#5)
+  \rarc(#1,#2)(#3,#4,#5)
+}
+\def\Auqr(#1,#2)(#3,#4,#5){
+  \ArrowArcn(#1,#2)(#3,#5,#4)
+  \rarc(#1,#2)(#3,#4,#5)
+}
+\def\Lqur(#1,#2)(#3,#4){
+  \ArrowLine(#1,#2)(#3,#4)
+  \rline(#1,#2)(#3,#4)
+}
+\def\Luqr(#1,#2)(#3,#4){
+  \ArrowLine(#3,#4)(#1,#2)
+  \rline(#1,#2)(#3,#4)
+}
+\def\Aqua(#1,#2)(#3,#4,#5){
+  \ArrowArc(#1,#2)(#3,#4,#5)
+  \aarc(#1,#2)(#3,#4,#5)
+}
+\def\Auqa(#1,#2)(#3,#4,#5){
+  \ArrowArcn(#1,#2)(#3,#5,#4)
+  \aarc(#1,#2)(#3,#4,#5)
+}
+\def\Lqua(#1,#2)(#3,#4){
+  \ArrowLine(#1,#2)(#3,#4)
+  \rline(#3,#4)(#1,#2)
+}
+\def\Luqa(#1,#2)(#3,#4){
+  \ArrowLine(#3,#4)(#1,#2)
+  \rline(#3,#4)(#1,#2)
+}
+
+\def\Aqurr(#1,#2)(#3,#4,#5){
+  \rrarc(#1,#2)(#3,#4,#5)
+  \ArrowArc(#1,#2)(#3,#4,#5)
+}
+\def\Auqrr(#1,#2)(#3,#4,#5){
+  \rrarc(#1,#2)(#3,#4,#5)
+  \ArrowArcn(#1,#2)(#3,#5,#4)
+}
+\def\Lqurr(#1,#2)(#3,#4){
+  \rrline(#1,#2)(#3,#4)
+  \ArrowLine(#1,#2)(#3,#4)
+}
+\def\Luqrr(#1,#2)(#3,#4){
+  \rrline(#1,#2)(#3,#4)
+  \ArrowLine(#3,#4)(#1,#2)
+}
+
+\def\Aghr(#1,#2)(#3,#4,#5){
+  \DashArrowArc(#1,#2)(#3,#4,#5){1}
+  \rarc(#1,#2)(#3,#4,#5)
+}
+\def\Ahgr(#1,#2)(#3,#4,#5){
+  \DashArrowArcn(#1,#2)(#3,#5,#4){1}
+  \rarc(#1,#2)(#3,#4,#5)
+}
+\def\Lghr(#1,#2)(#3,#4){
+  \DashArrowLine(#1,#2)(#3,#4){1}
+  \rline(#1,#2)(#3,#4)
+}
+\def\Lhgr(#1,#2)(#3,#4){
+  \DashArrowLine(#3,#4)(#1,#2){1}
+  \rline(#1,#2)(#3,#4)
+}
+\def\Agha(#1,#2)(#3,#4,#5){
+  \DashArrowArc(#1,#2)(#3,#4,#5){1}
+  \aarc(#1,#2)(#3,#4,#5)
+}
+\def\Ahga(#1,#2)(#3,#4,#5){
+  \DashArrowArcn(#1,#2)(#3,#5,#4){1}
+  \aarc(#1,#2)(#3,#4,#5)
+}
+\def\Lgha(#1,#2)(#3,#4){
+  \DashArrowLine(#1,#2)(#3,#4){1}
+  \rline(#3,#4)(#1,#2)
+}
+\def\Lhga(#1,#2)(#3,#4){
+  \DashArrowLine(#3,#4)(#1,#2){1}
+  \rline(#3,#4)(#1,#2)
+}
+
+\def\Aghrr(#1,#2)(#3,#4,#5){
+  \rrarc(#1,#2)(#3,#4,#5)
+  \DashArrowArc(#1,#2)(#3,#4,#5){1}}
+\def\Ahgrr(#1,#2)(#3,#4,#5){
+  \rrarc(#1,#2)(#3,#4,#5)
+  \DashArrowArcn(#1,#2)(#3,#5,#4){1}}
+\def\Lghrr(#1,#2)(#3,#4){
+  \rrline(#1,#2)(#3,#4)
+  \DashArrowLine(#1,#2)(#3,#4){1}}
+\def\Lhgrr(#1,#2)(#3,#4){
+  \rrline(#1,#2)(#3,#4)
+  \DashArrowLine(#3,#4)(#1,#2){1}}
+
+\def\Aglr(#1,#2)(#3,#4,#5){
+  \PhotonArc(#1,#2)(#3,#4,#5){\Lwidth}
+  {2 pi mul #3 mul 360 div #4 #5 sub #4 #5 sub mul sqrt mul Ldensity mul}
+  \rarc(#1,#2)(#3,#4,#5)
+}
+\def\Lglr(#1,#2)(#3,#4){
+  \Photon(#1,#2)(#3,#4){\Lwidth}
+  {#1 #3 sub #1 #3 sub mul #2 #4 sub #2 #4 sub mul add sqrt Ldensity mul}
+  \rline(#1,#2)(#3,#4)
+}
+\def\Agla(#1,#2)(#3,#4,#5){
+  \PhotonArc(#1,#2)(#3,#4,#5){\Lwidth}
+  {2 pi mul #3 mul 360 div #4 #5 sub #4 #5 sub mul sqrt mul Ldensity mul}
+  \aarc(#1,#2)(#3,#4,#5)
+}
+\def\Lgla(#1,#2)(#3,#4){
+  \Photon(#1,#2)(#3,#4){\Lwidth}
+  {#1 #3 sub #1 #3 sub mul #2 #4 sub #2 #4 sub mul add sqrt Ldensity mul}
+  \rline(#3,#4)(#1,#2)
+}
+\def\Aglrr(#1,#2)(#3,#4,#5){
+  \rrarc(#1,#2)(#3,#4,#5)
+  \PhotonArc(#1,#2)(#3,#4,#5){\Lwidth}
+  {2 pi mul #3 mul 360 div #4 #5 sub #4 #5 sub mul sqrt mul Ldensity mul}}
+\def\Lglrr(#1,#2)(#3,#4){
+  \rrline(#1,#2)(#3,#4)
+  \Photon(#1,#2)(#3,#4){\Lwidth}
+  {#1 #3 sub #1 #3 sub mul #2 #4 sub #2 #4 sub mul add sqrt Ldensity mul}}
+
+
+
+%%%
+%%% new commands: small text insertions
+%%%
+\def\Textt(#1,#2,#3){\Text(#1,#2)[t]{{$\scriptstyle #3$}}}
+\def\Textb(#1,#2,#3){\Text(#1,#2)[b]{{$\scriptstyle #3$}}}
+\def\Textl(#1,#2,#3){\Text(#1,#2)[l]{{$\scriptstyle #3$}}}
+\def\Textr(#1,#2,#3){\Text(#1,#2)[r]{{$\scriptstyle #3$}}}
+\def\Texttl(#1,#2,#3){\Text(#1,#2)[tl]{{$\scriptstyle #3$}}}
+\def\Textbl(#1,#2,#3){\Text(#1,#2)[bl]{{$\scriptstyle #3$}}}
+\def\Texttr(#1,#2,#3){\Text(#1,#2)[tr]{{$\scriptstyle #3$}}}
+\def\Textbr(#1,#2,#3){\Text(#1,#2)[br]{{$\scriptstyle #3$}}}
+%%%
+%%% 2pt external lines
+%%%
+\def\fextB(#1,#2){%
+  \def\Lgex{#2}%
+  \def\Lgez{\Lge3}%
+  \def\Lgey{\Lge2}%
+  #1(0,15)(7.5,15)
+  \ifx\Lgex\Lgez
+    #2(45,15)(37.5,15)
+  \else
+    \ifx\Lgex\Lgey
+      #2(45,15)(37.5,15)
+    \else
+      #2(37.5,15)(45,15)
+    \fi
+  \fi}
+\def\fextT(#1,#2){
+  \def\Lgex{#2}%
+  \def\Lgez{\Lge3}%
+  \def\Lgey{\Lge2}%
+  #1(0,0)(22.5,0)
+  \ifx\Lgex\Lgez
+    #2(45,0)(22.5,0)
+  \else
+    \ifx\Lgex\Lgey
+      #2(45,0)(22.5,0)
+    \else
+      #2(22.5,0)(45,0)
+    \fi
+  \fi}
+%%%
+%%% tree level
+%%%
+\def\Vtxtt(#1){\picb{
+  #1(0,15)(45,15)}}
+\def\Vtxttn(#1,#2){\picb{
+  #1(0,15)(45,15)
+  \Textb(7.5,20,#2)}}
+\def\VtxvS(#1,#2,#3,#4,#5){\picc{
+  #1(40 45 cos 20 mul add,15 45 sin 20 mul add)(40,15)%
+  #2(20 135 cos 20 mul add,15 135 sin 20 mul add)(20,15)%
+  #3(20 225 cos 20 mul add,15 225 sin 20 mul add)(20,15)%
+  #4(40 315 cos 20 mul add,15 315 sin 20 mul add)(40,15)%
+  #5(20,15)(40,15)}}
+\def\VtxvSB(#1,#2,#3,#4,#5){\picc{
+  #1(40 45 cos 20 mul add,15 45 sin 20 mul add)(40,15)%
+  #2(20 135 cos 20 mul add,15 135 sin 20 mul add)(20,15)%
+  #3(20 225 cos 20 mul add,15 225 sin 20 mul add)(20,15)%
+  #4(40 315 cos 20 mul add,15 315 sin 20 mul add)(40,15)%
+  #5(20,15)(25,15)%
+  #5(35,15)(40,15)%
+  \GCirc(30,15){5}{0.75}}}
+\def\VtxvSSB(#1,#2,#3,#4,#5){\picc{
+  #1(40 45 cos 5 mul add,15 45 sin 5 mul add)(40,15)%
+  #1(40 45 cos 20 mul add,15 45 sin 20 mul add)(40 45 cos 15 mul add,15 45 sin 15 mul add)%
+  #2(20 135 cos 20 mul add,15 135 sin 20 mul add)(20,15)%
+  #3(20 225 cos 20 mul add,15 225 sin 20 mul add)(20,15)%
+  #4(40 315 cos 20 mul add,15 315 sin 20 mul add)(40,15)%
+  #5(20,15)(40,15)
+  \GCirc(40 45 cos 10 mul add,15 45 sin 10 mul add){5}{0.75}%
+}}
+\def\VtxvSt(#1,#2,#3,#4,#5,#6,#7,#8){\picc{
+  #1(40 45 cos 10 mul add,15 45 sin 10 mul add)(40,15)%
+  #2(40 45 cos 20 mul add,15 45 sin 20 mul add)(40 45 cos 10 mul add,15 45 sin 10 mul add)%
+  #3(20 135 cos 20 mul add,15 135 sin 20 mul add)(20,15)%
+  #4(20 225 cos 20 mul add,15 225 sin 20 mul add)(20,15)%
+  #5(40 315 cos 10 mul add,15 315 sin 10 mul add)(40,15)%
+  #6(40 315 cos 20 mul add,15 315 sin 20 mul add)(40 315 cos 10 mul add,15 315 sin 10 mul add)%
+  #7(20,15)(40,15)
+  #8(40 45 cos 10 mul add,15 45 sin 10 mul add)(40 315 cos 10 mul add,15 315 sin 10 mul add)%
+}}
+\def\VtxvVD(#1,#2,#3,#4){\picb{
+  #1%
+    (22.5 45 cos 22.5 mul add,15 45 sin 22.5 mul add)%
+     (22.5 45 cos 12.5 mul add,15 45 sin 12.5 mul add)%
+  #4%
+    (22.5 135 cos 22.5 mul add,15 134 sin 22.5 mul add)%
+    (22.5 135 cos 12.5 mul add,15 135 sin 12.5 mul add)%
+  #3%
+    (22.5 225 cos 22.5 mul add,15 225 sin 22.5 mul add)%
+    (22.5 225 cos 12.5 mul add,15 225 sin 12.5 mul add)%
+  #2%
+    (22.5 315 cos 22.5 mul add,15 315 sin 22.5 mul add)%
+    (22.5 315 cos 12.5 mul add,15 315 sin 12.5 mul add)%
+   \GCirc(22.5,15){12.5}{0.75}%
+}}
+%%%
+%%% Vertices
+%%%
+\def\Vtxo(#1){\picb{
+  #1(0,15)(22.5,15)%
+  \Vertex(22.5,15){3}}}
+\def\Vtxt(#1,#2){\picb{
+  #1(0,15)(22.5,15)%
+  #2(45,15)(22.5,15)%
+  \Vertex(22.5,15){3}}}
+\def\Vtxtn(#1,#2,#3){\picb{
+  #1(0,15)(22.5,15)%
+  #2(45,15)(22.5,15)%
+  \Vertex(22.5,15){3}%
+  \Textb(7.5,20,#3)}}
+\def\Vtxr(#1,#2,#3){\picb{
+  #1(22.5,37.5)(22.5,15)%
+  #2(22.5 30 cos 22.5 mul sub,15 30 sin 22.5 mul sub)(22.5,15)%
+  #3(22.5 30 cos 22.5 mul add,15 30 sin 22.5 mul sub)(22.5,15)%
+  \Vertex(22.5,15){3}}}
+\def\Vtxv(#1,#2,#3,#4){\picb{
+  #1(22.5 45 cos 22.5 mul add,15 45 sin 22.5 mul add)(22.5,15)%
+  #2(22.5 135 cos 22.5 mul add,15 135 sin 22.5 mul add)(22.5,15)%
+  #3(22.5 225 cos 22.5 mul add,15 225 sin 22.5 mul add)(22.5,15)%
+  #4(22.5 315 cos 22.5 mul add,15 315 sin 22.5 mul add)(22.5,15)%
+  \Vertex(22.5,15){3}}}
+\def\Vtxvn(#1,#2,#3,#4,#5,#6,#7,#8){\picb{
+  #1(22.5 45 cos 22.5 mul add,15 45 sin 22.5 mul add)(22.5,15)%
+  #2(22.5 135 cos 22.5 mul add,15 135 sin 22.5 mul add)(22.5,15)%
+  #3(22.5 225 cos 22.5 mul add,15 225 sin 22.5 mul add)(22.5,15)%
+  #4(22.5 315 cos 22.5 mul add,15 315 sin 22.5 mul add)(22.5,15)%
+  \Textb(45,22.5,#5)%
+  \Textb(0,22.5,#6)%
+  \Textb(0,0,#7)%
+  \Textb(45,0,#8)%
+  \Vertex(22.5,15){3}}}
+\def\Vtxf(#1,#2,#3,#4,#5){\picb{
+  #1(22.5 18 cos 22.5 mul add,15 18 sin 22.5 mul add)(22.5,15)%
+  #2(22.5,37.5)(22.5,15)%
+  #3(22.5 162 cos 22.5 mul add,15 162 sin 22.5 mul add)(22.5,15)%
+  #4(22.5 234 cos 22.5 mul add,15 234 sin 22.5 mul add)(22.5,15)%
+  #5(22.5 306 cos 22.5 mul add,15 306 sin 22.5 mul add)(22.5,15)%
+  \Vertex(22.5,15){3}}}
+\def\Vtxs(#1,#2,#3,#4,#5,#6){\picb{
+  #1(0,15)(22.5,15)%
+  #2(22.5 60 cos 22.5 mul add,15 60 sin 22.5 mul add)(22.5,15)%
+  #3(22.5 120 cos 22.5 mul add,15 120 sin 22.5 mul add)(22.5,15)%
+  #4(45,15)(22.5,15)%
+  #5(22.5 240 cos 22.5 mul add,15 240 sin 22.5 mul add)(22.5,15)%
+  #6(22.5 300 cos 22.5 mul add,15 300 sin 22.5 mul add)(22.5,15)%
+  \Vertex(22.5,15){3}}}
+%%%
+%%% Topologies
+%%%
+%%
+%% vacuum
+%%
+% 1loop
+\def\TopoVR(#1){\pic{
+  #1(15,15)(15,-90,270)}}
+\def\TopoVRn(#1){\pic{
+  #1(15,15)(15,-90,270)\Textt(15,28,1)}}
+\def\TopoVRo(#1){\;\pic{
+  #1(15,15)(15,-90,270)%
+  \GCirc(15,0){2}{0}
+  \;}}
+\def\TopoVRd(#1){\;\pic{
+  #1(15,15)(15,-90,270)%
+  \diamond(15,0)
+  \;}}
+\def\TopoVRoo(#1){\;\pic{
+  #1(15,15)(15,0,180)
+  #1(15,15)(15,180,360)%
+  \GCirc(0,15){3}{0}
+  \GCirc(30,15){3}{0}}\;}
+\def\TopoVRor(#1){\;\pic{
+  #1(15,15)(15,0,180)
+  #1(15,15)(15,180,360)%
+  \GCirc(0,15){3}{0}
+  \BBoxc(30,15)(6,6)}\;}
+\def\TopoVRoi(#1){\;\pic{
+  #1(15,15)(15,0,180)
+  #1(15,15)(15,180,360)%
+  \GCirc(0,15){3}{0}
+  \GBoxc(30,15)(6,6){0}}\;}
+\def\TopoVRooo(#1){\pic{
+  #1(15,15)(15,-30,90)
+  #1(15,15)(15,90,210)%
+  #1(15,15)(15,210,330)
+  \GCirc(15,30){3}{0}
+  \GCirc(2,7.5){3}{0}% 
+  \GCirc(28,7.5){3}{0}}}
+\def\TopoVRooT(#1,#2,#3){\;\pic{
+  #1(15,15)(15,0,180)
+  #1(15,15)(15,180,360)%
+  \GCirc(0,15){3}{0}
+  \GCirc(30,15){3}{0}
+  \Text(5,15)[l]{{$\scriptstyle #2$}}%
+  \Text(25,15)[r]{{$\scriptstyle #3$}}}\;}
+\def\TopoVRorT(#1,#2,#3){\;\pic{
+  #1(15,15)(15,0,180)
+  #1(15,15)(15,180,360)%
+  \GCirc(0,15){3}{0}
+  \BBoxc(30,15)(6,6)
+  \Text(5,15)[l]{{$\scriptstyle #2$}}%
+  \Text(25,15)[r]{{$\scriptstyle #3$}}}\;}
+\def\TopoVRoiT(#1,#2,#3){\;\pic{
+  #1(15,15)(15,0,180)
+  #1(15,15)(15,180,360)%
+  \GCirc(0,15){3}{0}
+  \GBoxc(30,15)(6,6){0}
+  \Text(5,15)[l]{{$\scriptstyle #2$}}%
+  \Text(25,15)[r]{{$\scriptstyle #3$}}}\;}
+\def\TopoVRoooT(#1,#2,#3,#4){\pic{
+  #1(15,15)(15,-30,90)
+  #1(15,15)(15,90,210)%
+  #1(15,15)(15,210,330)
+  \GCirc(15,30){3}{0}
+  \GCirc(2,7.5){3}{0}% 
+  \GCirc(28,7.5){3}{0}
+  \Text(15,25)[t]{{$\scriptstyle #2$}}%
+  \Text(6,9)[bl]{{$\scriptstyle #3$}}
+  \Text(24,9)[br]{{$\scriptstyle #4$}}}}
+% 2loop
+\def\ToptVS(#1,#2,#3){\pic{
+  #1(15,15)(15,0,180)
+  #2(15,15)(15,180,360)%
+  #3(30,15)(0,15)}}
+\def\ToptVSn(#1,#2,#3){\pic{
+  #1(15,15)(15,0,180)
+  #2(15,15)(15,180,360)%
+  #3(30,15)(0,15)
+  \Textb(15,32,1)\Textb(15,15,2)\Textb(15,2,3)}}
+\def\ToptVSTxt(#1,#2,#3,#4,#5){\;\pic{
+  #1(15,15)(15,0,180)%
+  #2(15,15)(15,180,360)
+  #3(30,15)(0,15)
+  \GCirc(0,15){3}{0}
+  \GCirc(30,15){3}{0}%
+  \Text(4,17)[bl]{{$\scriptstyle #4$}}
+  \Text(26,13)[tr]{{$\scriptstyle #5$}}}\;}
+\def\ToptVE(#1,#2){\picc{
+  #1(15,15)(15,0,360)
+  #2(45,15)(15,-180,180)}}
+% 2loop red
+\def\ToptVTpT(#1,#2,#3){\picc{%
+  #1(10,15)(10,0,360)%
+  #2(50,15)(10,-180,180)%
+  #3(20,15)(40,15)%
+  }}
+% 3loop
+\def\ToprVW(#1,#2,#3,#4,#5,#6){\pic{
+  #1(15,15)(15,90,210)%
+  #2(15,15)(15,210,330)%
+  #3(15,15)(15,-30,90)%
+  #4(15,15)(15,30)%
+  #5(15,15)(15 15 210 cos mul add,15 15 210 sin mul add)%
+  #6(15,15)(15 15 330 cos mul add,15 15 330 sin mul add)%
+  }}
+\def\ToprVWn(#1,#2,#3,#4,#5,#6){\pic{
+  #1(15,15)(15,90,210)%
+  #2(15,15)(15,210,330)%
+  #3(15,15)(15,-30,90)%
+  #4(15,15)(15,30)%
+  #5(15,15)(15 15 210 cos mul add,15 15 210 sin mul add)%
+  #6(15,15)(15 15 330 cos mul add,15 15 330 sin mul add)%
+  \Textbr(7,12,5)\Textr(14,22,6)}}
+\def\ToprVV(#1,#2,#3,#4,#5){\!\!\picb{
+  #1(22.5,15)(15,-90,45)%
+  #2(22.5,15)(15,45,135)%
+  #3(22.5,15)(15,135,270)%
+  #4(22.5,0)(22.5 45 cos 15 mul add,15 45 sin 15 mul add)%
+  #5(22.5,0)(22.5 45 cos 15 mul sub,15 45 sin 15 mul add)}}
+\def\ToprVVn(#1,#2,#3,#4,#5){\!\!\picb{
+  #2(26.25,15)(15,256,76)%
+  #3(30,30)(15,30)
+  #1(18.75,15)(15,104,284)
+  #4(15,30)(22.5,0)%
+  #5(30,30)(22.5,0)\Textl(5,15,1)\Textr(17,15,2)\Textl(28,15,3)%
+ \Textr(40,15,4)\Textt(22.5,28,5)}\!\!}
+%\def\ToprVB(#1,#2,#3,#4){\picb{
+%  #1(30,15)(15,-120,120)
+%  #2(30,15)(15,120,240)%
+%  #3(15,15)(15,60,300)
+%  #4(15,15)(15,-60,60)}}
+\def\ToprVB(#1,#2,#3,#4){\picb{
+  #1(22.5,15)(15,-90,90)
+  #2(37.5,15)(15 45 sin div,135,225)
+  #3(22.5,15)(15,90,270)
+  #4(7.5,15)(15 45 sin div,-45,45)%
+  }}
+\def\ToprVBn(#1,#2,#3,#4){\picb{
+  #1(30,15)(15,-120,120)
+  #2(30,15)(15,120,240)%
+  #3(15,15)(15,60,300)
+  #4(15,15)(15,-60,60)%
+  \Textl(1,15,1)\Textr(14,15,2)\Textl(31,15,3)\Textr(44,15,4)}}
+% new: 3loop red
+\def\ToprVBB(#1,#2,#3,#4,#5,#6){\picb{
+  #1(30,15)(15,-90,90)%
+  #2(30,30)(15,30)
+  #3(15,15)(15,90,270)
+  #4(15,0)(30,0)%
+  #5(30,30)(30,0)
+  #6(15,30)(15,0)}}
+\def\ToprVS(#1,#2,#3,#4){\!\!\picb{
+  #1(22.5,15)(15,0,180)
+  #2(22.5,15)(15,180,360)%
+  #3(22.5,30)(15 45 sin div,225,-45)
+  #4(22.5,0)(15 45 sin div,45,135)}\!\!}
+%\def\ToprVBT(#1,#2,#3,#4){\picc{
+%  #3(15,15)(15,0,360)%
+%  #4(30,15)(60,15)%
+%  #1(45,15)(15,0,180)
+%  #2(45,15)(15,180,360)
+%  }}
+%\def\ToprVTT(#1,#2,#3){\picc{
+%  #1(30 90 cos 15 mul add,15 90 sin 15 mul add)%
+%    (10,-90,270)%
+%  #2(30 210 cos 15 mul add,15 210 sin 15 mul add)%
+%    (10,-140,270)%
+%  #3(30 330 cos 15 mul add,15 330 sin 15 mul add)%
+%    (10,-30,330)%
+%  }}
+\def\ToprVBT(#1,#2,#3,#4,#5){\picc{
+  #3(15,15)(15,0,360)
+  #5(45,30)(45,0)
+  #1(45,15)(15,-90,90)
+  #2(45,15)(15,90,180)
+  #4(45,15)(15,180,270)}}
+\def\ToprVTT(#1,#2,#3,#4){\picc{%
+  #1(50,15)(10,-180,180)%
+  #2(30,15)(10,0,180)%
+  #3(10,15)(10,0,360)%
+  #4(30,15)(10,180,360)%
+  }}
+
+% 4loop
+\def\TopfVX(#1,#2,#3,#4,#5,#6,#7,#8,#9){\picb{
+  #1(15,15)(15,90,270)%
+  #2(30,15)(15,-90,90)
+  #4(30,30)(15,30)
+  #3(15,0)(30,0)
+  #6(15,0)(15,15)%
+  #5(15,15)(30,30)
+  #8(15,30)(20,25)
+  #8(25,20)(30,15)
+  #7(30,15)(30,0)%
+  #9(15,15)(30,15)}}
+\def\TopfVH(#1,#2,#3,#4,#5,#6,#7,#8,#9){\picb{
+  #1(15,15)(15,90,270)%
+  #2(30,15)(15,-90,90)
+  #4(30,30)(15,30)
+  #3(15,0)(30,0)
+  #6(15,0)(15,15)%
+  #5(15,15)(15,30)
+  #8(30,30)(30,15)
+  #7(30,15)(30,0)
+  #9(15,15)(30,15)}}
+\def\TopfVHnn(#1,#2,#3,#4,#5,#6,#7,#8,#9){\picb{
+  #1(15,15)(15,90,270)%
+  #2(30,15)(15,-90,90)
+  #4(30,30)(15,30)
+  #3(15,0)(30,0)
+  #6(15,0)(15,15)%
+  #5(15,15)(15,30)
+  #8(30,30)(30,15)
+  #7(30,15)(30,0)
+  #9(15,15)(30,15)%
+  \Textl(2,15,1)\Textr(43,15,2)\Textb(22.5,1,3)\Textt(22.5,29,4)%
+  \Textr(14,22.5,5)\Textr(14,7.5,6)\Textl(31,7.5,7)\Textl(31,22.5,8)%
+  \Textb(22.5,16,9)}}
+\def\TopfVW(#1,#2,#3,#4,#5,#6,#7,#8){\pic{
+  #1(15,15)(15,90,180)%
+  #3(15,15)(15,180,270)
+  #2(15,15)(15,270,360)
+  #4(15,15)(15,0,90)%
+  #5(15,15)(15,30)
+  #7(15,15)(15,0)
+  #6(0,15)(15,15)
+  #8(30,15)(15,15)}}
+\def\TopfVWnn(#1,#2,#3,#4,#5,#6,#7,#8){\pic{
+  #1(15,15)(15,90,180)%
+  #3(15,15)(15,180,270)
+  #2(15,15)(15,270,360)
+  #4(15,15)(15,0,90)%
+  #5(15,15)(15,30)
+  #7(15,15)(15,0)
+  #6(0,15)(15,15)
+  #8(30,15)(15,15)%
+  \Textbr(3,25,1)\Texttl(27,5,2)\Texttr(3,5,3)\Textbl(27,25,4)%
+  \Textr(14,22.5,5)\Textt(7.5,14,6)\Textl(16,7.5,7)\Textb(22.5,16,8)}}
+\def\TopfVV(#1,#2,#3,#4,#5,#6,#7,#8){\!\!\picb{
+  #2(26.25,15)(15,256,346)%
+  #3(26.25,15)(15,-14,76)
+  #4(30,30)(15,30)
+  #1(18.75,15)(15,104,284)%
+  #7(22.5,0)(15,30)
+  #6(30,30)(26.25,15)
+  #8(26.25,15)(22.5,0)%
+  #5(25.25,15)(39.8,11.4)}\!\!}
+\def\TopfVVnn(#1,#2,#3,#4,#5,#6,#7,#8){\!\!\picb{
+  #2(26.25,15)(15,256,346)%
+  #3(26.25,15)(15,-14,76)
+  #4(30,30)(15,30)
+  #1(18.75,15)(15,104,284)%
+  #7(22.5,0)(15,30)
+  #6(30,30)(26.25,15)
+  #8(26.25,15)(22.5,0)%
+  #5(25.25,15)(39.8,11.4)%
+  \Textl(5,15,1)\Textbl(40,25,2)\Textt(22.5,28,3)\Texttl(38,5,4)%
+  \Textr(17,15,6)\Textl(30,22.5,7)\Textb(35,15,8)\Textl(26,7.5,9)}\!\!}
+\def\TopfVB(#1,#2,#3,#4,#5,#6,#7){\picb{
+  #2(30,15)(15,-120,120)%
+  #6(30,15)(15,120,180)
+  #5(30,15)(15,180,240)
+  #1(15,15)(15,60,300)%
+  #4(15,15)(15,-60,0)
+  #3(15,15)(15,0,60)
+  #7(30,15)(15,15)}}
+\def\TopfVN(#1,#2,#3,#4,#5,#6,#7){\picb{
+  #1(15,15)(15,90,270)%
+  #2(30,15)(15,-90,90)
+  #4(30,30)(15,30)
+  #3(15,0)(30,0)%
+  #5(15,0)(15,30)
+  #6(30,30)(30,0)
+  #7(15,30)(30,0)}}
+\def\TopfVNnn(#1,#2,#3,#4,#5,#6,#7){\picb{
+  #1(15,15)(15,90,270)%
+  #2(30,15)(15,-90,90)
+  #4(30,30)(15,30)
+  #3(15,0)(30,0)%
+  #5(15,0)(15,30)
+  #6(30,30)(30,0)
+  #7(15,30)(30,0)%
+  \Textl(2,15,1)\Textr(43,15,2)\Textb(22.5,1,3)\Textt(22.5,29,4)%
+  \Textr(14,15,6)\Textl(31,15,8)\Textbl(22.5,16,9)}}
+\def\TopfVU(#1,#2,#3,#4,#5,#6,#7){\pic{
+  #3(15,15)(15,0,90)%
+  #2(15,15)(15,90,180)
+  #4(15,15)(15,180,270)
+  #1(15,15)(15,270,360)%
+  #6(0,15)(15,30)
+  #7(15,0)(0,15)
+  #5(30,15)(15,0)}}
+\def\TopfVUnn(#1,#2,#3,#4,#5,#6,#7){\pic{
+  #3(15,15)(15,0,90)%
+  #2(15,15)(15,90,180)
+  #4(15,15)(15,180,270)
+  #1(15,15)(15,270,360)%
+  #6(0,15)(15,30)
+  #7(15,0)(0,15)
+  #5(30,15)(15,0)%
+  \Textbr(4,26,1)\Texttl(26,4,2)\Texttr(4,4,4)\Texttl(7.5,22.5,6)%
+  \Textbr(22.5,7.5,7)\Textbl(7.5,7.5,9)\Textbl(26,26,3)}}
+\def\TopfVP(#1,#2,#3,#4,#5,#6){\pic{
+  #1(15,15)(15,90,210)%
+  #2(15,15)(15,210,330)
+  #3(15,15)(15,-30,90)
+  #4(2,7.5)(15,30)%
+  #6(28,7.5)(2,7.5)
+  #5(15,30)(28,7.5)}}
+\def\TopfVPnn(#1,#2,#3,#4,#5,#6){\pic{
+  #1(15,15)(15,90,210)%
+  #2(15,15)(15,210,330)
+  #3(15,15)(15,-30,90)
+  #4(2,7.5)(15,30)%
+  #6(28,7.5)(2,7.5)
+  #5(15,30)(28,7.5)%
+  \Textbr(2,24,1)\Textbl(28,24,2)\Textb(15,1,4)
+  \Texttl(10,20,6)\Texttr(20,20,7)\Textb(15,8.5,9)}}
+% 4loop red
+\def\TopfVMT(#1,#2,#3,#4,#5,#6,#7,#8){\picb{%
+  #1(15,15)(15,0,90)%
+  #2(15,15)(15,90,180)%
+  #3(15,15)(15,180,270)%
+  #4(15,15)(15,270,360)%
+  #5(15,30)(15,15)%
+  #6(0,15)(15,15)%
+  #7(15,15)(15,0)%
+  #8(37.5,15)(7.5,-180,180)}}
+\def\TopfVMB(#1,#2,#3,#4,#5,#6,#7,#8,#9){\picb{%
+  #1(15,30)(30,30)%
+  #2(15,15)(15,90,180)%
+  #3(15,15)(15,180,270)%
+  #4(15,0)(30,0)%
+  #5(15,30)(15,15)%
+  #6(0,15)(15,15)%
+  #7(15,15)(15,0)%
+  #8(30,30)(30,0)%
+  #9(30,15)(15,-90,90)}}
+\def\TopfVVTa(#1,#2,#3,#4,#5,#6,#7){\picb{%
+  #1(15,15)(15,0,60)%
+  #2(15,15)(15,60,180)%
+  #3(15,15)(15,180,300)%
+  #4(15,15)(15,300,360)%
+  #5(0,15)(22.5,28)%
+  #6(0,15)(22.5,2)%
+  #7(37.5,15)(7.5,-180,180)}}
+\def\TopfVVBa(#1,#2,#3,#4,#5,#6,#7,#8){\picb{%
+  #1(15,30)(30,30)%
+  #2(15,15)(15,90,180)%
+  #3(15,15)(15,180,270)%
+  #4(15,0)(30,0)%
+  #5(0,30)(15,-90,0)%
+  #6(0,0)(15,0,90)%
+  #7(30,30)(30,0)%
+  #8(30,15)(15,-90,90)}}
+\def\TopfVVTb(#1,#2,#3,#4,#5,#6,#7){\!\!\picc{%
+  #1(26.25,15)(15,-104,-5)%
+  #4(26.25,15)(15,-5,76)%
+  #2(15,30)(30,30)%
+  #3(18.75,15)(15,104,284)% 
+  #5(15,30)(22.5,0)%
+  #6(30,30)(22.5,0)%
+  #7(49,12)(7.5,-180,180)}\!\!}
+\def\TopfVVBb(#1,#2,#3,#4,#5,#6,#7,#8){\picc{%
+  #1(30,30)(45,30)%
+  #4(22.5,0)(45,0)%
+  #2(15,30)(30,30)%
+  #3(18.75,15)(15,104,284)% 
+  #5(15,30)(22.5,0)%
+  #6(30,30)(22.5,0)%
+  #7(45,30)(45,0)%
+  #8(45,15)(15,-90,90)}}
+\def\TopfVBT(#1,#2,#3,#4,#5,#6){\picc{%
+  #1(15,15)(15,60,300)%
+  #2(30,15)(15,120,240)%
+  #3(15,15)(15,-60,60)%
+  #4(30,15)(15,0,120)%
+  #5(30,15)(15,-120,0)%
+  #6(52.5,15)(7.5,-180,180)}}
+\def\TopfVBBa(#1,#2,#3,#4,#5,#6,#7){\picc{%
+  #1(15,15)(15,60,300)%
+  #2(30,15)(15,120,240)%
+  #3(15,15)(15,-60,60)%
+  #4(30,15)(15,30,120)%
+  #5(30,15)(15,-120,-30)%
+  #6(30,15)(15,-30,30)%
+  #7(45,15)(7.5,-100,100)}}
+%
+\def\TopfVBSB(#1,#2,#3,#4,#5,#6,#7,#8,#9){\picc{%
+  #1(15,15)(15,90,270)%
+  #2(15,30)(15,0)%
+  #3(30,30)(30,0)%
+  #4(45,30)(45,0)%
+  #5(45,15)(15,-90,90)%
+  #6(15,30)(30,30)%
+  #7(15,0)(30,0)%
+  #8(30,30)(45,30)%
+  #9(30,0)(45,0)}}
+\def\TopfVBST(#1,#2,#3,#4,#5,#6,#7,#8){\picc{%
+  #1(15,15)(15,90,270)%
+  #2(15,30)(15,0)%
+  #3(30,30)(30,0)%
+  #4(15,30)(30,30)%
+  #5(15,0)(30,0)%
+  #6(30,15)(15,0,90)%
+  #7(30,15)(15,-90,0)%
+  #8(52.5,15)(7.5,-180,180)}}
+\def\TopfVSS(#1,#2,#3,#4,#5,#6,#7,#8){\picc{%
+  #1(15,15)(15,90,270)%
+  #2(15,30)(15,0)%
+  #3(15,15)(15,0,90)%
+  #4(15,15)(15,-90,0)%
+  #5(45,15)(15,90,180)%
+  #6(45,15)(15,180,270)%
+  #7(45,30)(45,0)%
+  #8(45,15)(15,-90,90)}}
+\def\TopfVSTT(#1,#2,#3,#4,#5,#6,#7){\picc{%
+  #1(15,15)(15,90,270)%
+  #2(15,30)(15,0)%
+  #3(15,15)(15,0,90)%
+  #4(15,15)(15,-90,0)%
+  #5(37.5,15)(7.5,0,180)%
+  #6(37.5,15)(7.5,180,360)%
+  #7(52.5,15)(7.5,-180,180)}}
+\def\TopfVTST(#1,#2,#3,#4,#5,#6,#7){\picc{%
+  #1(7.5,15)(7.5,0,360)%
+  #2(30,15)(15,90,180)%
+  #3(30,15)(15,180,270)%
+  #4(30,30)(30,0)%
+  #5(30,15)(15,0,90)%
+  #6(30,15)(15,-90,0)%
+  #7(52.5,15)(7.5,-180,180)}}
+\def\TopfVTTTT(#1,#2,#3,#4,#5,#6){\picc{%
+  #1(7.5,15)(7.5,0,360)%
+  #2(22.5,15)(7.5,0,180)%
+  #3(22.5,15)(7.5,180,360)%
+  #4(37.5,15)(7.5,0,180)%
+  #5(37.5,15)(7.5,180,360)%
+  #6(52.5,15)(7.5,-180,180)}}
+\def\TopfVBBB(#1,#2,#3,#4,#5,#6,#7,#8,#9){\picb{%
+  #8(20,20)(20,0,60)%
+  #1(20,20)(20,60,120)%
+  #4(20,20)(20,120,180)%
+  #2(20,20)(20,180,240)%
+  #6(20,20)(20,240,300)%
+  #3(20,20)(20,300,360)%
+  #7(20,0)(10,15,165)%
+  #5(2.7,30)(10,-100,50)%
+  #9(37.3,30)(10,130,280)}}
+\def\TopfVBBT(#1,#2,#3,#4,#5,#6,#7,#8){\picb{%
+  #1(15,15)(15,0,60)%
+  #4(15,15)(15,60,120)%
+  #2(15,15)(15,120,240)%
+  #6(15,15)(15,240,300)%
+  #3(15,15)(15,300,360)%
+  #5(15,30)(10,195,345)%
+  #7(15,0)(10,15,165)%
+  #8(37.5,15)(7.5,-180,180)}}
+\def\TopfVBTT(#1,#2,#3,#4,#5,#6,#7){\picb{%
+  #1(20,15)(15,45,135)%
+  #2(20,15)(15,135,240)%
+  #5(20,15)(15,240,300)%
+  #3(20,15)(15,-60,45)%
+  #6(20,0)(10,15,165)%
+  #4(5,30)(5.5,-45,315)%
+  #7(35,30)(5.5,-135,225)}}
+\def\TopfVTTT(#1,#2,#3,#4,#5,#6){\picb{%
+  #1(20,15)(15,45,135)%
+  #2(20,15)(15,135,270)%
+  #3(20,15)(15,-90,45)%
+  #5(20,-5.5)(5.5,-270,90)%
+  #4(5,30)(5.5,-45,315)%
+  #6(35,30)(5.5,-135,225)}}
+% 5loop
+\def\TopvVS(#1,#2,#3,#4,#5,#6,#7,#8,#9){\picb{%
+  #1(15,15)(15,0,90)%
+  #2(15,15)(15,90,180)%
+  #3(15,15)(15,180,270)%
+  #4(15,15)(15,270,360)%
+  #5(15,0)(15,20)%
+  #6(0,0)(15,0,90)%
+  #7(30,0)(15,90,180)%
+  #8(15,25)(5,-90,90)%
+  #9(15,25)(5,90,270)}}
+\def\TopvVP(#1,#2,#3,#4,#5,#6,#7,#8){\pic{
+  #1(15,15)(15,90,180)%
+  #3(15,15)(15,180,270)
+  #2(15,15)(15,270,360)
+  #4(15,15)(15,0,90)%
+  #5(0,30)(15,-90,0)%
+  #6(30,30)(15,180,270)%
+  #7(0,0)(15,0,90)%
+  #8(0,30)(15,90,180)}}
+\def\TopvV(#1,#2,#3,#4,#5,#6,#7,#8,#9){\picb{%
+  #1(15,15)(15,0,90)%
+  #2(15,15)(15,90,180)%
+  #3(15,15)(15,180,270)%
+  #4(15,15)(15,270,360)%
+  #5(15,0)(15,20)%
+  #6(0,0)(15,0,90)%
+  #7(30,0)(15,90,180)%
+  #8(15,25)(5,-90,90)%
+  #9(15,25)(5,90,270)}}
+\def\TopvVW(#1,#2,#3,#4,#5,#6,#7,#8,#9){\pic{
+  #1(15,15)(15,54,126)%
+  #1(15,15)(15,126,198)%
+  #2(15,15)(15,198,270)
+  #3(15,15)(15,270,342)
+  #4(15,15)(15,-18,54)
+  #5(15,15)(15,30)
+  #6(15,15)(15,0)
+  #7(15,15)(15,0)
+  #8(15,15)(15,0)
+  #9(30,15)(15,15)}}
+% nloop
+\def\TopnVTT(#1,#2,#3,#4){\pic{
+  #1(15,15)(15,0,360)%
+  #2(15 120 cos 20 mul add,15 120 sin 20 mul add)(5,-90,270)%
+  #2(15 160 cos 20 mul add,15 160 sin 20 mul add)(5,-90,270)%
+  #2(15 200 cos 20 mul add,15 200 sin 20 mul add)(5,-90,270)%
+  #2(15 240 cos 20 mul add,15 240 sin 20 mul add)(5,-90,270)%
+  #2(15 280 cos 20 mul add,15 280 sin 20 mul add)(5,-90,270)%
+  #2(15 320 cos 20 mul add,15 320 sin 20 mul add)(5,-90,270)%
+  #2(15 360 cos 20 mul add,15 360 sin 20 mul add)(5,-90,270)%
+  \Vertex(15 40 cos 20 mul add,15 40 sin 20 mul add){1}%
+  \Vertex(15 60 cos 20 mul add,15 60 sin 20 mul add){1}%
+  \Vertex(15 80 cos 20 mul add,15 80 sin 20 mul add){1}%
+  \Textl(28,38,#3)%
+  \Textt(15,15,#4)%
+  }}
+\def\TopnVS(#1,#2,#3){\piccc{
+  #1(15,15)(15,90,270)%
+  \Textr(10,15,1)%
+  #3(15,0)(15,30)%
+  #3(15,30)(35,30)%
+  #3(35,0)(15,0)%
+  \Textr(30,15,2)%
+  \Textl(40,15,\dots)%
+  #3(35,0)(35,30)%
+  #3(35,30)(55,30)%
+  #3(55,0)(35,0)%
+  \Textl(75,15,N + 1)%
+  #3(55,0)(55,30)%
+  #2(55,15)(15,-90,90)%
+  }}
+%%
+%% 1pt
+% 1loop
+\def\TopoOT(#1,#2){\picb{
+  #1(0,15)(7.5,15)
+  #2(22.5,15)(15,-180,180)%
+  }}
+% 1loop higher
+\def\TopoOTx(fex(#1),#2,#3){\picb{
+  \def\fex(##1){
+    ##1(0,15)(7.5,15)
+  }\fex(#1)
+  #2(22.5,15)(15,-180,0)%
+  #3(22.5,15)(15,0,180)%
+  \Vertex(37.5,15){2}}}
+\def\TopoOTa(#1,#2){\picb{
+  #1(0,15)(7.5,15)%
+  #2(22.5,15)(15,-180,180)%
+  \Vertex(7.5,15){3}}}
+%%
+% 2loop
+\def\ToptOM(#1,#2,#3,#4,#5){\picb{
+  #1(0,15)(7.5,15)
+  #2(22.5,15)(15,180,270)%
+  #3(22.5,15)(15,-90,90)%
+  #4(22.5,15)(15,90,180)%
+  #5(22.5,0)(22.5,30)%
+  }}
+\def\ToptOE(#1,#2,#3,#4){\picb{
+  #1(0,15)(7.5,15)
+  #2(15,15)(7.5,0,180)
+  #3(15,15)(7.5,180,360)%
+  #4(30,15)(7.5,-180,180)}}
+\def\ToptOS(#1,#2,#3,#4){\picb{
+  #1(0,15)(7.5,15)
+  #2(22.5,15)(15,0,180)%
+  #3(22.5,15)(15,180,360)%
+  #4(37.5,15)(7.5,15)}}
+%%
+%% selfE
+%%
+% 1loop
+%\def\TopoS(#1){\picb{#1(0,15)(20,15) #1(45,15)(25,15)%
+% \GCirc(22.5,15){3}{0}}}
+\def\TopoSBo(#1,#2,#3){
+  \fextB(#1,#1)
+  #2(22.5,15)(15,0,180)%
+  #3(22.5,15)(15,180,360)}
+\def\TopoSB(#1,#2,#3){\picb{
+  \TopoSBo(#1,#2,#3)}}
+\def\TopoSBtxt(#1,#2,#3,#4,#5,#6,#7){\picb{
+  \TopoSBo(#1,#2,#3)%
+  \Textr(0,15,#4)%
+  \Textl(45,15,#5)%
+  \Textb(22.5,32,#6)
+  \Textt(22.5,-2,#7)
+  }}
+\def\TopoSBn(#1,#2,#3){\picb{
+  \TopoSBo(#1,#2,#3)
+  \Textt(22.5,28,1)
+  \Textb(22.5,2,2)
+  \Textb(3,17,p)}}
+\def\TopoST(#1,#2){\picb{
+  \fextT(#1,#1)
+  #2(22.5,15)(15,-90,270)}}
+\def\TopoSTtxt(#1,#2,#3,#4,#5){\picb{
+  \fextT(#1,#1)
+  #2(22.5,15)(15,-90,270)
+  \Textr(0,0,#3)%
+  \Textl(45,0,#4)%
+  \Textb(22.5,32,#5)%
+  }}
+\def\TopoSTxt(#1,#2){\picb{
+  #1(0,15)(20,15)%
+  #1(45,15)(25,15)%
+  \Vertex(22.5,15){3}
+  \Text(22.5,20)[b]{{$\scriptstyle #2$}}}}
+\def\TopoSTT(#1,#2,#3){\picb{
+  \fextT(#1,#1)%
+  #2(22.5,0)(22.5,10)%
+  #3(22.5,20)(10,-90,270)}}
+% 1loop higher
+\def\TopoSBx(#1,#2,#3){\picb{
+  \TopoSBo(#1,#2,#3)
+  \Vertex(22.5,30){3}}}
+\def\TopoSBa(#1,#2,#3){\picb{
+  \TopoSBo(#1,#2,#3)
+  \Vertex(7.5,15){3}}}
+\def\TopoSTx(#1,#2){\picb{
+  \fextT(#1,#1)
+  #2(22.5,15)(15,-90,270)
+  \Vertex(22.5,30){3}}}
+\def\TopoSTxtxt(#1,#2,#3,#4,#5,#6){\picb{
+  \fextT(#1,#1)
+  #2(22.5,15)(15,-90,270)
+  \Textr(0,0,#3)%
+  \Textl(45,0,#4)%
+  \Textbr(5,15,#5)%
+  \Textbl(40,15,#6)%
+  \Vertex(22.5,30){3}}}
+\def\TopoSTxo(#1,#2,#3){\picb{
+  \fextT(#1,#1)
+  #2(22.5,15)(15,-90,270)
+  #3(22.5,30)}}
+\def\TopoSTc(#1,#2){\picb{
+  \fextT(#1,#1)
+  #2(22.5,15)(15,-90,270)
+  \Vertex(22.5,0){3}}}
+\def\TopoSTco(#1,#2,#3){\picb{
+  \fextT(#1,#1)
+  #2(22.5,15)(15,-90,270)
+  \diamond(22.5,0)}}
+\def\TopoSBax(#1,#2,#3){\picb{
+  \TopoSBo(#1,#2,#3)%
+  \Vertex(22.5,30){3}%
+  \Vertex(7.5,15){3}}}
+\def\TopoSBxx(fex(#1),#2,#3,#4){\picb{
+  \def\fex(##1,##2){
+    \fextB(##2,##1)
+  }\fex(#1)
+  #2(22.5,15)(15,0,90)%
+  #3(22.5,15)(15,90,180)%
+  #4(22.5,15)(15,180,360)%
+  \Vertex(22.5,30){2}}}
+
+
+% 2loop irr
+%\def\ToptSi(#1){\picb{#1(0,15)(20,15) #1(45,15)(25,15)%
+% \GBoxc(22.5,15)(6,6){0}}}
+\def\ToptSiTxt(#1,#2){\picb{
+  #1(0,15)(20,15)%
+  #1(45,15)(25,15)%
+  \GBoxc(22.5,15)(6,6){0}
+  \Text(22.5,20)[b]{{$\scriptstyle #2$}}}}
+\def\ToptSMo(#1,#2,#3,#4,#5,#6){
+  \fextB(#1,#1)
+  #2(22.5,15)(15,0,90)
+  #3(22.5,15)(15,90,180)
+  #4(22.5,15)(15,180,270)%
+  #5(22.5,15)(15,270,360)
+  #6(22.5,30)(22.5,0)}
+\def\ToptSM(#1,#2,#3,#4,#5,#6){\picb{
+  \ToptSMo(#1,#2,#3,#4,#5,#6)}}
+\def\ToptSalo(#1,#2,#3,#4,#5){
+  \fextB(#1,#1)
+  #2(22.5,15)(15,0,90)
+  #3(22.5,15)(15,90,180)
+  #4(22.5,15)(15,180,360)%
+  #5(7.5,30)(15,270,360)}
+\def\ToptSal(#1,#2,#3,#4,#5){\picb{
+  \ToptSalo(#1,#2,#3,#4,#5)}}
+\def\ToptSar(#1,#2,#3,#4,#5){\picb{
+  \fextB(#1,#1)
+  #2(22.5,15)(15,0,90)
+  #3(22.5,15)(15,90,180)
+  #4(22.5,15)(15,180,360)%
+  #5(37.5,30)(15,180,270)}}
+\def\ToptSEo(#1,#2,#3,#4,#5){
+  \fextB(#1,#1)
+  #2(30,15)(7.5,0,180)
+  #3(15,15)(7.5,0,180)
+  #4(15,15)(7.5,180,360)%
+  #5(30,15)(7.5,180,360)}
+\def\ToptSE(#1,#2,#3,#4,#5){\picb{
+  \ToptSEo(#1,#2,#3,#4,#5)}}
+\def\ToptSSo(#1,#2,#3,#4){
+  \TopoSBo(#1,#2,#3)
+  #4(37.5,15)(7.5,15)}
+\def\ToptSS(#1,#2,#3,#4){\picb{
+  \ToptSSo(#1,#2,#3,#4)}}
+\def\ToptSBTlo(#1,#2,#3,#4){
+  \TopoSBo(#1,#3,#4)
+  #2(15,15)(7.5,-180,180)}
+\def\ToptSBTl(#1,#2,#3,#4){\picb{
+  \ToptSBTlo(#1,#2,#3,#4)}}
+\def\ToptSBTr(#1,#2,#3,#4){\picb{
+  \TopoSBo(#1,#3,#4)
+  #2(30,15)(7.5,0,360)}}
+\def\ToptSTMo(#1,#2,#3,#4){
+  \fextT(#1,#1)
+  #3(22.5,15)(15,-90,90)
+  #4(22.5,15)(15,90,-90)
+  #2(22.5,30)(22.5,0)}
+\def\ToptSTM(#1,#2,#3,#4){\picb{
+  \ToptSTMo(#1,#2,#3,#4)}}
+\def\ToptSTTTo(#1,#2,#3){
+  #1(0,15)(22.5,15)%
+  #1(45,15)(22.5,15)%
+  #2(22.5,22.5)(7.5,-90,270)
+  #3(22.5,7.5)(7.5,90,450)}
+\def\ToptSTTT(#1,#2,#3){\picb{
+  \ToptSTTTo(#1,#2,#3)}}
+
+%% 2loop red
+%\def\ToptSr(#1){\picb{#1(0,15)(20,15) #1(45,15)(25,15)%
+% \GBoxc(22.5,15)(6,6){1}}}
+\def\ToptSrTxt(#1,#2){\picb{
+  #1(0,15)(20,15) #1(45,15)(25,15)%
+  \GBoxc(22.5,15)(6,6){1}
+  \Text(22.5,20)[b]{{$\scriptstyle #2$}}}}
+\def\ToptSBBml(#1,#2,#3){\picb{
+  \fextB(#1,#1)
+  #2(22.5,15)(15,0,90)
+  #2(22.5,15)(15,90,180)
+  #3(22.5,15)(15,180,360)%
+  \GCirc(22.5,30){3}{0}}}
+\def\ToptSBBTxt(#1,#2,#3,#4){\picb{
+  \fextB(#1,#1)
+  #2(22.5,15)(15,0,90)
+  #2(22.5,15)(15,90,180)
+  #3(22.5,15)(15,180,360)%
+  \GCirc(22.5,30){3}{0}
+  \Text(22.5,25)[t]{{$\scriptstyle #4$}}}}
+\def\ToptSTBml(#1,#2){\picb{
+  \fextT(#1,#1)
+  #2(22.5,15)(15,-90,90)
+  #2(22.5,15)(15,90,270)
+  \GCirc(22.5,30){3}{0}}}
+\def\ToptSTBTxt(#1,#2,#3){\picb{
+  \fextT(#1,#1)
+  #2(22.5,15)(15,-90,90)
+  #2(22.5,15)(15,90,270)
+  \GCirc(22.5,30){3}{0}%
+  \Text(22.5,25)[t]{{$\scriptstyle #3$}}}}
+\def\ToptSBBo(#1,#2,#3,#4,#5,#6){
+  \fextB(#1,#1)%
+  #2(22.5,15)(15,0,60)%
+  #3(22.5,15)(15,120,180)%
+  #4(22.5,15)(15,180,360)%
+  #5(22.5,15 60 sin 15 mul add)(7.5,0,180)%
+  #6(22.5,15 60 sin 15 mul add)(7.5,180,360)%
+}
+\def\ToptSBB(#1,#2,#3,#4,#5,#6){\picb{
+  \ToptSBBo(#1,#2,#3,#4,#5,#6)}}
+\def\ToptSBTo(#1,#2,#3,#4,#5){
+  \fextB(#1,#1)
+  #2(22.5,15)(15,0,90)
+  #3(22.5,15)(15,90,180)
+  #4(22.5,15)(15,180,360)%
+  #5(22.5,37.5)(7.5,-90,270)}
+\def\ToptSBT(#1,#2,#3,#4,#5){\picb{
+  \ToptSBTo(#1,#2,#3,#4,#5)}}
+\def\ToptSTBo(#1,#2,#3,#4,#5){
+  \fextT(#1,#1)
+  #2(22.5,15)(15,-90,60)
+  #3(22.5,15)(15,120,270)%
+  #4(22.5,15 60 sin 15 mul add)(7.5,0,180)
+  #5(22.5,15 60 sin 15 mul add)(7.5,180,360)}
+\def\ToptSTB(#1,#2,#3,#4,#5){\picb{
+  \ToptSTBo(#1,#2,#3,#4,#5)}}
+\def\ToptSTTo(#1,#2,#3,#4){
+  \fextT(#1,#1)
+  #2(22.5,15)(15,-90,90)
+  #3(22.5,15)(15,90,270)
+  #4(22.5,37.5)(7.5,-90,270)}
+\def\ToptSTT(#1,#2,#3,#4){\picb{
+  \ToptSTTo(#1,#2,#3,#4)}}
+\def\ToptSBSB(#1,#2,#3,#4,#5,#6){\picb{
+  \fextB(#1,#1)%
+  #2(31.5,15)(6,0,180)%
+  #3(13.5,15)(6,0,180)%
+  #4(13.5,15)(6,180,360)%
+  #5(31.5,15)(6,180,360)
+  #6(19.5,15)(25.5,15)
+}}
+
+\def\VCirc(#1){\picb{
+  \GCirc(30,15){15}{0.75}
+  \Text(30,15)[c]{$\scriptstyle #1$}}}
+\def\SPropCircProp(#1,#2){\picb{
+  #1(0,15)(22.5,15)%
+  #1(22.5,15)(45,15)%
+%  #1(5,15)(15,15)%
+%  #1(25,15)(35,15)%
+  \GCirc(22.5,15){6}{0.75}
+  \Text(22.5,15)[c]{$\scriptstyle #2$}}}
+\def\SPropBoxProp(#1,#2){\!\pib{
+  #1(5,15)(15,15)%
+  #1(25,15)(35,15)%
+  \GBoxc(20,15)(9,9){0.75}
+  \Text(20,15)[c]{$\scriptstyle #2$}}}
+\def\VPropCircProp(#1,#2,#3,#4,#5){\picb{
+  #1(22.5 45 cos 22.5 mul add,15 45 sin 22.5 mul add)(22.5,15)%
+  #2(22.5 135 cos 22.5 mul add,15 135 sin 22.5 mul add)(22.5,15)%
+  #3(22.5 225 cos 22.5 mul add,15 225 sin 22.5 mul add)(22.5,15)%
+  #4(22.5 315 cos 22.5 mul add,15 315 sin 22.5 mul add)(22.5,15)%
+  \GCirc(22.5,15){6}{0.75}
+  \Text(22.5,15)[c]{$\scriptstyle #5$}}}
+\def\TopSi(#1,#2){\SPropCircProp(#1,#2)}
+\def\TopSr(#1,#2){\SPropBoxProp(#1,#2)}
+\def\TopVi(#1,#2,#3,#4,#5){\VPropCircProp(#1,#2,#3,#4,#5)}
+
+
+\def\diamond(#1,#2){\FilledRotatedBox(#1,#2)(5,5){45}{black}}
+\def\SPropCircVtxProp(#1,#2){\!\pib{
+  #1(5,15)(15,15)%
+  #1(25,15)(35,15)%
+  \GCirc(20,15){5}{0.75}%
+  \Vertex(20,20){2}%
+  \Text(20,15)[c]{$\scriptstyle #2$}}}
+\def\TopSih(#1,#2){\SPropCircVtxProp(#1,#2)}
+%%
+%% 2loop higher
+%%
+\def\ToptSMa(#1,#2,#3,#4,#5,#6){\picb{
+  \ToptSMo(#1,#2,#3,#4,#5,#6)
+  \Vertex(7.5,15){2}}}
+\def\ToptSMb(#1,#2,#3,#4,#5,#6){\picb{
+  \ToptSMo(#1,#2,#3,#4,#5,#6)
+  \Vertex(22.5,30){2}}}
+\def\ToptSMx(#1,#2,#3,#4,#5,#6){\picb{
+  \ToptSMo(#1,#2,#3,#4,#5,#6)
+  \Vertex(22.5 45 cos 15 mul sub,15 45 sin 15 mul add){2}}}
+\def\ToptSMy(#1,#2,#3,#4,#5,#6){\picb{
+  \ToptSMo(#1,#2,#3,#4,#5,#6)
+  \Vertex(22.5,15){2}}}
+\def\ToptSMz(#1,#2,#3,#4,#5,#6){\picb{
+  \ToptSMo(#1,#2,#3,#4,#5,#6)
+  \Vertex(22.5 45 cos 15 mul add,15 45 sin 15 mul add){2}}}
+\def\ToptSSc(#1,#2,#3,#4){\picb{
+  \ToptSSo(#1,#2,#3,#4)
+  \Vertex(7.5,15){2}}}
+\def\ToptSSx(#1,#2,#3,#4){\picb{
+  \ToptSSo(#1,#2,#3,#4)
+  \Vertex(22.5,15){2}}}
+\def\ToptSSy(#1,#2,#3,#4){\picb{
+  \ToptSSo(#1,#2,#3,#4)
+  \Vertex(22.5,30){2}}}
+\def\ToptSBBa(#1,#2,#3,#4,#5,#6){\picb{
+  \ToptSBBo(#1,#2,#3,#4,#5,#6)
+  \Vertex(7.5,15){2}}}
+\def\ToptSBBb(#1,#2,#3,#4,#5,#6){\picb{
+  \ToptSBBo(#1,#2,#3,#4,#5,#6)
+  \Vertex(22.5 60 cos 15 mul sub,15 60 sin 15 mul add){2}}}
+\def\ToptSBBw(#1,#2,#3,#4,#5,#6){\picb{
+  \ToptSBBo(#1,#2,#3,#4,#5,#6)
+  \Vertex(22.5,22.5 60 sin 15 mul add){2}}}
+\def\ToptSBBx(#1,#2,#3,#4,#5,#6){\picb{
+  \ToptSBBo(#1,#2,#3,#4,#5,#6)
+  \Vertex(22.5 30 cos 15 mul sub,15 30 sin 15 mul add){2}}}
+\def\ToptSBBy(#1,#2,#3,#4,#5,#6){\picb{
+  \ToptSBBo(#1,#2,#3,#4,#5,#6)
+  \Vertex(22.5,0){2}}}
+\def\ToptSBBz(#1,#2,#3,#4,#5,#6){\picb{
+  \ToptSBBo(#1,#2,#3,#4,#5,#6)
+  \Vertex(22.5,7.5 60 sin 15 mul add){2}}}
+\def\ToptSAla(#1,#2,#3,#4,#5){\picb{
+  \ToptSalo(#1,#2,#3,#4,#5)
+  \Vertex(22.5,30){2}}}
+\def\ToptSAlb(#1,#2,#3,#4,#5){\picb{
+  \ToptSalo(#1,#2,#3,#4,#5)
+  \Vertex(37.5,15){2}}}
+\def\ToptSAlc(#1,#2,#3,#4,#5){\picb{
+  \ToptSalo(#1,#2,#3,#4,#5)
+  \Vertex(7.5,15){2}}}
+\def\ToptSAlw(#1,#2,#3,#4,#5){\picb{
+  \ToptSalo(#1,#2,#3,#4,#5)
+  \Vertex(22.5 45 cos 7 mul sub,15 45 sin 7 mul add){2}}}
+\def\ToptSAlx(#1,#2,#3,#4,#5){\picb{
+  \ToptSalo(#1,#2,#3,#4,#5)
+  \Vertex(22.5 45 cos 15 mul sub,15 45 sin 15 mul add){2}}}
+\def\ToptSAly(#1,#2,#3,#4,#5){\picb{
+  \ToptSalo(#1,#2,#3,#4,#5)
+  \Vertex(22.5,0){2}}}
+\def\ToptSAlz(#1,#2,#3,#4,#5){\picb{
+  \ToptSalo(#1,#2,#3,#4,#5)
+  \Vertex(22.5 45 cos 15 mul add,15 45 sin 15 mul add){2}}}
+\def\ToptSTBa(#1,#2,#3,#4,#5){\picb{
+  \ToptSTBo(#1,#2,#3,#4,#5)
+  \Vertex(22.5 60 cos 15 mul sub,15 60 sin 15 mul add){2}}}
+\def\ToptSTBc(#1,#2,#3,#4,#5){\picb{
+  \ToptSTBo(#1,#2,#3,#4,#5)
+  \Vertex(22.5,0){2}}}
+\def\ToptSTBx(#1,#2,#3,#4,#5){\picb{
+  \ToptSTBo(#1,#2,#3,#4,#5)
+  \Vertex(7.5,15){2}}}
+\def\ToptSTBy(#1,#2,#3,#4,#5){\picb{
+  \ToptSTBo(#1,#2,#3,#4,#5)
+  \Vertex(22.5,7.5 60 sin 15 mul add){2}}}
+\def\ToptSTBz(#1,#2,#3,#4,#5){\picb{
+  \ToptSTBo(#1,#2,#3,#4,#5)
+  \Vertex(22.5,22.5 60 sin 15 mul add){2}}}
+\def\ToptSBTx(#1,#2,#3,#4,#5){\picb{
+  \ToptSBTo(#1,#2,#3,#4,#5)
+  \Vertex(22.5 45 cos 15 mul sub,15 45 sin 15 mul add){2}}}
+\def\ToptSBTy(#1,#2,#3,#4,#5){\picb{
+  \ToptSBTo(#1,#2,#3,#4,#5)
+  \Vertex(22.5,0){2}}}
+\def\ToptSBTz(#1,#2,#3,#4,#5){\picb{
+  \ToptSBTo(#1,#2,#3,#4,#5)
+  \Vertex(22.5,45){2}}}
+\def\ToptSBTa(#1,#2,#3,#4,#5){\picb{
+  \ToptSBTo(#1,#2,#3,#4,#5)
+  \Vertex(7.5,15){2}}}
+\def\ToptSBTc(#1,#2,#3,#4,#5){\picb{
+  \ToptSBTo(#1,#2,#3,#4,#5)
+  \Vertex(22.5,30){2}}}
+\def\ToptSTTx(#1,#2,#3,#4){\picb{
+  \ToptSTTo(#1,#2,#3,#4)
+  \Vertex(7.5,15){2}}}
+\def\ToptSTTz(#1,#2,#3,#4){\picb{
+  \ToptSTTo(#1,#2,#3,#4)
+  \Vertex(22.5,45){2}}}
+\def\ToptSTTa(#1,#2,#3,#4){\picb{
+  \ToptSTTo(#1,#2,#3,#4)
+  \Vertex(22.5,0){2}}}
+\def\ToptSTTc(#1,#2,#3,#4){\picb{
+  \ToptSTTo(#1,#2,#3,#4)
+  \Vertex(22.5,30){2}}}
+\def\ToptSEx(#1,#2,#3,#4,#5){\picb{
+  \ToptSEo(#1,#2,#3,#4,#5)
+  \Vertex(15,22.5){2}}}
+\def\ToptSEa(#1,#2,#3,#4,#5){\picb{
+  \ToptSEo(#1,#2,#3,#4,#5)
+  \Vertex(7.5,15){2}}} 
+\def\ToptSEc(#1,#2,#3,#4,#5){\picb{
+  \ToptSEo(#1,#2,#3,#4,#5)
+  \Vertex(22.5,15){2}}}
+\def\ToptSBTla(#1,#2,#3,#4){\picb{
+  \ToptSBTlo(#1,#2,#3,#4)
+  \Vertex(7.5,15){2}}}
+\def\ToptSTMa(#1,#2,#3,#4){\picb{
+  \ToptSTMo(#1,#2,#3,#4)
+  \Vertex(22.5,0){2}}}
+\def\ToptSTTTa(#1,#2,#3){\picb{
+  \ToptSTTTo(#1,#2,#3)
+  \Vertex(22.5,15){2}}}
+%%%
+%%% 3pt fcts
+%%%
+\def\TopoT(#1,#2,#3){\!\pic{
+  #1(15,30)(15,15)
+  #2(2,7.5)(15,15)%
+  #3(28,7.5)(15,15)
+  \GCirc(15,15){3}{0}}\!}
+\def\TopoTTxt(#1,#2,#3,#4){\!\pic{
+  #1(15,30)(15,15)
+  #2(2,7.5)(15,15)%
+  #3(28,7.5)(15,15)
+  \GCirc(15,15){3}{0}%
+  \Text(19,17)[bl]{{$\scriptstyle #4$}}}\!}
+\def\TopoTS(#1,#2,#3,#4,#5,#6){\!\pic{
+  #1(15,30)(15,23)
+  #2(2,7.5)(8,11)%
+  #3(28,7.5)(22,11)
+  #6(15,15)(8,210,330)
+  #5(15,15)(8,90,210)%
+  #4(15,15)(8,-30,90)}\!}
+\def\TopoTAo(#1,#2,#3,#4,#5){\!\pic{
+  #1(15,30)(15,23)
+  #2(2,7.5)(15,7)%
+  #3(28,7.5)(15,7)
+  #4(15,15)(8,-90,90)
+  #5(15,15)(8,90,270)}\!}
+\def\TopoTAr(#1,#2,#3,#4,#5){\!\pic{
+  #1(15,30)(8,19)
+  #2(2,7.5)(8,19)%
+  #3(28,7.5)(22,11)
+  #4(15,15)(8,-45,135)
+  #5(15,15)(8,135,315)}\!}
+\def\TopoTAl(#1,#2,#3,#4,#5){\!\pic{
+  #1(15,30)(23,19)
+  #2(2,7.5)(8,11)%
+  #3(28,7.5)(23,19)
+  #4(15,15)(8,45,225)
+  #5(15,15)(8,-135,45)}\!}
+%%
+%% 3loop red
+%%
+
+%%
+%% YM
+%%
+\def\ToprSV(#1,#2,#3,#4,#5,#6,#7,#8){\picb{
+  \fextB(#1,#1)%
+  #2(22.5,15)(15,0,30)%
+  #3(22.5,15)(15,30,150)
+  #4(22.5,15)(15,150,180)%
+  #5(22.5,15)(15,180,270)%
+  #6(22.5,15)(15,-90,0)%
+  #7(-2.5,0)(25,0,60)%
+  #8(47.5,0)(25,120,180)%
+% #7(22.5,0)(22.5 45 cos 15 mul add,15 45 sin 15 mul add)%
+%  #8(22.5,0)(22.5 45 cos 15 mul sub,15 45 sin 15 mul add)
+}}
+\def\ToprSY(#1,#2,#3,#4,#5,#6,#7,#8,#9){\picb{
+  \fextB(#1,#1)%
+  #2(22.5,15)(15,0,90)
+  #3(22.5,15)(15,90,180)
+  #4(22.5,15)(15,180,225)%
+  #5(22.5,15)(15,225,315)
+  #6(22.5,15)(15,-45,0)
+  #7(22.5,15)(22.5,30)%
+  #8(22.5,15)(22.5 45 cos 15 mul sub,15 45 sin 15 mul sub)%
+  #9(22.5,15)(22.5 45 cos 15 mul add,15 45 sin 15 mul sub)}}
+\def\ToprSX(#1,#2,#3,#4,#5,#6,#7,#8,#9){\picb{
+  \fextB(#1,#1)%
+  #2(22.5,15)(15,0,45)
+  #3(22.5,15)(15,45,135)
+  #4(22.5,15)(15,135,180)%
+  #5(22.5,15)(15,180,225)
+  #6(22.5,15)(15,225,315)
+  #7(22.5,15)(15,-45,0)%
+  #8(22.5 45 cos 15 mul add,15 45 sin 15 mul add)%
+    (22.5 45 cos 15 mul sub,15 45 sin 15 mul sub)
+  #9(22.5 45 cos 15 mul sub,15 45 sin 15 mul add)(20,17.5)
+  #9(25,12.5)(22.5 45 cos 15 mul add,15 45 sin 15 mul sub)}}
+\def\ToprSSB(#1,#2,#3,#4,#5,#6,#7){\picb{
+  \TopoSBo(#1,#2,#3)
+  #4(37.5,15)(27.5,15)%
+  #5(22.5,15)(5,0,180)
+  #6(22.5,15)(5,180,0)
+  #7(17.5,15)(7.5,15)}}
+\def\ToprSST(#1,#2,#3,#4,#5,#6){\picb{
+  \ToptSBTo(#1,#2,#3,#4,#6)
+  #5(7.5,15)(37.5,15)}}
+\def\ToprSSM(#1,#2,#3,#4,#5,#6,#7){\picb{
+  \fextB(#1,#1)%
+  #2(22.5,15)(15,0,90)
+  #3(22.5,15)(15,90,180)
+  #4(22.5,15)(15,180,0)
+  #5(37.5,15)(22.5,15)%
+  #6(22.5,30)(22.5,15)
+  #7(7.5,15)(22.5,15)}}
+\def\ToprSTS(#1,#2,#3,#4,#5,#6){\picb{
+  \fextT(#1,#1)%
+  #2(22.5,15)(15,-90,0)
+  #3(22.5,15)(15,0,180)
+  #4(22.5,15)(15,180,270)%
+  #5(22.5,0)(15 45 sin div,45,135)
+  #6(22.5,30)(15 45 sin div,-135,-45)}}
+\def\ToprSTE(#1,#2,#3,#4,#5,#6,#7){\picb{
+  \fextT(#1,#1)%
+  #2(22.5,15)(15,-90,0)
+  #3(22.5,15)(15,0,90)
+  #4(37.5,30)(15,180,270)%
+  #5(22.5,15)(15,90,180)
+  #6(7.5,30)(15,270,360)
+  #7(22.5,15)(15,180,270)}}
+\def\ToprSTSar(#1,#2,#3,#4,#5,#6,#7){\picb{
+  \fextT(#1,#1)%
+  #2(22.5,15)(15,-90,0)
+  #3(22.5,15)(15,0,90)
+  #4(22.5,15)(15,90,180)
+  #5(22.5,15)(15,180,270)%
+  #6(37.5,30)(15,180,270)
+  #7(7.5,15)(37.5,15)}}
+\def\ToprSTTS(#1,#2,#3,#4,#5,#6,#7){\picb{
+  \fextT(#1,#1)%
+  #2(22.5,15)(15,-90,90)
+  #3(22.5,15)(15,90,270)%
+  #4(22.5,37.5)(7.5,-90,0)
+  #5(22.5,37.5)(7.5,0,180)
+  #6(22.5,37.5)(7.5,180,270)%
+  #7(15,37.5)(30,37.5)}}
+\def\ToprSTTT(#1,#2,#3,#4,#5,#6){\picb{
+  \fextT(#1,#1)%
+  #2(22.5,7.5)(7.5,-90,90)
+  #3(22.5,22.5)(7.5,-90,90)
+  #4(22.5,22.5)(7.5,90,270)%
+  #5(22.5,7.5)(7.5,90,270)
+  #6(22.5,37.5)(7.5,-90,270)}}
+\def\ToprSTTTlr(#1,#2,#3,#4,#5,#6){\picb{
+  \fextT(#1,#1)%
+  #2(22.5,15)(15,-90,45)
+  #3(22.5,15)(15,45,135)
+  #4(22.5,15)(15,135,270)%
+  #5(22.5 45 cos 20.5 mul add,15 45 sin 20.5 mul add)(5.5,-135,225)%
+  #6(22.5 45 cos 20.5 mul sub,15 45 sin 20.5 mul add)(5.5,-45,315)}}
+\def\ToprSTMM(#1,#2,#3,#4,#5,#6,#7,#8){\picb{
+  \fextT(#1,#1)%
+  #2(22.5,15)(15,-90,-30)
+  #3(22.5,15)(15,-30,30)
+  #4(22.5,15)(15,30,150)%
+  #5(22.5,15)(15,150,210)
+  #6(22.5,15)(15,210,270)%
+  #7(22.5 30 cos 15 mul add,15 30 sin 15 mul sub)%
+    (22.5 30 cos 15 mul sub,15 30 sin 15 mul sub)%
+  #8(22.5 30 cos 15 mul add,15 30 sin 15 mul add)%
+    (22.5 30 cos 15 mul sub,15 30 sin 15 mul add)}}
+\def\ToprSTBBlr(#1,#2,#3,#4,#5,#6,#7,#8){\picb{
+  \fextT(#1,#1)%
+  #2(22.5,15)(15,-90,-45)
+  #3(22.5,15)(15,-45,45)
+  #7(22.5 15 2 sqrt mul sub,15)(15,-45,45)%
+  #5(22.5,15)(15,45,135)
+  #6(22.5,15)(15,135,225)
+  #4(22.5 15 2 sqrt mul add,15)(15,135,225)%
+  #8(22.5,15)(15,225,270)}}
+\def\ToprSTBTlr(#1,#2,#3,#4,#5,#6,#7){\picb{
+  \fextT(#1,#1)%
+  #2(22.5,15)(15,-90,0)
+  #3(22.5,15)(15,0,90)
+  #4(37.5,30)(15,180,270)%
+  #5(22.5,15)(15,90,120)
+  #6(22.5,15)(15,120,270)
+  #7(22.5 45 cos 20.5 mul sub,15 45 sin 20.5 mul add)(5.5,-45,315)}}
+\def\ToprSTBT(#1,#2,#3,#4,#5,#6,#7){\picb{
+  \fextT(#1,#1)%
+  #2(22.5,15)(15,-90,60)
+  #3(22.5,15 60 sin 15 mul add)(7.5,0,90)
+  #4(22.5,15 60 sin 15 mul add)(7.5,90,180)%
+  #5(22.5,15 60 sin 15 mul add)(7.5,180,360)
+  #6(22.5,15)(15,120,270)
+  #7(22.5,11.5 15 60 sin 15 mul add add)(4,-90,270)}}
+\def\ToprSTSM(#1,#2,#3,#4,#5,#6,#7,#8){\picb{
+  \fextT(#1,#1)%
+  #2(22.5,15)(15,-90,0)
+  #3(22.5,15)(15,0,90)
+  #4(22.5,15)(15,90,180)
+  #5(22.5,15)(15,180,270)%
+  #6(37.5,15)(22.5,15)
+  #7(22.5,30)(22.5,15)
+  #8(7.5,15)(22.5,15)}}
+\def\ToprSTV(#1,#2,#3,#4,#5,#6){\picb{
+  \fextT(#1,#1)%
+  #2(22.5,15)(15,-90,45)
+  #3(22.5,15)(15,45,135)
+  #4(22.5,15)(15,135,270)%
+  #5(22.5,0)(22.5 45 cos 15 mul add,15 45 sin 15 mul add)%
+  #6(22.5,0)(22.5 45 cos 15 mul sub,15 45 sin 15 mul add)}}
+\def\ToprSM(#1,#2,#3,#4,#5,#6,#7){\picb{
+  \fextB(#1,#1)%
+  #2(22.5,15)(15,0,90)
+  #3(22.5,15)(15,90,180)
+  #4(22.5,15)(15,180,270)%
+  #5(22.5,15)(15,270,360)
+  #6(37.5,15)(15 45 sin div,135,225)
+  #7(7.5,15)(15 45 sin div,-45,45)}}
+\def\ToprSMB(#1,#2,#3,#4,#5,#6,#7,#8,#9){\picb{
+  \fextB(#1,#1)%
+  #2(22.5,15)(15,0,90)
+  #3(22.5,15)(15,90,180)
+  #4(22.5,15)(15,180,270)%
+  #5(22.5,15)(15,270,360)#6(22.5,30)(22.5,20)%
+  #7(22.5,15)(5,90,-90)
+  #8(22.5,15)(5,-90,90)
+  #9(22.5,10)(22.5,0)}}
+\def\ToprSMb(#1,#2,#3,#4,#5,#6,#7,#8){\picb{
+  \fextB(#1,#1)%
+  #2(22.5,15)(15,0,90)
+  #3(22.5,15)(15,90,180)
+  #4(22.5,15)(15,180,270)
+  #5(22.5,15)(15,270,360)%
+  #6(22.5,22.5)(7.5,90,270)
+  #7(22.5,22.5)(7.5,-90,90)
+  #8(22.5,15)(22.5,0)}}
+\def\ToprSMBl(#1,#2,#3,#4,#5,#6,#7,#8,#9){\picb{
+  \fextB(#1,#1)%
+  #2(22.5,15)(15,0,90)
+  #3(22.5,15)(15,90,112.5)%
+  #4(22.5 45 cos 15 mul sub,15 45 sin 15 mul add)(15 22.5 sin mul,30,240)%
+  #5(22.5 45 cos 15 mul sub,15 45 sin 15 mul add)(15 22.5 sin mul,-120,30)%
+  #6(22.5,15)(15,157.5,180)
+  #7(22.5,15)(15,180,270)
+  #8(22.5,15)(15,-90,0)
+  #9(22.5,30)(22.5,0)}}
+\def\ToprSMBr(#1,#2,#3,#4,#5,#6,#7,#8,#9){\picb{
+  \fextB(#1,#1)%
+  #2(22.5,15)(15,0,22.5)%
+  #3(22.5 45 cos 15 mul add,15 45 sin 15 mul add)(15 22.5 sin mul,150,300)%
+  #4(22.5 45 cos 15 mul add,15 45 sin 15 mul add)(15 22.5 sin mul,-60,150)%
+  #5(22.5,15)(15,67.5,90)
+  #6(22.5,15)(15,90,180)
+  #7(22.5,15)(15,180,270)%
+  #8(22.5,15)(15,-90,0)
+  #9(22.5,30)(22.5,0)}}
+\def\ToprSMbl(#1,#2,#3,#4,#5,#6,#7,#8){\picb{
+  \fextB(#1,#1)%
+  #2(22.5,15)(15,0,90)
+  #3(22.5,15)(15,90,135)%
+  #4(22.5 22.5 cos 15 mul sub,15 22.5 sin 15 mul add)(15 22.5 sin mul,55,260)%
+  #5(22.5 22.5 cos 15 mul sub,15 22.5 sin 15 mul add)(15 22.5 sin mul,-100,55)%
+  #6(22.5,15)(15,180,270)
+  #7(22.5,15)(15,-90,0)
+  #8(22.5,30)(22.5,0)}}
+\def\ToprSMbr(#1,#2,#3,#4,#5,#6,#7,#8){\picb{
+  \fextB(#1,#1)%
+  #2(22.5 22.5 cos 15 mul add,15 22.5 sin 15 mul add)(15 22.5 sin mul,125,280)%
+  #3(22.5 22.5 cos 15 mul add,15 22.5 sin 15 mul add)(15 22.5 sin mul,-80,125)%
+  #4(22.5,15)(15,45,90)
+  #5(22.5,15)(15,90,180)
+  #6(22.5,15)(15,180,270)%
+  #7(22.5,15)(15,-90,0)
+  #8(22.5,30)(22.5,0)}}
+\def\ToprSMbul(#1,#2,#3,#4,#5,#6,#7,#8){\picb{
+  \fextB(#1,#1)%
+  #2(22.5,15)(15,0,60)%
+  #3(22.5,15 60 sin 15 mul add)(7.5,0,180)
+  #4(22.5,15 60 sin 15 mul add)(7.5,180,0)
+  #5(22.5,15)(15,120,180)
+  #6(22.5,15)(15,180,300)
+  #7(22.5,15)(15,-60,0)%
+  #8(22.5 60 cos 15 mul add,15 60 sin 15 mul add)%
+    (22.5 60 cos 15 mul add,15 60 sin 15 mul sub)}}
+\def\ToprSMbur(#1,#2,#3,#4,#5,#6,#7,#8){\picb{
+  \fextB(#1,#1)%
+  #2(22.5,15)(15,0,60)%
+  #3(22.5,15 60 sin 15 mul add)(7.5,0,180)
+  #4(22.5,15 60 sin 15 mul add)(7.5,180,0)
+  #5(22.5,15)(15,120,180)
+  #6(22.5,15)(15,180,240)
+  #7(22.5,15)(15,-120,0)%
+  #8(22.5 60 cos 15 mul sub,15 60 sin 15 mul add)%
+    (22.5 60 cos 15 mul sub,15 60 sin 15 mul sub)}}
+\def\ToprSMT(#1,#2,#3,#4,#5,#6,#7,#8){\picb{
+  \fextB(#1,#1)%
+  #2(22.5,15)(15,0,90)
+  #3(22.5,15)(15,90,180)
+  #4(22.5,15)(15,180,270)%
+  #5(22.5,15)(15,-90,0)
+  #6(22.5,30)(22.5,15)
+  #7(22.5,15)(22.5,0)%
+  #8(17.5,15)(5,0,360)}}
+\def\ToprSMTl(#1,#2,#3,#4,#5,#6,#7,#8){\picb{
+  \fextB(#1,#1)%
+  #2(22.5,15)(15,0,90)
+  #3(22.5,15)(15,90,135)
+  #4(22.5,15)(15,135,180)%
+  #5(22.5,15)(15,180,270)
+  #6(22.5,15)(15,-90,0)
+  #7(22.5,30)(22.5,0)%
+  #8(22.5 45 cos 20.5 mul sub,15 45 sin 20.5 mul add)(5.5,-45,315)}}
+\def\ToprSMTr(#1,#2,#3,#4,#5,#6,#7,#8){\picb{
+  \fextB(#1,#1)%
+  #2(22.5,15)(15,0,45)
+  #3(22.5,15)(15,45,90)
+  #4(22.5,15)(15,90,180)%
+  #5(22.5,15)(15,180,270)
+  #6(22.5,15)(15,-90,0)
+  #7(22.5,30)(22.5,0)%
+  #8(22.5 45 cos 20.5 mul add,15 45 sin 20.5 mul add)(5.5,-135,225)}}
+\def\ToprSMM(#1,#2,#3,#4,#5,#6,#7,#8,#9){\picb{
+  \fextB(#1,#1)%
+  #2(22.5,15)(15,0,60)
+  #3(22.5,15)(15,60,120)
+  #4(22.5,15)(15,120,180)%
+  #5(22.5,15)(15,180,240)
+  #6(22.5,15)(15,240,300)
+  #7(22.5,15)(15,-60,0)%
+  #8(22.5 60 cos 15 mul add,15 60 sin 15 mul add)%
+    (22.5 60 cos 15 mul add,15 60 sin 15 mul sub)
+  #9(22.5 60 cos 15 mul sub,15 60 sin 15 mul add)%
+    (22.5 60 cos 15 mul sub,15 60 sin 15 mul sub)}}
+\def\ToprSMMl(#1,#2,#3,#4,#5,#6,#7,#8){\picb{
+  \fextB(#1,#1)%
+  #2(22.5,15)(15,0,90)
+  #3(22.5,15)(15,90,180)
+  #4(22.5,15)(15,180,270)%
+  #5(22.5,15)(15,-90,0)
+  #6(22.5,30)(22.5,15)
+  #7(7.5,15)(22.5,15)
+  #8(22.5,0)(22.5,15)}}
+\def\ToprSMMr(#1,#2,#3,#4,#5,#6,#7,#8){\picb{
+  \fextB(#1,#1)%
+  #2(22.5,15)(15,0,90)
+  #3(22.5,15)(15,90,180)
+  #4(22.5,15)(15,180,270)%
+  #5(22.5,15)(15,-90,0)
+  #6(22.5,30)(22.5,15)
+  #7(37.5,15)(22.5,15)
+  #8(22.5,0)(22.5,15)}}
+\def\ToprSMal(#1,#2,#3,#4,#5,#6,#7){\picb{
+  \ToptSMo(#1,#2,#3,#4,#5,#6)
+  #7(7.5,30)(15,270,360)}}
+\def\ToprSMar(#1,#2,#3,#4,#5,#6,#7){\picb{
+  \ToptSMo(#1,#2,#3,#4,#5,#6)
+  #7(37.5,30)(15,180,270)}}
+% change ordering
+\def\ToprSalar(#1,#2,#3,#4,#5,#6){\picb{
+  \ToptSalo(#1,#4,#2,#6,#3)
+  #5(37.5,30)(15,180,270)}}
+\def\ToprSaladr(#1,#2,#3,#4,#5,#6,#7){\picb{
+  \fextB(#1,#1)%
+  #2(22.5,15)(15,0,90)
+  #3(22.5,15)(15,90,180)
+  #4(7.5,30)(15,270,360)
+  #5(22.5,15)(15,180,270)
+  #6(22.5,15)(15,-90,0)
+  #7(37.5,0)(15,90,180)}}
+\def\ToprSalM(#1,#2,#3,#4,#5,#6,#7,#8){\picb{
+  \fextB(#1,#1)%
+  #2(22.5,15)(15,0,90)
+  #3(22.5,15)(15,90,135)
+  #4(22.5,15)(15,135,180)%
+  #5(7.5,30)(15,-90,-45)
+  #6(7.5,30)(15,-45,-0)
+  #7(22.5,15)(15,180,0)%
+  #8(22.5 45 cos 15 mul sub,15 45 sin 15 mul add)%
+    (22.5 45 cos 6 mul sub,15 45 sin 6 mul add)}}
+\def\ToprSarM(#1,#2,#3,#4,#5,#6,#7,#8){\picb{
+  \fextB(#1,#1)%
+  #2(22.5,15)(15,0,45)
+  #3(22.5,15)(15,45,90)
+  #4(37.5,30)(15,180,225)
+  #5(37.5,30)(15,225,270)%
+  #6(22.5,15)(15,90,180)
+  #7(22.5,15)(15,180,0)%
+  #8(22.5 45 cos 15 mul add,15 45 sin 15 mul add)%
+    (22.5 45 cos 6 mul add,15 45 sin 6 mul add)}}
+\def\ToprSaBl(#1,#2,#3,#4,#5,#6,#7){\picb{
+  \fextB(#1,#1)%
+  #2(22.5,15)(15,0,45)
+  #3(22.5 67.6 cos 15 mul add,15 67.5 sin 15 mul add)(15 22.5 sin mul,180,330)%
+  #4(22.5 67.6 cos 15 mul add,15 67.5 sin 15 mul add)(15 22.5 sin mul,-30,180)%
+  #5(22.5,15)(15,90,180)
+  #6(7.5,30)(15,270,360)
+  #7(22.5,15)(15,180,0)}}
+\def\ToprSaBr(#1,#2,#3,#4,#5,#6,#7){\picb{
+  \fextB(#1,#1)%
+  #2(22.5,15)(15,0,90)
+  #3(37.5,30)(15,180,270)%
+  #4(22.5 67.6 cos 15 mul sub,15 67.5 sin 15 mul add)(15 22.5 sin mul,210,360)%
+  #5(22.5 67.6 cos 15 mul sub,15 67.5 sin 15 mul add)(15 22.5 sin mul,0,210)%
+  #6(22.5,15)(15,135,180)
+  #7(22.5,15)(15,180,0)}}
+\def\ToprSabl(#1,#2,#3,#4,#5,#6,#7){\picb{
+  \fextB(#1,#1)%
+  #2(22.5,15)(15,0,90)
+  #3(22.5,15)(15,90,135)%
+  #4(22.5 67.6 cos 15 mul sub,15 67.5 sin 15 mul add)(15 22.5 sin mul,10,210)%
+  #5(22.5,15)(15,135,180)
+  #6(7.5,30)(15,270,360)
+  #7(22.5,15)(15,180,0)}}
+\def\ToprSabr(#1,#2,#3,#4,#5,#6,#7){\picb{
+  \fextB(#1,#1)%
+  #2(22.5,15)(15,0,45)
+  #3(22.5,15)(15,45,90)%
+  #4(22.5 67.6 cos 15 mul add,15 67.5 sin 15 mul add)(15 22.5 sin mul,-30,170)%
+  #5(37.5,30)(15,180,270)
+  #6(22.5,15)(15,90,180)
+  #7(22.5,15)(15,180,0)}}
+\def\ToprSalTr(#1,#2,#3,#4,#5,#6,#7){\picb{
+  \fextB(#1,#1)%
+  #2(22.5,15)(15,0,45)
+  #3(22.5,15)(15,45,90)
+  #4(22.5,15)(15,90,180)
+  #5(7.5,30)(15,270,360)%
+  #6(22.5,15)(15,180,0)
+  #7(22.5 45 cos 20.5 mul add,15 45 sin 20.5 mul add)(5.5,-135,225)}}
+\def\ToprSarTl(#1,#2,#3,#4,#5,#6,#7){\picb{
+  \fextB(#1,#1)%
+  #2(22.5,15)(15,0,90)
+  #3(37.5,30)(15,180,270)
+  #4(22.5,15)(15,90,135)
+  #5(22.5,15)(15,135,180)%
+  #6(22.5,15)(15,180,0)
+  #7(22.5 45 cos 20.5 mul sub,15 45 sin 20.5 mul add)(5.5,-45,315)}}
+\def\ToprSalTl(#1,#2,#3,#4,#5,#6,#7){\picb{
+  \fextB(#1,#1)%
+  #2(22.5,15)(15,0,90)
+  #3(22.5,15)(15,90,135)
+  #4(22.5,15)(15,135,180)
+  #5(7.5,30)(15,270,360)%
+  #6(22.5,15)(15,180,0)
+  #7(22.5 45 cos 20.5 mul sub,15 45 sin 20.5 mul add)(5.5,-45,315)}}
+\def\ToprSarTr(#1,#2,#3,#4,#5,#6,#7){\picb{
+  \fextB(#1,#1)%
+  #2(22.5,15)(15,0,45)
+  #3(22.5,15)(15,45,90)
+  #4(37.5,30)(15,180,270)
+  #5(22.5,15)(15,90,180)%
+  #6(22.5,15)(15,180,0)
+  #7(22.5 45 cos 20.5 mul add,15 45 sin 20.5 mul add)(5.5,-135,225)}}
+\def\ToprSaldT(#1,#2,#3,#4,#5,#6,#7){\picb{
+  \fextB(#1,#1)%
+  #2(22.5,15)(15,0,90)
+  #3(22.5,15)(15,90,180)
+  #4(22.5,15)(15,180,270)
+  #5(7.5,0)(15,0,90)%
+  #6(22.5,15)(15,270,360)
+  #7(22.5,37.5)(7.5,-90,270)}}
+\def\ToprSardT(#1,#2,#3,#4,#5,#6,#7){\picb{
+  \fextB(#1,#1)%
+  #2(22.5,15)(15,0,90)
+  #3(22.5,15)(15,90,180)
+  #4(22.5,15)(15,180,270)
+  #6(37.5,0)(15,90,180)%
+  #5(22.5,15)(15,270,360)
+  #7(22.5,37.5)(7.5,-90,270)}}
+\def\ToprSaldB(#1,#2,#3,#4,#5,#6,#7,#8){\picb{
+  \fextB(#1,#1)%
+  #2(22.5,15)(15,0,60)
+  #3(22.5,15 60 sin 15 mul add)(7.5,0,180)
+  #4(22.5,15 60 sin 15 mul add)(7.5,180,0)
+  #5(22.5,15)(15,120,180)%
+  #6(22.5,15)(15,180,270)
+  #7(7.5,0)(15,0,90)
+  #8(22.5,15)(15,270,360)}}
+\def\ToprSardB(#1,#2,#3,#4,#5,#6,#7,#8){\picb{
+  \fextB(#1,#1)%
+  #2(22.5,15)(15,0,60)
+  #3(22.5,15 60 sin 15 mul add)(7.5,0,180)
+  #4(22.5,15 60 sin 15 mul add)(7.5,180,0)#5(22.5,15)(15,120,180)%
+  #6(22.5,15)(15,180,270)
+  #7(37.5,0)(15,90,180)
+  #8(22.5,15)(15,270,360)}}
+\def\ToprSalBr(#1,#2,#3,#4,#5,#6,#7,#8){\picb{
+  \fextB(#1,#1)%
+  #2(22.5,15)(15,0,22.5)%
+  #3(22.5 45 cos 15 mul add,15 45 sin 15 mul add)(15 22.5 sin mul,150,300)%
+  #4(22.5 45 cos 15 mul add,15 45 sin 15 mul add)(15 22.5 sin mul,-60,150)%
+  #5(22.5,15)(15,67.5,90)
+  #6(22.5,15)(15,90,180)
+  #7(7.5,30)(15,270,360)
+  #8(22.5,15)(15,180,0)}}
+\def\ToprSarBl(#1,#2,#3,#4,#5,#6,#7,#8){\picb{
+  \fextB(#1,#1)%
+  #2(22.5,15)(15,0,90)
+  #3(37.5,30)(15,180,270)
+  #4(22.5,15)(15,90,112.5)%
+  #5(22.5 45 cos 15 mul sub,15 45 sin 15 mul add)(15 22.5 sin mul,30,240)%
+  #6(22.5 45 cos 15 mul sub,15 45 sin 15 mul add)(15 22.5 sin mul,-120,30)%
+  #7(22.5,15)(15,157.5,180)
+  #8(22.5,15)(15,180,0)}}
+\def\ToprSarBr(#1,#2,#3,#4,#5,#6,#7,#8){\picb{
+  \fextB(#1,#1)%
+  #2(22.5,15)(15,0,22.5)%
+  #3(22.5 45 cos 15 mul add,15 45 sin 15 mul add)(15 22.5 sin mul,150,300)%
+  #4(22.5 45 cos 15 mul add,15 45 sin 15 mul add)(15 22.5 sin mul,-60,150)%
+  #5(22.5,15)(15,67.5,90)
+  #6(37.5,30)(15,180,270)
+  #7(22.5,15)(15,90,180)
+  #8(22.5,15)(15,180,0)}}
+\def\ToprSalBl(#1,#2,#3,#4,#5,#6,#7,#8){\picb{
+  \fextB(#1,#1)%
+  #2(22.5,15)(15,0,90)
+  #3(22.5,15)(15,90,112.5)%
+  #4(22.5 45 cos 15 mul sub,15 45 sin 15 mul add)(15 22.5 sin mul,30,240)%
+  #5(22.5 45 cos 15 mul sub,15 45 sin 15 mul add)(15 22.5 sin mul,-120,30)%
+  #6(22.5,15)(15,157.5,180)
+  #7(7.5,30)(15,-90,0)
+  #8(22.5,15)(15,180,0)}}
+\def\ToprSBB(#1,#2,#3,#4,#5,#6,#7,#8,#9){\picb{
+  \fextB(#1,#1)%
+  #2(22.5,15)(15,0,60)
+  #3(22.5,15 60 sin 15 mul add)(7.5,0,60)%
+  #4(22.5,15 60 sin 15 mul add 60 sin 7.5 mul add)(3.75,0,180)
+  #5(22.5,15 60 sin 15 mul add 60 sin 7.5 mul add)(3.75,180,0)
+  #6(22.5,15 60 sin 15 mul add)(7.5,120,180)
+  #7(22.5,15 60 sin 15 mul add)(7.5,180,0)%
+  #8(22.5,15)(15,120,180)
+  #9(22.5,15)(15,180,0)}}
+\def\ToprSBS(#1,#2,#3,#4,#5,#6,#7){\picb{
+  \ToptSBBo(#1,#2,#4,#5,#3,#6)
+  #7(15,15 60 sin 15 mul add)(30,15 60 sin 15 mul add)}}
+\def\ToprSBE(#1,#2,#3,#4,#5,#6,#7,#8){\picb{
+  \fextB(#1,#1)%
+  #2(22.5,15)(15,0,45)
+  #3(22.5 45 sin 15 mul 2 div add,15 45 cos 15 mul add)(45 sin 15 mul 2 div,0,180)
+  #4(22.5 45 sin 15 mul 2 div add,15 45 cos 15 mul add)(45 sin 15 mul 2 div,180,0)%
+  #5(22.5 45 sin 15 mul 2 div sub,15 45 cos 15 mul add)(45 sin 15 mul 2 div,0,180)
+  #6(22.5 45 sin 15 mul 2 div sub,15 45 cos 15 mul add)(45 sin 15 mul 2 div,180,0)%
+  #7(22.5,15)(15,135,180)
+  #8(22.5,15)(15,180,0)}}
+\def\ToprSBM(#1,#2,#3,#4,#5,#6,#7,#8,#9){\picb{
+  \fextB(#1,#1)%
+  #2(22.5,15)(15,0,60)
+  #3(22.5,15 60 sin 15 mul add)(7.5,0,90)
+  #4(22.5,15 60 sin 15 mul add)(7.5,90,180)%
+  #5(22.5,15 60 sin 15 mul add)(7.5,180,270)
+  #6(22.5,15 60 sin 15 mul add)(7.5,-90,0)%
+  #7(22.5,15)(15,120,180)#8(22.5,15)(15,180,0)
+  #9(22.5,15 60 sin 15 mul add 7.5 sub)(22.5,15 60 sin 15 mul add 7.5 add)}}
+\def\ToprSBblr(#1,#2,#3,#4,#5,#6,#7){\picb{
+  \fextB(#1,#1)%
+  #2(22.5 22.5 cos 15 mul add,15 22.5 sin 15 mul add)(15 22.5 sin mul,125,280)%
+  #3(22.5 22.5 cos 15 mul add,15 22.5 sin 15 mul add)(15 22.5 sin mul,-80,125)%
+  #4(22.5,15)(15,45,135)%
+  #5(22.5 22.5 cos 15 mul sub,15 22.5 sin 15 mul add)(15 22.5 sin mul,55,260)%
+  #6(22.5 22.5 cos 15 mul sub,15 22.5 sin 15 mul add)(15 22.5 sin mul,-100,55)%
+  #7(22.5,15)(15,180,0)}}
+\def\ToprSBBal(#1,#2,#3,#4,#5,#6,#7,#8){\picb{
+  \fextB(#1,#1)%
+  #2(22.5,15)(15,0,60)
+  #3(22.5,15 60 sin 15 mul add)(7.5,0,90)
+  #4(22.5,15 60 sin 15 mul add)(7.5,90,180)%
+  #5(15,22.5 60 sin 15 mul add)(7.5,-90,0)
+  #6(22.5,15 60 sin 15 mul add)(7.5,180,0)
+  #7(22.5,15)(15,120,180)#8(22.5,15)(15,180,0)}}
+\def\ToprSBBar(#1,#2,#3,#4,#5,#6,#7,#8){\picb{
+  \fextB(#1,#1)%
+  #2(22.5,15)(15,0,60)
+  #3(22.5,15 60 sin 15 mul add)(7.5,0,90)
+  #4(30,22.5 60 sin 15 mul add)(7.5,180,270)%
+  #5(22.5,15 60 sin 15 mul add)(7.5,90,180)
+  #6(22.5,15 60 sin 15 mul add)(7.5,180,0)%
+  #7(22.5,15)(15,120,180)
+  #8(22.5,15)(15,180,0)}}
+\def\ToprSBBBlr(#1,#2,#3,#4,#5,#6,#7,#8,#9){\picb{
+  \fextB(#1,#1)%
+  #2(22.5,15)(15,0,22.5)%
+  #3(22.5 45 cos 15 mul add,15 45 sin 15 mul add)(15 22.5 sin mul,150,300)%
+  #4(22.5 45 cos 15 mul add,15 45 sin 15 mul add)(15 22.5 sin mul,-60,150)%
+  #5(22.5,15)(15,67.5,112.5)%
+  #6(22.5 45 cos 15 mul sub,15 45 sin 15 mul add)(15 22.5 sin mul,30,240)%
+  #7(22.5 45 cos 15 mul sub,15 45 sin 15 mul add)(15 22.5 sin mul,-120,30)%
+  #8(22.5,15)(15,157.5,180)#9(22.5,15)(15,180,0)}}
+\def\ToprSBBud(#1,#2,#3,#4,#5,#6,#7,#8,#9){\picb{
+  \fextB(#1,#1)%
+  #2(22.5,15)(15,0,60)
+  #3(22.5,15 60 sin 15 mul add)(7.5,0,180)
+  #4(22.5,15 60 sin 15 mul add)(7.5,180,0)
+  #5(22.5,15)(15,120,180)%
+  #6(22.5,15)(15,180,240)
+  #7(22.5,15 60 sin 15 mul sub)(7.5,180,0)
+  #8(22.5,15 60 sin 15 mul sub)(7.5,0,-180)
+  #9(22.5,15)(15,-60,0)}}
+\def\ToprSBTud(#1,#2,#3,#4,#5,#6,#7,#8){\picb{
+  \fextB(#1,#1)%
+  #2(22.5,15)(15,0,60)
+  #3(22.5,15 60 sin 15 mul add)(7.5,0,180)
+  #4(22.5,15 60 sin 15 mul add)(7.5,180,0)
+  #5(22.5,15)(15,120,180)%
+  #6(22.5,15)(15,180,270)
+  #7(22.5,15)(15,-90,0)
+  #8(22.5,-5.5)(5.5,90,450)}}
+\def\ToprSBBT(#1,#2,#3,#4,#5,#6,#7,#8){\picb{
+  \fextB(#1,#1)%
+  #2(22.5,15)(15,0,60)
+  #3(22.5,15 60 sin 15 mul add)(7.5,0,90)
+  #4(22.5,15 60 sin 15 mul add)(7.5,90,180)%
+  #5(22.5,15 60 sin 15 mul add)(7.5,180,0)
+  #6(22.5,15)(15,120,180)
+  #7(22.5,15)(15,180,0)
+  #8(22.5,11.5 15 60 sin 15 mul add add)(4,-90,270)}}
+\def\ToprSBBTlr(#1,#2,#3,#4,#5,#6,#7,#8){\picb{
+  \fextB(#1,#1)%
+  #2(22.5,15)(15,0,45)#3(22.5,15)(15,45,112.5)%
+  #4(22.5 45 cos 15 mul sub,15 45 sin 15 mul add)(15 22.5 sin mul,30,240)%
+  #5(22.5 45 cos 15 mul sub,15 45 sin 15 mul add)(15 22.5 sin mul,-120,30)%
+  #6(22.5,15)(15,157.5,180)
+  #7(22.5,15)(15,180,0)%
+  #8(22.5 45 cos 20.5 mul add,15 45 sin 20.5 mul add)(5.5,-135,225)}}
+\def\ToprSBBTrl(#1,#2,#3,#4,#5,#6,#7,#8){\picb{
+  \fextB(#1,#1)%
+  #2(22.5,15)(15,0,22.5)%
+  #3(22.5 45 cos 15 mul add,15 45 sin 15 mul add)(15 22.5 sin mul,150,300)%
+  #4(22.5 45 cos 15 mul add,15 45 sin 15 mul add)(15 22.5 sin mul,-60,150)%
+  #5(22.5,15)(15,67.5,135)
+  #6(22.5,15)(15,135,180)
+  #7(22.5,15)(15,180,0)%
+  #8(22.5 45 cos 20.5 mul sub,15 45 sin 20.5 mul add)(5.5,-45,315)}}
+\def\ToprSBTS(#1,#2,#3,#4,#5,#6,#7,#8){\picb{
+  \fextB(#1,#1)%
+  #2(22.5,15)(15,0,90)
+  #3(22.5,15)(15,90,180)
+  #4(22.5,15)(15,180,0)%
+  #5(22.5,37.5)(7.5,-90,0)
+  #6(22.5,37.5)(7.5,0,180)
+  #7(22.5,37.5)(7.5,180,270)
+  #8(15,37.5)(30,37.5)}}
+\def\ToprSBTT(#1,#2,#3,#4,#5,#6,#7){\picb{
+  \fextB(#1,#1)%
+  #2(22.5,15)(15,0,90)
+  #3(22.5,15)(15,90,180)
+  #4(22.5,15)(15,180,0)%
+  #5(22.5,34)(4,-90,90)
+  #6(22.5,34)(4,90,-90)
+  #7(22.5,42)(4,-90,270)}}
+\def\ToprSBTTlr(#1,#2,#3,#4,#5,#6,#7){\picb{
+  \fextB(#1,#1)%
+  #2(22.5,15)(15,0,45)
+  #3(22.5,15)(15,45,135)
+  #4(22.5,15)(15,135,180)
+  #5(22.5,15)(15,180,0)%
+  #6(22.5 45 cos 20.5 mul add,15 45 sin 20.5 mul add)(5.5,-135,225)%
+  #7(22.5 45 cos 20.5 mul sub,15 45 sin 20.5 mul add)(5.5,-45,315)}}
+\def\ToprSBTTud(#1,#2,#3,#4,#5,#6,#7){\picb{
+  \fextB(#1,#1)%
+  #2(22.5,15)(15,0,90)
+  #3(22.5,15)(15,90,180)
+  #4(22.5,15)(15,180,270)
+  #5(22.5,15)(15,-90,0)%
+  #6(22.5,35.5)(5.5,-90,270)
+  #7(22.5,-5.5)(5.5,90,450)}}
+\def\ToprSE(#1,#2,#3,#4,#5,#6,#7){\picb{
+  \fextB(#1,#1)%
+  #2(12.5,15)(5,0,180)
+  #3(22.5,15)(5,0,180)
+  #4(32.5,15)(5,0,180)%
+  #5(12.5,15)(5,180,0)
+  #6(22.5,15)(5,180,0)
+  #7(32.5,15)(5,180,0)}}
+\def\ToprSEBl(#1,#2,#3,#4,#5,#6,#7,#8){\picb{
+  \fextB(#1,#1)%
+  #2(30,15)(7.5,0,180)
+  #3(30,15)(7.5,180,0)%
+  #4(15,15)(7.5,0,60)
+  #5(15,15 60 sin 7.5 mul add)(3.75,0,180)%
+  #6(15,15 60 sin 7.5 mul add)(3.75,180,0)
+  #7(15,15)(7.5,120,180)
+  #7(15,15)(7.5,180,0)}}
+\def\ToprSEBr(#1,#2,#3,#4,#5,#6,#7,#8){\picb{
+  \fextB(#1,#1)%
+  #2(30,15)(7.5,0,60)
+  #3(30,15 60 sin 7.5 mul add)(3.75,0,180)%
+  #4(30,15 60 sin 7.5 mul add)(3.75,180,0)
+  #5(30,15)(7.5,120,180)
+  #6(30,15)(7.5,180,0)%
+  #7(15,15)(7.5,0,180)
+  #8(15,15)(7.5,180,0)}}
+\def\ToprSEMl(#1,#2,#3,#4,#5,#6,#7,#8){\picb{
+  \fextB(#1,#1)%
+  #2(30,15)(7.5,0,180)
+  #3(30,15)(7.5,180,0)%
+  #4(15,15)(7.5,0,90)
+  #5(15,15)(7.5,90,180)
+  #6(15,15)(7.5,180,270)
+  #7(15,15)(7.5,-90,0)
+  #8(15,22.5)(15,7.5)}}
+\def\ToprSEMr(#1,#2,#3,#4,#5,#6,#7,#8){\picb{
+  \fextB(#1,#1)%
+  #2(30,15)(7.5,0,90)
+  #3(30,15)(7.5,90,180)
+  #4(30,15)(7.5,180,270)
+  #5(30,15)(7.5,-90,0)%
+  #6(15,15)(7.5,0,180)
+  #7(15,15)(7.5,180,0)
+  #8(30,22.5)(30,7.5)}}
+\def\ToprSEall(#1,#2,#3,#4,#5,#6,#7){\picb{
+  \fextB(#1,#1)%
+  #2(30,15)(7.5,0,180)
+  #3(30,15)(7.5,180,0)%
+  #4(15,15)(7.5,0,90)
+  #5(7.5,22.5)(7.5,-90,0)
+  #6(15,15)(7.5,90,180)
+  #7(15,15)(7.5,180,0)}}
+\def\ToprSEarr(#1,#2,#3,#4,#5,#6,#7){\picb{
+  \fextB(#1,#1)%
+  #2(30,15)(7.5,0,90)
+  #3(37.5,22.5)(7.5,180,270)
+  #4(30,15)(7.5,90,180)
+  #5(30,15)(7.5,180,0)%
+  #6(15,15)(7.5,0,180)
+  #7(15,15)(7.5,180,0)}}
+\def\ToprSETl(#1,#2,#3,#4,#5,#6,#7){\picb{
+  \fextB(#1,#1)%
+  #2(30,15)(7.5,0,180)
+  #3(30,15)(7.5,180,0)%
+  #4(15,15)(7.5,0,90)
+  #5(15,15)(7.5,90,180)
+  #6(15,15)(7.5,180,0)
+  #7(15,30)(7.5,-90,270)}}
+\def\ToprSETr(#1,#2,#3,#4,#5,#6,#7){\picb{
+  \fextB(#1,#1)%
+  #2(30,15)(7.5,0,90)
+  #3(30,15)(7.5,90,180)
+  #4(30,15)(7.5,180,0)%
+  #5(15,15)(7.5,0,180)
+  #6(15,15)(7.5,180,0)
+  #7(30,30)(7.5,-90,270)}}
+%%
+%% nloop
+%%
+\def\TopnSTT(#1,#2,#3,#4,#5){\picb{
+  \fextT(#1,#1)%
+  #2(22.5,15)(15,-90,270)%
+  #3(22.5 340 cos 20 mul add,15 340 sin 20 mul add)(5,-90,270)%
+  #3(22.5 120 cos 20 mul add,15 120 sin 20 mul add)(5,-90,270)%
+  #3(22.5 160 cos 20 mul add,15 160 sin 20 mul add)(5,-90,270)%
+  #3(22.5 200 cos 20 mul add,15 200 sin 20 mul add)(5,-90,270)%
+  \Vertex(22.5 30 cos 20 mul add,15 30 sin 20 mul add){1}%
+  \Vertex(22.5 50 cos 20 mul add,15 50 sin 20 mul add){1}%
+  \Vertex(22.5 70 cos 20 mul add,15 70 sin 20 mul add){1}%
+  \Textl(38,38,#4)%
+  \Textt(22.5,15,#5)%
+  }}
+%% 3pt
+\def\TopTi(#1,#2,#3,#4){\!\pib{
+  #1(20 60 cos 15 mul add,15 60 sin 15 mul add)%
+    (20 60 cos 5 mul add,15 60 sin 5 mul add)%
+  #2(20 60 cos 15 mul add,15 60 sin 15 mul sub)%
+    (20 60 cos 5 mul add,15 60 sin 5 mul sub)%
+  #3(5,15)(15,15)
+  \GCirc(20,15){5}{0.75}
+  \Text(20,15)[c]{$\scriptstyle #4$}}}
+% 1loop
+\def\TopoTC(fex(#1),#2,#3,#4){\picb{
+  \def\fex(##1,##2,##3){
+    ##1(22.5 60 cos 22.5 mul add,15 60 sin 22.5 mul add)%
+       (22.5 60 cos 12.5 mul add,15 60 sin 12.5 mul add)%
+    ##2(22.5 60 cos 22.5 mul add,15 60 sin 22.5 mul sub)%
+       (22.5 60 cos 12.5 mul add,15 60 sin 12.5 mul sub)%
+    ##3(0,15)(10,15)
+  }\fex(#1)
+  #2(22.5,15)(12.5,-60,60)%
+  #3(22.5,15)(12.5,180,300)%
+  #4(22.5,15)(12.5,60,180)%
+ }}
+\def\TopoTBl(#1,#2,#3){\picb{
+  #1(0,15)(10,15)
+  #1(22.5 30 cos 22.5 mul add,15 30 sin 22.5 mul add)(35,15)%
+  #1(22.5 30 cos 22.5 mul add,15 30 sin 22.5 mul sub)(35,15)%
+  #2(22.5,15)(12.5,0,180)
+  #3(22.5,15)(12.5,180,0)}}
+\def\TopoTBru(#1,#2,#3){\picb{
+  #1(22.5 30 cos 22.5 mul sub,15 30 sin 22.5 mul sub)%
+    (22.5 60 cos 12.5 mul sub,15 60 sin 12.5 mul sub)%
+  #1(22.5 90 cos 22.5 mul sub,15 90 sin 22.5 mul sub)%
+    (22.5 60 cos 12.5 mul sub,15 60 sin 12.5 mul sub)%
+  #1(22.5 60 cos 22.5 mul add,15 60 sin 22.5 mul add)%
+    (22.5 60 cos 12.5 mul add,15 60 sin 12.5 mul add)%
+  #2(22.5,15)(12.5,60,240)
+  #3(22.5,15)(12.5,240,60)}}
+\def\TopoTBrd(#1,#2,#3){\picb{
+  #1(22.5 30 cos 22.5 mul sub,15 30 sin 22.5 mul add)%
+    (22.5 60 cos 12.5 mul sub,15 60 sin 12.5 mul add)%
+  #1(22.5 90 cos 22.5 mul sub,15 90 sin 22.5 mul add)%
+    (22.5 60 cos 12.5 mul sub,15 60 sin 12.5 mul add)%
+  #1(22.5 60 cos 22.5 mul add,15 60 sin 22.5 mul sub)%
+    (22.5 60 cos 12.5 mul add,15 60 sin 12.5 mul sub)%
+  #2(22.5,15)(12.5,-60,120)
+  #3(22.5,15)(12.5,120,300)}}
+%% 4pt
+% 1loop
+\def\TopoVD(fex(#1),#2,#3,#4,#5){\picb{
+  \def\fex(##1,##2,##3,##4){
+    ##1%
+      (22.5 45 cos 22.5 mul add,15 45 sin 22.5 mul add)%
+      (22.5 45 cos 12.5 mul add,15 45 sin 12.5 mul add)%
+    ##4%
+      (22.5 135 cos 22.5 mul add,15 134 sin 22.5 mul add)%
+      (22.5 135 cos 12.5 mul add,15 135 sin 12.5 mul add)%
+    ##3%
+      (22.5 225 cos 22.5 mul add,15 225 sin 22.5 mul add)%
+      (22.5 225 cos 12.5 mul add,15 225 sin 12.5 mul add)%
+    ##2%
+      (22.5 315 cos 22.5 mul add,15 315 sin 22.5 mul add)%
+      (22.5 315 cos 12.5 mul add,15 315 sin 12.5 mul add)%
+  }\fex(#1)%
+  #5(22.5,15)(12.5,45,135)%
+  #4(22.5,15)(12.5,135,225)%
+  #3(22.5,15)(12.5,225,315)%
+  #2(22.5,15)(12.5,-45,45)%
+  }}
+\def\TopoVDtxt(fex(#1),#2,#3,#4,#5,ftxt(#6)){\picb{
+  \def\fex(##1,##2,##3,##4){
+    ##1%
+      (22.5 45 cos 22.5 mul add,15 45 sin 22.5 mul add)%
+      (22.5 45 cos 12.5 mul add,15 45 sin 12.5 mul add)%
+    ##4%
+      (22.5 135 cos 22.5 mul add,15 134 sin 22.5 mul add)%
+      (22.5 135 cos 12.5 mul add,15 135 sin 12.5 mul add)%
+    ##3%
+      (22.5 225 cos 22.5 mul add,15 225 sin 22.5 mul add)%
+      (22.5 225 cos 12.5 mul add,15 225 sin 12.5 mul add)%
+    ##2%
+      (22.5 315 cos 22.5 mul add,15 315 sin 22.5 mul add)%
+      (22.5 315 cos 12.5 mul add,15 315 sin 12.5 mul add)%
+  }\fex(#1)%
+  \def\ftxt(##1,##2,##3,##4,##5,##6,##7,##8){
+    \Textbr(5,25,##1)%
+    \Texttr(5,5,##2)%
+    \Textbl(40,25,##3)%
+    \Texttl(40,5,##4)%
+    \Textb(22.5,32,##5)%
+    \Textr(7,15,##6)%
+    \Textt(22.5,-2,##7)%
+    \Textl(38,15,##8)%
+  }%
+  #5(22.5,15)(12.5,45,135)%
+  #4(22.5,15)(12.5,135,225)%
+  #3(22.5,15)(12.5,225,315)%
+  #2(22.5,15)(12.5,-45,45)%
+  \ftxt(#6)
+  }}
+\def\TopoVC(fex(#1),#2,#3,#4){\picb{
+  \def\fex(##1,##2,##3,##4){
+    ##1%
+      (22.5 180 30 add cos 22.5 mul add,15 180 30 add sin 22.5 mul add)%
+      (10,15)%
+    ##2%
+      (22.5 180 30 sub cos 22.5 mul add,15 180 30 sub sin 22.5 mul add)%
+      (10,15)%
+    ##4%
+      (22.5 315 cos 22.5 mul add,15 315 sin 22.5 mul add)%
+      (22.5 315 cos 12.5 mul add,15 315 sin 12.5 mul add)%
+    ##3%
+      (22.5 45 cos 22.5 mul add,15 45 sin 22.5 mul add)%
+      (22.5 45 cos 12.5 mul add,15 45 sin 12.5 mul add)%
+  }\fex(#1)
+  #4(22.5,15)(12.5,180,315)%
+  #3(22.5,15)(12.5,-45,45)%
+  #2(22.5,15)(12.5,45,180)%
+  }}
+\def\TopoVClr(fex(#1),#2,#3,#4){\picb{
+  \def\fex(##1,##2,##3,##4){
+    ##1%
+      (22.5 180 30 add cos 22.5 mul add,15 180 30 add sin 22.5 mul add)%
+      (10,15)%
+    ##2%
+      (22.5 180 30 sub cos 22.5 mul add,15 180 30 sub sin 22.5 mul add)%
+      (10,15)%
+    ##4%
+      (22.5 315 cos 22.5 mul add,15 315 sin 22.5 mul add)%
+      (22.5 315 cos 12.5 mul add,15 315 sin 12.5 mul add)%
+    ##3%
+      (22.5 45 cos 22.5 mul add,15 45 sin 22.5 mul add)%
+      (22.5 45 cos 12.5 mul add,15 45 sin 12.5 mul add)%
+  }\fex(#1)
+  #4(22.5,15)(12.5,180,315)%
+  #3(22.5,15)(12.5,-45,45)%
+  #2(22.5,15)(12.5,45,180)%
+  }}
+\def\TopoVCrl(fex(#1),#2,#3,#4){\picb{
+  \def\fex(##1,##2,##3,##4){
+    ##1%
+      (22.5 180 30 add cos 22.5 mul add,15 180 30 add sin 22.5 mul add)%
+      (10,15)%
+    ##2%
+      (22.5 180 30 sub cos 22.5 mul add,15 180 30 sub sin 22.5 mul add)%
+      (10,15)%
+    ##4%
+      (22.5 315 cos 22.5 mul add,15 315 sin 22.5 mul add)%
+      (22.5 315 cos 12.5 mul add,15 315 sin 12.5 mul add)%
+    ##3%
+      (22.5 45 cos 22.5 mul add,15 45 sin 22.5 mul add)%
+      (22.5 45 cos 12.5 mul add,15 45 sin 12.5 mul add)%
+  }\fex(#1)
+  #4(22.5,15)(12.5,180,315)%
+  #3(22.5,15)(12.5,-45,45)%
+  #2(22.5,15)(12.5,45,180)%
+  }}
+
+\def\TopoVBrl(fex(#1),#2,#3){\picb{
+  \def\fex(##1,##2,##3,##4){
+    ##1(22.5 30 cos 22.5 mul sub,15 30 sin 22.5 mul add)(10,15)%
+    ##2(22.5 30 cos 22.5 mul add,15 30 sin 22.5 mul sub)(10,15)%
+    ##3(22.5 30 cos 22.5 mul add,15 30 sin 22.5 mul add)(35,15)%
+    ##4(22.5 30 cos 22.5 mul sub,15 30 sin 22.5 mul sub)(35,15)}
+  \fex(#1)
+  #2(22.5,15)(12.5,0,180)
+  #3(22.5,15)(12.5,180,0)}}
+\def\TopoVBlr(fex(#1),#2,#3){\picb{
+  \def\fex(##1,##2,##3,##4){
+    ##1(22.5 30 cos 22.5 mul sub,15 30 sin 22.5 mul add)(10,15)%
+    ##2(22.5 30 cos 22.5 mul sub,15 30 sin 22.5 mul sub)(10,15)%
+    ##3(22.5 30 cos 22.5 mul add,15 30 sin 22.5 mul add)(35,15)%
+    ##4(22.5 30 cos 22.5 mul add,15 30 sin 22.5 mul sub)(35,15)%
+  }%
+  \fex(#1)
+  #2(22.5,15)(12.5,0,180)
+  #3(22.5,15)(12.5,180,0)}}
+\def\TopoVBlrtxt(fex(#1),#2,#3,ftxt(#4)){\picb{
+  \def\fex(##1,##2,##3,##4){
+    ##1(22.5 30 cos 22.5 mul sub,15 30 sin 22.5 mul add)(10,15)%
+    ##2(22.5 30 cos 22.5 mul sub,15 30 sin 22.5 mul sub)(10,15)%
+    ##3(22.5 30 cos 22.5 mul add,15 30 sin 22.5 mul add)(35,15)%
+    ##4(22.5 30 cos 22.5 mul add,15 30 sin 22.5 mul sub)(35,15)%
+  }%
+  \def\ftxt(##1,##2,##3,##4,##5,##6){
+    \Textbr(0,25,##1)%
+    \Texttr(0,5,##2)%
+    \Textbl(45,25,##3)%
+    \Texttl(45,5,##4)%
+    \Textb(22.5,32,##5)%
+    \Textt(22.5,-2,##6)%
+  }%
+  \fex(#1)%
+  #2(22.5,15)(12.5,0,180)%
+  #3(22.5,15)(12.5,180,0)%
+  \ftxt(#4)%
+}}
+\def\TopoVA(fex(#1),#2){\picb{
+  \def\fex(##1,##2,##3,##4){
+    ##1(0,15)(22.5,15)%
+    ##2(22.5,15)(45,15)%
+    ##3(22.5 210 cos 22.5 mul add,15 210 sin 22.5 mul add)(22.5,15)%
+    ##4(22.5 30 cos 22.5 mul add,15 30 sin 22.5 mul sub)(22.5,15)}
+  \fex(#1)
+  #2(22.5,22.5)(7.5,-90,270)}}
+% 2loop
+\def\ToptVElr(fex(#1),#2,#3,#4,#5){\picb{
+  \def\fex(##1,##2,##3,##4){
+    ##1(22.5 30 cos 22.5 mul sub,15 30 sin 22.5 mul add)(7.5,15)%
+    ##2(22.5 30 cos 22.5 mul sub,15 30 sin 22.5 mul sub)(7.5,15)
+    ##3(22.5 30 cos 22.5 mul add,15 30 sin 22.5 mul add)(37.5,15)%
+    ##4(22.5 30 cos 22.5 mul add,15 30 sin 22.5 mul sub)(37.5,15)}
+  \fex(#1)
+  #2(30,15)(7.5,0,180)
+  #3(30,15)(7.5,180,360)
+  #4(15,15)(7.5,0,180)
+  #5(15,15)(7.5,180,360)}}
+\def\ToptVErl(fex(#1),#2,#3,#4,#5){\picb{
+  \def\fex(##1,##2,##3,##4){
+    ##1(22.5 30 cos 22.5 mul sub,15 30 sin 22.5 mul add)(7.5,15)%
+    ##2(22.5 30 cos 22.5 mul add,15 30 sin 22.5 mul sub)(7.5,15)
+    ##3(22.5 30 cos 22.5 mul add,15 30 sin 22.5 mul add)(37.5,15)%
+    ##4(22.5 30 cos 22.5 mul sub,15 30 sin 22.5 mul sub)(37.5,15)}
+  \fex(#1)
+  #2(30,15)(7.5,0,180)
+  #3(30,15)(7.5,180,360)
+  #4(15,15)(7.5,0,180)
+  #5(15,15)(7.5,180,360)}}
+\def\ToptVBTlr(fex(#1),#2,#3,#4,#5){\picb{
+  \def\fex(##1,##2,##3,##4){
+    ##1%
+      (22.5 30 cos 22.5 mul sub,15 30 sin 22.5 mul add)%
+      (10,15)%
+    ##2%
+      (22.5 30 cos 22.5 mul sub,15 30 sin 22.5 mul sub)%
+      (10,15)%
+    ##3%
+      (22.5 30 cos 22.5 mul add,15 30 sin 22.5 mul add)%
+      (35,15)%
+    ##4%
+      (22.5 30 cos 22.5 mul add,15 30 sin 22.5 mul sub)%
+      (35,15)}
+  \fex(#1)
+  #2(22.5,15)(12.5,0,90)
+  #3(22.5,15)(12.5,90,180)
+  #4(22.5,15)(12.5,180,360)%
+  #5(22.5,35)(7.5,-90,270)}}
+\def\ToptVMlud(fex(#1),#2,#3,#4,#5){\picb{
+  \def\fex(##1,##2,##3,##4){
+    ##1(22.5 30 cos 22.5 mul sub,15 30 sin 22.5 mul add)(10,15)%
+    ##2(22.5 30 cos 22.5 mul sub,15 30 sin 22.5 mul sub)(10,15)%
+    ##4(22.5 30 cos 15 mul add,2.5 30 sin 15 mul sub)(22.5,2.5)%
+    ##3(22.5 30 cos 15 mul add,27.5 30 sin 15 mul add)(22.5,27.5)%
+  }
+  \fex(#1)
+  #2(22.5,15)(12.5,90,180)
+  #3(22.5,15)(12.5,180,270)
+  #4(22.5,15)(12.5,270,90)%
+  #5(22.5,27.5)(22.5,2.5)}}
+\def\ToptVMlud(fex(#1),#2,#3,#4,#5){\picb{
+  \def\fex(##1,##2,##3,##4){
+    ##1(22.5 30 cos 22.5 mul sub,15 30 sin 22.5 mul add)(10,15)%
+    ##2(22.5 30 cos 22.5 mul sub,15 30 sin 22.5 mul sub)(10,15)%
+    ##4(22.5 30 cos 15 mul add,2.5 30 sin 15 mul sub)(22.5,2.5)%
+    ##3(22.5 30 cos 15 mul add,27.5 30 sin 15 mul add)(22.5,27.5)%
+  }
+  \fex(#1)
+  #2(22.5,15)(12.5,90,180)
+  #3(22.5,15)(12.5,180,270)
+  #4(22.5,15)(12.5,270,90)%
+  #5(22.5,27.5)(22.5,2.5)}}
+\def\ToptVSS(fex(#1),#2,#3,#4,#5,#6,#7){\picb{
+  \def\fex(##1,##2,##3,##4){
+    ##1(22.5 30 cos 22.5 mul sub,15 30 sin 22.5 mul add)(10,15)%
+    ##2(22.5 30 cos 22.5 mul sub,15 30 sin 22.5 mul sub)(10,15)%
+    ##4(22.5 30 cos 15 mul add,2.5 30 sin 15 mul sub)(22.5,2.5)%
+    ##3(22.5 30 cos 15 mul add,27.5 30 sin 15 mul add)(22.5,27.5)%
+  }
+  \fex(#1)%
+  #2(22.5,15)(12.5,0,90)%
+  #3(22.5,15)(12.5,90,180)%
+  #4(22.5,15)(12.5,180,270)%
+  #5(22.5,15)(12.5,270,360)%
+  #6(22.5,15)(12.5,270,90)%
+  #7(10,15)(35,15)}}
+
+%% 5pt
+% 1loop
+\def\TopoFE(#1,#2,#3,#4,#5,#6){\picb{
+  #1(0,15)(10,15)
+  #1(22.5 36 cos 22.5 mul add,15 36 sin 22.5 mul add)%
+    (22.5 36 cos 12.5 mul add,15 36 sin 12.5 mul add)%
+  #1(22.5 108 cos 22.5 mul add,15 108 sin 22.5 mul add)%
+    (22.5 108 cos 12.5 mul add,15 108 sin 12.5 mul add)%
+  #1(22.5 252 cos 22.5 mul add,15 252 sin 22.5 mul add)%
+    (22.5 252 cos 12.5 mul add,15 252 sin 12.5 mul add)%
+  #1(22.5 324 cos 22.5 mul add,15 324 sin 22.5 mul add)%
+    (22.5 324 cos 12.5 mul add,15 324 sin 12.5 mul add)%
+  #2(22.5,15)(12.5,-36,36)
+  #3(22.5,15)(12.5,36,108)
+  #4(22.5,15)(12.5,108,180)
+  #5(22.5,15)(12.5,180,252)
+  #6(22.5,15)(12.5,252,324)}}
+\def\TopoFD(#1,#2,#3,#4,#5){\picb{
+  #1(0,15)(10,15)
+  #1(22.5,37.5)(22.5,27.5)
+  #1(22.5,-7.5)(22.5,2.5)
+  #1(22.5 30 cos 22.5 mul add,15 30 sin 22.5 mul add)(35,15)%
+  #1(22.5 30 cos 22.5 mul add,15 30 sin 22.5 mul sub)(35,15)%
+  #2(22.5,15)(12.5,0,90)
+  #3(22.5,15)(12.5,90,180)
+  #4(22.5,15)(12.5,180,270)
+  #5(22.5,15)(12.5,270,360)}}
+\def\TopoFC(#1,#2,#3,#4){\picb{
+  #1(45,15)(35,15)
+  #1(22.5 30 cos 22.5 mul sub,15 30 sin 22.5 mul add)%
+    (22.5 60 cos 12.5 mul sub,15 60 sin 12.5 mul add)%
+  #1(22.5 90 cos 22.5 mul sub,15 90 sin 22.5 mul add)%
+    (22.5 60 cos 12.5 mul sub,15 60 sin 12.5 mul add)%
+  #1(22.5 30 cos 22.5 mul sub,15 30 sin 22.5 mul sub)%
+    (22.5 60 cos 12.5 mul sub,15 60 sin 12.5 mul sub)%
+  #1(22.5 90 cos 22.5 mul sub,15 90 sin 22.5 mul sub)%
+    (22.5 60 cos 12.5 mul sub,15 60 sin 12.5 mul sub)%
+  #2(22.5,15)(12.5,0,120)
+  #3(22.5,15)(12.5,120,240)
+  #4(22.5,15)(12.5,-120,0)}}
+
+
+%% 6pt
+\def\TopSxi(#1,#2,#3,#4,#5,#6,#7){\!\pib{
+  #1(5,15)(15,15)%
+  #2%
+   (20 60 cos 15 mul add,15 60 sin 15 mul add)%
+   (20 60 cos 5 mul add,15 60 sin 5 mul add)%
+  #3%
+   (20 120 cos 15 mul add,15 120 sin 15 mul add)%
+   (20 120 cos 5 mul add,15 120 sin 5 mul add)%
+  #4(25,15)(35,15)%
+  #5%
+   (20 240 cos 15 mul add,15 240 sin 15 mul add)%
+   (20 240 cos 5 mul add,15 240 sin 5 mul add)%
+  #6%
+   (20 300 cos 15 mul add,15 300 sin 15 mul add)%
+   (20 300 cos 5 mul add,15 300 sin 5 mul add)%
+  #3(5,15)(15,15)
+  \GCirc(20,15){5}{0.75}
+  \Text(20,15)[c]{$\scriptstyle #7$}}}
+% 0loop
+\def\TopOST(fex(#1),#2){\picb{
+  \def\fex(##1,##2,##3,##4,##5,##6){
+    ##1(22.5 30 cos 22.5 mul sub,15 30 sin 22.5 mul add)(10,15)%
+    ##2(0,15)(10,15)%
+    ##3(22.5 30 cos 22.5 mul sub,15 30 sin 22.5 mul sub)(10,15)%
+    ##4(22.5 30 cos 22.5 mul add,15 30 sin 22.5 mul add)(35,15)%
+    ##5(45,15)(35,15)%
+    ##6(22.5 30 cos 22.5 mul add,15 30 sin 22.5 mul sub)(35,15)}
+  \fex(#1)
+  #2(10,15)(35,15)}}
+% 1loop
+\def\TopoSF(fex(#1),#2,#3,#4,#5,#6,#7){\picb{
+  \def\fex(##1,##2,##3,##4,##5,##6){
+    ##1(0,15)(10,15)%
+    ##2%
+      (22.5 60 cos 22.5 mul add,15 60 sin 22.5 mul add)%
+      (22.5 60 cos 12.5 mul add,15 60 sin 12.5 mul add)%
+    ##3%
+      (22.5 120 cos 22.5 mul add,15 120 sin 22.5 mul add)%
+      (22.5 120 cos 12.5 mul add,15 120 sin 12.5 mul add)%
+    ##4(45,15)(35,15)%
+    ##5%
+      (22.5 240 cos 22.5 mul add,15 240 sin 22.5 mul add)%
+      (22.5 240 cos 12.5 mul add,15 240 sin 12.5 mul add)%
+    ##6%
+      (22.5 300 cos 22.5 mul add,15 300 sin 22.5 mul add)%
+      (22.5 300 cos 12.5 mul add,15 300 sin 12.5 mul add)%
+  }
+  \fex(#1)%
+  #2(22.5,15)(12.5,0,60)
+  #3(22.5,15)(12.5,60,120)
+  #4(22.5,15)(12.5,120,180)
+  #5(22.5,15)(12.5,180,240)
+  #6(22.5,15)(12.5,240,300)
+  #7(22.5,15)(12.5,300,360)
+  }}
+\def\TopoSE(fex(#1),#2,#3,#4,#5,#6){\picb{
+  \def\fex(##1,##2,##3,##4,##5,##6){
+    ##1(0,15)(10,15)%
+    ##2%
+      (22.5 60 cos 22.5 mul add,15 60 sin 22.5 mul add)%
+      (22.5 60 cos 12.5 mul add,15 60 sin 12.5 mul add)%
+    ##3%
+      (22.5 120 cos 22.5 mul add,15 120 sin 22.5 mul add)%
+      (22.5 120 cos 12.5 mul add,15 120 sin 12.5 mul add)%
+    ##4%
+      (45,15)(35,15)%
+    ##5%
+      (22.5 270 25 sub cos 22.5 mul add,15 270 25 sub sin 22.5 mul add)%
+      (22.5,2.5)%
+    ##6%
+      (22.5 270 25 add cos 22.5 mul add,15 270 25 add sin 22.5 mul add)%
+      (22.5,2.5)%
+  }
+  \fex(#1)%
+  #2(22.5,15)(12.5,0,60)
+  #3(22.5,15)(12.5,60,120)
+  #4(22.5,15)(12.5,120,180)
+  #5(22.5,15)(12.5,180,270)
+  #6(22.5,15)(12.5,270,360)
+  }}
+
+\def\TopoSD(fex(#1),#2,#3,#4,#5){\picb{
+  \def\fex(##1,##2,##3,##4,##5,##6){
+    ##1%
+      (22.5 45 cos 22.5 mul add,15 45 sin 22.5 mul add)%
+      (22.5 45 cos 12.5 mul add,15 45 sin 12.5 mul add)%
+    ##2%
+      (22.5 135 cos 22.5 mul add,15 135 sin 22.5 mul add)%
+      (22.5 135 cos 12.5 mul add,15 135 sin 12.5 mul add)%
+    ##3%
+      (22.5 225 25 sub cos 22.5 mul add,15 225 25 sub sin 22.5 mul add)%
+      (22.5 225 cos 12.5 mul add,15 225 sin 12.5 mul add)%
+    ##4%
+      (22.5 225 25 add cos 22.5 mul add,15 225 25 add sin 22.5 mul add)%
+      (22.5 225 cos 12.5 mul add,15 225 sin 12.5 mul add)%
+    ##5%
+      (22.5 315 25 sub cos 22.5 mul add,15 315 25 sub sin 22.5 mul add)%
+      (22.5 315 cos 12.5 mul add,15 315 sin 12.5 mul add)%
+    ##6%
+      (22.5 315 25 add cos 22.5 mul add,15 315 25 add sin 22.5 mul add)%
+      (22.5 315 cos 12.5 mul add,15 315 sin 12.5 mul add)%
+      }
+  \fex(#1)%
+  #2(22.5,15)(12.5,45,135)%
+  #3(22.5,15)(12.5,135,225)%
+  #4(22.5,15)(12.5,225,315)%
+  #5(22.5,15)(12.5,-45,45)%
+  }}
+\def\TopoSDB(#1,#2,#3,#4,#5){\picb{
+  #1(22.5,37.5)(22.5,27.5)
+  #1(22.5,-7.5)(22.5,2.5)
+  #1(22.5 30 cos 22.5 mul add,15 30 sin 22.5 mul add)(35,15)%
+  #1(22.5 30 cos 22.5 mul add,15 30 sin 22.5 mul sub)(35,15)%
+  #1(22.5 30 cos 22.5 mul sub,15 30 sin 22.5 mul add)(10,15)%
+  #1(22.5 30 cos 22.5 mul sub,15 30 sin 22.5 mul sub)(10,15)%
+  #2(22.5,15)(12.5,0,90)
+  #3(22.5,15)(12.5,90,180)
+  #4(22.5,15)(12.5,180,270)
+  #5(22.5,15)(12.5,270,360)}}
+\def\TopoSC(fex(#1),#2,#3,#4){\picb{
+  \def\fex(##1,##2,##3,##4,##5,##6){
+    ##1%
+      (22.5 0 25 add cos 22.5 mul add,15 0 25 add sin 22.5 mul add)%
+      (35,15)%
+    ##2%
+      (22.5 0 -25 add cos 22.5 mul add,15 0 -25 add sin 22.5 mul add)%
+      (35,15)%
+    ##3%
+      (22.5 120 25 sub cos 22.5 mul add,15 120 25 sub sin 22.5 mul add)%
+      (22.5 120 cos 12.5 mul add,15 120 sin 12.5 mul add)%
+    ##4%
+      (22.5 120 25 add cos 22.5 mul add,15 120 25 add sin 22.5 mul add)%
+      (22.5 120 cos 12.5 mul add,15 120 sin 12.5 mul add)%
+    ##5%
+      (22.5 240 25 sub cos 22.5 mul add,15 240 25 sub sin 22.5 mul add)%
+      (22.5 240 cos 12.5 mul add,15 240 sin 12.5 mul add)%
+    ##6%
+      (22.5 240 25 add cos 22.5 mul add,15 240 25 add sin 22.5 mul add)%
+      (22.5 240 cos 12.5 mul add,15 240 sin 12.5 mul add)%
+    }
+  \fex(#1)%
+  #2(22.5,15)(12.5,0,120)%
+  #3(22.5,15)(12.5,120,240)%
+  #4(22.5,15)(12.5,240,360)%
+  }}
+
+
+%%% 
+%%% topo-prototypes
+%%%
+%% vacuum diags
+%\TopoVR(\A) 
+%\TopoVRoo(\A) 
+%\TopoVRor(\A) 
+%\TopoVRoi(\A) 
+%\TopoVRooo(\A) 
+%\ToptVS(\A,\A,\L)
+%\ToptVSTxt(\A,\A,\L,1,2)
+%\ToptVE(\A,\A)
+%\ToprVM(\A,\A,\A,\L,\L,\L)
+%\ToprVV(\A,\A,\L,\L,\L)
+%\ToprVB(\A,\A,\A,\A)
+%\TopfVX(\A,\A,\L,\L,\L,\L,\L,\L,\L)
+%\TopfVH(\A,\A,\L,\L,\L,\L,\L,\L,\L)
+%\TopfVW(\A,\A,\A,\A,\L,\L,\L,\L)
+%\TopfVV(\A,\A,\A,\L,\L,\L,\L,\L)
+%\TopfVB(\A,\A,\A,\A,\A,\A,\L)
+%\TopfVN(\A,\A,\L,\L,\L,\L,\L)
+%\TopfVU(\A,\A,\A,\A,\L,\L,\L)
+%\TopfVT(\A,\A,\A,\L,\L,\L)
+%% selfE diags
+%\TopoS(\L)
+%\TopoSTxt(\L,1)
+%\TopoSB(\L,\A,\A)
+%\TopoST(\L,\A)
+%\ToptSi(\L)
+%\ToptSiTxt(\L,1)
+%\ToptSM(\L,\A,\A,\A,\A,\L)
+%\ToptSAl(\L,\A,\A,\A,\A)
+%\ToptSal(\L,\A,\A,\A,\A)
+%\ToptSAr(\L,\A,\A,\A,\A)
+%\ToptSar(\L,\A,\A,\A,\A)
+%\ToptSE(\L,\A,\A,\A,\A)
+%\ToptSS(\L,\A,\A,\L)
+%\ToptSr(\L)
+%\ToptSrTxt(\L,1)
+%\ToptSBBml(\L,\A,\A)
+%\ToptSBBTxt(\L,\A,\A,1)
+%\ToptSTBml(\L,\A)
+%\ToptSTBTxt(\L,\A,1)
+%% 3pt fcts
+%\TopoT(\L,\L,\L)
+%\TopoTTxt(\L,\L,\L,1)
+%\TopoTS(\L,\L,\L,\A,\A,\A)
+%\TopoTAo(\L,\L,\L,\A,\A)
+%\TopoTAr(\L,\L,\L,\A,\A)
+%\TopoTAl(\L,\L,\L,\A,\A)
+
+%% Basic scalar integrals in blue
+\newcommand{\Mline}{\SetWidth{1.0}\SetColor{Blue}}
+\newcommand{\MMline}{\SetWidth{4.0}\SetColor{Red}}
+% 1loop vac
+\newcommand{\BasicAm}{\pis{\Mline \Line(3,6)(17,6) 
+\CArc(10,15)(8,0,360)}}
+\newcommand{\BasicA}{\Mline \pis{\Line(3,6)(17,6) 
+\Ahh(10,15)(8,0,360)}}
+% 1loop 2pt
+\newcommand{\BasicBmm}{\Mline \pic{\Line(0,15)(7,15) 
+\CArc(15,15)(8,0,360) \Line(23,15)(30,15)}}
+\newcommand{\BasicBm}{\Mline \pic{\Line(0,15)(7,15) 
+\Ahh(15,15)(8,0,180) \CArc(15,15)(8,180,360) \Line(23,15)(30,15)}}
+\newcommand{\BasicB}{\Mline \pic{\Line(0,15)(7,15) 
+\Ahh(15,15)(8,0,360) \Line(23,15)(30,15)}}
+% 2loop 2pt
+\newcommand{\BasicSmmm}{\Mline \pic{\Line(0,15)(30,15) 
+\CArc(15,15)(8,0,360)}}
+\newcommand{\BasicSmm}{\Mline \pic{\Line(0,15)(30,15) 
+\Ahh(15,15)(8,0,180) \CArc(15,15)(8,180,360)}}
+\newcommand{\BasicSdmm}{\Mline \pic{\Line(0,15)(30,15) 
+\Ahh(15,15)(8,0,180) \CArc(15,15)(8,180,360) \GCirc(15,7){2}{0}}}
+
+\def\BasicKmmm{\ToptVS({\Mline \Asc},\Asc,\Lsc) }
+\def\BasicKb{\ToptVS({\Mline \Asc},\Asc,\Lhh) }
+\def\BasicKc{\ToptVS({\Mline \Asc},\Asc,{\MMline \Lsc}) }
+\def\BasicBBmmmm{\ToprVB({\Mline \Asc},\Asc,\Asc,\Asc)}
+\def\BasicBBmmzz{\ToprVB({\Mline \Asc},\Asc,\Ahh,\Ahh)}
+\def\BasicBBmmmmm{\TopfVBB({\Mline \Asc},\Asc,\Asc,\Asc,\Lsc)}
+\def\BasicVV{\ToprVV(\Asc,{\Mline \Asc},\Lsc,\Lsc,\Lsc)}
+\def\BasicVVa{\ToprVV(\Asc,{\Mline \Asc},\Lsc,\Lhh,\Lhh)}
+\def\BasicVVb{\ToprVV(\Asc,{\Mline \Asc},\Lhh,\Lsc,\Lsc)}
+\def\BasicLV{\TopLV(\Asc,{\Mline \Asc},\Lsc,\Lsc,\Lsc,\Asc)}
+\def\BasicLVa{\TopLV(\Asc,{\Mline \Asc},\Lhh,\Lsc,\Lhh,\Asc)}
+\def\BasicLVb{\TopLV({\Mline \Asc},{\Mline \Asc},{\MMline \Lsc},\Lsc,\Lhh,\Asc)}
+\def\BasicLVc{\TopLV(\Asc,{\Mline \Asc},\Lsc,\Lhh,\Lsc,\Asc)}
+\def\BasicLVd{\TopLV(\Asc,{\Mline \Asc},\Lhh,\Lsc,\Lhh,{\GCirc(42,14){2}{0} \Asc})}
+\def\BasicLVe{\TopLV({\Mline \Asc},{\Mline \Asc},{\MMline \Lsc},\Lsc,\Lhh,{\GCirc(42,14){2}{0} \Asc})}
+\def\BasicLVf{\TopLV(\Asc,{\Mline \Asc},\Lsc,\Lhh,\Lsc,{\GCirc(22.5,30){2}{0} \Asc})}
+\def\BasicLVg{\TopLV(\Asc,{\Mline \Asc},\Lsc,\Lsc,\Lsc,{\GCirc(22.5,30){2}{0} \Asc})}
+\def\BasicLVh{\TopLV(\Asc,{\Mline \Asc},\Lsc,\Lsc,\Lsc,{\GCirc(42,14){2}{0} \Asc})}
+\def\BasicLVi{\TopLV(\Asc,{\Mline \Asc},\Lsc,\Lhh,\Lsc,{\GCirc(42,14){2}{0} \Asc})}
+\def\BasicU{\TopfVU(\Asc,\Asc,{\Mline \Asc},\Asc,\Lsc,\Lsc,\Lsc)}
+\def\BasicUa{\TopfVU(\Asc,{\Mline \Asc},{\MMline \Asc},\Asc,\Lsc,\Lsc,\Lsc)}
+\def\BasicT{\TopfVT({\Mline \Asc},\Asc,\Asc,\Lsc,\Lsc,\Lsc)}
+
+\newcommand{\lf}{\vspace*{12mm}}
+\def\TopoSsh(#1){\pib{
+  #1(0,15)(10,15) #1(12.5,15)(22.5,15)%
+  \GCirc(11.25,15){2.0}{0}}}
+\def\TopfVBB(#1,#2,#3,#4,#5){\picb{
+  #1(30,15)(15,-120,120)%
+  #2(30,15)(15,120,240)
+  #3(15,15)(15,60,300)
+  #4(15,15)(15,-60,60)%
+  #5(22.5,3)(22.5,15 60 sin 15 mul add)}}
+\def\TopfVBBnn(#1,#2,#3,#4,#5){\picb{
+  #1(30,15)(15,-120,120)%
+  #2(30,15)(15,120,240)
+  #3(15,15)(15,60,300)
+  #4(15,15)(15,-60,60)%
+  #5(22.5,3)(22.5,15 60 sin 15 mul add)
+  \Textl(2,15,1)\Textr(43,15,2)\Textr(14,15,6)\Textr(29,15,8)\Textr(21.5,15,9)}}
+\def\TopLV(#1,#2,#3,#4,#5,#6){\!\!\picb{
+  #2(26.25,15)(15.5,256,76)%
+  #3(30,30)(15,30)
+  #1(18.75,15)(15.5,104,284)
+  #4(15,30)(22.5,0)%
+  #5(30,30)(22.5,0)
+  #6(15,17.8)(19.3,292.8,39.1)}\!\!}
+\def\TopLVnn(#1,#2,#3,#4,#5,#6){\!\!\picb{
+  #2(26.25,15)(15.5,256,76)%
+  #3(30,30)(15,30)
+  #1(18.75,15)(15.5,104,284)
+  #4(15,30)(22.5,0)%
+  #5(30,30)(22.5,0)
+  #6(15,17.8)(19.3,292.8,39.1)%
+  \Textl(5,15,1)\Textl(43,9,2)\Textt(22.5,28,3)%
+  \Textr(17,15,6)\Textl(35,12,8)\Textl(28,15,9)}\!\!}
+
+%% for basic 3d ints
+\def\TopfVVn(#1,#2,#3,#4,#5,#6,#7,#8){\!\!\picb{
+  #2(26.25,15)(15,256,346)%
+  #3(26.25,15)(15,-14,76)%
+  \Text(22.5,30)[c]{$p$}%
+  #1(18.75,15)(15,104,284)%
+  #7(22.5,0)(15,30)
+  #6(30,30)(26.25,15)
+  #8(26.25,15)(22.5,0)%
+  #5(25.25,15)(39.8,11.4)}\!\!\(p^2\)^{#4}}
+\def\TopfVUn(#1,#2,#3,#4,#5,#6,#7){\pic{
+  \Text(25,25)[c]{$p$}%
+  #2(15,15)(15,90,180)
+  #4(15,15)(15,180,270)
+  #1(15,15)(15,270,360)%
+  #6(0,15)(15,30)
+  #7(15,0)(0,15)
+  #5(30,15)(15,0)}\(p^2\)^{#3}}
+\def\TopLVn(#1,#2,#3,#4,#5,#6){\!\!\picb{
+  #2(26.25,15)(15.5,256,76)%
+  \Text(22.5,30)[c]{$p$}
+  #1(18.75,15)(15.5,104,284)
+  #4(15,30)(22.5,0)%
+  #5(30,30)(22.5,0)
+  #6(15,17.8)(19.3,292.8,39.1)}\!\!\(p^2\)^{#3}}
+\def\ToptSSdot(#1,#2,#3,#4){\picb{#1(0,15)(7.5,15) #1(37.5,15)(45,15)%
+  #4(7.5,15)(37.5,15) #2(22.5,15)(15,0,180) #3(22.5,15)(15,180,360)%
+  \GCirc(22.5,30){2}{0}}}
+\def\TopfVNn(#1,#2,#3,#4,#5,#6,#7){
+  \picb{#1(15,15)(15,90,270)%
+  #2(30,15)(15,-90,90)
+  \Text(22.5,30)[c]{$p$}
+  #3(15,0)(30,0)%
+  #5(15,0)(15,30)
+  #6(30,30)(30,0)
+  #7(15,30)(30,0)}\(p^2\)^{#4}}
+
+%% 4loop vac with higher vertices
+%\TopfVBB see above
+%\TopLV   see above
+\def\TopfVMx(#1,#2,#3,#4,#5,#6,#7){\pic{
+  #3(15,15)(15,-30,90)
+  #1(15,15)(15,90,210)%
+  #2(15,15)(15,210,330)
+  #5(15,15)(2,7.5)
+  #6(15,30)(15,15)
+  #4(28,7.5)(15,15)%
+  #7(15,36)(6,-90,270)}}
+\def\TopfVVx(#1,#2,#3,#4,#5,#6){\!\!\picb{
+  #2(26.25,15)(15,256,76)%
+  #3(30,30)(15,30)
+  #1(18.75,15)(15,104,284)
+  #4(15,30)(22.5,0)%
+  #5(30,30)(22.5,0)
+  #6(31,36)(6,-90,270)}\!\!}
+\def\TopfVVxx(#1,#2,#3,#4,#5,#6){\!\!\picb{
+  #2(26.25,15)(15,256,76)%
+  #3(30,30)(15,30)
+  #1(18.75,15)(15,104,284)
+  #4(15,30)(22.5,0)%
+  #5(30,30)(22.5,0)
+  #6(22.5,-6)(6,90,450)}\!\!}
+\def\TopfVBx(#1,#2,#3,#4,#5){\picb{
+  #1(30,15)(15,-120,120)
+  #2(30,15)(15,120,240)%
+  #3(15,15)(15,60,300)
+  #4(15,15)(15,-60,60)
+  #5(22.5,34)(6,-90,270)}}
+\def\TopLNV(#1,#2,#3,#4,#5,#6,#7){\!\!\picb{
+  #5(26.25,15)(15,256,76)%
+  #7(30,30)(22.5,30)
+  #6(22.5,30)(15,30)
+  #1(18.75,15)(15,104,284)
+  #2(15,30)(22.5,0)%
+  #4(30,30)(22.5,0)
+  #3(22.5,30)(22.5,0)}\!\!}
+\def\TopLLO(#1,#2,#3,#4,#5,#6,#7){\picb{
+  #1(15,15)(15,90,270) #2(15,0)(15,30)%
+  #3(30,30)(15,30)
+  #4(15,0)(30,0)
+  #5(30,0)(30,30)
+  #6(30,15)(15,-90,90)%
+  #7(30,36)(6,-90,270)}}
+\def\TopLSS(#1,#2,#3,#4,#5,#6){\picc{
+  #1(15,15)(15,0,180)
+  #2(15,15)(15,180,360)%
+  #3(30,15)(0,15)
+  #4(45,15)(15,0,180)
+  #5(45,15)(15,180,360)
+  #6(60,15)(30,15)}}
+\def\TopLSSx(#1,#2,#3,#4,#5,#6,#7){\picc{
+  #1(15,15)(15,0,180)
+  #2(15,15)(15,180,360)%
+  #3(30,15)(0,15)
+  #4(45,15)(15,90,180)
+  #5(45,15)(15,180,270)
+  #6(45,0)(45,30)%
+  #7(45,15)(15,-90,90)}}
+\def\TopLOSO(#1,#2,#3,#4,#5){\picc{
+  #1(30,15)(15,0,180)
+  #2(30,15)(15,180,360)%
+  #3(45,15)(15,15)
+  #4(9,15)(6,0,360)
+  #5(51,15)(6,180,540)}}
+\def\TopLSOO(#1,#2,#3,#4,#5){\picc{
+  #1(15,15)(15,0,180)
+  #2(15,15)(15,180,360)%
+  #3(30,15)(0,15)
+  #4(45,15)(15,180,540)
+  #5(37,15)(7,180,540)}}
+\def\TopLSOOx(#1,#2,#3,#4,#5,#6){\picc{
+  #1(15,15)(15,90,270)
+  #2(15,0)(15,30)%
+  #3(15,15)(15,0,90)
+  #4(15,15)(15,270,360)
+  #5(45,15)(15,180,540)
+  #6(37,15)(7,180,540)}}
+\def\TopLSE(#1,#2,#3,#4,#5,#6){\picc{
+  #1(15,15)(15,0,180)
+  #2(15,15)(15,180,360)%
+  #3(30,15)(0,15)
+  #4(45,15)(15,0,180)
+  #5(45,15)(15,180,360)
+  #6(53,15)(7,0,360)}}
+\def\TopLOOS(#1,#2,#3,#4,#5,#6){\picb{
+  #1(15,15)(15,90,180)
+  #2(15,15)(15,0,90)%
+  #3(15,15)(15,180,360)
+  #4(30,15)(0,15)
+  #5(15,36)(6,-90,270)
+  #6(37,15)(7,180,540)}}
