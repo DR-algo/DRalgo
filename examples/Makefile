@@ -1,7 +1,7 @@
 # List of filenames
 FILES := \
-	2hdm.m 2xsm.m 3hdm.m ah-thermo.m ah.m cxsm.m htm 2.m htm.m LRSymmetric.m \
-	NewModel.m RealScalar.m ScalYukawa.m sm.m \
+	2hdm.m 2xsm.m 3hdm.m ah-thermo.m ah.m cxsm.m htm.m LRSymmetric.m \
+	RealScalar.m ScalYukawa.m sm.m \
 	smCKM.m smDim6.m smZp.m SU5.m tripletHET.m WessZumino.m xsm.m
 
 # Target: test
