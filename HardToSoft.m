@@ -17,7 +17,7 @@
 (* ------------------------------------------------------------------------ *)
 
 
-(* ::Section:: *)
+(* ::Section::Closed:: *)
 (*Help routines*)
 
 
@@ -1586,7 +1586,7 @@ If[verbose,Print["Calculating CounterTerms"]];
 ];
 
 
-(* ::Section::Closed:: *)
+(* ::Section:: *)
 (*Printing the results*)
 
 
@@ -2576,11 +2576,11 @@ If[verbose,Print["Finding \[Beta]-functions"]];
 			ResTadpole=Solve[SolVar==0,QuarticVar]/.SubGauge2//Flatten[#,1]&;
 		];
 
-		PrintPre=Join[ResMass,ResTadpole]//Normal//FullSimplify//DeleteDuplicates;
+		PrintPre=Join[ResMass,ResTadpole]/.\[Mu]3->\[Mu] Exp[1]//Normal//FullSimplify//DeleteDuplicates;
 ,
 	ResMass=#->0&/@Variables[\[Mu]ij//Normal];
 	ResTadpole=#->0&/@Variables[\[Lambda]1//Normal];
-	PrintPre=Join[ResMass,ResTadpole]//Normal//FullSimplify//DeleteDuplicates;
+	PrintPre=Join[ResMass,ResTadpole]/.\[Mu]3->\[Mu] Exp[1]//Normal//FullSimplify//DeleteDuplicates;
 ];
 ToExpression[StringReplace[ToString[StandardForm[PrintPre]],"DRalgo`Private`"->""]]
 
