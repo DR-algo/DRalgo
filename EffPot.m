@@ -17,7 +17,7 @@
 (* ------------------------------------------------------------------------ *)
 
 
-(* ::Section:: *)
+(* ::Section::Closed:: *)
 (*Definition of model*)
 
 
@@ -191,6 +191,10 @@ DefineVEVS[\[Phi]Vecp_]:=Module[{\[Phi]Vec=\[Phi]Vecp},
 (*Calculation of the effective potential*)
 
 
+	Options[CalculatePotentialUS] = {CustomMasses -> False,PerturbativeDiagonalization->False}
+	Options[CalculatePotential] = {CustomMasses -> False,PerturbativeDiagonalization->False}
+
+
 (*
 	Calculates the effective potential with custom masses
 *)
@@ -211,18 +215,77 @@ CalculatePotentialUS[ScalMassI_,VecMassI_,OptionsPattern[]]:=Module[{ScalMassP=S
 	,
 	Print["Please set CustomMasses->True"]
 	];
-
-
 ];
 
+(*
+	Calculates the effective potential with custom masses (just a copy of CalculatePotentialUS)
+*)
+CalculatePotential[ScalMassI_,VecMassI_,OptionsPattern[]]:=Module[{ScalMassP=ScalMassI,VecMassP=VecMassI},
 
-	Options[CalculatePotentialUS] = {CustomMasses -> False,PerturbativeDiagonalization->False}
+	CustomMass= OptionValue[CustomMasses];
+	If[CustomMass==True,
+		\[Mu]ij\[Phi]=ScalMassP//SparseArray;
+		\[Mu]ab\[Phi]=VecMassP//SparseArray;
+
+			If[DiagonalMatrixQAE[\[Mu]ij\[Phi]]==True && DiagonalMatrixQAE[\[Mu]ab\[Phi]]==True,
+				CalculateLOPotentialSS[];
+				CalculateNLOPotentialSS[];
+				VTot={VLO,VNLO};
+			,
+			Print["The Mass matrices are not diagonal. Please rotate to the mass-basis using RotateTensorsUSPostVeV[]"];
+			];
+	,
+	Print["Please set CustomMasses->True"]
+	];
+];
 
 
 (*
 	Calculates the effective potential.
 *)
 CalculatePotentialUS[OptionsPattern[]]:=Module[{},
+
+	CustomMass= OptionValue[CustomMasses]; (*Whether the user wants to use their own masses*)
+	PertDia=OptionValue[PerturbativeDiagonalization]; (*If a perturbative diagonalization in terms of off-diagonal masses should be carried out*)
+	
+	If[PertDia==False,
+		If[CustomMass==False,
+			If[DiagonalMatrixQAE[\[Mu]ij\[Phi]]==True && DiagonalMatrixQAE[\[Mu]ab\[Phi]]==True,
+				CalculateLOPotentialSS[];
+				CalculateNLOPotentialSS[];
+				CalculateNNLOPotentialSS[];
+
+				VTot={VLO,VNLO,VNNLO};
+			,
+			Print["The Mass matrices are not diagonal. Please rotate to the mass-basis using RotateTensorsUSPostVeV[]"];
+			];
+		,
+			Print["Please supply scalar and vector mass matrices"]
+		];
+	,
+		(*We now treat off-diagonal masses as small*)
+		\[Mu]ijPert=ArrayRules[\[Mu]ij\[Phi]]/.({x_Integer,y_Integer}->a_)/;Equal[x,y]->{x,y}->0//SparseArray;
+		\[Mu]ij\[Phi]=ArrayRules[\[Mu]ij\[Phi]]/.({x_Integer,y_Integer}->a_)/;Unequal[x,y]->{x,y}->0//SparseArray;
+		
+		\[Mu]ab\[Phi]Pert=ArrayRules[\[Mu]ab\[Phi]]/.({x_Integer,y_Integer}->a_)/;Equal[x,y]->{x,y}->0//SparseArray;
+		\[Mu]ab\[Phi]=ArrayRules[\[Mu]ab\[Phi]]/.({x_Integer,y_Integer}->a_)/;Unequal[x,y]->{x,y}->0//SparseArray;
+		
+		CalculateLOPotentialSS[];
+		CalculateNLOPotentialSS[];
+		CalculateNNLOPotentialSS[];
+		CalculateOffDiagPotentialSS[];
+
+		VTot={VLO,VNLO,VNNLO};
+	
+	];
+
+
+];
+
+(*
+	Calculates the effective potential. (just a copy of CalculatePotentialUS)
+*)
+CalculatePotential[OptionsPattern[]]:=Module[{},
 
 	CustomMass= OptionValue[CustomMasses]; (*Whether the user wants to use their own masses*)
 	PertDia=OptionValue[PerturbativeDiagonalization]; (*If a perturbative diagonalization in terms of off-diagonal masses should be carried out*)

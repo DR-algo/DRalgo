@@ -25,8 +25,22 @@
 	Prints the result from SymmEnergy.
 *)
 PrintPressureUS[optP_]:=Module[{opt=optP},
-	SymmPrint=Switch[opt,"LO",SymmEnergyUS[[1]],"NLO",SymmEnergyUS[[2]]];
 	
+	If[mode<2,
+		SymmPrint=-SymmetricPhaseUSLO[]
+	,
+		SymmPrint=Switch[opt,"LO",SymmEnergyUS[[1]],"NLO",SymmEnergyUS[[2]]];
+	];
+(*Printing Result*)
+	ToExpression[StringReplace[ToString[StandardForm[SymmPrint]],"DRalgo`Private`"->""]]
+];
+
+PrintPressureUS[]:=Module[{},
+	If[mode<2,
+		SymmPrint=-SymmetricPhaseUSLO[]
+	,
+		SymmPrint=SymmEnergyUS[[1]]+SymmEnergyUS[[2]];
+	];
 (*Printing Result*)
 	ToExpression[StringReplace[ToString[StandardForm[SymmPrint]],"DRalgo`Private`"->""]]
 ];
@@ -624,7 +638,6 @@ TadPoleSS[]:=Module[{},
 *)
 IdentifyTensorsPreSSDRalgo[]:=Module[{},
 
-
 (*Quartic Tensor*)
 	HelpList=DeleteDuplicates@SparseArray[Flatten@Simplify[ (\[Lambda]4S)]]//Sort//FullSimplify;
 	HelpVar=Table[\[Lambda]PSS[a],{a,1,Delete[HelpList,1]//Length}];
@@ -667,53 +680,54 @@ IdentifyTensorsPreSSDRalgo[]:=Module[{},
 IdentifyTensorsSSDRalgo[]:=Module[{},
 
 If[verbose,Print["Identifying Components"]];
-(*Quartic Tensor*)
 
-	HelpList=SparseArray[\[Lambda]4S+\[Lambda]3DSS]["NonzeroValues"]//Simplify//DeleteDuplicates//Sort;
-	If[HelpList[[1]]==0&&Length[HelpList]>1,
-		HelpList=Delete[HelpList,1];
-	];
-	HelpVar=Table[\[Lambda]SS[a],{a,1,HelpList//Length}];
-	HelpVarMod=RelationsBVariables[HelpList,HelpVar];
-	HelpSolveQuarticS=Table[{HelpList[[a]]->HelpVarMod[[a]]},{a,1,HelpList//Length}]//Flatten;
-	\[Lambda]4US=(\[Lambda]4S+\[Lambda]3DSS)//Normal//Simplify//ReplaceAll[#,HelpSolveQuarticS]&//SparseArray;
-	
-	If[Length[Variables[\[Lambda]4US["NonzeroValues"]/.\[Lambda]SS[x_]->0]]>0,
-		HelpSolveQuarticS2=HelpSolveQuarticS/.\[Lambda]SS[x_]->\[Lambda]SSS[x];
-		HelpList=DeleteDuplicates[\[Lambda]4US["NonzeroValues"]//Simplify]/.\[Lambda]SS[x_]->\[Lambda]SSS[x]//Sort;
+	If[mode>=1,
+
+(*Quartic Tensor*)
+		HelpList=SparseArray[\[Lambda]4S+\[Lambda]3DSS]["NonzeroValues"]//Simplify//DeleteDuplicates//Sort;
 		If[HelpList[[1]]==0&&Length[HelpList]>1,
 			HelpList=Delete[HelpList,1];
 		];
 		HelpVar=Table[\[Lambda]SS[a],{a,1,HelpList//Length}];
 		HelpVarMod=RelationsBVariables[HelpList,HelpVar];
 		HelpSolveQuarticS=Table[{HelpList[[a]]->HelpVarMod[[a]]},{a,1,HelpList//Length}]//Flatten;
-		\[Lambda]4US=Normal[\[Lambda]4US]/.\[Lambda]SS[x_]->\[Lambda]SSS[x]//Simplify//ReplaceAll[#,HelpSolveQuarticS]&//SparseArray;
-		
-		HelpSolveQuarticS=HelpSolveQuarticS//ReplaceAll[#,HelpSolveQuarticS2/.(b_->a_):>a->b]&
-	];
+		\[Lambda]4US=(\[Lambda]4S+\[Lambda]3DSS)//Normal//Simplify//ReplaceAll[#,HelpSolveQuarticS]&//SparseArray;
+	
+		If[Length[Variables[\[Lambda]4US["NonzeroValues"]/.\[Lambda]SS[x_]->0]]>0,
+			HelpSolveQuarticS2=HelpSolveQuarticS/.\[Lambda]SS[x_]->\[Lambda]SSS[x];
+			HelpList=DeleteDuplicates[\[Lambda]4US["NonzeroValues"]//Simplify]/.\[Lambda]SS[x_]->\[Lambda]SSS[x]//Sort;
+			If[HelpList[[1]]==0&&Length[HelpList]>1,
+				HelpList=Delete[HelpList,1];
+			];
+			HelpVar=Table[\[Lambda]SS[a],{a,1,HelpList//Length}];
+			HelpVarMod=RelationsBVariables[HelpList,HelpVar];
+			HelpSolveQuarticS=Table[{HelpList[[a]]->HelpVarMod[[a]]},{a,1,HelpList//Length}]//Flatten;
+			\[Lambda]4US=Normal[\[Lambda]4US]/.\[Lambda]SS[x_]->\[Lambda]SSS[x]//Simplify//ReplaceAll[#,HelpSolveQuarticS]&//SparseArray;
+			
+			HelpSolveQuarticS=HelpSolveQuarticS//ReplaceAll[#,HelpSolveQuarticS2/.(b_->a_):>a->b]&
+		];
 	
 	
 (*Cubic Tensor*)
-	HelpList=DeleteDuplicates@SparseArray[Flatten@Simplify[(\[Lambda]3CSSS+\[Lambda]3CLight)]]//Sort//FullSimplify;
-	If[HelpList[[1]]==0&&Length[HelpList]>1,
-		HelpList=Delete[HelpList,1];
-	];
-	HelpVar=Table[cSSSS[a],{a,1,HelpList//Length}];
-	HelpVarMod=RelationsBVariables[HelpList,HelpVar];
-	HelpSolveCubicSSS=Table[{HelpList[[a]]->HelpVarMod[[a]]},{a,1,HelpList//Length}]//Flatten//Simplify;
-	\[Lambda]3CSRedSS=(\[Lambda]3CSSS+\[Lambda]3CLight)//Normal//Simplify//FullSimplify//ReplaceAll[#,HelpSolveCubicSSS]&//SparseArray;
+		HelpList=DeleteDuplicates@SparseArray[Flatten@Simplify[(\[Lambda]3CSSS+\[Lambda]3CLight)]]//Sort//FullSimplify;
+		If[HelpList[[1]]==0&&Length[HelpList]>1,
+			HelpList=Delete[HelpList,1];
+		];
+		HelpVar=Table[cSSSS[a],{a,1,HelpList//Length}];
+		HelpVarMod=RelationsBVariables[HelpList,HelpVar];
+		HelpSolveCubicSSS=Table[{HelpList[[a]]->HelpVarMod[[a]]},{a,1,HelpList//Length}]//Flatten//Simplify;
+		\[Lambda]3CSRedSS=(\[Lambda]3CSSS+\[Lambda]3CLight)//Normal//Simplify//FullSimplify//ReplaceAll[#,HelpSolveCubicSSS]&//SparseArray;
 (*Scalar-Vector Tensor*)
 
-	HelpList=DeleteDuplicates@Simplify@Flatten[(HabijVL+GvvssTSS)]//Sort;
-	If[HelpList[[1]]==0&&Length[HelpList]>1,
-		HelpList=Delete[HelpList,1];
+		HelpList=DeleteDuplicates@Simplify@Flatten[(HabijVL+GvvssTSS)]//Sort;
+		If[HelpList[[1]]==0&&Length[HelpList]>1,
+			HelpList=Delete[HelpList,1];
+		];
+		HelpVar=Table[ \[Lambda]VTSS[a],{a,1,HelpList//Length}];
+		HelpVarMod=RelationsBVariables[HelpList,HelpVar];
+		HelpSolveVecTS=Table[{HelpList[[a]]->HelpVarMod[[a]]},{a,1,HelpList//Length}]//Flatten;
+		\[Lambda]KVecTSS= (HabijVL+GvvssTSS)//Normal//Simplify//ReplaceAll[#,HelpSolveVecTS]&//SparseArray;		
 	];
-	HelpVar=Table[ \[Lambda]VTSS[a],{a,1,HelpList//Length}];
-	HelpVarMod=RelationsBVariables[HelpList,HelpVar];
-	HelpSolveVecTS=Table[{HelpList[[a]]->HelpVarMod[[a]]},{a,1,HelpList//Length}]//Flatten;
-	\[Lambda]KVecTSS= (HabijVL+GvvssTSS)//Normal//Simplify//ReplaceAll[#,HelpSolveVecTS]&//SparseArray;
-
-
 (*Scalar Mass*)
 	If[mode>=2,
 		HelpList=DeleteDuplicates@Flatten@Simplify[ xLO \[Mu]ijLight+xLO \[Mu]ijSSLO+xNLO(\[Mu]ijSSNLO+\[Mu]ijSSNLO2)]//Sort;
@@ -745,7 +759,11 @@ If[verbose,Print["Identifying Components"]];
 	HelpSolveTadpoleSS=Table[{HelpList[[a]]->HelpVarMod[[a]]},{a,1,HelpList//Length}]//Flatten;
 	TadPoleSSSLO=TadPoleLightSS//Normal//Simplify//ReplaceAll[#,HelpSolveTadpoleSS]&//SparseArray;
 	
-	IdentMatSS=List/@Join[HelpSolveQuarticS,HelpSolveVecTS,HelpSolveMassS,HelpSolveCubicSSS,HelpSolveTadpoleSS]/.{b_->a_}:>a->b//Flatten[#,1]&;
+	If[mode>=1,
+		IdentMatSS=List/@Join[HelpSolveQuarticS,HelpSolveVecTS,HelpSolveMassS,HelpSolveCubicSSS,HelpSolveTadpoleSS]/.{b_->a_}:>a->b//Flatten[#,1]&;
+	,
+		IdentMatSS=List/@Join[HelpSolveMassS,HelpSolveTadpoleSS]/.{b_->a_}:>a->b//Flatten[#,1]&;
+	];
 
 ];
 
@@ -1048,7 +1066,7 @@ If[a==1,
     ]
 
 
-(* ::Section::Closed:: *)
+(* ::Section:: *)
 (*Printing functions*)
 
 
@@ -1078,6 +1096,26 @@ If[verbose,Print["Printing Scalar Masses"]];
 
 ];
 
+PrintScalarMassUS[]:=Module[{},
+If[verbose,Print["Printing Scalar Masses"]];
+
+	VarGauge=Join[\[Mu]ijLight//Normal//Variables]//DeleteDuplicates;
+	SubGauge=Table[c->Symbol[ToString[c]<>ToString["US"]],{c,VarGauge}];
+
+	\[Mu]ijp=\[Mu]ijLight//Normal//ReplaceAll[#,SubGauge]&;
+	var=Normal[\[Mu]ijp]//Variables;
+	helpMass=Normal[\[Mu]ijp-\[Mu]ijSNLOSS];
+	ResScalp=Reduce[helpMass==0,var]//ToRules[#]&;
+	SolveTemp=var/.ResScalp;
+	SolMassPre=Table[{var[[i]]->SolveTemp[[i]]},{i,1,Length@var}]//Flatten[#,1]&//ReplaceAll[#,IdentMatSS]&;
+	
+	SolMass=SolMassPre/.xLO->1/.xNLO->1;
+	
+(*Printing Result*)
+	ToExpression[StringReplace[ToString[StandardForm[Join[SolMass]]],"DRalgo`Private`"->""]]
+
+];
+
 
 (*
 	Prints all the couplings in the supersoft theory.	
@@ -1089,6 +1127,7 @@ PrintCouplingsUS[]:=Module[{},
 
 	NonAbelianCouplingSS[]; (*Calculates non-abelian couplings*)
 	
+	If[mode==0,GgvvvSS=EmptyArray[{nv,nv,nv}]];
 	GabcdTemp=GgvvvSS . gvvvSS+gvvvSS . GgvvvSS;
 	Temp=Activate @ TensorContract[Inactive[TensorProduct][gvvvSS,gvvvSS], {{3, 6}}]; 
 	GabVTree=TensorContract[Temp,{{2,3}}]//Normal;
@@ -1114,6 +1153,7 @@ PrintCouplingsUS[]:=Module[{},
 	ResGaugeNASS=Table[List[Sol1[[c]]]/.{b_->a_}:>b^2->a,{c,1,Length[Sol1]}]//Simplify;
 
 (* Gauge couplings*)
+	If[mode==0,\[Lambda]KVecTSS=HabijVL];
 	A1=TensorContract[\[Lambda]KVecTSS,{{3,4}}]//Normal;
 	A2=TensorContract[HabijVL,{{3,4}}]//Normal//ReplaceAll[#,SubGauge]&;
 (*Trick to avoid problems when kinetic mixing*)
@@ -1128,6 +1168,7 @@ PrintCouplingsUS[]:=Module[{},
 	ResGauge=Table[List[Sol1[[c]]]/.{b_->a_}:>b^2->a,{c,1,Length[Sol1]}];
 
 (* Scalar Quartics*)
+	If[mode==0,\[Lambda]4US=\[Lambda]4S];
 	QuarticVar=\[Lambda]4S//Normal//Variables;
 	SubGauge=Table[c->Symbol[ToString[c]<>ToString["US"]],{c,QuarticVar}];
 	NonZeroPos=SparseArray[\[Lambda]4S]["NonzeroPositions"];
@@ -1138,6 +1179,7 @@ PrintCouplingsUS[]:=Module[{},
 
 
 (* Scalar Cubics*)
+	If[mode==0,\[Lambda]3CSRedSS=\[Lambda]3CLight];
 	VarGauge=Join[\[Lambda]3CLight//Normal//Variables]//DeleteDuplicates;
 	SubGauge=Table[c->Symbol[ToString[c]<>ToString["US"]],{c,VarGauge}];
 	\[Lambda]3p=\[Lambda]3CLight//Normal//ReplaceAll[#,SubGauge]&;
