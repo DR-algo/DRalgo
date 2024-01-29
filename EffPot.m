@@ -187,7 +187,7 @@ DefineVEVS[\[Phi]Vecp_]:=Module[{\[Phi]Vec=\[Phi]Vecp},
 ];
 
 
-(* ::Section::Closed:: *)
+(* ::Section:: *)
 (*Calculation of the effective potential*)
 
 
@@ -200,21 +200,7 @@ DefineVEVS[\[Phi]Vecp_]:=Module[{\[Phi]Vec=\[Phi]Vecp},
 *)
 CalculatePotentialUS[ScalMassI_,VecMassI_,OptionsPattern[]]:=Module[{ScalMassP=ScalMassI,VecMassP=VecMassI},
 
-	CustomMass= OptionValue[CustomMasses];
-	If[CustomMass==True,
-		\[Mu]ij\[Phi]=ScalMassP//SparseArray;
-		\[Mu]ab\[Phi]=VecMassP//SparseArray;
-
-			If[DiagonalMatrixQAE[\[Mu]ij\[Phi]]==True && DiagonalMatrixQAE[\[Mu]ab\[Phi]]==True,
-				CalculateLOPotentialSS[];
-				CalculateNLOPotentialSS[];
-				VTot={VLO,VNLO};
-			,
-			Print["The Mass matrices are not diagonal. Please rotate to the mass-basis using RotateTensorsUSPostVeV[]"];
-			];
-	,
-	Print["Please set CustomMasses->True"]
-	];
+	CalculatePotential[ScalMassP,VecMassP,OptionsPattern[]]
 ];
 
 (*
