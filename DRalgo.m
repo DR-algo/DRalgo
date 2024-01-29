@@ -38,7 +38,7 @@ AppendTo[result,Row[{
 	TexFor["DRDRDRDRDRDRDRDRDRDRDRDRDRDR "],
 	TexFor["DRalgo"],
 	TexFor[" DRDRDRDRDRDRDRDRDRDRDRDRDRDRD"]}]];
-AppendTo[result,Row[{"Version: "//TexFor,"1.2 (11-10-2023)"//TexFor}]];
+AppendTo[result,Row[{"Version: "//TexFor,"1.2 (29-01-2024)"//TexFor}]];
 AppendTo[result,Row[{"Authors: "//TexFor,
     Hyperlink["Andreas Ekstedt","https://inspirehep.net/authors/1799400"],", "//TexFor,
     Hyperlink["Philipp Schicho","https://inspirehep.net/authors/1639147"],", "//TexFor,
