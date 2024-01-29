@@ -38,7 +38,7 @@ AppendTo[result,Row[{
 	TexFor["DRDRDRDRDRDRDRDRDRDRDRDRDRDR "],
 	TexFor["DRalgo"],
 	TexFor[" DRDRDRDRDRDRDRDRDRDRDRDRDRDRD"]}]];
-AppendTo[result,Row[{"Version: "//TexFor,"1.1 (11-10-2023)"//TexFor}]];
+AppendTo[result,Row[{"Version: "//TexFor,"1.2 (29-01-2024)"//TexFor}]];
 AppendTo[result,Row[{"Authors: "//TexFor,
     Hyperlink["Andreas Ekstedt","https://inspirehep.net/authors/1799400"],", "//TexFor,
     Hyperlink["Philipp Schicho","https://inspirehep.net/authors/1639147"],", "//TexFor,
@@ -79,6 +79,7 @@ Print[Grid[{{Image[DRalgoLoad,ImageSize->140],Row[result,"\n",BaseStyle->(FontFa
 	PrintScalarMassUS::usage="Prints scalar masses in the supersoft theory"
 	AnomDim4D::usage="Prints anomalous dimensions in the 4d theory"
 	BetaFunctions4D::usage="Prints beta-functions in the 4d theory"
+	BetaFunctions3DS::usage="Prints beta-functions in the soft theory"
 	DefineNewTensorsUS::usage="Defines Custom Tensors for Effective-Potential Computations"
 	SymmetricPhaseEnergy::usage="Prints the energy of the Symmetric Phase"
 	PrintCouplingsUS::usage="Prints couplings in the supersoft theory"
@@ -93,6 +94,7 @@ Print[Grid[{{Image[DRalgoLoad,ImageSize->140],Row[result,"\n",BaseStyle->(FontFa
 	DefineGroup::usuage="Loads the group and names Debye masses"
 	PerformDRsoft::usage="Perform the reduction from soft to supersoft"
 	CalculatePotentialUS::usage="Calculates the effective potential"
+	CalculatePotential::usage="Calculates the effective potential"
 	CompareInvariants::usuage="Finds relations between couplings by calculating basis-invariant tensors"
 	AllocateTensors::usage="Creates gauge generators"
 	GradQuartic::usage="Creates Quartic tensors"
@@ -144,7 +146,7 @@ Print["Please Cite GroupMath: Comput.Phys.Commun. 267 (2021) 108085 \[Bullet] e-
 	Mode=2 calculates everything, Mode=1 only calculates LO masses and couplings
 	 Mode=0 only calculates LO masses
 *)
-Options[ImportModelDRalgo] = {Verbose -> False,Mode->2,Dim6->False,Normalization4D->False}
+Options[ImportModelDRalgo] = {Verbose -> False,Mode->2,Dim6->False,Normalization4D->False,AutoRG->True}
 
 
 Begin["`Private`"]
@@ -161,7 +163,7 @@ Get[FileNameJoin[{$DRalgoDic,"ModelCreation.m"}]];(*Loads Effective Potential Fu
 Get[FileNameJoin[{$DRalgoDic,"HEFT.m"}]];(*Loads Higgs-Effective field theory Functions*)
 
 
-(* ::Section:: *)
+(* ::Section::Closed:: *)
 (*Initialization*)
 
 
@@ -200,6 +202,7 @@ If[ Global`$LoadGroupMath,
 	mode = OptionValue[Mode]; (*If 2 everthing is calculated. And if 2 only 1-loop contributions are calculated*)
 	NFMat=IdentityMatrix[nf]//SparseArray; (*This matrix is only relevant if the user wants an arbitrary number of fermion families*)
 	normalization4D=OptionValue[Normalization4D];
+	If[OptionValue[AutoRG],rgFac=1,rgFac=0]; (*Determines whether the RG-running is automatically incorporated in the soft masses and tadpoles*)
 (*End of Options*)
 
 	CT=False; (*Checks if counter-terms have already been calculated*)
@@ -249,13 +252,13 @@ DefineNF[NFMatP_]:=Module[{NFMatI=NFMatP},
 PerformDRhard[]:=Module[{},
 
 	If[mode>=0,
+		CreateBasisVanDeVis[]; (*Creates a basis of "couplings" to identify all linearly-independent dimensionally reduced paramters*)
 		ScalarMass[];
 		VectorMass[];
+		TadPole[];
 	];
 
 	If[mode>=1,
-		CreateBasisVanDeVis[]; (*Creates a basis of "couplings" to identify all linearly-independent dimensionally reduced paramters*)
-
 		ScalarSelfEnergy[];
 		VectorSelfEnergy[];
 		ScalarCubic[];
@@ -264,7 +267,6 @@ PerformDRhard[]:=Module[{},
 		LongitudionalSSVV[];
 		LongitudionalVVVV[];
 		LongitudionalVVS[];
-		TadPole[];
 	];
 
 
@@ -301,8 +303,6 @@ PerformDRhard[]:=Module[{},
 *)
 
 PerformDRsoft[ListHardP_]:=Module[{ListHardI=ListHardP},
-(*Options*)
-
 	PrepareSoftToSuperSoft[ListHardI];
 	CreateHelpTensorsSS[];
 
@@ -310,10 +310,13 @@ PerformDRsoft[ListHardP_]:=Module[{ListHardI=ListHardP},
 	TadPoleSS[];(*Calculates tadpoles*)
 	HeavyScalarMassSS[];(*Includes self-energies for heavy-lines with soft momenta*)
 	VectorSelfEnergySS[];
-	ScalarVectorCouplingSS[];
-	ScalarQuarticSS[];
-	ScalarCubicsSS[];
 	ScalarMassSS[];
+	
+	If[mode>=1,
+		ScalarVectorCouplingSS[];
+		ScalarQuarticSS[];
+		ScalarCubicsSS[];
+	];
 	
 	If[mode>=2,
 		ScalarMass2LoopSS[];
@@ -424,7 +427,6 @@ CreateBasisVanDeVis[]:=Module[{},
 	FermionFamVar=Normal[NFMat]//Variables;
 	ScalVar=\[Lambda]4//Normal//Variables;
 
-
 	GaugeVarPre=Join[Normal[gvvv]//Variables,Normal[gvff]//Variables,Normal[gvss]//Variables]//DeleteDuplicates; (*Includes possible non-numeric charges*)
 	GaugeCharge=Complement[GaugeVarPre,GaugeCouplingNames];(*Possible non-numeric gauge charges*)
 
@@ -464,7 +466,6 @@ RelationsBVariables3[list_]:=Module[{L=list},
 	,
 		Lp=L;
 	];
-
 
 	varHelp=Lp//Variables;
 	varFix=#->0&/@varHelp; (*Trick to ensure that vectors are expanded properly*)
@@ -569,7 +570,7 @@ CompExp3[a0_,b0_]:=Module[{a=a0,b=b0},
 	Converts an array to a saveable form
 *)
 ConvertToSaveFormat[tens_SparseArray]:=Module[{},
-Return[{tens["NonzeroPositions"],tens["NonzeroValues"],Dimensions[tens]}]
+	Return[{tens["NonzeroPositions"],tens["NonzeroValues"],Dimensions[tens]}]
 ];
 
 
@@ -577,7 +578,7 @@ Return[{tens["NonzeroPositions"],tens["NonzeroValues"],Dimensions[tens]}]
 	Converts imported data, as defined by ConvertToSaveFormat, to a sparse array
 *)
 ConvertToSparse[arr_]:=Module[{},
-Return[SparseArray[arr[[1]]->arr[[2]],arr[[3]]]]
+	Return[SparseArray[arr[[1]]->arr[[2]],arr[[3]]]]
 ];
 
 
@@ -585,9 +586,9 @@ Return[SparseArray[arr[[1]]->arr[[2]],arr[[3]]]]
 	Loads the position of all scalar,gauge, and fermion representations.
 *)
 LoadRepPositions[repPos_]:=Module[{repPosP=repPos},
-ScalarVariablesIndices=repPosP[[1]];
-GaugeIndices=repPosP[[2]];
-FermionVariablesIndices=repPosP[[3]];
+	ScalarVariablesIndices=repPosP[[1]];
+	GaugeIndices=repPosP[[2]];
+	FermionVariablesIndices=repPosP[[3]];
 ];
 
 
@@ -595,7 +596,7 @@ FermionVariablesIndices=repPosP[[3]];
 	Loads the names of gauge couplings.
 *)
 LoadCouplingNames[couplingNamesI_]:=Module[{couplingNamesP=couplingNamesI},
-GaugeCouplingNames=couplingNamesP;
+	GaugeCouplingNames=couplingNamesP;
 ];
 
 
@@ -604,17 +605,19 @@ GaugeCouplingNames=couplingNamesP;
 *)
 SaveModelDRalgo[modelInfo_,fileName_]:=Module[{modelInfoP=modelInfo},
 
-PosScalar=PrintScalarRepPositions[];
-PosVector=PrintGaugeRepPositions[];
-PosFermion=PrintFermionRepPositions[];
-PosReps={PosScalar,PosVector,PosFermion};
-tensP={modelInfoP,PosReps,GaugeCouplingNames,GroupDR,gvvv,gvff,gvss,\[Lambda]1,\[Lambda]3,\[Lambda]4,\[Mu]ij,\[Mu]IJFC,\[Mu]IJF,Ysff,YsffC};
-SaveFile={tensP[[1]],tensP[[2]],tensP[[3]],tensP[[4]]}; (*The fourth element is the group*)
-tensP=Delete[Delete[Delete[Delete[tensP,1],1],1],1];
-Do[
-AppendTo[SaveFile,ConvertToSaveFormat[i]];
-,{i,tensP}];
-Export[fileName,SaveFile];
+	PosScalar=PrintScalarRepPositions[];
+	PosVector=PrintGaugeRepPositions[];
+	PosFermion=PrintFermionRepPositions[];
+	PosReps={PosScalar,PosVector,PosFermion};
+	tensP={modelInfoP,PosReps,GaugeCouplingNames,GroupDR,gvvv,gvff,gvss,\[Lambda]1,\[Lambda]3,\[Lambda]4,\[Mu]ij,\[Mu]IJFC,\[Mu]IJF,Ysff,YsffC};
+	SaveFile={tensP[[1]],tensP[[2]],tensP[[3]],tensP[[4]]}; (*The fourth element is the group*)
+	tensP=Delete[Delete[Delete[Delete[tensP,1],1],1],1];
+
+	Do[
+		AppendTo[SaveFile,ConvertToSaveFormat[i]];
+	,{i,tensP}];
+	
+	Export[fileName,SaveFile];
 ];
 
 
@@ -622,26 +625,26 @@ Export[fileName,SaveFile];
 	Loads tensors that are saved by SaveModelDRalgo
 *)
 LoadModelDRalgo[fileName_]:=Module[{},
-arrImp=ReadList[fileName];
-InfoText=arrImp[[1]];(*The first element is the info*)
-arrImp=Delete[arrImp,1];
+	arrImp=ReadList[fileName];
+	InfoText=arrImp[[1]];(*The first element is the info*)
+	arrImp=Delete[arrImp,1];
 
-LoadRepPositions[arrImp[[1]]];(*The Second element is the repPositions*)
-arrImp=Delete[arrImp,1];
+	LoadRepPositions[arrImp[[1]]];(*The Second element is the repPositions*)
+	arrImp=Delete[arrImp,1];
 
-LoadCouplingNames[arrImp[[1]]];(*The Third element is the gauge-coupling names*)
-arrImp=Delete[arrImp,1];
+	LoadCouplingNames[arrImp[[1]]];(*The Third element is the gauge-coupling names*)
+	arrImp=Delete[arrImp,1];
 
-ImportFile={arrImp[[1]]};(*The fourth element is the group*)
-arrImp=Delete[arrImp,1];
+	ImportFile={arrImp[[1]]};(*The fourth element is the group*)
+	arrImp=Delete[arrImp,1];
 
-Do[
-AppendTo[ImportFile,ConvertToSparse[i]];
-,{i,arrImp}];
+	Do[
+		AppendTo[ImportFile,ConvertToSparse[i]];
+	,{i,arrImp}];
 (*Prints the info text*)
-Print[Grid[{{Row[InfoText,"\n",BaseStyle->(FontFamily->"Consolas")]}},Alignment->{Left,Center}]];
+	Print[Grid[{{Row[InfoText,"\n",BaseStyle->(FontFamily->"Consolas")]}},Alignment->{Left,Center}]];
 (**)
-Return[ImportFile]
+	Return[ImportFile]
 ];
 
 

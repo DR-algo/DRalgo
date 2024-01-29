@@ -1146,7 +1146,6 @@ If[verbose,Print["Calculating 2-Loop Tadpoles"]];
 	
 	Contri7=-IF2p(Contri71+Contri72);
 
-
 (*Fermion-mass contributions*)
 	YHelp2=Contract[YsffC,Ysff,{{1,4},{2,5}}]//SimplifySparse;
 	YHelpC2=Contract[Ysff,YsffC,{{1,4},{2,5}}]//SimplifySparse;
@@ -1159,10 +1158,8 @@ If[verbose,Print["Calculating 2-Loop Tadpoles"]];
 	Temp1C=Contract[YsffC,\[Mu]IJF,FHelp,{{2,4},{5,6},{3,7}}]//SimplifySparse;
 	Contri6=-(D-2)(IF1p IF2p-IF2p I1p)(Temp1+Temp1C)//SimplifySparse;
 
-
 (*Counterterm contribution*)
-	ContriCTS=-1/2 I1p \[Epsilon]^-1*( TensorContract[Z\[Lambda]ijk,{{2,3}}]+1/2*Contract[\[Gamma]ij,\[Lambda]3,{{2,3},{4,5}}])//SparseArray//SimplifySparse;
-
+	ContriCTS=-1/2 I1p \[Epsilon]^-1*( TensorContract[Z\[Lambda]ijk,{{2,3}}]+1/2*TensorContract[\[Gamma]ij . \[Lambda]3,{2,3}])//SparseArray//SimplifySparse;
 	temp1=Contract[ZYsij,\[Mu]IJFC,{{2,4},{3,5}}]//SimplifySparse;
 	temp2=Contract[ZYsijC,\[Mu]IJF,{{2,4},{3,5}}]//SimplifySparse;
 	temp3=Contract[Ysff,Z\[Mu]IJFC,{{2,4},{3,5}}]//SimplifySparse;
@@ -1170,14 +1167,10 @@ If[verbose,Print["Calculating 2-Loop Tadpoles"]];
 	temp5=1/2Contract[\[Gamma]ij,Ysff,\[Mu]IJFC,{{2,3},{4,6},{5,7}}]//SimplifySparse;
 	temp6=1/2Contract[\[Gamma]ij,YsffC,\[Mu]IJF,{{2,3},{4,6},{5,7}}]//SimplifySparse;
 	ContriCTFF=1/2*2*IF1p*\[Epsilon]^-1 (-1)^2*(temp1+temp2+temp3+temp4+temp5+temp6);
-
 (*Self-Energy correction*)
 	ContriF=-TadPoleLO . ZijS//SimplifySparse;
-	
 	Tot=ContriF-Contri1-Contri2-Contri3-ContriCTS-Contri4-ContriCTFF-Contri5-Contri6-Contri7//Normal; (*minus signs from matching*)
-
 	TadPoleNLO=Series[(Tot)/.D->4-2\[Epsilon]/.\[Epsilon]bp->(1/\[Epsilon]+Lb)^-1/.\[Epsilon]b->(1/\[Epsilon]+Lbb)^-1/.\[Epsilon]BF->(1/\[Epsilon]+LBF)^-1/.\[Epsilon]F->(1/\[Epsilon]+LFF)^-1/.\[Epsilon]FB->(1/\[Epsilon]+LFB)^-1/.\[Epsilon]bbM->(1/\[Epsilon]+LbbM)^-1,{\[Epsilon],0,0}]/.ReplaceLb//Normal//Coefficient[#,\[Epsilon],0]&//Simplify//FullSimplify;
-
 ];
 
 
@@ -1297,172 +1290,6 @@ If[verbose,Print["RG-evolving from \[Mu] to \[Mu]3"]];
 
 
 (*
-	Prints beta-functions of 4d couplings and masses.
-*)
-BetaFunctions4D[]:=Module[{},
-If[verbose,Print["Finding \[Beta]-functions"]];
-	CounterTerm[];
-
-
-(*To make the comparisons easier*)
-	VarGauge=GaugeCouplingNames//Variables;
-	SubGauge=Table[c->Symbol[ToString[c]<>ToString["temp"]],{c,VarGauge}];
-	SubGauge2=Table[Symbol[ToString[c]<>ToString["temp"]]->c,{c,VarGauge}];
-
-(* 
-	Gauge couplings
-*)
-	A1=TensorContract[\[Beta]vvss//Normal,{{3,4}}];
-	A2=TensorContract[HabijV,{{3,4}}]//Normal//ReplaceAll[#,SubGauge]&;
-(*Trick to avoid problems when kinetic mixing*)
-	A1=DiagonalMatrix[Diagonal[A1]];
-	A2=DiagonalMatrix[Diagonal[A2]];
-(*end of trick*)
-	Var3D=VarGauge//ReplaceAll[#,SubGauge]&//Variables;
-	RepVar3D=#->Sqrt[#]&/@Var3D;
-	A2Mod=A2/.RepVar3D;
-
-	Sol1=Solve[A2Mod==A1,Var3D]//Flatten[#,1]&//FullSimplify;
-	ResGauge=Table[List[Sol1[[c]]]/.{b_->a_}:>b^2->a,{c,1,Length[Sol1]}]/.SubGauge2;
-
-(* 
-	Non-abelian couplings
-*)
-
-	GabcdTemp=\[Beta]gvvv . gvvv+gvvv . \[Beta]gvvv//SparseArray;
-	GabVTree=TensorContract[GabcdV,{{2,3}}]//Normal;
-	GabVLoop=TensorContract[GabcdTemp,{{2,3}}]//Normal;
-
-	A1=GabVLoop//Normal;
-	A2=GabVTree//Normal//ReplaceAll[#,SubGauge]&;
-	Var3D=A2//Variables;
-	RepVar3D=#->Sqrt[#]&/@Var3D;
-	A2Mod=A2/.RepVar3D;
-	Sol1=Solve[A2Mod==A1,Var3D]//Flatten[#,1]&//FullSimplify;
-	ResGaugeNA=Table[List[Sol1[[c]]]/.{b_->a_}:>b^2->a,{c,1,Length[Sol1]}]/.SubGauge2//Simplify;
-
-(* 
-	Scalar-quartic couplings
-*)
-
-	VarGauge=Join[\[Lambda]4//Normal//Variables]//DeleteDuplicates;
-	SubGauge=Table[c->Symbol[ToString[c]<>ToString["temp"]],{c,VarGauge}];
-	SubGauge2=Table[Symbol[ToString[c]<>ToString["temp"]]->c,{c,VarGauge}];
-
-
-	HelpList=DeleteDuplicates@Flatten@SimplifySparse[\[Beta]\[Lambda]ijkl]//Sort;
-	HelpVarMod=RelationsBVariables3[HelpList]//ReplaceAll[#,\[Lambda]VL[v1_]->\[Lambda]Beta[v1]]&;
-If[HelpList[[1]]==0&&Length[HelpList]>1,
-	HelpList=Delete[HelpList,1];
-];
-	HelpSolve\[Beta]=Table[{HelpList[[a]]->HelpVarMod[[a]]},{a,1,HelpList//Length}]//Flatten//Simplify;
-	HelpSolve\[Beta]2=Table[{HelpVarMod[[a]]->HelpList[[a]]},{a,1,HelpList//Length}]//Flatten//Simplify;
-	\[Lambda]4\[Beta]=\[Beta]\[Lambda]ijkl//SimplifySparse//Normal//ReplaceAll[#,HelpSolve\[Beta]]&//SparseArray;
-
-	\[Lambda]4p=\[Lambda]4//Normal//ReplaceAll[#,SubGauge]&;
-	SolVar=\[Lambda]4\[Beta]-\[Lambda]4p//Normal;
-	QuarticVar=\[Lambda]4p//Normal//Variables;
-	ResScalp=Reduce[SolVar==0,QuarticVar]//ToRules[#]&;
-	SolveTemp=QuarticVar/.ResScalp;
-	ResScal=Table[{QuarticVar[[i]]->SolveTemp[[i]]},{i,1,Length@QuarticVar}]/.SubGauge2//Flatten[#,1]&//ReplaceAll[#,HelpSolve\[Beta]2]&//Simplify;
-
-(* 
-	Scalar-cubic couplings
-*)
-	VarGauge=Join[\[Lambda]3//Normal//Variables]//DeleteDuplicates;
-	SubGauge=Table[c->Symbol[ToString[c]<>ToString["temp"]],{c,VarGauge}];
-	SubGauge2=Table[Symbol[ToString[c]<>ToString["temp"]]->c,{c,VarGauge}];
-
-	\[Lambda]3p=\[Lambda]3//Normal//ReplaceAll[#,SubGauge]&;
-	SolVar=\[Beta]\[Lambda]ijk-\[Lambda]3p//Normal;
-	CubicVar=\[Lambda]3p//Normal//Variables;
-	ResCubic=Solve[SolVar==0,CubicVar]/.SubGauge2//Flatten[#,1]&;
-
-(* 
-	Yukawa couplings
-*)
-	VarGauge=Join[Ysff//Normal//Variables]//DeleteDuplicates;
-	SubGauge=Table[c->Symbol[ToString[c]<>ToString["temp"]],{c,VarGauge}];
-	SubGauge2=Table[Symbol[ToString[c]<>ToString["temp"]]->c,{c,VarGauge}];
-
-	\[Lambda]4p=Ysff//Normal//ReplaceAll[#,SubGauge]&;
-	SolVar=\[Beta]Ysij-\[Lambda]4p//Normal;
-	QuarticVar=\[Lambda]4p//Normal//Variables;
-	ResYuk=Solve[SolVar==0,QuarticVar]/.SubGauge2//Flatten[#,1]&;
-
-(* 
-	Scalar masses
-*)
-
-	VarGauge=Join[\[Mu]ij//Normal//Variables]//DeleteDuplicates;
-	SubGauge=Table[c->Symbol[ToString[c]<>ToString["temp"]],{c,VarGauge}];
-	SubGauge2=Table[Symbol[ToString[c]<>ToString["temp"]]->c,{c,VarGauge}];
-
-	\[Lambda]4p=\[Mu]ij//Normal//ReplaceAll[#,SubGauge]&;
-	SolVar=\[Beta]mij-\[Lambda]4p//Normal;
-	QuarticVar=\[Lambda]4p//Normal//Variables;
-	ResMass=Solve[SolVar==0,QuarticVar]/.SubGauge2//Flatten[#,1]&;
-
-(* 
-	Fermion masses
-*)
-
-	VarGauge=Join[\[Mu]IJF//Normal//Variables]//DeleteDuplicates;
-	SubGauge=Table[c->Symbol[ToString[c]<>ToString["temp"]],{c,VarGauge}];
-	SubGauge2=Table[Symbol[ToString[c]<>ToString["temp"]]->c,{c,VarGauge}];
-
-	\[Lambda]4p=\[Mu]IJF//Normal//ReplaceAll[#,SubGauge]&;
-	SolVar=\[Beta]\[Mu]IJF-\[Lambda]4p//Normal;
-	QuarticVar=\[Lambda]4p//Normal//Variables;
-	ResMassF=Solve[SolVar==0,QuarticVar]/.SubGauge2//Flatten[#,1]&;
-
-(* 
-	Scalar tadpoles
-*)
-If[Length[\[Lambda]1//Normal//Variables]==0,
-	ResTadpole={};
-,
-	VarGauge=Join[\[Lambda]1//Normal//Variables]//DeleteDuplicates;
-	SubGauge=Table[c->Symbol[ToString[c]<>ToString["temp"]],{c,VarGauge}];
-	SubGauge2=Table[Symbol[ToString[c]<>ToString["temp"]]->c,{c,VarGauge}];
-
-	\[Lambda]4p=\[Lambda]1//Normal//ReplaceAll[#,SubGauge]&;
-	SolVar=\[Beta]\[Lambda]1-\[Lambda]4p//Normal;
-	QuarticVar=\[Lambda]4p//Normal//Variables;
-	ResTadpole=Solve[SolVar==0,QuarticVar]/.SubGauge2//Flatten[#,1]&;
-];
-(*Effective couplings*)
-If[mode>=3,
-
-(* 
-	Scalar-cubic couplings
-*)
-
-	VarGauge=Join[\[Lambda]6//Normal//Variables]//DeleteDuplicates;
-	SubGauge=Table[c->Symbol[ToString[c]<>ToString["temp"]],{c,VarGauge}];
-	SubGauge2=Table[Symbol[ToString[c]<>ToString["temp"]]->c,{c,VarGauge}];
-
-	\[Lambda]6p=\[Lambda]6//Normal//ReplaceAll[#,SubGauge]&;
-	SolVar=\[Beta]\[Lambda]6ijklnm-\[Lambda]6p//Normal;
-	SexticVar=\[Lambda]6p//Normal//Variables;
-	ResSextic=Solve[SolVar==0,SexticVar]/.SubGauge2//Flatten[#,1]&;
-
-
-
-(*Printing Result*)
-PrintPre=Join[ResGauge,ResGaugeNA,ResScal,ResCubic,ResYuk,ResMass,ResMassF,ResTadpole,ResSextic]//Normal//FullSimplify//DeleteDuplicates;
-,
-(*Printing Result*)
-PrintPre=Join[ResGauge,ResGaugeNA,ResScal,ResCubic,ResYuk,ResMass,ResMassF,ResTadpole]//Normal//FullSimplify//DeleteDuplicates;
-];
-
-ToExpression[StringReplace[ToString[StandardForm[PrintPre]],"DRalgo`Private`"->""]]
-
-
-];
-
-
-(*
 	Calculates all counterterms required for two-loop calculations.
 *)
 CounterTerm[]:=Module[{},
@@ -1543,13 +1370,12 @@ If[verbose,Print["Calculating CounterTerms"]];
 (*Fermion mass contributions*)
 	Contri1=Table[Tr[a . \[Mu]IJFC . b . c],{a,Ysff},{b,Ysff},{c,YsffC}];
 	Contri2=Table[Tr[a . \[Mu]IJF . b . c],{a,YsffC},{b,YsffC},{c,Ysff}];
-	ContriFF=-1/(8 \[Pi]^2) 3 Symmetrize[(Contri1+Contri2),Symmetric[{1,2,3}]];
+	ContriFF=-1/(8 \[Pi]^2) 3 Symmetrize[(Contri1+Contri2),Symmetric[{1,2,3}]]//SparseArray;
 	
 (*Anomalous dimension contribution*)
 	ContriAnom=Simplify[Activate @ TensorContract[Inactive[TensorProduct][\[Gamma]ij,\[Lambda]3], {{2, 3}}]];
-	\[Beta]\[Lambda]ijk=(-ContriAnom-Transpose[ContriAnom,{2,1,3}]-Transpose[ContriAnom,{3,2,1}]+ContriSSC+ContriFF)//Expand//SparseArray; (*beta function*)
+	\[Beta]\[Lambda]ijk=(-ContriAnom-Transpose[ContriAnom,{2,1,3}]-Transpose[ContriAnom,{3,2,1}]+ContriSSC+ContriFF)//SparseArray//SimplifySparse; (*beta function*)
 	Z\[Lambda]ijk=\[Beta]\[Lambda]ijk/2;(*renormalization constants*)
-
 
 (*
 	Vector-field renormalization
@@ -1792,6 +1618,27 @@ PrintDebyeMass[optP_]:=Module[{opt=optP},
 	Return[ToExpression[StringReplace[ToString[StandardForm[Join[SolMass]]],"DRalgo`Private`"->""]]]
 ];
 
+(*
+	Prints the debye mass in the soft theory
+*)
+PrintDebyeMass[]:=Module[{},
+
+	If[verbose,Print["Printing Debye Masses"]];
+
+		VarGauge=Join[\[Mu]abDef//Normal//Variables]//DeleteDuplicates;
+
+		\[Mu]ijp=\[Mu]abDef//Normal;
+		var=Normal[\[Mu]ijp]//Variables;
+		helpMass=Normal[\[Mu]ijp-\[Mu]ijVNLO];
+		SolMassPre=Solve[helpMass==0,var]/.IdentMat//Flatten[#,1]&;
+		SolMass=SolMassPre;
+
+		SolMass=SolMassPre/.xLO->1/.xNLO->1/.ReplaceLb//Simplify;
+	
+(*Printing Result. May you find your worth in the waking world.*)
+	Return[ToExpression[StringReplace[ToString[StandardForm[Join[SolMass]]],"DRalgo`Private`"->""]]]
+];
+
 
 (*
 	Prints higher-order couplings.
@@ -1836,6 +1683,8 @@ If[verbose,Print["Printing 3D vector and quartic couplings in terms of 4D coupli
 (*VarGauge denotes all possible vector couplings*)
 
 (* Gauge couplings*)
+	If[mode==0,\[Lambda]KVecT=Tfac HabijV]; (*If mode=0 no couplings are calculated*)
+	
 	A1=TensorContract[\[Lambda]KVecT,{{3,4}}]//Normal; 
 	A2=TensorContract[HabijV,{{3,4}}]//Normal//ReplaceAll[#,SubGauge]&;
 (*Trick to avoid problems when kinetic mixing*)
@@ -1851,7 +1700,8 @@ If[verbose,Print["Printing 3D vector and quartic couplings in terms of 4D coupli
 
 (*Non-Abelian Couplings*)
 	NonAbelianCoupling[];
-
+	
+	If[mode==0,Ggvvv=EmptyArray[{nv,nv,nv}]]; (*If mode=0 no couplings are calculated*)
 	GabcdTemp=Ggvvv . gvvv+gvvv . Ggvvv;
 	GabVTree=TensorContract[GabcdV,{{2,3}}]//Normal;
 	GabVLoop=TensorContract[GabcdTemp,{{2,3}}]//Normal;
@@ -1860,7 +1710,7 @@ If[verbose,Print["Printing 3D vector and quartic couplings in terms of 4D coupli
 	HelpVar=Table[ \[Lambda]VNA[a],{a,1,Delete[HelpList,1]//Length}];
 	HelpVarMod=RelationsBVariables[HelpList,HelpVar];
 	HelpSolveNA=Table[{Delete[HelpList,1][[a]]->ReplaceAll[HelpVarMod[[a]],SubGauge]},{a,1,Delete[HelpList,1]//Length}]//Flatten;
-	\[Lambda]VecNA=T (GabVTree+GabVLoop)//Normal//FullSimplify//ReplaceAll[#,HelpSolveNA]&//SparseArray;
+	\[Lambda]VecNA=Tfac (GabVTree+GabVLoop)//Normal//FullSimplify//ReplaceAll[#,HelpSolveNA]&//SparseArray;
 	IdentMatNA=List/@Join[HelpSolveNA]/.{b_->a_}:>a->b//Flatten[#,1]&;
 
 
@@ -1874,20 +1724,32 @@ If[verbose,Print["Printing 3D vector and quartic couplings in terms of 4D coupli
 
 
 (*Scalar quartics*)
+(*If mode=0 no couplings are calculated*)
 	VarGauge=Join[\[Lambda]4//Normal//Variables]//DeleteDuplicates;
 	SubGauge=Table[c->Symbol[ToString[c]<>ToString["3d"]],{c,VarGauge}];
-	SolVar=SparseArray[\[Lambda]3DS-\[Lambda]4]["NonzeroValues"]//DeleteDuplicates//ReplaceAll[#,SubGauge]&;
-	QuarticVar=\[Lambda]4//Normal//ReplaceAll[#,SubGauge]&//Variables;
-	ResScalp=Reduce[SolVar==0,QuarticVar]//ToRules[#]&;
-	SolveTemp=QuarticVar/.ResScalp;
-	ResScal=Table[{QuarticVar[[i]]->SolveTemp[[i]]},{i,1,Length@QuarticVar}]//Flatten[#,1]&//ReplaceAll[#,IdentMat]&//Simplify;
+	
+	If[mode==0,
+			\[Lambda]4p= \[Lambda]4//Normal//ReplaceAll[#,SubGauge]&;
+			SolVar=Tfac*\[Lambda]4-\[Lambda]4p//Normal;
+			QuarticVar=\[Lambda]4p//Normal//Variables;
+			ResQuartic=Solve[SolVar==0,QuarticVar]/.IdentMat//Flatten[#,1]&;
+	,
+			SolVar=SparseArray[\[Lambda]3DS-\[Lambda]4]["NonzeroValues"]//DeleteDuplicates//ReplaceAll[#,SubGauge]&;
+			QuarticVar=\[Lambda]4//Normal//ReplaceAll[#,SubGauge]&//Variables;
+			ResScalp=Reduce[SolVar==0,QuarticVar]//ToRules[#]&;
+			SolveTemp=QuarticVar/.ResScalp;
+			ResQuartic=Table[{QuarticVar[[i]]->SolveTemp[[i]]},{i,1,Length@QuarticVar}]//Flatten[#,1]&//ReplaceAll[#,IdentMat]&//Simplify;
+	]; 
+	
+
 
 	
 (* Scalar Cubics*)
 
 	VarGauge=Join[\[Lambda]3//Normal//Variables]//DeleteDuplicates;
 	SubGauge=Table[c->Symbol[ToString[c]<>ToString["3d"]],{c,VarGauge}];
-
+	
+	If[mode==0,\[Lambda]3CSRed=Tfac^(1/2) \[Lambda]3]; (*If mode=0 no couplings are calculated*)
 	\[Lambda]3p=\[Lambda]3//Normal//ReplaceAll[#,SubGauge]&;
 	SolVar=\[Lambda]3CSRed-\[Lambda]3p//Normal;
 	CubicVar=\[Lambda]3p//Normal//Variables;
@@ -1896,7 +1758,7 @@ If[verbose,Print["Printing 3D vector and quartic couplings in terms of 4D coupli
 
 
 (*Printing Result*)
-	PrintPre=Join[ResGauge,ResGaugeNA,ResScal,ResCubic]//Normal//FullSimplify//DeleteDuplicates;
+	PrintPre=Join[ResGauge,ResGaugeNA,ResQuartic,ResCubic]//Normal//FullSimplify//DeleteDuplicates;
 
 	ToExpression[StringReplace[ToString[StandardForm[PrintPre]],"DRalgo`Private`"->""]]
 
@@ -1907,10 +1769,28 @@ If[verbose,Print["Printing 3D vector and quartic couplings in terms of 4D coupli
 	Prints the result from SymmEnergy.
 *)
 PrintPressure[optP_]:=Module[{opt=optP},
-	SymmPrint=Switch[opt,"LO",SymmEnergy[[1]],"NLO",SymmEnergy[[2]],"NNLO",SymmEnergy[[3]]];
+	If[mode>0,
+		SymmPrint=Switch[opt,"LO",SymmEnergy[[1]],"NLO",SymmEnergy[[2]],"NNLO",SymmEnergy[[3]]];
 
 (*Printing Result*)
-	ToExpression[StringReplace[ToString[StandardForm[SymmPrint]],"DRalgo`Private`"->""]]
+		ToExpression[StringReplace[ToString[StandardForm[SymmPrint]],"DRalgo`Private`"->""]]
+	,
+		ToExpression[StringReplace[ToString[StandardForm[-SymmetricPhaseLO[]]],"DRalgo`Private`"->""]]
+	]
+];
+
+
+(*
+	Prints the result from SymmEnergy.
+*)
+PrintPressure[]:=Module[{},
+	If[mode>0,
+		SymmPrint=SymmEnergy[[1]]+SymmEnergy[[2]]+SymmEnergy[[3]];
+(*Printing Result*)
+		ToExpression[StringReplace[ToString[StandardForm[SymmPrint]],"DRalgo`Private`"->""]]
+	,
+		ToExpression[StringReplace[ToString[StandardForm[-SymmetricPhaseLO[]]],"DRalgo`Private`"->""]]
+	]
 ];
 
 
@@ -1941,6 +1821,27 @@ PrintScalarMass[optP_]:=Module[{opt=optP},
 			SolMass=SolMassPre/.xLO->0/.xNLO->1/.ReplaceLb//Simplify;
 		];
 	];
+(*Printing Result*)
+	ToExpression[StringReplace[ToString[StandardForm[Join[SolMass]]],"DRalgo`Private`"->""]]
+
+];
+
+PrintScalarMass[]:=Module[{},
+	If[verbose,Print["Printing Scalar Masses"]];
+
+	VarGauge=Join[\[Mu]ij//Normal//Variables]//DeleteDuplicates;
+	SubGauge=Table[c->Symbol[ToString[c]<>ToString["3d"]],{c,VarGauge}];
+
+	\[Mu]ijp=\[Mu]ij//Normal//ReplaceAll[#,SubGauge]&;
+	var=Normal[\[Mu]ijp]//Variables;
+	helpMass=Normal[\[Mu]ijp-\[Mu]ijSNLO];
+	ResScalp=Reduce[helpMass==0,var]//ToRules[#]&;
+	SolveTemp=var/.ResScalp;
+	SolMassPre=Table[{var[[i]]->SolveTemp[[i]]},{i,1,Length@var}]//Flatten[#,1]&//ReplaceAll[#,IdentMat]&;
+
+
+	SolMass=SolMassPre/.xLO->1/.xNLO->1/.ReplaceLb//Simplify;
+
 (*Printing Result*)
 	ToExpression[StringReplace[ToString[StandardForm[Join[SolMass]]],"DRalgo`Private`"->""]]
 
@@ -1992,7 +1893,14 @@ PrintIdentification[]:=Module[{},
 	Prints anomalous dimensions of 4d fields.
 *)
 AnomDim4D[ParticleI_,ComponentsI_]:=Module[{ParticleP=ParticleI,ComponentsP=ComponentsI},
-	CounterTerm[]; (*Calculates counterterms if not already done*)
+	If[mode>=2,
+		CounterTerm[];(*Calculates counterterms if not already done*)
+	,
+		\[Gamma]ij=EmptyArray[{ns,ns}];
+		\[Gamma]IJF=EmptyArray[{nf,nf}];
+		\[Gamma]ab=EmptyArray[{nv,nv}];
+		
+	]; 
 	Switch[ParticleP,"S",
 		Ret=\[Gamma]ij[[ComponentsP[[1]][[1]],ComponentsP[[2]][[1]]]];
 	,"F",
@@ -2074,8 +1982,6 @@ IdentifyTensorsDRalgo[]:=Module[{},
 				\[Lambda]KVecT=Tfac (HabijV+GvvssT)//SimplifySparse//Normal//ReplaceAll[#,HelpSolveVecT]&//SparseArray;
 			];
 
-
-
 (*
 	Temporal-scalar/scalar cross couplings
 *)
@@ -2092,7 +1998,6 @@ IdentifyTensorsDRalgo[]:=Module[{},
 
 
 			If[verbose,Print["Calculating Temporal-Vector Quartics "]];
-
 (*
 	Temporal-Scalar quartics
 *)
@@ -2121,8 +2026,22 @@ IdentifyTensorsDRalgo[]:=Module[{},
 				HelpSolveCubicL=Table[{Delete[HelpList,1][[a]]->HelpVarMod[[a]]},{a,1,Delete[HelpList,1]//Length}]//Flatten//Simplify;
 				\[Lambda]vvsLS=Sqrt[Tfac] GvvsL//Normal//Simplify//ReplaceAll[#,HelpSolveCubicL]&//SparseArray;
 
-				];
-
+		];
+(*
+	TemporalVector-scalar couplings
+*)
+			
+			If[mode==0,GvvssL=EmptyArray[{nv,nv,ns,ns}]];
+			HelpList=DeleteDuplicates@Simplify@Flatten[-Tfac(HabijV+GvvssL)]//Sort;
+			If[Length[Delete[HelpList,1]]<1,
+				\[Lambda]KVec=-Tfac(HabijV+GvvssL)//Normal//Simplify//SparseArray;
+				HelpSolveVecL={};
+			,
+				HelpVarMod=RelationsBVariables3[HelpList];
+				HelpSolveVecL=Table[{Delete[HelpList,1][[a]]->HelpVarMod[[a]]},{a,1,Delete[HelpList,1]//Length}]//Flatten//Simplify;
+				\[Lambda]KVec=-Tfac(HabijV+GvvssL)//Normal//Simplify//ReplaceAll[#,HelpSolveVecL]&//SparseArray;
+			];			
+			
 	If[mode>=3,
 		If[verbose,Print["Calculating Sextic Tensor"]];
 
@@ -2166,11 +2085,11 @@ If[DiagonalMatrixQAE[Normal[\[Mu]ijVNLO]]==False,Print["Off-Diagonal Debye Matri
 *)
 	If[mode>=2,
 		RGRunningHardToSoft[]; (*Runs from the hard to the soft scale in the effective theory*)
-		HelpList=DeleteDuplicates@Flatten@Simplify[ xLO aS3D+xNLO (\[Mu]SijNLO+Contri\[Beta]SoftToHard)]//Sort;
+		HelpList=DeleteDuplicates@Flatten@Simplify[ xLO aS3D+xNLO (\[Mu]SijNLO+rgFac*Contri\[Beta]SoftToHard)]//Sort;
 		HelpVar=Table[ \[Mu]ijS[a],{a,1,Delete[HelpList,1]//Length}];
 		HelpVarMod=RelationsBVariables[HelpList,HelpVar];
 		HelpSolveMass=Table[{Delete[HelpList,1][[a]]->HelpVarMod[[a]]},{a,1,Delete[HelpList,1]//Length}]//Flatten;
-		\[Mu]ijSNLO=xLO aS3D+xNLO (\[Mu]SijNLO+Contri\[Beta]SoftToHard)//Normal//Simplify//ReplaceAll[#,HelpSolveMass]&//SparseArray;
+		\[Mu]ijSNLO=xLO aS3D+xNLO (\[Mu]SijNLO+rgFac*Contri\[Beta]SoftToHard)//Normal//Simplify//ReplaceAll[#,HelpSolveMass]&//SparseArray;
 	,
 		HelpList=DeleteDuplicates@Flatten@Simplify[ xLO aS3D]//Sort;
 		HelpVar=Table[ \[Mu]ijS[a],{a,1,Delete[HelpList,1]//Length}];
@@ -2183,11 +2102,11 @@ If[DiagonalMatrixQAE[Normal[\[Mu]ijVNLO]]==False,Print["Off-Diagonal Debye Matri
 	Scalar tadpoles
 *)
 	If[mode>=2,
-		HelpList=DeleteDuplicates@Flatten@Simplify[ xLO*Tfac^(-1/2)(\[Lambda]1+TadPoleLO)+xNLO(TadPoleNLO*Tfac^(-1/2) +ContriTadPoleSoftToHard)]//Sort;
+		HelpList=DeleteDuplicates@Flatten@Simplify[ xLO*Tfac^(-1/2)(\[Lambda]1+TadPoleLO)+xNLO(TadPoleNLO*Tfac^(-1/2) +rgFac*ContriTadPoleSoftToHard)]//Sort;
 		HelpVar=Table[ dS[a],{a,1,Delete[HelpList,1]//Length}];
 		HelpVarMod=RelationsBVariables[HelpList,HelpVar];
 		HelpSolveTadpole=Table[{Delete[HelpList,1][[a]]->HelpVarMod[[a]]},{a,1,Delete[HelpList,1]//Length}]//Flatten;
-		TadPoleS=xLO*Tfac^(-1/2) (\[Lambda]1+TadPoleLO)+xNLO (TadPoleNLO*T^(-1/2)+ContriTadPoleSoftToHard)//Normal//Simplify//ReplaceAll[#,HelpSolveTadpole]&//SparseArray;
+		TadPoleS=xLO*Tfac^(-1/2) (\[Lambda]1+TadPoleLO)+xNLO (TadPoleNLO*T^(-1/2)+rgFac*ContriTadPoleSoftToHard)//Normal//Simplify//ReplaceAll[#,HelpSolveTadpole]&//SparseArray;
 	,
 		HelpList=DeleteDuplicates@Flatten@Simplify[ xLO*Tfac^(-1/2)(\[Lambda]1+TadPoleLO)]//Sort;
 		HelpVar=Table[ dS[a],{a,1,Delete[HelpList,1]//Length}];
@@ -2204,7 +2123,7 @@ If[DiagonalMatrixQAE[Normal[\[Mu]ijVNLO]]==False,Print["Off-Diagonal Debye Matri
 	If[mode>=1,
 		IdentMat=List/@Join[HelpSolveCubicS,HelpSolveVecT,HelpSolveVecL,HelpSolveQuarticL,HelpSolveVectorMass,HelpSolveMass,HelpSolveCubicL,HelpSolveTadpole,HelpSolveQuartic]/.{b_->a_}:>a->b//Flatten[#,1]&;
 	,
-		IdentMat=List/@Join[HelpSolveVectorMass,HelpSolveMass]/.{b_->a_}:>a->b//Flatten[#,1]&;
+		IdentMat=List/@Join[HelpSolveVectorMass,HelpSolveMass,HelpSolveVecL]/.{b_->a_}:>a->b//Flatten[#,1]&;
 	];
 	
 	If[mode>=3,
@@ -2224,16 +2143,19 @@ PrintTemporalScalarCouplings[]:=Module[{},
 
 
 (*Quartics*)
+	If[mode==0,\[Lambda]AAS=EmptyArray[{nv,nv,nv,nv}]]; (*If mode=0 no couplings are calculated*)
 	AE2=\[Lambda]AAS//Normal//Variables;
 	AE=ToExpression[StringReplace[ToString[StandardForm[AE2]],"DRalgo`Private`"->""]];
 	QuarticL=#->(ReplaceAll[#,PrintIdentification[]])&/@AE;
 
 
 (*Cubics*)
+	If[mode==0,\[Lambda]vvsLS=EmptyArray[{nv,nv,ns}]]; (*If mode=0 no couplings are calculated*)
 	AE2=\[Lambda]vvsLS//Normal//Variables;
 	AE=ToExpression[StringReplace[ToString[StandardForm[AE2]],"DRalgo`Private`"->""]];
 	CubicsL=#->(ReplaceAll[#,PrintIdentification[]])&/@AE;
 
+			
 (*S^2V^2 (temporal)*)
 	AE2=\[Lambda]KVec//Normal//Variables;
 	AE=ToExpression[StringReplace[ToString[StandardForm[AE2]],"DRalgo`Private`"->""]];
@@ -2443,5 +2365,224 @@ CounterTerms4D[]:=Module[{},
 
 		PrintPre=ReplaceAll[PrintPre,(a_->b_):>a->b/(2 \[Epsilon])];
 		ToExpression[StringReplace[ToString[StandardForm[PrintPre]],"DRalgo`Private`"->""]]
+
+];
+
+
+(*
+	Prints beta-functions of 4d couplings and masses.
+*)
+BetaFunctions4D[]:=Module[{},
+If[verbose,Print["Finding \[Beta]-functions"]];
+	If[mode>=2,
+		CounterTerm[];
+
+
+(*To make the comparisons easier*)
+		VarGauge=GaugeCouplingNames//Variables;
+		SubGauge=Table[c->Symbol[ToString[c]<>ToString["temp"]],{c,VarGauge}];
+		SubGauge2=Table[Symbol[ToString[c]<>ToString["temp"]]->c,{c,VarGauge}];
+
+(* 
+	Gauge couplings
+*)
+	
+		A1=TensorContract[\[Beta]vvss//Normal,{{3,4}}];
+		A2=TensorContract[HabijV,{{3,4}}]//Normal//ReplaceAll[#,SubGauge]&;
+(*Trick to avoid problems when kinetic mixing*)
+		A1=DiagonalMatrix[Diagonal[A1]];
+		A2=DiagonalMatrix[Diagonal[A2]];
+(*end of trick*)
+		Var3D=VarGauge//ReplaceAll[#,SubGauge]&//Variables;
+		RepVar3D=#->Sqrt[#]&/@Var3D;
+		A2Mod=A2/.RepVar3D;
+
+		Sol1=Solve[A2Mod==A1,Var3D]//Flatten[#,1]&//FullSimplify;
+		ResGauge=Table[List[Sol1[[c]]]/.{b_->a_}:>b^2->a,{c,1,Length[Sol1]}]/.SubGauge2;
+
+(* 
+	Non-abelian couplings
+*)
+	
+		GabcdTemp=\[Beta]gvvv . gvvv+gvvv . \[Beta]gvvv//SparseArray;
+		GabVTree=TensorContract[GabcdV,{{2,3}}]//Normal;
+		GabVLoop=TensorContract[GabcdTemp,{{2,3}}]//Normal;
+
+		A1=GabVLoop//Normal;
+		A2=GabVTree//Normal//ReplaceAll[#,SubGauge]&;
+		Var3D=A2//Variables;
+		RepVar3D=#->Sqrt[#]&/@Var3D;
+		A2Mod=A2/.RepVar3D;
+		Sol1=Solve[A2Mod==A1,Var3D]//Flatten[#,1]&//FullSimplify;
+		ResGaugeNA=Table[List[Sol1[[c]]]/.{b_->a_}:>b^2->a,{c,1,Length[Sol1]}]/.SubGauge2//Simplify;
+
+(* 
+	Scalar-quartic couplings
+*)
+
+		VarGauge=Join[\[Lambda]4//Normal//Variables]//DeleteDuplicates;
+		SubGauge=Table[c->Symbol[ToString[c]<>ToString["temp"]],{c,VarGauge}];
+		SubGauge2=Table[Symbol[ToString[c]<>ToString["temp"]]->c,{c,VarGauge}];
+
+	
+		HelpList=DeleteDuplicates@Flatten@SimplifySparse[\[Beta]\[Lambda]ijkl]//Sort;
+		HelpVarMod=RelationsBVariables3[HelpList]//ReplaceAll[#,\[Lambda]VL[v1_]->\[Lambda]Beta[v1]]&;
+
+		If[HelpList[[1]]==0&&Length[HelpList]>1,
+			HelpList=Delete[HelpList,1];
+		];
+		HelpSolve\[Beta]=Table[{HelpList[[a]]->HelpVarMod[[a]]},{a,1,HelpList//Length}]//Flatten//Simplify;
+		HelpSolve\[Beta]2=Table[{HelpVarMod[[a]]->HelpList[[a]]},{a,1,HelpList//Length}]//Flatten//Simplify;
+		\[Lambda]4\[Beta]=\[Beta]\[Lambda]ijkl//SimplifySparse//Normal//ReplaceAll[#,HelpSolve\[Beta]]&//SparseArray;
+
+		\[Lambda]4p=\[Lambda]4//Normal//ReplaceAll[#,SubGauge]&;
+		SolVar=\[Lambda]4\[Beta]-\[Lambda]4p//Normal;
+		QuarticVar=\[Lambda]4p//Normal//Variables;
+		ResScalp=Reduce[SolVar==0,QuarticVar]//ToRules[#]&;
+		SolveTemp=QuarticVar/.ResScalp;
+		ResScal=Table[{QuarticVar[[i]]->SolveTemp[[i]]},{i,1,Length@QuarticVar}]/.SubGauge2//Flatten[#,1]&//ReplaceAll[#,HelpSolve\[Beta]2]&//Simplify;
+
+(* 
+	Scalar-cubic couplings
+*)
+		VarGauge=Join[\[Lambda]3//Normal//Variables]//DeleteDuplicates;
+		SubGauge=Table[c->Symbol[ToString[c]<>ToString["temp"]],{c,VarGauge}];
+		SubGauge2=Table[Symbol[ToString[c]<>ToString["temp"]]->c,{c,VarGauge}];
+
+	
+		\[Lambda]3p=\[Lambda]3//Normal//ReplaceAll[#,SubGauge]&;
+		SolVar=\[Beta]\[Lambda]ijk-\[Lambda]3p//Normal;
+		CubicVar=\[Lambda]3p//Normal//Variables;
+		ResCubic=Solve[SolVar==0,CubicVar]/.SubGauge2//Flatten[#,1]&;
+
+(* 
+	Yukawa couplings
+*)
+		VarGauge=Join[Ysff//Normal//Variables]//DeleteDuplicates;
+		SubGauge=Table[c->Symbol[ToString[c]<>ToString["temp"]],{c,VarGauge}];
+		SubGauge2=Table[Symbol[ToString[c]<>ToString["temp"]]->c,{c,VarGauge}];
+
+	
+		\[Lambda]4p=Ysff//Normal//ReplaceAll[#,SubGauge]&;
+		SolVar=\[Beta]Ysij-\[Lambda]4p//Normal;
+		QuarticVar=\[Lambda]4p//Normal//Variables;
+		ResYuk=Solve[SolVar==0,QuarticVar]/.SubGauge2//Flatten[#,1]&;
+
+(* 
+	Scalar masses
+*)
+
+	
+		VarGauge=Join[\[Mu]ij//Normal//Variables]//DeleteDuplicates;
+		SubGauge=Table[c->Symbol[ToString[c]<>ToString["temp"]],{c,VarGauge}];
+		SubGauge2=Table[Symbol[ToString[c]<>ToString["temp"]]->c,{c,VarGauge}];
+
+		\[Lambda]4p=\[Mu]ij//Normal//ReplaceAll[#,SubGauge]&;
+		SolVar=\[Beta]mij-\[Lambda]4p//Normal;
+		QuarticVar=\[Lambda]4p//Normal//Variables;
+		ResMass=Solve[SolVar==0,QuarticVar]/.SubGauge2//Flatten[#,1]&;
+
+(* 
+	Fermion masses
+*)
+		VarGauge=Join[\[Mu]IJF//Normal//Variables]//DeleteDuplicates;
+		SubGauge=Table[c->Symbol[ToString[c]<>ToString["temp"]],{c,VarGauge}];
+		SubGauge2=Table[Symbol[ToString[c]<>ToString["temp"]]->c,{c,VarGauge}];
+
+	
+		\[Lambda]4p=\[Mu]IJF//Normal//ReplaceAll[#,SubGauge]&;
+		SolVar=\[Beta]\[Mu]IJF-\[Lambda]4p//Normal;
+		QuarticVar=\[Lambda]4p//Normal//Variables;
+		ResMassF=Solve[SolVar==0,QuarticVar]/.SubGauge2//Flatten[#,1]&;
+
+(* 
+	Scalar tadpoles
+*)
+		If[Length[\[Lambda]1//Normal//Variables]==0,
+			ResTadpole={};
+		,
+			VarGauge=Join[\[Lambda]1//Normal//Variables]//DeleteDuplicates;
+			SubGauge=Table[c->Symbol[ToString[c]<>ToString["temp"]],{c,VarGauge}];
+			SubGauge2=Table[Symbol[ToString[c]<>ToString["temp"]]->c,{c,VarGauge}];
+
+			\[Lambda]4p=\[Lambda]1//Normal//ReplaceAll[#,SubGauge]&;
+			SolVar=\[Beta]\[Lambda]1-\[Lambda]4p//Normal;
+			QuarticVar=\[Lambda]4p//Normal//Variables;
+			ResTadpole=Solve[SolVar==0,QuarticVar]/.SubGauge2//Flatten[#,1]&;
+		];
+(*Dim-6 couplings*)
+	If[mode>=3,
+		VarGauge=Join[\[Lambda]6//Normal//Variables]//DeleteDuplicates;
+		SubGauge=Table[c->Symbol[ToString[c]<>ToString["temp"]],{c,VarGauge}];
+		SubGauge2=Table[Symbol[ToString[c]<>ToString["temp"]]->c,{c,VarGauge}];
+		
+		\[Lambda]6p=\[Lambda]6//Normal//ReplaceAll[#,SubGauge]&;
+		SolVar=\[Beta]\[Lambda]6ijklnm-\[Lambda]6p//Normal;
+		SexticVar=\[Lambda]6p//Normal//Variables;
+		ResSextic=Solve[SolVar==0,SexticVar]/.SubGauge2//Flatten[#,1]&;
+(*Printing Result*)
+		PrintPre=Join[ResGauge,ResGaugeNA,ResScal,ResCubic,ResYuk,ResMass,ResMassF,ResTadpole,ResSextic]//Normal//FullSimplify//DeleteDuplicates;
+	,
+(*Printing Result*)
+		PrintPre=Join[ResGauge,ResGaugeNA,ResScal,ResCubic,ResYuk,ResMass,ResMassF,ResTadpole]//Normal//FullSimplify//DeleteDuplicates;
+	];
+,
+	ResGauge=#^2->0&/@GaugeCouplingNames;
+	ResScal=#->0&/@Variables[\[Lambda]4//Normal];
+	ResCubic=#->0&/@Variables[\[Lambda]3//Normal];
+	ResYuk=#->0&/@Variables[Ysff//Normal];
+	ResMass=#->0&/@Variables[\[Mu]ij//Normal];
+	ResMassF=#->0&/@Variables[\[Mu]IJF//Normal];
+	ResTadpole=#->0&/@Variables[\[Lambda]1//Normal];
+	PrintPre=Join[ResGauge,ResScal,ResCubic,ResYuk,ResMass,ResMassF,ResTadpole]//Normal//FullSimplify//DeleteDuplicates;
+];
+ToExpression[StringReplace[ToString[StandardForm[PrintPre]],"DRalgo`Private`"->""]]
+
+
+];
+
+
+(*
+	Prints beta-functions of the soft masses and tadpoles.
+*)
+BetaFunctions3DS[]:=Module[{},
+If[verbose,Print["Finding \[Beta]-functions"]];
+	If[mode>0,
+
+(* 
+	Scalar masses
+*)
+		VarGauge=Join[\[Mu]ij//Normal//Variables]//DeleteDuplicates;
+		SubGauge=Table[c->Symbol[ToString[c]<>ToString["temp"]],{c,VarGauge}];
+		SubGauge2=Table[Symbol[ToString[c]<>ToString["temp"]]->c,{c,VarGauge}];
+
+		\[Lambda]4p=\[Mu]ij//Normal//ReplaceAll[#,SubGauge]&;
+		SolVar=Contri\[Beta]SoftToHard-\[Lambda]4p//Normal;
+		QuarticVar=\[Lambda]4p//Normal//Variables;
+		ResMass=Solve[SolVar==0,QuarticVar]/.SubGauge2//Flatten[#,1]&;
+(* 
+	Scalar tadpoles
+*)
+		If[Length[\[Lambda]1//Normal//Variables]==0,
+			ResTadpole={};
+		,
+			VarGauge=Join[\[Lambda]1//Normal//Variables]//DeleteDuplicates;
+			SubGauge=Table[c->Symbol[ToString[c]<>ToString["temp"]],{c,VarGauge}];
+			SubGauge2=Table[Symbol[ToString[c]<>ToString["temp"]]->c,{c,VarGauge}];
+
+			\[Lambda]4p=\[Lambda]1//Normal//ReplaceAll[#,SubGauge]&;
+			SolVar=ContriTadPoleSoftToHard-\[Lambda]4p//Normal;
+			QuarticVar=\[Lambda]4p//Normal//Variables;
+			ResTadpole=Solve[SolVar==0,QuarticVar]/.SubGauge2//Flatten[#,1]&;
+		];
+
+		PrintPre=Join[ResMass,ResTadpole]/.\[Mu]3->\[Mu] Exp[1]//Normal//FullSimplify//DeleteDuplicates;
+,
+	ResMass=#->0&/@Variables[\[Mu]ij//Normal];
+	ResTadpole=#->0&/@Variables[\[Lambda]1//Normal];
+	PrintPre=Join[ResMass,ResTadpole]/.\[Mu]3->\[Mu] Exp[1]//Normal//FullSimplify//DeleteDuplicates;
+];
+ToExpression[StringReplace[ToString[StandardForm[PrintPre]],"DRalgo`Private`"->""]]
+
 
 ];

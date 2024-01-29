@@ -17,7 +17,7 @@
 (* ------------------------------------------------------------------------ *)
 
 
-(* ::Section:: *)
+(* ::Section::Closed:: *)
 (*Help functions*)
 
 
@@ -49,7 +49,7 @@ we want to return an array with 0 elements; this makes it easier to avoid unnece
 ];
 
 
-(* ::Section:: *)
+(* ::Section::Closed:: *)
 (*Definition of model*)
 
 
@@ -125,7 +125,7 @@ PrepareHET[HardScalarI_,HardSVectorI_]:=Module[{ListScalar=HardScalarI,ListVecto
 ];
 
 
-(* ::Section:: *)
+(* ::Section::Closed:: *)
 (*Effective potential*)
 
 
@@ -257,7 +257,7 @@ CalculatePotentialHET[]:=Module[{},
 ];
 
 
-(* ::Section:: *)
+(* ::Section::Closed:: *)
 (*Scalar mass*)
 
 
@@ -302,7 +302,7 @@ If[verbose,Print["Calculating Scalar Self-Energy"]];
 ];
 
 
-(* ::Section:: *)
+(* ::Section::Closed:: *)
 (*Master Integrals*)
 
 
