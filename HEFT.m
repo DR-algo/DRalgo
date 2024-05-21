@@ -257,7 +257,7 @@ CalculatePotentialHET[]:=Module[{},
 ];
 
 
-(* ::Section::Closed:: *)
+(* ::Section:: *)
 (*Scalar mass*)
 
 

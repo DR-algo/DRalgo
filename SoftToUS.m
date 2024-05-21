@@ -17,7 +17,7 @@
 (* ------------------------------------------------------------------------ *)
 
 
-(* ::Section::Closed:: *)
+(* ::Section:: *)
 (*Pressure calculation*)
 
 
@@ -82,7 +82,7 @@ SymmetricPhaseUSNLO[]:=Module[{},
 (*Definitions*)
 	fSSV[x_,y_]:=(4 (x^2+y^2) Log[\[Mu]3/(x+y)]+4 Sqrt[x^2] Sqrt[y^2]+x^2+y^2)/(32 \[Pi]^2);
 
-	I1Temp=1/(16^2 \[Pi]);
+	I1Temp=1/(16 \[Pi]^2);
 	Vss=1/8*I1Temp*TensorContract[\[Mu]ijL . \[Lambda]KTotal . \[Mu]ijL,{{1,2},{3,4}}];
 
 	ssv=1/4 TensorProduct[gvssVTot,gvssVTot];
@@ -1066,7 +1066,7 @@ If[a==1,
     ]
 
 
-(* ::Section:: *)
+(* ::Section::Closed:: *)
 (*Printing functions*)
 
 
