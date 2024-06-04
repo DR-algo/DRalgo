@@ -132,7 +132,7 @@ PrepareHET[HardScalarI_,HardSVectorI_]:=Module[{ListScalar=HardScalarI,ListVecto
 (*
 	Calculates the tree-level effective potential.
 *)
-CalculateLOPotentialHET[]:=Module[{},
+CalculateLOPotentialHET[]:=Module[{V1,V2,V3},
 	If[verbose==True,Print["Calculating the Tree-Level Effective Potential"]];
 	
 	V1=\[Lambda]4EP . \[Phi]Vev . \[Phi]Vev . \[Phi]Vev . \[Phi]Vev;
@@ -145,9 +145,11 @@ CalculateLOPotentialHET[]:=Module[{},
 (*
 	Calculates the one-loop effective potential.
 *)
-CalculateNLOPotentialHET[]:=Module[{},
+CalculateNLOPotentialHET[]:=Module[{V1,V2,ALog},
 If[verbose==True,Print["Calculating the 1-Loop Effective Potential"]];
-
+	(*Log integral*)
+	ALog[x_]:=-(x^(3/2)/(12 \[Pi]));
+	
 	V1=Sum[ALog[\[Mu]ijHET[[i,i]]],{i,1,nHETS}];
 	V2=2*Sum[ALog[\[Mu]abHET[[i,i]]],{i,1,nHETV}];
 
@@ -158,11 +160,14 @@ If[verbose==True,Print["Calculating the 1-Loop Effective Potential"]];
 (*
 	Calculates the two-loop effective potential.
 *)
-CalculateNNLOPotentialHET[]:=Module[{},
+CalculateNNLOPotentialHET[]:=Module[{fvvv,f\[Eta]\[Eta]v,fssv,fvvs,fsss,fss,fvs,fvv,ss,sss,vs,vvs,ssv,vv,vvv,ggv,
+							Vss,Vsss,Vvs,Vvvs,Vssv,Vvvv,Vvv,V\[Eta]\[Eta]v,
+							\[Mu]ab\[Phi]Pert,\[Mu]ijPert,helpTens,V1,V2,AD},
 If[verbose==True,Print["Calculating the 2-Loop Effective Potential"]];
 
 
-	
+	(*Loading two-loop master integrals*)
+	{fvvv,f\[Eta]\[Eta]v,fssv,fvvs,fsss,fss,fvs,fvv}=TwoLoopFunctions[];
 (*scalar-scalar bubble*)	
 	ss=1/8 TensorProduct[\[Lambda]4\[Phi]];
 	Vss=Sum[ss[[j,j,k,k]]fss[asF[[j]],asF[[k]]],{j,nsEP},{k,nsEP}];
@@ -206,6 +211,10 @@ If[verbose==True,Print["Calculating the 2-Loop Effective Potential"]];
 	\[Mu]ab\[Phi]Pert[[LightVectorHET,LightVectorHET]]=0;
 	\[Mu]ab\[Phi]Pert=ArrayRules[\[Mu]ab\[Phi]Pert]/.({x_Integer,y_Integer}->a_)/;Equal[x,y]->{x,y}->0//SparseArray[#,{nvEP,nvEP}]&;
 
+(*One-loop integrals*)	
+	AD[x_,y_]:=-(1/(4 \[Pi]))( Sqrt[x]-Sqrt[y])/(y-x);
+	AD[0,0]:=0;
+	AD[x_,x_]:=(1/(8 \[Pi]))/Sqrt[x];
 
 (*Scalar contribution*)
 	helpTens=Table[AD[a,b],{a,asF},{b,asF}]//SparseArray;
@@ -217,8 +226,6 @@ If[verbose==True,Print["Calculating the 2-Loop Effective Potential"]];
 	helpTens=TensorProduct[helpTens,\[Mu]ab\[Phi]Pert]//SparseArray//DiagonalTensor2[#,1,3]&;
 	V2=2*Tr[helpTens . \[Mu]ab\[Phi]Pert];
 		
-	VMix=V1+V2;
-	
 	
 (*Potential*)
 (*
@@ -226,7 +233,7 @@ If[verbose==True,Print["Calculating the 2-Loop Effective Potential"]];
 
 	
 	*)
-	VHETNNLO= Vss+Vsss+Vvs+ Vvvs+  Vssv+ Vvvv+ Vvv+ V\[Eta]\[Eta]v+VMix;
+	VHETNNLO= Vss+Vsss+Vvs+ Vvvs+  Vssv+ Vvvv+ Vvv+ V\[Eta]\[Eta]v+V1+V2;
 
 ];
 
@@ -275,26 +282,29 @@ PrintScalarKineticHET[]:=Module[{},
 (*
 	Scalar self-energy in the effective theory.
 *)
-ScalarSelfEnergyHET[]:=Module[{},
+ScalarSelfEnergyHET[]:=Module[{LSV,LVV,LSS,\[Lambda]3IJi,gAIj,GABi,TensHelp,ContriSV,ContriVV,ContriSS},
 If[verbose,Print["Calculating Scalar Self-Energy"]];
 
+(*One-loop master integrals*)
+	{LSV,LVV,LSS}=OneLoopFunctions[];
+	
 (*Scalar-scalar bubble*)
 	\[Lambda]3IJi=\[Lambda]3\[Phi][[;;,;;,LightScalarHET]]//HeavyTensor[#,{nsEP,nsEP,nHETSlight}]&;
 	TensHelp=Table[LSS[i,a],{i,asF},{a,asF}]//SparseArray;
-	Temp=TensorProduct[TensHelp,\[Lambda]3IJi]//DiagonalTensor[#,2,3]&//DiagonalTensor[#,2,3]&;
-	ContriSS=1/2*Contract[\[Lambda]3IJi,Temp,{{1,4},{2,5}}]//SimplifySparse;
+	TensHelp=TensorProduct[TensHelp,\[Lambda]3IJi]//DiagonalTensor[#,2,3]&//DiagonalTensor[#,2,3]&;
+	ContriSS=1/2*Contract[\[Lambda]3IJi,TensHelp,{{1,4},{2,5}}]//SimplifySparse;
 
 (*Scalar-vector bubble*)
 	gAIj=gvss\[Phi][[;;,LightScalarHET,;;]]//HeavyTensor[#,{nvEP,nHETSlight,nsEP}]&;
 	TensHelp=Table[LSV[i,a],{i,asF},{a,avF}]//SparseArray;
-	Temp=TensorProduct[TensHelp,gAIj]//DiagonalTensor[#,2,3]&//DiagonalTensor[#,2,4]&;
-	ContriSV=TensorContract[gAIj . Temp,{1,3}];
+	TensHelp=TensorProduct[TensHelp,gAIj]//DiagonalTensor[#,2,3]&//DiagonalTensor[#,2,4]&;
+	ContriSV=TensorContract[gAIj . TensHelp,{1,3}];
 
 (*Vector-vector bubble*)	
 	GABi=Gvvs\[Phi][[;;,;;,LightScalarHET]]//HeavyTensor[#,{nvEP,nvEP,nHETSlight}]&;
 	TensHelp=Table[LVV[i,a],{i,avF},{a,avF}]//SparseArray;
-	Temp=TensorProduct[TensHelp,GABi]//DiagonalTensor[#,2,3]&//DiagonalTensor[#,2,3]&;
-	ContriVV=1/2*Contract[GABi,Temp,{{1,4},{2,5}}]//SimplifySparse;
+	TensHelp=TensorProduct[TensHelp,GABi]//DiagonalTensor[#,2,3]&//DiagonalTensor[#,2,3]&;
+	ContriVV=1/2*Contract[GABi,TensHelp,{{1,4},{2,5}}]//SimplifySparse;
 	
 	ZSijHET=(- ContriSV- ContriVV-ContriSS)/2;
 	
@@ -302,48 +312,36 @@ If[verbose,Print["Calculating Scalar Self-Energy"]];
 ];
 
 
-(* ::Section::Closed:: *)
-(*Master Integrals*)
+(* ::Section:: *)
+(*Scalar master integrals*)
 
 
+OneLoopFunctions[]:=Module[{LSV,LVV,LSS,A},
+
+(*One-loop bubble*)
+	A[0]=0;
+	A[x_]:=-(1/(4 \[Pi])) Sqrt[x];
+	
 (*scalar-vector 2-point*)
-
-
-LSV[x_,y_]:=(8 (-A[x]+A[y]))/(3 (x-y));
-
-
-LSV[x_,x_]:=-((4 A[x] )/(3 x));
-LSV[x_,0]:=-((8 A[x] )/(3 x))
-LSV[0,0]=0;
-
-
+	LSV[x_,y_]:=(8 (-A[x]+A[y]))/(3 (x-y));
+	LSV[x_,x_]:=-((4 A[x] )/(3 x));
+	LSV[x_,0]:=-((8 A[x] )/(3 x));
+	LSV[0,0]=0;
+	
 (*vector-vector 2-point*)
-
-
-LVV[x_,y_]:=(2 ((5 x-y) y^2 A[x]+x^2 (x-5 y) A[y]) )/(3 x (x-y)^3 y) ;
-
-
-LVV[x_,x_]:=(5 A[x] )/(12 x^2);
-
-
-LVV[x_,0]:=0;
-
-
-LVV[0,x_]:=LVV[x,0];
-LVV[0,0]:=0;
-
-
+	LVV[x_,y_]:=(2 ((5 x-y) y^2 A[x]+x^2 (x-5 y) A[y]) )/(3 x (x-y)^3 y) ;
+	LVV[x_,x_]:=(5 A[x] )/(12 x^2);
+	LVV[x_,0]:=0;
+	LVV[0,x_]:=LVV[x,0];
+	LVV[0,0]:=0;
+	
 (*Scalar-scalar 2-point*)
+	LSS[x_,y_]:=((x+3 y) A[x]-(3 x+y) A[y]) /(3 (x-y)^3);
+	LSS[x_,x_]:=A[x]/(24 x^2);
+	LSS[x_,0]:=A[x] /(24 x^2);
+	LSS[0,x_]:=LSS[x,0];
+	LSS[0,0]:=0;
+	
+	Return[{LSV,LVV,LSS}];
+]
 
-
-LSS[x_,y_]:=((x+3 y) A[x]-(3 x+y) A[y]) /(3 (x-y)^3);
-
-
-LSS[x_,x_]:=A[x]/(24 x^2);
-
-
-LSS[x_,0]:=A[x] /(24 x^2);
-LSS[0,x_]:=LSS[x,0];
-
-
-LSS[0,0]:=0;
