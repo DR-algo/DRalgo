@@ -60,93 +60,166 @@ Print[Grid[{{Image[DRalgoLoad,ImageSize->140],Row[result,"\n",BaseStyle->(FontFa
 
 
 
-(* ::Section::Closed:: *)
+(* ::Section:: *)
 (*List of public functions*)
 
 
-	ImportModelDRalgo::usage="Loads the model and creates help tensors"
-	DefineVectorMass::usuage="Defines Custom Vector-Boson masses"
-	PrintDebyeMass::usuage="Prints Debye Masses in the soft theory"
-	PrintTemporalScalarCouplings::usage="Prints Temporal-Vector Couplings in the soft theory"
-	PerformDRhard::usage="Performs the dimensional reduction from hard to soft"
-	PrintIdentification::usage="Shows dim-red parameters in terms of 4-d ones"
-	PrintTensorDRalgo::usage="Shows dim-red parameters in terms of 4-d ones"
-	PrintCouplings::usage="Prints all couplings in the soft theory"
-	PrintScalarMass::usage="Prints scalar masses in the soft theory"
-	BetaFunctions3DUS::usage="Prints beta functions in the supersoft theory"
-	PrintPressure::usage="Prints the preassure in the soft theory"
-	PrintEffectivePotential::usage="Prints the effective potential in the supersoft theory"
-	PrintScalarMassUS::usage="Prints scalar masses in the supersoft theory"
-	AnomDim4D::usage="Prints anomalous dimensions in the 4d theory"
-	BetaFunctions4D::usage="Prints beta-functions in the 4d theory"
-	BetaFunctions3DS::usage="Prints beta-functions in the soft theory"
-	DefineNewTensorsUS::usage="Defines Custom Tensors for Effective-Potential Computations"
-	SymmetricPhaseEnergy::usage="Prints the energy of the Symmetric Phase"
-	PrintCouplingsUS::usage="Prints couplings in the supersoft theory"
-	PrintIdentificationUS::usage="Shows supersoft parameters in terms of soft parameters"
-	PrintTensorUSDRalgo::usage="Prints tensors in the supersoft theory"
-	PrintConstants::usage="Prints constants used in the matching"
-	PrintGenericBasis::usage="Rewrites the results in a different basis"
-	PrintTensorsVEV::usage="Prints background-field dependent couplings and masses"
-	DefineVEVS::usuage="Defines background fields for scalars"
-	RotateTensorsUSPostVEV::usuage="Rotate the field basis. Both for scalar and vector."
-	RotateTensorsCustomMass::usuage="Creates custom field-dependent masses"
-	DefineGroup::usuage="Loads the group and names Debye masses"
-	PerformDRsoft::usage="Perform the reduction from soft to supersoft"
-	CalculatePotentialUS::usage="Calculates the effective potential"
-	CalculatePotential::usage="Calculates the effective potential"
-	CompareInvariants::usuage="Finds relations between couplings by calculating basis-invariant tensors"
-	AllocateTensors::usage="Creates gauge generators"
-	GradQuartic::usage="Creates Quartic tensors"
-	GradCubic::usage="Creates Cubic tensors"
-	GradTadpole::usage="Creates Tadpole tensors"
-	GradSextic::usage="Creates dim 6 tensors"
-	GradMass::usage="Creates Mass tensors"
-	CreateInvariant::usage="Creates an invariant"
-	CreateInvariantYukawa::usage="Creates Yukawa Tensor"
-	GradYukawa::usuage="Creates Yukawa tensor"
-	PrintTadpoles::usuage="Prints Tadpoles"
-	PrintGaugeRepPositions::usuage="Prints the indices of Gauge reps"
-	PrintScalarRepPositions::usuage="Prints the indices of Scalar reps"
-	PrintFermionRepPositions::usuage="Prints the indices of Fermion reps"
-	DefineNF::usuage="Allows the user to add an arbitrary number of fermion families"
-	PrintTadpolesUS::usuage="Prints tadpoles in the supersoft theory"
-	GradMassFermion::usuage="Creates Fermion Invariants"
-	CreateInvariantFermion::usuage="Creates Fermion Invariants"
-	SaveModelDRalgo::usuage="Saves a model to a file"
-	LoadModelDRalgo::usuage="Loads a model from file"
-	DefineDim6::usuage="Defines a dimension 6 operator"
-	PrintPressureUS::usuage="Calculates the preassure in the ultrasoft theory"
-	PrintCouplingsEffective::usuage="Prints higher-order couplings"
-	CounterTerms4D::usuage="Prints 4d CounterTerms"
-	UseUltraSoftTheory::usuage="Uses ultrasoft couplings to construct the potential"
-	UseSoftTheory::usuage="Specifies that soft couplings should be used to construct the potential"
-	PrepareHET::usuage="Remove later"
-	PrintActionHET::usuage="Remove later"
-	CalculatePotentialHET::usuage="Remove later"
-	PrintScalarKineticHET::usuage="Remove later"
+ImportModelDRalgo::usage="\
+ImportModelDRalgo[Group,gvvv,gvff,gvss,\[Lambda]1,\[Lambda]3,\[Lambda]4,\[Mu]ij,\[Mu]IJ,\[Mu]IJC,Ysff,YsffC,Verbose->False,Mode->ModeNumber] \
+Loads the model and creates help tensors. Here,
+gvvv:  structure constants
+gvff:  vector-fermion trilinear couplings
+gvss:  vector-scalar trilinear couplings
+\[Lambda]1:    scalar tadpole couplings
+\[Lambda]3:    cubic couplings
+\[Lambda]4:    quartic couplings
+\[Mu]ij:   scalar-mass matrix
+\[Mu]IJ:   fermion-mass matrices
+\[Mu]IJC:  fermion-mass matrices
+Ysff:  Yukawa couplings
+YsffC: Yukawa couplings.
+";
+PerformDRhard::usage="\
+Performs the dimensional reduction from hard to soft";
+PerformDRsoft::usage="\
+PerformDRsoft[{\!\(\*
+StyleBox[SubscriptBox[\"s\", \"1\"],\nFontSlant->\"Italic\"]\)\!\(\*
+StyleBox[\",\",\nFontSlant->\"Italic\"]\)\!\(\*
+StyleBox[\"...\",\nFontSlant->\"Italic\"]\)\!\(\*
+StyleBox[\",\",\nFontSlant->\"Italic\"]\)\!\(\*
+StyleBox[SubscriptBox[\"s\", \"n\"],\nFontSlant->\"Italic\"]\)}] \
+performs the reduction from soft to supersoft by integrating out\
+the scalars with indices \!\(\*SubscriptBox[\(s\), \(1\)]\) to \!\(\*SubscriptBox[\(s\), \(n\)]\)";
+DefineVectorMass::usage="\
+Defines Custom Vector-Boson masses";
+PrintDebyeMass::usage="\
+Prints Debye Masses in the soft theory";
+PrintTemporalScalarCouplings::usage="\
+Prints Temporal-Vector Couplings in the soft theory";
+PrintIdentification::usage="\
+Shows dim-red parameters in terms of 4-d ones";
+PrintTensorDRalgo::usage="\
+Shows dim-red parameters in terms of 4-d ones";
+PrintCouplings::usage="\
+Prints all couplings in the soft theory";
+PrintScalarMass::usage="\
+Prints scalar masses in the soft theory";
+BetaFunctions3DUS::usage="\
+Prints beta functions in the supersoft theory";
+PrintPressure::usage="\
+PrintPressure[\!\(\*
+StyleBox[\"Order\",\nFontSlant->\"Italic\"]\)] \
+calculates the pressure in the soft theory at \
+\!\(\*
+StyleBox[\"Order\",\nFontSlant->\"Italic\"]\) \[Element]{\"LO\", \"NLO\", \"NNLO\"}";
+PrintPressureUS::usage="\
+PrintPressureUS[\!\(\*
+StyleBox[\"Order\",\nFontSlant->\"Italic\"]\)] \
+calculates the pressure in the ultrasoft theory at \
+\!\(\*
+StyleBox[\"Order\",\nFontSlant->\"Italic\"]\) \[Element]{\"LO\", \"NLO\"}";
+PrintEffectivePotential::usage="\
+Prints the effective potential in the supersoft theory";
+PrintScalarMassUS::usage="\
+Prints scalar masses in the supersoft theory";
+AnomDim4D::usage="\
+Prints anomalous dimensions in the 4d theory";
+BetaFunctions4D::usage="\
+Prints beta-functions in the 4d theory";
+BetaFunctions3DS::usage="\
+Prints beta-functions in the soft theory";
+DefineNewTensorsUS::usage="\
+Defines Custom Tensors for Effective-Potential Computations";
+SymmetricPhaseEnergy::usage="\
+Prints the energy of the Symmetric Phase";
+PrintCouplingsUS::usage="\
+Prints couplings in the supersoft theory";
+PrintIdentificationUS::usage="\
+Shows supersoft parameters in terms of soft parameters";
+PrintTensorUSDRalgo::usage="\
+Prints tensors in the supersoft theory";
+PrintConstants::usage="\
+Prints constants used in the matching";
+PrintGenericBasis::usage="\
+Rewrites the results in a different basis";
+PrintTensorsVEV::usage="\
+Prints background-field dependent couplings and masses";
+DefineVEVS::usage="\
+Defines background fields for scalars";
+RotateTensorsUSPostVEV::usage="\
+Rotate the field basis. Both for scalar and vector.";
+RotateTensorsCustomMass::usage="\
+Creates custom field-dependent masses";
+DefineGroup::usage="Loads the group and names Debye masses";
+CalculatePotentialUS::usage="\
+Calculates the effective potential";
+CalculatePotential::usage="\
+Calculates the effective potential";
+CompareInvariants::usage="\
+Finds relations between couplings by calculating basis-invariant tensors";
+AllocateTensors::usage="\
+Creates gauge generators";
+GradQuartic::usage="Creates Quartic tensors";
+GradCubic::usage="Creates Cubic tensors";
+GradTadpole::usage="Creates Tadpole tensors";
+GradSextic::usage="Creates dim 6 tensors";
+GradMass::usage="Creates Mass tensors";
+CreateInvariant::usage="Creates an invariant";
+CreateInvariantYukawa::usage="Creates Yukawa Tensor";
+GradYukawa::usage="Creates Yukawa tensor";
+PrintTadpoles::usage="Prints Tadpoles";
+PrintGaugeRepPositions::usage="Prints the indices of Gauge reps";
+PrintScalarRepPositions::usage="Prints the indices of Scalar reps";
+PrintFermionRepPositions::usage="Prints the indices of Fermion reps";
+DefineNF::usage="Allows the user to add an arbitrary number of fermion families";
+PrintTadpolesUS::usage="Prints tadpoles in the supersoft theory";
+GradMassFermion::usage="Creates Fermion Invariants";
+CreateInvariantFermion::usage="Creates Fermion Invariants";
+SaveModelDRalgo::usage="Saves a model to a file";
+LoadModelDRalgo::usage="Loads a model from file";
+DefineDim6::usage="Defines a dimension 6 operator";
+PrintCouplingsEffective::usage="Prints higher-order couplings";
+CounterTerms4D::usage="Prints 4d CounterTerms";
+UseUltraSoftTheory::usage="\
+Uses ultrasoft couplings to construct the potential";
+UseSoftTheory::usage="\
+Specifies that soft couplings should be used to construct the potential";
+PrepareHET::usage="Remove later";
+PrintActionHET::usage="Remove later";
+CalculatePotentialHET::usage="Remove later";
+PrintScalarKineticHET::usage="Remove later";
+
+DRalgo::failmsg =
+"Error! DRalgo has encountered a fatal problem and must abort the computation. \
+The problem reads: `1`";
+DRalgo::ImplementationFail =
+"Error! DRalgo has encountered a problem and must abort the computation. \
+The problem reads: `1`";
 
 
-$DRalgoDic=DirectoryName[$InputFileName];
+$DRalgoDirectory=DirectoryName[$InputFileName];
 
 
 (*
 	Functions from groupmath are used to create the model.
 *)
-If[ Global`$LoadGroupMath,
-Get["GroupMath`"];
-Print["GroupMath is an independent package, and is not part of DRalgo"];
-Print["Please Cite GroupMath: Comput.Phys.Commun. 267 (2021) 108085 \[Bullet] e-Print: 2011.01764 [hep-th]
-"];
+If[Global`$LoadGroupMath,
+	Get["GroupMath`"];
+	Print["GroupMath is an independent package, and is not part of DRalgo"];
+	Print["Please Cite GroupMath: Comput.Phys.Commun. 267 (2021) 108085 \[Bullet] e-Print: 2011.01764 [hep-th]"];
 ];
 
 
 (*
 	Verbose=True removes progress messages.
 	Mode=2 calculates everything, Mode=1 only calculates LO masses and couplings
-	 Mode=0 only calculates LO masses
+	Mode=0 only calculates LO masses
 *)
-Options[ImportModelDRalgo] = {Verbose -> False,Mode->2,Dim6->False,Normalization4D->False,AutoRG->True}
+Options[ImportModelDRalgo]={
+	Verbose -> False,Mode->2,
+	Dim6->False,
+	Normalization4D->False,
+	AutoRG->True}
 
 
 Begin["`Private`"]
@@ -155,15 +228,15 @@ Begin["`Private`"]
 (*
 	Loads all functions.
 *)
-Get[FileNameJoin[{$DRalgoDic,"Debye.m"}]]; (*Loads additional functions*)
-Get[FileNameJoin[{$DRalgoDic,"HardToSoft.m"}]];(*Loads Hard -> Soft functions*)
-Get[FileNameJoin[{$DRalgoDic,"SoftToUS.m"}]];(*Loads Soft -> SS functions*)
-Get[FileNameJoin[{$DRalgoDic,"EffPot.m"}]];(*Loads Effective Potential Functions*)
-Get[FileNameJoin[{$DRalgoDic,"ModelCreation.m"}]];(*Loads Effective Potential Functions*)
-Get[FileNameJoin[{$DRalgoDic,"HEFT.m"}]];(*Loads Higgs-Effective field theory Functions*)
+Get[FileNameJoin[{$DRalgoDirectory,"Debye.m"}]]; (*Loads additional functions*)
+Get[FileNameJoin[{$DRalgoDirectory,"HardToSoft.m"}]];(*Loads Hard -> Soft functions*)
+Get[FileNameJoin[{$DRalgoDirectory,"SoftToUS.m"}]];(*Loads Soft -> SS functions*)
+Get[FileNameJoin[{$DRalgoDirectory,"EffPot.m"}]];(*Loads Effective Potential Functions*)
+Get[FileNameJoin[{$DRalgoDirectory,"ModelCreation.m"}]];(*Loads Effective Potential Functions*)
+Get[FileNameJoin[{$DRalgoDirectory,"HEFT.m"}]];(*Loads Higgs-Effective field theory Functions*)
 
 
-(* ::Section::Closed:: *)
+(* ::Section:: *)
 (*Initialization*)
 
 
@@ -219,7 +292,8 @@ DefineDim6[\[Lambda]6I_]:=Module[{\[Lambda]6P=\[Lambda]6I},
 	If[mode>=3,
 		\[Lambda]6=\[Lambda]6P//SparseArray;
 	,
-		Print["Please set mode=3 to use this feature"];
+		Message[DRalgo::ImplementationFail, "Please set mode=3 to use this feature"];
+		Abort[]
 	];
 ];
 
@@ -293,7 +367,6 @@ PerformDRhard[]:=Module[{},
 	IdentifyTensorsDRalgo[];
 
 ];
-
 
 
 (*

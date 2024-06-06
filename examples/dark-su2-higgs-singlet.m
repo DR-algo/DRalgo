@@ -149,7 +149,7 @@ Dim6Term=(
 (*Dimensional Reduction*)
 
 
-(* ::Subsection:: *)
+(* ::Subsection::Closed:: *)
 (*Model Import*)
 
 
@@ -160,8 +160,8 @@ ImportModelDRalgo[Group,gvvv,gvff,gvss,\[Lambda]1,\[Lambda]3,\[Lambda]4,\[Mu]ij,
 (* Mode -> 3 option is used for marginal operators if desired, in this case one also includes:*)
 
 
-(*ImportModelDRalgo[Group,gvvv,gvff,gvss,\[Lambda]1,\[Lambda]3,\[Lambda]4,\[Mu]ij,\[Mu]IJ,\[Mu]IJC,Ysff,YsffC,Verbose->False,Mode->3];
-DefineDim6[\[Lambda]6]*)
+(*ImportModelDRalgo[Group,gvvv,gvff,gvss,\[Lambda]1,\[Lambda]3,\[Lambda]4,\[Mu]ij,\[Mu]IJ,\[Mu]IJC,Ysff,YsffC,Verbose->False,Mode->3];*)
+(*DefineDim6[\[Lambda]6]*)
 
 
 (* ::Subsection::Closed:: *)
@@ -248,7 +248,7 @@ this is the hard mode contribution to symmetric phase pressure
 *)
 PrintPressure["LO"]
 PrintPressure["NLO"] 
-PrintPressure["NNLO"] 
+PrintPressure["NNLO"]
 
 
 (*
@@ -259,7 +259,7 @@ PosScalar=PrintScalarRepPositions[]
 PosFermion=PrintFermionRepPositions[]*)
 
 
-(* ::Subsection:: *)
+(* ::Subsection::Closed:: *)
 (*Soft-to-softer EFT construction*)
 
 
@@ -292,7 +292,7 @@ PrintScalarMassUS["NLO"]
 BetaFunctions3DUS[]
 
 
-(* ::Subsubsection:: *)
+(* ::Subsubsection::Closed:: *)
 (*The  unit  operator  pM:*)
 
 
