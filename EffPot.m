@@ -187,7 +187,7 @@ DefineVEVS[\[Phi]Vecp_]:=Module[{\[Phi]Vec=\[Phi]Vecp},
 ];
 
 
-(* ::Section::Closed:: *)
+(* ::Section:: *)
 (*Calculation of the effective potential*)
 
 
@@ -198,9 +198,9 @@ DefineVEVS[\[Phi]Vecp_]:=Module[{\[Phi]Vec=\[Phi]Vecp},
 (*
 	Calculates the effective potential with custom masses
 *)
-CalculatePotentialUS[ScalMassI_,VecMassI_,OptionsPattern[]]:=Module[{ScalMassP=ScalMassI,VecMassP=VecMassI},
+CalculatePotentialUS[ScalMassI_,VecMassI_,OptionsPattern[]]:=Module[{},
 
-	CalculatePotential[ScalMassP,VecMassP,OptionsPattern[]]
+	CalculatePotential[ScalMassI,VecMassI,OptionsPattern[]]
 ];
 
 (*
@@ -335,9 +335,13 @@ PrintEffectivePotential[optP_]:=Module[{opt=optP},
 (*
 	Calculates the tree-level effective potential.
 *)
-CalculateOffDiagPotentialSS[]:=Module[{},
+CalculateOffDiagPotentialSS[]:=Module[{V1,V2,helpTens,AD},
 		
-
+(*Scalar integrals*)	
+	AD[x_,y_]:=-(1/(4 \[Pi]))( Sqrt[x]-Sqrt[y])/(y-x);
+	AD[0,0]:=0;
+	AD[x_,x_]:=(1/(8 \[Pi]))/Sqrt[x];
+	
 (*Scalar contribution*)
 		helpTens=Table[AD[a,b],{a,Diagonal[\[Mu]ij\[Phi]]},{b,Diagonal[\[Mu]ij\[Phi]]}]//SparseArray;
 		helpTens=TensorProduct[helpTens,\[Mu]ijPert]//SparseArray//DiagonalTensor2[#,1,3]&;
@@ -357,7 +361,9 @@ CalculateOffDiagPotentialSS[]:=Module[{},
 (*
 	Calculates the two-loop effective potential.
 *)
-CalculateNNLOPotentialSS[]:=Module[{},
+CalculateNNLOPotentialSS[]:=Module[{Vss, Vsss, Vvvs, Vssv, Vvs, Vvvv, Vvv, V\[Eta]\[Eta]v
+									,fvvv,f\[Eta]\[Eta]v,fssv,fvvs,fsss,fss,fvs,fvv,aS,av,
+									ss,sss,vvs,ssv,vs,vv,vvv,ggv},
 If[verbose==True,Print["Calculating the 2-Loop Effective Potential"]];
 
 	
@@ -366,7 +372,9 @@ If[verbose==True,Print["Calculating the 2-Loop Effective Potential"]];
 	(*Assuming that the mass matrices are diagonal*)
 	aS=Table[\[Mu]ij\[Phi][[i,i]],{i,1,nsEP}]//SparseArray;
 	av=Table[\[Mu]ab\[Phi][[i,i]],{i,1,nvEP}]//SparseArray;
-	
+
+(*Loading two-loop master integrals*)
+	{fvvv,f\[Eta]\[Eta]v,fssv,fvvs,fsss,fss,fvs,fvv}=TwoLoopFunctions[];
 (*Potential*)
 
 	If[Length[TensorDimensions[\[Lambda]4\[Phi]]]<4,
@@ -544,9 +552,9 @@ RotateTensorsCustomMass[DScalarsp_,DVectorsp_,ScalarMass_,vectorMass_,OptionsPat
 (*Scalar master integrals*)
 
 
+TwoLoopFunctions[]:=Module[{f,A,I2,I2Div,AD,ALog,fvvv,f\[Eta]\[Eta]v,fssv,fvvs,fsss,fss,fvs,fvv},
 (*The notation follows Martin's convention*)
 (*Please see arXiv:1808.07615*)
-
 	f[x_]:=-(1/(12 \[Pi])) x^(3/2);
 	A[0]=0;
 	A[x_]:=-(1/(4 \[Pi])) Sqrt[x];
@@ -614,3 +622,6 @@ RotateTensorsCustomMass[DScalarsp_,DVectorsp_,ScalarMass_,vectorMass_,OptionsPat
 (*vector-vector bubble*)	
 	fvv[x_,y_]:=8/3 A[x]A[y];
 	
+	Return[{fvvv,f\[Eta]\[Eta]v,fssv,fvvs,fsss,fss,fvs,fvv}];
+]
+
