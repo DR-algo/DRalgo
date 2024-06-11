@@ -198,9 +198,9 @@ DefineVEVS[\[Phi]Vecp_]:=Module[{\[Phi]Vec=\[Phi]Vecp},
 (*
 	Calculates the effective potential with custom masses
 *)
-CalculatePotentialUS[ScalMassI_,VecMassI_,OptionsPattern[]]:=Module[{},
+CalculatePotentialUS[ScalMassI_,VecMassI_,Opt_]:=Module[{},
 
-	CalculatePotential[ScalMassI,VecMassI,OptionsPattern[]]
+	CalculatePotential[ScalMassI,VecMassI,Opt]
 ];
 
 (*
@@ -408,9 +408,11 @@ If[verbose==True,Print["Calculating the 2-Loop Effective Potential"]];
 (*
 	Calculates the one-loop effective potential.
 *)
-CalculateNLOPotentialSS[]:=Module[{},
+CalculateNLOPotentialSS[]:=Module[{ALog},
 If[verbose==True,Print["Calculating the 1-Loop Effective Potential"]];
-
+	
+	ALog[x_]:=-(x^(3/2)/(12 \[Pi]));
+		
 	V1=Sum[ALog[\[Mu]ij\[Phi][[i,i]]],{i,1,nsEP}];
 	V2=2*Sum[ALog[\[Mu]ab\[Phi][[i,i]]],{i,1,nvEP}];
 
@@ -548,7 +550,7 @@ RotateTensorsCustomMass[DScalarsp_,DVectorsp_,ScalarMass_,vectorMass_,OptionsPat
 ];
 
 
-(* ::Section::Closed:: *)
+(* ::Section:: *)
 (*Scalar master integrals*)
 
 
