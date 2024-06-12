@@ -164,7 +164,7 @@ ImportModelDRalgo[Group,gvvv,gvff,gvss,\[Lambda]1,\[Lambda]3,\[Lambda]4,\[Mu]ij,
 (*DefineDim6[\[Lambda]6]*)
 
 
-(* ::Subsection::Closed:: *)
+(* ::Subsection:: *)
 (*Hard-to-soft EFT construction*)
 
 
@@ -239,7 +239,7 @@ etc.
 BetaFunctions4D[]
 
 
-(* ::Subsubsection::Closed:: *)
+(* ::Subsubsection:: *)
 (*Unit operator pE:*)
 
 
@@ -251,16 +251,16 @@ PrintPressure["NLO"]
 PrintPressure["NNLO"]
 
 
+(* ::Subsection:: *)
+(*Soft-to-softer EFT construction*)
+
+
 (*
 indices 1 to 4 are doublet components, and index 5 a singlet
 *)
 PosScalar=PrintScalarRepPositions[]
 (*PosVector=PrintGaugeRepPositions[]
 PosFermion=PrintFermionRepPositions[]*)
-
-
-(* ::Subsection::Closed:: *)
-(*Soft-to-softer EFT construction*)
 
 
 (*
