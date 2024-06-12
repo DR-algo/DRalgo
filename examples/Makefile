@@ -2,7 +2,8 @@
 FILES := \
 	2hdm.m 2xsm.m 3hdm.m ah-thermo.m ah.m cxsm.m htm.m LRSymmetric.m \
 	RealScalar.m ScalYukawa.m sm.m \
-	smCKM.m smDim6.m smZp.m SU5.m tripletHET.m WessZumino.m xsm.m
+	smCKM.m smDim6.m smZp.m SU5.m \
+	tripletHET.m WessZumino.m xsm.m
 
 # Target: test
 test: make
