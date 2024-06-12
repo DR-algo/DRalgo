@@ -3,6 +3,12 @@
 (*Quit[];*)
 
 
+(* Check Mathematica version *)
+If[$VersionNumber < 13.3,
+  Print["The Mathematica testing framework requires Mathematica version ", requiredVersion," or higher. You are using version ", currentVersion, "."];
+  Abort[]
+];
+
 SetDirectory[NotebookDirectory[]];
 $LoadGroupMath=True;
 <<..//DRalgo.m
@@ -323,6 +329,4 @@ TestCreate[PrintPressureUS["NLO"],
 
 report=TestReport[testList]
 report["ResultsDataset"]
-
-
 
