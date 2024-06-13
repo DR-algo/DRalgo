@@ -289,18 +289,18 @@ If[verbose,Print["Calculating NNLO \!\(\*SuperscriptBox[\(T\), \(4\)]\) Terms"]]
 
 
 (*These integrals are given in 9408276 and 9410360*)
-	EPre=1/(24*16 \[Pi]^2) T^4*(\[Mu]/(4 \[Pi])Exp[-EulerGamma])^(6 \[Epsilon]) (1/\[Epsilon]+91/15+8( Derivative[1][Zeta][-1])/Zeta[-1]-2 Derivative[1][Zeta][-3]/Zeta[-3]);
+	EPre=1/(24*16 \[Pi]^2) T^4*(\[Mu]/(4 \[Pi] T))^(6 \[Epsilon]) (1/\[Epsilon]+91/15+8( Derivative[1][Zeta][-1])/Zeta[-1]-2 Derivative[1][Zeta][-3]/Zeta[-3]);
 	Series[EPre,{\[Epsilon],0,0}]//Normal//FullSimplify;
 	M00=Series[EPre,{\[Epsilon],0,0}]//Normal;
 	LInt=(T^4 Log[Glaisher])/(48 \[Pi]^2)+(T^4 Log[\[Mu]^2])/(768 \[Pi]^2)+T^4/(2304 \[Pi]^2 \[Epsilon])+(EulerGamma T^4)/(1152 \[Pi]^2)-(T^4 Log[\[Pi] T])/(384 \[Pi]^2)-(T^4 Log[2])/(192 \[Pi]^2);
-	EFPre=1/(96*16 \[Pi]^2) T^4*(\[Mu]/(4 \[Pi])Exp[-EulerGamma])^(6 \[Epsilon]) (1/\[Epsilon]+173/30-42/2 Log[2]+8( Derivative[1][Zeta][-1])/Zeta[-1]-2 Derivative[1][Zeta][-3]/Zeta[-3]);
+	EFPre=1/(96*16 \[Pi]^2) T^4*(\[Mu]/(4 \[Pi] T))^(6 \[Epsilon]) (1/\[Epsilon]+173/30-42/5 Log[2]+8( Derivative[1][Zeta][-1])/Zeta[-1]-2 Derivative[1][Zeta][-3]/Zeta[-3]);
 	EFInt=Series[EFPre,{\[Epsilon],0,0}]//Normal//FullSimplify//Expand;
 	N00=EFInt;
-	MF1M1=Series[-1/(192*16 \[Pi]^2) T^4*(\[Mu]/(4 \[Pi])Exp[-EulerGamma])^(6 \[Epsilon]) (1/\[Epsilon]+361/60+76/5 Log[2]+6EulerGamma-4( Derivative[1][Zeta][-1])/Zeta[-1]-4Derivative[1][Zeta][-3]/Zeta[-3]),{\[Epsilon],0,0}]//Normal;
-	MF00=Series[-1/(192*16 \[Pi]^2) T^4*(\[Mu]/(4 \[Pi])Exp[-EulerGamma])^(6 \[Epsilon]) (1/\[Epsilon]+179/30-34/5 Log[2]+6EulerGamma+8( Derivative[1][Zeta][-1])/Zeta[-1]-2Derivative[1][Zeta][-3]/Zeta[-3]),{\[Epsilon],0,0}]//Normal;
-	MFM2P2=Series[-29/(1728*16 \[Pi]^2) T^4*(\[Mu]/(4 \[Pi])Exp[-EulerGamma])^(6 \[Epsilon]) (1/\[Epsilon]+89/29-90/29 Log[2]+48/29EulerGamma+136/29( Derivative[1][Zeta][-1])/Zeta[-1]-10/29Derivative[1][Zeta][-3]/Zeta[-3]),{\[Epsilon],0,0}]//Normal;
-	N2M2=Series[1/(108*16 \[Pi]^2) T^4*(\[Mu]/(4 \[Pi])Exp[-EulerGamma])^(6 \[Epsilon]) (1/\[Epsilon]+35/8+3/2EulerGamma-63/10 Log[2]+5( Derivative[1][Zeta][-1])/Zeta[-1]-1/2Derivative[1][Zeta][-3]/Zeta[-3]),{\[Epsilon],0,0}]//Normal;
-	MP2M2=Series[11/(216*16 \[Pi]^2) T^4*(\[Mu]/(4 \[Pi])Exp[-EulerGamma])^(6 \[Epsilon]) (1/\[Epsilon]+73/22+12/11EulerGamma+64/11( Derivative[1][Zeta][-1])/Zeta[-1]-10/11Derivative[1][Zeta][-3]/Zeta[-3]),{\[Epsilon],0,0}]//Normal;
+	MF1M1=Series[-1/(192*16 \[Pi]^2) T^4*(\[Mu]/(4 \[Pi] T))^(6 \[Epsilon]) (1/\[Epsilon]+361/60+76/5 Log[2]+6EulerGamma-4( Derivative[1][Zeta][-1])/Zeta[-1]+4Derivative[1][Zeta][-3]/Zeta[-3]),{\[Epsilon],0,0}]//Normal;
+	MF00=Series[-1/(192*16 \[Pi]^2) T^4*(\[Mu]/(4 \[Pi] T))^(6 \[Epsilon]) (1/\[Epsilon]+179/30-34/5 Log[2]+8( Derivative[1][Zeta][-1])/Zeta[-1]-2Derivative[1][Zeta][-3]/Zeta[-3]),{\[Epsilon],0,0}]//Normal;
+	MFM2P2=Series[-29/(1728*16 \[Pi]^2) T^4*(\[Mu]/(4 \[Pi] T))^(6 \[Epsilon]) (1/\[Epsilon]+89/29-90/29 Log[2]+48/29EulerGamma+136/29( Derivative[1][Zeta][-1])/Zeta[-1]-10/29Derivative[1][Zeta][-3]/Zeta[-3]),{\[Epsilon],0,0}]//Normal;
+	N2M2=Series[1/(108*16 \[Pi]^2) T^4*(\[Mu]/(4 \[Pi] T))^(6 \[Epsilon]) (1/\[Epsilon]+35/8+3/2EulerGamma-63/10 Log[2]+5( Derivative[1][Zeta][-1])/Zeta[-1]-1/2Derivative[1][Zeta][-3]/Zeta[-3]),{\[Epsilon],0,0}]//Normal;
+	MP2M2=Series[11/(216*16 \[Pi]^2) T^4*(\[Mu]/(4 \[Pi] T))^(6 \[Epsilon]) (1/\[Epsilon]+73/22+12/11EulerGamma+64/11( Derivative[1][Zeta][-1])/Zeta[-1]-10/11Derivative[1][Zeta][-3]/Zeta[-3]),{\[Epsilon],0,0}]//Normal;
 
 
 (*Note that some contractions are inefficent. Will fix later but they are anyway not bottlenecks*)
