@@ -26,3 +26,8 @@ endef
 
 # Apply the template rule for each file
 $(foreach file,$(FILES),$(eval $(call run_wolframscript_template,$(file))))
+
+clean:
+	rm -rf log/*
+
+.PHONY: test clean
