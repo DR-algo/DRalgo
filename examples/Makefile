@@ -3,7 +3,8 @@ FILES := \
 	2hdm.m 2xsm.m 3hdm.m ah-thermo.m ah.m cxsm.m htm.m LRSymmetric.m \
 	RealScalar.m ScalYukawa.m sm.m \
 	smCKM.m smDim6.m smZp.m SU5.m \
-	tripletHET.m WessZumino.m xsm.m
+	tripletHET.m WessZumino.m xsm.m \
+	dark-su2-higgs-singlet.m
 
 # Target: test
 test: make
@@ -25,3 +26,8 @@ endef
 
 # Apply the template rule for each file
 $(foreach file,$(FILES),$(eval $(call run_wolframscript_template,$(file))))
+
+clean:
+	rm -rf log/*
+
+.PHONY: test clean

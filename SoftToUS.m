@@ -25,11 +25,14 @@
 	Prints the result from SymmEnergy.
 *)
 PrintPressureUS[optP_]:=Module[{opt=optP},
-	
 	If[mode<2,
 		SymmPrint=-SymmetricPhaseUSLO[]
 	,
-		SymmPrint=Switch[opt,"LO",SymmEnergyUS[[1]],"NLO",SymmEnergyUS[[2]]];
+		SymmPrint=Switch[opt,
+			"LO",SymmEnergyUS[[1]],
+			"NLO",SymmEnergyUS[[2]],
+			"NNLO",Message[DRalgo::failmsg, "No NNLO ultrasoft pressure implemented in DRalgo."]
+		];
 	];
 (*Printing Result*)
 	ToExpression[StringReplace[ToString[StandardForm[SymmPrint]],"DRalgo`Private`"->""]]
