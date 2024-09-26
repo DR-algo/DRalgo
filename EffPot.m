@@ -187,12 +187,12 @@ DefineVEVS[\[Phi]Vecp_]:=Module[{\[Phi]Vec=\[Phi]Vecp},
 ];
 
 
-(* ::Section:: *)
+(* ::Section::Closed:: *)
 (*Calculation of the effective potential*)
 
 
-	Options[CalculatePotentialUS] = {CustomMasses -> False,PerturbativeDiagonalization->False}
-	Options[CalculatePotential] = {CustomMasses -> False,PerturbativeDiagonalization->False}
+	Options[CalculatePotentialUS] = {CustomMasses -> False,PerturbativeDiagonalization->False, CalculateThreeLoop->False}
+	Options[CalculatePotential] = {CustomMasses -> False,PerturbativeDiagonalization->False, CalculateThreeLoop->False}
 
 
 (*
@@ -216,9 +216,8 @@ CalculatePotential[ScalMassI_,VecMassI_,OptionsPattern[]]:=Module[{ScalMassP=Sca
 			If[DiagonalMatrixQAE[\[Mu]ij\[Phi]]==True && DiagonalMatrixQAE[\[Mu]ab\[Phi]]==True,
 				CalculateLOPotentialSS[];
 				CalculateNLOPotentialSS[];
-				VTot={VLO,VNLO};
 			,
-			Print["The Mass matrices are not diagonal. Please rotate to the mass-basis using RotateTensorsUSPostVeV[]"];
+				Print["The Mass matrices are not diagonal. Please rotate to the mass-basis using RotateTensorsUSPostVeV[]"];
 			];
 	,
 	Print["Please set CustomMasses->True"]
@@ -240,8 +239,13 @@ CalculatePotentialUS[OptionsPattern[]]:=Module[{},
 				CalculateLOPotentialSS[];
 				CalculateNLOPotentialSS[];
 				CalculateNNLOPotentialSS[];
-
-				VTot={VLO,VNLO,VNNLO};
+				
+				If[OptionValue[CalculateThreeLoop]==True,
+					CalculateN3LOPotentialSS[];
+					VTot={VLO,VNLO,VNNLO,VN3LO};
+				,
+					VTot={VLO,VNLO,VNNLO};
+				];
 			,
 			Print["The Mass matrices are not diagonal. Please rotate to the mass-basis using RotateTensorsUSPostVeV[]"];
 			];
@@ -283,7 +287,12 @@ CalculatePotential[OptionsPattern[]]:=Module[{},
 				CalculateNLOPotentialSS[];
 				CalculateNNLOPotentialSS[];
 
-				VTot={VLO,VNLO,VNNLO};
+				If[OptionValue[CalculateThreeLoop]==True,
+					CalculateN3LOPotentialSS[];
+					VTot={VLO,VNLO,VNNLO,VN3LO};
+				,
+					VTot={VLO,VNLO,VNNLO};
+				];
 			,
 			Print["The Mass matrices are not diagonal. Please rotate to the mass-basis using RotateTensorsUSPostVeV[]"];
 			];
@@ -322,7 +331,7 @@ PrintEffectivePotential[]:=Module[{},
 ];
 
 PrintEffectivePotential[optP_]:=Module[{opt=optP},
-	EffPotPrint=Switch[opt,"LO",VTot[[1]],"NLO",VTot[[2]],"NNLO",VTot[[3]],__,VTot[[1]]+VTot[[2]]+VTot[[3]]];
+	EffPotPrint=Switch[opt,"LO",VTot[[1]],"NLO",VTot[[2]],"NNLO",VTot[[3]],"N3LO",VTot[[4]],__,VTot[[1]]+VTot[[2]]+VTot[[3]]];
 
 (*Printing Result*)
 	OutputFormatDR[EffPotPrint]
@@ -431,6 +440,340 @@ CalculateLOPotentialSS[]:=Module[{},
 	V3=\[Lambda]3EP . \[Phi]Vev . \[Phi]Vev . \[Phi]Vev;
 	VLO=1/4! V1+V2/2!+V3/3!;
 	];
+
+
+(* ::Section:: *)
+(*Three - loop potential*)
+
+
+(*
+	Calculates the three-loop effective potential.
+*)
+CalculateN3LOPotentialSS[]:=Module[{Res,Tens,aS,av,fac},
+If[verbose==True,Print["Calculating the 3-Loop Effective Potential"]];
+
+	
+(*Contraction with coupling-tensors and masses*)
+
+	(*Assuming that the mass matrices are diagonal*)
+	aS=Table[\[Mu]ij\[Phi][[i,i]],{i,1,nsEP}]//SparseArray;
+	av=Table[\[Mu]ab\[Phi][[i,i]],{i,1,nvEP}]//SparseArray;
+
+(*Pure-scalar contributions*)
+	Tens=1/24 TensorProduct[\[Lambda]3\[Phi], \[Lambda]3\[Phi],\[Lambda]3\[Phi],\[Lambda]3\[Phi]];
+	Res=Sum[Tens[[j,k,m,k,l,n,j,l,p,m,n,p]]fHssssss[aS[[j]],aS[[k]],aS[[l]],aS[[m]],aS[[n]],aS[[p]]],{j,nsEP},{k,nsEP},{l,nsEP},{m,nsEP},{n,nsEP},{p,nsEP}];
+	VN3LO=Res;
+	
+	
+	
+	Tens=1/16 TensorProduct[\[Lambda]3\[Phi], \[Lambda]3\[Phi],\[Lambda]3\[Phi],\[Lambda]3\[Phi]];
+	Res=Sum[Tens[[j,l,m,k,l,m,j,n,p,k,n,p]]fKssssss[aS[[j]],aS[[k]],aS[[l]],aS[[m]],aS[[n]],aS[[p]]],{j,nsEP},{k,nsEP},{l,nsEP},{m,nsEP},{n,nsEP},{p,nsEP}];
+	VN3LO+=Res;
+	
+	Tens=1/8 TensorProduct[\[Lambda]4\[Phi], \[Lambda]3\[Phi],\[Lambda]3\[Phi]];
+	Res=Sum[Tens[[j,k,n,n,j,l,m,k,l,m]]fJsssss[aS[[j]],aS[[k]],aS[[l]],aS[[m]],aS[[n]]],{j,nsEP},{k,nsEP},{l,nsEP},{m,nsEP},{n,nsEP}];
+	VN3LO+=Res;
+	
+	Tens=1/8 TensorProduct[\[Lambda]3\[Phi], \[Lambda]3\[Phi],\[Lambda]4\[Phi]];
+	Res=Sum[Tens[[j,k,l,j,m,n,k,l,m,n]]fGsssss[aS[[j]],aS[[k]],aS[[l]],aS[[m]],aS[[n]]],{j,nsEP},{k,nsEP},{l,nsEP},{m,nsEP},{n,nsEP}];
+	VN3LO+=Res;
+	
+	Tens=1/16 TensorProduct[\[Lambda]4\[Phi],\[Lambda]4\[Phi]];
+	Res=Sum[Tens[[j,k,l,l,j,k,m,m]]fLssss[aS[[j]],aS[[k]],aS[[l]],aS[[m]]],{j,nsEP},{k,nsEP},{l,nsEP},{m,nsEP}];
+	VN3LO+=Res;
+	
+	Tens=1/48 TensorProduct[\[Lambda]4\[Phi],\[Lambda]4\[Phi]];
+	Res=Sum[Tens[[j,k,l,m,j,k,l,m]]fEssss[aS[[j]],aS[[k]],aS[[l]],aS[[m]]],{j,nsEP},{k,nsEP},{l,nsEP},{m,nsEP}];
+	VN3LO+=Res;
+	
+	
+(*Cactus diagrams*)
+	Tens=2 1/2^3 TensorProduct[gvss\[Phi],gvss\[Phi],\[Lambda]4\[Phi]];
+	Res=Sum[Tens[[a,j,n,a,n,k,j,m,m,k]]fLssvs[aS[[j]],aS[[k]],av[[a]],aS[[m]]],{a,nvEP},{j,nsEP},{k,nsEP},{l,nsEP},{m,nsEP},{n,nsEP}];
+	VN3LO+=Res;
+	
+	
+	Tens=-4 1/2^4 TensorProduct[gvss\[Phi],gvss\[Phi],gvss\[Phi],gvss\[Phi]];
+	Res=Sum[Tens[[a,j,n,a,n,k,b,j,m,b,m,k]]fLssvv[aS[[j]],aS[[k]],av[[a]],av[[b]]],{a,nv},{j,nsEP},{k,nsEP},{b,nvEP},{m,nsEP},{n,nsEP}];
+	VN3LO+=Res;
+	
+	Tens=4 1/2^4 TensorProduct[gvss\[Phi],gvss\[Phi],gvss\[Phi],gvss\[Phi]];
+	fac=-1;
+	Res=fac*Sum[Tens[[a,j,n,b,n,j,a,k,m,b,m,k]]fLvvss[av[[a]],av[[b]],aS[[j]],aS[[k]]],{a,nvEP},{j,nsEP},{k,nsEP},{b,nvEP},{m,nsEP},{n,nsEP}];
+	VN3LO+=Res;
+		
+	Tens=2 1/2^3 TensorProduct[gvvv\[Phi],gvvv\[Phi],gvss\[Phi],gvss\[Phi]];
+	fac=1;
+	Res=fac*Sum[Tens[[a,b,e,a,d,e,b,i,n,d,n,i]]fLvvvs[av[[b]],av[[d]],av[[a]],aS[[i]]],{a,nvEP},{b,nvEP},{d,nvEP},{e,nvEP},{n,nsEP},{i,nsEP}];
+	VN3LO+=Res;
+	
+	Tens=1/2^4 TensorProduct[gvvv\[Phi],gvvv\[Phi],gvvv\[Phi],gvvv\[Phi]];
+	fac=-1;
+	Res=fac*Sum[Tens[[a,b,e,a,d,e,h,b,f,h,d,f]]fLvvvv[av[[b]],av[[d]],av[[a]],av[[h]]],{a,nvEP},{b,nvEP},{d,nvEP},{e,nvEP},{h,nvEP},{f,nvEP}];
+	VN3LO+=Res;
+	
+	
+(*Baseball diagrams*)
+	Tens=2 1/2^3 TensorProduct[gvss\[Phi],gvss\[Phi],gvss\[Phi],gvss\[Phi]];
+	fac=-1;
+	Res=fac*Sum[( Tens[[a,j,n,b,n,k,a,k,l,b,l,j]]+Tens[[a,j,n,b,n,k,a,j,l,b,l,k]])fEssvv[aS[[j]],aS[[k]],av[[a]],av[[b]]],{a,nvEP},{j,nsEP},{k,nsEP},{b,nvEP},{l,nsEP},{n,nsEP}];
+	VN3LO+=Res;	
+	
+	
+	Tens=6 1/(4!*2) TensorProduct[gvvv\[Phi],gvvv\[Phi],gvvv\[Phi],gvvv\[Phi]];
+	fac=-1;
+	Res=fac*Sum[(Tens[[a,b,d,b,c,e,a,c,f,d,e,f]]fEvvvvH[av[[a]],av[[f]],av[[b]],av[[e]]]),{a,nvEP},{b,nvEP},{c,nvEP},{e,nvEP},{f,nvEP},{d,nvEP}];
+	VN3LO+=Res;
+	
+	Tens=1/(2^4*9)TensorProduct[gvvv\[Phi],gvvv\[Phi],gvvv\[Phi],gvvv\[Phi]];
+	fac=1;
+	Res=fac*Sum[(Tens[[a,c,d,b,c,d,a,e,f,b,e,f]]fEvvvvK[av[[a]],av[[f]],av[[b]],av[[e]]]),{a,nvEP},{b,nvEP},{c,nvEP},{e,nvEP},{f,nvEP},{d,nvEP}];
+	VN3LO+=Res;
+
+			
+(*Sunset-Bubble diagrams*)			
+	
+	Tens=2 1/2^3 TensorProduct[gvss\[Phi],gvss\[Phi],\[Lambda]3\[Phi],\[Lambda]3\[Phi]];
+	fac=-1;
+	Res=fac*Sum[( Tens[[a,j,n,a,n,k,j,l,m,l,k,m]])fJssssv[aS[[j]],aS[[k]],aS[[m]],aS[[l]],av[[a]]],{a,nvEP},{j,nsEP},{k,nsEP},{b,nvEP},{l,nsEP},{m,nsEP},{n,nsEP}];		
+	VN3LO+=Res;					
+													
+	Tens=1/2^2 TensorProduct[gvss\[Phi],gvss\[Phi],\[Lambda]4\[Phi]];
+	fac=-1;
+	Res=fac*Sum[( Tens[[a,m,j,a,k,m,j,l,l,k]])fJssvss[aS[[j]],aS[[k]],av[[a]],aS[[m]],aS[[l]]],{a,nvEP},{j,nsEP},{k,nsEP},{l,nsEP},{m,nsEP}];
+	VN3LO+=Res;																		
+
+	Tens=1/2^3 TensorProduct[Gvvs\[Phi],Gvvs\[Phi],\[Lambda]4\[Phi]];
+	fac=1;
+	Res=fac*Sum[( Tens[[a,b,j,a,b,k,j,m,m,k]])fJssvvs[aS[[j]],aS[[k]],av[[a]],av[[b]],aS[[m]]],{a,nvEP},{j,nsEP},{k,nsEP},{b,nvEP},{m,nsEP}];
+	VN3LO+=Res;	
+	
+	Tens=2 1/2^2 TensorProduct[gvss\[Phi],gvss\[Phi],gvss\[Phi],gvss\[Phi]];
+	fac=1;
+	Res=fac*Sum[( Tens[[a,j,m,a,m,k,b,j,l,b,l,k]])fJsssvv[aS[[j]],aS[[k]],aS[[m]],av[[a]],av[[b]]],{a,nvEP},{j,nsEP},{k,nsEP},{b,nvEP},{m,nsEP},{l,nsEP}];	
+	VN3LO+=Res;																																																
+		
+	Tens=2 1/2^3 TensorProduct[Gvvs\[Phi],Gvvs\[Phi],gvss\[Phi],gvss\[Phi]];
+	fac=-1;
+	Res=fac*Sum[( Tens[[a,b,j,a,b,k,c,j,m,c,m,k]])fJssvvv[aS[[j]],aS[[k]],av[[a]],av[[b]],av[[c]]],{a,nvEP},{j,nsEP},{k,nsEP},{b,nvEP},{m,nsEP},{c,nvEP}];																																																																																																																																																	
+	VN3LO+=Res;																																																																																																																																																																																																																																																																																																																																																																																																																																														
+	
+	Tens=2 1/2^3 TensorProduct[gvss\[Phi],gvss\[Phi],gvss\[Phi],gvss\[Phi]];
+	fac=1;
+	Res=fac*Sum[( Tens[[a,k,j,b,j,k,a,m,l,b,l,m]])fJvvsss[av[[a]],av[[b]],aS[[j]],aS[[k]],aS[[m]]],{a,nvEP},{j,nsEP},{k,nsEP},{b,nvEP},{m,nsEP},{l,nsEP}];	
+	VN3LO+=Res;																																				
+																																																																								
+	Tens=2 1/2^3 TensorProduct[Gvvs\[Phi],Gvvs\[Phi],gvss\[Phi],gvss\[Phi]];
+	fac=-1;
+	Res=fac*Sum[( Tens[[a,c,j,b,c,j,a,k,m,b,m,k]])fJvvsvs[av[[a]],av[[b]],aS[[j]],av[[c]],aS[[k]]],{a,nvEP},{j,nsEP},{k,nsEP},{b,nvEP},{m,nsEP},{c,nvEP}];
+	VN3LO+=Res;	
+	
+	Tens=2 1/2^2 TensorProduct[gvvv\[Phi],gvvv\[Phi],gvss\[Phi],gvss\[Phi]];
+	fac=-1;
+	Res=fac*Sum[Tens[[d,c,a,c,d,b,a,i,n,b,n,i]]fJvvggs[av[[a]],av[[b]],0,0,aS[[i]]],{a,nvEP},{b,nvEP},{c,nvEP},{d,nvEP},{i,nsEP},{n,nsEP}];																																																																																																																																																																																																																																																																																																																																																																																																																																																	
+	VN3LO+=Res;
+	
+	Tens=2 1/2^3 TensorProduct[gvvv\[Phi],gvvv\[Phi],gvss\[Phi],gvss\[Phi]];
+	fac=1;
+	Res=fac*Sum[Tens[[a,d,c,b,c,d,a,i,n,b,n,i]]fJvvvvs[av[[a]],av[[b]],av[[c]],av[[d]],aS[[i]]],{a,nvEP},{b,nvEP},{c,nvEP},{d,nvEP},{i,nsEP},{n,nsEP}];
+	VN3LO+=Res;
+	
+	Tens=1/2^3 TensorProduct[gvvv\[Phi],gvvv\[Phi],gvss\[Phi],gvss\[Phi]];
+	fac=-1;
+	Res=fac*Sum[Tens[[a,c,e,b,c,e,a,j,i,b,i,j]]fJvvssv[av[[a]],av[[b]],aS[[i]],aS[[j]],av[[c]]],{a,nvEP},{b,nvEP},{c,nvEP},{e,nvEP},{i,nsEP},{j,nsEP}];
+	VN3LO+=Res;
+	
+	Tens=1/2^2 TensorProduct[gvvv\[Phi],gvvv\[Phi],Gvvs\[Phi],Gvvs\[Phi]];
+	fac=1;
+	Res=fac*Sum[Tens[[a,c,e,b,c,e,a,d,i,d,b,i]]fJvvvsv[av[[a]],av[[b]],av[[d]],aS[[i]],av[[c]]],{a,nvEP},{b,nvEP},{c,nvEP},{e,nvEP},{i,nsEP},{d,nvEP}];		
+	VN3LO+=Res;	
+	
+	Tens=1/2^2 TensorProduct[gvvv\[Phi],gvvv\[Phi],gvvv\[Phi],gvvv\[Phi]];
+	fac=1;
+	Res=fac*Sum[Tens[[a,c,e,b,c,e,f,d,a,d,f,b]]fJvvggv[av[[a]],av[[b]],0,0,av[[c]]],{a,nvEP},{b,nvEP},{c,nvEP},{e,nvEP},{f,nvEP},{d,nvEP}];																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																													
+	VN3LO+=Res;
+
+	Tens=1/2^3 TensorProduct[gvvv\[Phi],gvvv\[Phi],gvvv\[Phi],gvvv\[Phi]];
+	fac=-1;
+	Res=fac*Sum[Tens[[a,c,e,b,c,e,a,f,d,b,d,f]]fJvvvvv[av[[a]],av[[b]],av[[d]],av[[f]],av[[c]]],{a,nvEP},{b,nvEP},{c,nvEP},{e,nvEP},{f,nvEP},{d,nvEP}];
+	VN3LO+=Res;
+	
+	
+	
+(*Shades Diagrams*)
+	Tens=1/2^2 TensorProduct[Gvvs\[Phi],\[Lambda]3\[Phi],gvss\[Phi],gvss\[Phi]];
+	fac=1;
+	Res=fac*Sum[( Tens[[a,b,j,j,k,m,a,k,l,b,l,m]]+ Tens[[a,b,j,j,k,m,a,m,l,b,l,k]])fGsvvss[aS[[j]],av[[a]],av[[b]],aS[[k]],aS[[m]]],{a,nvEP},{j,nsEP},{k,nsEP},{b,nvEP},{m,nsEP},{c,nvEP},{l,nsEP}];	
+	VN3LO+=Res;
+	
+	Tens=1/2 TensorProduct[gvss\[Phi],gvss\[Phi],gvss\[Phi],gvss\[Phi]];
+	fac=1;
+	Res=fac*Sum[( Tens[[a,j,k,b,m,j,a,k,l,b,l,m]]+ Tens[[a,j,k,b,m,j,a,m,l,b,l,k]])fGssvvs[aS[[j]],aS[[k]],av[[a]],av[[b]],aS[[m]]],{a,nvEP},{j,nsEP},{k,nsEP},{b,nvEP},{m,nsEP},{l,nsEP}];
+	VN3LO+=Res;
+								
+	Tens=1/2 TensorProduct[Gvvs\[Phi],Gvvs\[Phi],gvss\[Phi],gvss\[Phi]];
+	fac=-1;
+	Res=fac*Sum[( Tens[[a,b,j,a,c,k,a,j,l,b,l,k]]+  Tens[[a,b,j,a,c,k,a,k,l,b,l,j]])fGvsvvs[av[[a]],aS[[j]],av[[b]],av[[c]],aS[[k]]],{a,nvEP},{j,nsEP},{k,nsEP},{b,nvEP},{c,nvEP},{l,nsEP}];			
+	VN3LO+=Res;
+		
+	Tens=2 1/2^3 TensorProduct[gvvv\[Phi],gvvv\[Phi],gvvv\[Phi],gvvv\[Phi]];
+	fac=-1;
+	Res=fac*Sum[(Tens[[a,b,d,b,c,e,a,c,f,d,e,f]]fgvvv\[Phi]vvH[av[[c]],av[[a]],av[[b]],av[[e]],av[[f]]]),{a,nvEP},{b,nvEP},{c,nvEP},{e,nvEP},{f,nvEP},{d,nvEP}];	
+	VN3LO+=Res;
+		
+	Tens=1/3 1/2^3 TensorProduct[gvvv\[Phi],gvvv\[Phi],gvvv\[Phi],gvvv\[Phi]];
+	fac=1;
+	Res=fac*Sum[(Tens[[a,c,d,b,c,d,a,e,f,b,e,f]]fgvvv\[Phi]vvK[av[[c]],av[[a]],av[[b]],av[[e]],av[[f]]]),{a,nvEP},{b,nvEP},{c,nvEP},{e,nvEP},{f,nvEP},{d,nvEP}];																			
+	VN3LO+=Res;
+	
+	Tens=1/2^3 TensorProduct[gvvv\[Phi],gvvv\[Phi],Gvvs\[Phi],Gvvs\[Phi]];
+	fac=1;
+	Res=fac*Sum[(Tens[[a,b,e,c,d,e,a,c,i,b,d,i]]fGsvvvv[aS[[i]],av[[a]],av[[c]],av[[d]],av[[b]]]),{a,nvEP},{b,nvEP},{c,nvEP},{e,nvEP},{i,nsEP},{d,nvEP}];
+	VN3LO+=Res;
+																	
+(*Football Ress*)
+	Tens=1/2^2 TensorProduct[\[Lambda]3\[Phi],\[Lambda]3\[Phi],gvss\[Phi],gvss\[Phi]];
+	fac=1;
+	Res=fac*Sum[( Tens[[m,j,l,l,k,m,a,j,n,a,n,k]])fKsssssv[aS[[j]],aS[[k]],aS[[m]],aS[[l]],aS[[n]],av[[a]]],{a,nvEP},{j,nsEP},{n,nsEP},{m,nsEP},{k,nsEP},{l,nsEP}];																			
+	VN3LO+=Res;
+	
+	Tens=1/2^3 TensorProduct[\[Lambda]3\[Phi],\[Lambda]3\[Phi],Gvvs\[Phi],Gvvs\[Phi]];
+	fac=-1;
+	Res=fac*Sum[( Tens[[m,j,l,l,k,m,a,b,j,a,b,k]])fKssssvv[aS[[j]],aS[[k]],aS[[m]],aS[[l]],av[[a]],av[[b]]],{a,nvEP},{j,nsEP},{b,nvEP},{m,nsEP},{k,nsEP},{l,nsEP}];																							
+	VN3LO+=Res;	
+	
+	Tens=1/2^2 TensorProduct[gvss\[Phi],gvss\[Phi],gvss\[Phi],gvss\[Phi]];
+	fac=-1;
+	Res=fac*Sum[( Tens[[a,m,j,a,k,m,b,l,j,b,k,l]])fKsssvvs[aS[[j]],aS[[k]],aS[[m]],av[[a]],av[[b]],aS[[l]]],{a,nvEP},{j,nsEP},{b,nvEP},{m,nsEP},{k,nsEP},{l,nsEP}];																			
+	VN3LO+=Res;
+	
+	Tens=1/2^4 TensorProduct[gvss\[Phi],gvss\[Phi],gvss\[Phi],gvss\[Phi]];
+	fac=-1;
+	Res=fac*Sum[( Tens[[a,j,k,b,k,j,a,m,l,b,l,m]])fKvvssss[av[[a]],av[[b]],aS[[j]],aS[[k]],aS[[l]],aS[[m]]],{a,nvEP},{j,nsEP},{b,nvEP},{m,nsEP},{k,nsEP},{l,nsEP}];	
+	VN3LO+=Res;
+		
+	Tens=1/2^2 TensorProduct[gvss\[Phi],gvss\[Phi],Gvvs\[Phi],Gvvs\[Phi]];
+	fac=1;
+	Res=fac*Sum[( Tens[[a,m,j,a,k,m,b,c,j,b,c,k]])fKsssvvv[aS[[j]],aS[[k]],aS[[m]],av[[a]],av[[b]],av[[c]]],{a,nvEP},{j,nsEP},{b,nvEP},{m,nsEP},{k,nsEP},{c,nvEP}];	
+	VN3LO+=Res;
+	
+	Tens=1/2^2 TensorProduct[gvss\[Phi],gvss\[Phi],Gvvs\[Phi],Gvvs\[Phi]];
+	fac=1;
+	Res=fac*Sum[( Tens[[a,j,k,b,k,j,a,c,m,b,c,m]])fKvvssvs[av[[a]],av[[b]],aS[[j]],aS[[k]],av[[c]],aS[[m]]],{a,nvEP},{j,nsEP},{b,nvEP},{m,nsEP},{k,nsEP},{c,nvEP}];	
+	VN3LO+=Res;
+	
+	Tens=1/2^4 TensorProduct[Gvvs\[Phi],Gvvs\[Phi],Gvvs\[Phi],Gvvs\[Phi]];
+	fac=-1;
+	Res=fac*Sum[( Tens[[a,b,j,a,b,k,c,d,j,c,d,k]])fKssvvvv[aS[[j]],aS[[k]],av[[a]],av[[b]],av[[c]],av[[d]]],{a,nvEP},{j,nsEP},{b,nvEP},{d,nvEP},{k,nsEP},{c,nvEP}];	
+	VN3LO+=Res;
+		
+	Tens=1/2^2 TensorProduct[Gvvs\[Phi],Gvvs\[Phi],Gvvs\[Phi],Gvvs\[Phi]];
+	fac=-1;
+	Res=fac*Sum[( Tens[[a,c,j,c,b,j,a,d,k,b,d,k]])fKvvsvvs[av[[a]],av[[b]],aS[[j]],av[[c]],av[[d]],aS[[k]]],{a,nvEP},{j,nsEP},{b,nvEP},{d,nvEP},{k,nsEP},{c,nvEP}];	
+	VN3LO+=Res;
+		
+	Tens=1/2^2 TensorProduct[gvss\[Phi],gvss\[Phi],gvvv\[Phi],gvvv\[Phi]];
+	fac=1;
+	Res=fac*Sum[(Tens[[a,i,j,b,j,i,d,c,a,c,d,b]]fKvvssgg[av[[a]],av[[b]],aS[[i]],aS[[j]],0,0]),{a,nvEP},{b,nvEP},{c,nvEP},{j,nsEP},{i,nsEP},{d,nvEP}];	
+	VN3LO+=Res;
+	
+	Tens=1/2^3 TensorProduct[gvss\[Phi],gvss\[Phi],gvvv\[Phi],gvvv\[Phi]];
+	fac=-1;
+	Res=fac*Sum[(Tens[[a,i,j,b,j,i,a,d,c,b,c,d]]fKvvssvv[av[[a]],av[[b]],aS[[i]],aS[[j]],av[[c]],av[[d]]]),{a,nvEP},{b,nvEP},{c,nvEP},{j,nsEP},{i,nsEP},{d,nvEP}];	
+	VN3LO+=Res;
+		
+	Tens=1/2 TensorProduct[Gvvs\[Phi],Gvvs\[Phi],gvvv\[Phi],gvvv\[Phi]];
+	fac=-1;
+	Res=fac*Sum[(Tens[[a,e,i,e,b,i,d,c,a,c,d,b]]fKvvsvgg[av[[a]],av[[b]],aS[[i]],av[[e]],0,0]),{a,nvEP},{b,nvEP},{c,nvEP},{e,nvEP},{i,nsEP},{d,nvEP}];	
+	VN3LO+=Res;
+		
+	Tens=1/2 TensorProduct[gvvv\[Phi],gvvv\[Phi],gvvv\[Phi],gvvv\[Phi]];
+	fac=1;
+	Res=fac*Sum[(Tens[[a,f,e,f,b,e,b,c,d,c,a,d]]fKgggvvg[0,0,0,av[[d]],av[[e]],0]),{a,nvEP},{b,nvEP},{c,nvEP},{e,nvEP},{f,nvEP},{d,nvEP}];	
+	VN3LO+=Res;
+		
+	Tens=1/2^2 TensorProduct[gvvv\[Phi],gvvv\[Phi],gvvv\[Phi],gvvv\[Phi]];
+	fac=1;
+	Res=fac*Sum[(Tens[[f,e,a,e,f,b,a,d,c,b,c,d]]fKvvvvgg[av[[a]],av[[b]],av[[c]],av[[d]],0,0]),{a,nvEP},{b,nvEP},{c,nvEP},{e,nvEP},{f,nvEP},{d,nvEP}];	
+	VN3LO+=Res;
+		
+	Tens=1/2^2 TensorProduct[gvvv\[Phi],gvvv\[Phi],gvvv\[Phi],gvvv\[Phi]];
+	fac=-1;
+	Res=fac*Sum[(Tens[[f,e,a,e,f,b,c,d,a,d,c,b]]fKvvgggg[av[[a]],av[[b]],0,0,0,0]),{a,nvEP},{b,nvEP},{c,nvEP},{e,nvEP},{f,nvEP},{d,nvEP}];	
+	VN3LO+=Res;
+		
+	Tens=1/2^2 TensorProduct[Gvvs\[Phi],Gvvs\[Phi],gvvv\[Phi],gvvv\[Phi]];
+	fac=1;
+	Res=fac*Sum[(Tens[[a,e,i,e,b,i,a,d,c,b,c,d]]fKvvsvvv[av[[a]],av[[b]],aS[[i]],av[[e]],av[[c]],av[[d]]]),{a,nvEP},{b,nvEP},{c,nvEP},{e,nvEP},{i,nsEP},{d,nvEP}];	
+	VN3LO+=Res;
+		
+	Tens=1/2^4 TensorProduct[gvvv\[Phi],gvvv\[Phi],gvvv\[Phi],gvvv\[Phi]];
+	fac=-1;
+	Res=fac*Sum[(Tens[[a,f,e,b,e,f,a,d,c,b,c,d]]fKvvvvvv[av[[a]],av[[b]],av[[c]],av[[d]],av[[e]],av[[f]]]),{a,nvEP},{b,nvEP},{c,nvEP},{e,nvEP},{f,nvEP},{d,nvEP}];	
+	VN3LO+=Res;
+		
+	
+(*Mercedes Ress*)	
+	Tens=1/2^2 TensorProduct[\[Lambda]3\[Phi],\[Lambda]3\[Phi],gvss\[Phi],gvss\[Phi]];
+	fac=1;
+	Res=fac*Sum[( Tens[[j,k,m,k,l,n,a,l,j,a,n,m]])fHsssssv[aS[[j]],aS[[k]],aS[[l]],aS[[m]],aS[[n]],av[[a]]],{a,nvEP},{j,nsEP},{m,nsEP},{l,nsEP},{k,nsEP},{n,nsEP}];	
+	VN3LO+=Res;
+		
+	Tens=1/2 TensorProduct[\[Lambda]3\[Phi],gvss\[Phi],gvss\[Phi],Gvvs\[Phi]];
+	fac=1;
+	Res=fac*Sum[( Tens[[k,l,m,a,j,m,b,l,j,a,b,k]])fHvvssss[av[[a]],av[[b]],aS[[j]],aS[[k]],aS[[l]],aS[[m]]],{a,nvEP},{j,nsEP},{m,nsEP},{l,nsEP},{k,nsEP},{b,nvEP}];	
+	VN3LO+=Res;
+		
+	Tens=1/2^3 TensorProduct[gvss\[Phi],gvss\[Phi],gvss\[Phi],gvss\[Phi]];
+	fac=-1;
+	Res=fac*Sum[( Tens[[b,j,k,a,m,j,a,k,l,b,l,m]])fHssvvss[aS[[j]],aS[[k]],av[[a]],av[[b]],aS[[l]],aS[[m]]],{a,nvEP},{j,nsEP},{m,nsEP},{l,nsEP},{k,nsEP},{b,nvEP}];	
+	VN3LO+=Res;
+		
+	Tens=1/(3*2) TensorProduct[Gvvs\[Phi],Gvvs\[Phi],Gvvs\[Phi],\[Lambda]3\[Phi]];
+	fac=-1;
+	Res=fac*Sum[( Tens[[a,b,j,b,c,k,c,a,l,j,k,l]])fHvvvsss[av[[a]],av[[b]],av[[c]],aS[[j]],aS[[k]],aS[[l]]],{a,nvEP},{j,nsEP},{c,nvEP},{l,nsEP},{k,nsEP},{b,nvEP}];	
+	VN3LO+=Res;
+		
+	Tens=1/2 TensorProduct[Gvvs\[Phi],Gvvs\[Phi],gvss\[Phi],gvss\[Phi]];
+	fac=1;
+	Res=fac*Sum[( Tens[[a,b,k,b,c,j,c,k,l,a,l,j]])fHvvssvs[av[[a]],av[[b]],aS[[j]],aS[[k]],av[[c]],aS[[l]]],{a,nvEP},{j,nsEP},{c,nvEP},{l,nsEP},{k,nsEP},{b,nvEP}];	
+	VN3LO+=Res;
+		
+	Tens=1/2^3 TensorProduct[Gvvs\[Phi],Gvvs\[Phi],Gvvs\[Phi],Gvvs\[Phi]];
+	fac=-1;
+	Res=fac*Sum[( Tens[[b,d,j,a,c,j,a,b,k,c,d,k]])fHsvvvsv[aS[[j]],av[[a]],av[[b]],av[[c]],aS[[k]],av[[d]]],{a,nvEP},{j,nsEP},{c,nvEP},{d,nvEP},{k,nsEP},{b,nvEP}];	
+	VN3LO+=Res;
+		
+	Tens=1/4! TensorProduct[gvvv\[Phi],gvvv\[Phi],gvvv\[Phi],gvvv\[Phi]];
+	fac=-1;
+	Res=fac*Sum[(Tens[[a,f,c,a,b,d,b,c,e,d,e,f]]fHvvvvvv[av[[a]],av[[b]],av[[c]],av[[d]],av[[e]],av[[f]]]),{a,nvEP},{b,nvEP},{c,nvEP},{e,nvEP},{f,nvEP},{d,nvEP}];	
+	VN3LO+=Res;
+		
+	Tens=1/2^2 TensorProduct[gvvv\[Phi],gvvv\[Phi],gvvv\[Phi],gvvv\[Phi]];
+	fac=1;
+	Res=fac*Sum[(Tens[[c,f,a,d,b,a,b,c,e,f,d,e]]fHvgggvg[av[[a]],0,0,0,av[[e]],0]),{a,nvEP},{b,nvEP},{c,nvEP},{e,nvEP},{f,nvEP},{d,nvEP}];	
+	VN3LO+=Res;
+		
+	Tens=1/3 TensorProduct[gvvv\[Phi],gvvv\[Phi],gvvv\[Phi],gvvv\[Phi]];
+	fac=1;
+	Res=fac*Sum[(Tens[[a,b,d,b,c,e,c,a,f,d,e,f]]fHgggvvv\[Phi][0,0,0,av[[d]],av[[e]],av[[f]]]),{a,nvEP},{b,nvEP},{c,nvEP},{e,nvEP},{f,nvEP},{d,nvEP}];	
+	VN3LO+=Res;
+		
+	Tens=1/2^2 TensorProduct[gvvv\[Phi],gvvv\[Phi],Gvvs\[Phi],Gvvs\[Phi]];
+	fac=1;
+	Res=fac*Sum[(Tens[[a,b,d,b,c,e,d,e,i,a,c,i]]fHvvvvvs[av[[a]],av[[b]],av[[c]],av[[d]],av[[e]],aS[[i]]]),{a,nvEP},{b,nvEP},{c,nvEP},{e,nvEP},{i,nsEP},{d,nvEP}];	
+	VN3LO+=Res;
+		
+	Tens=1/3! TensorProduct[gvss\[Phi],gvss\[Phi],gvss\[Phi],gvvv\[Phi]];
+	fac=-1;
+	Res=fac*Sum[(Tens[[c,k,i,a,i,j,b,j,k,a,b,c]]fHsssvvv[aS[[i]],aS[[j]],aS[[k]],av[[a]],av[[b]],av[[c]]]),{a,nvEP},{b,nvEP},{c,nvEP},{j,nsEP},{i,nsEP},{k,nsEP}];	
+	VN3LO+=Res;
+		
+	Tens=1/2 TensorProduct[Gvvs\[Phi],gvss\[Phi],Gvvs\[Phi],gvvv\[Phi]];
+	fac=1;
+	Res=fac*Sum[(Tens[[a,d,i,b,i,j,a,c,j,b,c,d]]fHssvvvv[aS[[i]],aS[[j]],av[[a]],av[[b]],av[[c]],av[[d]]]),{a,nvEP},{b,nvEP},{c,nvEP},{j,nsEP},{i,nsEP},{d,nvEP}];	
+	VN3LO+=Res;
+];
 
 
 (* ::Section::Closed:: *)
@@ -550,7 +893,7 @@ RotateTensorsCustomMass[DScalarsp_,DVectorsp_,ScalarMass_,vectorMass_,OptionsPat
 ];
 
 
-(* ::Section:: *)
+(* ::Section::Closed:: *)
 (*Scalar master integrals*)
 
 
