@@ -18,6 +18,25 @@
 (* ------------------------------------------------------------------------ *)
 
 
+$DRalgoVersion::usage =
+"$DRlagoVersion is a string that represents the version of DRalgo.";
+
+
+If[ MemberQ[$Packages,"DRalgo`"],
+	Print[Style["DRalgo is already loaded! If you are trying to reload DRalgo please restart the kernel.","Text", Red, Bold]];
+(*	Abort[]*)
+];
+
+If[ ($VersionNumber < 12.0) && StringFreeQ[$Version, "Mathics"],
+	Print[Style["You need at least Mathematica 12.0 to run FeynCalc. Evaluation aborted.",Red, Bold]];
+	Abort[]
+];
+
+
+(*    Set the version number    *)
+DRalgo`$DRalgoVersion = "1.21";
+
+
 BeginPackage["DRalgo`"] (* digital history: at its early days in 2021, DRalgo was called FireStorm *)
 
 
