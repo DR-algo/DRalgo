@@ -135,7 +135,7 @@ CreateHelpTensors[]:=Module[{},
 ];
 
 
-(* ::Section:: *)
+(* ::Section::Closed:: *)
 (*Pressure calculations*)
 
 
@@ -544,7 +544,7 @@ Fermion-Vector-Scalar
 
 
 
-(* ::Section:: *)
+(* ::Section::Closed:: *)
 (*Scalar masses*)
 
 
@@ -1378,7 +1378,11 @@ If[verbose,Print["Calculating CounterTerms"]];
 	
 (*Anomalous dimension contribution*)
 	ContriAnom=Simplify[Activate @ TensorContract[Inactive[TensorProduct][\[Gamma]ij,\[Lambda]3], {{2, 3}}]];
-	\[Beta]\[Lambda]ijk=(-ContriAnom-Transpose[ContriAnom,{2,1,3}]-Transpose[ContriAnom,{3,2,1}]+ContriSSC+ContriFF)//SparseArray//SimplifySparse; (*beta function*)
+	\[Beta]\[Lambda]ijk=(
+		-ContriAnom
+		-Transpose[ContriAnom,{2,1,3}]
+		-Transpose[ContriAnom,{3,2,1}]
+		+ContriSSC+ContriFF)//SparseArray//SimplifySparse; (*beta function*)
 	Z\[Lambda]ijk=\[Beta]\[Lambda]ijk/2;(*renormalization constants*)
 
 (*
