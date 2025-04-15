@@ -135,7 +135,7 @@ CreateHelpTensors[]:=Module[{},
 ];
 
 
-(* ::Section::Closed:: *)
+(* ::Section:: *)
 (*Pressure calculations*)
 
 
@@ -544,7 +544,7 @@ Fermion-Vector-Scalar
 
 
 
-(* ::Section::Closed:: *)
+(* ::Section:: *)
 (*Scalar masses*)
 
 
@@ -1073,7 +1073,7 @@ If[verbose,Print["Calculating Scalar-Temporal-Vector Couplings"]];
 ];
 
 
-(* ::Section::Closed:: *)
+(* ::Section:: *)
 (*Tadpoles*)
 
 
@@ -1092,7 +1092,7 @@ If[verbose,Print["Calculating 1-Loop Tadpoles"]];
 	Temp1C=Contract[YsffC,\[Mu]IJF,{{2,4},{3,5}}]//SimplifySparse;
 	ContriFF=1/2fac*(-1)^2*(Temp1+Temp1C);
 
-	TadPoleLO=-  ContriS-ContriFF; (*Minus sign from matching*)
+	TadPoleLO=\[Lambda]1-  ContriS-ContriFF; (*Minus sign from matching*)
 ];
 
 
@@ -1169,12 +1169,16 @@ If[verbose,Print["Calculating 2-Loop Tadpoles"]];
 	ContriCTFF=1/2*2*IF1p*\[Epsilon]^-1 (-1)^2*(temp1+temp2+temp3+temp4+temp5+temp6);
 (*Self-Energy correction*)
 	ContriF=-TadPoleLO . ZijS//SimplifySparse;
+	Print["Hallo"];
+	Print[-TadPoleLO//MatrixForm];
+	Print[ZijS//MatrixForm];
+	Print[ContriF//MatrixForm];
 	Tot=ContriF-Contri1-Contri2-Contri3-ContriCTS-Contri4-ContriCTFF-Contri5-Contri6-Contri7//Normal; (*minus signs from matching*)
 	TadPoleNLO=Series[(Tot)/.D->4-2\[Epsilon]/.\[Epsilon]bp->(1/\[Epsilon]+Lb)^-1/.\[Epsilon]b->(1/\[Epsilon]+Lbb)^-1/.\[Epsilon]BF->(1/\[Epsilon]+LBF)^-1/.\[Epsilon]F->(1/\[Epsilon]+LFF)^-1/.\[Epsilon]FB->(1/\[Epsilon]+LFB)^-1/.\[Epsilon]bbM->(1/\[Epsilon]+LbbM)^-1,{\[Epsilon],0,0}]/.ReplaceLb//Normal//Coefficient[#,\[Epsilon],0]&//Simplify//FullSimplify;
 ];
 
 
-(* ::Section::Closed:: *)
+(* ::Section:: *)
 (*Counter-terms and beta functions*)
 
 
@@ -2102,17 +2106,17 @@ If[DiagonalMatrixQAE[Normal[\[Mu]ijVNLO]]==False,Print["Off-Diagonal Debye Matri
 	Scalar tadpoles
 *)
 	If[mode>=2,
-		HelpList=DeleteDuplicates@Flatten@Simplify[ xLO*Tfac^(-1/2)(\[Lambda]1+TadPoleLO)+xNLO(TadPoleNLO*Tfac^(-1/2) +rgFac*ContriTadPoleSoftToHard)]//Sort;
+		HelpList=DeleteDuplicates@Flatten@Simplify[ xLO*Tfac^(-1/2)(TadPoleLO)+xNLO(TadPoleNLO*Tfac^(-1/2) +rgFac*ContriTadPoleSoftToHard)]//Sort;
 		HelpVar=Table[ dS[a],{a,1,Delete[HelpList,1]//Length}];
 		HelpVarMod=RelationsBVariables[HelpList,HelpVar];
 		HelpSolveTadpole=Table[{Delete[HelpList,1][[a]]->HelpVarMod[[a]]},{a,1,Delete[HelpList,1]//Length}]//Flatten;
-		TadPoleS=xLO*Tfac^(-1/2) (\[Lambda]1+TadPoleLO)+xNLO (TadPoleNLO*T^(-1/2)+rgFac*ContriTadPoleSoftToHard)//Normal//Simplify//ReplaceAll[#,HelpSolveTadpole]&//SparseArray;
+		TadPoleS=xLO*Tfac^(-1/2) (TadPoleLO)+xNLO (TadPoleNLO*T^(-1/2)+rgFac*ContriTadPoleSoftToHard)//Normal//Simplify//ReplaceAll[#,HelpSolveTadpole]&//SparseArray;
 	,
-		HelpList=DeleteDuplicates@Flatten@Simplify[ xLO*Tfac^(-1/2)(\[Lambda]1+TadPoleLO)]//Sort;
+		HelpList=DeleteDuplicates@Flatten@Simplify[ xLO*Tfac^(-1/2)(TadPoleLO)]//Sort;
 		HelpVar=Table[ dS[a],{a,1,Delete[HelpList,1]//Length}];
 		HelpVarMod=RelationsBVariables[HelpList,HelpVar];
 		HelpSolveTadpole=Table[{Delete[HelpList,1][[a]]->HelpVarMod[[a]]},{a,1,Delete[HelpList,1]//Length}]//Flatten;
-		TadPoleS=xLO Tfac^(-1/2) (\[Lambda]1+TadPoleLO)//Normal//Simplify//ReplaceAll[#,HelpSolveTadpole]&//SparseArray;
+		TadPoleS=xLO Tfac^(-1/2) (TadPoleLO)//Normal//Simplify//ReplaceAll[#,HelpSolveTadpole]&//SparseArray;
 	];
 
 	If[Length[SparseArray[TadPoleS]["NonzeroValues"]]!=Length[SparseArray[\[Lambda]1]["NonzeroValues"]],
