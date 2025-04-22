@@ -196,108 +196,151 @@ SymmetricPhaseEnergy[] := Module[
 ];
 
 
-(*
-	Calculates the 1-loop pressure in the soft theory.
-*)
-SymmetricPhaseLO[]:=Module[{},
-If[verbose,Print["Calculating Leading-Order \!\(\*SuperscriptBox[\(T\), \(4\)]\) Terms"]];
-
-
-(*Scalar Contribution*)
-	TestQ=NumericQ[#]&/@Flatten[gvss]//Normal;
-	Test2=ConstantArray[True,Length[TestQ]];
-(*This checks if the all scalar tensors are empty*)	
-	If[TestQ==Test2,
-		If[CompareTensors[gvss,EmptyArray[{nv,nf,nf}]]&&CompareTensors[Ysff,EmptyArray[{ns,nf,nf}]]&&CompareTensors[\[Mu]ij,EmptyArray[{ns,ns}]]&&CompareTensors[\[Lambda]4,EmptyArray[{ns,ns,ns,ns}]]&&CompareTensors[\[Lambda]3,EmptyArray[{ns,ns,ns}]]&&CompareTensors[\[Lambda]1,EmptyArray[{ns}]],
-			ContriScalars=0;
-		,
-			ContriScalars=Sum[-( (\[Pi]^2)/90) T^4,{a,1,ns}];
-	];,
-		ContriScalars=Sum[-( (\[Pi]^2)/90) T^4,{a,1,ns}];
-	];
-
-(*Vector contribution*)
-(*This checks if the all vector tensors are empty*)
-	TestQ=NumericQ[#]&/@Flatten[{gvss,gvff}//Flatten[#,1]&]//Normal;
-	Test2=ConstantArray[True,Length[TestQ]];
-	If[TestQ==Test2,
-		If[CompareTensors[gvss,EmptyArray[{nv,nf,nf}]]&&CompareTensors[gvvv,EmptyArray[{nv,nv,nv}]]&&CompareTensors[gvff,EmptyArray[{nv,nf,nf}]],
-			ContriVectors=0;
-		,
-			ContriVectors=Sum[-( (\[Pi]^2)/90) T^4*2,{a,1,nv}];
-		];,
-		
-		ContriVectors=Sum[-( (\[Pi]^2)/90) T^4*2,{a,1,nv}];
-	];
-
-(*Fermion contribution*)
-	TestQ=NumericQ[#]&/@Flatten[gvff]//Normal;
-	Test2=ConstantArray[True,Length[TestQ]];
-(*This checks if the all fermion tensors are empty*)
-	If[TestQ==Test2,
-		If[CompareTensors[gvff,EmptyArray[{nv,nf,nf}]]&&CompareTensors[Ysff,EmptyArray[{ns,nf,nf}]]&&CompareTensors[\[Mu]IJF,EmptyArray[{nf,nf}]],
-			ContriFermions=0;
-		,
-			ContriFermions=Sum[-7 \[Pi]^2/720 T^4*2*NFMat[[a,a]],{a,1,nf}];
-		];,
-		
-		ContriFermions=Sum[-7 \[Pi]^2/720 T^4*2*NFMat[[a,a]],{a,1,nf}];
-	];
-
-	ToExpression[StringReplace[ToString[StandardForm[ContriScalars+ContriVectors+ContriFermions]],"DRalgo`Private`"->""]]
-];
-
+(* ::Subsection::Closed:: *)
+(*LO symmetric pressure*)
 
 
 (*
-	Calculates the 2-loop pressure in the soft theory.
+  SymmetricPhaseLO:
+  Calculates the 1-loop pressure in the symmetric phase of the soft theory.
 *)
-SymmetricPhaseNLO[]:=Module[{},
-If[verbose,Print["Calculating NLO \!\(\*SuperscriptBox[\(T\), \(4\)]\) Terms"]];
-(*Follows Martin's notation arXiv:1808.07615*)
+SymmetricPhaseLO[] := Module[
+  {
+    isEmptyTensorQ,                  (* helper function *)
+    scalarEmptyQ, vectorEmptyQ, fermionEmptyQ,
+    scalarContribution, vectorContribution, fermionContribution
+  },
+  
+  If[verbose,
+    Print["Calculating Leading-Order \!\(\*SuperscriptBox[\(T\), \(4\)]\) Terms"]];
 
-(*Contribution from two-loop diagrams*)
-	I1Temp=1/144 T^4;
-	Vss=1/8*I1Temp*TensorContract[\[Lambda]4,{{1,2},{3,4}}];
-	
-	I1Temp=-(1/144) T^4;
-	Vssv=1/4I1Temp*Total[Flatten[gvss] Flatten[gvss]];
-	
-	I1Temp=1/48 T^4;
-	Vvs=1/2*I1Temp*Total[Flatten[gvss] Flatten[gvss]];
-	
-	I1Temp=3/64 T^4;
-	Vvv=1/4*I1Temp*Total[Flatten[gvvv] Flatten[gvvv]];
-	
-	I1Temp=-(13/192) T^4;
-	Vvvv=1/12*I1Temp*Total[Flatten[gvvv] Flatten[gvvv]];
-	
-	I1Temp=1/288 T^4;
-	Vggv=1/4*I1Temp*Total[Flatten[gvvv] Flatten[gvvv]];
-	
-	I1Temp=5/576 T^4;
-	VFFs=1/2*I1Temp*TensorContract[Ysij,{{1,2}}];
-	
-(*Generic nF modification*)
-	HabIJFnF=HabIJF . NFMat;
-(************************)
-	I1Temp=5/288 T^4;
-	VFFv=1/2*I1Temp*TensorContract[HabIJFnF,{{1,2},{3,4}}];
+  (* --- Helper to check whether a tensor is numerically empty --- *)
+  isEmptyTensorQ[tensor_, shape_] := (
+    AllTrue[Flatten[tensor], NumericQ] &&
+    CompareTensors[tensor, EmptyArray[shape]]
+  );
 
+  (* --- Scalar contribution --- *)
+  scalarEmptyQ = And @@ {
+    isEmptyTensorQ[gvss, {nv, nf, nf}],
+    isEmptyTensorQ[Ysff, {ns, nf, nf}],
+    isEmptyTensorQ[\[Mu]ij, {ns, ns}],
+    isEmptyTensorQ[\[Lambda]4, {ns, ns, ns, ns}],
+    isEmptyTensorQ[\[Lambda]3, {ns, ns, ns}],
+    isEmptyTensorQ[\[Lambda]1, {ns}]
+  };
+  scalarContribution = If[scalarEmptyQ, 0, Sum[-(\[Pi]^2/90) T^4, {a, 1, ns}]];
 
-(*Contributions from mass-insertions in one-loop diagrams*)
-	ContriMass=1/2Tr[\[Mu]ij]*T^2/12;
-	ContriMassFermion=1/2*T^2/12 Tr[\[Mu]IJF . \[Mu]IJFC];
+  (* --- Vector contribution --- *)
+  vectorEmptyQ = And @@ {
+    isEmptyTensorQ[gvss, {nv, nf, nf}],
+    isEmptyTensorQ[gvvv, {nv, nv, nv}],
+    isEmptyTensorQ[gvff, {nv, nf, nf}]
+  };
+  vectorContribution = If[vectorEmptyQ, 0, Sum[-(\[Pi]^2/90) T^4 * 2, {a, 1, nv}]];
 
-	If[mode>=3,
-(*Contribution from higher-dimensional operators*)
-		VSS\[Lambda]6=1/82944*T^6*TensorContract[\[Lambda]6,{{1,2},{3,4},{5,6}}];
-	,
-		VSS\[Lambda]6=0;
-	];
+  (* --- Fermion contribution --- *)
+  fermionEmptyQ = And @@ {
+    isEmptyTensorQ[gvff, {nv, nf, nf}],
+    isEmptyTensorQ[Ysff, {ns, nf, nf}],
+    isEmptyTensorQ[\[Mu]IJF, {nf, nf}]
+  };
+  fermionContribution = If[
+    fermionEmptyQ, 
+    0, 
+    Sum[-(7 \[Pi]^2)/720 T^4 * 2 * NFMat[[a, a]], {a, 1, nf}]
+  ];
 
-	ToExpression[StringReplace[ToString[StandardForm[ContriMass+ContriMassFermion+Vss+Vssv+Vvs+Vvv+Vvvv+Vggv+VFFs+VFFv+VSS\[Lambda]6//FullSimplify]],"DRalgo`Private`"->""]]
+  (* --- Return total contribution, cleaning internal formatting --- *)
+  ToExpression @ StringReplace[
+    ToString[StandardForm[scalarContribution + vectorContribution + fermionContribution]],
+    "DRalgo`Private`" -> ""
+  ]
 ];
+
+
+(* ::Subsection::Closed:: *)
+(*NLO symmetric pressure*)
+
+
+(*
+  SymmetricPhaseNLO:
+  Calculates the 2-loop pressure in the symmetric phase of the soft theory.
+  Uses notation following Martin (arXiv:1808.07615).
+*)
+ClearAll[SymmetricPhaseNLO];
+SymmetricPhaseNLO[] := Module[
+  {
+    tempCoeff, Vss, Vssv, Vvs, Vvv, Vvvv, Vggv, VFFs, VFFv,
+    massInsertionScalar, massInsertionFermion,
+    VssLambda6, HabIJFnF, totalNLOPressure
+  },
+
+  If[verbose,
+    Print["Calculating NLO \!\(\*SuperscriptBox[\(T\), \(4\)]\) Terms"]];
+
+  (* --- Two-loop diagram contributions --- *)
+  (* Scalar quartic self-interaction term *)
+  tempCoeff = (1/144) * T^4;
+  Vss = (1/8) * tempCoeff * TensorContract[\[Lambda]4, {{1, 2}, {3, 4}}];
+
+  (* Scalar-vector interaction (type I) *)
+  tempCoeff = -(1/144) * T^4;
+  Vssv = (1/4) * tempCoeff * Total[Flatten[gvss] Flatten[gvss]];
+
+  (* Scalar-vector interaction (type II) *)
+  tempCoeff = (1/48) * T^4;
+  Vvs = (1/2) * tempCoeff * Total[Flatten[gvss] Flatten[gvss]];
+
+  (* Vector cubic self-interaction *)
+  tempCoeff = (3/64) * T^4;
+  Vvv = (1/4) * tempCoeff * Total[Flatten[gvvv] Flatten[gvvv]];
+
+  (* Vector quartic self-interaction *)
+  tempCoeff = -(13/192) * T^4;
+  Vvvv = (1/12) * tempCoeff * Total[Flatten[gvvv] Flatten[gvvv]];
+
+  (* Ghost-vector interaction *)
+  tempCoeff = (1/288) * T^4;
+  Vggv = (1/4) * tempCoeff * Total[Flatten[gvvv] Flatten[gvvv]];
+
+  (* Fermion-scalar Yukawa interaction *)
+  tempCoeff = (5/576) * T^4;
+  VFFs = (1/2) * tempCoeff * TensorContract[Ysij, {{1, 2}}];
+
+  (* --- Fermion-vector coupling correction with nF factor --- *)
+  tempCoeff = 5/288 T^4;
+  HabIJFnF = HabIJF . NFMat;
+  VFFv = (1/2) * tempCoeff * TensorContract[HabIJFnF, {{1, 2}, {3, 4}}];
+
+  (* --- Mass insertions in 1-loop diagrams --- *)
+  massInsertionScalar = (1/2) * Tr[\[Mu]ij] * T^2 / 12;
+  massInsertionFermion = (1/2) * T^2 / 12 * Tr[\[Mu]IJF . \[Mu]IJFC];
+
+  (* --- Higher-dimensional operator (\[Lambda]6) contribution --- *)
+  VssLambda6 = If[
+    mode >= 3,
+    (1/82944) * T^6 * TensorContract[\[Lambda]6, {{1, 2}, {3, 4}, {5, 6}}],
+    0
+  ];
+
+  (* --- Total expression and cleanup --- *)
+  totalNLOPressure = (
+    + massInsertionScalar
+    + massInsertionFermion
+    + Vss + Vssv + Vvs + Vvv + Vvvv + Vggv + VFFs + VFFv
+    + VssLambda6
+    );
+
+  ToExpression @ StringReplace[
+    ToString[StandardForm[FullSimplify[totalNLOPressure]]],
+    "DRalgo`Private`" -> ""
+  ]
+];
+
+
+(* ::Subsection::Closed:: *)
+(*NNLO symmetric pressure*)
 
 
 (*
