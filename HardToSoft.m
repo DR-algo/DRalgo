@@ -167,23 +167,32 @@ CreateHelpTensors[] := Module[{},
 ];
 
 
-(* ::Section::Closed:: *)
+(* ::Section:: *)
 (*Pressure calculations*)
 
 
 (*
-	Calculates the preassure in the soft theory. Only the preassure in the symmetric
-	phae is calculated.
+  SymmetricPhaseEnergy:
+  Computes the total pressure in the symmetric phase of the soft theory.
+  Includes contributions up to NNLO.
 *)
-SymmetricPhaseEnergy[]:=Module[{},
-(*
-	Counterterms are needed to calculate
-	SymmetricPhaseNLO and SymmetricPhaseNNLO
-*)
-	CounterTerm[]; 
-	(*The minus signs is a convention to get the pressure*)
-	Tot={-SymmetricPhaseLO[],-SymmetricPhaseNLO[],-SymmetricPhaseNNLO[]};
-	SymmEnergy=Tot;
+SymmetricPhaseEnergy[] := Module[
+  {
+    totalPressure
+  },
+
+  (* Counterterms are required for higher-order SymmetricPhaseNLO and SymmetricPhaseNNLO contributions *)
+  CounterTerm[];
+
+  (* Convention: pressure is minus the free energy *)
+  totalPressure = {
+    -SymmetricPhaseLO[],
+    -SymmetricPhaseNLO[],
+    -SymmetricPhaseNNLO[]
+  };
+
+  (* Store result *)
+  SymmEnergy = totalPressure;
 ];
 
 
