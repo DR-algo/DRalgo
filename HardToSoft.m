@@ -6,9 +6,9 @@
 
 (*
       	This software is covered by the GNU General Public License 3.
-       	Copyright (C) 2021-2023 Andreas Ekstedt
-       	Copyright (C) 2021-2023 Philipp Schicho
-       	Copyright (C) 2021-2023 Tuomas V.I. Tenkanen
+       	Copyright (C) 2021-2025 Andreas Ekstedt
+       	Copyright (C) 2021-2025 Philipp Schicho
+       	Copyright (C) 2021-2025 Tuomas V.I. Tenkanen
 
 *)
 
@@ -17,7 +17,7 @@
 (* ------------------------------------------------------------------------ *)
 
 
-(* ::Section:: *)
+(* ::Section::Closed:: *)
 (*Help routines*)
 
 
@@ -1951,7 +1951,7 @@ If[verbose,Print["Calculating CounterTerms"]];
 ];
 
 
-(* ::Section:: *)
+(* ::Section::Closed:: *)
 (*Identify tensors*)
 
 
@@ -2143,7 +2143,7 @@ If[DiagonalMatrixQAE[Normal[\[Mu]ijVNLO]]==False,Print["Off-Diagonal Debye Matri
 ];
 
 
-(* ::Section:: *)
+(* ::Section::Closed:: *)
 (*Printing the results*)
 
 
@@ -2398,7 +2398,7 @@ PrintScalarMass[optP_: "All"] := Module[
 ];
 
 
-(* ::Subsection::Closed:: *)
+(* ::Subsection:: *)
 (*Print tadpole*)
 
 
@@ -2564,7 +2564,7 @@ PrintTensorDRalgo[ind_]:=Module[{},
 ];
 
 
-(* ::Subsection::Closed:: *)
+(* ::Subsection:: *)
 (*Print 4D counter terms*)
 
 
@@ -2743,7 +2743,7 @@ CounterTerms4D[]:=Module[{},
 ];
 
 
-(* ::Subsection::Closed:: *)
+(* ::Subsection:: *)
 (*Print 4D beta functions*)
 
 
@@ -2920,7 +2920,7 @@ ToExpression[StringReplace[ToString[StandardForm[PrintPre]],"DRalgo`Private`"->"
 ];
 
 
-(* ::Subsection::Closed:: *)
+(* ::Subsection:: *)
 (*Print 3D beta functions*)
 
 
