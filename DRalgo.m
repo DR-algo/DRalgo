@@ -199,6 +199,7 @@ DRalgo::ImplementationFail =
 The problem reads: `1`";
 
 Contract::argcount = "Contract expects between 2 and 4 tensors, but `1` were provided.";
+PrintResults::badopt = "Unknown option `1`. Use \"LO\", \"NLO\", or \"All\" only.";
 
 
 $DRalgoDirectory=DirectoryName[$InputFileName];
