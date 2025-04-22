@@ -28,7 +28,7 @@ If[ MemberQ[$Packages,"DRalgo`"],
 ];
 
 If[ ($VersionNumber < 12.0) && StringFreeQ[$Version, "Mathics"],
-	Print[Style["You need at least Mathematica 12.0 to run FeynCalc. Evaluation aborted.",Red, Bold]];
+	Print[Style["You need at least Mathematica 12.0 to run DRalgo. Evaluation aborted.",Red, Bold]];
 	Abort[]
 ];
 
