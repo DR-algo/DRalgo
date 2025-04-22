@@ -668,7 +668,7 @@ SymmetricPhaseNNLO[]:=Module[
 ];
 
 
-(* ::Section:: *)
+(* ::Section::Closed:: *)
 (*Scalar masses*)
 
 
@@ -864,120 +864,174 @@ ScalarMass2Loop[] := Module[
 ];
 
 
-(* ::Section::Closed:: *)
+(* ::Section:: *)
 (*Temporal masses*)
 
 
-(*
-	1-loop Debye mass in the soft theory.
+(* ::Subsection::Closed:: *)
+(*1loop temporal mass*)
+
+
+(* 
+    1-loop Debye mass in the soft theory.
 *)
-VectorMass[]:=Module[{},
-If[verbose,Print["Calculating 1-Loop Vector Mass"]];
+VectorMass[] := Module[
+  {
+    ContriSS, ContriVV, fac, ContriVVV, SelfEnergyFF, HabIJFnF, ContriFF
+  },
 
-	ContriSS=T^2/(12)*Hg;
+  If[verbose, Print["Calculating 1-Loop Vector Mass"]];
 
-	ContriVV=T^2/(12)*Hg;
+  (* Scalar and vector boson contributions *)
+  ContriSS = (T^2/12) Hg;
+  ContriVV = (T^2/12) Hg;
+
+  (* Pure gauge 3-vertex contribution *)
+  fac = Simplify[T^2/24 - T^2/4 - (1/2) T^2/4];
+  ContriVVV = fac TensorContract[GabcdV, {{2, 4}}];
+
+  (* Fermion contribution *)
+  SelfEnergyFF = -(T^2/6);
+  HabIJFnF = HabIJF . NFMat;  (* Incorporate general nF modification *)
+  ContriFF = SelfEnergyFF Simplify[TensorContract[HabIJFnF, {{3, 4}}] // Normal];
+
+  (* Result: Minus sign due to matching convention *)
+  aV3D = -ContriSS - ContriVV - ContriVVV - ContriFF // Normal // FullSimplify // Expand;
+];
 
 
-	fac=T^2/24-T^2/4-1/2  T^2/4//Simplify;
-	ContriVVV=fac*TensorContract[GabcdV,{{2,4}}];
+(* ::Subsection::Closed:: *)
+(*1loop vector self-energy*)
 
-	SelfEnergyFF=(-1)T^2/(6);
-	(*General nF modification*)
-	HabIJFnF=HabIJF . NFMat;
-(************************)
-	ContriFF=SelfEnergyFF*Simplify[TensorContract[HabIJFnF,{{3,4}}]//Normal];
 
-(*Minus sign due to matching*)
-	aV3D=-ContriSS- ContriVV- ContriVVV-   ContriFF //Normal//FullSimplify//Expand;
+(* 
+    Vector self-energy in the soft theory.
+*)
+VectorSelfEnergy[] := Module[
+  {
+    SelfEnergySS, ContriSS, fac, ContriVVV, SelfEnergyFF,
+    HabIJFnF, ContriFF
+  },
 
+  If[verbose, Print["Calculating Vector-Field Renormalization"]];
+
+  (* Contribution from scalar self-energy (transverse part) *)
+  SelfEnergySS = -1/2 * 1/(16 \[Pi]^2) * (-1/3 Lb);
+  ContriSS = SelfEnergySS * Hg;
+
+  (* Vector self-energy contribution (transverse part) *)
+  fac = 1/(16 \[Pi]^2) * (1/12 Lb + 1/2 (25/6 Lb + 2/3));
+  ContriVVV = fac * Simplify[TensorContract[GabcdV, {{2, 4}}]];
+
+  (* Fermion self-energy contribution *)
+  SelfEnergyFF = - (2/3 Lf)/(16 \[Pi]^2);
+  HabIJFnF = HabIJF . NFMat;  (* General nF modification *)
+  ContriFF = SelfEnergyFF * Simplify[TensorContract[HabIJFnF, {{3, 4}}] // Normal];
+
+  (* Transverse vector contribution *)
+  ZabT = -(ContriSS + ContriVVV + ContriFF)/2 // Normal // Simplify;
+
+  (* Contribution from scalar self-energy (longitudinal part) *)
+  SelfEnergySS = -1/2 * 1/(16 \[Pi]^2) * (-1) * (1/3 Lb + 2/3);
+  ContriSS = SelfEnergySS * Hg;
+
+  (* Vector self-energy contribution (longitudinal part) *)
+  fac = 1/(16 \[Pi]^2) * (1/12 Lb + 1/6 + 1/2 (25/6 Lb - 3));
+  ContriVVV = fac * Simplify[TensorContract[GabcdV, {{2, 4}}]];
+
+  (* Fermion self-energy contribution (longitudinal part) *)
+  SelfEnergyFF = - (2/3 Lf - 2/3)/(16 \[Pi]^2);
+  HabIJFnF = HabIJF . NFMat;  (* General nF modification *)
+  ContriFF = SelfEnergyFF * Simplify[TensorContract[HabIJFnF, {{3, 4}}] // Normal];
+
+  (* Longitudinal vector contribution *)
+  ZabL = -(ContriSS + ContriVVV + ContriFF)/2 // Normal // Simplify;
 
 ];
 
 
-(*
-	Vector self-energy in the soft theory.
+(* ::Subsection:: *)
+(*2loop temporal mass*)
+
+
+(* 
+    Calculations of the 2-loop Debye mass in the soft theory.
 *)
-VectorSelfEnergy[]:=Module[{},
-If[verbose,Print["Calculating Vector-Field Renormalization"]];
+VectorMass2Loop[] := Module[
+  {
+    gvffnF, TrSS, TrFF, TrVV, Gabij, Gabcd, GabIJ,
+    GroupFacVVVV, GroupTheoryFacm2, GroupTheoryFac\[Lambda], 
+    GroupTheoryFacTrSSTrSS, GroupTheoryFacSSSS, GroupTheoryFacVVTrSS, 
+    GroupTheoryFacTrVVTrSS, GroupTheoryFacVVTrFF, GroupTheoryFacTrVVTrFF, 
+    GroupTheoryFacFFFF, GroupFacTrSSTrFF, GroupTheoryYuk1, GroupTheoryYuk2, 
+    \[CapitalPi]V, \[CapitalPi]S, \[CapitalPi]F, \[CapitalPi]SF
+  },
 
-	SelfEnergySS=-1/2*1/(16 \[Pi]^2)*(-1/3 Lb);
-	ContriSS=SelfEnergySS*Hg;
+  If[verbose, Print["Calculating 2-Loop Debye Mass"]];
 
-	fac=1/(16 \[Pi]^2)(1/12 Lb+1/2(25/6Lb+2/3));
-	ContriVVV=fac*Simplify[TensorContract[GabcdV,{{2,4}}]];
+  (* General nF modification *)
+  gvffnF = gvff . NFMat;
 
-	SelfEnergyFF=(-1)(2/3 Lf)/(16 \[Pi]^2);
-(*General nF modification*)
-	HabIJFnF=HabIJF . NFMat;
-(************************)
-	ContriFF=SelfEnergyFF*Simplify[TensorContract[HabIJFnF,{{3,4}}]//Normal];
-	ZabT=-(ContriSS+ ContriVVV+ContriFF)/2//Normal//Simplify;(*Transverse vectors*)
- 
+  (* Compute trace terms *)
+  TrSS = Table[Tr[a . b], {a, gvss}, {b, gvss}] // SparseArray;
+  TrFF = Table[Tr[a . b], {a, gvff}, {b, gvffnF}] // SparseArray;
+  TrVV = Table[Tr[a . b], {a, gvvv}, {b, gvvv}] // SparseArray;
 
+  (* Compute Gab terms *)
+  Gabij = Table[a . b, {a, gvss}, {b, gvss}] // SparseArray;
+  Gabcd = gvvv . gvvv // SparseArray;
+  GabIJ = Table[a . b, {a, gvff}, {b, gvff}] // SparseArray;
 
-	SelfEnergySS=-1/2*1/(16 \[Pi]^2)*(-1)(1/3 Lb+2/3);
-	ContriSS=SelfEnergySS*Hg;
+  (* Group theory factors *)
+  GroupFacVVVV = -Flatten[Gabcd, {{1}, {2, 3, 4}}] . Flatten[Gabcd, {1, 3, 2}];
+  GroupTheoryFacm2 = Flatten[\[Mu]ij] . Flatten[Gabij, {3, 4}];
+  GroupTheoryFac\[Lambda] = Flatten[TensorContract[\[Lambda]4, {{1, 2}}]] . Flatten[Gabij, {3, 4}];
 
-	fac=1/(16 \[Pi]^2)(1/12 Lb+1/6 +1/2(25/6Lb- 3));
-	ContriVVV=fac*Simplify[TensorContract[GabcdV,{{2,4}}]];
+  (* Various contributions based on traces and group theory *)
+  GroupTheoryFacTrSSTrSS = TrSS . TrSS;
+  GroupTheoryFacSSSS = Table[Sum[Tr[c . d . a . a], {a, gvss}], {c, gvss}, {d, gvss}];
+  GroupTheoryFacVVTrSS = Flatten[TrSS] . Flatten[Gabcd, {2, 4}];
+  GroupTheoryFacTrVVTrSS = TrSS . TrVV + TrVV . TrSS;
+  GroupTheoryFacVVTrFF = Flatten[TrFF] . Flatten[Gabcd, {2, 4}];
+  GroupTheoryFacTrVVTrFF = TrFF . TrVV + TrVV . TrFF;
+  GroupTheoryFacFFFF = Table[Sum[Tr[a . a . c . d], {a, gvff}], {c, gvff}, {d, gvffnF}] // SparseArray;
+  GroupFacTrSSTrFF = (TrSS . TrFF + TrFF . TrSS);
+  GroupTheoryFacTrFFTrFF = TrFF . TrFF;
 
+  (* Yukawa terms *)
+  GroupTheoryYuk1 = Flatten[TensorContract[TensorProduct[Ysff, YsffC], {{1, 4}, {3, 5}}]] . Flatten[GabIJ, {3, 4}];
+  GroupTheoryYuk2 = Flatten[Table[Tr[a . b + b . a], {a, Ysff}, {b, YsffC}] // SparseArray] . Flatten[Gabij, {3, 4}];
 
-	SelfEnergyFF=(-1)(2/3 Lf-2/3)/(16 \[Pi]^2);
-(*General nF modification*)
-	HabIJFnF=HabIJF . NFMat;
-(************************)
-	ContriFF=SelfEnergyFF*Simplify[TensorContract[HabIJFnF,{{3,4}}]//Normal];
-	ZabL=-( ContriSS  +ContriVVV+ContriFF)/2//Normal//Simplify;(*Temporal/Longitudional vectors*)
+  (* Contributions to the Debye mass *)
+  \[CapitalPi]V = GroupFacVVVV * (
+    T^2 * (11 Log[\[Mu]/(4 \[Pi] T)] + 11 EulerGamma - 1/2) / (36 \[Pi]^2) + T^2 / (12 \[Pi]^2)
+  );
+
+  \[CapitalPi]S = -GroupTheoryFac\[Lambda] * T^2 / (192 \[Pi]^2) 
+    - GroupTheoryFacm2 / (8 \[Pi]^2) 
+    - GroupTheoryFacTrSSTrSS * (T^2 * (Log[\[Mu]/(4 \[Pi])] - Log[T] + EulerGamma + 1)) / (288 \[Pi]^2)
+    + GroupTheoryFacSSSS * T^2 / (32 \[Pi]^2)
+    - (T^2 * (Log[\[Mu]] - Log[T] + EulerGamma - Log[\[Pi]] - 2 Log[2])) / (24 \[Pi]^2) * GroupTheoryFacVVTrSS
+    - GroupTheoryFacVVTrSS * T^2 / (48 \[Pi]^2)
+    + (T^2 * (8 Log[\[Mu]] - 8 Log[T] + 8 EulerGamma - 3 - 8 Log[\[Pi]] - 16 Log[2])) / (576 \[Pi]^2) * GroupTheoryFacTrVVTrSS;
+
+  \[CapitalPi]F = (T^2 * (Log[\[Mu]] - Log[T] + EulerGamma - Log[\[Pi]] - 2 Log[2])) / (24 \[Pi]^2) * GroupTheoryFacVVTrFF
+    - (T^2 * (2 Log[\[Mu]] - 2 Log[T] + 2 EulerGamma - 1 - 2 Log[\[Pi]])) / (144 \[Pi]^2) * GroupTheoryFacTrFFTrFF
+    - (T^2 * (2 Log[\[Mu]] - 2 Log[T] + 2 EulerGamma + 3 - 2 Log[\[Pi]] - 20 Log[2])) / (576 \[Pi]^2) * GroupTheoryFacTrVVTrFF
+    - GroupTheoryFacFFFF * T^2 / (16 \[Pi]^2)
+    + GroupTheoryFacVVTrFF * T^2 / (48 \[Pi]^2);
+
+  \[CapitalPi]SF = (T^2 * (5 Log[\[Mu]/(4 \[Pi] T)] + 5 EulerGamma - 1 + 8 Log[2])) / (576 \[Pi]^2) * GroupFacTrSSTrFF
+    - 1/(32 \[Pi]^2) * T^2 * GroupTheoryYuk1
+    - T^2 / (192 \[Pi]^2) * GroupTheoryYuk2;
+
+  (* Final expression for the 2-loop Debye mass *)
+  \[Mu]VabNLO = \[CapitalPi]V + \[CapitalPi]S + \[CapitalPi]F + \[CapitalPi]SF // Normal // Simplify // FullSimplify;
 
 ];
 
 
-(*
-	Calculations of the 2-loop Debye mass in the soft theory.
-*)
-VectorMass2Loop[]:=Module[{},
-If[verbose,Print["Calculating 2-Loop Debye Mass"]];
-
-(*Using the result from 2302.04894 to make the result neater*)
-(*General nF modification*)
-	gvffnF=gvff . NFMat;
-(***********)
-
-	TrSS=Table[Tr[a . b],{a,gvss},{b,gvss}]//SparseArray;
-	TrFF=Table[Tr[a . b],{a,gvff},{b,gvffnF}]//SparseArray;
-	TrVV=Table[Tr[a . b],{a,gvvv},{b,gvvv}]//SparseArray;
-	Gabij=Table[a . b,{a,gvss},{b,gvss}]//SparseArray;
-	Gabcd= gvvv . gvvv//SparseArray;
-	GabIJ=Table[a . b,{a,gvff},{b,gvff}]//SparseArray;
-	GroupFacVVVV=-Flatten[Gabcd,{{1},{2,3,4}}] . Flatten[Gabcd,{1,3,2}];
-	GroupTheoryFacm2=Flatten[\[Mu]ij] . Flatten[Gabij,{3,4}];
-	GroupTheoryFac\[Lambda]=Flatten[TensorContract[\[Lambda]4,{{1,2}}]] . Flatten[Gabij,{3,4}];
-	
-	GroupTheoryFacTrSSTrSS=TrSS . TrSS;
-	GroupTheoryFacSSSS=Table[Sum[Tr[c . d . a . a],{a,gvss}],{c,gvss},{d,gvss}];
-	GroupTheoryFacVVTrSS=Flatten[TrSS] . Flatten[Gabcd,{2,4}];
-	GroupTheoryFacTrVVTrSS=TrSS . TrVV+TrVV . TrSS;
-	GroupTheoryFacVVTrFF= Flatten[TrFF] . Flatten[Gabcd,{2,4}];
-	GroupTheoryFacTrVVTrFF=(TrFF . TrVV+TrVV . TrFF);
-	GroupTheoryFacFFFF= Table[Sum[Tr[a . a . c . d],{a,gvff}],{c,gvff},{d,gvffnF}]//SparseArray;
-	GroupFacTrSSTrFF=(TrSS . TrFF+TrFF . TrSS);
-	GroupTheoryFacTrFFTrFF=TrFF . TrFF;
-	GroupTheoryYuk1= Flatten[TensorContract[TensorProduct[Ysff,YsffC],{{1,4},{3,5}}]] . Flatten[GabIJ,{3,4}];
-	GroupTheoryYuk2=Flatten[Table[Tr[a . b+b . a],{a,Ysff},{b,YsffC}]//SparseArray] . Flatten[Gabij,{3,4}];
-	
-	\[CapitalPi]V=GroupFacVVVV(  T^2 (11Log[\[Mu]/(4 \[Pi] T)]+11EulerGamma-1/2)/(36 \[Pi]^2)+T^2/(12 \[Pi]^2));
-	\[CapitalPi]S=-GroupTheoryFac\[Lambda] T^2/(192 \[Pi]^2)-GroupTheoryFacm2/(8 \[Pi]^2)-GroupTheoryFacTrSSTrSS (T^2 (Log[\[Mu]/(4 \[Pi])]-Log[T]+EulerGamma+1))/(288 \[Pi]^2)+ GroupTheoryFacSSSS T^2/(32 \[Pi]^2) -(T^2 (Log[\[Mu]]-Log[T]+EulerGamma-Log[\[Pi]]-2 Log[2]))/(24 \[Pi]^2) GroupTheoryFacVVTrSS-GroupTheoryFacVVTrSS T^2/(48 \[Pi]^2)+(T^2 (8 Log[\[Mu]]-8 Log[T]+8 EulerGamma-3-8 Log[\[Pi]]-16 Log[2]))/(576 \[Pi]^2) GroupTheoryFacTrVVTrSS;
-	\[CapitalPi]F=(T^2 (Log[\[Mu]]-Log[T]+EulerGamma-Log[\[Pi]]-2 Log[2]))/(24 \[Pi]^2) GroupTheoryFacVVTrFF-(T^2 (2 Log[\[Mu]]-2 Log[T]+2 EulerGamma-1-2 Log[\[Pi]]))/(144 \[Pi]^2) GroupTheoryFacTrFFTrFF-(T^2 (2 Log[\[Mu]]-2 Log[T]+2 EulerGamma+3-2 Log[\[Pi]]-20 Log[2]))/(576 \[Pi]^2) GroupTheoryFacTrVVTrFF-  GroupTheoryFacFFFF T^2/(16 \[Pi]^2)+ GroupTheoryFacVVTrFF T^2/(48 \[Pi]^2);
-	\[CapitalPi]SF=(T^2 (5 Log[\[Mu]/(4 \[Pi] T)]+5 EulerGamma-1+8 Log[2]))/(576 \[Pi]^2) GroupFacTrSSTrFF-1/(32 \[Pi]^2) T^2 GroupTheoryYuk1-T^2/(192 \[Pi]^2)GroupTheoryYuk2;
-	
-	
-	\[Mu]VabNLO=\[CapitalPi]V+\[CapitalPi]S+\[CapitalPi]F+\[CapitalPi]SF//Normal//Simplify//FullSimplify;
-
-];
-
-
-(* ::Section::Closed:: *)
+(* ::Section:: *)
 (*Effective couplings*)
 
 
