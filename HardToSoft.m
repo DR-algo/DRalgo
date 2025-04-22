@@ -119,41 +119,51 @@ Return[mat1P==mat2P]
 
 
 (*
-	Creates tensors used in intermediate steps
+  CreateHelpTensors:
+  Constructs intermediate tensors from scalar-vector, fermion-vector, Yukawa, and structure constant couplings.
+  These are used in higher-loop pressure calculations and symmetry analyses.
 *)
-CreateHelpTensors[]:=Module[{},
-(*Ahh, you were at my side, all along... My true mentor... My guiding moonlight...*)
-	If[verbose,Print["Creating Help Tensors"]];
+ClearAll[CreateHelpTensors];
+CreateHelpTensors[] := Module[{},
+  If[verbose, Print["Creating Help Tensors"]];
+  
+  (* --- Tensors from two scalar-vector Trilinear Couplings --- *)
+  Habij = Contract[gvss, gvss, {{3, 5}}] // Transpose[#, {1, 3, 2, 4}] & // SimplifySparse;
+  Hg = TensorContract[Habij, {{3, 4}}] // SimplifySparse;
+  \[CapitalLambda]g = TensorContract[Habij, {{1, 2}}] // SimplifySparse;
+  HabijV = (Habij + Transpose[Habij, {2, 1, 3, 4}]) // SparseArray // SimplifySparse;
 
-(*Tensors that are built from two scalar-vector trillinear couplings*)
-		Habij=Contract[gvss,gvss,{{3,5}}]//Transpose[#,{1,3,2,4}]&//SimplifySparse;
-		Hg=TensorContract[Habij,{{3,4}}]//SimplifySparse;
-		\[CapitalLambda]g=TensorContract[Habij,{{1,2}}]//SimplifySparse;            
-		HabijV=Habij+Transpose[Habij,{2,1,3,4}]//SparseArray//SimplifySparse;
-		
-(*Tensor that is built from two structure constants*)
-		GabcdV=gvvv . gvvv//SparseArray//SimplifySparse;
-	
-(*Tensor that is built from two fermion-vector trillinear couplings*)
-		HabIJF=Contract[gvff,gvff,{{3,5}}]//Transpose[#,{1,3,2,4}]&//SimplifySparse;
-        
-(*Tensors that is built from two Yukawa couplings*)
-		Ysij=Contract[Ysff,YsffC,{{2, 5},{3,6}}]//SimplifySparse;
-		YsijC=Contract[YsffC,Ysff,{{2, 5},{3,6}}]//SimplifySparse;
-        
-	If[mode>=1,
-(*Tensor that is built from two scalar quartics*)
-		\[CapitalLambda]\[Lambda] =Flatten[\[Lambda]4,{{1},{2},{3,4}}] . Flatten[\[Lambda]4,{1,2}]//SparseArray//SimplifySparse;
+  (* --- Tensors from two structure constants --- *)
+  GabcdV = gvvv . gvvv // SparseArray // SimplifySparse;
 
-(*Invariant tensors built from two Yukawa couplings*)
-		YTemp=Ysff . Transpose[YsffC]//Transpose[#,{1,3,2,4}]&//Transpose[#,{1,2,4,3}]&//SimplifySparse;
-		YTempC=YsffC . Transpose[Ysff]//Transpose[#,{1,3,2,4}]&//Transpose[#,{1,2,4,3}]&//SimplifySparse;
-        
-		Yhelp=Flatten[YTemp,{{1},{2},{3,4}}] . Flatten[YTemp,{4,3}]//SparseArray//SimplifySparse;     
-		YhelpC=Flatten[YTempC,{{1},{2},{3,4}}] . Flatten[YTempC,{4,3}]//SparseArray//SimplifySparse;
-	];
+  (* --- Tensors from two fermion-vector trilinear couplings --- *)
+  HabIJF = Contract[gvff, gvff, {{3, 5}}] // Transpose[#, {1, 3, 2, 4}] & // SimplifySparse;
 
+  (* --- Tensors from two Yukawa coupling contractions --- *)
+  Ysij = Contract[Ysff, YsffC, {{2, 5}, {3, 6}}] // SimplifySparse;
+  YsijC = Contract[YsffC, Ysff, {{2, 5}, {3, 6}}] // SimplifySparse;
 
+  (* --- Mode-dependent contributions --- *)
+  If[mode >= 1,
+    
+    (* Tensors from two scalar quartic contractions *)
+    \[CapitalLambda]\[Lambda] = Flatten[\[Lambda]4, {{1}, {2}, {3, 4}}] . Flatten[\[Lambda]4, {1, 2}] // SparseArray // SimplifySparse;
+
+    (* Tensors from Yukawa \[Times] Yukawa\:1d9c *)
+    YTemp = Ysff . Transpose[YsffC] 
+      // Transpose[#, {1, 3, 2, 4}] & 
+      // Transpose[#, {1, 2, 4, 3}] & 
+      // SimplifySparse;
+
+    YTempC = YsffC . Transpose[Ysff] 
+      // Transpose[#, {1, 3, 2, 4}] & 
+      // Transpose[#, {1, 2, 4, 3}] & 
+      // SimplifySparse;
+
+    (* Flatten to contract internal indices and obtain invariants *)
+    Yhelp = Flatten[YTemp, {{1}, {2}, {3, 4}}] . Flatten[YTemp, {4, 3}] // SparseArray // SimplifySparse;
+    YhelpC = Flatten[YTempC, {{1}, {2}, {3, 4}}] . Flatten[YTempC, {4, 3}] // SparseArray // SimplifySparse;
+  ];
 ];
 
 
