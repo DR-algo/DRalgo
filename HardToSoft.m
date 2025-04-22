@@ -167,7 +167,7 @@ CreateHelpTensors[] := Module[{},
 ];
 
 
-(* ::Section:: *)
+(* ::Section::Closed:: *)
 (*Pressure calculations*)
 
 
@@ -672,151 +672,195 @@ SymmetricPhaseNNLO[]:=Module[
 (*Scalar masses*)
 
 
-(*
-	Calculates the 1-loop scalar mass in the soft theory.
+(* ::Subsection::Closed:: *)
+(*1loop scalar mass*)
+
+
+(* 
+    Computes the 1-loop scalar mass correction (aS3D) in the dimensionally reduced 
+    soft theory, incorporating contributions from scalar self-interactions, 
+    gauge boson loops, fermion self-energies, and optionally 6-point scalar couplings.
 *)
-ScalarMass[]:=Module[{},
-If[verbose,Print["Calculating 1-Loop Scalar Mass"]];
+ScalarMass[] := Module[
+  {
+    selfEnergyFF, contriSS, contriVV, contriFF,
+    contriSSLambda6, result
+  },
 
-	ContriSS=-T^2/(24)TensorContract[\[Lambda]4, {{3, 4}}]//SimplifySparse;
-	
-	ContriVV=T^2/4 \[CapitalLambda]g;
+  If[verbose, Print["Calculating 1-Loop Scalar Mass"]];
 
-(*Self-energy contribution*)
-	SelfEnergyFF=-T^2/(12);
-	ContriFF=1/2SelfEnergyFF( Ysij+YsijC)//SimplifySparse;
+  (* Scalar 4-point interaction contribution *)
+  contriSS = -T^2/24 TensorContract[\[Lambda]4, {{3, 4}}] // SimplifySparse;
 
-If[mode>=3,
-(*Minus signs from the matching*)
-	ContriSS\[Lambda]6=T^4/1152*TensorContract[\[Lambda]6,{{1,2},{3,4}}];
-	aS3D=\[Mu]ij-ContriSS-ContriVV-ContriFF+ContriSS\[Lambda]6//Normal//FullSimplify//Expand;
-,
-(*Minus signs from the matching*)
-	aS3D=\[Mu]ij-ContriSS-ContriVV-ContriFF//Normal//FullSimplify//Expand;
-];
-];
+  (* Gauge boson loop contribution *)
+  contriVV = T^2/4 \[CapitalLambda]g;
 
+  (* Fermion self-energy contribution *)
+  selfEnergyFF = -T^2/12;
+  contriFF = 1/2 selfEnergyFF (Ysij + YsijC) // SimplifySparse;
 
-(*
-	Scalar self-energy in the soft theory.
-*)
-ScalarSelfEnergy[]:=Module[{},
-If[verbose,Print["Calculating Scalar-Field Renormalization"]];
-(*Scalars are nice. I like scalars. They don't abuse me with twenty-index tensor integrals.*)
-(*This is the reason why I never like to adjust prices*)
+  (* If mode \[GreaterEqual] 3, include 6-point scalar coupling contribution *)
+  If[mode >= 3,
+    contriSSLambda6 = T^4/1152 TensorContract[\[Lambda]6, {{1, 2}, {3, 4}}];
+    result = \[Mu]ij - contriSS - contriVV - contriFF + contriSSLambda6,
+    
+    (* Otherwise, only include up to 4-point interactions *)
+    (* Minus signs from the matching *)
+    result = \[Mu]ij - contriSS - contriVV - contriFF
+  ];
 
-	ContriVV=-3/(16 \[Pi]^2 )Lb \[CapitalLambda]g;
-
-	SelfEnergyFF=-Lf/(16 \[Pi]^2);
-	ContriFF=1/2SelfEnergyFF (( Ysij+YsijC));
-
-
-	ZijS=-ContriVV/2-ContriFF/2//SimplifySparse;
-
+  (* Store the final corrected scalar mass, fully simplified *)
+  aS3D = result // Normal // FullSimplify // Expand;
 ];
 
 
-(*
-	Calculates the scalar mass to 2 loops in the soft theory
-*)
-ScalarMass2Loop[]:=Module[{},
-If[verbose,Print["Calculating 2-Loop Scalar Mass"]];
-
-(*Just temp variables. Except for all the way they're reused throughout the code.*)
-(*Somebody should grant me some eys...*)
-
-	\[Kappa]=1/(16 \[Pi]^2);
-	I1I2=\[Kappa] T^2/(12 \[Epsilon]b);
-	dI1I2=3\[Kappa] T^2/(12 \[Epsilon]b)-\[Kappa] T^2/6;
-	I1=T^2/(12 \[Epsilon])+T^2 Lbbb;
-	I2I3m1=T^2/(512 \[Pi]^2 \[Epsilon]b)-T^2/(768 \[Pi]^2);
-	I1FI2F=-((T^2) /(384 \[Pi]^2))/\[Epsilon]F;
-	I1BI2F=((T^2) /(192 \[Pi]^2))/\[Epsilon]FB;
-	I1FI2B=-((T^2) /(384 \[Pi]^2))/\[Epsilon]BF;
-	I1FI2FD=(3-2\[Epsilon]F)I1FI2F;
-	I1BI2FD=(3-2\[Epsilon]FB)I1BI2F;
-	I1FI2BT1=I1FI2B(-4)-T^2/(96 \[Pi]^2);
-	I1F=-T^2/(24\[Epsilon])+1/24 T^2 Lfff; (*This one is my favorite*)
+(* ::Subsection::Closed:: *)
+(*1loop scalar self-energy*)
 
 
 (*
-	The indexing of diagrams follow a genius-level system.
-	It is so genius, words can't properly describe it.
+  Computes the 1-loop scalar self-energy (wavefunction renormalization)
+  in the dimensionally reduced soft theory.
 *)
+ScalarSelfEnergy[] := Module[
+	{
+		ContriVV, SelfEnergyFF, ContriFF
+	},
+  If[verbose,
+    Print["Calculating Scalar-Field Renormalization"]];
 
-	Contri1=1/4 I1I2 Simplify[TensorContract[\[CapitalLambda]\[Lambda],{3,4}]];
+  (* Gauge boson loop contribution *)
+  ContriVV = -3/(16 \[Pi]^2) Lb \[CapitalLambda]g;
 
-	Contri2=1/2 I1 *Flatten[\[Gamma]ij] . Flatten[\[Lambda]4,{1,2}];
-	
-	Contri21=1/(16 \[Pi]^2)Lb *1/2 *Flatten[\[Mu]ij] . Flatten[\[Lambda]4,{1,2}];
-	
-	Contri3=-1/2 I1 \[Epsilon] *TensorContract[Z\[Lambda]ijkl,{3,4}];
-	
-	Contri31=-1/2 I1 *Flatten[\[Gamma]ij] . Flatten[\[Lambda]4,{1,2}];
-	
-	Contri32=-1/4 I1 *(\[Gamma]ij . TensorContract[\[Lambda]4,{1,2}]+TensorContract[\[Lambda]4,{1,2}] . \[Gamma]ij);
+  (* Fermion loop contribution via Yukawa couplings *)
+  SelfEnergyFF = -Lf/(16 \[Pi]^2);
+  ContriFF = 1/2 SelfEnergyFF (Ysij + YsijC);
 
-	Contri4=-1/2 dI1I2  *(Flatten[\[CapitalLambda]g] . Flatten[\[Lambda]4,{1,2}]);
-	
-	Contri5=1/2 dI1I2 *Contract[Hg,HabijV, {{1,3},{2,4}}]//SimplifySparse;
-        
-	Contri6= (3-2\[Epsilon]) I1 \[Epsilon]*1/2 TensorContract[Zgvvss,{1,2}];
-	
-	Contri61=(3-2\[Epsilon]) I1*1/2*Contract[\[Gamma]ab,HabijV,  {{1,3},{2,4}}]//SimplifySparse;
-        
-	Contri62=(3-2\[Epsilon]) I1*1/2*(Contract[\[Gamma]ij,Habij, {{3,4},{2,5}}]+Contract[\[Gamma]ij,Habij, {{3,4},{2,6}}])//SimplifySparse; 
-        
-	Contri7=-1/2 I1 (3-2\[Epsilon])*Contract[\[Gamma]ab,HabijV,{{1,3},{2,4}}]//SimplifySparse; 
-
-	Contri8=-1/2 I1I2*Contract[Hg,HabijV,{{1,3},{2,4}}]//SimplifySparse; 
-        
-	Contri9=T^2 1/4*(-1)*(9 /(8 \[Epsilon]b)-13 /8)1/(16 \[Pi]^2)Contract[GabcdV,HabijV,{{2,4},{1,5},{3,6}}]//SimplifySparse; 
-        
-    help=Contract[GabcdV,HabijV,{{1,5},{2,3},{4,6}}]//SimplifySparse; 
-	Contri10=(I1I2/4)*help; 
-        
-	Contri11=T^2 (-1)1/4*(13/(24 \[Epsilon]b)-7/24)/(16 \[Pi]^2)*help;
-        
-	Contri12= (-1/2)(-1)2(I1FI2F-I1BI2F)*(Flatten[TensorContract[YTemp,{1,2}]] . Flatten[YTemp,{4,3}]+Flatten[TensorContract[YTempC,{1,2}]] . Flatten[YTempC,{4,3}]);
-	
-	Contri13= (-2 I1FI2B)*1/4*(Flatten[Ysij] . Flatten[\[Lambda]4,{1,2}]+Flatten[YsijC] . Flatten[\[Lambda]4,{1,2}]);
-
-(*Kos, or some say Kosm*)
-	help1=Flatten[Ysff,{{1},{2,3}}] . Flatten[ZYsijC,{2,3}]+Flatten[YsffC,{{1},{2,3}}] . Flatten[ZYsij,{2,3}];
-	Contri14=I1F*(help1+Transpose[help1,{2,1}])//Simplify;
-	
-	help1=Ysij . \[Gamma]ij;
-	Contri141=I1F (help1+Transpose[help1])//Simplify;
-	(*General nF modifcation*)
-	help=TensorContract[HabIJF . NFMat,{3,4}];
-(**********************)
-	Contri15=2I1FI2BT1(-1)*1/4 *(Flatten[help] . Flatten[HabijV,{1,2}]);
-	
-	help=TensorContract[HabIJF,{1,2}];
-	help2=Flatten[help] . Flatten[YTemp,{3,4}]+Flatten[help] . Flatten[YTempC,{3,4}];
-	Contri16=(-1)( I1FI2FD-I1BI2FD)(-1)*2/3(1-1 \[Epsilon]/3)*help2;
-
-(*Self-energy contribution*)
-	ContriF=-(ZijS . aS3D+Transpose[ZijS . aS3D]); 
+  (* Total wavefunction renormalization from gauge + fermion loops *)
+  ZijS = -ContriVV/2 - ContriFF/2 // SimplifySparse;
+];
 
 
-(*Contribution from Cubics*)
-	ContriCubic=1/2*1/(16 \[Pi]^2)Lb Contract[\[Lambda]3,\[Lambda]3,{{2,5},{3,6}}]//SimplifySparse; 
+(* ::Subsection::Closed:: *)
+(*2loop scalar mass*)
 
-(*Contribution from Fermion Masses*)
-	Fac=1/(8 \[Pi]^2) Lf;
-	Temp1=Activate@TensorContract[Inactive@TensorProduct[Ysff,\[Mu]IJFC,\[Mu]IJFC,Ysff],{{2,4},{3,6},{5,9},{7,10}}]//Normal;
-	Temp1C=Activate@TensorContract[Inactive@TensorProduct[YsffC,\[Mu]IJF,\[Mu]IJF,YsffC],{{2,4},{3,6},{5,9},{7,10}}]//Normal;
-	ContriFFMass1=-1/2Fac*(Temp1+Temp1C)//Simplify//PowerExpand;
-	
-	Temp1=Activate@TensorContract[Inactive@TensorProduct[Ysff,YsffC,\[Mu]IJFC,\[Mu]IJF],{{3,5},{2,7},{6,10},{8,9}}]//Normal;
-	Temp1C=Activate@TensorContract[Inactive@TensorProduct[YsffC,Ysff,\[Mu]IJF,\[Mu]IJFC],{{3,5},{2,7},{6,10},{8,9}}]//Normal;
-	ContriFFMass2=-Fac*(Temp1+Temp1C)//Simplify//PowerExpand;      
 
-                    
-(*Grant us eyes*)        
-	\[Mu]SijNLO=SerEnergyHelp[ContriF//Normal]-SerEnergyHelp[ContriCubic//Normal]-SerEnergyHelp[(ContriFFMass1+ContriFFMass2)//Normal]-SerEnergyHelp[(Contri1+Contri2+Contri3+Contri31+ Contri32+Contri4+Contri5)//Normal]-SerEnergyHelp[(Contri6+Contri61+Contri62+Contri7+Contri8+  Contri9+ Contri10+ Contri11)//Normal]-SerEnergyHelp[(Contri21+Contri12+Contri13+ Contri14+ Contri141+ Contri15+ Contri16)//Normal]//Simplify;
+(* Calculates the scalar mass to 2 loops in the soft theory *)
 
+ScalarMass2Loop[] := Module[
+	{
+		I1I2, dI1I2, I1, I2I3m1, I1FI2F, I1BI2F, I1FI2B, 
+		I1FI2FD, I1BI2FD, I1FI2BT1, I1F, Contri1, Contri2, Contri21, Contri3, 
+		Contri31, Contri32, Contri4, Contri5, Contri6, Contri61, Contri62, Contri7, 
+		Contri8, Contri9, help, Contri10, Contri11, Contri12, Contri13, Contri14, 
+		Contri141, Contri15, Contri16, ContriF, ContriCubic, Fac, Temp1, Temp1C,
+		simplifyContract
+	},
+  
+  If[verbose,
+    Print["Calculating 2-Loop Scalar Mass"]];
+  
+  (* Constants *)
+  \[Kappa] = 1/(16 \[Pi]^2);
+  I1I2 = \[Kappa] T^2/(12 \[Epsilon]b);
+  dI1I2 = 3 \[Kappa] T^2/(12 \[Epsilon]b) - \[Kappa] T^2/6;
+  I1 = T^2/(12 \[Epsilon]) + T^2 Lbbb;
+  I2I3m1 = T^2/(512 \[Pi]^2 \[Epsilon]b) - T^2/(768 \[Pi]^2);
+  I1FI2F = -((T^2)/(384 \[Pi]^2))/\[Epsilon]F;
+  I1BI2F = ((T^2)/(192 \[Pi]^2))/\[Epsilon]FB;
+  I1FI2B = -((T^2)/(384 \[Pi]^2))/\[Epsilon]BF;
+  I1FI2FD = (3 - 2 \[Epsilon]F) I1FI2F;
+  I1BI2FD = (3 - 2 \[Epsilon]FB) I1BI2F;
+  I1FI2BT1 = I1FI2B(-4) - T^2/(96 \[Pi]^2);
+  I1F = -T^2/(24 \[Epsilon]) + 1/24 T^2 Lfff;
+
+  (* Helper Functions *)
+  simplifyContract[expr_] := Simplify[expr] // SimplifySparse;
+
+  (* Contributions *)
+  Contri1 = (1/4) I1I2 Simplify[TensorContract[\[CapitalLambda]\[Lambda], {3, 4}]];
+  Contri2 = (1/2) I1 Flatten[\[Gamma]ij] . Flatten[\[Lambda]4, {1, 2}];
+  Contri21 = (1/(16 \[Pi]^2)) Lb * (1/2) Flatten[\[Mu]ij] . Flatten[\[Lambda]4, {1, 2}];
+  Contri3 = -(1/2) I1 \[Epsilon] TensorContract[Z\[Lambda]ijkl, {3, 4}];
+  Contri31 = -(1/2) I1 Flatten[\[Gamma]ij] . Flatten[\[Lambda]4, {1, 2}];
+  Contri32 = -(1/4) I1*(
+    + \[Gamma]ij . TensorContract[\[Lambda]4, {1, 2}]
+    + TensorContract[\[Lambda]4, {1, 2}] . \[Gamma]ij
+    );
+  Contri4 = -(1/2) dI1I2 Flatten[\[CapitalLambda]g] . Flatten[\[Lambda]4, {1, 2}];
+  Contri5 = (1/2) dI1I2 Contract[Hg, HabijV, {{1, 3}, {2, 4}}] // simplifyContract;
+  Contri6 = (3 - 2 \[Epsilon]) I1 \[Epsilon] (1/2) TensorContract[Zgvvss, {1, 2}];
+  Contri61 = (3 - 2 \[Epsilon]) I1 (1/2) Contract[\[Gamma]ab, HabijV, {{1, 3}, {2, 4}}] // simplifyContract;
+  Contri62 = (3 - 2 \[Epsilon]) I1 (1/2) (
+     + Contract[\[Gamma]ij, Habij, {{3, 4}, {2, 5}}]
+     + Contract[\[Gamma]ij, Habij, {{3, 4}, {2, 6}}]) // simplifyContract;
+  Contri7 = -(1/2) I1 (3 - 2 \[Epsilon]) Contract[\[Gamma]ab, HabijV, {{1, 3}, {2, 4}}] // simplifyContract;
+  Contri8 = -(1/2) I1I2 Contract[Hg, HabijV, {{1, 3}, {2, 4}}] // simplifyContract;
+  Contri9 = T^2 (1/4) (-1) (9/(8 \[Epsilon]b) - 13/8) (1/(16 \[Pi]^2)) Contract[GabcdV, HabijV, {{2, 4}, {1, 5}, {3, 6}}] // simplifyContract;
+  
+  help = Contract[GabcdV, HabijV, {{1, 5}, {2, 3}, {4, 6}}] // simplifyContract;
+  Contri10 = (I1I2/4) help;
+  
+  Contri11 = T^2 (-1) (1/4) (13/(24 \[Epsilon]b) - 7/24)/(16 \[Pi]^2) help;
+  
+  Contri12 = (-1/2) (-1) 2 (I1FI2F - I1BI2F)*(
+    + Flatten[TensorContract[YTemp, {1, 2}]] . Flatten[YTemp, {4, 3}]
+    + Flatten[TensorContract[YTempC, {1, 2}]] . Flatten[YTempC, {4, 3}]
+    );
+  
+  Contri13 = (-2 I1FI2B) (1/4)*(
+    + Flatten[Ysij] . Flatten[\[Lambda]4, {1, 2}]
+    + Flatten[YsijC] . Flatten[\[Lambda]4, {1, 2}]
+    );
+
+  (* Kosm or "Kos" contributions *)
+  help1 = (
+    + Flatten[Ysff, {{1}, {2, 3}}] . Flatten[ZYsijC, {2, 3}]
+    + Flatten[YsffC, {{1}, {2, 3}}] . Flatten[ZYsij, {2, 3}]
+    );
+  Contri14 = I1F (help1 + Transpose[help1, {2, 1}]) // Simplify;
+  
+  help1 = Ysij . \[Gamma]ij;
+  Contri141 = I1F (help1 + Transpose[help1]) // Simplify;
+  
+  (* General nF modification *)
+  help = TensorContract[HabIJF . NFMat, {3, 4}];
+  
+  (* Contributions from self-energy, cubics, and fermion masses *)
+  Contri15 = 2 I1FI2BT1 (-1) (1/4) (Flatten[help] . Flatten[HabijV, {1, 2}]);
+  
+  help = TensorContract[HabIJF, {1, 2}];
+  help2 = (
+    + Flatten[help] . Flatten[YTemp, {3, 4}]
+    + Flatten[help] . Flatten[YTempC, {3, 4}]
+    );
+  Contri16 = (-1) (I1FI2FD - I1BI2FD) (-1) (2/3) (1 - 1 \[Epsilon]/3) help2;
+
+  (* Self-energy contribution *)
+  ContriF = -(ZijS . aS3D + Transpose[ZijS . aS3D]);
+
+  (* Contribution from Cubics *)
+  ContriCubic = (1/2) (1/(16 \[Pi]^2)) Lb Contract[\[Lambda]3, \[Lambda]3, {{2, 5}, {3, 6}}] // simplifyContract;
+
+  (* Contribution from Fermion Masses *)
+  Fac = 1/(8 \[Pi]^2) Lf;
+  Temp1 = Activate @ TensorContract[Inactive @ TensorProduct[Ysff, \[Mu]IJFC, \[Mu]IJFC, Ysff], {{2, 4}, {3, 6}, {5, 9}, {7, 10}}] // Normal;
+  Temp1C = Activate @ TensorContract[Inactive @ TensorProduct[YsffC, \[Mu]IJF, \[Mu]IJF, YsffC], {{2, 4}, {3, 6}, {5, 9}, {7, 10}}] // Normal;
+  ContriFFMass1 = -(1/2) Fac (Temp1 + Temp1C) // Simplify // PowerExpand;
+  
+  Temp1 = Activate @ TensorContract[Inactive @ TensorProduct[Ysff, YsffC, \[Mu]IJFC, \[Mu]IJF], {{3, 5}, {2, 7}, {6, 10}, {8, 9}}] // Normal;
+  Temp1C = Activate @ TensorContract[Inactive @ TensorProduct[YsffC, Ysff, \[Mu]IJF, \[Mu]IJFC], {{3, 5}, {2, 7}, {6, 10}, {8, 9}}] // Normal;
+  ContriFFMass2 = -Fac (Temp1 + Temp1C) // Simplify // PowerExpand;
+
+  (* Final scalar mass *)
+  \[Mu]SijNLO = (
+    + SerEnergyHelp[ContriF // Normal]
+    - SerEnergyHelp[ContriCubic // Normal]
+    - SerEnergyHelp[(ContriFFMass1 + ContriFFMass2) // Normal]
+    - SerEnergyHelp[(Contri1 + Contri2 + Contri3 + Contri31 + Contri32 + Contri4 + Contri5) // Normal]
+    - SerEnergyHelp[(Contri6 + Contri61 + Contri62 + Contri7 + Contri8 + Contri9 + Contri10 + Contri11) // Normal]
+    - SerEnergyHelp[(Contri21 + Contri12 + Contri13 + Contri14 + Contri141 + Contri15 + Contri16) // Normal]
+    ) // Simplify;
 ];
 
 
@@ -1710,7 +1754,7 @@ If[verbose,Print["Calculating CounterTerms"]];
 ];
 
 
-(* ::Section:: *)
+(* ::Section::Closed:: *)
 (*Printing the results*)
 
 
