@@ -900,7 +900,7 @@ VectorMass[] := Module[
 ];
 
 
-(* ::Subsection::Closed:: *)
+(* ::Subsection:: *)
 (*1loop vector self-energy*)
 
 
@@ -950,7 +950,7 @@ VectorSelfEnergy[] := Module[
 ];
 
 
-(* ::Subsection:: *)
+(* ::Subsection::Closed:: *)
 (*2loop temporal mass*)
 
 
@@ -1035,263 +1035,355 @@ VectorMass2Loop[] := Module[
 (*Effective couplings*)
 
 
-(*
-Calculates non-abelian couplings from ghost-renormalization.
+(* ::Subsection::Closed:: *)
+(*Gauge couplings*)
+
+
+(* 
+    Calculates non-abelian couplings from ghost-renormalization.
 *)
-NonAbelianCoupling[]:=Module[{},
+NonAbelianCoupling[] := Module[
+  {
+    fac, ContriVVV, Zab\[Eta], ContriAnomVV
+  },
 
-	fac=3/4 Lb/(16 \[Pi]^2);
-	ContriVVV=fac*Table[-Tr[a . b],{a,gvvv},{b,gvvv}]//SparseArray//SimplifySparse;
-	Zab\[Eta]=-1/2(ContriVVV);
+  (* Define factor for the contribution *)
+  fac = 3/4 * Lb / (16 \[Pi]^2);
 
-	ContriAnomVV= gvvv . ZabT+Zab\[Eta] . gvvv+Table[Zab\[Eta] . a,{a,gvvv}]//SparseArray;
-	Ggvvv=-ContriAnomVV;
+  (* Contribution from the vector interactions *)
+  ContriVVV = fac * Table[-Tr[a . b], {a, gvvv}, {b, gvvv}] // SparseArray // SimplifySparse;
 
+  (* Calculate Zab\[Eta] term *)
+  Zab\[Eta] = -1/2 * ContriVVV;
+
+  (* Anomalous dimension contribution to the vector interaction *)
+  ContriAnomVV = gvvv . ZabT + Zab\[Eta] . gvvv + Table[Zab\[Eta] . a, {a, gvvv}] // SparseArray;
+
+  (* Final result *)
+  Ggvvv = -ContriAnomVV;
 ];
 
 
- (*
-	Calculates 1-loop scalar cubics in the soft theory.
+(* ::Subsection::Closed:: *)
+(*SSS*)
+
+
+(* 
+    Calculates 1-loop scalar cubics in the soft theory.
 *)
-ScalarCubic[]:=Module[{},
-If[verbose,Print["Calculating Scalar-Cubic Couplings"]];
+ScalarCubic[] := Module[
+  {
+    SelfEnergySSC, ContriSSCTemp, ContriSSC,
+    Contri1, Contri2, ContriFF,
+    ContriSETemp, ContriSE
+  },
 
-(*Let's be honest, nobody cares about cubic couplings*)
-	SelfEnergySSC=1/(16 \[Pi]^2)Lb *1/2;
-	ContriSSCTemp=Contract[\[Lambda]4,\[Lambda]3, {{3, 5},{4,6}}];
-	ContriSSC=SelfEnergySSC(ContriSSCTemp+Transpose[ContriSSCTemp,{1,3,2}]+Transpose[ContriSSCTemp,{3,2,1}]);
+  If[verbose, Print["Calculating Scalar-Cubic Couplings"]];
 
-(*Fermion mass contributions*)
-	Contri1=Table[Tr[a . \[Mu]IJFC . b . c],{a,Ysff},{b,Ysff},{c,YsffC}];
-	Contri2=Table[Tr[a . \[Mu]IJF . b . c],{a,YsffC},{b,YsffC},{c,Ysff}];
-	ContriFF=-1/(8 \[Pi]^2)Lf 3 Symmetrize[(Contri1+Contri2),Symmetric[{1,2,3}]];
+  (* Scalar self-energy contribution *)
+  SelfEnergySSC = 1 / (16 \[Pi]^2) * Lb * 1 / 2;
+  ContriSSCTemp = Contract[\[Lambda]4, \[Lambda]3, {{3, 5}, {4, 6}}];
+  ContriSSC = SelfEnergySSC * (
+    ContriSSCTemp + Transpose[ContriSSCTemp, {1, 3, 2}] + Transpose[ContriSSCTemp, {3, 2, 1}]
+  );
 
-(*Self-energy contribution*)
-	ContriSETemp=-ZijS . \[Lambda]3;
-	ContriSE=ContriSETemp+Transpose[ContriSETemp,{2,1,3}]+Transpose[ContriSETemp,{3,1,2}]//Simplify;
-	
-	\[Lambda]3CS=-ContriSSC-ContriFF+ContriSE//Simplify;
+  (* Fermion mass contributions *)
+  Contri1 = Table[Tr[a . \[Mu]IJFC . b . c], {a, Ysff}, {b, Ysff}, {c, YsffC}];
+  Contri2 = Table[Tr[a . \[Mu]IJF . b . c], {a, YsffC}, {b, YsffC}, {c, Ysff}];
+  ContriFF = -1 / (8 \[Pi]^2) * Lf * 3 * Symmetrize[(Contri1 + Contri2), Symmetric[{1, 2, 3}]];
 
+  (* Self-energy contribution *)
+  ContriSETemp = -ZijS . \[Lambda]3;
+  ContriSE = ContriSETemp + Transpose[ContriSETemp, {2, 1, 3}] + Transpose[ContriSETemp, {3, 1, 2}] // Simplify;
+
+  (* Final result for \[Lambda]3CS *)
+  \[Lambda]3CS = -ContriSSC - ContriFF + ContriSE // Simplify;
 ];
 
 
-(*
-	Calculates temporal-vector quartics ~(V^4). Note that all terms are finite.
-*)
-LongitudionalVVVV[]:=Module[{},
-If[verbose,Print["Calculating Temporal-Vector Quartics"]];
+(* ::Subsection:: *)
+(*VVVV*)
+
 
 (*
-	ContriSSSS is the sum of bubbles, triangles, and boxes with internal scalars.
+    Calculates Temporal-Vector Quartics ~ (V^4). Note that all terms are finite.
 *)
-	CouplingSSSS=-(1/(24 \[Pi]^2));
-	ContriSSSSTemp=Flatten[HabijV,{{1},{2},{3,4}}] . Flatten[HabijV,{3,4}];
-	Help=Simplify[ContriSSSSTemp+Transpose[ContriSSSSTemp,{1,3,2,4}]+Transpose[ContriSSSSTemp,{1,4,3,2}]]//SparseArray//SimplifySparse;
-	ContriSSSS=CouplingSSSS*Help//SparseArray;
+LongitudinalVVVV[] := Module[
+  {
+    CouplingSSSS, ContriSSSSTemp, Help, ContriSSSS, CouplingVV, ContriVVTemp, ContriVVTemp2, 
+    ContriVV, HabIJFnF, helpF, ContriFFFF
+  },
 
+  (* Verbose output for debugging *)
+  If[verbose, Print["Calculating Temporal-Vector Quartics"]];
 
+  (* Temporal-Scalar Scalar contributions (Sum of Bubbles, Triangles, and Boxes with internal scalars) *)
+  CouplingSSSS = -(1 / (24 \[Pi]^2));
+  ContriSSSSTemp = Flatten[HabijV, {{1}, {2}, {3, 4}}] . Flatten[HabijV, {3, 4}];
+  Help = Simplify[
+    ContriSSSSTemp + 
+    Transpose[ContriSSSSTemp, {1, 3, 2, 4}] + 
+    Transpose[ContriSSSSTemp, {1, 4, 3, 2}]
+  ] // SparseArray // SimplifySparse;
+  ContriSSSS = CouplingSSSS * Help // SparseArray;
 
-	CouplingVV=-(1/(6 \[Pi]^2));
-	ContriVVTemp=Flatten[GabcdV,{{1},{3},{2,4}}] . Flatten[GabcdV,{2,4}];
-	ContriVVTemp2=ContriVVTemp+Transpose[ContriVVTemp,{1,2,4,3}]//Simplify;
-	Help=Simplify[(ContriVVTemp2+Transpose[ContriVVTemp2,{1,3,2,4}]+Transpose[ContriVVTemp2,{1,4,3,2}])]//SparseArray//SimplifySparse;
-	ContriVV=CouplingVV*Help//SparseArray;
+  (* Vector-Vector contributions (General nF modification) *)
+  CouplingVV = -(1 / (6 \[Pi]^2));
+  ContriVVTemp = Flatten[GabcdV, {{1}, {3}, {2, 4}}] . Flatten[GabcdV, {2, 4}];
+  ContriVVTemp2 = ContriVVTemp + Transpose[ContriVVTemp, {1, 2, 4, 3}] // Simplify;
+  Help = Simplify[
+    (ContriVVTemp2 
+    + Transpose[ContriVVTemp2, {1, 3, 2, 4}] 
+    + Transpose[ContriVVTemp2, {1, 4, 3, 2}])
+  ] // SparseArray // SimplifySparse;
+  ContriVV = CouplingVV * Help // SparseArray;
 
-(*General nF modification*)
-	HabIJFnF=HabIJF . NFMat;
-(************************)
-(*
-	ContriFFFF is the sum of boxes with internal fermions.
-*)
-	helpF=Flatten[HabIJFnF,{{1},{2},{3,4}}] . Flatten[Transpose[HabIJF,{1,2,4,3}],{3,4}]//SimplifySparse;
-	ContriFFFF=1/(3 \[Pi]^2)*(helpF+Transpose[helpF,{1,3,2,4}]+Transpose[helpF,{1,2,4,3}])//SparseArray;(*Check this one after changed*)
- 
- (* Minus sign from matching*)
- \[Lambda]AA= -(ContriSSSS+ContriVV+ ContriFFFF )//SimplifySparse//SparseArray;
+  (* General nF modification (adjusting fermionic contributions) *)
+  HabIJFnF = HabIJF . NFMat;
 
+  (* Fermion-Fermion contributions (Sum of Boxes with Internal Fermions) *)
+  helpF = Flatten[HabIJFnF, {{1}, {2}, {3, 4}}] . Flatten[Transpose[HabIJF, {1, 2, 4, 3}], {3, 4}] // SimplifySparse;
+  ContriFFFF = 1 / (3 \[Pi]^2) * (
+    + helpF 
+    + Transpose[helpF, {1, 3, 2, 4}] 
+    + Transpose[helpF, {1, 2, 4, 3}]) // SparseArray; (* Check this one after modification *)
+
+  (* Final result with minus sign for matching *)
+  \[Lambda]AA = -(ContriSSSS + ContriVV + ContriFFFF) // SimplifySparse // SparseArray;
 ];
 
 
+(* ::Subsection::Closed:: *)
+(*VVS*)
 
 
-(*
-	Calculates cubics between two temporal-vectors and one scalar.
-	No tree-level contribution.
+(* 
+    Calculates cubics between two temporal-vectors and one scalar.
+    No tree-level contribution.
 *)
-LongitudionalVVS[]:=Module[{},
-If[verbose,Print["Calculating Temporal-Vector-Scalar Cubics"]];
+LongitudinalVVS[] := Module[
+  {
+    CouplingSSSS, ContriSSSSTemp
+  },
 
-	CouplingSSSS=1/(8 \[Pi]^2);
-	ContriSSSSTemp=CouplingSSSS*Contract[Habij,\[Lambda]3, {{3, 5},{4,6}}];
+  If[verbose, Print["Calculating Temporal-Vector-Scalar Cubics"]];
 
-(*Minus sign from matching*)
-	GvvsL=-ContriSSSSTemp;
+  (* Cubic contribution with internal scalars *)
+  CouplingSSSS = 1 / (8 \[Pi]^2);
+  ContriSSSSTemp = CouplingSSSS * Contract[Habij, \[Lambda]3, {{3, 5}, {4, 6}}];
 
+  (* Minus sign from matching *)
+  GvvsL = -ContriSSSSTemp;
 ];
 
 
+(* ::Subsection::Closed:: *)
+(*SSSS*)
 
 
-(*
-	Calculates Scalar quartics in the soft theory
+(* 
+    Calculates Scalar Quartics in the soft theory.
 *)
-ScalarQuartic[]:=Module[{},
-If[verbose,Print["Calculating Scalar Quartic"]];
-(*Changes Made*)
-	ContriSS=1/(16 \[Pi]^2)Lb*1/2*Simplify[(\[CapitalLambda]\[Lambda]+Transpose[\[CapitalLambda]\[Lambda],{1,4,3,2}]+Transpose[\[CapitalLambda]\[Lambda],{1,3,2,4}])];
+ScalarQuartic[] := Module[
+  {
+    ContriSS, ContriVVTemp, ContriVVTemp2, ContriVV, 
+    CouplingFF, ContriFF, ContriSETemp, ContriSE, ContriSS\[Lambda]6
+  },
 
-	ContriVVTemp=Transpose[Flatten[HabijV,{1,2}],{3,2,1}] . Flatten[HabijV,{1,2}]//SimplifySparse;
-	ContriVVTemp2=ContriVVTemp+Transpose[ContriVVTemp,{1,3,2,4}]+Transpose[ContriVVTemp,{1,4,2,3}];
-	ContriVV=1/(16 \[Pi]^2)(3 Lb-2)/2*ContriVVTemp2;
+  (* Verbose output for debugging *)
+  If[verbose, Print["Calculating Scalar Quartic"]];
 
-	CouplingFF=2*1/(16 \[Pi]^2)(2 Lf)(-1)*1/4;
-	ContriFF=CouplingFF*12*Symmetrize[Yhelp,Symmetric[{1,2,3,4}]]//SparseArray//SimplifySparse;
+  (* Scalar contribution to the quartic terms *)
+  ContriSS = (1 / (16 \[Pi]^2)) * Lb * 1 / 2 * Simplify[
+    (\[CapitalLambda]\[Lambda] + Transpose[\[CapitalLambda]\[Lambda], {1, 4, 3, 2}] + 
+     Transpose[\[CapitalLambda]\[Lambda], {1, 3, 2, 4}])
+  ];
 
-	ContriSETemp=-ZijS . \[Lambda]4;
-	ContriSE=ContriSETemp+Transpose[ContriSETemp,{2,1,3,4}]+Transpose[ContriSETemp,{3,1,2,4}]+Transpose[ContriSETemp,{4,1,2,3}]//Simplify;
+  (* Temporal-vector contribution *)
+  ContriVVTemp = Transpose[Flatten[HabijV, {1, 2}], {3, 2, 1}] . Flatten[HabijV, {1, 2}] // SimplifySparse;
+  ContriVVTemp2 = ContriVVTemp + Transpose[ContriVVTemp, {1, 3, 2, 4}] + Transpose[ContriVVTemp, {1, 4, 2, 3}];
+  ContriVV = (1 / (16 \[Pi]^2)) * (3 Lb - 2) / 2 * ContriVVTemp2;
 
-If[mode>=3,
-(*Minus sign from matching*)
-	ContriSS\[Lambda]6=-T^2/24*TensorContract[\[Lambda]6,{1,2}];
-	\[Lambda]3D=- ContriSS- ContriVV+  ContriSE- ContriFF-ContriSS\[Lambda]6; 
-,
-(*Minus sign from matching*)
-	\[Lambda]3D=- ContriSS- ContriVV+  ContriSE- ContriFF; 
+  (* Fermion contribution *)
+  CouplingFF = 2 * 1 / (16 \[Pi]^2) * (2 Lf) * (-1) * 1 / 4;
+  ContriFF = CouplingFF * 12 * Symmetrize[Yhelp, Symmetric[{1, 2, 3, 4}]] // SparseArray // SimplifySparse;
+
+  (* Self-energy contribution *)
+  ContriSETemp = -ZijS . \[Lambda]4;
+  ContriSE = ContriSETemp + Transpose[ContriSETemp, {2, 1, 3, 4}] + Transpose[ContriSETemp, {3, 1, 2, 4}] + 
+    Transpose[ContriSETemp, {4, 1, 2, 3}] // Simplify;
+
+  (* Conditional handling based on mode *)
+  If[mode >= 3,
+    (* Additional contribution based on the mode *)
+    ContriSS\[Lambda]6 = -T^2 / 24 * TensorContract[\[Lambda]6, {1, 2}];
+    \[Lambda]3D = -ContriSS - ContriVV + ContriSE - ContriFF - ContriSS\[Lambda]6,
+    
+    (* Default contribution *)
+    \[Lambda]3D = -ContriSS - ContriVV + ContriSE - ContriFF;
+  ];
 ];
 
 
-
-];
-
-
-
-(*
-	Calculates Scalar quartics in the soft theory
-*)
-ScalarSextic[]:=Module[{},
-If[verbose,Print["Calculating Scalar Sextic"]];
-
-(*Scalar loops*)
-	\[CapitalLambda]\[Lambda]6tem=Flatten[\[Lambda]4 . \[Lambda]4,{{1},{2},{4},{5},{3,6}}];
-	\[CapitalLambda]\[Lambda]6tot=\[CapitalLambda]\[Lambda]6tem . Flatten[\[Lambda]4,{1,2}];
-	Prefac=-Zeta[3]15/(128 \[Pi]^4 T^2);
-	ContriSS=Prefac*Symmetrize[\[CapitalLambda]\[Lambda]6tot,Symmetric]//SparseArray//SimplifySparse;
-
-
-(*Scalar loop with mixed \[Lambda]6 and \[Lambda]4 vertices*)
-	\[CapitalLambda]\[Lambda]6tot=Flatten[\[Lambda]4,{{1},{2},{3,4}}] . Flatten[\[Lambda]6,{1,2}]//SimplifySparse;
-	Prefac=15/2*1/(16 \[Pi]^2)Lb;
-	SymHelp=Symmetrize[\[CapitalLambda]\[Lambda]6tot,Symmetric]//SparseArray;
-	ContriSSS=Prefac*SymHelp;
-
-(*Vector loops*)
-	\[CapitalLambda]\[Lambda]6tem=Flatten[Transpose[HabijV,{1,4,3,2}] . HabijV,{{2},{3},{5},{6},{1,4}}];
-	\[CapitalLambda]\[Lambda]6tot=\[CapitalLambda]\[Lambda]6tem . Flatten[HabijV,{{1,2},{3},{4}}];
-	Prefac=3*15*Zeta[3]/(128 \[Pi]^4 T^2);
-	ContriVV=Prefac*Symmetrize[\[CapitalLambda]\[Lambda]6tot,Symmetric]//SparseArray//SimplifySparse;
-
-
-(*Fermion loops*)
-	\[CapitalLambda]\[Lambda]6tot1=Table[Tr[a . b . c . d . e . f],{a,Ysff},{b,YsffC},{c,Ysff},{d,YsffC},{e,Ysff},{f,YsffC}]//SparseArray;
-	\[CapitalLambda]\[Lambda]6totC=Table[Tr[a . b . c . d . e . f],{a,YsffC},{b,Ysff},{c,YsffC},{d,Ysff},{e,YsffC},{f,Ysff}]//SparseArray;
-	\[CapitalLambda]\[Lambda]6tot=\[CapitalLambda]\[Lambda]6tot1+ \[CapitalLambda]\[Lambda]6totC;
-	Prefac=((7 Zeta[3])*15*4/(64 \[Pi]^4 T^2));
-	ContriFF=Prefac*Symmetrize[\[CapitalLambda]\[Lambda]6tot,Symmetric]//SparseArray//SimplifySparse;
-
-
-(*Field-strength renormalization*)
-
-	ContriSETemp=-ZijS . \[Lambda]6;
-	ContriSE=6*Symmetrize[ContriSETemp,Symmetric]//SparseArray//SimplifySparse;
-
-
-(*Minus sign from matching*)
-	\[Lambda]6D=ContriSE- ContriSS- ContriVV- ContriFF-ContriSSS//SparseArray; 
-
-
-
-
-];
-
+(* ::Subsection::Closed:: *)
+(*SSSSSS*)
 
 
 (*
-	Calculates Scalar-Vector gauge couplings in the soft theory.
+    Calculates Scalar Sextic contributions in the soft theory
 *)
-TransverseSSVV[]:=Module[{},
-If[verbose,Print["Calculating Transverse-Vector Couplings"]];
+ScalarSextic[] := Module[
+  {
+    LambdaLambda6Temp, LambdaLambda6Tot, Prefac, ContriSS, SymHelp, 
+    ContriSSS, ContriVV, ContriFF, ContriSETemp, ContriSE, LambdaLambda6Tot1, 
+    LambdaLambda6TotC, LambdaLambda6TotFermion
+  },
 
-	CouplingSV= 1/(16 \[Pi]^2)*3/4Lb ;
-	ContriSVTemp=Transpose[Simplify[Transpose[Transpose[Flatten[HabijV,{2,3}],{2,1,3}],{1,3,2}] . Flatten[HabijV,{2,4}]],{1,3,2,4}];
-	ContriSV=CouplingSV*Simplify[(ContriSVTemp+Transpose[ContriSVTemp,{2,1,3,4}])]//SimplifySparse;
+  (* Verbose output for debugging *)
+  If[verbose, Print["Calculating Scalar Sextic"]];
 
+  (* Scalar loop contributions *)
+  LambdaLambda6Temp = Flatten[\[Lambda]4 . \[Lambda]4, {{1}, {2}, {4}, {5}, {3, 6}}];
+  LambdaLambda6Tot = LambdaLambda6Temp . Flatten[\[Lambda]4, {1, 2}];
+  Prefac = -Zeta[3] * 15 / (128 \[Pi]^4 T^2);
+  ContriSS = Prefac * Symmetrize[LambdaLambda6Tot, Symmetric] // SparseArray // SimplifySparse;
 
-	CouplingVVVV= -((3 Lb)/(64 \[Pi]^2));
-	ContriVVVV=CouplingVVVV*Transpose[Transpose[Flatten[GabcdV,{2,3}],{2,1,3}],{1,3,2}] . Flatten[HabijV,{1,2}]//SimplifySparse;
- 
- 
-	CouplingFFFF=(-1) 1/(16 \[Pi]^2)( Lf) ;
-	HabIJFAE=gvff . Transpose[gvff,{2,1,3}];
-	YTemp2=Ysff . Transpose[YsffC,{2,1,3}];
+  (* Scalar loop with mixed \[Lambda]6 and \[Lambda]4 vertices *)
+  LambdaLambda6Tot = Flatten[\[Lambda]4, {{1}, {2}, {3, 4}}] . Flatten[\[Lambda]6, {1, 2}] // SimplifySparse;
+  Prefac = 15 / 2 * 1 / (16 \[Pi]^2) * Lb;
+  SymHelp = Symmetrize[LambdaLambda6Tot, Symmetric] // SparseArray;
+  ContriSSS = Prefac * SymHelp;
 
-	ContriFFFFTemp=Transpose[Transpose[Flatten[HabIJFAE,{2,4}],{2,1,3}],{1,3,2}] . Flatten[Transpose[YTemp2,{1,4,3,2}],{2,4}];
-	ContriFFFFTemp2=ContriFFFFTemp+Transpose[Transpose[ContriFFFFTemp,{1,2,4,3}],{2,1,3,4}];
-	ContriFFFF=CouplingFFFF*Simplify[ContriFFFFTemp2+    Transpose[ContriFFFFTemp2,{2,1,3,4}]];
+  (* Vector loop contributions *)
+  LambdaLambda6Temp = Flatten[Transpose[HabijV, {1, 4, 3, 2}] . HabijV, {{2}, {3}, {5}, {6}, {1, 4}}];
+  LambdaLambda6Tot = LambdaLambda6Temp . Flatten[HabijV, {{1, 2}, {3}, {4}}];
+  Prefac = 3 * 15 * Zeta[3] / (128 \[Pi]^4 T^2);
+  ContriVV = Prefac * Symmetrize[LambdaLambda6Tot, Symmetric] // SparseArray // SimplifySparse;
 
-	HgY=gvff . Transpose[Ysff,{2,1,3}];
-	HgY4=Transpose[gvff,{1,3,2}] . Transpose[YsffC,{2,1,3}];
-	AE1=Transpose[Transpose[Flatten[HgY,{2,4}],{2,1,3}],{1,3,2}] . Flatten[Transpose[HgY4,{1,4,3,2}],{2,4}]//Transpose[#,{1,3,2,4}]&;
-	AE2=Transpose[Transpose[Flatten[HgY4,{2,4}],{2,1,3}],{1,3,2}] . Flatten[Transpose[HgY,{1,4,3,2}],{2,4}]//Transpose[#,{1,3,2,4}]&;
-	CouplingFFFF2=2*(-1)*2*1/2*1/(16 \[Pi]^2)( Lf) ;
-	ContriFFFF2=CouplingFFFF2*Simplify[ AE1 +  AE2 ];
+  (* Fermion loop contributions *)
+  LambdaLambda6Tot1 = Table[Tr[a . b . c . d . e . f], {a, Ysff}, {b, YsffC}, {c, Ysff}, {d, YsffC}, {e, Ysff}, {f, YsffC}] // SparseArray;
+  LambdaLambda6TotC = Table[Tr[a . b . c . d . e . f], {a, YsffC}, {b, Ysff}, {c, YsffC}, {d, Ysff}, {e, YsffC}, {f, Ysff}] // SparseArray;
+  LambdaLambda6TotFermion = LambdaLambda6Tot1 + LambdaLambda6TotC;
+  Prefac = ((7 * Zeta[3]) * 15 * 4) / (64 \[Pi]^4 T^2);
+  ContriFF = Prefac * Symmetrize[LambdaLambda6TotFermion, Symmetric] // SparseArray // SimplifySparse;
 
-(*Self-energy contribution*)
-	ContriSEScalar=-HabijV . ZijS-Transpose[Transpose[HabijV,{1,2,4,3}] . ZijS,{1,2,4,3}]//SparseArray;
-	ContriSEVector=-ZabT . HabijV-Transpose[ZabT . Transpose[HabijV,{2,1,3,4}],{2,1,3,4}]//SparseArray//SimplifySparse;
+  (* Field-strength renormalization *)
+  ContriSETemp = -ZijS . \[Lambda]6;
+  ContriSE = 6 * Symmetrize[ContriSETemp, Symmetric] // SparseArray // SimplifySparse;
 
-	GvvssT=ContriSV+ContriVVVV +ContriFFFF+ ContriFFFF2+   ContriSEScalar+   ContriSEVector//SparseArray;
-
+  (* Minus sign from matching *)
+  \[Lambda]6D = ContriSE - ContriSS - ContriVV - ContriFF - ContriSSS // SparseArray;
 ];
 
 
+(* ::Subsection::Closed:: *)
+(*SSVV transverse*)
+
 
 (*
-	Calculates Scalar and temporal-scalar quartics in the soft theory.
+    Calculates Scalar-Vector gauge couplings in the soft theory.
 *)
-LongitudionalSSVV[]:=Module[{},
-If[verbose,Print["Calculating Scalar-Temporal-Vector Couplings"]];
+TransverseSSVV[] := Module[
+  {
+    CouplingSV, ContriSVTemp, ContriSV, CouplingVVVV, ContriVVVV, CouplingFFFF,
+    HabIJFAE, YTemp2, ContriFFFFTemp, ContriFFFFTemp2, ContriFFFF, HgY, HgY4, AE1, AE2,
+    CouplingFFFF2, ContriFFFF2, ContriSEScalar, ContriSEVector
+  },
 
-	CouplingSV= 1/(16 \[Pi]^2)*(3/4Lb-1/2) ;
-	ContriSVTemp=Transpose[Simplify[Transpose[Transpose[Flatten[HabijV,{2,3}],{2,1,3}],{1,3,2}] . Flatten[HabijV,{2,4}]],{1,3,2,4}];
-	ContriSV=CouplingSV*Simplify[(ContriSVTemp+Transpose[ContriSVTemp,{2,1,3,4}])]//SimplifySparse;
+  (* Verbose output for debugging *)
+  If[verbose, Print["Calculating Transverse-Vector Couplings"]];
 
-	CouplingSSS=1/(8 \[Pi]^2);
-	ContriSSS=CouplingSSS*Transpose[Transpose[Flatten[Habij,{3,4}],{2,1,3}],{1,3,2}] . Flatten[\[Lambda]4,{1,2}]//SimplifySparse;
+  (* Scalar-Vector coupling *)
+  CouplingSV = 1 / (16 \[Pi]^2) * 3 / 4 * Lb;
+  ContriSVTemp = Transpose[Simplify[Transpose[Transpose[Flatten[HabijV, {2, 3}], {2, 1, 3}], {1, 3, 2}] . Flatten[HabijV, {2, 4}]], {1, 3, 2, 4}];
+  ContriSV = CouplingSV * Simplify[(ContriSVTemp + Transpose[ContriSVTemp, {2, 1, 3, 4}])] // SimplifySparse;
 
-	CouplingVVVV= -((3 Lb+22)/(64 \[Pi]^2));
-	ContriVVVV=CouplingVVVV*Transpose[Transpose[Flatten[GabcdV,{2,3}],{2,1,3}],{1,3,2}] . Flatten[HabijV,{1,2}]//SimplifySparse;
- 
-	CouplingFFFF=(-1) 1/(16 \[Pi]^2)( Lf-2) ;
-	HabIJFAE=gvff . Transpose[gvff,{2,1,3}];
-	YTemp2=Ysff . Transpose[YsffC,{2,1,3}];
-	ContriFFFFTemp=Transpose[Transpose[Flatten[HabIJFAE,{2,4}],{2,1,3}],{1,3,2}] . Flatten[Transpose[YTemp2,{1,4,3,2}],{2,4}];
-	ContriFFFFTemp2=ContriFFFFTemp+Transpose[Transpose[ContriFFFFTemp,{1,2,4,3}],{2,1,3,4}]//SimplifySparse;
-	ContriFFFF=CouplingFFFF*Simplify[ContriFFFFTemp2+    Transpose[ContriFFFFTemp2,{2,1,3,4}]];
+  (* Vector-Vector coupling *)
+  CouplingVVVV = -((3 * Lb) / (64 \[Pi]^2));
+  ContriVVVV = CouplingVVVV * Transpose[Transpose[Flatten[GabcdV, {2, 3}], {2, 1, 3}], {1, 3, 2}] . Flatten[HabijV, {1, 2}] // SimplifySparse;
 
-	HgY=gvff . Transpose[Ysff,{2,1,3}];
-	HgY4=Transpose[gvff,{1,3,2}] . Transpose[YsffC,{2,1,3}];
-	AE1=Transpose[Transpose[Flatten[HgY,{2,4}],{2,1,3}],{1,3,2}] . Flatten[Transpose[HgY4,{1,4,3,2}],{2,4}]//Transpose[#,{1,3,2,4}]&;
-	AE2=Transpose[Transpose[Flatten[HgY4,{2,4}],{2,1,3}],{1,3,2}] . Flatten[Transpose[HgY,{1,4,3,2}],{2,4}]//Transpose[#,{1,3,2,4}]&;
-	CouplingFFFF2=2* (-1)*2*1/2*1/(16 \[Pi]^2)( Lf) ;
-	ContriFFFF2=CouplingFFFF2*Simplify[ AE1 +  AE2 ];
+  (* Fermion-Fermion coupling *)
+  CouplingFFFF = -1 * 1 / (16 \[Pi]^2) * Lf;
+  HabIJFAE = gvff . Transpose[gvff, {2, 1, 3}];
+  YTemp2 = Ysff . Transpose[YsffC, {2, 1, 3}];
+  
+  ContriFFFFTemp = Transpose[Transpose[Flatten[HabIJFAE, {2, 4}], {2, 1, 3}], {1, 3, 2}] . Flatten[Transpose[YTemp2, {1, 4, 3, 2}], {2, 4}];
+  ContriFFFFTemp2 = ContriFFFFTemp + Transpose[Transpose[ContriFFFFTemp, {1, 2, 4, 3}], {2, 1, 3, 4}];
+  ContriFFFF = CouplingFFFF * Simplify[ContriFFFFTemp2 + Transpose[ContriFFFFTemp2, {2, 1, 3, 4}]];
 
-(*Self-energy contribution*)
-	ContriSEScalar=-HabijV . ZijS-Transpose[Transpose[HabijV,{1,2,4,3}] . ZijS,{1,2,4,3}]//SimplifySparse//SparseArray;
-	ContriSEVector=-ZabL . HabijV-Transpose[ZabL . Transpose[HabijV,{2,1,3,4}],{2,1,3,4}]//SparseArray//SimplifySparse;
+  (* Additional Fermion-Fermion contribution *)
+  HgY = gvff . Transpose[Ysff, {2, 1, 3}];
+  HgY4 = Transpose[gvff, {1, 3, 2}] . Transpose[YsffC, {2, 1, 3}];
+  
+  AE1 = Transpose[Transpose[Flatten[HgY, {2, 4}], {2, 1, 3}], {1, 3, 2}] . Flatten[Transpose[HgY4, {1, 4, 3, 2}], {2, 4}] // Transpose[#, {1, 3, 2, 4}] &;
+  AE2 = Transpose[Transpose[Flatten[HgY4, {2, 4}], {2, 1, 3}], {1, 3, 2}] . Flatten[Transpose[HgY, {1, 4, 3, 2}], {2, 4}] // Transpose[#, {1, 3, 2, 4}] &;
+  
+  CouplingFFFF2 = 2 * (-1) * 2 * 1 / 2 * 1 / (16 \[Pi]^2) * Lf;
+  ContriFFFF2 = CouplingFFFF2 * Simplify[AE1 + AE2];
 
-	GvvssL=ContriSV+ContriSSS+ContriVVVV+  ContriFFFF+ContriFFFF2+ ContriSEScalar+   ContriSEVector//SimplifySparse//SparseArray;
+  (* Self-energy contributions *)
+  ContriSEScalar = -HabijV . ZijS - Transpose[Transpose[HabijV, {1, 2, 4, 3}] . ZijS, {1, 2, 4, 3}] // SparseArray;
+  ContriSEVector = -ZabT . HabijV - Transpose[ZabT . Transpose[HabijV, {2, 1, 3, 4}], {2, 1, 3, 4}] // SparseArray // SimplifySparse;
+
+  (* Final result: total transverse-Scalar-Vector couplings *)
+  GvvssT = ContriSV + ContriVVVV + ContriFFFF + ContriFFFF2 + ContriSEScalar + ContriSEVector // SparseArray;
+];
 
 
+(* ::Subsection::Closed:: *)
+(*SSVV longitudinal*)
+
+
+(*
+    Calculates Scalar and Temporal-Scalar Quartics in the Soft Theory.
+*)
+LongitudinalSSVV[] := Module[
+  {
+    CouplingSV, ContriSVTemp, ContriSV, CouplingSSS, ContriSSS, CouplingVVVV, ContriVVVV,
+    CouplingFFFF, HabIJFAE, YTemp2, ContriFFFFTemp, ContriFFFFTemp2, ContriFFFF,
+    HgY, HgY4, AE1, AE2, CouplingFFFF2, ContriFFFF2, ContriSEScalar, ContriSEVector
+  },
+
+  (* Verbose output for debugging *)
+  If[verbose, Print["Calculating Scalar-Temporal-Vector Couplings"]];
+
+  (* Scalar-Vector coupling contribution *)
+  CouplingSV = 1 / (16 \[Pi]^2) * (3 / 4 * Lb - 1 / 2);
+  ContriSVTemp = Transpose[Simplify[Transpose[Transpose[Flatten[HabijV, {2, 3}], {2, 1, 3}], {1, 3, 2}] . Flatten[HabijV, {2, 4}]], {1, 3, 2, 4}];
+  ContriSV = CouplingSV * Simplify[(ContriSVTemp + Transpose[ContriSVTemp, {2, 1, 3, 4}])] // SimplifySparse;
+
+  (* Scalar-Scalar coupling contribution *)
+  CouplingSSS = 1 / (8 \[Pi]^2);
+  ContriSSS = CouplingSSS * Transpose[Transpose[Flatten[Habij, {3, 4}], {2, 1, 3}], {1, 3, 2}] . Flatten[\[Lambda]4, {1, 2}] // SimplifySparse;
+
+  (* Vector-Vector coupling contribution *)
+  CouplingVVVV = -((3 * Lb + 22) / (64 \[Pi]^2));
+  ContriVVVV = CouplingVVVV * Transpose[Transpose[Flatten[GabcdV, {2, 3}], {2, 1, 3}], {1, 3, 2}] . Flatten[HabijV, {1, 2}] // SimplifySparse;
+
+  (* Fermion-Fermion coupling contribution *)
+  CouplingFFFF = -1 * 1 / (16 \[Pi]^2) * (Lf - 2);
+  HabIJFAE = gvff . Transpose[gvff, {2, 1, 3}];
+  YTemp2 = Ysff . Transpose[YsffC, {2, 1, 3}];
+  ContriFFFFTemp = Transpose[Transpose[Flatten[HabIJFAE, {2, 4}], {2, 1, 3}], {1, 3, 2}] . Flatten[Transpose[YTemp2, {1, 4, 3, 2}], {2, 4}];
+  ContriFFFFTemp2 = ContriFFFFTemp + Transpose[Transpose[ContriFFFFTemp, {1, 2, 4, 3}], {2, 1, 3, 4}] // SimplifySparse;
+  ContriFFFF = CouplingFFFF * Simplify[ContriFFFFTemp2 + Transpose[ContriFFFFTemp2, {2, 1, 3, 4}]];
+
+  (* Additional Fermion-Fermion contribution *)
+  HgY = gvff . Transpose[Ysff, {2, 1, 3}];
+  HgY4 = Transpose[gvff, {1, 3, 2}] . Transpose[YsffC, {2, 1, 3}];
+  
+  AE1 = Transpose[Transpose[Flatten[HgY, {2, 4}], {2, 1, 3}], {1, 3, 2}] . Flatten[Transpose[HgY4, {1, 4, 3, 2}], {2, 4}] // Transpose[#, {1, 3, 2, 4}] &;
+  AE2 = Transpose[Transpose[Flatten[HgY4, {2, 4}], {2, 1, 3}], {1, 3, 2}] . Flatten[Transpose[HgY, {1, 4, 3, 2}], {2, 4}] // Transpose[#, {1, 3, 2, 4}] &;
+  
+  CouplingFFFF2 = 2 * (-1) * 2 * 1 / 2 * 1 / (16 \[Pi]^2) * Lf;
+  ContriFFFF2 = CouplingFFFF2 * Simplify[AE1 + AE2];
+
+  (* Self-energy contributions *)
+  ContriSEScalar = -HabijV . ZijS - Transpose[Transpose[HabijV, {1, 2, 4, 3}] . ZijS, {1, 2, 4, 3}] // SimplifySparse // SparseArray;
+  ContriSEVector = -ZabL . HabijV - Transpose[ZabL . Transpose[HabijV, {2, 1, 3, 4}], {2, 1, 3, 4}] // SparseArray // SimplifySparse;
+
+  (* Final result: Total scalar-temporal-vector couplings *)
+  GvvssL = ContriSV + ContriSSS + ContriVVVV + ContriFFFF + ContriFFFF2 + ContriSEScalar + ContriSEVector // SimplifySparse // SparseArray;
 ];
 
 

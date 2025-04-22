@@ -342,9 +342,9 @@ PerformDRhard[]:=Module[{},
 		ScalarCubic[];
 		ScalarQuartic[];
 		TransverseSSVV[];
-		LongitudionalSSVV[];
-		LongitudionalVVVV[];
-		LongitudionalVVS[];
+		LongitudinalSSVV[];
+		LongitudinalVVVV[];
+		LongitudinalVVS[];
 	];
 
 
