@@ -1,0 +1,14 @@
+*~
+Makefile
+manual/obj/
+examples/debug/
+examples/log/
+examples/testExamples/
+*.DS_Store
+*/.DS_Store
+*.png
+*.pdf
+*.nb
+*.dat
+*.txt
+*.wl
