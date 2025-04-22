@@ -864,7 +864,7 @@ ScalarMass2Loop[] := Module[
 ];
 
 
-(* ::Section:: *)
+(* ::Section::Closed:: *)
 (*Temporal masses*)
 
 
@@ -900,7 +900,7 @@ VectorMass[] := Module[
 ];
 
 
-(* ::Subsection:: *)
+(* ::Subsection::Closed:: *)
 (*1loop vector self-energy*)
 
 
@@ -1031,7 +1031,7 @@ VectorMass2Loop[] := Module[
 ];
 
 
-(* ::Section:: *)
+(* ::Section::Closed:: *)
 (*Effective couplings*)
 
 
@@ -1101,7 +1101,7 @@ ScalarCubic[] := Module[
 ];
 
 
-(* ::Subsection:: *)
+(* ::Subsection::Closed:: *)
 (*VVVV*)
 
 
@@ -1391,34 +1391,62 @@ LongitudinalSSVV[] := Module[
 (*Tadpoles*)
 
 
+(* ::Subsection::Closed:: *)
+(*1loop scalar tadpole*)
+
+
 (*
-	Calculates the 1-loop tadpole in the soft theory.
+    Calculates the 1-loop tadpole in the soft theory.
 *)
-TadPole[]:=Module[{},
-If[verbose,Print["Calculating 1-Loop Tadpoles"]];
+TadPole[] := Module[
+  {
+    ContriS, fac, Temp1, Temp1C, ContriFF
+  },
 
-(*One-loop bubble. Minus sign from feynman rule*)
-	ContriS=-1/2 T^2/12 TensorContract[\[Lambda]3,{{2,3}}]; 
+  If[verbose, Print["Calculating 1-Loop Tadpoles"]];
 
-(*Fermion-mass insertion*)
-	fac=-(T^2/12);
-	Temp1=Contract[Ysff,\[Mu]IJFC,{{2,4},{3,5}}]//SimplifySparse;
-	Temp1C=Contract[YsffC,\[Mu]IJF,{{2,4},{3,5}}]//SimplifySparse;
-	ContriFF=1/2fac*(-1)^2*(Temp1+Temp1C);
+  (* Scalar bubble contribution (from one-loop with cubic coupling).
+     Minus sign comes from the Feynman rule. *)
+  ContriS = -1/2 * T^2 / 12 * TensorContract[\[Lambda]3, {{2, 3}}];
 
-	TadPoleLO=-  ContriS-ContriFF; (*Minus sign from matching*)
+  (* Fermion mass-insertion contribution.
+     Includes both Y and Y\[Dagger] contractions with fermion masses. *)
+  fac = -(T^2 / 12);
+  Temp1 = Contract[Ysff, \[Mu]IJFC, {{2, 4}, {3, 5}}] // SimplifySparse;
+  Temp1C = Contract[YsffC, \[Mu]IJF, {{2, 4}, {3, 5}}] // SimplifySparse;
+
+  (* Symmetrized fermionic contribution; factor (-1)^2 is from Wick contraction and symmetry. *)
+  ContriFF = (1/2) * fac * (Temp1 + Temp1C);
+
+  (* Final result; minus sign from matching to effective potential. *)
+  TadPoleLO = -ContriS - ContriFF;
 ];
 
 
-(*
-	Calculates the 2-loop tadpole in the soft theory.
-*)
-TadPole2Loop[]:=Module[{},
-If[verbose,Print["Calculating 2-Loop Tadpoles"]];
+(* ::Subsection::Closed:: *)
+(*2loop scalar tadpole*)
+
 
 (*
-	Name of master-integrals appearing
+    Calculates the 2-loop tadpole in the soft theory.
 *)
+TadPole2Loop[] := Module[
+	{
+	    (* General variables *)
+	    \[Kappa], I1, I2M2, I1I2, dI1I2, I211M020, I2M2I2, I3M2I1,
+	    I1p, I3M2p, I2p, I4M4p, I2M2p, IF1p, IF2p, IF3M2p, IF2M2p,
+	
+	    (* Contractions & results *)
+	    \[Lambda]Help, Yhelp1, Yhelp2, YHelp2, YHelpC2, FHelp,
+	    temp1, temp1C, temp2, temp3, temp4, temp5, temp6,
+	    Contri1, Contri2, Contri3, Contri4, Contri5, Contri6,
+	    Contri7, Contri71, Contri72,
+	    ContriCTS, ContriCTFF, ContriF, TotalResult
+	},
+
+	If[verbose, Print["Calculating 2-Loop Tadpoles"]];
+
+	(* --- Master integrals --- *)
 	\[Kappa]=1/(16 \[Pi]^2);
 	I1=T^2/(12 \[Epsilon])+T^2 Lbbb;
 	I2M2=T^2/(24 )(-1/\[Epsilon]-  12Lbbb+2);
@@ -1427,6 +1455,7 @@ If[verbose,Print["Calculating 2-Loop Tadpoles"]];
 	I211M020=T^2/(192 \[Pi]^2);
 	I2M2I2=T^2/(192 \[Pi]^2)-T^2/(384 \[Pi]^2 \[Epsilon]bbM);
 	I3M2I1=T^2/(768 \[Pi]^2 \[Epsilon]bbM)+T^2/(384 \[Pi]^2);
+	
 	Clear[LbbM];
 	I1p=T^2/(12 )+\[Epsilon] T^2 Lbbb;
 	I3M2p=1/(64 \[Pi]^2 \[Epsilon]bp)+1/(32 \[Pi]^2);
@@ -1440,40 +1469,41 @@ If[verbose,Print["Calculating 2-Loop Tadpoles"]];
 
 	\[Lambda]Help=TensorContract[\[Lambda]4,{3,4}];
 
-(* Pure-diagram contributions*)
-	Contri1=1/4*I2p I1p Contract[\[Lambda]3,\[Lambda]Help,{{2,4},{3,5}}]//SimplifySparse;
+	(* --- Pure diagram contributions --- *)
+	Contri1 = (1/4) * I2p * I1p * Contract[\[Lambda]3, \[Lambda]Help, {{2, 4}, {3, 5}}] // SimplifySparse;
+	Contri2 = -1/2 * (D - 1) * I2p * I1p * Contract[\[Lambda]3, \[CapitalLambda]g, {{2, 4}, {3, 5}}] // SimplifySparse;
+	Contri3 = -I2p * IF1p * Contract[\[Lambda]3, Ysij, {{2, 4}, {3, 5}}] // SimplifySparse;
+
+	(* --- Scalar Mass insertion --- *)
+	Contri4 = 1/2 * I2p * Contract[\[Lambda]3, \[Mu]ij, {{2, 4}, {3, 5}}] // SimplifySparse;
+
+
+	(* --- Fermion Mass insertion --- *)
+	Yhelp1 = \[Mu]IJF . \[Mu]IJFC . \[Mu]IJF;
+	Yhelp2 = \[Mu]IJFC . \[Mu]IJF . \[Mu]IJFC;
+	Contri71 = Contract[YsffC, Yhelp1, {{2, 4}, {3, 5}}] // SimplifySparse;
+	Contri72 = Contract[Ysff, Yhelp2, {{2, 4}, {3, 5}}] // SimplifySparse;
+	Contri7 = -IF2p * (Contri71 + Contri72);
+
+	(* --- Fermion loop contributions --- *)
+	YHelp2 = Contract[YsffC, Ysff, {{1, 4}, {2, 5}}] // SimplifySparse;
+	YHelpC2 = Contract[Ysff, YsffC, {{1, 4}, {2, 5}}] // SimplifySparse;
+	temp1 = Contract[Ysff, \[Mu]IJFC, YHelp2, {{2, 4}, {5, 7}, {3, 6}}] // SimplifySparse;
+	temp1C = Contract[YsffC, \[Mu]IJF, YHelpC2, {{2, 4}, {5, 7}, {3, 6}}] // SimplifySparse;
+	Contri5 = -(IF1p * IF2p - IF2p * I1p) * (temp1 + temp1C) // SimplifySparse;
+
+	FHelp = TensorContract[HabIJF, {1, 2}] // SimplifySparse;
+	temp1 = Contract[Ysff, \[Mu]IJFC, FHelp, {{2, 4}, {5, 6}, {3, 7}}] // SimplifySparse;
+	temp1C = Contract[YsffC, \[Mu]IJF, FHelp, {{2, 4}, {5, 6}, {3, 7}}] // SimplifySparse;
+	Contri6 = -(D - 2) * (IF1p * IF2p - IF2p * I1p) * (temp1 + temp1C) // SimplifySparse;
+
+	(* --- Counterterm contribution --- *)
 	
-	Contri2=-1/4*(D-1)*I2p I1p*2 Contract[\[Lambda]3,\[CapitalLambda]g,{{2,4},{3,5}}]//SimplifySparse;
-
-	Contri3=(-2)/2* I2p IF1p Contract[\[Lambda]3,Ysij,{{2,4},{3,5}}]//SimplifySparse;
-
-(*Scalar Mass insertion*)
-	Contri4=1/2*I2p*Contract[\[Lambda]3,\[Mu]ij,{{2,4},{3,5}}]//SimplifySparse;
-
-
-(*Fermion Mass insertion*)
-	Yhelp1=\[Mu]IJF . \[Mu]IJFC . \[Mu]IJF;
-	Yhelp2=\[Mu]IJFC . \[Mu]IJF . \[Mu]IJFC;
-	Contri71=Contract[YsffC,Yhelp1,{{2,4},{3,5}}]//SimplifySparse;
-	
-	Contri72=Contract[Ysff,Yhelp2,{{2,4},{3,5}}]//SimplifySparse;
-	
-	Contri7=-IF2p(Contri71+Contri72);
-
-(*Fermion-mass contributions*)
-	YHelp2=Contract[YsffC,Ysff,{{1,4},{2,5}}]//SimplifySparse;
-	YHelpC2=Contract[Ysff,YsffC,{{1,4},{2,5}}]//SimplifySparse;
-	Temp1=Contract[Ysff,\[Mu]IJFC,YHelp2,{{2,4},{5,7},{3,6}}]//SimplifySparse;
-	Temp1C=Contract[YsffC,\[Mu]IJF,YHelpC2,{{2,4},{5,7},{3,6}}]//SimplifySparse;
-	Contri5=-(-1)(IF1p IF2p-IF2p I1p)(Temp1C+Temp1)//SimplifySparse;
-	
-	FHelp=TensorContract[HabIJF,{1,2}]//SimplifySparse;
-	Temp1=Contract[Ysff,\[Mu]IJFC,FHelp,{{2,4},{5,6},{3,7}}]//SimplifySparse;
-	Temp1C=Contract[YsffC,\[Mu]IJF,FHelp,{{2,4},{5,6},{3,7}}]//SimplifySparse;
-	Contri6=-(D-2)(IF1p IF2p-IF2p I1p)(Temp1+Temp1C)//SimplifySparse;
-
-(*Counterterm contribution*)
-	ContriCTS=-1/2 I1p \[Epsilon]^-1*( TensorContract[Z\[Lambda]ijk,{{2,3}}]+1/2*TensorContract[\[Gamma]ij . \[Lambda]3,{2,3}])//SparseArray//SimplifySparse;
+	ContriCTS=-1/2 I1p \[Epsilon]^-1*(
+		+ TensorContract[Z\[Lambda]ijk,{{2,3}}]
+		+ 1/2*TensorContract[\[Gamma]ij . \[Lambda]3,{2,3}]
+		)//SparseArray//SimplifySparse;
+		
 	temp1=Contract[ZYsij,\[Mu]IJFC,{{2,4},{3,5}}]//SimplifySparse;
 	temp2=Contract[ZYsijC,\[Mu]IJF,{{2,4},{3,5}}]//SimplifySparse;
 	temp3=Contract[Ysff,Z\[Mu]IJFC,{{2,4},{3,5}}]//SimplifySparse;
@@ -1481,10 +1511,23 @@ If[verbose,Print["Calculating 2-Loop Tadpoles"]];
 	temp5=1/2Contract[\[Gamma]ij,Ysff,\[Mu]IJFC,{{2,3},{4,6},{5,7}}]//SimplifySparse;
 	temp6=1/2Contract[\[Gamma]ij,YsffC,\[Mu]IJF,{{2,3},{4,6},{5,7}}]//SimplifySparse;
 	ContriCTFF=1/2*2*IF1p*\[Epsilon]^-1 (-1)^2*(temp1+temp2+temp3+temp4+temp5+temp6);
-(*Self-Energy correction*)
+	
+	(* --- Self-Energy correction --- *)
 	ContriF=-TadPoleLO . ZijS//SimplifySparse;
-	Tot=ContriF-Contri1-Contri2-Contri3-ContriCTS-Contri4-ContriCTFF-Contri5-Contri6-Contri7//Normal; (*minus signs from matching*)
-	TadPoleNLO=Series[(Tot)/.D->4-2\[Epsilon]/.\[Epsilon]bp->(1/\[Epsilon]+Lb)^-1/.\[Epsilon]b->(1/\[Epsilon]+Lbb)^-1/.\[Epsilon]BF->(1/\[Epsilon]+LBF)^-1/.\[Epsilon]F->(1/\[Epsilon]+LFF)^-1/.\[Epsilon]FB->(1/\[Epsilon]+LFB)^-1/.\[Epsilon]bbM->(1/\[Epsilon]+LbbM)^-1,{\[Epsilon],0,0}]/.ReplaceLb//Normal//Coefficient[#,\[Epsilon],0]&//Simplify//FullSimplify;
+	
+	(* --- Final result --- *)
+	TotalResult = ContriF-Contri1-Contri2-Contri3-ContriCTS-Contri4-ContriCTFF-Contri5-Contri6-Contri7//Normal; (*minus signs from matching*)
+	TadPoleNLO=Series[
+		TotalResult/.{
+			D->4-2\[Epsilon],
+			\[Epsilon]bp->(1/\[Epsilon]+Lb)^-1,
+			\[Epsilon]b->(1/\[Epsilon]+Lbb)^-1,
+			\[Epsilon]BF->(1/\[Epsilon]+LBF)^-1,
+			\[Epsilon]F->(1/\[Epsilon]+LFF)^-1,
+			\[Epsilon]FB->(1/\[Epsilon]+LFB)^-1,
+			\[Epsilon]bbM->(1/\[Epsilon]+LbbM)^-1
+		},{\[Epsilon],0,0}
+	]/.ReplaceLb//Normal//Coefficient[#,\[Epsilon],0]&//Simplify//FullSimplify;
 ];
 
 
