@@ -4,7 +4,7 @@
 
 
 SetDirectory[NotebookDirectory[]];
-$LoadGroupMath=True;
+DRalgo`$LoadGroupMath=True;
 <<../DRalgo.m
 
 
@@ -216,6 +216,4 @@ CalculatePotentialUS[];
 PrintEffectivePotential["LO"]
 PrintEffectivePotential["NLO"]
 PrintEffectivePotential["NNLO"]
-
-
 

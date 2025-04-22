@@ -10,7 +10,7 @@ If[$VersionNumber < 13.3,
 ];
 
 SetDirectory[NotebookDirectory[]];
-$LoadGroupMath=True;
+DRalgo`$LoadGroupMath=True;
 <<..//DRalgo.m
 
 
