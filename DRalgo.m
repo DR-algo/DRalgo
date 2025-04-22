@@ -189,12 +189,16 @@ PrintActionHET::usage="Remove later";
 CalculatePotentialHET::usage="Remove later";
 PrintScalarKineticHET::usage="Remove later";
 
+
+(* Custom error messages *)
 DRalgo::failmsg =
 "Error! DRalgo has encountered a fatal problem and must abort the computation. \
 The problem reads: `1`";
 DRalgo::ImplementationFail =
 "Error! DRalgo has encountered a problem and must abort the computation. \
 The problem reads: `1`";
+
+Contract::argcount = "Contract expects between 2 and 4 tensors, but `1` were provided.";
 
 
 $DRalgoDirectory=DirectoryName[$InputFileName];

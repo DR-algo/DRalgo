@@ -17,7 +17,7 @@
 (* ------------------------------------------------------------------------ *)
 
 
-(* ::Section::Closed:: *)
+(* ::Section:: *)
 (*Help routines*)
 
 
@@ -34,30 +34,52 @@ ReplaceLb={
 	LbbM->2Lb+2(12Log[Glaisher]-EulerGamma)};
 
 
-Contract[tensor1_,tensor2_,indices_]:=Activate @ TensorContract[
-        Inactive[TensorProduct][tensor1,tensor2], indices]
-
-
-Contract[tensor1_,tensor2_,tensor3_,indices_]:=Activate @ TensorContract[
-        Inactive[TensorProduct][tensor1,tensor2,tensor3], indices]
-
-
-Contract[tensor1_,tensor2_,tensor3_,tensor4_,indices_]:=Activate @ TensorContract[
-        Inactive[TensorProduct][tensor1,tensor2,tensor3,tensor4], indices]
+(*
+  Contract:
+  Performs a TensorContract after forming the TensorProduct of any number of tensors.
+  Uses Inactive TensorProduct to delay evaluation until after contraction.
+  Automatically activates the resulting expression.
+*)
+Contract[tensors__SparseArray, indices_] := Module[
+  {
+    product,
+    tensorList = {tensors}
+  },
+  If[Length[tensorList] < 2,
+    Message[Contract::argcount, Length[tensorList]];
+    Return[$Failed];
+  ];
+  
+  (* Build the TensorProduct without evaluation *)
+  product = Inactive[TensorProduct][tensors];
+  
+  (* Perform contraction and activate result *)
+  Activate @ TensorContract[product, indices]
+];
 
 
 (*
-	Trick to simplify tensors because Mathematica 13 sucks.
+  SimplifySparse:
+  Simplifies the non-zero elements of a SparseArray.
+  Useful workaround for limitations in Simplify behavior with SparseArray in Mathematica 13.
 *)
-SimplifySparse[s_SparseArray] := With[
-    {
-    elem =Simplify[s["NonzeroValues"]],
-    pos=s["NonzeroPositions"],
-    dim = Dimensions[s]
-    },
-SparseArray[pos->elem,dim,0]
-    ]
-
+SimplifySparse[s_SparseArray] := Module[
+  {
+    simplifiedValues,
+    positions,
+    shape
+  },
+  
+  (* Extract and simplify the non-zero values *)
+  simplifiedValues = Simplify[s["NonzeroValues"]];
+  
+  (* Extract positions and array dimensions *)
+  positions = s["NonzeroPositions"];
+  shape = Dimensions[s];
+  
+  (* Return a new SparseArray with simplified entries *)
+  SparseArray[positions -> simplifiedValues, shape, 0]
+];
 
 
 (*
