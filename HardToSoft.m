@@ -268,13 +268,12 @@ SymmetricPhaseLO[] := Module[
   Calculates the 2-loop pressure in the symmetric phase of the soft theory.
   Uses notation following Martin (arXiv:1808.07615).
 *)
-ClearAll[SymmetricPhaseNLO];
 SymmetricPhaseNLO[] := Module[
-  {
-    tempCoeff, Vss, Vssv, Vvs, Vvv, Vvvv, Vggv, VFFs, VFFv,
-    massInsertionScalar, massInsertionFermion,
-    VssLambda6, HabIJFnF, totalNLOPressure
-  },
+	{
+	tempCoeff, Vss, Vssv, Vvs, Vvv, Vvvv, Vggv, VFFs, VFFv,
+	massInsertionScalar, massInsertionFermion,
+	VssLambda6, HabIJFnF, totalNLOPressure
+	},
 
   If[verbose,
     Print["Calculating NLO \!\(\*SuperscriptBox[\(T\), \(4\)]\) Terms"]];
@@ -344,14 +343,24 @@ SymmetricPhaseNLO[] := Module[
 
 
 (*
-	Calculates the 3-loop pressure in the soft theory.
+  Computes the 3-loop pressure in the soft theory.
+  Diagrammatic contributions follow the naming and structure of arXiv:1709.02397.
 *)
-SymmetricPhaseNNLO[]:=Module[{},
-If[verbose,Print["Calculating NNLO \!\(\*SuperscriptBox[\(T\), \(4\)]\) Terms"]];
+SymmetricPhaseNNLO[]:=Module[
+	{
+	  \[Kappa], I1, I2M2, I1I2, dI1I2, I211M020, I2M2I2, I3M2I1, I1p, 
+	  I3M2p, I2p, I4M4p, I2M2p, IF1p, IF2p, IF3M2p, IF2M2p,
+	  EPre, M00, LInt, EFPre, EFInt, N00, MF1M1, MF00, MFM2P2, N2M2, MP2M2,
+	  Temp, Temp1, Temp2, Temp3, Temp4, Temp5, 
+	  Help1, Help2, Help3, GHelp, GHelp2, I1Temp, HFab, GabV, gvffnF, gvffNf, \[Lambda]4Eff,
+	  HabIJFnF,
+	  DiagramsSimplified, DiagramsTotal
+	},
+	If[verbose,
+		Print["Calculating NNLO \!\(\*SuperscriptBox[\(T\), \(4\)]\) Terms"]];
 
-
-(*From the fish to you.*)
-
+	(* --- Precompute loop integrals --- *)
+	(* One- and two-loop integrals appearing in scalar, gauge and fermionic diagrams *)
 	\[Kappa]=1/(16 \[Pi]^2);
 	I1=T^2/(12 \[Epsilon])+T^2 Lbbb;
 	I2M2=T^2/(24 )(-1/\[Epsilon]-  12Lbbb+2);
@@ -372,7 +381,7 @@ If[verbose,Print["Calculating NNLO \!\(\*SuperscriptBox[\(T\), \(4\)]\) Terms"]]
 	IF2M2p=(-T^2/24-T^2 1/48* Lfff)\[Epsilon]+T^2/48;
 
 
-(*These integrals are given in 9408276 and 9410360*)
+	(* These integrals are given in 9408276 and 9410360 *)
 	EPre=1/(24*16 \[Pi]^2) T^4*(\[Mu]/(4 \[Pi] T))^(6 \[Epsilon]) (1/\[Epsilon]+91/15+8( Derivative[1][Zeta][-1])/Zeta[-1]-2 Derivative[1][Zeta][-3]/Zeta[-3]);
 	Series[EPre,{\[Epsilon],0,0}]//Normal//FullSimplify;
 	M00=Series[EPre,{\[Epsilon],0,0}]//Normal;
@@ -387,12 +396,10 @@ If[verbose,Print["Calculating NNLO \!\(\*SuperscriptBox[\(T\), \(4\)]\) Terms"]]
 	MP2M2=Series[11/(216*16 \[Pi]^2) T^4*(\[Mu]/(4 \[Pi] T))^(6 \[Epsilon]) (1/\[Epsilon]+73/22+12/11EulerGamma+64/11( Derivative[1][Zeta][-1])/Zeta[-1]-10/11Derivative[1][Zeta][-3]/Zeta[-3]),{\[Epsilon],0,0}]//Normal;
 
 
-(*Note that some contractions are inefficent. Will fix later but they are anyway not bottlenecks*)
-(*The names of all diagrams follow Martin's notation arXiv:1709.02397*)
+	(*Note that some contractions are inefficent. Will fix later but they are anyway not bottlenecks*)
+	(*The names of all diagrams follow Martin's notation arXiv:1709.02397*)
 
-(*
-	Pure Scalar
-*)
+	(* --- Pure scalar sector --- *)
 	Temp=TensorContract[\[Lambda]4,{3,4}];
 	I1Temp=-LInt;
 	LSSSS=1/16  *I1Temp*Activate@TensorContract[Inactive@TensorProduct[Temp,Temp],{{1,3},{2,4}}];
@@ -400,18 +407,14 @@ If[verbose,Print["Calculating NNLO \!\(\*SuperscriptBox[\(T\), \(4\)]\) Terms"]]
 	I1Temp=-M00;
 	ESSSS=1/48I1Temp*TensorContract[\[CapitalLambda]\[Lambda],{{1,3},{2,4}}];
 
-(*
-	Scalar-Vector
-*)
+	(* --- Scalar vector sector --- *)
 	I1Temp=1/2Activate@TensorContract[Inactive@TensorProduct[\[CapitalLambda]g,\[Lambda]4],{{1,3},{2,4},{5,6}}];
 	LSSVS=I1Temp/2*D I1p^2 I2p;
 	
 	I1Temp= 1/2Activate@TensorContract[Inactive@TensorProduct[\[CapitalLambda]g,\[Lambda]4],{{1,3},{2,4},{5,6}}];
 	JSSVSS=-1/2I1Temp I1p^2 I2p;
 
-(*
-	Yukawa-Scalar
-*)
+	(* --- Yukawa scalar sector --- *)
 	Temp1=Activate@TensorContract[Inactive@TensorProduct[Ysij,Ysij],{{1,3},{2,4}}]+Activate@TensorContract[Inactive@TensorProduct[Ysij,YsijC],{{1,3},{2,4}}];
 	KSSFFFF=-Temp1/8*(4*IF1p^2 I2p  + N00);
 	
@@ -419,19 +422,14 @@ If[verbose,Print["Calculating NNLO \!\(\*SuperscriptBox[\(T\), \(4\)]\) Terms"]]
 	Temp1=Activate@TensorContract[Inactive@TensorProduct[Help1,Help1],{{1,4},{2,3}}];
 	KFFSFSF=-1/2*(-1)*Temp1*(     MF1M1+    MF00+(I1p-IF1p)^2 IF2p);
 
-(*
-	Yukawa-Scalar \[Lambda]
-*)
+	(* --- Yukawa scalar sector with Lambda4 --- *)
 	help1=TensorContract[\[Lambda]4,{{3,4}}];
 	help2=Activate@TensorContract[Inactive@TensorProduct[Ysff,YsffC],{{2,5},{3,6}}]//SparseArray;
 	Temp1=Activate@TensorContract[Inactive@TensorProduct[help1,help2],{{1,3},{2,4}}];
 	JSSFFS=1/4*2Temp1*I1p IF1p I2p;
 
 
-(*
-	Yukawa-Vector
-*)
-
+	(* --- Yukawa vector sector --- *)
 	Temp1=Activate@TensorContract[Inactive@TensorProduct[Ysij,\[CapitalLambda]g],{{1,3},{2,4}}];
 	KSSSVFF=-Temp1/2*2*(MF00-I1p IF1p I2p);
 	
@@ -451,48 +449,42 @@ If[verbose,Print["Calculating NNLO \!\(\*SuperscriptBox[\(T\), \(4\)]\) Terms"]]
 	HSSFVFF=Temp1*(MF00);
 
 
-(*
-Fermion-Vector
-	*)
-
-(*General nF modification*)
+	(* --- Fermion vector sector --- *)
+	(*General nF modification*)
 	gvffnF=gvff . NFMat;
-(***********)
+	(***********)
 	Help1=Flatten[HabIJF,{{1},{2},{4,3}}] . Flatten[gvffnF,{2,3}];
 	Temp1=6*I/3*Total[Flatten[Help1]Flatten[gvvv]];
 	HFFFVVV=1/2(D-2)Temp1 MF00/.D->4-2\[Epsilon];
 
-(*General nF modification*)
+	(*General nF modification*)
 	gvffnF=gvff . NFMat;
-(***********)
+	(***********)
 	Temp1=8*1/4Sum[Tr[gvffnF[[a]] . gvff[[b]] . gvff[[a]] . gvff[[b]]],{a,1,nv},{b,1,nv}]//Simplify//Expand;
 	HFFVVFF=1/8*(D-2)*(2*(4-D)*MF00+(D-6)N00)*Temp1/.D->4-2\[Epsilon];
 	GabV=TensorContract[GabcdV,{{2,4}}]//SparseArray;
 
-(*General nF modification*)
+	(*General nF modification*)
 	HabIJFnF=HabIJF . NFMat;
-(***********)
+	(***********)
 	Temp1=-4*1/4*Tr[Flatten[GabV] . Flatten[HabIJFnF,{1,2}]];
 	KGaugeFF=-1/2*Temp1*(D-2)*(2 MFM2P2+MF00+2(D-6)IF1p I2p I1p)/.D->4-2\[Epsilon];
 
-(*General nF modification*)
+	(*General nF modification*)
 	HabIJFnF=HabIJF . NFMat;
-(***********)
+	(***********)
 	Help1=TensorContract[HabIJFnF,{3,4}]//SparseArray;
 	Temp1=-1*Flatten[Help1] . Flatten[Help1];
 	KVVFFFF=Temp1/4*(4N2M2+(D-4)N00-4(6-D)IF1p^2 I2p)/.D->4-2\[Epsilon];
 
-(*General nF modification*)
+	(*General nF modification*)
 	gvffNf=gvff . NFMat;
-(***********)
+	(***********)
 	Temp1=-1/2Sum[Tr[gvffNf[[a]] . gvff[[a]] . gvff[[b]] . gvff[[b]]],{a,1,nv},{b,1,nv}]//Simplify//Expand;
 	KFFFVVF=-(2-D)^2Temp1*(MF1M1+MF00+(IF1p-I1p)^2 IF2p)/.D->4-2\[Epsilon];
 
 
-(*
-Vector-Scalar
-	*)
-
+	(* --- Scalar vector sector --- *)
 	Help1=Table[Tr[gvss[[a]] . gvss[[b]] . gvss[[c]]],{a,1,nv},{b,1,nv},{c,1,nv}]//SparseArray;
 	Temp1=-1*Total[Flatten[Help1]Flatten[gvvv]];
 	HSSSVVV=5/8Temp1 M00;
@@ -517,9 +509,8 @@ Vector-Scalar
 	
 	Temp1=-1/2Total[Flatten[\[CapitalLambda]g]Flatten[\[CapitalLambda]g]];
 	JSSSVV=Temp1*(-D I1p^2 I2p+2 M00+1/2 I1p^2 I2p+D^2/2 I1p^2 I2p);
-(*
-	Pure Vector
-*)
+	
+	(* --- Pure vector sector --- *)
 	Help1=Flatten[GabcdV,{{1},{3},{2,4}}] . Flatten[gvvv,{2,3}];
 	Temp1=-2*Total[Flatten[Help1]Flatten[gvvv]];
 	HGauge=SerEnergyHelp[(1/8*(5D-5-3/4)-1/16-1/32+3/16(D-1)*D-27/16*(D-1))*M00]*Temp1;
@@ -530,21 +521,16 @@ Vector-Scalar
 	
 	KGhost=-1/8 M00*Temp1;
 
-(*
-Fermion-Vector-Scalar
-	*)
-
-(*General nF modification*)
+	(* --- Fermion vector scalar sector --- *)
+	(* General nF modification *)
 	HabIJFnF=HabIJF . NFMat;
-(***********)
+	(***********)
 	HFab=TensorContract[HabIJFnF,{{3,4}}];
 	Temp1=2*Total[Flatten[Hg]Flatten[HFab]];
 	KVVFFSS=-1/2*Temp1*(MFM2P2-1/2 MF00+(D-6)I1p IF1p I2p);
 
 
-(*
-	Counter-Terms
-	*)
+	(* --- Counterterms --- *)
 	Temp=1/2*\[Gamma]ij . \[Lambda]4;
 	\[Lambda]4Eff=\[Epsilon]*Z\[Lambda]ijkl;
 	I1Temp=1/3 T^4 \[Epsilon] Log[Glaisher]+1/72 T^4 \[Epsilon] Log[\[Mu]^2]-1/36 T^4 \[Epsilon] Log[4 \[Pi] T]+T^4/144;
@@ -578,17 +564,13 @@ Fermion-Vector-Scalar
 	Temp=Flatten[ZYsij,{{1},{2,3}}] . Flatten[YsffC,{2,3}]+Flatten[Ysff,{{1},{2,3}}] . Flatten[ZYsijC,{2,3}];
 	VFFsZ=1/2*\[Epsilon]^-1 V2FFS*Tr[Temp];
 
-(*General nF modification*)
+	(*General nF modification*)
 	gvffnF=gvff . NFMat;
-(*************************)
+	(*************************)
 	Temp=Transpose[Zgvff . Transpose[gvffnF,{2,1,3}]+gvffnF . Transpose[Zgvff,{2,1,3}],{1,3,2,4}];
 	VFFvZ=1/2*\[Epsilon]^-1*V2FFV*Tr[Flatten[Temp,{{1,3},{2,4}}]];
 
-
-
-(*
-	Contribution from Scalar Mass
-*)
+	(* --- Scalar mass contributions --- *)
 	\[Lambda]Help=TensorContract[\[Lambda]4,{3,4}];
 	V\[Mu]SS=Tr[\[Lambda]Help . \[Mu]ij]/4* I1p I2p*(-1);
 	
@@ -602,33 +584,91 @@ Fermion-Vector-Scalar
 
 	ContriMass=VLOtoNNLO+ VLOtoNLOCT+V\[Mu]SS+V\[Mu]FFS+ V\[Mu]SV;
 
-(*
-	Contribution from Fermion Mass
-*)
+	(* --- Fermion mass contributions --- *)
 	VLOtoNNLOF=1/2*Tr[\[Mu]IJ . \[Mu]IJC . \[Mu]IJ . \[Mu]IJC]*1/(16 (\[Pi]^2) ) Lf;
 
-(*Result*)
-	DiaCT=SerEnergyHelp[VssvZ+  VvsZ+ VssZ+ VvvZ+ VvvvZ+ VggvZ+ VFFsZ  +   VFFvZ]//Simplify;
-	DiaScalar\[Lambda]=SerEnergyHelp[LSSSS+ESSSS]//Simplify;
-	DiaScalarVector\[Lambda]=SerEnergyHelp[LSSVS+JSSVSS]//Simplify;
-	DiaYukawaScalar=SerEnergyHelp[KSSFFFF+KFFSFSF]//Simplify;
-	DiaYukawaScalar\[Lambda]=SerEnergyHelp[JSSFFS]//Simplify;
-	DiaYukawaVector=SerEnergyHelp[KSSSVFF+JSSFFV+KFFFSVF+HFFSVFF+HSSFVFF]//Simplify;
-	DiaFermionVector= SerEnergyHelp[ HFFFVVV+  HFFVVFF +  KGaugeFF +  KVVFFFF+ KFFFVVF]//Simplify;
-	DiaScalarVector=SerEnergyHelp[HSSSVVV+  EVVSS+ GSSVVS+ KGaugeSS+ KGaugeS+ KVVSSSS+   JSSSVV+  HSSVVSS]//Simplify;
-	DiaPureVector= SerEnergyHelp[HGauge+  KGauge+ KGhost]//Simplify;
-	DiaFermionScalarVector=SerEnergyHelp[KVVFFSS]//Simplify;
-	DiaFermionMass=VLOtoNNLOF;
-	DiaTot=VLOtoNNLOF+ContriMass+DiaCT+DiaFermionScalarVector+DiaPureVector+DiaScalarVector+DiaFermionVector+DiaYukawaVector+DiaYukawaScalar\[Lambda]+DiaScalar\[Lambda]+DiaScalarVector\[Lambda]+DiaYukawaScalar;
+	(* Total NNLO symmetric pressure contributions, organized by sector *)
+	(* Counterterm diagrams *)
+	DiagramsCT = SerEnergyHelp[
+	    VssvZ + VvsZ + VssZ + VvvZ + VvvvZ + VggvZ + VFFsZ + VFFvZ
+	] // Simplify;
+	
+	(* Pure scalar sector (\[Lambda]-dependent) *)
+	DiagramsScalar\[Lambda] = SerEnergyHelp[LSSSS + ESSSS] // Simplify;
+	
+	(* Scalar-vector mixing (\[Lambda]-dependent) *)
+	DiagramsScalarVector\[Lambda] = SerEnergyHelp[LSSVS + JSSVSS] // Simplify;
+	
+	(* Yukawa: scalar couplings *)
+	DiagramsYukawaScalar = SerEnergyHelp[KSSFFFF + KFFSFSF] // Simplify;
+	
+	(* Yukawa: \[Lambda]-dependent scalar-fermion *)
+	DiagramsYukawaScalar\[Lambda] = SerEnergyHelp[JSSFFS] // Simplify;
+	
+	(* Yukawa: vector couplings *)
+	DiagramsYukawaVector = SerEnergyHelp[
+	    KSSSVFF + JSSFFV + KFFFSVF + HFFSVFF + HSSFVFF
+	] // Simplify;
+	
+	(* Fermion-vector interactions *)
+	DiagramsFermionVector = SerEnergyHelp[
+	    HFFFVVV + HFFVVFF + KGaugeFF + KVVFFFF + KFFFVVF
+	] // Simplify;
+	
+	(* Scalar-vector diagrams not tied to \[Lambda] *)
+	DiagramsScalarVector = SerEnergyHelp[
+	    HSSSVVV + EVVSS + GSSVVS + KGaugeSS + KGaugeS + 
+	    KVVSSSS + JSSSVV + HSSVVSS
+	] // Simplify;
+	
+	(* Pure gauge and ghost contributions *)
+	DiagramsPureVector = SerEnergyHelp[
+	    HGauge + KGauge + KGhost
+	] // Simplify;
+	
+	(* Mixed fermion-scalar-vector contribution *)
+	DiagramsFermionScalarVector = SerEnergyHelp[KVVFFSS] // Simplify;
+	
+	(* One-loop and mass-related term *)
+	DiagramsFermionMass = VLOtoNNLOF;
+	
+	(* Total NNLO contribution *)
+	DiagramsTotal = (
+	      DiagramsFermionMass
+	    + ContriMass
+	    + DiagramsCT
+	    + DiagramsFermionScalarVector
+	    + DiagramsPureVector
+	    + DiagramsScalarVector
+	    + DiagramsFermionVector
+	    + DiagramsYukawaVector
+	    + DiagramsYukawaScalar\[Lambda]
+	    + DiagramsScalar\[Lambda]
+	    + DiagramsScalarVector\[Lambda]
+	    + DiagramsYukawaScalar
+	);
 
-	AE=Series[DiaTot/.D->4-2\[Epsilon]/.\[Epsilon]bp->(1/\[Epsilon]+Lb)^-1/.\[Epsilon]b->(1/\[Epsilon]+Lbb)^-1/.\[Epsilon]BF->(1/\[Epsilon]+LBF)^-1/.\[Epsilon]F->(1/\[Epsilon]+LFF)^-1/.\[Epsilon]FB->(1/\[Epsilon]+LFB)^-1/.\[Epsilon]bbM->(1/\[Epsilon]+LbbM)^-1/.ReplaceLb,{\[Epsilon],0,0}]//Normal;
+	(* \[Epsilon]-expansion and simplification *)
+	DiagramsSimplified=Series[
+		DiagramsTotal/.D->4-2\[Epsilon] 
+		/.\[Epsilon]bp->(1/\[Epsilon]+Lb)^-1
+		/.\[Epsilon]b->(1/\[Epsilon]+Lbb)^-1
+		/.\[Epsilon]BF->(1/\[Epsilon]+LBF)^-1 
+		/.\[Epsilon]F->(1/\[Epsilon]+LFF)^-1
+		/.\[Epsilon]FB->(1/\[Epsilon]+LFB)^-1
+		/.\[Epsilon]bbM->(1/\[Epsilon]+LbbM)^-1
+		/.ReplaceLb,
+		{\[Epsilon],0,0}]//Normal;
 
-	ToExpression[StringReplace[ToString[StandardForm[Coefficient[Simplify[AE],\[Epsilon],0]]],"DRalgo`Private`"->""]]
+	(* Extract \[Epsilon]^0 coefficient and clean namespace *)
+	ToExpression[
+		StringReplace[
+			ToString[StandardForm[Coefficient[Simplify[DiagramsSimplified],\[Epsilon],0]]],
+			"DRalgo`Private`"->""]]
 ];
 
 
-
-(* ::Section::Closed:: *)
+(* ::Section:: *)
 (*Scalar masses*)
 
 
