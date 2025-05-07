@@ -1979,7 +1979,11 @@ ProcessCoupling[expr_, sym_] := Module[{flat, cleaned, vars, mods, rules},
 	Identifies couplings and masses in the soft theory.
 *)
 
-IdentifyTensorsDRalgo[]:=Module[{},
+IdentifyTensorsDRalgo[]:=Module[
+	{
+		couplingTensor,
+		HelpListCleaned, HelpVar, HelpVarMod
+	},
 
 (*Option to keep 4d-normalization in the matching relations*)
 	Tfac=T;
@@ -2004,12 +2008,9 @@ IdentifyTensorsDRalgo[]:=Module[{},
 		(* --- Scalar cubic couplings --- *)
 		VerbosePrint["Calculating Cubic Tensor "];
 		
-		HelpList=DeleteDuplicates@SparseArray[Flatten@Simplify[Tfac^(1/2) (\[Lambda]3CS+\[Lambda]3)]]//Sort//FullSimplify;
-		HelpListCleaned=CleanedList[HelpList];
-		HelpVar=Table[cSS[a],{a,1,HelpListCleaned//Length}];
-		HelpVarMod=RelationsBVariables[HelpList,HelpVar];
-		HelpSolveCubicS=Table[{HelpListCleaned[[a]]->HelpVarMod[[a]]},{a,1,HelpListCleaned//Length}]//Flatten//Simplify;
-		\[Lambda]3CSRed=Tfac^(1/2) (\[Lambda]3CS+\[Lambda]3)//Normal//Simplify//FullSimplify//ReplaceAll[#,HelpSolveCubicS]&//SparseArray;
+		couplingTensor = Tfac^(1/2)*(\[Lambda]3CS+\[Lambda]3);
+		{HelpListCleaned, HelpVar, HelpVarMod, HelpSolveCubicS} = ProcessCoupling[couplingTensor, cSS];	
+		\[Lambda]3CSRed=couplingTensor//Normal//Simplify//FullSimplify//ReplaceAll[#,HelpSolveCubicS]&//SparseArray;
 
 		If[Length[SparseArray[\[Lambda]3CSRed]["NonzeroValues"]]!=Length[SparseArray[\[Lambda]3]["NonzeroValues"]],
 			Print["Detected 1-loop Scalar Cubic not defined at tree-level"];
