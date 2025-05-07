@@ -17,8 +17,13 @@
 (* ------------------------------------------------------------------------ *)
 
 
-(* ::Section::Closed:: *)
+(* ::Section:: *)
 (*Help routines*)
+
+
+(* Helper functions *)
+VerbosePrint[msg_] := If[verbose, Print[msg]]
+LogPrint[msg_] := If[verbose, Print[DateString[{"Hour", ":", "Minute"}], " \[LongDash] ", msg]];
 
 
 (*
@@ -125,7 +130,7 @@ Return[mat1P==mat2P]
 *)
 ClearAll[CreateHelpTensors];
 CreateHelpTensors[] := Module[{},
-  If[verbose, Print["Creating Help Tensors"]];
+  VerbosePrint["Creating Help Tensors"];
   
   (* --- Tensors from two scalar-vector Trilinear Couplings --- *)
   Habij = Contract[gvss, gvss, {{3, 5}}] // Transpose[#, {1, 3, 2, 4}] & // SimplifySparse;
@@ -167,7 +172,7 @@ CreateHelpTensors[] := Module[{},
 ];
 
 
-(* ::Section::Closed:: *)
+(* ::Section:: *)
 (*Pressure calculations*)
 
 
@@ -196,7 +201,7 @@ SymmetricPhaseEnergy[] := Module[
 ];
 
 
-(* ::Subsection::Closed:: *)
+(* ::Subsection:: *)
 (*LO symmetric pressure*)
 
 
@@ -211,8 +216,7 @@ SymmetricPhaseLO[] := Module[
     scalarContribution, vectorContribution, fermionContribution
   },
   
-  If[verbose,
-    Print["Calculating Leading-Order \!\(\*SuperscriptBox[\(T\), \(4\)]\) Terms"]];
+  VerbosePrint["Calculating Leading-Order \!\(\*SuperscriptBox[\(T\), \(4\)]\) Terms"];
 
   (* --- Helper to check whether a tensor is numerically empty --- *)
   isEmptyTensorQ[tensor_, shape_] := (
@@ -259,7 +263,7 @@ SymmetricPhaseLO[] := Module[
 ];
 
 
-(* ::Subsection::Closed:: *)
+(* ::Subsection:: *)
 (*NLO symmetric pressure*)
 
 
@@ -275,8 +279,7 @@ SymmetricPhaseNLO[] := Module[
 	VssLambda6, HabIJFnF, totalNLOPressure
 	},
 
-  If[verbose,
-    Print["Calculating NLO \!\(\*SuperscriptBox[\(T\), \(4\)]\) Terms"]];
+  VerbosePrint["Calculating NLO \!\(\*SuperscriptBox[\(T\), \(4\)]\) Terms"];
 
   (* --- Two-loop diagram contributions --- *)
   (* Scalar quartic self-interaction term *)
@@ -338,7 +341,7 @@ SymmetricPhaseNLO[] := Module[
 ];
 
 
-(* ::Subsection::Closed:: *)
+(* ::Subsection:: *)
 (*NNLO symmetric pressure*)
 
 
@@ -356,8 +359,8 @@ SymmetricPhaseNNLO[]:=Module[
 	  HabIJFnF,
 	  DiagramsSimplified, DiagramsTotal
 	},
-	If[verbose,
-		Print["Calculating NNLO \!\(\*SuperscriptBox[\(T\), \(4\)]\) Terms"]];
+	
+	VerbosePrint["Calculating NNLO \!\(\*SuperscriptBox[\(T\), \(4\)]\) Terms"];
 
 	(* --- Precompute loop integrals --- *)
 	(* One- and two-loop integrals appearing in scalar, gauge and fermionic diagrams *)
@@ -668,11 +671,11 @@ SymmetricPhaseNNLO[]:=Module[
 ];
 
 
-(* ::Section::Closed:: *)
+(* ::Section:: *)
 (*Scalar masses*)
 
 
-(* ::Subsection::Closed:: *)
+(* ::Subsection:: *)
 (*1loop scalar mass*)
 
 
@@ -687,7 +690,7 @@ ScalarMass[] := Module[
     contriSSLambda6, result
   },
 
-  If[verbose, Print["Calculating 1-Loop Scalar Mass"]];
+  VerbosePrint["Calculating 1-Loop Scalar Mass"];
 
   (* Scalar 4-point interaction contribution *)
   contriSS = -T^2/24 TensorContract[\[Lambda]4, {{3, 4}}] // SimplifySparse;
@@ -714,7 +717,7 @@ ScalarMass[] := Module[
 ];
 
 
-(* ::Subsection::Closed:: *)
+(* ::Subsection:: *)
 (*1loop scalar self-energy*)
 
 
@@ -726,8 +729,8 @@ ScalarSelfEnergy[] := Module[
 	{
 		ContriVV, SelfEnergyFF, ContriFF
 	},
-  If[verbose,
-    Print["Calculating Scalar-Field Renormalization"]];
+	
+  VerbosePrint["Calculating Scalar-Field Renormalization"];
 
   (* Gauge boson loop contribution *)
   ContriVV = -3/(16 \[Pi]^2) Lb \[CapitalLambda]g;
@@ -741,7 +744,7 @@ ScalarSelfEnergy[] := Module[
 ];
 
 
-(* ::Subsection::Closed:: *)
+(* ::Subsection:: *)
 (*2loop scalar mass*)
 
 
@@ -757,8 +760,7 @@ ScalarMass2Loop[] := Module[
 		simplifyContract
 	},
   
-  If[verbose,
-    Print["Calculating 2-Loop Scalar Mass"]];
+  VerbosePrint["Calculating 2-Loop Scalar Mass"];
   
   (* Constants *)
   \[Kappa] = 1/(16 \[Pi]^2);
@@ -864,11 +866,11 @@ ScalarMass2Loop[] := Module[
 ];
 
 
-(* ::Section::Closed:: *)
+(* ::Section:: *)
 (*Temporal masses*)
 
 
-(* ::Subsection::Closed:: *)
+(* ::Subsection:: *)
 (*1loop temporal mass*)
 
 
@@ -880,7 +882,7 @@ VectorMass[] := Module[
     ContriSS, ContriVV, fac, ContriVVV, SelfEnergyFF, HabIJFnF, ContriFF
   },
 
-  If[verbose, Print["Calculating 1-Loop Vector Mass"]];
+  VerbosePrint["Calculating 1-Loop Vector Mass"];
 
   (* Scalar and vector boson contributions *)
   ContriSS = (T^2/12) Hg;
@@ -900,7 +902,7 @@ VectorMass[] := Module[
 ];
 
 
-(* ::Subsection::Closed:: *)
+(* ::Subsection:: *)
 (*1loop vector self-energy*)
 
 
@@ -913,7 +915,7 @@ VectorSelfEnergy[] := Module[
     HabIJFnF, ContriFF
   },
 
-  If[verbose, Print["Calculating Vector-Field Renormalization"]];
+  VerbosePrint["Calculating Vector-Field Renormalization"];
 
   (* Contribution from scalar self-energy (transverse part) *)
   SelfEnergySS = -1/2 * 1/(16 \[Pi]^2) * (-1/3 Lb);
@@ -950,7 +952,7 @@ VectorSelfEnergy[] := Module[
 ];
 
 
-(* ::Subsection::Closed:: *)
+(* ::Subsection:: *)
 (*2loop temporal mass*)
 
 
@@ -967,7 +969,7 @@ VectorMass2Loop[] := Module[
     \[CapitalPi]V, \[CapitalPi]S, \[CapitalPi]F, \[CapitalPi]SF
   },
 
-  If[verbose, Print["Calculating 2-Loop Debye Mass"]];
+  VerbosePrint["Calculating 2-Loop Debye Mass"];
 
   (* General nF modification *)
   gvffnF = gvff . NFMat;
@@ -1031,7 +1033,7 @@ VectorMass2Loop[] := Module[
 ];
 
 
-(* ::Section::Closed:: *)
+(* ::Section:: *)
 (*Effective couplings*)
 
 
@@ -1064,7 +1066,7 @@ NonAbelianCoupling[] := Module[
 ];
 
 
-(* ::Subsection::Closed:: *)
+(* ::Subsection:: *)
 (*SSS*)
 
 
@@ -1078,7 +1080,7 @@ ScalarCubic[] := Module[
     ContriSETemp, ContriSE
   },
 
-  If[verbose, Print["Calculating Scalar-Cubic Couplings"]];
+  VerbosePrint["Calculating Scalar-Cubic Couplings"];
 
   (* Scalar self-energy contribution *)
   SelfEnergySSC = 1 / (16 \[Pi]^2) * Lb * 1 / 2;
@@ -1101,7 +1103,7 @@ ScalarCubic[] := Module[
 ];
 
 
-(* ::Subsection::Closed:: *)
+(* ::Subsection:: *)
 (*VVVV*)
 
 
@@ -1115,7 +1117,7 @@ LongitudinalVVVV[] := Module[
   },
 
   (* Verbose output for debugging *)
-  If[verbose, Print["Calculating Temporal-Vector Quartics"]];
+  VerbosePrint["Calculating Temporal-Vector Quartics"];
 
   (* Temporal-Scalar Scalar contributions (Sum of Bubbles, Triangles, and Boxes with internal scalars) *)
   CouplingSSSS = -(1 / (24 \[Pi]^2));
@@ -1153,7 +1155,7 @@ LongitudinalVVVV[] := Module[
 ];
 
 
-(* ::Subsection::Closed:: *)
+(* ::Subsection:: *)
 (*VVS*)
 
 
@@ -1166,7 +1168,7 @@ LongitudinalVVS[] := Module[
     CouplingSSSS, ContriSSSSTemp
   },
 
-  If[verbose, Print["Calculating Temporal-Vector-Scalar Cubics"]];
+  VerbosePrint["Calculating Temporal-Vector-Scalar Cubics"];
 
   (* Cubic contribution with internal scalars *)
   CouplingSSSS = 1 / (8 \[Pi]^2);
@@ -1177,7 +1179,7 @@ LongitudinalVVS[] := Module[
 ];
 
 
-(* ::Subsection::Closed:: *)
+(* ::Subsection:: *)
 (*SSSS*)
 
 
@@ -1191,7 +1193,7 @@ ScalarQuartic[] := Module[
   },
 
   (* Verbose output for debugging *)
-  If[verbose, Print["Calculating Scalar Quartic"]];
+  VerbosePrint["Calculating Scalar Quartic"];
 
   (* Scalar contribution to the quartic terms *)
   ContriSS = (1 / (16 \[Pi]^2)) * Lb * 1 / 2 * Simplify[
@@ -1225,7 +1227,7 @@ ScalarQuartic[] := Module[
 ];
 
 
-(* ::Subsection::Closed:: *)
+(* ::Subsection:: *)
 (*SSSSSS*)
 
 
@@ -1240,7 +1242,7 @@ ScalarSextic[] := Module[
   },
 
   (* Verbose output for debugging *)
-  If[verbose, Print["Calculating Scalar Sextic"]];
+  VerbosePrint["Calculating Scalar Sextic"];
 
   (* Scalar loop contributions *)
   LambdaLambda6Temp = Flatten[\[Lambda]4 . \[Lambda]4, {{1}, {2}, {4}, {5}, {3, 6}}];
@@ -1276,7 +1278,7 @@ ScalarSextic[] := Module[
 ];
 
 
-(* ::Subsection::Closed:: *)
+(* ::Subsection:: *)
 (*SSVV transverse*)
 
 
@@ -1291,7 +1293,7 @@ TransverseSSVV[] := Module[
   },
 
   (* Verbose output for debugging *)
-  If[verbose, Print["Calculating Transverse-Vector Couplings"]];
+  VerbosePrint["Calculating Transverse-Vector Couplings"];
 
   (* Scalar-Vector coupling *)
   CouplingSV = 1 / (16 \[Pi]^2) * 3 / 4 * Lb;
@@ -1330,7 +1332,7 @@ TransverseSSVV[] := Module[
 ];
 
 
-(* ::Subsection::Closed:: *)
+(* ::Subsection:: *)
 (*SSVV longitudinal*)
 
 
@@ -1345,7 +1347,7 @@ LongitudinalSSVV[] := Module[
   },
 
   (* Verbose output for debugging *)
-  If[verbose, Print["Calculating Scalar-Temporal-Vector Couplings"]];
+  VerbosePrint["Calculating Scalar-Temporal-Vector Couplings"];
 
   (* Scalar-Vector coupling contribution *)
   CouplingSV = 1 / (16 \[Pi]^2) * (3 / 4 * Lb - 1 / 2);
@@ -1387,11 +1389,11 @@ LongitudinalSSVV[] := Module[
 ];
 
 
-(* ::Section::Closed:: *)
+(* ::Section:: *)
 (*Tadpoles*)
 
 
-(* ::Subsection::Closed:: *)
+(* ::Subsection:: *)
 (*1loop scalar tadpole*)
 
 
@@ -1403,7 +1405,7 @@ TadPole[] := Module[
     ContriS, fac, Temp1, Temp1C, ContriFF
   },
 
-  If[verbose, Print["Calculating 1-Loop Tadpoles"]];
+  VerbosePrint["Calculating 1-Loop Tadpoles"];
 
   (* Scalar bubble contribution (from one-loop with cubic coupling).
      Minus sign comes from the Feynman rule. *)
@@ -1423,7 +1425,7 @@ TadPole[] := Module[
 ];
 
 
-(* ::Subsection::Closed:: *)
+(* ::Subsection:: *)
 (*2loop scalar tadpole*)
 
 
@@ -1444,7 +1446,7 @@ TadPole2Loop[] := Module[
 	    ContriCTS, ContriCTFF, ContriF, TotalResult
 	},
 
-	If[verbose, Print["Calculating 2-Loop Tadpoles"]];
+	VerbosePrint["Calculating 2-Loop Tadpoles"];
 
 	(* --- Master integrals --- *)
 	\[Kappa]=1/(16 \[Pi]^2);
@@ -1531,11 +1533,11 @@ TadPole2Loop[] := Module[
 ];
 
 
-(* ::Section::Closed:: *)
+(* ::Section:: *)
 (*Counter-terms and beta functions*)
 
 
-(* ::Subsection::Closed:: *)
+(* ::Subsection:: *)
 (*Running hard to soft*)
 
 
@@ -1543,7 +1545,7 @@ TadPole2Loop[] := Module[
 	Calculates counter-terms, and beta functions, in the soft theory.
 *)
 RGRunningHardToSoft[]:=Module[{},
-If[verbose,Print["RG-evolving from \[Mu] to \[Mu]3"]];
+	VerbosePrint["RG-evolving from \[Mu] to \[Mu]3"];
 
 (*
 	All calculations are done within the 3d theory.
@@ -1650,7 +1652,7 @@ If[verbose,Print["RG-evolving from \[Mu] to \[Mu]3"]];
 ];
 
 
-(* ::Subsection::Closed:: *)
+(* ::Subsection:: *)
 (*Counter terms*)
 
 
@@ -1663,7 +1665,7 @@ If[CT==False,
 	CT=True;
 	CreateBasisVanDeVis[];
 		
-If[verbose,Print["Calculating CounterTerms"]];
+	VerbosePrint["Calculating CounterTerms"];
 		\[Kappa]=1/(16 \[Pi]^2);
 
 (*
@@ -1951,8 +1953,26 @@ If[verbose,Print["Calculating CounterTerms"]];
 ];
 
 
-(* ::Section::Closed:: *)
+(* ::Section:: *)
 (*Identify tensors*)
+
+
+(* Helper functions *)
+CleanedList[list_] := If[Length[list] > 1 && list[[1]] === 0, Rest[list], list];
+
+MakeReplacementRules[list_, vars_] := Module[{modVars},
+  modVars = RelationsBVariables[list, vars];
+  Table[Delete[list, 1][[a]] -> modVars[[a]], {a, Length[Delete[list, 1]]}] // Flatten // Simplify
+];
+
+ProcessCoupling[expr_, sym_] := Module[{flat, cleaned, vars, mods, rules},
+  flat = DeleteDuplicates@Flatten@Simplify[expr] // Sort;
+  cleaned = CleanedList[flat];
+  vars = Table[sym[a], {a, Length[cleaned]}];
+  mods = RelationsBVariables[flat, vars];
+  rules = MakeReplacementRules[flat, vars];
+  {cleaned, vars, mods, rules}
+];
 
 
 (*
@@ -1966,115 +1986,116 @@ IdentifyTensorsDRalgo[]:=Module[{},
 	If[normalization4D, Tfac=1];
 
 	If[mode>=1,
-		If[verbose,Print["Calculating Quartic Tensor"]];
-			
-			(* --- Scalar quartic couplings --- *)
-			HelpList=DeleteDuplicates@Flatten[Tfac(\[Lambda]4+\[Lambda]3D)]//Sort//Simplify;
-			HelpVarMod=RelationsBVariables3[HelpList]//ReplaceAll[#,\[Lambda]VL[v1_]->\[Lambda][v1]]&;
-			If[HelpList[[1]]==0&&Length[HelpList]>1,
-				HelpList=Delete[HelpList,1];
-			];
-			HelpSolveQuartic=Table[{HelpList[[a]]->HelpVarMod[[a]]},{a,1,HelpList//Length}]//Flatten//Simplify;
-			\[Lambda]3DS=Tfac(\[Lambda]4+\[Lambda]3D)//SimplifySparse//Normal//ReplaceAll[#,HelpSolveQuartic]&//SparseArray;
+		(* --- Scalar quartic couplings --- *)
+		VerbosePrint["Calculating Quartic Tensor"];
+		
+		HelpList=DeleteDuplicates@Flatten[Tfac(\[Lambda]4+\[Lambda]3D)]//Sort//Simplify;
+		HelpVarMod=RelationsBVariables3[HelpList]//ReplaceAll[#,\[Lambda]VL[v1_]->\[Lambda][v1]]&;
+		If[HelpList[[1]]==0&&Length[HelpList]>1,
+			HelpList=Delete[HelpList,1];
+		];
+		HelpSolveQuartic=Table[{HelpList[[a]]->HelpVarMod[[a]]},{a,1,HelpList//Length}]//Flatten//Simplify;
+		\[Lambda]3DS=Tfac(\[Lambda]4+\[Lambda]3D)//SimplifySparse//Normal//ReplaceAll[#,HelpSolveQuartic]&//SparseArray;
 
 
-			If[Length[SparseArray[\[Lambda]3DS]["NonzeroValues"]]!=Length[SparseArray[\[Lambda]4]["NonzeroValues"]],
+		If[Length[SparseArray[\[Lambda]3DS]["NonzeroValues"]]!=Length[SparseArray[\[Lambda]4]["NonzeroValues"]],
 			Print["Detected 1-loop Scalar Quartics not defined at tree-level"];
 			Print["Please Check if you defined all couplings allowed by symmetry"];
 		];
 
-		If[verbose,Print["Calculating Cubic Tensor "]];
-
-			(* --- Scalar cubic couplings --- *)
-			HelpList=DeleteDuplicates@SparseArray[Flatten@Simplify[Tfac^(1/2) (\[Lambda]3CS+\[Lambda]3)]]//Sort//FullSimplify;
-			HelpVar=Table[cSS[a],{a,1,Delete[HelpList,1]//Length}];
-			HelpVarMod=RelationsBVariables[HelpList,HelpVar];
-			HelpSolveCubicS=Table[{Delete[HelpList,1][[a]]->HelpVarMod[[a]]},{a,1,Delete[HelpList,1]//Length}]//Flatten//Simplify;
-			\[Lambda]3CSRed=Tfac^(1/2) (\[Lambda]3CS+\[Lambda]3)//Normal//Simplify//FullSimplify//ReplaceAll[#,HelpSolveCubicS]&//SparseArray;
-
-			If[Length[SparseArray[\[Lambda]3CSRed]["NonzeroValues"]]!=Length[SparseArray[\[Lambda]3]["NonzeroValues"]],
-				Print["Detected 1-loop Scalar Cubic not defined at tree-level"];
-				Print["Please Check if you defined all couplings allowed by symmetry"];
-			];
-
-			If[verbose,Print["Calculating Vector-Scalar Interaction Tensor "]];
-			
-				(* --- Vector-scalar couplings --- *)
-				HelpList=DeleteDuplicates@Flatten@SimplifySparse[Tfac (HabijV+GvvssT)]//Sort;
-			If[Length[Delete[HelpList,1]]<1,(*Fix for when the tensor is empty*)
-				\[Lambda]KVecT=Tfac (HabijV+GvvssT)//SparseArray;
-				HelpSolveVecT={};
-			,
-				HelpVarMod=RelationsBVariables3[HelpList]//ReplaceAll[#,\[Lambda]VL[v1_]->\[Lambda]VT[v1]]&;
-				HelpSolveVecT=Table[{Delete[HelpList,1][[a]]->HelpVarMod[[a]]},{a,1,Delete[HelpList,1]//Length}]//Flatten//Simplify;
-				\[Lambda]KVecT=Tfac (HabijV+GvvssT)//SimplifySparse//Normal//ReplaceAll[#,HelpSolveVecT]&//SparseArray;
-			];
-
-			(* --- Temporal-scalar/scalar cross couplings --- *)
-			HelpList=DeleteDuplicates@Simplify@Flatten[-Tfac(HabijV+GvvssL)]//Sort;
-			If[Length[Delete[HelpList,1]]<1,
-				\[Lambda]KVec=-Tfac(HabijV+GvvssL)//Normal//Simplify//SparseArray;
-				HelpSolveVecL={};
-			,
-				HelpVarMod=RelationsBVariables3[HelpList];
-				HelpSolveVecL=Table[{Delete[HelpList,1][[a]]->HelpVarMod[[a]]},{a,1,Delete[HelpList,1]//Length}]//Flatten//Simplify;
-				\[Lambda]KVec=-Tfac(HabijV+GvvssL)//Normal//Simplify//ReplaceAll[#,HelpSolveVecL]&//SparseArray;
-			];
-
-
-			If[verbose,Print["Calculating Temporal-Vector Quartics "]];
-			
-				(* --- Temporal-Scalar quartics --- *)
-				HelpList=DeleteDuplicates@SparseArray[Flatten@Simplify[Tfac \[Lambda]AA]]//Sort//FullSimplify;
-				HelpVar=Table[\[Lambda]VLL[a],{a,1,Delete[HelpList,1]//Length}];
-
-				If[Length[HelpVar]<1,
-					HelpVar=\[Lambda]VLL[1];
-					HelpVarMod=RelationsBVariables[HelpList,HelpVar];
-					HelpSolveQuarticL={HelpList[[1]]->HelpVarMod}//Flatten;
-
-					\[Lambda]AAS=Tfac \[Lambda]AA//Normal//Simplify//ReplaceAll[#,HelpSolveQuarticL]&//SparseArray;
-				,
-					HelpVarMod=RelationsBVariables3[HelpList]//ReplaceAll[#,\[Lambda]VL[v1_]->\[Lambda]VLL[v1]]&;
-					HelpSolveQuarticL=Table[{Delete[HelpList,1][[a]]->HelpVarMod[[a]]},{a,1,Delete[HelpList,1]//Length}]//Flatten//Simplify;
-					\[Lambda]AAS=Tfac \[Lambda]AA//Normal//FullSimplify//ReplaceAll[#,HelpSolveQuarticL]&//SparseArray;
-				];
-
-				(* --- Temporal-Scalar/scalar cross cubic couplings --- *)
-				HelpList=DeleteDuplicates@SparseArray[Flatten@Simplify[Sqrt[Tfac] GvvsL]]//Sort//FullSimplify;
-				HelpVar=Table[\[Lambda]VVSL[a],{a,1,Delete[HelpList,1]//Length}];
-				HelpVarMod=RelationsBVariables[HelpList,HelpVar];
-				HelpSolveCubicL=Table[{Delete[HelpList,1][[a]]->HelpVarMod[[a]]},{a,1,Delete[HelpList,1]//Length}]//Flatten//Simplify;
-				\[Lambda]vvsLS=Sqrt[Tfac] GvvsL//Normal//Simplify//ReplaceAll[#,HelpSolveCubicL]&//SparseArray;
-
-		];
+		(* --- Scalar cubic couplings --- *)
+		VerbosePrint["Calculating Cubic Tensor "];
 		
-			(* --- TemporalVector-scalar couplings --- *)	
-			If[mode==0,GvvssL=EmptyArray[{nv,nv,ns,ns}]];
-			HelpList=DeleteDuplicates@Simplify@Flatten[-Tfac(HabijV+GvvssL)]//Sort;
-			If[Length[Delete[HelpList,1]]<1,
-				\[Lambda]KVec=-Tfac(HabijV+GvvssL)//Normal//Simplify//SparseArray;
-				HelpSolveVecL={};
-			,
-				HelpVarMod=RelationsBVariables3[HelpList];
-				HelpSolveVecL=Table[{Delete[HelpList,1][[a]]->HelpVarMod[[a]]},{a,1,Delete[HelpList,1]//Length}]//Flatten//Simplify;
-				\[Lambda]KVec=-Tfac(HabijV+GvvssL)//Normal//Simplify//ReplaceAll[#,HelpSolveVecL]&//SparseArray;
-			];			
+		HelpList=DeleteDuplicates@SparseArray[Flatten@Simplify[Tfac^(1/2) (\[Lambda]3CS+\[Lambda]3)]]//Sort//FullSimplify;
+		HelpVar=Table[cSS[a],{a,1,Delete[HelpList,1]//Length}];
+		HelpVarMod=RelationsBVariables[HelpList,HelpVar];
+		HelpSolveCubicS=Table[{Delete[HelpList,1][[a]]->HelpVarMod[[a]]},{a,1,Delete[HelpList,1]//Length}]//Flatten//Simplify;
+		\[Lambda]3CSRed=Tfac^(1/2) (\[Lambda]3CS+\[Lambda]3)//Normal//Simplify//FullSimplify//ReplaceAll[#,HelpSolveCubicS]&//SparseArray;
+
+		If[Length[SparseArray[\[Lambda]3CSRed]["NonzeroValues"]]!=Length[SparseArray[\[Lambda]3]["NonzeroValues"]],
+			Print["Detected 1-loop Scalar Cubic not defined at tree-level"];
+			Print["Please Check if you defined all couplings allowed by symmetry"];
+		];
+	
+		(* --- Vector-scalar couplings --- *)
+		VerbosePrint["Calculating Vector-Scalar Interaction Tensor "];
+		
+		HelpList=DeleteDuplicates@Flatten@SimplifySparse[Tfac (HabijV+GvvssT)]//Sort;
+		If[Length[Delete[HelpList,1]]<1,(*Fix for when the tensor is empty*)
+			\[Lambda]KVecT=Tfac (HabijV+GvvssT)//SparseArray;
+			HelpSolveVecT={};
+		,
+			HelpVarMod=RelationsBVariables3[HelpList]//ReplaceAll[#,\[Lambda]VL[v1_]->\[Lambda]VT[v1]]&;
+			HelpSolveVecT=Table[{Delete[HelpList,1][[a]]->HelpVarMod[[a]]},{a,1,Delete[HelpList,1]//Length}]//Flatten//Simplify;
+			\[Lambda]KVecT=Tfac (HabijV+GvvssT)//SimplifySparse//Normal//ReplaceAll[#,HelpSolveVecT]&//SparseArray;
+		];
+
+		(* --- Temporal-scalar/scalar cross couplings --- *)
+		HelpList=DeleteDuplicates@Simplify@Flatten[-Tfac(HabijV+GvvssL)]//Sort;
+		If[Length[Delete[HelpList,1]]<1,
+			\[Lambda]KVec=-Tfac(HabijV+GvvssL)//Normal//Simplify//SparseArray;
+			HelpSolveVecL={};
+		,
+			HelpVarMod=RelationsBVariables3[HelpList];
+			HelpSolveVecL=Table[{Delete[HelpList,1][[a]]->HelpVarMod[[a]]},{a,1,Delete[HelpList,1]//Length}]//Flatten//Simplify;
+			\[Lambda]KVec=-Tfac(HabijV+GvvssL)//Normal//Simplify//ReplaceAll[#,HelpSolveVecL]&//SparseArray;
+		];
+
+		(* --- Temporal-Scalar quartics --- *)
+		VerbosePrint["Calculating Temporal-Vector Quartics "];
+		
+		HelpList=DeleteDuplicates@SparseArray[Flatten@Simplify[Tfac \[Lambda]AA]]//Sort//FullSimplify;
+		HelpVar=Table[\[Lambda]VLL[a],{a,1,Delete[HelpList,1]//Length}];
+
+		If[Length[HelpVar]<1,
+			HelpVar=\[Lambda]VLL[1];
+			HelpVarMod=RelationsBVariables[HelpList,HelpVar];
+			HelpSolveQuarticL={HelpList[[1]]->HelpVarMod}//Flatten;
+
+			\[Lambda]AAS=Tfac \[Lambda]AA//Normal//Simplify//ReplaceAll[#,HelpSolveQuarticL]&//SparseArray;
+		,
+			HelpVarMod=RelationsBVariables3[HelpList]//ReplaceAll[#,\[Lambda]VL[v1_]->\[Lambda]VLL[v1]]&;
+			HelpSolveQuarticL=Table[{Delete[HelpList,1][[a]]->HelpVarMod[[a]]},{a,1,Delete[HelpList,1]//Length}]//Flatten//Simplify;
+			\[Lambda]AAS=Tfac \[Lambda]AA//Normal//FullSimplify//ReplaceAll[#,HelpSolveQuarticL]&//SparseArray;
+		];
+
+		(* --- Temporal-Scalar/scalar cross cubic couplings --- *)
+		HelpList=DeleteDuplicates@SparseArray[Flatten@Simplify[Sqrt[Tfac] GvvsL]]//Sort//FullSimplify;
+		HelpVar=Table[\[Lambda]VVSL[a],{a,1,Delete[HelpList,1]//Length}];
+		HelpVarMod=RelationsBVariables[HelpList,HelpVar];
+		HelpSolveCubicL=Table[{Delete[HelpList,1][[a]]->HelpVarMod[[a]]},{a,1,Delete[HelpList,1]//Length}]//Flatten//Simplify;
+		\[Lambda]vvsLS=Sqrt[Tfac] GvvsL//Normal//Simplify//ReplaceAll[#,HelpSolveCubicL]&//SparseArray;
+
+	];
+		
+	(* --- TemporalVector-scalar couplings --- *)	
+	If[mode==0,
+		GvvssL=EmptyArray[{nv,nv,ns,ns}]
+	];
+	HelpList=DeleteDuplicates@Simplify@Flatten[-Tfac(HabijV+GvvssL)]//Sort;
+	If[Length[Delete[HelpList,1]]<1,
+		\[Lambda]KVec=-Tfac(HabijV+GvvssL)//Normal//Simplify//SparseArray;
+		HelpSolveVecL={};
+	,
+		HelpVarMod=RelationsBVariables3[HelpList];
+		HelpSolveVecL=Table[{Delete[HelpList,1][[a]]->HelpVarMod[[a]]},{a,1,Delete[HelpList,1]//Length}]//Flatten//Simplify;
+		\[Lambda]KVec=-Tfac(HabijV+GvvssL)//Normal//Simplify//ReplaceAll[#,HelpSolveVecL]&//SparseArray;
+	];			
 			
 	If[mode>=3,
-		If[verbose,Print["Calculating Sextic Tensor"]];
+		VerbosePrint["Calculating Sextic Tensor"];
 
-			(* --- Scalar sextic couplings --- *)
-			HelpList=DeleteDuplicates@Flatten[Tfac^2 (\[Lambda]6+\[Lambda]6D)]//Sort//Simplify;
-			HelpVar=Table[ \[Lambda]6d[a],{a,1,Delete[HelpList,1]//Length}];
-			HelpVarMod=RelationsBVariables[HelpList,HelpVar];
-			HelpSolveSextic=Table[{Delete[HelpList,1][[a]]->HelpVarMod[[a]]},{a,1,Delete[HelpList,1]//Length}]//Flatten;
-			\[Lambda]6DS=Tfac^2 (\[Lambda]6+\[Lambda]6D)//Normal//Simplify//ReplaceAll[#,HelpSolveSextic]&//SparseArray;
+		(* --- Scalar sextic couplings --- *)
+		HelpList=DeleteDuplicates@Flatten[Tfac^2 (\[Lambda]6+\[Lambda]6D)]//Sort//Simplify;
+		HelpVar=Table[ \[Lambda]6d[a],{a,1,Delete[HelpList,1]//Length}];
+		HelpVarMod=RelationsBVariables[HelpList,HelpVar];
+		HelpSolveSextic=Table[{Delete[HelpList,1][[a]]->HelpVarMod[[a]]},{a,1,Delete[HelpList,1]//Length}]//Flatten;
+		\[Lambda]6DS=Tfac^2 (\[Lambda]6+\[Lambda]6D)//Normal//Simplify//ReplaceAll[#,HelpSolveSextic]&//SparseArray;
 
-			If[Length[SparseArray[\[Lambda]6DS]["NonzeroValues"]]!=Length[SparseArray[\[Lambda]6]["NonzeroValues"]],
-				Print["Detected 1-loop Scalar Sextic not defined at tree-level"];
-				Print["Please Check if you defined all couplings allowed by symmetry"];
-			];
+		If[Length[SparseArray[\[Lambda]6DS]["NonzeroValues"]]!=Length[SparseArray[\[Lambda]6]["NonzeroValues"]],
+			Print["Detected 1-loop Scalar Sextic not defined at tree-level"];
+			Print["Please Check if you defined all couplings allowed by symmetry"];
+		];
 	];
 	
 	(* --- Debye masses --- *);
@@ -2143,11 +2164,11 @@ If[DiagonalMatrixQAE[Normal[\[Mu]ijVNLO]]==False,Print["Off-Diagonal Debye Matri
 ];
 
 
-(* ::Section::Closed:: *)
+(* ::Section:: *)
 (*Printing the results*)
 
 
-(* ::Subsection::Closed:: *)
+(* ::Subsection:: *)
 (*Print Debye mass*)
 
 
@@ -2162,7 +2183,7 @@ PrintDebyeMass[optP_:"All"] := Module[
 	},
     
     (* Verbose output *)
-    If[verbose, Print["Printing Debye Masses"]];
+    VerbosePrint["Printing Debye Masses"];
     
     (* Prepare gauge couplings and variables *)
     VarGauge = Join[\[Mu]abDef // Normal // Variables] // DeleteDuplicates;
@@ -2190,7 +2211,7 @@ PrintDebyeMass[optP_:"All"] := Module[
 ];
 
 
-(* ::Subsection::Closed:: *)
+(* ::Subsection:: *)
 (*Print higher-dimensional effective couplings*)
 
 
@@ -2198,10 +2219,7 @@ PrintDebyeMass[optP_:"All"] := Module[
 	Prints higher-order couplings.
 *)
 PrintCouplingsEffective[]:=Module[{},
-	If[verbose,Print["Printing higher-dimension couplings"]];
-
-
-
+	VerbosePrint["Printing higher-dimension couplings"];
 
 (*Scalar Sextic*);
 	VarGauge=Join[\[Lambda]6//Normal//Variables]//DeleteDuplicates;
@@ -2222,7 +2240,7 @@ PrintCouplingsEffective[]:=Module[{},
 ];
 
 
-(* ::Subsection::Closed:: *)
+(* ::Subsection:: *)
 (*Print effective couplings*)
 
 
@@ -2235,7 +2253,7 @@ PrintCouplings[]:=Module[
 		A1, A2
 	},
 	
-	If[verbose,Print["Printing 3D vector and quartic couplings in terms of 4D couplings"]];
+	VerbosePrint["Printing 3D vector and quartic couplings in terms of 4D couplings"];
 
 	(*VarGauge=Join[gvvv//Normal//Variables,gvss//Normal//Variables,gvff//Normal//Variables]//DeleteDuplicates;*)
 	VarGauge=GaugeCouplingNames//Variables;
@@ -2354,7 +2372,7 @@ PrintPressure[optP_: "All"] := Module[{opt = optP, SymmPrint},
 ];
 
 
-(* ::Subsection::Closed:: *)
+(* ::Subsection:: *)
 (*Print scalar mass*)
 
 
@@ -2365,7 +2383,7 @@ PrintPressure[optP_: "All"] := Module[{opt = optP, SymmPrint},
 PrintScalarMass[optP_: "All"] := Module[
     {opt = optP, VarGauge, SubGauge, \[Mu]ijp, var, helpMass, ResScalp, SolveTemp, SolMassPre, SolMass},
 
-    If[verbose, Print["Printing Scalar Masses"]];
+    VerbosePrint["Printing Scalar Masses"];
 
     (* Collect gauge variables and apply 3d replacements *)
     VarGauge = DeleteDuplicates[Variables[Normal[\[Mu]ij]]];
@@ -2412,7 +2430,7 @@ PrintTadpoles[optP_: "All"] := Module[
     VarGauge, SubGauge, \[Lambda]1p, var, helpMass, ResScalp, SolveTemp, SolMassPre, SolTadpole
     },
 
-    If[verbose, Print["Printing Tadpoles"]];
+    VerbosePrint["Printing Tadpoles"];
 
     (* Gauge substitutions for 3D theory *)
     VarGauge = DeleteDuplicates[Variables[Normal[\[Lambda]1]]];
@@ -2503,8 +2521,8 @@ PrintTemporalScalarCouplings[]:=Module[
 	temporalCouplings, AE
 	},
 	
+	VerbosePrint["Printing Temporal Vector Couplings"];
 	If[verbose,
-		Print["Printing Temporal Vector Couplings"];
 		Print[
 			"\[Lambda]VLL[a] are \!\(\*SuperscriptBox[\(V\), \(4\)]\) Couplings, ",
 			"\[Lambda]vvsLS[a] are \!\(\*SuperscriptBox[\(V\), \(2\)]\)S Couplings, ",
@@ -2572,9 +2590,8 @@ PrintTensorDRalgo[ind_]:=Module[{},
 	Prints Counterterms of 4d couplings and masses.
 *)
 CounterTerms4D[]:=Module[{},
-	If[verbose,Print["Finding \[Beta]-functions"]];
-		CounterTerm[];
-
+	VerbosePrint["Finding \[Beta]-functions"];
+	CounterTerm[];
 
 (*To make the comparisons easier*)
 		VarGauge=GaugeCouplingNames//Variables;
@@ -2751,7 +2768,7 @@ CounterTerms4D[]:=Module[{},
 	Prints beta-functions of 4d couplings and masses.
 *)
 BetaFunctions4D[]:=Module[{},
-If[verbose,Print["Finding \[Beta]-functions"]];
+	VerbosePrint["Finding \[Beta]-functions"];
 	If[mode>=2,
 		CounterTerm[];
 
@@ -2764,7 +2781,6 @@ If[verbose,Print["Finding \[Beta]-functions"]];
 (* 
 	Gauge couplings
 *)
-	
 		A1=TensorContract[\[Beta]vvss//Normal,{{3,4}}];
 		A2=TensorContract[HabijV,{{3,4}}]//Normal//ReplaceAll[#,SubGauge]&;
 (*Trick to avoid problems when kinetic mixing*)
@@ -2781,7 +2797,6 @@ If[verbose,Print["Finding \[Beta]-functions"]];
 (* 
 	Non-abelian couplings
 *)
-	
 		GabcdTemp=\[Beta]gvvv . gvvv+gvvv . \[Beta]gvvv//SparseArray;
 		GabVTree=TensorContract[GabcdV,{{2,3}}]//Normal;
 		GabVLoop=TensorContract[GabcdTemp,{{2,3}}]//Normal;
@@ -2797,7 +2812,6 @@ If[verbose,Print["Finding \[Beta]-functions"]];
 (* 
 	Scalar-quartic couplings
 *)
-
 		VarGauge=Join[\[Lambda]4//Normal//Variables]//DeleteDuplicates;
 		SubGauge=Table[c->Symbol[ToString[c]<>ToString["temp"]],{c,VarGauge}];
 		SubGauge2=Table[Symbol[ToString[c]<>ToString["temp"]]->c,{c,VarGauge}];
@@ -2849,8 +2863,6 @@ If[verbose,Print["Finding \[Beta]-functions"]];
 (* 
 	Scalar masses
 *)
-
-	
 		VarGauge=Join[\[Mu]ij//Normal//Variables]//DeleteDuplicates;
 		SubGauge=Table[c->Symbol[ToString[c]<>ToString["temp"]],{c,VarGauge}];
 		SubGauge2=Table[Symbol[ToString[c]<>ToString["temp"]]->c,{c,VarGauge}];
@@ -2928,7 +2940,7 @@ ToExpression[StringReplace[ToString[StandardForm[PrintPre]],"DRalgo`Private`"->"
 	Prints beta-functions of the soft masses and tadpoles.
 *)
 BetaFunctions3DS[]:=Module[{},
-If[verbose,Print["Finding \[Beta]-functions"]];
+	VerbosePrint["Finding \[Beta]-functions"];
 	If[mode>0,
 
 (* 
