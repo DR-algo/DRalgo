@@ -1993,11 +1993,12 @@ IdentifyTensorsDRalgo[]:=Module[
 		(* --- Scalar quartic couplings --- *)
 		VerbosePrint["Calculating Quartic Tensor"];
 		
-		HelpList=DeleteDuplicates@Flatten[Tfac(\[Lambda]4+\[Lambda]3D)]//Sort//Simplify;
+		couplingTensor = Tfac(\[Lambda]4+\[Lambda]3D);
+		HelpList=DeleteDuplicates@Flatten[couplingTensor]//Sort//Simplify;
 		HelpVarMod=RelationsBVariables3[HelpList]//ReplaceAll[#,\[Lambda]VL[v1_]->\[Lambda][v1]]&;
 		HelpListCleaned=CleanedList[HelpList];
 		HelpSolveQuartic=Table[{HelpListCleaned[[a]]->HelpVarMod[[a]]},{a,1,HelpListCleaned//Length}]//Flatten//Simplify;
-		\[Lambda]3DS=Tfac(\[Lambda]4+\[Lambda]3D)//SimplifySparse//Normal//ReplaceAll[#,HelpSolveQuartic]&//SparseArray;
+		\[Lambda]3DS=couplingTensor//SimplifySparse//Normal//ReplaceAll[#,HelpSolveQuartic]&//SparseArray;
 
 
 		If[Length[SparseArray[\[Lambda]3DS]["NonzeroValues"]]!=Length[SparseArray[\[Lambda]4]["NonzeroValues"]],
@@ -2020,33 +2021,37 @@ IdentifyTensorsDRalgo[]:=Module[
 		(* --- Vector-scalar couplings --- *)
 		VerbosePrint["Calculating Vector-Scalar Interaction Tensor "];
 		
-		HelpList=DeleteDuplicates@Flatten@SimplifySparse[Tfac (HabijV+GvvssT)]//Sort;
+		couplingTensor = Tfac*(HabijV+GvvssT);
+		HelpList=DeleteDuplicates@Flatten@SimplifySparse[couplingTensor]//Sort;
 		HelpListCleaned=CleanedList[HelpList];
 		If[Length[HelpListCleaned]<1,(*Fix for when the tensor is empty*)
-			\[Lambda]KVecT=Tfac (HabijV+GvvssT)//SparseArray;
+			\[Lambda]KVecT=couplingTensor//SparseArray;
 			HelpSolveVecT={};
 		,
 			HelpVarMod=RelationsBVariables3[HelpList]//ReplaceAll[#,\[Lambda]VL[v1_]->\[Lambda]VT[v1]]&;
 			HelpSolveVecT=Table[{HelpListCleaned[[a]]->HelpVarMod[[a]]},{a,1,HelpListCleaned//Length}]//Flatten//Simplify;
-			\[Lambda]KVecT=Tfac (HabijV+GvvssT)//SimplifySparse//Normal//ReplaceAll[#,HelpSolveVecT]&//SparseArray;
+			\[Lambda]KVecT=couplingTensor//SimplifySparse//Normal//ReplaceAll[#,HelpSolveVecT]&//SparseArray;
 		];
 
 		(* --- Temporal-scalar/scalar cross couplings --- *)
-		HelpList=DeleteDuplicates@Simplify@Flatten[-Tfac(HabijV+GvvssL)]//Sort;
+		
+		couplingTensor = -Tfac(HabijV+GvvssL);
+		HelpList=DeleteDuplicates@Simplify@Flatten[couplingTensor]//Sort;
 		HelpListCleaned=CleanedList[HelpList];
 		If[Length[HelpListCleaned]<1,
-			\[Lambda]KVec=-Tfac(HabijV+GvvssL)//Normal//Simplify//SparseArray;
+			\[Lambda]KVec=couplingTensor//Normal//Simplify//SparseArray;
 			HelpSolveVecL={};
 		,
 			HelpVarMod=RelationsBVariables3[HelpList];
 			HelpSolveVecL=Table[{HelpListCleaned[[a]]->HelpListCleaned[[a]]},{a,1,HelpListCleaned//Length}]//Flatten//Simplify;
-			\[Lambda]KVec=-Tfac(HabijV+GvvssL)//Normal//Simplify//ReplaceAll[#,HelpSolveVecL]&//SparseArray;
+			\[Lambda]KVec=couplingTensor//Normal//Simplify//ReplaceAll[#,HelpSolveVecL]&//SparseArray;
 		];
 
 		(* --- Temporal-Scalar quartics --- *)
 		VerbosePrint["Calculating Temporal-Vector Quartics "];
 		
-		HelpList=DeleteDuplicates@SparseArray[Flatten@Simplify[Tfac \[Lambda]AA]]//Sort//FullSimplify;
+		couplingTensor=Tfac*\[Lambda]AA;
+		HelpList=DeleteDuplicates@SparseArray[Flatten@Simplify[couplingTensor]]//Sort//FullSimplify;
 		HelpListCleaned=CleanedList[HelpList];
 		HelpVar=Table[\[Lambda]VLL[a],{a,1,Rest[HelpList]//Length}];
 		If[Length[HelpVar]<1,
@@ -2054,20 +2059,21 @@ IdentifyTensorsDRalgo[]:=Module[
 			HelpVarMod=RelationsBVariables[HelpList,HelpVar];
 			HelpSolveQuarticL={HelpList[[1]]->HelpVarMod}//Flatten;
 
-			\[Lambda]AAS=Tfac \[Lambda]AA//Normal//Simplify//ReplaceAll[#,HelpSolveQuarticL]&//SparseArray;
+			\[Lambda]AAS=couplingTensor//Normal//Simplify//ReplaceAll[#,HelpSolveQuarticL]&//SparseArray;
 		,
 			HelpVarMod=RelationsBVariables3[HelpList]//ReplaceAll[#,\[Lambda]VL[v1_]->\[Lambda]VLL[v1]]&;
 			HelpSolveQuarticL=Table[{HelpListCleaned[[a]]->HelpVarMod[[a]]},{a,1,HelpListCleaned//Length}]//Flatten//Simplify;
-			\[Lambda]AAS=Tfac \[Lambda]AA//Normal//FullSimplify//ReplaceAll[#,HelpSolveQuarticL]&//SparseArray;
+			\[Lambda]AAS=couplingTensor//Normal//FullSimplify//ReplaceAll[#,HelpSolveQuarticL]&//SparseArray;
 		];
 
 		(* --- Temporal-Scalar/scalar cross cubic couplings --- *)
-		HelpList=DeleteDuplicates@SparseArray[Flatten@Simplify[Sqrt[Tfac] GvvsL]]//Sort//FullSimplify;
+		couplingTensor = Sqrt[Tfac]*GvvsL;
+		HelpList=DeleteDuplicates@SparseArray[Flatten@Simplify[couplingTensor]]//Sort//FullSimplify;
 		HelpListCleaned=CleanedList[HelpList];
 		HelpVar=Table[\[Lambda]VVSL[a],{a,1,HelpListCleaned//Length}];
 		HelpVarMod=RelationsBVariables[HelpList,HelpVar];
 		HelpSolveCubicL=Table[{HelpListCleaned[[a]]->HelpVarMod[[a]]},{a,1,HelpListCleaned//Length}]//Flatten//Simplify;
-		\[Lambda]vvsLS=Sqrt[Tfac] GvvsL//Normal//Simplify//ReplaceAll[#,HelpSolveCubicL]&//SparseArray;
+		\[Lambda]vvsLS=couplingTensor//Normal//Simplify//ReplaceAll[#,HelpSolveCubicL]&//SparseArray;
 
 	];
 		
@@ -2075,27 +2081,31 @@ IdentifyTensorsDRalgo[]:=Module[
 	If[mode==0,
 		GvvssL=EmptyArray[{nv,nv,ns,ns}]
 	];
-	HelpList=DeleteDuplicates@Simplify@Flatten[-Tfac(HabijV+GvvssL)]//Sort;
+	
+	couplingTensor = -Tfac(HabijV+GvvssL);
+	HelpList=DeleteDuplicates@Simplify@Flatten[couplingTensor]//Sort;
 	HelpListCleaned=CleanedList[HelpList];
 	If[Length[HelpListCleaned]<1,
-		\[Lambda]KVec=-Tfac(HabijV+GvvssL)//Normal//Simplify//SparseArray;
+		\[Lambda]KVec=couplingTensor//Normal//Simplify//SparseArray;
 		HelpSolveVecL={};
 	,
 		HelpVarMod=RelationsBVariables3[HelpList];
 		HelpSolveVecL=Table[{HelpListCleaned[[a]]->HelpVarMod[[a]]},{a,1,HelpListCleaned//Length}]//Flatten//Simplify;
-		\[Lambda]KVec=-Tfac(HabijV+GvvssL)//Normal//Simplify//ReplaceAll[#,HelpSolveVecL]&//SparseArray;
+		\[Lambda]KVec=couplingTensor//Normal//Simplify//ReplaceAll[#,HelpSolveVecL]&//SparseArray;
 	];			
 			
 	If[mode>=3,
-		VerbosePrint["Calculating Sextic Tensor"];
-
 		(* --- Scalar sextic couplings --- *)
-		HelpList=DeleteDuplicates@Flatten[Tfac^2 (\[Lambda]6+\[Lambda]6D)]//Sort//Simplify;
+		VerbosePrint["Calculating Sextic Tensor"];
+		
+		couplingTensor = Tfac^2*(\[Lambda]6+\[Lambda]6D);
+		HelpList=DeleteDuplicates@Flatten[couplingTensor]//Sort//Simplify;
+		
 		HelpListCleaned=CleanedList[HelpList];
 		HelpVar=Table[ \[Lambda]6d[a],{a,1,HelpListCleaned//Length}];
 		HelpVarMod=RelationsBVariables[HelpList,HelpVar];
 		HelpSolveSextic=Table[{HelpListCleaned[[a]]->HelpVarMod[[a]]},{a,1,HelpListCleaned//Length}]//Flatten;
-		\[Lambda]6DS=Tfac^2 (\[Lambda]6+\[Lambda]6D)//Normal//Simplify//ReplaceAll[#,HelpSolveSextic]&//SparseArray;
+		\[Lambda]6DS=couplingTensor//Normal//Simplify//ReplaceAll[#,HelpSolveSextic]&//SparseArray;
 
 		If[Length[SparseArray[\[Lambda]6DS]["NonzeroValues"]]!=Length[SparseArray[\[Lambda]6]["NonzeroValues"]],
 			Print["Detected 1-loop Scalar Sextic not defined at tree-level"];
@@ -2105,57 +2115,67 @@ IdentifyTensorsDRalgo[]:=Module[
 	
 	(* --- Debye masses --- *);
 	If[mode>=2,
-		HelpList=DeleteDuplicates@FullSimplify[Flatten[ xLO aV3D+ xNLO \[Mu]VabNLO]]//Sort;
+		couplingTensor = xLO*aV3D+ xNLO*\[Mu]VabNLO;
+		HelpList=DeleteDuplicates@FullSimplify[Flatten[couplingTensor]]//Sort;
+		
 		HelpListCleaned=CleanedList[HelpList];
 		HelpVar=Table[ \[Mu]ijV[a],{a,1,HelpListCleaned//Length}];
 		HelpVarMod=RelationsBVariables[HelpList,HelpVar];
 		HelpSolveVectorMass=Table[{HelpListCleaned[[a]]->HelpVarMod[[a]]},{a,1,HelpListCleaned//Length}]//Flatten;
 		\[Mu]ijVNLO=Coefficient[ xLO aV3D+ xNLO \[Mu]VabNLO//Normal//FullSimplify//ReplaceAll[#,HelpSolveVectorMass]&,\[Epsilon],0]//SparseArray;
 	,
-		HelpList=DeleteDuplicates@FullSimplify[Flatten[ xLO aV3D]]//Sort;
+		couplingTensor = xLO*aV3D;
+		HelpList=DeleteDuplicates@FullSimplify[Flatten[couplingTensor]]//Sort;
+		
 		HelpListCleaned=CleanedList[HelpList];
 		HelpVar=Table[ \[Mu]ijV[a],{a,1,HelpListCleaned//Length}];
 		HelpVarMod=RelationsBVariables[HelpList,HelpVar];
 		HelpSolveVectorMass=Table[{HelpListCleaned[[a]]->HelpVarMod[[a]]},{a,1,HelpListCleaned//Length}]//Flatten;
-		\[Mu]ijVNLO= xLO aV3D//Normal//FullSimplify//ReplaceAll[#,HelpSolveVectorMass]&//SparseArray;
+		\[Mu]ijVNLO=couplingTensor//Normal//FullSimplify//ReplaceAll[#,HelpSolveVectorMass]&//SparseArray;
 	];
 
 
-If[DiagonalMatrixQAE[Normal[\[Mu]ijVNLO]]==False,Print["Off-Diagonal Debye Matrices Detected"]];
+	If[DiagonalMatrixQAE[Normal[\[Mu]ijVNLO]]==False,
+		Print["Off-Diagonal Debye Matrices Detected"]
+	];
 
 	(* --- Scalar masses --- *)
 	If[mode>=2,
 		RGRunningHardToSoft[]; (*Runs from the hard to the soft scale in the effective theory*)
-		HelpList=DeleteDuplicates@Flatten@Simplify[ xLO aS3D+xNLO (\[Mu]SijNLO+rgFac*Contri\[Beta]SoftToHard)]//Sort;
+		couplingTensor = xLO*aS3D+xNLO*(\[Mu]SijNLO+rgFac*Contri\[Beta]SoftToHard);
+		HelpList=DeleteDuplicates@Flatten@Simplify[couplingTensor]//Sort;
 		HelpListCleaned=CleanedList[HelpList];
 		HelpVar=Table[ \[Mu]ijS[a],{a,1,HelpListCleaned//Length}];
 		HelpVarMod=RelationsBVariables[HelpList,HelpVar];
 		HelpSolveMass=Table[{HelpListCleaned[[a]]->HelpVarMod[[a]]},{a,1,HelpListCleaned//Length}]//Flatten;
-		\[Mu]ijSNLO=xLO aS3D+xNLO (\[Mu]SijNLO+rgFac*Contri\[Beta]SoftToHard)//Normal//Simplify//ReplaceAll[#,HelpSolveMass]&//SparseArray;
+		\[Mu]ijSNLO=couplingTensor//Normal//Simplify//ReplaceAll[#,HelpSolveMass]&//SparseArray;
 	,
-		HelpList=DeleteDuplicates@Flatten@Simplify[ xLO aS3D]//Sort;
+		couplingTensor = xLO*aS3D;
+		HelpList=DeleteDuplicates@Flatten@Simplify[couplingTensor]//Sort;
 		HelpListCleaned=CleanedList[HelpList];
 		HelpVar=Table[ \[Mu]ijS[a],{a,1,HelpListCleaned//Length}];
 		HelpVarMod=RelationsBVariables[HelpList,HelpVar];
 		HelpSolveMass=Table[{HelpListCleaned[[a]]->HelpVarMod[[a]]},{a,1,HelpListCleaned//Length}]//Flatten;
-		\[Mu]ijSNLO=xLO aS3D//Normal//Simplify//ReplaceAll[#,HelpSolveMass]&//SparseArray;
+		\[Mu]ijSNLO=couplingTensor//Normal//Simplify//ReplaceAll[#,HelpSolveMass]&//SparseArray;
 	];
 
 	(* --- Scalar tadpoles --- *)
 	If[mode>=2,
-		HelpList=DeleteDuplicates@Flatten@Simplify[ xLO*Tfac^(-1/2)(\[Lambda]1+TadPoleLO)+xNLO(TadPoleNLO*Tfac^(-1/2) +rgFac*ContriTadPoleSoftToHard)]//Sort;
+		couplingTensor = xLO*Tfac^(-1/2)(\[Lambda]1+TadPoleLO)+xNLO(TadPoleNLO*Tfac^(-1/2) +rgFac*ContriTadPoleSoftToHard);
+		HelpList=DeleteDuplicates@Flatten@Simplify[couplingTensor]//Sort;
 		HelpListCleaned=CleanedList[HelpList];
 		HelpVar=Table[ dS[a],{a,1,HelpListCleaned//Length}];
 		HelpVarMod=RelationsBVariables[HelpList,HelpVar];
 		HelpSolveTadpole=Table[{HelpListCleaned[[a]]->HelpVarMod[[a]]},{a,1,HelpListCleaned//Length}]//Flatten;
-		TadPoleS=xLO*Tfac^(-1/2) (\[Lambda]1+TadPoleLO)+xNLO (TadPoleNLO*T^(-1/2)+rgFac*ContriTadPoleSoftToHard)//Normal//Simplify//ReplaceAll[#,HelpSolveTadpole]&//SparseArray;
+		TadPoleS=couplingTensor//Normal//Simplify//ReplaceAll[#,HelpSolveTadpole]&//SparseArray;
 	,
-		HelpList=DeleteDuplicates@Flatten@Simplify[ xLO*Tfac^(-1/2)(\[Lambda]1+TadPoleLO)]//Sort;
+		couplingTensor = xLO*Tfac^(-1/2)(\[Lambda]1+TadPoleLO);
+		HelpList=DeleteDuplicates@Flatten@Simplify[couplingTensor]//Sort;
 		HelpListCleaned=CleanedList[HelpList];
 		HelpVar=Table[ dS[a],{a,1,HelpListCleaned//Length}];
 		HelpVarMod=RelationsBVariables[HelpList,HelpVar];
 		HelpSolveTadpole=Table[{HelpListCleaned[[a]]->HelpVarMod[[a]]},{a,1,HelpListCleaned//Length}]//Flatten;
-		TadPoleS=xLO Tfac^(-1/2) (\[Lambda]1+TadPoleLO)//Normal//Simplify//ReplaceAll[#,HelpSolveTadpole]&//SparseArray;
+		TadPoleS=couplingTensor//Normal//Simplify//ReplaceAll[#,HelpSolveTadpole]&//SparseArray;
 	];
 
 	If[Length[SparseArray[TadPoleS]["NonzeroValues"]]!=Length[SparseArray[\[Lambda]1]["NonzeroValues"]],
@@ -2164,7 +2184,11 @@ If[DiagonalMatrixQAE[Normal[\[Mu]ijVNLO]]==False,Print["Off-Diagonal Debye Matri
 	];
 
 	If[mode>=1,
-		IdentMat=List/@Join[HelpSolveCubicS,HelpSolveVecT,HelpSolveVecL,HelpSolveQuarticL,HelpSolveVectorMass,HelpSolveMass,HelpSolveCubicL,HelpSolveTadpole,HelpSolveQuartic]/.{b_->a_}:>a->b//Flatten[#,1]&;
+		IdentMat=List/@Join[
+			HelpSolveCubicS,HelpSolveVecT,HelpSolveVecL,
+			HelpSolveQuarticL,HelpSolveVectorMass,HelpSolveMass,
+			HelpSolveCubicL,HelpSolveTadpole,HelpSolveQuartic
+		]/.{b_->a_}:>a->b//Flatten[#,1]&;
 	,
 		IdentMat=List/@Join[HelpSolveVectorMass,HelpSolveMass,HelpSolveVecL]/.{b_->a_}:>a->b//Flatten[#,1]&;
 	];
