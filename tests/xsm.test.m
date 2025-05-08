@@ -121,14 +121,16 @@ Ysff=-yt1*GradYukawa[YukawaDoublet1[[1]]];
 YsffC=SparseArray[Simplify[Conjugate[Ysff]//Normal,Assumptions->{yt1>0}]];
 
 
+MassTerm1[[1]]
+
+
 Dim6Term=(
-	+ MassTerm1^3
-	+ MassTerm2^3
-	+ MassTerm1^2*MassTerm2
-	+ MassTerm2^2*MassTerm1
+	+ c61*MassTerm1[[1]]^3
+	+ c62*MassTerm2[[1]]^3
+	+ c63*MassTerm1[[1]]^2*MassTerm2[[1]]
+	+ c64*MassTerm2[[1]]^2*MassTerm1[[1]]
 	);
-\[Lambda]6=0 GradSextic[Dim6Term]
-Dimensions[\[Lambda]6]
+\[Lambda]6=GradSextic[Dim6Term];
 
 
 (* ::Section:: *)
@@ -151,7 +153,22 @@ PerformDRhard[]
 (*Test hard*)
 
 
+Replacements={
+	Thread[{c61,c62,c63,c64}->0]
+}//Flatten;
+
+
 testList={};
+
+
+(* ::Subsubsection::Closed:: *)
+(*Beta functions*)
+
+
+AppendTo[testList,
+TestCreate[BetaFunctions4D[]/.Replacements//DeleteCases[#,0->0]&,
+	{g1^2->(g1^2 (-18 yt1^2 (Yq-Yu)^2+(18 yt1^2+g1^2 nF (3 Yd^2+Ye^2+2 Yl^2+6 Yq^2+3 Yu^2)) Y\[Phi]^2+g1^2 Y\[Phi]^4))/(48 \[Pi]^2 Y\[Phi]^2),g2^2->(g2^4 (-43+8 nF))/(48 \[Pi]^2),g3^2->(g3^4 (-33+4 nF))/(24 \[Pi]^2),\[Lambda]1H->(9 g2^4-48 yt1^4+3 g1^4 Y\[Phi]^4+6 g2^2 (g1^2 Y\[Phi]^2-12 \[Lambda]1H)-24 g1^2 Y\[Phi]^2 \[Lambda]1H+96 \[Lambda]1H (yt1^2+2 \[Lambda]1H)+4 \[Lambda]m^2)/(128 \[Pi]^2),\[Lambda]m->(\[Lambda]m (-9 g2^2+12 yt1^2-3 g1^2 Y\[Phi]^2+24 \[Lambda]1H+8 \[Lambda]m+12 \[Lambda]\[Sigma]))/(32 \[Pi]^2),\[Lambda]\[Sigma]->(\[Lambda]m^2+9 \[Lambda]\[Sigma]^2)/(8 \[Pi]^2),\[Mu]3->(3 (6 \[Lambda]\[Sigma] \[Mu]3+\[Lambda]m \[Mu]m))/(16 \[Pi]^2),\[Mu]m->(-3 (3 g2^2-4 yt1^2+g1^2 Y\[Phi]^2-8 \[Lambda]1H) \[Mu]m+8 \[Lambda]m (\[Mu]3+\[Mu]m))/(32 \[Pi]^2),yt1->(yt1 (-9 g2^2-32 g3^2+18 yt1^2-3 g1^2 (2 Yq Yu+Y\[Phi]^2)))/(64 \[Pi]^2),m1->(-3 m1 (3 g2^2-4 yt1^2+g1^2 Y\[Phi]^2-8 \[Lambda]1H)+\[Mu]m^2+2 \[Lambda]m \[Mu]\[Sigma])/(32 \[Pi]^2),\[Mu]\[Sigma]->(4 m1 \[Lambda]m+4 \[Mu]3^2+\[Mu]m^2+6 \[Lambda]\[Sigma] \[Mu]\[Sigma])/(16 \[Pi]^2),\[Mu]1->(m1 \[Mu]m+\[Mu]3 \[Mu]\[Sigma])/(8 \[Pi]^2)}
+]];
 
 
 (* ::Subsubsection::Closed:: *)
@@ -159,63 +176,54 @@ testList={};
 
 
 AppendTo[testList,
-TestCreate[BetaFunctions4D[],
-	{g1^2->(g1^2 (-18 yt1^2 (Yq-Yu)^2+(18 yt1^2+g1^2 nF (3 Yd^2+Ye^2+2 Yl^2+6 Yq^2+3 Yu^2)) Y\[Phi]^2+g1^2 Y\[Phi]^4))/(48 \[Pi]^2 Y\[Phi]^2),g2^2->(g2^4 (-43+8 nF))/(48 \[Pi]^2),g3^2->(g3^4 (-33+4 nF))/(24 \[Pi]^2),\[Lambda]1H->(9 g2^4-48 yt1^4+3 g1^4 Y\[Phi]^4+6 g2^2 (g1^2 Y\[Phi]^2-12 \[Lambda]1H)-24 g1^2 Y\[Phi]^2 \[Lambda]1H+96 \[Lambda]1H (yt1^2+2 \[Lambda]1H)+4 \[Lambda]m^2)/(128 \[Pi]^2),\[Lambda]m->(\[Lambda]m (-9 g2^2+12 yt1^2-3 g1^2 Y\[Phi]^2+24 \[Lambda]1H+8 \[Lambda]m+12 \[Lambda]\[Sigma]))/(32 \[Pi]^2),\[Lambda]\[Sigma]->(\[Lambda]m^2+9 \[Lambda]\[Sigma]^2)/(8 \[Pi]^2),\[Mu]3->(3 (6 \[Lambda]\[Sigma] \[Mu]3+\[Lambda]m \[Mu]m))/(16 \[Pi]^2),\[Mu]m->(-3 (3 g2^2-4 yt1^2+g1^2 Y\[Phi]^2-8 \[Lambda]1H) \[Mu]m+8 \[Lambda]m (\[Mu]3+\[Mu]m))/(32 \[Pi]^2),yt1->(yt1 (-9 g2^2-32 g3^2+18 yt1^2-3 g1^2 (2 Yq Yu+Y\[Phi]^2)))/(64 \[Pi]^2),m1->(-3 m1 (3 g2^2-4 yt1^2+g1^2 Y\[Phi]^2-8 \[Lambda]1H)+\[Mu]m^2+2 \[Lambda]m \[Mu]\[Sigma])/(32 \[Pi]^2),\[Mu]\[Sigma]->(4 m1 \[Lambda]m+4 \[Mu]3^2+\[Mu]m^2+6 \[Lambda]\[Sigma] \[Mu]\[Sigma])/(16 \[Pi]^2),\[Mu]1->(m1 \[Mu]m+\[Mu]3 \[Mu]\[Sigma])/(8 \[Pi]^2)}
-]];
-
-
-AppendTo[testList,
-TestCreate[PrintCouplings[],
+TestCreate[PrintCouplings[]/.Replacements//Simplify,
 	{g13d^2->1/(96 \[Pi]^2 Y\[Phi]^2) g1^2 T (18 Lf yt1^2 (Yq-Yu)^2+(96 \[Pi]^2-Lf (18 yt1^2+g1^2 nF (3 Yd^2+Ye^2+2 Yl^2+6 Yq^2+3 Yu^2))) Y\[Phi]^2-g1^2 Lb Y\[Phi]^4),g23d^2->g2^2 T+(g2^4 (4+43 Lb-8 Lf nF) T)/(96 \[Pi]^2),g33d^2->g3^2 T+(g3^4 (3+33 Lb-4 Lf nF) T)/(48 \[Pi]^2),\[Lambda]1H3d->1/(256 \[Pi]^2) T (48 Lf yt1^4+(2-3 Lb) (3 g2^4+2 g1^2 g2^2 Y\[Phi]^2+g1^4 Y\[Phi]^4)+256 \[Pi]^2 \[Lambda]1H+24 (3 g2^2 Lb-4 Lf yt1^2+g1^2 Lb Y\[Phi]^2) \[Lambda]1H-4 Lb (48 \[Lambda]1H^2+\[Lambda]m^2)),\[Lambda]m3d->(T \[Lambda]m (9 g2^2 Lb+64 \[Pi]^2-12 Lf yt1^2+3 g1^2 Lb Y\[Phi]^2-4 Lb (6 \[Lambda]1H+2 \[Lambda]m+3 \[Lambda]\[Sigma])))/(64 \[Pi]^2),\[Lambda]\[Sigma]3d->T \[Lambda]\[Sigma]-(Lb T (\[Lambda]m^2+9 \[Lambda]\[Sigma]^2))/(16 \[Pi]^2),\[Mu]33d->1/2 Sqrt[T] (2 \[Mu]3-(3 Lb (6 \[Lambda]\[Sigma] \[Mu]3+\[Lambda]m \[Mu]m))/(16 \[Pi]^2)),\[Mu]m3d->(Sqrt[T] (4 (16 \[Pi]^2-3 Lf yt1^2) \[Mu]m+3 Lb (3 g2^2+g1^2 Y\[Phi]^2-8 \[Lambda]1H) \[Mu]m-8 Lb \[Lambda]m (\[Mu]3+\[Mu]m)))/(64 \[Pi]^2)}
 ]];
 
 
 AppendTo[testList,
-TestCreate[PrintTadpoles["LO"],
+TestCreate[PrintTadpoles["LO"]/.Replacements,
 	{\[Mu]13d->(12 \[Mu]1+T^2 (\[Mu]3+\[Mu]m))/(12 Sqrt[T])}
 ]];
 AppendTo[testList,
-TestCreate[PrintTadpoles["NLO"],
+TestCreate[PrintTadpoles["NLO"]/.Replacements,
 	{\[Mu]13d->1/(768 \[Pi]^2 Sqrt[T]) (-Lb (T^2 (-12 \[Lambda]\[Sigma] \[Mu]3+2 \[Lambda]m (4 \[Mu]3-5 \[Mu]m)+3 (9 g2^2+6 yt1^2+3 g1^2 Y\[Phi]^2+8 \[Lambda]1H) \[Mu]m)+48 (m1 \[Mu]m+\[Mu]3 \[Mu]\[Sigma]))+2 T^2 (3 Lf yt1^2 \[Mu]m+g1^2 Y\[Phi]^2 \[Mu]m+6 EulerGamma (-4 \[Lambda]\[Sigma] \[Mu]3+(3 g2^2+g1^2 Y\[Phi]^2-2 \[Lambda]m) \[Mu]m)+3 g2^2 \[Mu]m (1-72 Log[Glaisher])+288 \[Lambda]\[Sigma] \[Mu]3 Log[Glaisher]-72 g1^2 Y\[Phi]^2 \[Mu]m Log[Glaisher]+144 \[Lambda]m \[Mu]m Log[Glaisher])+24 Sqrt[T] (4 \[Lambda]\[Sigma]3d \[Mu]33d-(3 g23d^2+g13d^2 Y\[Phi]^2-2 \[Lambda]m3d) \[Mu]m3d) Log[\[Mu]3/\[Mu]])}
 ]];
 
 
 AppendTo[testList,
-TestCreate[PrintTemporalScalarCouplings[],
+TestCreate[PrintTemporalScalarCouplings[]/.Replacements,
 	{\[Lambda]VLL[1]->-((g2^2 g3^2 nF T)/(4 \[Pi]^2)),\[Lambda]VLL[2]->(g3^4 (9-2 nF) T)/(4 \[Pi]^2),\[Lambda]VLL[3]->(g2^4 (17-4 nF) T)/(8 \[Pi]^2),\[Lambda]VLL[4]->-((I g1 g2^3 nF T (Yl+3 Yq))/(24 \[Pi]^2)),\[Lambda]VLL[5]->-((I g1 g3^3 nF T (Yd-2 Yq+Yu))/(48 \[Pi]^2)),\[Lambda]VLL[6]->-((g1 g3^3 nF T (Yd+2 Yq+Yu))/(16 \[Pi]^2)),\[Lambda]VLL[7]->-((g1^2 g3^2 nF T (Yd^2+2 Yq^2+Yu^2))/(8 \[Pi]^2)),\[Lambda]VLL[8]->(g1^2 g2^2 T (-nF (Yl^2+3 Yq^2)+Y\[Phi]^2))/(8 \[Pi]^2),\[Lambda]VLL[9]->-((g1^4 T (nF (3 Yd^4+Ye^4+2 Yl^4+6 Yq^4+3 Yu^4)-2 Y\[Phi]^4))/(16 \[Pi]^2)),\[Lambda]VVSL[1]->(g2^2 Sqrt[T] \[Mu]m)/(16 \[Pi]^2),\[Lambda]VVSL[2]->(g1^2 Sqrt[T] Y\[Phi]^2 \[Mu]m)/(16 \[Pi]^2),\[Lambda]VL[1]->-((g3^2 T yt1^2)/(4 \[Pi]^2)),\[Lambda]VL[2]->1/192 g1^2 T (96 Y\[Phi]^2+1/\[Pi]^2 (-36 Lf Yq yt1^2 Yu+18 yt1^2 ((-2+Lf) Yu^2-Lf Y\[Phi]^2)+6 Yq^2 (3 (-2+Lf) yt1^2-g1^2 (-1+Lf) nF Y\[Phi]^2)+Y\[Phi]^2 (9 g2^2+g1^2 (-((-1+Lf) nF (3 Yd^2+Ye^2+2 Yl^2+3 Yu^2))-(-1+Lb) Y\[Phi]^2)+72 \[Lambda]1H))),\[Lambda]VL[3]->(g2^2 T (g2^2 (51+43 Lb+8 nF-8 Lf nF)+96 \[Pi]^2-36 yt1^2+3 g1^2 Y\[Phi]^2+72 \[Lambda]1H))/(192 \[Pi]^2),\[Lambda]VL[4]->1/384 g1 g2 T (192 Y\[Phi]+1/\[Pi]^2 (-36 (-2+Lf) Yq yt1^2+36 Lf yt1^2 (Yu-Y\[Phi])+g2^2 (-12+43 Lb+8 nF) Y\[Phi]-6 g1^2 (-1+Lf) nF Yq^2 Y\[Phi]-Lf nF (8 g2^2+g1^2 (3 Yd^2+Ye^2+2 Yl^2+3 Yu^2)) Y\[Phi]+g1^2 Y\[Phi] (nF (3 Yd^2+Ye^2+2 Yl^2+3 Yu^2)-(-4+Lb) Y\[Phi]^2)+48 Y\[Phi] \[Lambda]1H)),\[Lambda]VL[5]->(g2^2 T \[Lambda]m)/(8 \[Pi]^2),\[Lambda]VL[6]->(g1^2 T Y\[Phi]^2 \[Lambda]m)/(8 \[Pi]^2)}
 ]];
 
 
 AppendTo[testList,
-TestCreate[PrintDebyeMass["LO"],
+TestCreate[PrintDebyeMass["LO"]/.Replacements,
 	{\[Mu]sqSU2->1/6 g2^2 (5+2 nF) T^2,\[Mu]sqSU3->1/3 g3^2 (3+nF) T^2,\[Mu]sqU1->1/24 g1^2 T^2 (nF (3 Yd^2+Ye^2+2 Yl^2+6 Yq^2+3 Yu^2)+4 Y\[Phi]^2)}
 ]];
 AppendTo[testList,
-TestCreate[PrintDebyeMass["NLO"],
-{\[Mu]sqSU2->1/(1152 \[Pi]^2) g2^2 (144 m1+T^2 (-144 g3^2 nF+9 g1^2 (-nF (Yl^2+3 Yq^2)+Y\[Phi]^2)+6 (-3 yt1^2+12 \[Lambda]1H+\[Lambda]m)+g2^2 (207-4 EulerGamma (5+2 nF) (-43+8 nF)+4 nF (11+8 nF-192 Log[2])))+4 g2^2 T^2 (8 nF (-7+2 nF) Log[\[Pi] T]-39 Log[4 \[Pi] T]+(39+8 (7-2 nF) nF) Log[\[Mu]]+2 (88-5 nF) Log[\[Mu]/(4 \[Pi] T)])),\[Mu]sqSU3->1/(1152 \[Pi]^2) g3^2 T^2 (-9 (6 g2^2 nF+8 yt1^2+g1^2 nF (Yd^2+2 Yq^2+Yu^2))-8 g3^2 (-45+2 EulerGamma (3+nF) (-33+4 nF)+nF (-3-4 nF+132 Log[2]))+16 g3^2 (nF (-21+4 nF) (Log[\[Pi]]+Log[T]-Log[\[Mu]])+99 Log[\[Mu]/(4 \[Pi] T)])),\[Mu]sqU1->1/(576 \[Pi]^2) (-27 g1^2 T^2 yt1^2 (Yq^2+Yu^2)-9/4 g1^2 nF T^2 (6 g2^2 (Yl^2+3 Yq^2)+16 g3^2 (Yd^2+2 Yq^2+Yu^2)+g1^2 (3 Yd^4+Ye^4+2 Yl^4+6 Yq^4+3 Yu^4))+72 g1^2 m1 Y\[Phi]^2+18 g1^2 T^2 yt1^2 Y\[Phi]^2+9/2 T^2 (3 g1^2 g2^2 Y\[Phi]^2+g1^4 Y\[Phi]^4)+3 g1^2 T^2 Y\[Phi]^2 (12 \[Lambda]1H+\[Lambda]m)-2 g1^4 T^2 Y\[Phi]^4 (1+EulerGamma-Log[4 \[Pi] T]+Log[\[Mu]])-1/4 g1^4 nF^2 T^2 (3 Yd^2+Ye^2+2 Yl^2+6 Yq^2+3 Yu^2)^2 (-1+2 EulerGamma-2 Log[\[Pi] T]+2 Log[\[Mu]])-1/2 g1^4 nF T^2 (3 Yd^2+Ye^2+2 Yl^2+6 Yq^2+3 Yu^2) Y\[Phi]^2 (-1+5 EulerGamma+Log[1/(4 \[Pi]^5)]+5 Log[\[Mu]/T]))}
+TestCreate[PrintDebyeMass["NLO"]/.Replacements,
+	{\[Mu]sqSU2->1/(1152 \[Pi]^2) g2^2 (144 m1+T^2 (-144 g3^2 nF+9 g1^2 (-nF (Yl^2+3 Yq^2)+Y\[Phi]^2)+6 (-3 yt1^2+12 \[Lambda]1H+\[Lambda]m)+g2^2 (207-4 EulerGamma (5+2 nF) (-43+8 nF)+4 nF (11+8 nF-192 Log[2])))+4 g2^2 T^2 (8 nF (-7+2 nF) Log[\[Pi] T]-39 Log[4 \[Pi] T]+(39+8 (7-2 nF) nF) Log[\[Mu]]+2 (88-5 nF) Log[\[Mu]/(4 \[Pi] T)])),\[Mu]sqSU3->1/(1152 \[Pi]^2) g3^2 T^2 (-9 (6 g2^2 nF+8 yt1^2+g1^2 nF (Yd^2+2 Yq^2+Yu^2))-8 g3^2 (-45+2 EulerGamma (3+nF) (-33+4 nF)+nF (-3-4 nF+132 Log[2]))+16 g3^2 (nF (-21+4 nF) (Log[\[Pi]]+Log[T]-Log[\[Mu]])+99 Log[\[Mu]/(4 \[Pi] T)])),\[Mu]sqU1->1/(576 \[Pi]^2) (-27 g1^2 T^2 yt1^2 (Yq^2+Yu^2)-9/4 g1^2 nF T^2 (6 g2^2 (Yl^2+3 Yq^2)+16 g3^2 (Yd^2+2 Yq^2+Yu^2)+g1^2 (3 Yd^4+Ye^4+2 Yl^4+6 Yq^4+3 Yu^4))+72 g1^2 m1 Y\[Phi]^2+18 g1^2 T^2 yt1^2 Y\[Phi]^2+9/2 T^2 (3 g1^2 g2^2 Y\[Phi]^2+g1^4 Y\[Phi]^4)+3 g1^2 T^2 Y\[Phi]^2 (12 \[Lambda]1H+\[Lambda]m)-2 g1^4 T^2 Y\[Phi]^4 (1+EulerGamma-Log[4 \[Pi] T]+Log[\[Mu]])-1/4 g1^4 nF^2 T^2 (3 Yd^2+Ye^2+2 Yl^2+6 Yq^2+3 Yu^2)^2 (-1+2 EulerGamma-2 Log[\[Pi] T]+2 Log[\[Mu]])-1/2 g1^4 nF T^2 (3 Yd^2+Ye^2+2 Yl^2+6 Yq^2+3 Yu^2) Y\[Phi]^2 (-1+5 EulerGamma+Log[1/(4 \[Pi]^5)]+5 Log[\[Mu]/T]))}
 ]];
 
 
 AppendTo[testList,
-TestCreate[PrintScalarMass["LO"],
+TestCreate[PrintScalarMass["LO"]/.Replacements//Simplify,
 	{m13d->m1+1/48 T^2 (9 g2^2+12 yt1^2+3 g1^2 Y\[Phi]^2+24 \[Lambda]1H+2 \[Lambda]m),\[Mu]\[Sigma]3d->1/12 T^2 (2 \[Lambda]m+3 \[Lambda]\[Sigma])+\[Mu]\[Sigma]}
 ]];
 AppendTo[testList,
-TestCreate[PrintScalarMass["NLO"],
-{m13d->1/(9216 \[Pi]^2) (-1728 Lf m1 yt1^2-1152 g3^2 T^2 yt1^2-384 g3^2 Lb T^2 yt1^2+1536 g3^2 Lf T^2 yt1^2-36 g1^2 T^2 Yq^2 yt1^2+18 g1^2 Lb T^2 Yq^2 yt1^2+90 g1^2 Lf T^2 Yq^2 yt1^2+216 Lb T^2 yt1^4-144 g1^2 T^2 Yq yt1^2 Yu-108 g1^2 Lb T^2 Yq yt1^2 Yu+108 g1^2 Lf T^2 Yq yt1^2 Yu-36 g1^2 T^2 yt1^2 Yu^2+18 g1^2 Lb T^2 yt1^2 Yu^2+90 g1^2 Lf T^2 yt1^2 Yu^2+432 g1^2 Lb m1 Y\[Phi]^2+6 g1^4 nF T^2 Yd^2 Y\[Phi]^2-27 g1^4 Lb nF T^2 Yd^2 Y\[Phi]^2+9 g1^4 Lf nF T^2 Yd^2 Y\[Phi]^2+2 g1^4 nF T^2 Ye^2 Y\[Phi]^2-9 g1^4 Lb nF T^2 Ye^2 Y\[Phi]^2+3 g1^4 Lf nF T^2 Ye^2 Y\[Phi]^2+4 g1^4 nF T^2 Yl^2 Y\[Phi]^2-18 g1^4 Lb nF T^2 Yl^2 Y\[Phi]^2+6 g1^4 Lf nF T^2 Yl^2 Y\[Phi]^2+12 g1^4 nF T^2 Yq^2 Y\[Phi]^2-54 g1^4 Lb nF T^2 Yq^2 Y\[Phi]^2+18 g1^4 Lf nF T^2 Yq^2 Y\[Phi]^2+108 g1^2 Lb T^2 yt1^2 Y\[Phi]^2-108 g1^2 Lf T^2 yt1^2 Y\[Phi]^2+6 g1^4 nF T^2 Yu^2 Y\[Phi]^2-27 g1^4 Lb nF T^2 Yu^2 Y\[Phi]^2+9 g1^4 Lf nF T^2 Yu^2 Y\[Phi]^2+2 g1^4 T^2 Y\[Phi]^4-126 EulerGamma g1^4 T^2 Y\[Phi]^4+66 g1^4 Lb T^2 Y\[Phi]^4-3456 Lb m1 \[Lambda]1H-1296 Lb T^2 yt1^2 \[Lambda]1H-432 Lf T^2 yt1^2 \[Lambda]1H+144 g1^2 T^2 Y\[Phi]^2 \[Lambda]1H+864 EulerGamma g1^2 T^2 Y\[Phi]^2 \[Lambda]1H-432 g1^2 Lb T^2 Y\[Phi]^2 \[Lambda]1H-3456 EulerGamma T^2 \[Lambda]1H^2-72 Lf T^2 yt1^2 \[Lambda]m+18 g1^2 Lb T^2 Y\[Phi]^2 \[Lambda]m-144 Lb T^2 \[Lambda]1H \[Lambda]m-144 EulerGamma T^2 \[Lambda]m^2+24 Lb T^2 \[Lambda]m^2-72 Lb T^2 \[Lambda]m \[Lambda]\[Sigma]-144 Lb \[Mu]m^2-288 Lb \[Lambda]m \[Mu]\[Sigma]+54 g2^2 (Lb (24 m1+T^2 (7 yt1^2+8 g1^2 Y\[Phi]^2-24 \[Lambda]1H+\[Lambda]m))-T^2 ((2+Lf) yt1^2-8 \[Lambda]1H (1+6 EulerGamma-72 Log[Glaisher])+2 g1^2 Y\[Phi]^2 (1+5 EulerGamma-60 Log[Glaisher])))+6 g2^4 T^2 (167+243 EulerGamma+8 nF+12 Lf nF-3 Lb (47+12 nF)-2916 Log[Glaisher])+1512 g1^4 T^2 Y\[Phi]^4 Log[Glaisher]-10368 g1^2 T^2 Y\[Phi]^2 \[Lambda]1H Log[Glaisher]+41472 T^2 \[Lambda]1H^2 Log[Glaisher]+1728 T^2 \[Lambda]m^2 Log[Glaisher]-36 Log[\[Mu]3/\[Mu]] (39 g23d^4-5 g13d^4 Y\[Phi]^4+48 g13d^2 Y\[Phi]^2 \[Lambda]1H3d+g23d^2 (-18 g13d^2 Y\[Phi]^2+144 \[Lambda]1H3d+96 \[Lambda]VL[3])-8 (24 \[Lambda]1H3d^2+\[Lambda]m3d^2-48 g33d^2 \[Lambda]VL[1]+8 \[Lambda]VL[1]^2+\[Lambda]VL[2]^2+3 \[Lambda]VL[3]^2+6 \[Lambda]VL[4]^2))),\[Mu]\[Sigma]3d->-(1/(384 \[Pi]^2))(Lb (48 m1 \[Lambda]m+27 g2^2 T^2 \[Lambda]m+18 T^2 yt1^2 \[Lambda]m+9 g1^2 T^2 Y\[Phi]^2 \[Lambda]m+24 T^2 \[Lambda]1H \[Lambda]m-10 T^2 \[Lambda]m^2+12 T^2 \[Lambda]m \[Lambda]\[Sigma]-18 T^2 \[Lambda]\[Sigma]^2+48 \[Mu]3^2+12 \[Mu]m^2+72 \[Lambda]\[Sigma] \[Mu]\[Sigma])-2 T^2 (3 Lf yt1^2 \[Lambda]m+g1^2 Y\[Phi]^2 \[Lambda]m+6 EulerGamma g1^2 Y\[Phi]^2 \[Lambda]m-12 EulerGamma \[Lambda]m^2-36 EulerGamma \[Lambda]\[Sigma]^2+3 g2^2 \[Lambda]m (1+6 EulerGamma-72 Log[Glaisher])-72 g1^2 Y\[Phi]^2 \[Lambda]m Log[Glaisher]+144 \[Lambda]m^2 Log[Glaisher]+432 \[Lambda]\[Sigma]^2 Log[Glaisher])+12 Log[\[Mu]3/\[Mu]] (2 g13d^2 Y\[Phi]^2 \[Lambda]m3d-4 \[Lambda]m3d^2-12 \[Lambda]\[Sigma]3d^2-3 \[Lambda]VL[5]^2+6 g23d^2 (\[Lambda]m3d+2 \[Lambda]VL[5])-\[Lambda]VL[6]^2))}
+TestCreate[PrintScalarMass["NLO"]/.Replacements//Simplify,
+	{m13d->1/(9216 \[Pi]^2) (-1728 Lf m1 yt1^2-1152 g3^2 T^2 yt1^2-384 g3^2 Lb T^2 yt1^2+1536 g3^2 Lf T^2 yt1^2-36 g1^2 T^2 Yq^2 yt1^2+18 g1^2 Lb T^2 Yq^2 yt1^2+90 g1^2 Lf T^2 Yq^2 yt1^2+216 Lb T^2 yt1^4-144 g1^2 T^2 Yq yt1^2 Yu-108 g1^2 Lb T^2 Yq yt1^2 Yu+108 g1^2 Lf T^2 Yq yt1^2 Yu-36 g1^2 T^2 yt1^2 Yu^2+18 g1^2 Lb T^2 yt1^2 Yu^2+90 g1^2 Lf T^2 yt1^2 Yu^2+432 g1^2 Lb m1 Y\[Phi]^2+6 g1^4 nF T^2 Yd^2 Y\[Phi]^2-27 g1^4 Lb nF T^2 Yd^2 Y\[Phi]^2+9 g1^4 Lf nF T^2 Yd^2 Y\[Phi]^2+2 g1^4 nF T^2 Ye^2 Y\[Phi]^2-9 g1^4 Lb nF T^2 Ye^2 Y\[Phi]^2+3 g1^4 Lf nF T^2 Ye^2 Y\[Phi]^2+4 g1^4 nF T^2 Yl^2 Y\[Phi]^2-18 g1^4 Lb nF T^2 Yl^2 Y\[Phi]^2+6 g1^4 Lf nF T^2 Yl^2 Y\[Phi]^2+12 g1^4 nF T^2 Yq^2 Y\[Phi]^2-54 g1^4 Lb nF T^2 Yq^2 Y\[Phi]^2+18 g1^4 Lf nF T^2 Yq^2 Y\[Phi]^2+108 g1^2 Lb T^2 yt1^2 Y\[Phi]^2-108 g1^2 Lf T^2 yt1^2 Y\[Phi]^2+6 g1^4 nF T^2 Yu^2 Y\[Phi]^2-27 g1^4 Lb nF T^2 Yu^2 Y\[Phi]^2+9 g1^4 Lf nF T^2 Yu^2 Y\[Phi]^2+2 g1^4 T^2 Y\[Phi]^4-126 EulerGamma g1^4 T^2 Y\[Phi]^4+66 g1^4 Lb T^2 Y\[Phi]^4-3456 Lb m1 \[Lambda]1H-1296 Lb T^2 yt1^2 \[Lambda]1H-432 Lf T^2 yt1^2 \[Lambda]1H+144 g1^2 T^2 Y\[Phi]^2 \[Lambda]1H+864 EulerGamma g1^2 T^2 Y\[Phi]^2 \[Lambda]1H-432 g1^2 Lb T^2 Y\[Phi]^2 \[Lambda]1H-3456 EulerGamma T^2 \[Lambda]1H^2-72 Lf T^2 yt1^2 \[Lambda]m+18 g1^2 Lb T^2 Y\[Phi]^2 \[Lambda]m-144 Lb T^2 \[Lambda]1H \[Lambda]m-144 EulerGamma T^2 \[Lambda]m^2+24 Lb T^2 \[Lambda]m^2-72 Lb T^2 \[Lambda]m \[Lambda]\[Sigma]-144 Lb \[Mu]m^2-288 Lb \[Lambda]m \[Mu]\[Sigma]+54 g2^2 (Lb (24 m1+T^2 (7 yt1^2+8 g1^2 Y\[Phi]^2-24 \[Lambda]1H+\[Lambda]m))-T^2 ((2+Lf) yt1^2-8 \[Lambda]1H (1+6 EulerGamma-72 Log[Glaisher])+2 g1^2 Y\[Phi]^2 (1+5 EulerGamma-60 Log[Glaisher])))+6 g2^4 T^2 (167+243 EulerGamma+8 nF+12 Lf nF-3 Lb (47+12 nF)-2916 Log[Glaisher])+1512 g1^4 T^2 Y\[Phi]^4 Log[Glaisher]-10368 g1^2 T^2 Y\[Phi]^2 \[Lambda]1H Log[Glaisher]+41472 T^2 \[Lambda]1H^2 Log[Glaisher]+1728 T^2 \[Lambda]m^2 Log[Glaisher]-36 Log[\[Mu]3/\[Mu]] (39 g23d^4-5 g13d^4 Y\[Phi]^4+48 g13d^2 Y\[Phi]^2 \[Lambda]1H3d+g23d^2 (-18 g13d^2 Y\[Phi]^2+144 \[Lambda]1H3d+96 \[Lambda]VL[3])-8 (24 \[Lambda]1H3d^2+\[Lambda]m3d^2-48 g33d^2 \[Lambda]VL[1]+8 \[Lambda]VL[1]^2+\[Lambda]VL[2]^2+3 \[Lambda]VL[3]^2+6 \[Lambda]VL[4]^2))),\[Mu]\[Sigma]3d->-(1/(384 \[Pi]^2))(Lb (48 m1 \[Lambda]m+27 g2^2 T^2 \[Lambda]m+18 T^2 yt1^2 \[Lambda]m+9 g1^2 T^2 Y\[Phi]^2 \[Lambda]m+24 T^2 \[Lambda]1H \[Lambda]m-10 T^2 \[Lambda]m^2+12 T^2 \[Lambda]m \[Lambda]\[Sigma]-18 T^2 \[Lambda]\[Sigma]^2+48 \[Mu]3^2+12 \[Mu]m^2+72 \[Lambda]\[Sigma] \[Mu]\[Sigma])-2 T^2 (3 Lf yt1^2 \[Lambda]m+g1^2 Y\[Phi]^2 \[Lambda]m+6 EulerGamma g1^2 Y\[Phi]^2 \[Lambda]m-12 EulerGamma \[Lambda]m^2-36 EulerGamma \[Lambda]\[Sigma]^2+3 g2^2 \[Lambda]m (1+6 EulerGamma-72 Log[Glaisher])-72 g1^2 Y\[Phi]^2 \[Lambda]m Log[Glaisher]+144 \[Lambda]m^2 Log[Glaisher]+432 \[Lambda]\[Sigma]^2 Log[Glaisher])+12 Log[\[Mu]3/\[Mu]] (2 g13d^2 Y\[Phi]^2 \[Lambda]m3d-4 \[Lambda]m3d^2-12 \[Lambda]\[Sigma]3d^2-3 \[Lambda]VL[5]^2+6 g23d^2 (\[Lambda]m3d+2 \[Lambda]VL[5])-\[Lambda]VL[6]^2))}
 ]];
 
 
-(* ::Subsubsection:: *)
+(* ::Subsubsection::Closed:: *)
 (*Dimension 6 matching relations*)
 
 
-PrintCouplingsEffective[]
-
-
 AppendTo[testList,
-TestCreate[PrintCouplings[],
-	{g13d^2->1/(96 \[Pi]^2 Y\[Phi]^2) g1^2 T (18 Lf yt1^2 (Yq-Yu)^2+(96 \[Pi]^2-Lf (18 yt1^2+g1^2 nF (3 Yd^2+Ye^2+2 Yl^2+6 Yq^2+3 Yu^2))) Y\[Phi]^2-g1^2 Lb Y\[Phi]^4),g23d^2->g2^2 T+(g2^4 (4+43 Lb-8 Lf nF) T)/(96 \[Pi]^2),g33d^2->g3^2 T+(g3^4 (3+33 Lb-4 Lf nF) T)/(48 \[Pi]^2),\[Lambda]1H3d->1/(256 \[Pi]^2) T (48 Lf yt1^4+(2-3 Lb) (3 g2^4+2 g1^2 g2^2 Y\[Phi]^2+g1^4 Y\[Phi]^4)+256 \[Pi]^2 \[Lambda]1H+24 (3 g2^2 Lb-4 Lf yt1^2+g1^2 Lb Y\[Phi]^2) \[Lambda]1H-4 Lb (48 \[Lambda]1H^2+\[Lambda]m^2)),\[Lambda]m3d->(T \[Lambda]m (9 g2^2 Lb+64 \[Pi]^2-12 Lf yt1^2+3 g1^2 Lb Y\[Phi]^2-4 Lb (6 \[Lambda]1H+2 \[Lambda]m+3 \[Lambda]\[Sigma])))/(64 \[Pi]^2),\[Lambda]\[Sigma]3d->T \[Lambda]\[Sigma]-(Lb T (\[Lambda]m^2+9 \[Lambda]\[Sigma]^2))/(16 \[Pi]^2),\[Mu]33d->1/2 Sqrt[T] (2 \[Mu]3-(3 Lb (6 \[Lambda]\[Sigma] \[Mu]3+\[Lambda]m \[Mu]m))/(16 \[Pi]^2)),\[Mu]m3d->(Sqrt[T] (4 (16 \[Pi]^2-3 Lf yt1^2) \[Mu]m+3 Lb (3 g2^2+g1^2 Y\[Phi]^2-8 \[Lambda]1H) \[Mu]m-8 Lb \[Lambda]m (\[Mu]3+\[Mu]m)))/(64 \[Pi]^2)}
+TestCreate[PrintCouplingsEffective[],
+	{c613d->1/(6144 \[Pi]^4) (96 \[Pi]^2 T^2 (c61 (64 \[Pi]^2-36 Lf yt1^2+9 Lb (3 g2^2+g1^2 Y\[Phi]^2-24 \[Lambda]1H))-4 c63 Lb \[Lambda]m)+(9 g2^6+9 g1^2 g2^4 Y\[Phi]^2+9 g1^4 g2^2 Y\[Phi]^4+3 g1^6 Y\[Phi]^6+8 (-84 yt1^6+240 \[Lambda]1H^3+\[Lambda]m^3)) Zeta[3]),c623d->c62 T^2-(Lb T^2 (c64 \[Lambda]m+45 c62 \[Lambda]\[Sigma]))/(16 \[Pi]^2)+((\[Lambda]m^3+54 \[Lambda]\[Sigma]^3) Zeta[3])/(1536 \[Pi]^4),c633d->1/(256 \[Pi]^4) (-8 \[Pi]^2 T^2 (12 (c61+c64) Lb \[Lambda]m+c63 (-9 g2^2 Lb-32 \[Pi]^2+12 Lf yt1^2+Lb (-3 g1^2 Y\[Phi]^2+48 \[Lambda]1H+16 \[Lambda]m+6 \[Lambda]\[Sigma])))+\[Lambda]m (24 \[Lambda]1H^2+12 \[Lambda]1H \[Lambda]m+\[Lambda]m (2 \[Lambda]m+3 \[Lambda]\[Sigma])) Zeta[3]),c643d->1/(256 \[Pi]^4) (-4 \[Pi]^2 T^2 (12 (5 c62+c63) Lb \[Lambda]m+c64 (-64 \[Pi]^2+12 Lf yt1^2+Lb (-9 g2^2-3 g1^2 Y\[Phi]^2+24 \[Lambda]1H+32 \[Lambda]m+72 \[Lambda]\[Sigma])))+\[Lambda]m (3 \[Lambda]1H \[Lambda]m+(\[Lambda]m+3 \[Lambda]\[Sigma])^2) Zeta[3])}
 ]];
 
 
@@ -223,12 +231,15 @@ TestCreate[PrintCouplings[],
 (*Symmetric pressure*)
 
 
+PrintPressure["NLO"]
+
+
 AppendTo[testList,
 TestCreate[PrintPressure["LO"],
 	(29*Pi^2*T^4)/90 + (7*nF*Pi^2*T^4)/24
 ]];
 AppendTo[testList,
-TestCreate[PrintPressure["NLO"],
+TestCreate[PrintPressure["NLO"]/.Replacements//Simplify,
 	-1/2304*(T^2*(384*m1 + T^2*(64*g3^2*(6 + 5*nF) + 12*g2^2*(13 + 10*nF) + 
      5*g1^2*(nF*(3*Yd^2 + Ye^2 + 2*Yl^2 + 6*Yq^2 + 3*Yu^2) + 4*Y\[Phi]^2) + 
      4*(30*yt1^2 + 24*\[Lambda]1H + 4*\[Lambda]m + 3*\[Lambda]\[Sigma])) + 96*\[Mu]\[Sigma]))
@@ -619,6 +630,7 @@ TestCreate[PrintPressureUS["NLO"],
 
 report=TestReport[testList]
 report["ResultsDataset"]
+
 
 
 
