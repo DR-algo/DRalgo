@@ -4,7 +4,7 @@
 
 
 SetDirectory[NotebookDirectory[]];
-$LoadGroupMath=True;
+DRalgo`$LoadGroupMath=True;
 <<..//DRalgo.m
 
 

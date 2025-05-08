@@ -4,7 +4,7 @@
 
 
 SetDirectory[NotebookDirectory[]];
-$LoadGroupMath=True;
+DRalgo`$LoadGroupMath=True;
 <<../DRalgo.m
 
 
@@ -306,6 +306,4 @@ PrintPressureUS["NLO"]
 Currently, the "NNLO" part cannot be computed by DRalgo
 *) 
 PrintPressureUS["NNLO"]
-
-
 

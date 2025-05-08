@@ -4,7 +4,7 @@
 
 
 SetDirectory[NotebookDirectory[]];
-$LoadGroupMath=True;
+DRalgo`$LoadGroupMath=True;
 <<../DRalgo.m
 
 
@@ -240,7 +240,7 @@ Thus, the Higgs-vev contribution must be kept when integrating out the heavy par
 *)
 
 
-\[CurlyPhi]vev={0,0,0,\[CurlyPhi]}//SparseArray;
+\[CurlyPhi]vev={0,0,0,\[CurlyPhi],0*Range[3],0*Range[8],0*Range[3],0}//Flatten//SparseArray;
 DefineVEVS[\[CurlyPhi]vev];
 
 

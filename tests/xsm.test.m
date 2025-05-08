@@ -3,15 +3,21 @@
 Quit[];
 
 
-(* Check Mathematica version *)
-If[$VersionNumber < 13.3,
-  Print["The Mathematica testing framework requires Mathematica version ", requiredVersion," or higher. You are using version ", currentVersion, "."];
-  Abort[]
+If[$InputFileName=="",
+	SetDirectory[NotebookDirectory[]],
+	SetDirectory[DirectoryName[$InputFileName]]
 ];
+(*Put this if you want to create multiple model-files with the same kernel*)
+(*DRalgo`$GroupMathMultipleModels=True;*)
 
-SetDirectory[NotebookDirectory[]];
-$LoadGroupMath=True;
-<<..//DRalgo.m
+DRalgo`$LoadGroupMath=True;
+DRalgo`$InstallGroupMath=True;
+
+Check[
+    Get["../DRalgo.m"],
+    Message[Get::noopen, "DRalgo` at "<>ToString[$UserBaseDirectory]<>"/Applications"];
+    Abort[];
+]
 
 
 (* ::Chapter:: *)
@@ -21,7 +27,7 @@ $LoadGroupMath=True;
 (*see 2102.11145 [hep-ph]*)
 
 
-(* ::Section::Closed:: *)
+(* ::Section:: *)
 (*Model*)
 
 
@@ -119,9 +125,6 @@ Ysff=-yt1*GradYukawa[YukawaDoublet1[[1]]];
 
 
 YsffC=SparseArray[Simplify[Conjugate[Ysff]//Normal,Assumptions->{yt1>0}]];
-
-
-MassTerm1[[1]]
 
 
 Dim6Term=(
@@ -633,9 +636,6 @@ TestCreate[PrintPressureUS["NLO"],
 
 report=TestReport[testList]
 report["ResultsDataset"]
-
-
-
 
 
 

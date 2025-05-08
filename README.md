@@ -2,7 +2,7 @@
 
 [![license: GPLv3](https://img.shields.io/badge/license-GPLv3-brightgreen.svg)](https://github.com/DR-algo/DRalgo/blob/master/LICENSE)
 [![latest release](https://img.shields.io/github/release/DR-algo/DRalgo.svg)](https://github.com/DR-algo/DRalgo/releases)
-![compatibility](https://img.shields.io/badge/Mathematica-12.x_13.x-brightgreen.svg)
+![compatibility](https://img.shields.io/badge/Mathematica-12.x_13.x_14.x-brightgreen.svg)
 
 **DRalgo** is an algorithmic implementation that constructs an effective,
 dimensionally reduced, high-temperature field theory for generic models.
@@ -12,13 +12,12 @@ Public release of
 
 ## Installation
 
-To load DRalgo,
 place the content of the package folder in
 `$UserBaseDirectory/Applications/DRalgo` and
 execute the following commands:
 
-	SetDirectory[NotebookDirectory[]]; 
-	$LoadGroupMath=True;
+	SetDirectory[NotebookDirectory[]];
+    DRalgo`$LoadGroupMath=True;
 	<<DRalgo`
 
 Alternatively place the package content into `/DRalgo`
