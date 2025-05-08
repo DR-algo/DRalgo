@@ -21,7 +21,7 @@ $LoadGroupMath=True;
 (*see 2102.11145 [hep-ph]*)
 
 
-(* ::Section:: *)
+(* ::Section::Closed:: *)
 (*Model*)
 
 
@@ -147,6 +147,9 @@ PerformDRhard[]
 
 (* ::Section:: *)
 (*Tests*)
+
+
+PrintTensorDRalgo[];
 
 
 (* ::Subsection:: *)

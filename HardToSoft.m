@@ -1982,7 +1982,7 @@ ProcessCoupling[expr_, sym_] := Module[{flat, cleaned, vars, mods, rules},
 IdentifyTensorsDRalgo[]:=Module[
 	{
 		couplingTensor,
-		HelpListCleaned, HelpVar, HelpVarMod
+		HelpList, HelpListCleaned, HelpVar, HelpVarMod
 	},
 
 (*Option to keep 4d-normalization in the matching relations*)
@@ -2043,7 +2043,7 @@ IdentifyTensorsDRalgo[]:=Module[
 			HelpSolveVecL={};
 		,
 			HelpVarMod=RelationsBVariables3[HelpList];
-			HelpSolveVecL=Table[{HelpListCleaned[[a]]->HelpListCleaned[[a]]},{a,1,HelpListCleaned//Length}]//Flatten//Simplify;
+			HelpSolveVecL=Table[{HelpListCleaned[[a]]->HelpVarMod[[a]]},{a,1,HelpListCleaned//Length}]//Flatten//Simplify;
 			\[Lambda]KVec=couplingTensor//Normal//Simplify//ReplaceAll[#,HelpSolveVecL]&//SparseArray;
 		];
 
@@ -2094,12 +2094,7 @@ IdentifyTensorsDRalgo[]:=Module[
 		VerbosePrint["Calculating Sextic Tensor"];
 		
 		couplingTensor = Tfac^2*(\[Lambda]6+\[Lambda]6D);
-		HelpList=DeleteDuplicates@Flatten[couplingTensor]//Sort//Simplify;
-		
-		HelpListCleaned=CleanedList[HelpList];
-		HelpVar=Table[ \[Lambda]6d[a],{a,1,HelpListCleaned//Length}];
-		HelpVarMod=RelationsBVariables[HelpList,HelpVar];
-		HelpSolveSextic=Table[{HelpListCleaned[[a]]->HelpVarMod[[a]]},{a,1,HelpListCleaned//Length}]//Flatten;
+		{HelpListCleaned, HelpVar, HelpVarMod, HelpSolveSextic} = ProcessCoupling[couplingTensor, \[Lambda]6d];	
 		\[Lambda]6DS=couplingTensor//Normal//Simplify//ReplaceAll[#,HelpSolveSextic]&//SparseArray;
 
 		If[Length[SparseArray[\[Lambda]6DS]["NonzeroValues"]]!=Length[SparseArray[\[Lambda]6]["NonzeroValues"]],
@@ -2553,7 +2548,16 @@ PrintTemporalScalarCouplings[]:=Module[
 ];
 
 
-errPrintTens="Order of Tensors: (1) Scalar Quartic, (2) Vector-Scalar Couplings, (3) Temporal-Vector Scalar Couplings, (4) Temporal-Vector Quartics, (5) Temporal-Vector Mass, (6) Scalar Mass, (7) Scalar Cubics, (8) Temporal Vector-Scalar Cubics, (9) Tadpoles";
+errPrintTens="Order of Tensors:\n\
+	(1) Scalar Quartic,\n\
+	(2) Vector-Scalar Couplings,\n\
+	(3) Temporal-Vector Scalar Couplings,\n\
+	(4) Temporal-Vector Quartics,\n\
+	(5) Temporal-Vector Mass,\n\
+	(6) Scalar Mass,\n\
+	(7) Scalar Cubics,\n\
+	(8) Temporal Vector-Scalar Cubics,\n\
+	(9) Tadpoles";
 
 
 PrintTensorDRalgo[]:="nothing"/;Print[errPrintTens];
