@@ -1,17 +1,23 @@
 (* ::Package:: *)
 
-(*Quit[];*)
+Quit[];
 
 
-(* Check Mathematica version *)
-If[$VersionNumber < 13.3,
-  Print["The Mathematica testing framework requires Mathematica version ", requiredVersion," or higher. You are using version ", currentVersion, "."];
-  Abort[]
+If[$InputFileName=="",
+	SetDirectory[NotebookDirectory[]],
+	SetDirectory[DirectoryName[$InputFileName]]
 ];
+(*Put this if you want to create multiple model-files with the same kernel*)
+DRalgo`$GroupMathMultipleModels=True;
 
-SetDirectory[NotebookDirectory[]];
 DRalgo`$LoadGroupMath=True;
-<<..//DRalgo.m
+DRalgo`$InstallGroupMath=True;
+
+Check[
+    Get["../DRalgo.m"],
+    Message[Get::noopen, "DRalgo` at "<>ToString[$UserBaseDirectory]<>"/Applications"];
+    Abort[];
+]
 
 
 (* ::Chapter:: *)
@@ -329,4 +335,7 @@ TestCreate[PrintPressureUS["NLO"],
 
 report=TestReport[testList]
 report["ResultsDataset"]
+
+
+
 
