@@ -34,7 +34,7 @@ If[ ($VersionNumber < 12.0) && StringFreeQ[$Version, "Mathics"],
 
 
 (*    Set the version number    *)
-DRalgo`$DRalgoVersion = "1.21";
+DRalgo`$DRalgoVersion = "1.22";
 
 
 BeginPackage["DRalgo`"] (* digital history: at its early days in 2021, DRalgo was called FireStorm *)
@@ -60,6 +60,7 @@ Protect@Definition;
 	Welcome banner: All credit for this part to GroupMath
 *)
 TexFor[text_]:=Style[text,{GrayLevel[0.3]}]
+Block[{result},
 result={};
 AppendTo[result,Row[{
 	TexFor["DRDRDRDRDRDRDRDRDRDRDRDRDRDR "],
@@ -83,8 +84,7 @@ DRalgoLoad=Image[CompressedData["1:eJztXYlbFUe295t57/vee9/Me+8/eFEURERQQNllk0VRE
 
 AppendTo[result,Style["DRDRDRDRDRDRDRDRDRDRDRDRDRDRDRDRDRDRDRDRDRDRDRDRDRDRDRDRDRDRDRDRD",{GrayLevel[0.3]}]];
 Print[Grid[{{Image[DRalgoLoad,ImageSize->140],Row[result,"\n",BaseStyle->(FontFamily->"Consolas")]}},Alignment->{Left,Center}]]
-(**)
-
+];
 
 
 (* ::Section:: *)
@@ -227,6 +227,20 @@ The problem reads: `1`";
 $DRalgoDirectory=DirectoryName[$InputFileName];
 
 
+(* Backup existing folder if it exists *)
+backupIfExists[path_String] := Module[{n = 1, newPath},
+  If[DirectoryQ[path],
+    newPath = path <> "_copy_" <> ToString[n];
+    While[DirectoryQ[newPath],
+      n++;
+      newPath = path <> "_copy_" <> ToString[n];
+    ];
+    Print["Backing up existing folder to: ", newPath];
+    CopyDirectory[path, newPath];
+    DeleteDirectory[path, DeleteContents -> True];
+  ];
+];
+
 DownloadPackage[url_, targetName_]:=Module[{zipPath, targetFolder, targetDir, targetPath},
   
   (* Define the URL and file paths *)
@@ -242,11 +256,8 @@ DownloadPackage[url_, targetName_]:=Module[{zipPath, targetFolder, targetDir, ta
   ];
   
   (* Unzip the file *)
-  If[DirectoryQ[targetPath],
-  Print[targetPath<>" already exists. Check your "<>targetName<>" installation."];
-  Abort[];
-  ];
-  ExtractArchive[zipPath, targetDir];
+  backupIfExists[targetPath];
+  ExtractArchive[zipPath, targetDir, OverwriteTarget ->False];
   Print["Unpacked and installed "<>FileBaseName[url]<>" in Applications folder."];
   
   (* Clean up *)
@@ -258,18 +269,17 @@ DownloadPackage[url_, targetName_]:=Module[{zipPath, targetFolder, targetDir, ta
 	Functions from GroupMath are used to create the model.
 *)
 If[$LoadGroupMath,
-	Unprotect[BlockDiagonalMatrix];
 	If[$InstallGroupMath,
 		If[
-			Quiet[Check[Needs["GroupMath`"], True]],
-			DownloadPackage["https://renatofonseca.net/groupmath/ProgramVersions/GroupMath-1.1.2.zip","GroupMath"];
+			Quiet@Check[Needs["GroupMath`"], True],
+			DownloadPackage["https://renatofonseca.net/groupmath/ProgramVersions/GroupMath-1.1.3.zip","GroupMath"];
 			Print[Style["GroupMath installed.","Text", Red, Bold]];
 		]
 	];
 	Check[
 		Needs["GroupMath`"];,
 		Message[Get::noopen,
-			"GroupMath` at "<>ToString[$UserBaseDirectory]<>"/Applications.\n"<>
+			"or outdated GroupMath` at "<>ToString[$UserBaseDirectory]<>"/Applications.\n"<>
 			"Set DRalgo`$InstallGroupMath=True for automatic installation of GroupMath"];
 		Abort[];
 	];
