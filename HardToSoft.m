@@ -2025,13 +2025,12 @@ IdentifyTensorsDRalgo[]:=Module[
 		HelpList=DeleteDuplicates@Flatten@SimplifySparse[couplingTensor]//Sort;
 		HelpListCleaned=CleanedList[HelpList];
 		If[Length[Delete[HelpList,1]]<1,(*Fix for when the tensor is empty*)
-			\[Lambda]KVecT=couplingTensor//SparseArray;
 			HelpSolveVecT={};
 		,
 			HelpVarMod=RelationsBVariables3[HelpList]//ReplaceAll[#,\[Lambda]VL[v1_]->\[Lambda]VT[v1]]&;
 			HelpSolveVecT=Table[{HelpListCleaned[[a]]->HelpVarMod[[a]]},{a,1,HelpListCleaned//Length}]//Flatten//Simplify;
-			\[Lambda]KVecT=couplingTensor//SimplifySparse//Normal//ReplaceAll[#,HelpSolveVecT]&//SparseArray;
 		];
+		\[Lambda]KVecT=couplingTensor//SimplifySparse//Normal//ReplaceAll[#,HelpSolveVecT]&//SparseArray;
 
 		(* --- Temporal-scalar/scalar cross couplings --- *)
 		
@@ -2039,13 +2038,13 @@ IdentifyTensorsDRalgo[]:=Module[
 		HelpList=DeleteDuplicates@Simplify@Flatten[couplingTensor]//Sort;
 		HelpListCleaned=CleanedList[HelpList];
 		If[Length[Delete[HelpList,1]]<1,(*Fix for when the tensor is empty*)
-			\[Lambda]KVec=couplingTensor//Normal//Simplify//SparseArray;
 			HelpSolveVecL={};
 		,
 			HelpVarMod=RelationsBVariables3[HelpList];
 			HelpSolveVecL=Table[{HelpListCleaned[[a]]->HelpVarMod[[a]]},{a,1,HelpListCleaned//Length}]//Flatten//Simplify;
-			\[Lambda]KVec=couplingTensor//Normal//Simplify//ReplaceAll[#,HelpSolveVecL]&//SparseArray;
 		];
+		\[Lambda]KVec=couplingTensor//Normal//Simplify//ReplaceAll[#,HelpSolveVecL]&//SparseArray;
+
 
 		(* --- Temporal-Scalar quartics --- *)
 		VerbosePrint["Calculating Temporal-Scalar Quartics "];
@@ -2058,13 +2057,11 @@ IdentifyTensorsDRalgo[]:=Module[
 			HelpVar=\[Lambda]VLL[1];
 			HelpVarMod=RelationsBVariables[HelpList,HelpVar];
 			HelpSolveQuarticL={HelpList[[1]]->HelpVarMod}//Flatten;
-
-			\[Lambda]AAS=couplingTensor//Normal//Simplify//ReplaceAll[#,HelpSolveQuarticL]&//SparseArray;
 		,
 			HelpVarMod=RelationsBVariables3[HelpList]//ReplaceAll[#,\[Lambda]VL[v1_]->\[Lambda]VLL[v1]]&;
 			HelpSolveQuarticL=Table[{HelpListCleaned[[a]]->HelpVarMod[[a]]},{a,1,HelpListCleaned//Length}]//Flatten//Simplify;
-			\[Lambda]AAS=couplingTensor//Normal//FullSimplify//ReplaceAll[#,HelpSolveQuarticL]&//SparseArray;
 		];
+		\[Lambda]AAS=couplingTensor//Normal//FullSimplify//ReplaceAll[#,HelpSolveQuarticL]&//SparseArray;
 
 		(* --- Temporal-Scalar/scalar cross cubic couplings --- *)
 		couplingTensor = Sqrt[Tfac]*GvvsL;

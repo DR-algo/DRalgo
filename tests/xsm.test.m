@@ -152,9 +152,6 @@ PerformDRhard[]
 (*Tests*)
 
 
-PrintTensorDRalgo[];
-
-
 (* ::Subsection:: *)
 (*Test hard*)
 

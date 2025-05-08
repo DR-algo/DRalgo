@@ -116,9 +116,6 @@ ImportModelDRalgo[Group,gvvv,gvff,gvss,\[Lambda]1,\[Lambda]3,\[Lambda]4,\[Mu]ij,
 PerformDRhard[]
 
 
-Delete[{0},1]//Length
-
-
 (* ::Section:: *)
 (*Tests*)
 
