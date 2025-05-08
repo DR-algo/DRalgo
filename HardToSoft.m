@@ -17,7 +17,7 @@
 (* ------------------------------------------------------------------------ *)
 
 
-(* ::Section:: *)
+(* ::Section::Closed:: *)
 (*Help routines*)
 
 
@@ -172,7 +172,7 @@ CreateHelpTensors[] := Module[{},
 ];
 
 
-(* ::Section:: *)
+(* ::Section::Closed:: *)
 (*Pressure calculations*)
 
 
@@ -671,7 +671,7 @@ SymmetricPhaseNNLO[]:=Module[
 ];
 
 
-(* ::Section:: *)
+(* ::Section::Closed:: *)
 (*Scalar masses*)
 
 
@@ -866,7 +866,7 @@ ScalarMass2Loop[] := Module[
 ];
 
 
-(* ::Section:: *)
+(* ::Section::Closed:: *)
 (*Temporal masses*)
 
 
@@ -1033,7 +1033,7 @@ VectorMass2Loop[] := Module[
 ];
 
 
-(* ::Section:: *)
+(* ::Section::Closed:: *)
 (*Effective couplings*)
 
 
@@ -1473,8 +1473,8 @@ TadPole2Loop[] := Module[
 
 	(* --- Pure diagram contributions --- *)
 	Contri1 = (1/4) * I2p * I1p * Contract[\[Lambda]3, \[Lambda]Help, {{2, 4}, {3, 5}}] // SimplifySparse;
-	Contri2 = -1/2 * (D - 1) * I2p * I1p * Contract[\[Lambda]3, \[CapitalLambda]g, {{2, 4}, {3, 5}}] // SimplifySparse;
-	Contri3 = -I2p * IF1p * Contract[\[Lambda]3, Ysij, {{2, 4}, {3, 5}}] // SimplifySparse;
+	Contri2 = -1/4 * (D - 1) * I2p * I1p * Contract[\[Lambda]3, \[CapitalLambda]g, {{2, 4}, {3, 5}}] // SimplifySparse;
+	Contri3 = (-2)/2 * I2p * IF1p * Contract[\[Lambda]3, Ysij, {{2, 4}, {3, 5}}] // SimplifySparse;
 
 	(* --- Scalar Mass insertion --- *)
 	Contri4 = 1/2 * I2p * Contract[\[Lambda]3, \[Mu]ij, {{2, 4}, {3, 5}}] // SimplifySparse;
@@ -1492,7 +1492,7 @@ TadPole2Loop[] := Module[
 	YHelpC2 = Contract[Ysff, YsffC, {{1, 4}, {2, 5}}] // SimplifySparse;
 	temp1 = Contract[Ysff, \[Mu]IJFC, YHelp2, {{2, 4}, {5, 7}, {3, 6}}] // SimplifySparse;
 	temp1C = Contract[YsffC, \[Mu]IJF, YHelpC2, {{2, 4}, {5, 7}, {3, 6}}] // SimplifySparse;
-	Contri5 = -(IF1p * IF2p - IF2p * I1p) * (temp1 + temp1C) // SimplifySparse;
+	Contri5 = -(-1)*(IF1p * IF2p - IF2p * I1p) * (temp1 + temp1C) // SimplifySparse;
 
 	FHelp = TensorContract[HabIJF, {1, 2}] // SimplifySparse;
 	temp1 = Contract[Ysff, \[Mu]IJFC, FHelp, {{2, 4}, {5, 6}, {3, 7}}] // SimplifySparse;
