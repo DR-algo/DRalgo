@@ -1473,7 +1473,7 @@ TadPole2Loop[] := Module[
 
 	(* --- Pure diagram contributions --- *)
 	Contri1 = (1/4) * I2p * I1p * Contract[\[Lambda]3, \[Lambda]Help, {{2, 4}, {3, 5}}] // SimplifySparse;
-	Contri2 = -1/4 * (D - 1) * I2p * I1p * Contract[\[Lambda]3, \[CapitalLambda]g, {{2, 4}, {3, 5}}] // SimplifySparse;
+	Contri2 = -2/4 * (D - 1) * I2p * I1p * Contract[\[Lambda]3, \[CapitalLambda]g, {{2, 4}, {3, 5}}] // SimplifySparse;
 	Contri3 = (-2)/2 * I2p * IF1p * Contract[\[Lambda]3, Ysij, {{2, 4}, {3, 5}}] // SimplifySparse;
 
 	(* --- Scalar Mass insertion --- *)
@@ -2024,7 +2024,7 @@ IdentifyTensorsDRalgo[]:=Module[
 		couplingTensor = Tfac*(HabijV+GvvssT);
 		HelpList=DeleteDuplicates@Flatten@SimplifySparse[couplingTensor]//Sort;
 		HelpListCleaned=CleanedList[HelpList];
-		If[Length[HelpListCleaned]<1,(*Fix for when the tensor is empty*)
+		If[Length[Delete[HelpList,1]]<1,(*Fix for when the tensor is empty*)
 			\[Lambda]KVecT=couplingTensor//SparseArray;
 			HelpSolveVecT={};
 		,
@@ -2038,7 +2038,7 @@ IdentifyTensorsDRalgo[]:=Module[
 		couplingTensor = -Tfac(HabijV+GvvssL);
 		HelpList=DeleteDuplicates@Simplify@Flatten[couplingTensor]//Sort;
 		HelpListCleaned=CleanedList[HelpList];
-		If[Length[HelpListCleaned]<1,
+		If[Length[Delete[HelpList,1]]<1,(*Fix for when the tensor is empty*)
 			\[Lambda]KVec=couplingTensor//Normal//Simplify//SparseArray;
 			HelpSolveVecL={};
 		,
@@ -2048,7 +2048,7 @@ IdentifyTensorsDRalgo[]:=Module[
 		];
 
 		(* --- Temporal-Scalar quartics --- *)
-		VerbosePrint["Calculating Temporal-Vector Quartics "];
+		VerbosePrint["Calculating Temporal-Scalar Quartics "];
 		
 		couplingTensor=Tfac*\[Lambda]AA;
 		HelpList=DeleteDuplicates@SparseArray[Flatten@Simplify[couplingTensor]]//Sort//FullSimplify;
@@ -2075,19 +2075,7 @@ IdentifyTensorsDRalgo[]:=Module[
 	(* --- TemporalVector-scalar couplings --- *)	
 	If[mode==0,
 		GvvssL=EmptyArray[{nv,nv,ns,ns}]
-	];
-	
-	couplingTensor = -Tfac(HabijV+GvvssL);
-	HelpList=DeleteDuplicates@Simplify@Flatten[couplingTensor]//Sort;
-	HelpListCleaned=CleanedList[HelpList];
-	If[Length[HelpListCleaned]<1,
-		\[Lambda]KVec=couplingTensor//Normal//Simplify//SparseArray;
-		HelpSolveVecL={};
-	,
-		HelpVarMod=RelationsBVariables3[HelpList];
-		HelpSolveVecL=Table[{HelpListCleaned[[a]]->HelpVarMod[[a]]},{a,1,HelpListCleaned//Length}]//Flatten//Simplify;
-		\[Lambda]KVec=couplingTensor//Normal//Simplify//ReplaceAll[#,HelpSolveVecL]&//SparseArray;
-	];			
+	];		
 			
 	If[mode>=3,
 		(* --- Scalar sextic couplings --- *)

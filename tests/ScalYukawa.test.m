@@ -116,6 +116,9 @@ ImportModelDRalgo[Group,gvvv,gvff,gvss,\[Lambda]1,\[Lambda]3,\[Lambda]4,\[Mu]ij,
 PerformDRhard[]
 
 
+Delete[{0},1]//Length
+
+
 (* ::Section:: *)
 (*Tests*)
 
@@ -150,11 +153,6 @@ AppendTo[testList,
 TestCreate[PrintCouplings[],
 	{\[Lambda]3d->(T (48 Lf y^4+32 \[Pi]^2 \[Lambda]-8 Lf y^2 \[Lambda]-3 Lb \[Lambda]^2))/(32 \[Pi]^2),\[Gamma]3d->(Sqrt[T] (6 Lf y^2 (8 m\[Psi] y-\[Gamma])+32 \[Pi]^2 \[Gamma]-3 Lb \[Gamma] \[Lambda]))/(32 \[Pi]^2)}
 ]];
-
-
-PrintTadpoles["NLO"]
-	{\[Sigma]3d->1/(768 \[Pi]^2 Sqrt[T]) (192 Lf m\[Psi]^3 y-32 EulerGamma m\[Psi] T^2 y^3+28 Lb m\[Psi] T^2 y^3+4 Lf m\[Psi] T^2 y^3-24 Lb msq \[Gamma]-6 Lb T^2 y^2 \[Gamma]-4 EulerGamma T^2 \[Gamma] \[Lambda]+Lb T^2 \[Gamma] \[Lambda]+384 m\[Psi] T^2 y^3 Log[Glaisher]+48 T^2 \[Gamma] \[Lambda] Log[Glaisher]+8 Sqrt[T] \[Gamma]3d \[Lambda]3d Log[\[Mu]3/\[Mu]])}
-
 
 
 AppendTo[testList,

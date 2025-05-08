@@ -11,7 +11,7 @@ If[$InputFileName=="",
 (*DRalgo`$GroupMathMultipleModels=True;*)
 
 DRalgo`$LoadGroupMath=True;
-DRalgo`$InstallGroupMath=True;
+(*DRalgo`$InstallGroupMath=True;*)
 
 Check[
     Get["../DRalgo.m"],
@@ -27,7 +27,7 @@ Check[
 (*see 2102.11145 [hep-ph]*)
 
 
-(* ::Section:: *)
+(* ::Section::Closed:: *)
 (*Model*)
 
 
@@ -177,7 +177,7 @@ TestCreate[BetaFunctions4D[]/.Replacements//DeleteCases[#,0->0]&,
 ]];
 
 
-(* ::Subsubsection::Closed:: *)
+(* ::Subsubsection:: *)
 (*Dimension 4 matching relations*)
 
 
@@ -192,8 +192,8 @@ TestCreate[PrintTadpoles["LO"]/.Replacements,
 	{\[Mu]13d->(12 \[Mu]1+T^2 (\[Mu]3+\[Mu]m))/(12 Sqrt[T])}
 ]];
 AppendTo[testList,
-TestCreate[PrintTadpoles["NLO"]/.Replacements,
-	{\[Mu]13d->1/(768 \[Pi]^2 Sqrt[T]) (-Lb (T^2 (-12 \[Lambda]\[Sigma] \[Mu]3+2 \[Lambda]m (4 \[Mu]3-5 \[Mu]m)+3 (9 g2^2+6 yt1^2+3 g1^2 Y\[Phi]^2+8 \[Lambda]1H) \[Mu]m)+48 (m1 \[Mu]m+\[Mu]3 \[Mu]\[Sigma]))+2 T^2 (3 Lf yt1^2 \[Mu]m+g1^2 Y\[Phi]^2 \[Mu]m+6 EulerGamma (-4 \[Lambda]\[Sigma] \[Mu]3+(3 g2^2+g1^2 Y\[Phi]^2-2 \[Lambda]m) \[Mu]m)+3 g2^2 \[Mu]m (1-72 Log[Glaisher])+288 \[Lambda]\[Sigma] \[Mu]3 Log[Glaisher]-72 g1^2 Y\[Phi]^2 \[Mu]m Log[Glaisher]+144 \[Lambda]m \[Mu]m Log[Glaisher])+24 Sqrt[T] (4 \[Lambda]\[Sigma]3d \[Mu]33d-(3 g23d^2+g13d^2 Y\[Phi]^2-2 \[Lambda]m3d) \[Mu]m3d) Log[\[Mu]3/\[Mu]])}
+TestCreate[PrintTadpoles["NLO"]/.Replacements//Expand,
+	{\[Mu]13d->1/(768 \[Pi]^2 Sqrt[T]) (-Lb (T^2 (-12 \[Lambda]\[Sigma] \[Mu]3+2 \[Lambda]m (4 \[Mu]3-5 \[Mu]m)+3 (9 g2^2+6 yt1^2+3 g1^2 Y\[Phi]^2+8 \[Lambda]1H) \[Mu]m)+48 (m1 \[Mu]m+\[Mu]3 \[Mu]\[Sigma]))+2 T^2 (3 Lf yt1^2 \[Mu]m+g1^2 Y\[Phi]^2 \[Mu]m+6 EulerGamma (-4 \[Lambda]\[Sigma] \[Mu]3+(3 g2^2+g1^2 Y\[Phi]^2-2 \[Lambda]m) \[Mu]m)+3 g2^2 \[Mu]m (1-72 Log[Glaisher])+288 \[Lambda]\[Sigma] \[Mu]3 Log[Glaisher]-72 g1^2 Y\[Phi]^2 \[Mu]m Log[Glaisher]+144 \[Lambda]m \[Mu]m Log[Glaisher])+24 Sqrt[T] (4 \[Lambda]\[Sigma]3d \[Mu]33d-(3 g23d^2+g13d^2 Y\[Phi]^2-2 \[Lambda]m3d) \[Mu]m3d) Log[\[Mu]3/\[Mu]])}//Expand
 ]];
 
 
@@ -636,6 +636,7 @@ TestCreate[PrintPressureUS["NLO"],
 
 report=TestReport[testList]
 report["ResultsDataset"]
+
 
 
 
