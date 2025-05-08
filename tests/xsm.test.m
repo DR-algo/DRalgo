@@ -8,7 +8,7 @@ If[$InputFileName=="",
 	SetDirectory[DirectoryName[$InputFileName]]
 ];
 (*Put this if you want to create multiple model-files with the same kernel*)
-DRalgo`$GroupMathMultipleModels=True;
+(*DRalgo`$GroupMathMultipleModels=True;*)
 
 DRalgo`$LoadGroupMath=True;
 DRalgo`$InstallGroupMath=True;
@@ -125,6 +125,9 @@ Ysff=-yt1*GradYukawa[YukawaDoublet1[[1]]];
 
 
 YsffC=SparseArray[Simplify[Conjugate[Ysff]//Normal,Assumptions->{yt1>0}]];
+
+
+gvvv//Variables//Flatten//Variables
 
 
 (* ::Section:: *)
@@ -335,6 +338,7 @@ TestCreate[PrintPressureUS["NLO"],
 
 report=TestReport[testList]
 report["ResultsDataset"]
+
 
 
 

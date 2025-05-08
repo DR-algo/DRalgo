@@ -296,10 +296,12 @@ If[$LoadGroupMath,
 	Mode=0 only calculates LO masses
 *)
 Options[ImportModelDRalgo]={
-	Verbose -> False,Mode->2,
+	Verbose->False,
+	Mode->2,
 	Dim6->False,
 	Normalization4D->False,
-	AutoRG->True}
+	AutoRG->True
+}
 
 
 Begin["`Private`"]
@@ -326,9 +328,8 @@ Get[FileNameJoin[{$DRalgoDirectory,"HEFT.m"}]];(*Loads Higgs-Effective field the
 *)
 ImportModelDRalgo[GroupI_,gvvvI_,gvffI_,gvssI_,\[Lambda]1I_,\[Lambda]3I_,\[Lambda]4I_,\[Mu]ijI_,\[Mu]IJFI_,\[Mu]IJFCI_,YsffI_,YsffCI_, OptionsPattern[]]:=Module[{GroupP=GroupI,gvvvP=gvvvI,gvffP=gvffI,gvssP=gvssI,\[Lambda]1IP=\[Lambda]1I,\[Lambda]3P=\[Lambda]3I,\[Lambda]4P=\[Lambda]4I,\[Mu]ijP=\[Mu]ijI,\[Mu]IJFP=\[Mu]IJFI,\[Mu]IJFCP=\[Mu]IJFCI,YsffP=YsffI,YsffCP=YsffCI},
 
-
 If[$LoadGroupMath,
-	If[!GroupMathCleared && !ValueQ[$GroupMathMultipleModels],
+	If[Not[GroupMathCleared] && Not[$GroupMathMultipleModels],
 		Remove["GroupMath`*"];
 		GroupMathCleared=True;
 	];
