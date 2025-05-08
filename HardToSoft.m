@@ -2116,23 +2116,15 @@ IdentifyTensorsDRalgo[]:=Module[
 	(* --- Debye masses --- *);
 	If[mode>=2,
 		couplingTensor = xLO*aV3D+ xNLO*\[Mu]VabNLO;
-		HelpList=DeleteDuplicates@FullSimplify[Flatten[couplingTensor]]//Sort;
-		
-		HelpListCleaned=CleanedList[HelpList];
-		HelpVar=Table[ \[Mu]ijV[a],{a,1,HelpListCleaned//Length}];
-		HelpVarMod=RelationsBVariables[HelpList,HelpVar];
-		HelpSolveVectorMass=Table[{HelpListCleaned[[a]]->HelpVarMod[[a]]},{a,1,HelpListCleaned//Length}]//Flatten;
-		\[Mu]ijVNLO=Coefficient[ xLO aV3D+ xNLO \[Mu]VabNLO//Normal//FullSimplify//ReplaceAll[#,HelpSolveVectorMass]&,\[Epsilon],0]//SparseArray;
 	,
-		couplingTensor = xLO*aV3D;
-		HelpList=DeleteDuplicates@FullSimplify[Flatten[couplingTensor]]//Sort;
-		
-		HelpListCleaned=CleanedList[HelpList];
-		HelpVar=Table[ \[Mu]ijV[a],{a,1,HelpListCleaned//Length}];
-		HelpVarMod=RelationsBVariables[HelpList,HelpVar];
-		HelpSolveVectorMass=Table[{HelpListCleaned[[a]]->HelpVarMod[[a]]},{a,1,HelpListCleaned//Length}]//Flatten;
-		\[Mu]ijVNLO=couplingTensor//Normal//FullSimplify//ReplaceAll[#,HelpSolveVectorMass]&//SparseArray;
+		couplingTensor = xLO*aV3D;	
 	];
+	HelpList=DeleteDuplicates@FullSimplify[Flatten[couplingTensor]]//Sort;
+	HelpListCleaned=CleanedList[HelpList];
+	HelpVar=Table[ \[Mu]ijV[a],{a,1,HelpListCleaned//Length}];
+	HelpVarMod=RelationsBVariables[HelpList,HelpVar];
+	HelpSolveVectorMass=Table[{HelpListCleaned[[a]]->HelpVarMod[[a]]},{a,1,HelpListCleaned//Length}]//Flatten;
+	\[Mu]ijVNLO=couplingTensor//Normal//FullSimplify//ReplaceAll[#,HelpSolveVectorMass]&//SparseArray;
 
 
 	If[DiagonalMatrixQAE[Normal[\[Mu]ijVNLO]]==False,
@@ -2143,40 +2135,29 @@ IdentifyTensorsDRalgo[]:=Module[
 	If[mode>=2,
 		RGRunningHardToSoft[]; (*Runs from the hard to the soft scale in the effective theory*)
 		couplingTensor = xLO*aS3D+xNLO*(\[Mu]SijNLO+rgFac*Contri\[Beta]SoftToHard);
-		HelpList=DeleteDuplicates@Flatten@Simplify[couplingTensor]//Sort;
-		HelpListCleaned=CleanedList[HelpList];
-		HelpVar=Table[ \[Mu]ijS[a],{a,1,HelpListCleaned//Length}];
-		HelpVarMod=RelationsBVariables[HelpList,HelpVar];
-		HelpSolveMass=Table[{HelpListCleaned[[a]]->HelpVarMod[[a]]},{a,1,HelpListCleaned//Length}]//Flatten;
-		\[Mu]ijSNLO=couplingTensor//Normal//Simplify//ReplaceAll[#,HelpSolveMass]&//SparseArray;
 	,
 		couplingTensor = xLO*aS3D;
-		HelpList=DeleteDuplicates@Flatten@Simplify[couplingTensor]//Sort;
-		HelpListCleaned=CleanedList[HelpList];
-		HelpVar=Table[ \[Mu]ijS[a],{a,1,HelpListCleaned//Length}];
-		HelpVarMod=RelationsBVariables[HelpList,HelpVar];
-		HelpSolveMass=Table[{HelpListCleaned[[a]]->HelpVarMod[[a]]},{a,1,HelpListCleaned//Length}]//Flatten;
-		\[Mu]ijSNLO=couplingTensor//Normal//Simplify//ReplaceAll[#,HelpSolveMass]&//SparseArray;
 	];
+	HelpList=DeleteDuplicates@Flatten@Simplify[couplingTensor]//Sort;
+	HelpListCleaned=CleanedList[HelpList];
+	HelpVar=Table[ \[Mu]ijS[a],{a,1,HelpListCleaned//Length}];
+	HelpVarMod=RelationsBVariables[HelpList,HelpVar];
+	HelpSolveMass=Table[{HelpListCleaned[[a]]->HelpVarMod[[a]]},{a,1,HelpListCleaned//Length}]//Flatten;
+	\[Mu]ijSNLO=couplingTensor//Normal//Simplify//ReplaceAll[#,HelpSolveMass]&//SparseArray;
 
 	(* --- Scalar tadpoles --- *)
 	If[mode>=2,
 		couplingTensor = xLO*Tfac^(-1/2)(\[Lambda]1+TadPoleLO)+xNLO(TadPoleNLO*Tfac^(-1/2) +rgFac*ContriTadPoleSoftToHard);
-		HelpList=DeleteDuplicates@Flatten@Simplify[couplingTensor]//Sort;
-		HelpListCleaned=CleanedList[HelpList];
-		HelpVar=Table[ dS[a],{a,1,HelpListCleaned//Length}];
-		HelpVarMod=RelationsBVariables[HelpList,HelpVar];
-		HelpSolveTadpole=Table[{HelpListCleaned[[a]]->HelpVarMod[[a]]},{a,1,HelpListCleaned//Length}]//Flatten;
-		TadPoleS=couplingTensor//Normal//Simplify//ReplaceAll[#,HelpSolveTadpole]&//SparseArray;
 	,
 		couplingTensor = xLO*Tfac^(-1/2)(\[Lambda]1+TadPoleLO);
-		HelpList=DeleteDuplicates@Flatten@Simplify[couplingTensor]//Sort;
-		HelpListCleaned=CleanedList[HelpList];
-		HelpVar=Table[ dS[a],{a,1,HelpListCleaned//Length}];
-		HelpVarMod=RelationsBVariables[HelpList,HelpVar];
-		HelpSolveTadpole=Table[{HelpListCleaned[[a]]->HelpVarMod[[a]]},{a,1,HelpListCleaned//Length}]//Flatten;
-		TadPoleS=couplingTensor//Normal//Simplify//ReplaceAll[#,HelpSolveTadpole]&//SparseArray;
 	];
+	HelpList=DeleteDuplicates@Flatten@Simplify[couplingTensor]//Sort;
+	HelpListCleaned=CleanedList[HelpList];
+	HelpVar=Table[ dS[a],{a,1,HelpListCleaned//Length}];
+	HelpVarMod=RelationsBVariables[HelpList,HelpVar];
+	HelpSolveTadpole=Table[{HelpListCleaned[[a]]->HelpVarMod[[a]]},{a,1,HelpListCleaned//Length}]//Flatten;
+	TadPoleS=couplingTensor//Normal//Simplify//ReplaceAll[#,HelpSolveTadpole]&//SparseArray;
+
 
 	If[Length[SparseArray[TadPoleS]["NonzeroValues"]]!=Length[SparseArray[\[Lambda]1]["NonzeroValues"]],
 		Print["Detected 1-loop Scalar Tadpoles not defined at tree-level"];
