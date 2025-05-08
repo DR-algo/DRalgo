@@ -2068,13 +2068,8 @@ IdentifyTensorsDRalgo[]:=Module[
 
 		(* --- Temporal-Scalar/scalar cross cubic couplings --- *)
 		couplingTensor = Sqrt[Tfac]*GvvsL;
-		HelpList=DeleteDuplicates@SparseArray[Flatten@Simplify[couplingTensor]]//Sort//FullSimplify;
-		HelpListCleaned=CleanedList[HelpList];
-		HelpVar=Table[\[Lambda]VVSL[a],{a,1,HelpListCleaned//Length}];
-		HelpVarMod=RelationsBVariables[HelpList,HelpVar];
-		HelpSolveCubicL=Table[{HelpListCleaned[[a]]->HelpVarMod[[a]]},{a,1,HelpListCleaned//Length}]//Flatten//Simplify;
-		\[Lambda]vvsLS=couplingTensor//Normal//Simplify//ReplaceAll[#,HelpSolveCubicL]&//SparseArray;
-
+		{HelpListCleaned, HelpVar, HelpVarMod, HelpSolveCubicL} = ProcessCoupling[couplingTensor, \[Lambda]VVSL];	
+		\[Lambda]vvsLS=couplingTensor//Normal//Simplify//FullSimplify//ReplaceAll[#,HelpSolveCubicL]&//SparseArray;
 	];
 		
 	(* --- TemporalVector-scalar couplings --- *)	
@@ -2119,13 +2114,8 @@ IdentifyTensorsDRalgo[]:=Module[
 	,
 		couplingTensor = xLO*aV3D;	
 	];
-	HelpList=DeleteDuplicates@FullSimplify[Flatten[couplingTensor]]//Sort;
-	HelpListCleaned=CleanedList[HelpList];
-	HelpVar=Table[ \[Mu]ijV[a],{a,1,HelpListCleaned//Length}];
-	HelpVarMod=RelationsBVariables[HelpList,HelpVar];
-	HelpSolveVectorMass=Table[{HelpListCleaned[[a]]->HelpVarMod[[a]]},{a,1,HelpListCleaned//Length}]//Flatten;
-	\[Mu]ijVNLO=couplingTensor//Normal//FullSimplify//ReplaceAll[#,HelpSolveVectorMass]&//SparseArray;
-
+	{HelpListCleaned, HelpVar, HelpVarMod, HelpSolveVectorMass} = ProcessCoupling[couplingTensor, \[Mu]ijV];	
+	\[Mu]ijVNLO=couplingTensor//Normal//Simplify//FullSimplify//ReplaceAll[#,HelpSolveVectorMass]&//SparseArray;
 
 	If[DiagonalMatrixQAE[Normal[\[Mu]ijVNLO]]==False,
 		Print["Off-Diagonal Debye Matrices Detected"]
@@ -2138,11 +2128,7 @@ IdentifyTensorsDRalgo[]:=Module[
 	,
 		couplingTensor = xLO*aS3D;
 	];
-	HelpList=DeleteDuplicates@Flatten@Simplify[couplingTensor]//Sort;
-	HelpListCleaned=CleanedList[HelpList];
-	HelpVar=Table[ \[Mu]ijS[a],{a,1,HelpListCleaned//Length}];
-	HelpVarMod=RelationsBVariables[HelpList,HelpVar];
-	HelpSolveMass=Table[{HelpListCleaned[[a]]->HelpVarMod[[a]]},{a,1,HelpListCleaned//Length}]//Flatten;
+	{HelpListCleaned, HelpVar, HelpVarMod, HelpSolveMass} = ProcessCoupling[couplingTensor, \[Mu]ijS];	
 	\[Mu]ijSNLO=couplingTensor//Normal//Simplify//ReplaceAll[#,HelpSolveMass]&//SparseArray;
 
 	(* --- Scalar tadpoles --- *)
@@ -2151,13 +2137,8 @@ IdentifyTensorsDRalgo[]:=Module[
 	,
 		couplingTensor = xLO*Tfac^(-1/2)(\[Lambda]1+TadPoleLO);
 	];
-	HelpList=DeleteDuplicates@Flatten@Simplify[couplingTensor]//Sort;
-	HelpListCleaned=CleanedList[HelpList];
-	HelpVar=Table[ dS[a],{a,1,HelpListCleaned//Length}];
-	HelpVarMod=RelationsBVariables[HelpList,HelpVar];
-	HelpSolveTadpole=Table[{HelpListCleaned[[a]]->HelpVarMod[[a]]},{a,1,HelpListCleaned//Length}]//Flatten;
+	{HelpListCleaned, HelpVar, HelpVarMod, HelpSolveTadpole} = ProcessCoupling[couplingTensor, dS];	
 	TadPoleS=couplingTensor//Normal//Simplify//ReplaceAll[#,HelpSolveTadpole]&//SparseArray;
-
 
 	If[Length[SparseArray[TadPoleS]["NonzeroValues"]]!=Length[SparseArray[\[Lambda]1]["NonzeroValues"]],
 		Print["Detected 1-loop Scalar Tadpoles not defined at tree-level"];
