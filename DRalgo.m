@@ -18,7 +18,34 @@
 (* ------------------------------------------------------------------------ *)
 
 
+$DRalgoVersion::usage =
+"$DRlagoVersion is a string that represents the version of DRalgo.";
+
+
+If[ MemberQ[$Packages,"DRalgo`"],
+	Print[Style["DRalgo is already loaded! If you are trying to reload DRalgo please restart the kernel.","Text", Red, Bold]];
+(*	Abort[]*)
+];
+
+If[ ($VersionNumber < 12.0) && StringFreeQ[$Version, "Mathics"],
+	Print[Style["You need at least Mathematica 12.0 to run DRalgo. Evaluation aborted.",Red, Bold]];
+	Abort[]
+];
+
+
+(*    Set the version number    *)
+DRalgo`$DRalgoVersion = "1.22";
+
+
 BeginPackage["DRalgo`"] (* digital history: at its early days in 2021, DRalgo was called FireStorm *)
+
+
+If[! ValueQ[$GroupMathMultipleModels],
+	$GroupMathMultipleModels = False];
+If[! ValueQ[$LoadGroupMath],
+	$LoadGroupMath = True];
+If[! ValueQ[$InstallGroupMath],
+	$InstallGroupMath = False];
 
 
 Unprotect@Definition;
@@ -33,6 +60,7 @@ Protect@Definition;
 	Welcome banner: All credit for this part to GroupMath
 *)
 TexFor[text_]:=Style[text,{GrayLevel[0.3]}]
+Block[{result},
 result={};
 AppendTo[result,Row[{
 	TexFor["DRDRDRDRDRDRDRDRDRDRDRDRDRDR "],
@@ -56,8 +84,7 @@ DRalgoLoad=Image[CompressedData["1:eJztXYlbFUe295t57/vee9/Me+8/eFEURERQQNllk0VRE
 
 AppendTo[result,Style["DRDRDRDRDRDRDRDRDRDRDRDRDRDRDRDRDRDRDRDRDRDRDRDRDRDRDRDRDRDRDRDRD",{GrayLevel[0.3]}]];
 Print[Grid[{{Image[DRalgoLoad,ImageSize->140],Row[result,"\n",BaseStyle->(FontFamily->"Consolas")]}},Alignment->{Left,Center}]]
-(**)
-
+];
 
 
 (* ::Section:: *)
@@ -200,14 +227,67 @@ The problem reads: `1`";
 $DRalgoDirectory=DirectoryName[$InputFileName];
 
 
-(*
-	Functions from groupmath are used to create the model.
-*)
-If[Global`$LoadGroupMath,
-	Get["GroupMath`"];
-	Print["GroupMath is an independent package, and is not part of DRalgo"];
-	Print["Please Cite GroupMath: Comput.Phys.Commun. 267 (2021) 108085 \[Bullet] e-Print: 2011.01764 [hep-th]"];
+(* Backup existing folder if it exists *)
+backupIfExists[path_String] := Module[{n = 1, newPath},
+  If[DirectoryQ[path],
+    newPath = path <> "_copy_" <> ToString[n];
+    While[DirectoryQ[newPath],
+      n++;
+      newPath = path <> "_copy_" <> ToString[n];
+    ];
+    Print["Backing up existing folder to: ", newPath];
+    CopyDirectory[path, newPath];
+    DeleteDirectory[path, DeleteContents -> True];
+  ];
 ];
+
+DownloadPackage[url_, targetName_]:=Module[{zipPath, targetFolder, targetDir, targetPath},
+  
+  (* Define the URL and file paths *)
+  targetFolder=FileBaseName[url];
+  targetDir = FileNameJoin[{$UserBaseDirectory, "Applications"}];
+  zipPath = FileNameJoin[{targetDir, targetFolder<>".zip"}];
+  targetPath = FileNameJoin[{targetDir, targetName}];
+  
+  (* Download the ZIP file *)
+  If[! FileExistsQ[zipPath],
+    URLSave[url, zipPath];
+    Print["Downloaded "<>Last[FileNameSplit[url]]]
+  ];
+  
+  (* Unzip the file *)
+  backupIfExists[targetPath];
+  ExtractArchive[zipPath, targetDir, OverwriteTarget ->False];
+  Print["Unpacked and installed "<>FileBaseName[url]<>" in Applications folder."];
+  
+  (* Clean up *)
+  DeleteFile[zipPath];
+]
+
+
+(*
+	Functions from GroupMath are used to create the model.
+*)
+If[$LoadGroupMath,
+	If[$InstallGroupMath,
+		If[
+			Quiet@Check[Needs["GroupMath`"], True],
+			DownloadPackage["https://renatofonseca.net/groupmath/ProgramVersions/GroupMath-1.1.3.zip","GroupMath"];
+			Print[Style["GroupMath installed.","Text", Red, Bold]];
+		]
+	];
+	Check[
+		Needs["GroupMath`"];,
+		Message[Get::noopen,
+			"or outdated GroupMath` at "<>ToString[$UserBaseDirectory]<>"/Applications.\n"<>
+			"Set DRalgo`$InstallGroupMath=True for automatic installation of GroupMath"];
+		Abort[];
+	];
+	
+	Print["GroupMath is an independent package, and is not part of DRalgo."];
+	Print["Please cite GroupMath: Comput.Phys.Commun. 267 (2021) 108085 \[Bullet] e-Print: \!\(\*TemplateBox[{RowBox[{\"2011.01764\", \" \", \"[\", RowBox[{\"hep\", \"-\", \"th\"}], \"]\"}], {URL[\"https://arxiv.org/abs/2011.01764\"], None}, \"https://arxiv.org/abs/2011.01764\", \"HyperlinkActionRecycled\", {\"HyperlinkActive\"}, BaseStyle -> {\"Hyperlink\"}, HyperlinkAction -> \"Recycled\"},\n\"HyperlinkTemplate\"]\)"];
+
+]
 
 
 (*
@@ -216,10 +296,12 @@ If[Global`$LoadGroupMath,
 	Mode=0 only calculates LO masses
 *)
 Options[ImportModelDRalgo]={
-	Verbose -> False,Mode->2,
+	Verbose->False,
+	Mode->2,
 	Dim6->False,
 	Normalization4D->False,
-	AutoRG->True}
+	AutoRG->True
+}
 
 
 Begin["`Private`"]
@@ -246,9 +328,8 @@ Get[FileNameJoin[{$DRalgoDirectory,"HEFT.m"}]];(*Loads Higgs-Effective field the
 *)
 ImportModelDRalgo[GroupI_,gvvvI_,gvffI_,gvssI_,\[Lambda]1I_,\[Lambda]3I_,\[Lambda]4I_,\[Mu]ijI_,\[Mu]IJFI_,\[Mu]IJFCI_,YsffI_,YsffCI_, OptionsPattern[]]:=Module[{GroupP=GroupI,gvvvP=gvvvI,gvffP=gvffI,gvssP=gvssI,\[Lambda]1IP=\[Lambda]1I,\[Lambda]3P=\[Lambda]3I,\[Lambda]4P=\[Lambda]4I,\[Mu]ijP=\[Mu]ijI,\[Mu]IJFP=\[Mu]IJFI,\[Mu]IJFCP=\[Mu]IJFCI,YsffP=YsffI,YsffCP=YsffCI},
 
-
-If[ Global`$LoadGroupMath,
-	If[!GroupMathCleared && !ValueQ[Global`$GroupMathMultipleModels],
+If[$LoadGroupMath,
+	If[Not[GroupMathCleared] && Not[$GroupMathMultipleModels],
 		Remove["GroupMath`*"];
 		GroupMathCleared=True;
 	];
