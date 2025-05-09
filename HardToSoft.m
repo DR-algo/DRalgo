@@ -1953,9 +1953,6 @@ If[CT==False,
 ];
 
 
-Delete[{0},1]
-
-
 (* ::Section:: *)
 (*Identify tensors*)
 
