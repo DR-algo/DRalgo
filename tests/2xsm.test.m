@@ -14,7 +14,7 @@ DRalgo`$LoadGroupMath=True;
 DRalgo`$InstallGroupMath=True;
 
 Check[
-    Get["../DRalgo.m"],
+    Get["../Kernel/DRalgo.m"],
     Message[Get::noopen, "DRalgo` at "<>ToString[$UserBaseDirectory]<>"/Applications"];
     Abort[];
 ]
