@@ -137,7 +137,106 @@ Dim6Term=(
 
 
 (* ::Section:: *)
-(*Dimensional Reduction*)
+(*Dimensional Reduction Mode 0*)
+
+
+ImportModelDRalgo[Group,gvvv,gvff,gvss,\[Lambda]1,\[Lambda]3,\[Lambda]4,\[Mu]ij,\[Mu]IJ,\[Mu]IJC,Ysff,YsffC,Verbose->True,Mode->0];
+PosFermion=PrintFermionRepPositions[];
+FermionMat=Table[{nF,i},{i,PosFermion}];
+DefineNF[FermionMat]
+PerformDRhard[]
+
+
+(* ::Section:: *)
+(*Test Mode 0*)
+
+
+(* ::Subsection:: *)
+(*Test hard*)
+
+
+testList={};
+
+
+(* ::Subsubsection::Closed:: *)
+(*Beta functions*)
+
+
+AppendTo[testList,
+TestCreate[BetaFunctions4D[],
+	{g3^2->0,g2^2->0,g1^2->0,\[Lambda]1H->0,\[Lambda]m->0,\[Lambda]\[Sigma]->0,\[Mu]3->0,\[Mu]m->0,yt1->0,m1->0,\[Mu]\[Sigma]->0,\[Mu]1->0}
+]];
+
+
+(* ::Subsubsection:: *)
+(*Dimension 4 matching relations*)
+
+
+AppendTo[testList,
+TestCreate[PrintCouplings[],
+	{g13d^2->g1^2 T,g23d^2->g2^2 T,g33d^2->g3^2 T,\[Lambda]1H3d->T \[Lambda]1H,\[Lambda]m3d->T \[Lambda]m,\[Lambda]\[Sigma]3d->T \[Lambda]\[Sigma],\[Mu]33d->Sqrt[T] \[Mu]3,\[Mu]m3d->Sqrt[T] \[Mu]m}
+]];
+
+
+PrintTadpoles["NLO"]
+
+
+AppendTo[testList,
+TestCreate[PrintTadpoles["LO"],
+	{\[Mu]13d->(12 \[Mu]1+T^2 (\[Mu]3+\[Mu]m))/(12 Sqrt[T])}
+]];
+AppendTo[testList,
+TestCreate[PrintTadpoles["NLO"],
+	{\[Mu]13d->dS[1]}
+]];
+
+
+AppendTo[testList,
+TestCreate[PrintTemporalScalarCouplings[],
+	{\[Lambda]VL[1]->(g2^2 T)/2,\[Lambda]VL[2]->-(1/2) g1 g2 T Y\[Phi],\[Lambda]VL[3]->1/2 g1^2 T Y\[Phi]^2}
+]];
+
+
+AppendTo[testList,
+TestCreate[PrintDebyeMass["LO"],
+	{\[Mu]sqSU2->1/6 g2^2 (5+2 nF) T^2,\[Mu]sqSU3->1/3 g3^2 (3+nF) T^2,\[Mu]sqU1->1/24 g1^2 T^2 (nF (3 Yd^2+Ye^2+2 Yl^2+6 Yq^2+3 Yu^2)+4 Y\[Phi]^2)}
+]];
+AppendTo[testList,
+TestCreate[PrintDebyeMass["NLO"],
+	{\[Mu]sqSU2->0,\[Mu]sqSU3->0,\[Mu]sqU1->0}
+]];
+
+
+AppendTo[testList,
+TestCreate[PrintScalarMass["LO"],
+	{m13d->m1+1/48 T^2 (9 g2^2+12 yt1^2+3 g1^2 Y\[Phi]^2+24 \[Lambda]1H+2 \[Lambda]m),\[Mu]\[Sigma]3d->1/12 T^2 (2 \[Lambda]m+3 \[Lambda]\[Sigma])+\[Mu]\[Sigma]}
+]];
+AppendTo[testList,
+TestCreate[PrintScalarMass["NLO"],
+	{m13d->0,\[Mu]\[Sigma]3d->0}
+]];
+
+
+(* ::Subsubsection:: *)
+(*Symmetric pressure*)
+
+
+AppendTo[testList,
+TestCreate[PrintPressure["LO"],
+	(29*Pi^2*T^4)/90 + (7*nF*Pi^2*T^4)/24
+]];
+
+
+(* ::Subsubsection:: *)
+(*Report*)
+
+
+report=TestReport[testList]
+report["ResultsDataset"]
+
+
+(* ::Section::Closed:: *)
+(*Dimensional Reduction Mode 3*)
 
 
 ImportModelDRalgo[Group,gvvv,gvff,gvss,\[Lambda]1,\[Lambda]3,\[Lambda]4,\[Mu]ij,\[Mu]IJ,\[Mu]IJC,Ysff,YsffC,Verbose->True,Mode->3];
@@ -149,7 +248,7 @@ PerformDRhard[]
 
 
 (* ::Section:: *)
-(*Tests*)
+(*Tests Mode 3*)
 
 
 (* ::Subsection:: *)

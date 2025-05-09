@@ -2032,20 +2032,6 @@ IdentifyTensorsDRalgo[]:=Module[
 		];
 		\[Lambda]KVecT=couplingTensor//SimplifySparse//Normal//ReplaceAll[#,HelpSolveVecT]&//SparseArray;
 
-		(* --- Temporal-scalar/scalar cross couplings --- *)
-		
-		couplingTensor = -Tfac(HabijV+GvvssL);
-		HelpList=DeleteDuplicates@Simplify@Flatten[couplingTensor]//Sort;
-		HelpListCleaned=CleanedList[HelpList];
-		If[Length[Delete[HelpList,1]]<1,(*Fix for when the tensor is empty*)
-			HelpSolveVecL={};
-		,
-			HelpVarMod=RelationsBVariables3[HelpList];
-			HelpSolveVecL=Table[{HelpListCleaned[[a]]->HelpVarMod[[a]]},{a,1,HelpListCleaned//Length}]//Flatten//Simplify;
-		];
-		\[Lambda]KVec=couplingTensor//Normal//Simplify//ReplaceAll[#,HelpSolveVecL]&//SparseArray;
-
-
 		(* --- Temporal-Scalar quartics --- *)
 		VerbosePrint["Calculating Temporal-Scalar Quartics "];
 		
@@ -2069,10 +2055,20 @@ IdentifyTensorsDRalgo[]:=Module[
 		\[Lambda]vvsLS=couplingTensor//Normal//Simplify//FullSimplify//ReplaceAll[#,HelpSolveCubicL]&//SparseArray;
 	];
 		
-	(* --- TemporalVector-scalar couplings --- *)	
+	(* --- Temporal-scalar/scalar cross couplings --- *)	
 	If[mode==0,
 		GvvssL=EmptyArray[{nv,nv,ns,ns}]
-	];		
+	];
+	couplingTensor = -Tfac(HabijV+GvvssL);
+	HelpList=DeleteDuplicates@Simplify@Flatten[couplingTensor]//Sort;
+	HelpListCleaned=CleanedList[HelpList];
+	If[Length[Delete[HelpList,1]]<1,(*Fix for when the tensor is empty*)
+		HelpSolveVecL={};
+	,
+		HelpVarMod=RelationsBVariables3[HelpList];
+		HelpSolveVecL=Table[{HelpListCleaned[[a]]->HelpVarMod[[a]]},{a,1,HelpListCleaned//Length}]//Flatten//Simplify;
+	];
+	\[Lambda]KVec=couplingTensor//Normal//Simplify//ReplaceAll[#,HelpSolveVecL]&//SparseArray;
 			
 	If[mode>=3,
 		(* --- Scalar sextic couplings --- *)
