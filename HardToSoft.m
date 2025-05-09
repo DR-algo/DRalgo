@@ -2869,9 +2869,7 @@ BetaFunctions4D[]:=Module[{},
 	ResTadpole=#->0&/@Variables[\[Lambda]1//Normal];
 	PrintPre=Join[ResGauge,ResScal,ResCubic,ResYuk,ResMass,ResMassF,ResTadpole]//Normal//FullSimplify//DeleteDuplicates;
 ];
-ToExpression[StringReplace[ToString[StandardForm[PrintPre]],"DRalgo`Private`"->""]]
-
-
+	OutputFormatDR[PrintPre]
 ];
 
 
@@ -2919,7 +2917,5 @@ BetaFunctions3DS[]:=Module[{},
 	ResTadpole=#->0&/@Variables[\[Lambda]1//Normal];
 	PrintPre=Join[ResMass,ResTadpole]/.\[Mu]3->\[Mu] Exp[1]//Normal//FullSimplify//DeleteDuplicates;
 ];
-ToExpression[StringReplace[ToString[StandardForm[PrintPre]],"DRalgo`Private`"->""]]
-
-
+	OutputFormatDR[PrintPre]
 ];

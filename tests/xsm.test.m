@@ -158,7 +158,7 @@ PerformDRhard[]
 testList={};
 
 
-(* ::Subsubsection::Closed:: *)
+(* ::Subsubsection:: *)
 (*Beta functions*)
 
 
