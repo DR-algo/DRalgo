@@ -6,9 +6,9 @@
 
 (*
       	This software is covered by the GNU General Public License 3.
-       	Copyright (C) 2021-2023 Andreas Ekstedt
-       	Copyright (C) 2021-2023 Philipp Schicho
-       	Copyright (C) 2021-2023 Tuomas V.I. Tenkanen
+       	Copyright (C) 2021-2025 Andreas Ekstedt
+       	Copyright (C) 2021-2025 Philipp Schicho
+       	Copyright (C) 2021-2025 Tuomas V.I. Tenkanen
 
 *)
 
@@ -66,7 +66,7 @@ AppendTo[result,Row[{
 	TexFor["DRDRDRDRDRDRDRDRDRDRDRDRDRDR "],
 	TexFor["DRalgo"],
 	TexFor[" DRDRDRDRDRDRDRDRDRDRDRDRDRDRD"]}]];
-AppendTo[result,Row[{"Version: "//TexFor,"1.21 (21-05-2024)"//TexFor}]];
+AppendTo[result,Row[{"Version: "//TexFor,ToString[$DRalgoVersion]<>" (09-05-2025)"//TexFor}]];
 AppendTo[result,Row[{"Authors: "//TexFor,
     Hyperlink["Andreas Ekstedt","https://inspirehep.net/authors/1799400"],", "//TexFor,
     Hyperlink["Philipp Schicho","https://inspirehep.net/authors/1639147"],", "//TexFor,
@@ -216,12 +216,17 @@ PrintActionHET::usage="Remove later";
 CalculatePotentialHET::usage="Remove later";
 PrintScalarKineticHET::usage="Remove later";
 
+
+(* Custom error messages *)
 DRalgo::failmsg =
 "Error! DRalgo has encountered a fatal problem and must abort the computation. \
 The problem reads: `1`";
 DRalgo::ImplementationFail =
 "Error! DRalgo has encountered a problem and must abort the computation. \
 The problem reads: `1`";
+
+Contract::argcount = "Contract expects between 2 and 4 tensors, but `1` were provided.";
+PrintResults::badopt = "Unknown option `1`. Use \"LO\", \"NLO\", or \"All\" only.";
 
 
 $DRalgoDirectory=DirectoryName[$InputFileName];
@@ -419,9 +424,9 @@ PerformDRhard[]:=Module[{},
 		ScalarCubic[];
 		ScalarQuartic[];
 		TransverseSSVV[];
-		LongitudionalSSVV[];
-		LongitudionalVVVV[];
-		LongitudionalVVS[];
+		LongitudinalSSVV[];
+		LongitudinalVVVV[];
+		LongitudinalVVS[];
 	];
 
 
@@ -490,7 +495,10 @@ PerformDRsoft[ListHardP_]:=Module[{ListHardI=ListHardP},
 (*Help functions*)
 
 
-OutputFormatDR[x_]:=ToExpression[StringReplace[ToString[StandardForm[x]],"DRalgo`Private`"->""]];
+OutputFormatDR[expr_] := ToExpression @ StringReplace[
+  ToString[StandardForm[expr]],
+  "DRalgo`Private`" -> ""
+];
 
 
 (*
