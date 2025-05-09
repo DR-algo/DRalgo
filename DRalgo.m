@@ -34,7 +34,7 @@ If[ ($VersionNumber < 12.0) && StringFreeQ[$Version, "Mathics"],
 
 
 (*    Set the version number    *)
-DRalgo`$DRalgoVersion = "1.22";
+DRalgo`$DRalgoVersion = "1.3.0";
 
 
 BeginPackage["DRalgo`"] (* digital history: at its early days in 2021, DRalgo was called FireStorm *)
