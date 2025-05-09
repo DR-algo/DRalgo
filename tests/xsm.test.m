@@ -178,16 +178,13 @@ TestCreate[PrintCouplings[],
 ]];
 
 
-PrintTadpoles["NLO"]
-
-
 AppendTo[testList,
 TestCreate[PrintTadpoles["LO"],
 	{\[Mu]13d->(12 \[Mu]1+T^2 (\[Mu]3+\[Mu]m))/(12 Sqrt[T])}
 ]];
 AppendTo[testList,
 TestCreate[PrintTadpoles["NLO"],
-	{\[Mu]13d->dS[1]}
+	{\[Mu]13d->0}
 ]];
 
 
@@ -732,7 +729,5 @@ TestCreate[PrintPressureUS["NLO"],
 
 report=TestReport[testList]
 report["ResultsDataset"]
-
-
 
 

@@ -1953,12 +1953,18 @@ If[CT==False,
 ];
 
 
+Delete[{0},1]
+
+
 (* ::Section:: *)
 (*Identify tensors*)
 
 
 (* Helper functions *)
-CleanedList[list_] := If[Length[list] > 1 && list[[1]] === 0, Rest[list], list];
+CleanedList[list_] := If[
+	Length[list] > 1 && list[[1]] === 0,
+	Delete[list,1],
+	list];
 
 MakeReplacementRules[list_, vars_] := Module[{modVars},
   modVars = RelationsBVariables[list, vars];
@@ -2128,7 +2134,8 @@ IdentifyTensorsDRalgo[]:=Module[
 			HelpSolveCubicL,HelpSolveTadpole,HelpSolveQuartic
 		]/.{b_->a_}:>a->b//Flatten[#,1]&;
 	,
-		IdentMat=List/@Join[HelpSolveVectorMass,HelpSolveMass,HelpSolveVecL]/.{b_->a_}:>a->b//Flatten[#,1]&;
+		IdentMat=List/@Join[
+			HelpSolveVectorMass,HelpSolveMass,HelpSolveTadpole,HelpSolveVecL]/.{b_->a_}:>a->b//Flatten[#,1]&;
 	];
 	
 	If[mode>=3,
@@ -2354,7 +2361,10 @@ PrintPressure[optP_: "All"] := Module[{opt = optP, SymmPrint},
     Optional argument: "LO", "NLO", or "All" (default: "All").
 *)
 PrintScalarMass[optP_: "All"] := Module[
-    {opt = optP, VarGauge, SubGauge, \[Mu]ijp, var, helpMass, ResScalp, SolveTemp, SolMassPre, SolMass},
+    {
+    opt = optP,
+    VarGauge, SubGauge, \[Mu]ijp, var, helpMass, ResScalp, SolveTemp, SolMassPre, SolMass
+    },
 
     VerbosePrint["Printing Scalar Masses"];
 
@@ -2413,6 +2423,8 @@ PrintTadpoles[optP_: "All"] := Module[
     \[Lambda]1p = Normal[\[Lambda]1] /. SubGauge;
     var = Variables[Normal[\[Lambda]1p]];
     helpMass = Normal[\[Lambda]1p - TadPoleS];
+    
+    (* Solve for tadpole coupling *)
     ResScalp = ToRules[Reduce[helpMass == 0, var]];
     SolveTemp = var /. ResScalp;
     SolMassPre = ReplaceAll[Flatten[Table[{var[[i]] -> SolveTemp[[i]]}, {i, Length[var]}]], IdentMat];
@@ -2443,7 +2455,7 @@ PrintIdentification[]:=Module[{},
 ];
 
 
-(* ::Subsection::Closed:: *)
+(* ::Subsection:: *)
 (*Print anomalous dimensions*)
 
 
