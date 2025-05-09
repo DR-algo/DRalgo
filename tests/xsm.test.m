@@ -180,7 +180,7 @@ TestCreate[PrintCouplings[],
 
 AppendTo[testList,
 TestCreate[PrintTadpoles["LO"],
-	{\[Mu]13d->(12 \[Mu]1+T^2 (\[Mu]3+\[Mu]m))/(12 Sqrt[T])}
+	{\[Mu]13d->\[Mu]1/Sqrt[T]+1/12 T^(3/2) (\[Mu]3+\[Mu]m)}
 ]];
 AppendTo[testList,
 TestCreate[PrintTadpoles["NLO"],
@@ -232,7 +232,7 @@ report=TestReport[testList]
 report["ResultsDataset"]
 
 
-(* ::Section::Closed:: *)
+(* ::Section:: *)
 (*Dimensional Reduction Mode 3*)
 
 
@@ -282,7 +282,7 @@ TestCreate[PrintCouplings[]/.Replacements//Simplify,
 
 AppendTo[testList,
 TestCreate[PrintTadpoles["LO"]/.Replacements,
-	{\[Mu]13d->(12 \[Mu]1+T^2 (\[Mu]3+\[Mu]m))/(12 Sqrt[T])}
+	{\[Mu]13d->\[Mu]1/Sqrt[T]+1/12 T^(3/2) (\[Mu]3+\[Mu]m)}
 ]];
 AppendTo[testList,
 TestCreate[PrintTadpoles["NLO"]/.Replacements//Expand,
@@ -729,5 +729,8 @@ TestCreate[PrintPressureUS["NLO"],
 
 report=TestReport[testList]
 report["ResultsDataset"]
+
+
+
 
 

@@ -158,7 +158,7 @@ TestCreate[PrintTadpoles["LO"]//Expand,
 ]];
 AppendTo[testList,
 TestCreate[PrintTadpoles["NLO"],
-	{\[Sigma]3d->1/(768 \[Pi]^2 Sqrt[T]) (192 Lf m\[Psi]^3 y-32 EulerGamma m\[Psi] T^2 y^3+28 Lb m\[Psi] T^2 y^3+4 Lf m\[Psi] T^2 y^3-24 Lb msq \[Gamma]-6 Lb T^2 y^2 \[Gamma]-4 EulerGamma T^2 \[Gamma] \[Lambda]+Lb T^2 \[Gamma] \[Lambda]+384 m\[Psi] T^2 y^3 Log[Glaisher]+48 T^2 \[Gamma] \[Lambda] Log[Glaisher]+8 Sqrt[T] \[Gamma]3d \[Lambda]3d Log[\[Mu]3/\[Mu]])}
+	{\[Sigma]3d->1/(768 \[Pi]^2 Sqrt[T]) (192 Lf m\[Psi]^3 y-32 EulerGamma m\[Psi] T^2 y^3+28 Lb m\[Psi] T^2 y^3+4 Lf m\[Psi] T^2 y^3-24 Lb msq \[Gamma]-6 Lb T^2 y^2 \[Gamma]-4 EulerGamma T^2 \[Gamma] \[Lambda]+Lb T^2 \[Gamma] \[Lambda]+384 m\[Psi] T^2 y^3 Log[Glaisher]+48 T^2 \[Gamma] \[Lambda] Log[Glaisher]+8 Sqrt[T] \[Gamma]3d \[Lambda]3d Log[\[Mu]3/\[Mu]])}//Simplify
 ]];
 
 

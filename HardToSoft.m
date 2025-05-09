@@ -2125,13 +2125,13 @@ IdentifyTensorsDRalgo[]:=Module[
 	];
 
 	If[mode>=1,
-		TensorIdentities=List/@Join[
+		TensorIdentification=List/@Join[
 			HelpSolveCubicS,HelpSolveVecT,HelpSolveVecL,
 			HelpSolveQuarticL,HelpSolveVectorMass,HelpSolveMass,
 			HelpSolveCubicL,HelpSolveTadpole,HelpSolveQuartic
 		]/.{b_->a_}:>a->b//Flatten[#,1]&;
 	,
-		TensorIdentities=List/@Join[
+		TensorIdentification=List/@Join[
 			HelpSolveVectorMass,HelpSolveMass,HelpSolveTadpole,HelpSolveVecL]/.{b_->a_}:>a->b//Flatten[#,1]&;
 	];
 	
@@ -2172,7 +2172,7 @@ PrintDebyeMass[optP_:"All"] := Module[
     helpMass = Normal[\[Mu]ijp - \[Mu]ijVNLO];
     
     (* Solve for mass and flatten the result *)
-    SolMassPre = Solve[helpMass == 0, var] /. TensorIdentities // Flatten[#, 1] &;
+    SolMassPre = Solve[helpMass == 0, var] /. TensorIdentification // Flatten[#, 1] &;
     SolMass = SolMassPre;
     
     (* Apply options to SolMass based on optP *)
@@ -2251,7 +2251,7 @@ PrintCouplings[]:=Module[
 	Var3D=VarGauge//ReplaceAll[#,SubGauge]&//Variables;
 	RepVar3D=#->Sqrt[#]&/@Var3D;
 	A2Mod=A2/.RepVar3D;
-	Sol1=Solve[A2Mod==A1,Var3D]/.TensorIdentities//Flatten[#,1]&//FullSimplify;
+	Sol1=Solve[A2Mod==A1,Var3D]/.TensorIdentification//Flatten[#,1]&//FullSimplify;
 	ResGauge=Table[List[Sol1[[c]]]/.{b_->a_}:>b^2->a,{c,1,Length[Sol1]}];
 	
 
@@ -2288,13 +2288,13 @@ PrintCouplings[]:=Module[
 			\[Lambda]4p= \[Lambda]4//Normal//ReplaceAll[#,SubGauge]&;
 			SolVar=Tfac*\[Lambda]4-\[Lambda]4p//Normal;
 			QuarticVar=\[Lambda]4p//Normal//Variables;
-			ResQuartic=Solve[SolVar==0,QuarticVar]/.TensorIdentities//Flatten[#,1]&;
+			ResQuartic=Solve[SolVar==0,QuarticVar]/.TensorIdentification//Flatten[#,1]&;
 	,
 			SolVar=SparseArray[\[Lambda]3DS-\[Lambda]4]["NonzeroValues"]//DeleteDuplicates//ReplaceAll[#,SubGauge]&;
 			QuarticVar=\[Lambda]4//Normal//ReplaceAll[#,SubGauge]&//Variables;
 			ResScalp=Reduce[SolVar==0,QuarticVar]//ToRules[#]&;
 			SolveTemp=QuarticVar/.ResScalp;
-			ResQuartic=Table[{QuarticVar[[i]]->SolveTemp[[i]]},{i,1,Length@QuarticVar}]//Flatten[#,1]&//ReplaceAll[#,TensorIdentities]&//Simplify;
+			ResQuartic=Table[{QuarticVar[[i]]->SolveTemp[[i]]},{i,1,Length@QuarticVar}]//Flatten[#,1]&//ReplaceAll[#,TensorIdentification]&//Simplify;
 	]; 
 	
 
@@ -2307,7 +2307,7 @@ PrintCouplings[]:=Module[
 	\[Lambda]3p=\[Lambda]3//Normal//ReplaceAll[#,SubGauge]&;
 	SolVar=\[Lambda]3CSRed-\[Lambda]3p//Normal;
 	CubicVar=\[Lambda]3p//Normal//Variables;
-	ResCubic=Solve[SolVar==0,CubicVar]/.TensorIdentities//Flatten[#,1]&;
+	ResCubic=Solve[SolVar==0,CubicVar]/.TensorIdentification//Flatten[#,1]&;
 
 	(* --- Printing Result --- *)
 	PrintPre=Join[ResGauge,ResGaugeNA,ResQuartic,ResCubic]//Normal//FullSimplify//DeleteDuplicates;
@@ -2350,105 +2350,82 @@ PrintPressure[optP_: "All"] := Module[{opt = optP, SymmPrint},
 
 
 (* ::Subsection:: *)
-(*Print scalar mass*)
+(*Print scalar mass and tadpole*)
 
 
 (*
-    Prints 1-loop and 2-loop effective scalar masses in the soft theory.
+    Prints 1-loop and 2-loop effective parameters in the soft theory.
     Optional argument: "LO", "NLO", or "All" (default: "All").
 *)
-PrintScalarMass[optP_: "All"] := Module[
+PrintingRoutine[Tensor4D_, TensorIdentity_, optP_: "All"] := Module[
     {
     opt = optP,
-    VarGauge, SubGauge, \[Mu]ijp, var, helpMass, ResScalp, SolveTemp, SolMassPre, SolMass
+    VarGauge, SubGauge, Tensor4Dp, var, helpMass, ResScalp, SolveTemp, SolutionPre, Output
     },
 
-    VerbosePrint["Printing Scalar Masses"];
-
     (* Collect gauge variables and apply 3d replacements *)
-    VarGauge = DeleteDuplicates[Variables[Normal[\[Mu]ij]]];
+    VarGauge = DeleteDuplicates[Variables[Normal[Tensor4D]]];
     SubGauge = Rule @@@ (List @@@ {#, Symbol[ToString[#] <> "3d"]} & /@ VarGauge);
 
-    \[Mu]ijp = Normal[\[Mu]ij] /. SubGauge;
-    var = Variables[Normal[\[Mu]ijp]];
-    helpMass = Normal[\[Mu]ijp - \[Mu]ijSNLO];
+    Tensor4Dp = Normal[Tensor4D] /. SubGauge;
+    var = Variables[Normal[Tensor4Dp]];
+    helpMass = Normal[Tensor4Dp - TensorIdentity];
 
     (* Solve for scalar masses *)
     ResScalp = ToRules[Reduce[helpMass == 0, var]];
     SolveTemp = var /. ResScalp;
-    SolMassPre = ReplaceAll[Flatten[Table[{var[[i]] -> SolveTemp[[i]]}, {i, Length[var]}]], TensorIdentities];
+    SolutionPre = ReplaceAll[Flatten[Table[{var[[i]] -> SolveTemp[[i]]}, {i, Length[var]}]], TensorIdentification];
 
     (* Apply loop order option *)
-    SolMass = Switch[opt,
-        "LO",    SolMassPre /. xLO -> 1 /. xNLO -> 0 /. ReplaceLb // Simplify,
-        "NLO",   SolMassPre /. xLO -> 0 /. xNLO -> 1 /. ReplaceLb // Simplify,
-        "All",   SolMassPre /. xLO -> 1 /. xNLO -> 1 /. ReplaceLb // Simplify,
+    Output = Switch[opt,
+        "LO",    SolutionPre /. xLO -> 1 /. xNLO -> 0 /. ReplaceLb // Simplify,
+        "NLO",   SolutionPre /. xLO -> 0 /. xNLO -> 1 /. ReplaceLb // Simplify,
+        "All",   SolutionPre /. xLO -> 1 /. xNLO -> 1 /. ReplaceLb // Simplify,
         _,      Message[PrintResults::badopt, opt]; Return[$Failed];
     ];
 
     (* Final print with cleanup *)
     ToExpression[
         StringReplace[
-            ToString[StandardForm[Join[SolMass]]],
+            ToString[StandardForm[Join[Output]]],
             "DRalgo`Private`" -> ""
         ]
     ]
 ];
 
 
-(* ::Subsection:: *)
-(*Print tadpole*)
+(*
+    Prints 1-loop and 2-loop effective scalar masses in the soft theory.
+    Optional argument: "LO", "NLO", or "All" (default: "All").
+*)
+PrintScalarMass[optP_: "All"] := Module[{opt = optP},
+	VerbosePrint["Printing Scalar Masses"];
+	PrintingRoutine[\[Mu]ij, \[Mu]ijSNLO, opt]
+	]
 
 
 (*
     Prints 1-loop and 2-loop effective tadpoles in the soft theory.
     Valid options: "LO", "NLO", or "All". Default: "All".
 *)
-PrintTadpoles[optP_: "All"] := Module[
-    {
-    opt = optP,
-    VarGauge, SubGauge, \[Lambda]1p, var, helpMass, ResScalp, SolveTemp, SolMassPre, SolTadpole
-    },
+PrintTadpoles[optP_: "All"] := Module[{opt = optP},
+	VerbosePrint["Printing Scalar Masses"];
+	PrintingRoutine[\[Lambda]1, TadPoleS, opt]
+	]
 
-    VerbosePrint["Printing Tadpoles"];
 
-    (* Gauge substitutions for 3D theory *)
-    VarGauge = DeleteDuplicates[Variables[Normal[\[Lambda]1]]];
-    SubGauge = Rule @@@ (List @@@ {#, Symbol[ToString[#] <> "3d"]} & /@ VarGauge);
+(* ::Subsection:: *)
+(*Print IdentificationTensor*)
 
-    (* Setup and solve tadpole equations *)
-    \[Lambda]1p = Normal[\[Lambda]1] /. SubGauge;
-    var = Variables[Normal[\[Lambda]1p]];
-    helpMass = Normal[\[Lambda]1p - TadPoleS];
-    
-    (* Solve for tadpole coupling *)
-    ResScalp = ToRules[Reduce[helpMass == 0, var]];
-    SolveTemp = var /. ResScalp;
-    SolMassPre = ReplaceAll[Flatten[Table[{var[[i]] -> SolveTemp[[i]]}, {i, Length[var]}]], TensorIdentities];
 
-    (* Loop-order selection *)
-    SolTadpole = Switch[opt,
-        "LO",   SolMassPre /. xLO -> 1 /. xNLO -> 0,
-        "NLO",  SolMassPre /. xLO -> 0 /. xNLO -> 1,
-        "All",  SolMassPre /. xLO -> 1 /. xNLO -> 1,
-        _,      Message[PrintResults::badopt, opt]; Return[$Failed];
-    ];
 
-    (* Output final expression *)
-    ToExpression[
-        StringReplace[
-            ToString[StandardForm[Join[SolTadpole]]],
-            "DRalgo`Private`" -> ""
-        ]
-    ]
-];
 
 
 (*
 	Rewrites internal names of effective couplings in terms of 4d parameters.
 *)
 PrintIdentification[]:=Module[{},
-	ToExpression[StringReplace[ToString[StandardForm[TensorIdentities]],"DRalgo`Private`"->""]]
+	ToExpression[StringReplace[ToString[StandardForm[TensorIdentification]],"DRalgo`Private`"->""]]
 ];
 
 
