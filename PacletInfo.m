@@ -2,7 +2,7 @@
 
 PacletObject[
   <|
-    "Name" -> "DRalgo/DRalgo",
+    "Name" -> "DRalgo",
     "Description" -> "DRalgo is an algorithmic implementation that constructs an effective, dimensionally reduced, high-temperature field theory for generic models.",
     "Creator" -> "Andreas Ekstedt, Philipp Schicho, Tuomas V.I. Tenkanen",
     "URL" -> "https://github.com/DR-algo/DRalgo",
@@ -14,7 +14,7 @@ PacletObject[
         "Kernel",
         "Root" -> "Kernel",
         "Context" -> {
-			"DRalgo`DRalgo`",
+			"DRalgo`",
 			"DRalgo.m"
 		}
       }
