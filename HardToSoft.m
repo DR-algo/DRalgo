@@ -2146,49 +2146,6 @@ IdentifyTensorsDRalgo[]:=Module[
 
 
 (* ::Subsection:: *)
-(*Print Debye mass*)
-
-
-(*
-    Prints the Debye mass in the soft theory.
-    Can be customized with options for LO, NLO, or All.
-*)
-PrintDebyeMass[optP_:"All"] := Module[
-	{
-		opt = optP,
-		VarGauge, \[Mu]ijp, var, helpMass, SolMassPre, SolMass
-	},
-    
-    (* Verbose output *)
-    VerbosePrint["Printing Debye Masses"];
-    
-    (* Prepare gauge couplings and variables *)
-    VarGauge = Join[\[Mu]abDef // Normal // Variables] // DeleteDuplicates;
-    
-    \[Mu]ijp = \[Mu]abDef // Normal;
-    var = Variables[Normal[\[Mu]ijp]];  (* Get variables from the expression *)
-    
-    (* Calculate the mass term difference *)
-    helpMass = Normal[\[Mu]ijp - \[Mu]ijVNLO];
-    
-    (* Solve for mass and flatten the result *)
-    SolMassPre = Solve[helpMass == 0, var] /. TensorIdentification // Flatten[#, 1] &;
-    SolMass = SolMassPre;
-    
-    (* Apply options to SolMass based on optP *)
-    Switch[opt,
-        "All", SolMass = SolMassPre /. xLO -> 1 /. xNLO -> 1 /. ReplaceLb // Simplify,
-        "LO", SolMass = SolMassPre /. xLO -> 1 /. xNLO -> 0 /. ReplaceLb // Simplify,
-        "NLO", SolMass = SolMassPre /. xLO -> 0 /. xNLO -> 1 /. ReplaceLb // Simplify,
-        _, Message[PrintResults::badopt, opt]; Return[$Failed];
-    ];
-    
-    (* Return the result in readable form *)
-    Return[ToExpression[StringReplace[ToString[StandardForm[Join[SolMass]]], "DRalgo`Private`" -> ""]]]
-];
-
-
-(* ::Subsection:: *)
 (*Print higher-dimensional effective couplings*)
 
 
@@ -2211,9 +2168,7 @@ PrintCouplingsEffective[]:=Module[{},
 
 (*Printing Result*)
 	PrintPre=Join[ResScal]//Normal//FullSimplify//DeleteDuplicates;
-
-	ToExpression[StringReplace[ToString[StandardForm[PrintPre]],"DRalgo`Private`"->""]]
-
+	OutputFormatDR[PrintPre]
 ];
 
 
@@ -2222,7 +2177,9 @@ PrintCouplingsEffective[]:=Module[{},
 
 
 (*
-	Prints effective couplings in the soft theory. The module calculates all tensors in the soft theory and matches them with corresponding tensors in the original 4d theory.
+	Prints effective couplings in the soft theory.
+	The module calculates all tensors in the soft theory and matches them 
+	with corresponding tensors in the original 4d theory.
 *)
 PrintCouplings[]:=Module[
 	{
@@ -2237,7 +2194,7 @@ PrintCouplings[]:=Module[
 	SubGauge=Table[c->Symbol[ToString[c]<>ToString["3d"]],{c,VarGauge}];
 	(*VarGauge denotes all possible vector couplings*)
 
-	(* Gauge couplings*)
+	(* --- Gauge couplings --- *)
 	If[mode==0,\[Lambda]KVecT=Tfac HabijV]; (*If mode=0 no couplings are calculated*)
 	
 	A1=TensorContract[\[Lambda]KVecT,{{3,4}}]//Normal; 
@@ -2311,13 +2268,11 @@ PrintCouplings[]:=Module[
 
 	(* --- Printing Result --- *)
 	PrintPre=Join[ResGauge,ResGaugeNA,ResQuartic,ResCubic]//Normal//FullSimplify//DeleteDuplicates;
-
-	ToExpression[StringReplace[ToString[StandardForm[PrintPre]],"DRalgo`Private`"->""]]
-
+	OutputFormatDR[PrintPre]
 ];
 
 
-(* ::Subsection::Closed:: *)
+(* ::Subsection:: *)
 (*Print symmetric pressure*)
 
 
@@ -2340,32 +2295,35 @@ PrintPressure[optP_: "All"] := Module[{opt = optP, SymmPrint},
     ];
 
     (* Format and return output *)
-    ToExpression[
-        StringReplace[
-            ToString[StandardForm[SymmPrint]],
-            "DRalgo`Private`" -> ""
-        ]
-    ]
+    OutputFormatDR[SymmPrint]
 ];
 
 
 (* ::Subsection:: *)
-(*Print scalar mass and tadpole*)
+(*Print routine*)
 
 
 (*
     Prints 1-loop and 2-loop effective parameters in the soft theory.
     Optional argument: "LO", "NLO", or "All" (default: "All").
 *)
-PrintingRoutine[Tensor4D_, TensorIdentity_, optP_: "All"] := Module[
+PrintingRoutine::tagstr = "The tag `1` must be a string.";
+
+PrintingRoutine[Tensor4D_, TensorIdentity_, optP_, tagP_: ""] := Module[
     {
     opt = optP,
+    tag = tagP,
     VarGauge, SubGauge, Tensor4Dp, var, helpMass, ResScalp, SolveTemp, SolutionPre, Output
     },
+    
+	If[!StringQ[tag],
+		Message[PrintingRoutine::tagstr, tag];
+		Return[$Failed];
+	];
 
     (* Collect gauge variables and apply 3d replacements *)
     VarGauge = DeleteDuplicates[Variables[Normal[Tensor4D]]];
-    SubGauge = Rule @@@ (List @@@ {#, Symbol[ToString[#] <> "3d"]} & /@ VarGauge);
+    SubGauge = Rule @@@ (List @@@ {#, Symbol[ToString[#] <> tag]} & /@ VarGauge);
 
     Tensor4Dp = Normal[Tensor4D] /. SubGauge;
     var = Variables[Normal[Tensor4Dp]];
@@ -2385,13 +2343,26 @@ PrintingRoutine[Tensor4D_, TensorIdentity_, optP_: "All"] := Module[
     ];
 
     (* Final print with cleanup *)
-    ToExpression[
-        StringReplace[
-            ToString[StandardForm[Join[Output]]],
-            "DRalgo`Private`" -> ""
-        ]
-    ]
+    OutputFormatDR[Join[Output]]
 ];
+
+
+(* ::Subsubsection::Closed:: *)
+(*Print Debye mass*)
+
+
+(*
+    Prints the Debye mass in the soft theory.
+    Can be customized with options for LO, NLO, or All.
+*)
+PrintDebyeMass[optP_:"All"] := Module[{opt = optP},
+	VerbosePrint["Printing Debye Masses"];
+	PrintingRoutine[\[Mu]abDef, \[Mu]ijVNLO, opt]
+	]
+
+
+(* ::Subsubsection::Closed:: *)
+(*Print Scalar mass*)
 
 
 (*
@@ -2400,8 +2371,12 @@ PrintingRoutine[Tensor4D_, TensorIdentity_, optP_: "All"] := Module[
 *)
 PrintScalarMass[optP_: "All"] := Module[{opt = optP},
 	VerbosePrint["Printing Scalar Masses"];
-	PrintingRoutine[\[Mu]ij, \[Mu]ijSNLO, opt]
+	PrintingRoutine[\[Mu]ij, \[Mu]ijSNLO, opt, "3d"]
 	]
+
+
+(* ::Subsubsection::Closed:: *)
+(*Print Scalar tadpoles*)
 
 
 (*
@@ -2409,8 +2384,8 @@ PrintScalarMass[optP_: "All"] := Module[{opt = optP},
     Valid options: "LO", "NLO", or "All". Default: "All".
 *)
 PrintTadpoles[optP_: "All"] := Module[{opt = optP},
-	VerbosePrint["Printing Scalar Masses"];
-	PrintingRoutine[\[Lambda]1, TadPoleS, opt]
+	VerbosePrint["Printing Scalar Tadpoles"];
+	PrintingRoutine[\[Lambda]1, TadPoleS, opt, "3d"]
 	]
 
 
@@ -2418,14 +2393,11 @@ PrintTadpoles[optP_: "All"] := Module[{opt = optP},
 (*Print IdentificationTensor*)
 
 
-
-
-
 (*
 	Rewrites internal names of effective couplings in terms of 4d parameters.
 *)
 PrintIdentification[]:=Module[{},
-	ToExpression[StringReplace[ToString[StandardForm[TensorIdentification]],"DRalgo`Private`"->""]]
+	OutputFormatDR[TensorIdentification]
 ];
 
 
@@ -2436,7 +2408,11 @@ PrintIdentification[]:=Module[{},
 (*
 	Prints anomalous dimensions of 4d fields.
 *)
-AnomDim4D[ParticleI_,ComponentsI_]:=Module[{ParticleP=ParticleI,ComponentsP=ComponentsI},
+AnomDim4D[ParticleI_,ComponentsI_]:=Module[
+	{
+	ParticleP=ParticleI,
+	ComponentsP=ComponentsI
+	},
 	If[mode>=2,
 		CounterTerm[];(*Calculates counterterms if not already done*)
 	,
@@ -2445,15 +2421,16 @@ AnomDim4D[ParticleI_,ComponentsI_]:=Module[{ParticleP=ParticleI,ComponentsP=Comp
 		\[Gamma]ab=EmptyArray[{nv,nv}];
 		
 	]; 
-	Switch[ParticleP,"S",
-		Ret=\[Gamma]ij[[ComponentsP[[1]][[1]],ComponentsP[[2]][[1]]]];
-	,"F",
-		Ret=\[Gamma]IJF[[ComponentsP[[1]][[1]],ComponentsP[[2]][[1]]]];
-	,"V",
-		Ret=\[Gamma]ab[[ComponentsP[[1]][[1]],ComponentsP[[2]][[1]]]];
-	];
+	Ret = Switch[ParticleP,
+		"S",
+			\[Gamma]ij[[ComponentsP[[1]][[1]],ComponentsP[[2]][[1]]]];,
+		"F",
+			\[Gamma]IJF[[ComponentsP[[1]][[1]],ComponentsP[[2]][[1]]]];,
+		"V",
+			\[Gamma]ab[[ComponentsP[[1]][[1]],ComponentsP[[2]][[1]]]];
+		];
 
-	ToExpression[StringReplace[ToString[StandardForm[Ret]],"DRalgo`Private`"->""]]
+	OutputFormatDR[Ret]
 ];
 
 
@@ -2509,9 +2486,7 @@ PrintTemporalScalarCouplings[]:=Module[
 	(* Combine and print all temporal couplings *)
 	temporalCouplings=Join[quarticList, cubicList, quarticTempList]//Flatten;
 	
-	ToExpression[StringReplace[
-		ToString[StandardForm[temporalCouplings]],
-		"DRalgo`Private`"->""]]
+	OutputFormatDR[temporalCouplings]
 ];
 
 
