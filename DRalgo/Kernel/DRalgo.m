@@ -554,9 +554,12 @@ PerformDRsoft[ListHardP_]:=Module[{ListHardI=ListHardP},
 (*Help functions*)
 
 
+DRalgoNameSpace = "DRalgo`DRalgo`";
+
+
 OutputFormatDR[expr_] := ToExpression @ StringReplace[
   ToString[StandardForm[expr]],
-  "DRalgo`Private`" -> ""
+  DRalgoNameSpace<>"Private`" -> ""
 ];
 
 
