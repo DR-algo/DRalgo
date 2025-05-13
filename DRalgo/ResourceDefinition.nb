@@ -44,7 +44,7 @@ Cell["", "FileManagerTopSpacer",
  CellGroupingRules->{"SectionGrouping", 99},
  TaggingRules->{},
  CellTags->{"FileManagerCell", "FileManager-PacletFiles"},
- CellID->1700949726,ExpressionUUID->"85b0ead5-653f-4186-8d38-eb69901ee00d"],
+ CellID->1700949726,ExpressionUUID->"0691d203-f8c7-4e93-990e-e54038b56999"],
 
 Cell[CellGroupData[{
 
@@ -69,7 +69,7 @@ Cell[TextData[Cell[BoxData[
     NotebookDirectory[], "FrontEnd"}],
   BoxID -> "FileTreePath",
   BaseStyle->{
-   "Text"}]],ExpressionUUID->"a3fd0a6e-e8f6-427b-b894-4329b4b7710f"]], \
+   "Text"}]],ExpressionUUID->"c4ba3644-27fc-448d-9571-2c24c3a8c028"]], \
 "FileManagerDirectory",
  CellMargins->{{Inherited, Inherited}, {Inherited, Inherited}},
  CellGroupingRules->{"SectionGrouping", 100},
@@ -80,7 +80,7 @@ Cell[TextData[Cell[BoxData[
       TemplateBox[{}, "FileManagerDirectoryIconTemplate"]], Background -> 
      None], Inherited}, {Inherited, Inherited}},
  CellTags->{"FileManagerCell", "FileManager-PacletFiles"},
- CellID->156679116,ExpressionUUID->"9061166c-d8c1-4cfd-89b2-148702880fcd"],
+ CellID->156679116,ExpressionUUID->"dd4155c9-6aa1-4d83-b0ff-498d17c5e2bf"],
 
 Cell[BoxData[
  InterpretationBox[
@@ -104,7 +104,7 @@ Cell[BoxData[
       TemplateBox[{}, "FileManagerUnknownIconTemplate"]], Background -> None],
      Inherited}, {Inherited, Inherited}},
  CellTags->{"FileManagerCell", "FileManager-PacletFiles"},
- CellID->490951390,ExpressionUUID->"28b7ba9b-cd30-41b4-96a4-9780f87f033b"],
+ CellID->490951390,ExpressionUUID->"7d3cd05b-9351-4846-a42d-c6afd39cf013"],
 
 Cell[BoxData[
  InterpretationBox[
@@ -128,7 +128,7 @@ Cell[BoxData[
       TemplateBox[{}, "FileManagerPNGIconTemplate"]], Background -> None], 
     Inherited}, {Inherited, Inherited}},
  CellTags->{"FileManagerCell", "FileManager-PacletFiles"},
- CellID->787839956,ExpressionUUID->"009f92e9-7fdf-4d2b-8a43-e0cb9322f55a"],
+ CellID->787839956,ExpressionUUID->"dc178d66-3438-4cdd-8759-f2e67162f5e8"],
 
 Cell[BoxData[
  InterpretationBox[
@@ -152,7 +152,7 @@ Cell[BoxData[
       TemplateBox[{}, "FileManagerSVGIconTemplate"]], Background -> None], 
     Inherited}, {Inherited, Inherited}},
  CellTags->{"FileManagerCell", "FileManager-PacletFiles"},
- CellID->1989456737,ExpressionUUID->"c3d1024d-6706-420a-92fc-3cf7be963f3c"]
+ CellID->1989456737,ExpressionUUID->"2c1ab0d8-f35b-43d4-996c-f28a528aff3a"]
 }, Closed]],
 
 Cell[CellGroupData[{
@@ -178,7 +178,7 @@ Cell[TextData[Cell[BoxData[
     NotebookDirectory[], "Kernel"}],
   BoxID -> "FileTreePath",
   BaseStyle->{
-   "Text"}]],ExpressionUUID->"d7563c1a-15d2-4914-bad5-c5be5a917f64"]], \
+   "Text"}]],ExpressionUUID->"321dbbb7-c28f-47b3-9268-a291585d2bc5"]], \
 "FileManagerDirectory",
  CellMargins->{{Inherited, Inherited}, {Inherited, Inherited}},
  CellGroupingRules->{"SectionGrouping", 100},
@@ -189,7 +189,7 @@ Cell[TextData[Cell[BoxData[
       TemplateBox[{}, "FileManagerKernelIconTemplate"]], Background -> None], 
     Inherited}, {Inherited, Inherited}},
  CellTags->{"FileManagerCell", "FileManager-PacletFiles"},
- CellID->787717084,ExpressionUUID->"81f876d4-9e97-47d1-90e5-1fc9fc423698"],
+ CellID->787717084,ExpressionUUID->"22e7d46c-f025-4300-8c55-539da2abf6b8"],
 
 Cell[BoxData[
  InterpretationBox[
@@ -213,7 +213,7 @@ Cell[BoxData[
       TemplateBox[{}, "FileManagerWLIconTemplate"]], Background -> None], 
     Inherited}, {Inherited, Inherited}},
  CellTags->{"FileManagerCell", "FileManager-PacletFiles"},
- CellID->689502627,ExpressionUUID->"b14dad59-d42d-4f1c-b1b6-baaba2218df4"],
+ CellID->689502627,ExpressionUUID->"584c993f-c7f5-4954-860b-59f43031e63c"],
 
 Cell[BoxData[
  InterpretationBox[
@@ -237,7 +237,7 @@ Cell[BoxData[
       TemplateBox[{}, "FileManagerWLIconTemplate"]], Background -> None], 
     Inherited}, {Inherited, Inherited}},
  CellTags->{"FileManagerCell", "FileManager-PacletFiles"},
- CellID->648892777,ExpressionUUID->"ea0610aa-91e9-4bff-a158-65a095744f00"],
+ CellID->648892777,ExpressionUUID->"e20ae6e9-4645-41ad-b007-206c2311b8a1"],
 
 Cell[BoxData[
  InterpretationBox[
@@ -261,7 +261,7 @@ Cell[BoxData[
       TemplateBox[{}, "FileManagerWLIconTemplate"]], Background -> None], 
     Inherited}, {Inherited, Inherited}},
  CellTags->{"FileManagerCell", "FileManager-PacletFiles"},
- CellID->1018943573,ExpressionUUID->"eac0825f-4a3e-45a6-a351-c47bec28b2d4"],
+ CellID->1018943573,ExpressionUUID->"48202fcf-5eb1-4116-b0a7-2add08994eba"],
 
 Cell[BoxData[
  InterpretationBox[
@@ -285,7 +285,7 @@ Cell[BoxData[
       TemplateBox[{}, "FileManagerWLIconTemplate"]], Background -> None], 
     Inherited}, {Inherited, Inherited}},
  CellTags->{"FileManagerCell", "FileManager-PacletFiles"},
- CellID->1350030233,ExpressionUUID->"06cc1c3f-6dab-4883-8ffe-f46bc1721e09"],
+ CellID->1350030233,ExpressionUUID->"fa50a651-1e4c-42e8-9d52-995d4312a927"],
 
 Cell[BoxData[
  InterpretationBox[
@@ -309,7 +309,7 @@ Cell[BoxData[
       TemplateBox[{}, "FileManagerWLIconTemplate"]], Background -> None], 
     Inherited}, {Inherited, Inherited}},
  CellTags->{"FileManagerCell", "FileManager-PacletFiles"},
- CellID->1793395476,ExpressionUUID->"4faeb432-4f00-430c-aa2f-344a68fc4129"],
+ CellID->1793395476,ExpressionUUID->"1372b139-5f31-4d7c-90af-6a89544bf38a"],
 
 Cell[BoxData[
  InterpretationBox[
@@ -333,7 +333,7 @@ Cell[BoxData[
       TemplateBox[{}, "FileManagerWLIconTemplate"]], Background -> None], 
     Inherited}, {Inherited, Inherited}},
  CellTags->{"FileManagerCell", "FileManager-PacletFiles"},
- CellID->1664779487,ExpressionUUID->"072f11d8-7bff-4782-8fb2-15df1ccd7343"],
+ CellID->1664779487,ExpressionUUID->"c6ec41df-06f9-4d29-becc-bb80d6309172"],
 
 Cell[BoxData[
  InterpretationBox[
@@ -357,7 +357,7 @@ Cell[BoxData[
       TemplateBox[{}, "FileManagerWLIconTemplate"]], Background -> None], 
     Inherited}, {Inherited, Inherited}},
  CellTags->{"FileManagerCell", "FileManager-PacletFiles"},
- CellID->384401246,ExpressionUUID->"5b099e55-0943-4115-a128-43cd7d9d0ad4"]
+ CellID->384401246,ExpressionUUID->"0ee4f411-70a8-4b23-8576-1dc6d9bc16e2"]
 }, Open  ]],
 
 Cell[BoxData[
@@ -382,7 +382,7 @@ Cell[BoxData[
       TemplateBox[{}, "FileManagerPacletInfoIconTemplate"]], Background -> 
      None], Inherited}, {Inherited, Inherited}},
  CellTags->{"FileManagerCell", "FileManager-PacletFiles"},
- CellID->1062907304,ExpressionUUID->"3d10bc59-f269-486d-858f-0ac17acd6dcf"],
+ CellID->1062907304,ExpressionUUID->"037f9474-d867-4e3e-adb5-c29acdd2970f"],
 
 Cell[BoxData[
  InterpretationBox[
@@ -406,13 +406,13 @@ Cell[BoxData[
       TemplateBox[{}, "FileManagerNBIconTemplate"]], Background -> None], 
     Inherited}, {Inherited, Inherited}},
  CellTags->{"FileManagerCell", "FileManager-PacletFiles"},
- CellID->1514082582,ExpressionUUID->"007412f1-7b15-4aa9-9acd-9cb14d5a147a"],
+ CellID->1514082582,ExpressionUUID->"92c50ff8-0c6e-401f-9fe0-828c33bd0ce6"],
 
 Cell["", "FileManagerBottomSpacer",
  CellGroupingRules->{"SectionGrouping", 100},
  TaggingRules->{},
  CellTags->{"FileManagerCell", "FileManager-PacletFiles"},
- CellID->128430975,ExpressionUUID->"721531e0-2a68-4125-ab4f-59bc3f6e466e"]
+ CellID->128430975,ExpressionUUID->"9b9c74ad-d147-4706-aa31-9cc0aa380c0a"]
 }, Open  ]]
 }, Open  ]],
 
@@ -986,12 +986,13 @@ Cell[BoxData[
 
 Cell[BoxData[
  RowBox[{
-  RowBox[{"DRalgo`$LoadGroupMath", "=", "True"}], ";"}]], "Input", "Excluded",
- 
+  RowBox[{"DRalgo`DRalgo`$LoadGroupMath", "=", "True"}], 
+  ";"}]], "Input", "Excluded",
  TaggingRules->{},
  InitializationCell->True,
  CellChangeTimes->{
-  3.9393788327265863`*^9, {3.95581097822871*^9, 3.955810981331767*^9}},
+  3.9393788327265863`*^9, {3.95581097822871*^9, 3.955810981331767*^9}, {
+   3.9561526359137583`*^9, 3.956152637008417*^9}},
  CellLabel->"In[2]:=",
  CellID->1643159961,ExpressionUUID->"202e0216-195f-41d4-832c-f6ba4b2ed094"],
 
@@ -999,7 +1000,7 @@ Cell[CellGroupData[{
 
 Cell[BoxData[
  RowBox[{
-  RowBox[{"Get", "[", "\"\<DRalgo`DRalgo`\>\"", "]"}], 
+  RowBox[{"Needs", "[", "\"\<DRalgo`DRalgo`\>\"", "]"}], 
   ";"}]], "Input", "Excluded",
  TaggingRules->{},
  InitializationCell->True,
@@ -1007,7 +1008,8 @@ Cell[BoxData[
   3.9387644175176783`*^9, {3.938765050170738*^9, 3.938765053032064*^9}, {
    3.9387946374315863`*^9, 3.938794638333699*^9}, {3.93938058295724*^9, 
    3.939380583195784*^9}, {3.9558109523692007`*^9, 3.9558109539844637`*^9}, {
-   3.956115478701583*^9, 3.956115481628365*^9}},
+   3.956115478701583*^9, 3.956115481628365*^9}, {3.95615261723211*^9, 
+   3.956152617842547*^9}},
  CellLabel->"In[3]:=",
  CellID->172764492,ExpressionUUID->"bbefb7b2-e1e1-481b-95b7-b4336cc38080"],
 
@@ -8027,8 +8029,8 @@ Cell["Additional information about limitations, issues, etc.", "Text",
 }, Open  ]]
 }, Open  ]]
 },
-WindowSize->{914, 912},
-WindowMargins->{{Automatic, 486}, {Automatic, -124}},
+WindowSize->{914, 890},
+WindowMargins->{{Automatic, 198}, {Automatic, 0}},
 WindowTitle->"WallGoMatrix | Definition Notebook",
 DockedCells->{
   Cell[
@@ -8831,6 +8833,178 @@ DockedCells->{
           StyleBox[
           "\"Found 58 potential issues and 66 suggestions\"", LineBreakWithin -> 
            Automatic, LineIndent -> 0, StripOnInput -> False], ItemSize -> 
+          Fit, StripOnInput -> False], "", 
+         TagBox[
+          ButtonBox[
+           TagBox[
+            PaneSelectorBox[{False -> GraphicsBox[{
+                 GrayLevel[
+                  NCache[
+                   Rational[64, 85], 0.7529411764705882]], 
+                 
+                 PolygonBox[{{-0.282842712474619, -0.42426406871192845`}, \
+{-0.42426406871192845`, -0.282842712474619}, {0.282842712474619, 
+                  0.42426406871192845`}, {0.42426406871192845`, 
+                  0.282842712474619}}], 
+                 
+                 PolygonBox[{{0.42426406871192845`, -0.282842712474619}, {
+                  0.282842712474619, -0.42426406871192845`}, \
+{-0.42426406871192845`, 0.282842712474619}, {-0.282842712474619, 
+                  0.42426406871192845`}}]}, ImageSize -> 18, PlotRangePadding -> 
+                0, PlotRange -> 0.7, Background -> None], True -> GraphicsBox[{
+                 GrayLevel[
+                  NCache[
+                   Rational[128, 255], 0.5019607843137255]], 
+                 
+                 PolygonBox[{{-0.282842712474619, -0.42426406871192845`}, \
+{-0.42426406871192845`, -0.282842712474619}, {0.282842712474619, 
+                  0.42426406871192845`}, {0.42426406871192845`, 
+                  0.282842712474619}}], 
+                 
+                 PolygonBox[{{0.42426406871192845`, -0.282842712474619}, {
+                  0.282842712474619, -0.42426406871192845`}, \
+{-0.42426406871192845`, 0.282842712474619}, {-0.282842712474619, 
+                  0.42426406871192845`}}]}, ImageSize -> 18, PlotRangePadding -> 
+                0, PlotRange -> 0.7, Background -> None]}, 
+             Dynamic[
+              CurrentValue["MouseOver"]], ImageSize -> Automatic, 
+             FrameMargins -> 0], 
+            MouseAppearanceTag["LinkHand"]], ButtonFunction :> 
+           With[{DefinitionNotebookClient`Stripes`PackagePrivate`nbo$ = 
+              EvaluationNotebook[]}, 
+             CurrentValue[
+              DefinitionNotebookClient`Stripes`PackagePrivate`nbo$, 
+               DockedCells] = If[
+               TrueQ[
+                MemberQ[
+                 CurrentValue["ModifierKeys"], "Control"]], 
+               DeleteCases[
+                Flatten[{
+                  CurrentValue[
+                  DefinitionNotebookClient`Stripes`PackagePrivate`nbo$, 
+                   DockedCells]}], 
+                Cell[
+                 Blank[], "StripeCell", 
+                 BlankNullSequence[]]], 
+               DeleteCases[
+                Flatten[{
+                  CurrentValue[
+                  DefinitionNotebookClient`Stripes`PackagePrivate`nbo$, 
+                   DockedCells]}], 
+                Condition[
+                 Pattern[DefinitionNotebookClient`Stripes`PackagePrivate`c$, 
+                  Blank[Cell]], 
+                 Not[
+                  FreeQ[
+                  DefinitionNotebookClient`Stripes`PackagePrivate`c$, 
+                   "a101dbda-1e55-4640-88aa-043283fdb21b"]]]]]], Appearance -> 
+           None, BoxID -> "a101dbda-1e55-4640-88aa-043283fdb21b", Evaluator -> 
+           Automatic, Method -> "Preemptive"], 
+          MouseAppearanceTag["LinkHand"]]}}, 
+       GridBoxAlignment -> {"Columns" -> {{Left}}, "Rows" -> {{Baseline}}}, 
+       AutoDelete -> False, 
+       GridBoxItemSize -> {
+        "Columns" -> {{Automatic}}, "Rows" -> {{Automatic}}}], "Grid"], 
+     "Text", FontSize -> 12, FontColor -> GrayLevel[0.25], StripOnInput -> 
+     False]], "StripeCell", CellFrameMargins -> {{20, 5}, {2, 2}}, 
+   CellFrame -> {{0, 0}, {1, 0}}, CellFrameColor -> GrayLevel[0.75]], 
+  Cell[
+   BoxData[
+    StyleBox[
+     TagBox[
+      GridBox[{{
+         OverlayBox[{
+           StyleBox[
+            TagBox[
+             DynamicModuleBox[{Typeset`var$$ = False}, 
+              InterpretationBox[
+               StyleBox[
+                PaneSelectorBox[{False -> GridBox[{{
+                    OpenerBox[
+                    Dynamic[Typeset`var$$], Appearance -> Automatic, Enabled -> 
+                    Automatic, AutoAction -> False, ContinuousAction -> 
+                    False], 
+                    StyleBox[
+                    DynamicBox[
+                    ToBoxes[
+                    DateString[
+                    TimeZoneConvert[
+                    DateObject[
+                    3.95615248583803`16.34984801184287*^9, TimeZone -> 0]], {
+                    "MonthName", " ", "DayShort", ", ", "Year", " ", 
+                    "Hour12Short", ":", "Minute", " ", "AMPMLowerCase"}], 
+                    StandardForm], SingleEvaluation -> True, Evaluator -> 
+                    "System"], FontSlant -> Italic, FontColor -> 
+                    GrayLevel[0.5], FontSize -> 0.9 Inherited, StripOnInput -> 
+                    False]}}, GridBoxAlignment -> {"Columns" -> {{Left}}}, 
+                    AutoDelete -> False, 
+                    GridBoxBackground -> {"Columns" -> {{Automatic}}}, 
+                    GridBoxItemSize -> {
+                    "Columns" -> {{Automatic}}, "Rows" -> {{Automatic}}}, 
+                    GridBoxSpacings -> {
+                    "Columns" -> {{0.2}}, "Rows" -> {{0.5}}}, 
+                    BaselinePosition -> {1, 1}], True -> GridBox[{{
+                    OpenerBox[
+                    Dynamic[Typeset`var$$], Appearance -> Automatic, Enabled -> 
+                    Automatic, AutoAction -> False, ContinuousAction -> 
+                    False], 
+                    StyleBox[
+                    DynamicBox[
+                    ToBoxes[
+                    DateString[
+                    TimeZoneConvert[
+                    DateObject[
+                    3.95615248583803`16.34984801184287*^9, TimeZone -> 0]], {
+                    "MonthName", " ", "DayShort", ", ", "Year", " ", 
+                    "Hour12Short", ":", "Minute", " ", "AMPMLowerCase"}], 
+                    StandardForm], SingleEvaluation -> True, Evaluator -> 
+                    "System"], FontSlant -> Italic, FontColor -> 
+                    GrayLevel[0.5], FontSize -> 0.9 Inherited, StripOnInput -> 
+                    False]}, {"", 
+                    PaneBox["\"\"", ImageMargins -> 0]}}, 
+                    GridBoxAlignment -> {"Columns" -> {{Left}}}, AutoDelete -> 
+                    False, GridBoxBackground -> {"Columns" -> {{Automatic}}}, 
+                    GridBoxItemSize -> {
+                    "Columns" -> {{Automatic}}, "Rows" -> {{Automatic}}}, 
+                    GridBoxSpacings -> {
+                    "Columns" -> {{0.2}}, "Rows" -> {{0.5}}}, 
+                    BaselinePosition -> {1, 1}]}, 
+                 Dynamic[
+                  TrueQ[Typeset`var$$]], Alignment -> Automatic, ImageSize -> 
+                 Automatic, ImageMargins -> 0, BaseStyle -> {}, 
+                 DefaultBaseStyle -> "OpenerView", BaselinePosition -> 
+                 Baseline], Deployed -> False, StripOnInput -> False], 
+               OpenerView[{
+                 Style[
+                  Dynamic[
+                   DateString[
+                    TimeZoneConvert[
+                    DateObject[
+                    3.95615248583803`16.34984801184287*^9, TimeZone -> 0]], {
+                    "MonthName", " ", "DayShort", ", ", "Year", " ", 
+                    "Hour12Short", ":", "Minute", " ", "AMPMLowerCase"}], 
+                   SingleEvaluation -> True, Evaluator -> "System"], 
+                  FontSlant -> Italic, FontColor -> GrayLevel[0.5], FontSize -> 
+                  0.9 Inherited], ""}, False]], DynamicModuleValues -> 
+              Automatic], Setting[#, {0}]& ], ShowContents -> False, 
+            StripOnInput -> False], 
+           StyleBox[
+            DynamicBox[
+             ToBoxes[
+              DateString[
+               TimeZoneConvert[
+                DateObject[
+                3.95615248583803`16.34984801184287*^9, TimeZone -> 0]], {
+               "MonthName", " ", "DayShort", ", ", "Year", " ", "Hour12Short",
+                 ":", "Minute", " ", "AMPMLowerCase"}], StandardForm], 
+             SingleEvaluation -> True, Evaluator -> "System"], FontSlant -> 
+            Italic, FontColor -> GrayLevel[0.5], FontSize -> 0.9 Inherited, 
+            StripOnInput -> False]}, Alignment -> {Right, Baseline}], 
+         "\"   \"", 
+         ItemBox[
+          StyleBox[
+          "\"Found 57 potential issues and 66 suggestions\"", LineBreakWithin -> 
+           Automatic, LineIndent -> 0, StripOnInput -> False], ItemSize -> 
           Fit, StripOnInput -> False], 
          StyleBox[
           ActionMenuBox[
@@ -8847,7 +9021,7 @@ DockedCells->{
                     BaselinePosition -> Scaled[0.1]], 
                     TemplateBox[{1}, "Spacer1"], 
                     StyleBox[
-                    "58", FontSize -> 14, FontWeight -> Plain, FontColor -> 
+                    "57", FontSize -> 14, FontWeight -> Plain, FontColor -> 
                     GrayLevel[0.25], FontFamily -> "Source Sans Pro", 
                     StripOnInput -> False]}, "RowDefault"], 
                     "\"Potential issues found\""}, "PrettyTooltipTemplate"], 
@@ -8897,7 +9071,7 @@ DockedCells->{
                  StyleBox[
                  "Print", "Program", FontWeight -> Medium, 
                   ShowStringCharacters -> True, StripOnInput -> False], 
-                 "\".\\!\\(\\*StyleBox[\\\"\\\\\\\" (L24,C2) \\\\\\\"\\\", \
+                 "\".\\!\\(\\*StyleBox[\\\"\\\\\\\" (L20,C3) \\\\\\\"\\\", \
 Rule[FontOpacity, 0.65`], Rule[FontSize, Times[0.9`, Inherited]], \
 Rule[PrivateFontOptions, List[Rule[\\\"OperatorSubstitution\\\", False]]], \
 Rule[StripOnInput, False]]\\)\""}, "RowDefault"]}, "RowDefault"] :> 
@@ -8908,256 +9082,26 @@ Rule[StripOnInput, False]]\\)\""}, "RowDefault"]}, "RowDefault"] :>
               DefinitionNotebookClient`PackageScope`setHint[
                "Suggestion", "Paclet", 
                 DefinitionNotebookClient`$CurrentNotebook, 
-                "3dffe27d-d72a-48f1-98b8-cea91722d170", 648892777, 
+                "f1ad726c-3a3c-4b29-b54e-18282d4a62ca", 648892777, 
                 "CodeInspectionFileIssue/SuspiciousSessionSymbol", <|
                 "File" -> 
                  "/Users/schicho/Documents/hep/DRalgo/DRalgo/Kernel/DRalgo.m",
-                  "Editor" -> Automatic, "SourceLineStart" -> 24, 
-                 "SourceColumnStart" -> 2, "SourceLineEnd" -> 24, 
-                 "SourceColumnEnd" -> 7, "Message" -> 
-                 "Suspicious use of session symbol \
-``Print``.\!\(\*StyleBox[\"\\\" (L24,C2) \\\"\", Rule[FontOpacity, 0.65`], \
-Rule[FontSize, Times[0.9`, Inherited]], Rule[PrivateFontOptions, \
-List[Rule[\"OperatorSubstitution\", False]]], Rule[StripOnInput, False]]\)", 
-                 "SourceInformation" -> 
-                 CodeInspector`InspectionObject[
-                  "SuspiciousSessionSymbol", 
-                   "Suspicious use of session symbol ``Print``.", "Warning", <|
-                   CodeParser`Source -> {{24, 2}, {24, 7}}, ConfidenceLevel -> 
-                    0.55, "File" -> 
-                    "/Users/schicho/Documents/hep/DRalgo/DRalgo/Kernel/DRalgo.\
-m", "Editor" -> Automatic|>], "Hash" -> 8550698519583151563, "Position" -> 
-                 "\!\(\*StyleBox[\"\\\" (L24,C2) \\\"\", Rule[FontOpacity, \
-0.65`], Rule[FontSize, Times[0.9`, Inherited]], Rule[PrivateFontOptions, \
-List[Rule[\"OperatorSubstitution\", False]]], Rule[StripOnInput, \
-False]]\)"|>]; DefinitionNotebookClient`PackageScope`seekAfter[648892777]; 
-              Null], TemplateBox[{
-               PaneBox[
-                TemplateBox[{
-                  RGBColor[
-                  0.49019607843137253`, 0.49019607843137253`, 
-                   0.49019607843137253`]}, "HintPodIconHint"], 
-                ImageSize -> {10, 10}, ImageSizeAction -> "ShrinkToFit", 
-                BaselinePosition -> Scaled[0.1]], "\" \"", 
-               TemplateBox[{"\"Suspicious use of session symbol \"", 
-                 StyleBox[
-                 "Print", "Program", FontWeight -> Medium, 
-                  ShowStringCharacters -> True, StripOnInput -> False], 
-                 "\".\\!\\(\\*StyleBox[\\\"\\\\\\\" (L29,C2) \\\\\\\"\\\", \
-Rule[FontOpacity, 0.65`], Rule[FontSize, Times[0.9`, Inherited]], \
-Rule[PrivateFontOptions, List[Rule[\\\"OperatorSubstitution\\\", False]]], \
-Rule[StripOnInput, False]]\\)\""}, "RowDefault"]}, "RowDefault"] :> 
-            DefinitionNotebookClient`WithCurrentNotebook[
-              EvaluationNotebook[], 
-              DefinitionNotebookClient`LoadDefinitionNotebook[
-               "Paclet", DefinitionNotebookClient`$CurrentNotebook]; 
-              DefinitionNotebookClient`PackageScope`setHint[
-               "Suggestion", "Paclet", 
-                DefinitionNotebookClient`$CurrentNotebook, 
-                "a45932e8-906d-4d27-98b4-7ca2fb6f4437", 648892777, 
-                "CodeInspectionFileIssue/SuspiciousSessionSymbol", <|
-                "File" -> 
-                 "/Users/schicho/Documents/hep/DRalgo/DRalgo/Kernel/DRalgo.m",
-                  "Editor" -> Automatic, "SourceLineStart" -> 29, 
-                 "SourceColumnStart" -> 2, "SourceLineEnd" -> 29, 
-                 "SourceColumnEnd" -> 7, "Message" -> 
-                 "Suspicious use of session symbol \
-``Print``.\!\(\*StyleBox[\"\\\" (L29,C2) \\\"\", Rule[FontOpacity, 0.65`], \
-Rule[FontSize, Times[0.9`, Inherited]], Rule[PrivateFontOptions, \
-List[Rule[\"OperatorSubstitution\", False]]], Rule[StripOnInput, False]]\)", 
-                 "SourceInformation" -> 
-                 CodeInspector`InspectionObject[
-                  "SuspiciousSessionSymbol", 
-                   "Suspicious use of session symbol ``Print``.", "Warning", <|
-                   CodeParser`Source -> {{29, 2}, {29, 7}}, ConfidenceLevel -> 
-                    0.55, "File" -> 
-                    "/Users/schicho/Documents/hep/DRalgo/DRalgo/Kernel/DRalgo.\
-m", "Editor" -> Automatic|>], "Hash" -> 8550698519583151563, "Position" -> 
-                 "\!\(\*StyleBox[\"\\\" (L29,C2) \\\"\", Rule[FontOpacity, \
-0.65`], Rule[FontSize, Times[0.9`, Inherited]], Rule[PrivateFontOptions, \
-List[Rule[\"OperatorSubstitution\", False]]], Rule[StripOnInput, \
-False]]\)"|>]; DefinitionNotebookClient`PackageScope`seekAfter[648892777]; 
-              Null], TemplateBox[{
-               PaneBox[
-                TemplateBox[{
-                  RGBColor[
-                  0.49019607843137253`, 0.49019607843137253`, 
-                   0.49019607843137253`]}, "HintPodIconHint"], 
-                ImageSize -> {10, 10}, ImageSizeAction -> "ShrinkToFit", 
-                BaselinePosition -> Scaled[0.1]], "\" \"", 
-               TemplateBox[{"\"Suspicious use of session symbol \"", 
-                 StyleBox[
-                 "Print", "Program", FontWeight -> Medium, 
-                  ShowStringCharacters -> True, StripOnInput -> False], 
-                 "\".\\!\\(\\*StyleBox[\\\"\\\\\\\" (L104,C1) \\\\\\\"\\\", \
-Rule[FontOpacity, 0.65`], Rule[FontSize, Times[0.9`, Inherited]], \
-Rule[PrivateFontOptions, List[Rule[\\\"OperatorSubstitution\\\", False]]], \
-Rule[StripOnInput, False]]\\)\""}, "RowDefault"]}, "RowDefault"] :> 
-            DefinitionNotebookClient`WithCurrentNotebook[
-              EvaluationNotebook[], 
-              DefinitionNotebookClient`LoadDefinitionNotebook[
-               "Paclet", DefinitionNotebookClient`$CurrentNotebook]; 
-              DefinitionNotebookClient`PackageScope`setHint[
-               "Suggestion", "Paclet", 
-                DefinitionNotebookClient`$CurrentNotebook, 
-                "2594e45f-54f8-4439-923e-509b2e1ecf92", 648892777, 
-                "CodeInspectionFileIssue/SuspiciousSessionSymbol", <|
-                "File" -> 
-                 "/Users/schicho/Documents/hep/DRalgo/DRalgo/Kernel/DRalgo.m",
-                  "Editor" -> Automatic, "SourceLineStart" -> 104, 
-                 "SourceColumnStart" -> 1, "SourceLineEnd" -> 104, 
-                 "SourceColumnEnd" -> 6, "Message" -> 
-                 "Suspicious use of session symbol \
-``Print``.\!\(\*StyleBox[\"\\\" (L104,C1) \\\"\", Rule[FontOpacity, 0.65`], \
-Rule[FontSize, Times[0.9`, Inherited]], Rule[PrivateFontOptions, \
-List[Rule[\"OperatorSubstitution\", False]]], Rule[StripOnInput, False]]\)", 
-                 "SourceInformation" -> 
-                 CodeInspector`InspectionObject[
-                  "SuspiciousSessionSymbol", 
-                   "Suspicious use of session symbol ``Print``.", "Warning", <|
-                   CodeParser`Source -> {{104, 1}, {104, 6}}, ConfidenceLevel -> 
-                    0.55, "File" -> 
-                    "/Users/schicho/Documents/hep/DRalgo/DRalgo/Kernel/DRalgo.\
-m", "Editor" -> Automatic|>], "Hash" -> 8550698519583151563, "Position" -> 
-                 "\!\(\*StyleBox[\"\\\" (L104,C1) \\\"\", Rule[FontOpacity, \
-0.65`], Rule[FontSize, Times[0.9`, Inherited]], Rule[PrivateFontOptions, \
-List[Rule[\"OperatorSubstitution\", False]]], Rule[StripOnInput, \
-False]]\)"|>]; DefinitionNotebookClient`PackageScope`seekAfter[648892777]; 
-              Null], TemplateBox[{
-               PaneBox[
-                TemplateBox[{
-                  RGBColor[
-                  0.49019607843137253`, 0.49019607843137253`, 
-                   0.49019607843137253`]}, "HintPodIconHint"], 
-                ImageSize -> {10, 10}, ImageSizeAction -> "ShrinkToFit", 
-                BaselinePosition -> Scaled[0.1]], "\" \"", 
-               TemplateBox[{"\"Suspicious use of session symbol \"", 
-                 StyleBox[
-                 "Print", "Program", FontWeight -> Medium, 
-                  ShowStringCharacters -> True, StripOnInput -> False], 
-                 "\".\\!\\(\\*StyleBox[\\\"\\\\\\\" (L278,C5) \\\\\\\"\\\", \
-Rule[FontOpacity, 0.65`], Rule[FontSize, Times[0.9`, Inherited]], \
-Rule[PrivateFontOptions, List[Rule[\\\"OperatorSubstitution\\\", False]]], \
-Rule[StripOnInput, False]]\\)\""}, "RowDefault"]}, "RowDefault"] :> 
-            DefinitionNotebookClient`WithCurrentNotebook[
-              EvaluationNotebook[], 
-              DefinitionNotebookClient`LoadDefinitionNotebook[
-               "Paclet", DefinitionNotebookClient`$CurrentNotebook]; 
-              DefinitionNotebookClient`PackageScope`setHint[
-               "Suggestion", "Paclet", 
-                DefinitionNotebookClient`$CurrentNotebook, 
-                "1feb99a1-d6b9-495b-9553-2b3367b77032", 648892777, 
-                "CodeInspectionFileIssue/SuspiciousSessionSymbol", <|
-                "File" -> 
-                 "/Users/schicho/Documents/hep/DRalgo/DRalgo/Kernel/DRalgo.m",
-                  "Editor" -> Automatic, "SourceLineStart" -> 278, 
-                 "SourceColumnStart" -> 5, "SourceLineEnd" -> 278, 
-                 "SourceColumnEnd" -> 10, "Message" -> 
-                 "Suspicious use of session symbol \
-``Print``.\!\(\*StyleBox[\"\\\" (L278,C5) \\\"\", Rule[FontOpacity, 0.65`], \
-Rule[FontSize, Times[0.9`, Inherited]], Rule[PrivateFontOptions, \
-List[Rule[\"OperatorSubstitution\", False]]], Rule[StripOnInput, False]]\)", 
-                 "SourceInformation" -> 
-                 CodeInspector`InspectionObject[
-                  "SuspiciousSessionSymbol", 
-                   "Suspicious use of session symbol ``Print``.", "Warning", <|
-                   CodeParser`Source -> {{278, 5}, {278, 10}}, 
-                    ConfidenceLevel -> 0.55, "File" -> 
-                    "/Users/schicho/Documents/hep/DRalgo/DRalgo/Kernel/DRalgo.\
-m", "Editor" -> Automatic|>], "Hash" -> 8550698519583151563, "Position" -> 
-                 "\!\(\*StyleBox[\"\\\" (L278,C5) \\\"\", Rule[FontOpacity, \
-0.65`], Rule[FontSize, Times[0.9`, Inherited]], Rule[PrivateFontOptions, \
-List[Rule[\"OperatorSubstitution\", False]]], Rule[StripOnInput, \
-False]]\)"|>]; DefinitionNotebookClient`PackageScope`seekAfter[648892777]; 
-              Null], TemplateBox[{
-               PaneBox[
-                TemplateBox[{
-                  RGBColor[
-                  0.49019607843137253`, 0.49019607843137253`, 
-                   0.49019607843137253`]}, "HintPodIconHint"], 
-                ImageSize -> {10, 10}, ImageSizeAction -> "ShrinkToFit", 
-                BaselinePosition -> Scaled[0.1]], "\" \"", 
-               TemplateBox[{"\"Suspicious use of session symbol \"", 
-                 StyleBox[
-                 "Print", "Program", FontWeight -> Medium, 
-                  ShowStringCharacters -> True, StripOnInput -> False], 
-                 "\".\\!\\(\\*StyleBox[\\\"\\\\\\\" (L295,C5) \\\\\\\"\\\", \
-Rule[FontOpacity, 0.65`], Rule[FontSize, Times[0.9`, Inherited]], \
-Rule[PrivateFontOptions, List[Rule[\\\"OperatorSubstitution\\\", False]]], \
-Rule[StripOnInput, False]]\\)\""}, "RowDefault"]}, "RowDefault"] :> 
-            DefinitionNotebookClient`WithCurrentNotebook[
-              EvaluationNotebook[], 
-              DefinitionNotebookClient`LoadDefinitionNotebook[
-               "Paclet", DefinitionNotebookClient`$CurrentNotebook]; 
-              DefinitionNotebookClient`PackageScope`setHint[
-               "Suggestion", "Paclet", 
-                DefinitionNotebookClient`$CurrentNotebook, 
-                "688f11f7-6c97-406e-aba3-6a334e8e84b2", 648892777, 
-                "CodeInspectionFileIssue/SuspiciousSessionSymbol", <|
-                "File" -> 
-                 "/Users/schicho/Documents/hep/DRalgo/DRalgo/Kernel/DRalgo.m",
-                  "Editor" -> Automatic, "SourceLineStart" -> 295, 
-                 "SourceColumnStart" -> 5, "SourceLineEnd" -> 295, 
-                 "SourceColumnEnd" -> 10, "Message" -> 
-                 "Suspicious use of session symbol \
-``Print``.\!\(\*StyleBox[\"\\\" (L295,C5) \\\"\", Rule[FontOpacity, 0.65`], \
-Rule[FontSize, Times[0.9`, Inherited]], Rule[PrivateFontOptions, \
-List[Rule[\"OperatorSubstitution\", False]]], Rule[StripOnInput, False]]\)", 
-                 "SourceInformation" -> 
-                 CodeInspector`InspectionObject[
-                  "SuspiciousSessionSymbol", 
-                   "Suspicious use of session symbol ``Print``.", "Warning", <|
-                   CodeParser`Source -> {{295, 5}, {295, 10}}, 
-                    ConfidenceLevel -> 0.55, "File" -> 
-                    "/Users/schicho/Documents/hep/DRalgo/DRalgo/Kernel/DRalgo.\
-m", "Editor" -> Automatic|>], "Hash" -> 8550698519583151563, "Position" -> 
-                 "\!\(\*StyleBox[\"\\\" (L295,C5) \\\"\", Rule[FontOpacity, \
-0.65`], Rule[FontSize, Times[0.9`, Inherited]], Rule[PrivateFontOptions, \
-List[Rule[\"OperatorSubstitution\", False]]], Rule[StripOnInput, \
-False]]\)"|>]; DefinitionNotebookClient`PackageScope`seekAfter[648892777]; 
-              Null], TemplateBox[{
-               PaneBox[
-                TemplateBox[{
-                  RGBColor[
-                  0.49019607843137253`, 0.49019607843137253`, 
-                   0.49019607843137253`]}, "HintPodIconHint"], 
-                ImageSize -> {10, 10}, ImageSizeAction -> "ShrinkToFit", 
-                BaselinePosition -> Scaled[0.1]], "\" \"", 
-               TemplateBox[{"\"Suspicious use of session symbol \"", 
-                 StyleBox[
-                 "Print", "Program", FontWeight -> Medium, 
-                  ShowStringCharacters -> True, StripOnInput -> False], 
-                 "\".\\!\\(\\*StyleBox[\\\"\\\\\\\" (L301,C3) \\\\\\\"\\\", \
-Rule[FontOpacity, 0.65`], Rule[FontSize, Times[0.9`, Inherited]], \
-Rule[PrivateFontOptions, List[Rule[\\\"OperatorSubstitution\\\", False]]], \
-Rule[StripOnInput, False]]\\)\""}, "RowDefault"]}, "RowDefault"] :> 
-            DefinitionNotebookClient`WithCurrentNotebook[
-              EvaluationNotebook[], 
-              DefinitionNotebookClient`LoadDefinitionNotebook[
-               "Paclet", DefinitionNotebookClient`$CurrentNotebook]; 
-              DefinitionNotebookClient`PackageScope`setHint[
-               "Suggestion", "Paclet", 
-                DefinitionNotebookClient`$CurrentNotebook, 
-                "35ee711d-e3eb-4292-980a-eba3d32929a8", 648892777, 
-                "CodeInspectionFileIssue/SuspiciousSessionSymbol", <|
-                "File" -> 
-                 "/Users/schicho/Documents/hep/DRalgo/DRalgo/Kernel/DRalgo.m",
-                  "Editor" -> Automatic, "SourceLineStart" -> 301, 
-                 "SourceColumnStart" -> 3, "SourceLineEnd" -> 301, 
+                  "Editor" -> Automatic, "SourceLineStart" -> 20, 
+                 "SourceColumnStart" -> 3, "SourceLineEnd" -> 20, 
                  "SourceColumnEnd" -> 8, "Message" -> 
                  "Suspicious use of session symbol \
-``Print``.\!\(\*StyleBox[\"\\\" (L301,C3) \\\"\", Rule[FontOpacity, 0.65`], \
+``Print``.\!\(\*StyleBox[\"\\\" (L20,C3) \\\"\", Rule[FontOpacity, 0.65`], \
 Rule[FontSize, Times[0.9`, Inherited]], Rule[PrivateFontOptions, \
 List[Rule[\"OperatorSubstitution\", False]]], Rule[StripOnInput, False]]\)", 
                  "SourceInformation" -> 
                  CodeInspector`InspectionObject[
                   "SuspiciousSessionSymbol", 
                    "Suspicious use of session symbol ``Print``.", "Warning", <|
-                   CodeParser`Source -> {{301, 3}, {301, 8}}, ConfidenceLevel -> 
+                   CodeParser`Source -> {{20, 3}, {20, 8}}, ConfidenceLevel -> 
                     0.55, "File" -> 
                     "/Users/schicho/Documents/hep/DRalgo/DRalgo/Kernel/DRalgo.\
-m", "Editor" -> Automatic|>], "Hash" -> 8550698519583151563, "Position" -> 
-                 "\!\(\*StyleBox[\"\\\" (L301,C3) \\\"\", Rule[FontOpacity, \
+m", "Editor" -> Automatic|>], "Hash" -> 1193448317284482898, "Position" -> 
+                 "\!\(\*StyleBox[\"\\\" (L20,C3) \\\"\", Rule[FontOpacity, \
 0.65`], Rule[FontSize, Times[0.9`, Inherited]], Rule[PrivateFontOptions, \
 List[Rule[\"OperatorSubstitution\", False]]], Rule[StripOnInput, \
 False]]\)"|>]; DefinitionNotebookClient`PackageScope`seekAfter[648892777]; 
@@ -9173,7 +9117,7 @@ False]]\)"|>]; DefinitionNotebookClient`PackageScope`seekAfter[648892777];
                  StyleBox[
                  "Print", "Program", FontWeight -> Medium, 
                   ShowStringCharacters -> True, StripOnInput -> False], 
-                 "\".\\!\\(\\*StyleBox[\\\"\\\\\\\" (L316,C4) \\\\\\\"\\\", \
+                 "\".\\!\\(\\*StyleBox[\\\"\\\\\\\" (L34,C2) \\\\\\\"\\\", \
 Rule[FontOpacity, 0.65`], Rule[FontSize, Times[0.9`, Inherited]], \
 Rule[PrivateFontOptions, List[Rule[\\\"OperatorSubstitution\\\", False]]], \
 Rule[StripOnInput, False]]\\)\""}, "RowDefault"]}, "RowDefault"] :> 
@@ -9184,72 +9128,26 @@ Rule[StripOnInput, False]]\\)\""}, "RowDefault"]}, "RowDefault"] :>
               DefinitionNotebookClient`PackageScope`setHint[
                "Suggestion", "Paclet", 
                 DefinitionNotebookClient`$CurrentNotebook, 
-                "bb4f9e4c-fca7-458b-9234-cfe6d68c3bd7", 648892777, 
+                "f6dbfb55-10d9-4d9e-afa7-1f456675df13", 648892777, 
                 "CodeInspectionFileIssue/SuspiciousSessionSymbol", <|
                 "File" -> 
                  "/Users/schicho/Documents/hep/DRalgo/DRalgo/Kernel/DRalgo.m",
-                  "Editor" -> Automatic, "SourceLineStart" -> 316, 
-                 "SourceColumnStart" -> 4, "SourceLineEnd" -> 316, 
-                 "SourceColumnEnd" -> 9, "Message" -> 
-                 "Suspicious use of session symbol \
-``Print``.\!\(\*StyleBox[\"\\\" (L316,C4) \\\"\", Rule[FontOpacity, 0.65`], \
-Rule[FontSize, Times[0.9`, Inherited]], Rule[PrivateFontOptions, \
-List[Rule[\"OperatorSubstitution\", False]]], Rule[StripOnInput, False]]\)", 
-                 "SourceInformation" -> 
-                 CodeInspector`InspectionObject[
-                  "SuspiciousSessionSymbol", 
-                   "Suspicious use of session symbol ``Print``.", "Warning", <|
-                   CodeParser`Source -> {{316, 4}, {316, 9}}, ConfidenceLevel -> 
-                    0.55, "File" -> 
-                    "/Users/schicho/Documents/hep/DRalgo/DRalgo/Kernel/DRalgo.\
-m", "Editor" -> Automatic|>], "Hash" -> 8550698519583151563, "Position" -> 
-                 "\!\(\*StyleBox[\"\\\" (L316,C4) \\\"\", Rule[FontOpacity, \
-0.65`], Rule[FontSize, Times[0.9`, Inherited]], Rule[PrivateFontOptions, \
-List[Rule[\"OperatorSubstitution\", False]]], Rule[StripOnInput, \
-False]]\)"|>]; DefinitionNotebookClient`PackageScope`seekAfter[648892777]; 
-              Null], TemplateBox[{
-               PaneBox[
-                TemplateBox[{
-                  RGBColor[
-                  0.49019607843137253`, 0.49019607843137253`, 
-                   0.49019607843137253`]}, "HintPodIconHint"], 
-                ImageSize -> {10, 10}, ImageSizeAction -> "ShrinkToFit", 
-                BaselinePosition -> Scaled[0.1]], "\" \"", 
-               TemplateBox[{"\"Suspicious use of session symbol \"", 
-                 StyleBox[
-                 "Print", "Program", FontWeight -> Medium, 
-                  ShowStringCharacters -> True, StripOnInput -> False], 
-                 "\".\\!\\(\\*StyleBox[\\\"\\\\\\\" (L327,C2) \\\\\\\"\\\", \
-Rule[FontOpacity, 0.65`], Rule[FontSize, Times[0.9`, Inherited]], \
-Rule[PrivateFontOptions, List[Rule[\\\"OperatorSubstitution\\\", False]]], \
-Rule[StripOnInput, False]]\\)\""}, "RowDefault"]}, "RowDefault"] :> 
-            DefinitionNotebookClient`WithCurrentNotebook[
-              EvaluationNotebook[], 
-              DefinitionNotebookClient`LoadDefinitionNotebook[
-               "Paclet", DefinitionNotebookClient`$CurrentNotebook]; 
-              DefinitionNotebookClient`PackageScope`setHint[
-               "Suggestion", "Paclet", 
-                DefinitionNotebookClient`$CurrentNotebook, 
-                "3c167334-2195-4477-96f1-e1afbe1426fe", 648892777, 
-                "CodeInspectionFileIssue/SuspiciousSessionSymbol", <|
-                "File" -> 
-                 "/Users/schicho/Documents/hep/DRalgo/DRalgo/Kernel/DRalgo.m",
-                  "Editor" -> Automatic, "SourceLineStart" -> 327, 
-                 "SourceColumnStart" -> 2, "SourceLineEnd" -> 327, 
+                  "Editor" -> Automatic, "SourceLineStart" -> 34, 
+                 "SourceColumnStart" -> 2, "SourceLineEnd" -> 34, 
                  "SourceColumnEnd" -> 7, "Message" -> 
                  "Suspicious use of session symbol \
-``Print``.\!\(\*StyleBox[\"\\\" (L327,C2) \\\"\", Rule[FontOpacity, 0.65`], \
+``Print``.\!\(\*StyleBox[\"\\\" (L34,C2) \\\"\", Rule[FontOpacity, 0.65`], \
 Rule[FontSize, Times[0.9`, Inherited]], Rule[PrivateFontOptions, \
 List[Rule[\"OperatorSubstitution\", False]]], Rule[StripOnInput, False]]\)", 
                  "SourceInformation" -> 
                  CodeInspector`InspectionObject[
                   "SuspiciousSessionSymbol", 
                    "Suspicious use of session symbol ``Print``.", "Warning", <|
-                   CodeParser`Source -> {{327, 2}, {327, 7}}, ConfidenceLevel -> 
+                   CodeParser`Source -> {{34, 2}, {34, 7}}, ConfidenceLevel -> 
                     0.55, "File" -> 
                     "/Users/schicho/Documents/hep/DRalgo/DRalgo/Kernel/DRalgo.\
-m", "Editor" -> Automatic|>], "Hash" -> 8550698519583151563, "Position" -> 
-                 "\!\(\*StyleBox[\"\\\" (L327,C2) \\\"\", Rule[FontOpacity, \
+m", "Editor" -> Automatic|>], "Hash" -> 1193448317284482898, "Position" -> 
+                 "\!\(\*StyleBox[\"\\\" (L34,C2) \\\"\", Rule[FontOpacity, \
 0.65`], Rule[FontSize, Times[0.9`, Inherited]], Rule[PrivateFontOptions, \
 List[Rule[\"OperatorSubstitution\", False]]], Rule[StripOnInput, \
 False]]\)"|>]; DefinitionNotebookClient`PackageScope`seekAfter[648892777]; 
@@ -9265,7 +9163,7 @@ False]]\)"|>]; DefinitionNotebookClient`PackageScope`seekAfter[648892777];
                  StyleBox[
                  "Print", "Program", FontWeight -> Medium, 
                   ShowStringCharacters -> True, StripOnInput -> False], 
-                 "\".\\!\\(\\*StyleBox[\\\"\\\\\\\" (L328,C2) \\\\\\\"\\\", \
+                 "\".\\!\\(\\*StyleBox[\\\"\\\\\\\" (L114,C1) \\\\\\\"\\\", \
 Rule[FontOpacity, 0.65`], Rule[FontSize, Times[0.9`, Inherited]], \
 Rule[PrivateFontOptions, List[Rule[\\\"OperatorSubstitution\\\", False]]], \
 Rule[StripOnInput, False]]\\)\""}, "RowDefault"]}, "RowDefault"] :> 
@@ -9276,26 +9174,26 @@ Rule[StripOnInput, False]]\\)\""}, "RowDefault"]}, "RowDefault"] :>
               DefinitionNotebookClient`PackageScope`setHint[
                "Suggestion", "Paclet", 
                 DefinitionNotebookClient`$CurrentNotebook, 
-                "cc74e63d-18be-4993-8738-a1737a874de6", 648892777, 
+                "17c50d03-841b-4326-a9e7-28bc48a9e9b2", 648892777, 
                 "CodeInspectionFileIssue/SuspiciousSessionSymbol", <|
                 "File" -> 
                  "/Users/schicho/Documents/hep/DRalgo/DRalgo/Kernel/DRalgo.m",
-                  "Editor" -> Automatic, "SourceLineStart" -> 328, 
-                 "SourceColumnStart" -> 2, "SourceLineEnd" -> 328, 
-                 "SourceColumnEnd" -> 7, "Message" -> 
+                  "Editor" -> Automatic, "SourceLineStart" -> 114, 
+                 "SourceColumnStart" -> 1, "SourceLineEnd" -> 114, 
+                 "SourceColumnEnd" -> 6, "Message" -> 
                  "Suspicious use of session symbol \
-``Print``.\!\(\*StyleBox[\"\\\" (L328,C2) \\\"\", Rule[FontOpacity, 0.65`], \
+``Print``.\!\(\*StyleBox[\"\\\" (L114,C1) \\\"\", Rule[FontOpacity, 0.65`], \
 Rule[FontSize, Times[0.9`, Inherited]], Rule[PrivateFontOptions, \
 List[Rule[\"OperatorSubstitution\", False]]], Rule[StripOnInput, False]]\)", 
                  "SourceInformation" -> 
                  CodeInspector`InspectionObject[
                   "SuspiciousSessionSymbol", 
                    "Suspicious use of session symbol ``Print``.", "Warning", <|
-                   CodeParser`Source -> {{328, 2}, {328, 7}}, ConfidenceLevel -> 
+                   CodeParser`Source -> {{114, 1}, {114, 6}}, ConfidenceLevel -> 
                     0.55, "File" -> 
                     "/Users/schicho/Documents/hep/DRalgo/DRalgo/Kernel/DRalgo.\
-m", "Editor" -> Automatic|>], "Hash" -> 8550698519583151563, "Position" -> 
-                 "\!\(\*StyleBox[\"\\\" (L328,C2) \\\"\", Rule[FontOpacity, \
+m", "Editor" -> Automatic|>], "Hash" -> 1193448317284482898, "Position" -> 
+                 "\!\(\*StyleBox[\"\\\" (L114,C1) \\\"\", Rule[FontOpacity, \
 0.65`], Rule[FontSize, Times[0.9`, Inherited]], Rule[PrivateFontOptions, \
 List[Rule[\"OperatorSubstitution\", False]]], Rule[StripOnInput, \
 False]]\)"|>]; DefinitionNotebookClient`PackageScope`seekAfter[648892777]; 
@@ -9311,7 +9209,7 @@ False]]\)"|>]; DefinitionNotebookClient`PackageScope`seekAfter[648892777];
                  StyleBox[
                  "Print", "Program", FontWeight -> Medium, 
                   ShowStringCharacters -> True, StripOnInput -> False], 
-                 "\".\\!\\(\\*StyleBox[\\\"\\\\\\\" (L692,C28) \\\\\\\"\\\", \
+                 "\".\\!\\(\\*StyleBox[\\\"\\\\\\\" (L288,C5) \\\\\\\"\\\", \
 Rule[FontOpacity, 0.65`], Rule[FontSize, Times[0.9`, Inherited]], \
 Rule[PrivateFontOptions, List[Rule[\\\"OperatorSubstitution\\\", False]]], \
 Rule[StripOnInput, False]]\\)\""}, "RowDefault"]}, "RowDefault"] :> 
@@ -9322,26 +9220,302 @@ Rule[StripOnInput, False]]\\)\""}, "RowDefault"]}, "RowDefault"] :>
               DefinitionNotebookClient`PackageScope`setHint[
                "Suggestion", "Paclet", 
                 DefinitionNotebookClient`$CurrentNotebook, 
-                "0108d80d-8b01-45ee-8a82-61286828e693", 648892777, 
+                "49fb5407-48ff-459a-b123-92756d8018ea", 648892777, 
                 "CodeInspectionFileIssue/SuspiciousSessionSymbol", <|
                 "File" -> 
                  "/Users/schicho/Documents/hep/DRalgo/DRalgo/Kernel/DRalgo.m",
-                  "Editor" -> Automatic, "SourceLineStart" -> 692, 
-                 "SourceColumnStart" -> 28, "SourceLineEnd" -> 692, 
-                 "SourceColumnEnd" -> 33, "Message" -> 
+                  "Editor" -> Automatic, "SourceLineStart" -> 288, 
+                 "SourceColumnStart" -> 5, "SourceLineEnd" -> 288, 
+                 "SourceColumnEnd" -> 10, "Message" -> 
                  "Suspicious use of session symbol \
-``Print``.\!\(\*StyleBox[\"\\\" (L692,C28) \\\"\", Rule[FontOpacity, 0.65`], \
+``Print``.\!\(\*StyleBox[\"\\\" (L288,C5) \\\"\", Rule[FontOpacity, 0.65`], \
 Rule[FontSize, Times[0.9`, Inherited]], Rule[PrivateFontOptions, \
 List[Rule[\"OperatorSubstitution\", False]]], Rule[StripOnInput, False]]\)", 
                  "SourceInformation" -> 
                  CodeInspector`InspectionObject[
                   "SuspiciousSessionSymbol", 
                    "Suspicious use of session symbol ``Print``.", "Warning", <|
-                   CodeParser`Source -> {{692, 28}, {692, 33}}, 
+                   CodeParser`Source -> {{288, 5}, {288, 10}}, 
                     ConfidenceLevel -> 0.55, "File" -> 
                     "/Users/schicho/Documents/hep/DRalgo/DRalgo/Kernel/DRalgo.\
-m", "Editor" -> Automatic|>], "Hash" -> 8550698519583151563, "Position" -> 
-                 "\!\(\*StyleBox[\"\\\" (L692,C28) \\\"\", Rule[FontOpacity, \
+m", "Editor" -> Automatic|>], "Hash" -> 1193448317284482898, "Position" -> 
+                 "\!\(\*StyleBox[\"\\\" (L288,C5) \\\"\", Rule[FontOpacity, \
+0.65`], Rule[FontSize, Times[0.9`, Inherited]], Rule[PrivateFontOptions, \
+List[Rule[\"OperatorSubstitution\", False]]], Rule[StripOnInput, \
+False]]\)"|>]; DefinitionNotebookClient`PackageScope`seekAfter[648892777]; 
+              Null], TemplateBox[{
+               PaneBox[
+                TemplateBox[{
+                  RGBColor[
+                  0.49019607843137253`, 0.49019607843137253`, 
+                   0.49019607843137253`]}, "HintPodIconHint"], 
+                ImageSize -> {10, 10}, ImageSizeAction -> "ShrinkToFit", 
+                BaselinePosition -> Scaled[0.1]], "\" \"", 
+               TemplateBox[{"\"Suspicious use of session symbol \"", 
+                 StyleBox[
+                 "Print", "Program", FontWeight -> Medium, 
+                  ShowStringCharacters -> True, StripOnInput -> False], 
+                 "\".\\!\\(\\*StyleBox[\\\"\\\\\\\" (L305,C5) \\\\\\\"\\\", \
+Rule[FontOpacity, 0.65`], Rule[FontSize, Times[0.9`, Inherited]], \
+Rule[PrivateFontOptions, List[Rule[\\\"OperatorSubstitution\\\", False]]], \
+Rule[StripOnInput, False]]\\)\""}, "RowDefault"]}, "RowDefault"] :> 
+            DefinitionNotebookClient`WithCurrentNotebook[
+              EvaluationNotebook[], 
+              DefinitionNotebookClient`LoadDefinitionNotebook[
+               "Paclet", DefinitionNotebookClient`$CurrentNotebook]; 
+              DefinitionNotebookClient`PackageScope`setHint[
+               "Suggestion", "Paclet", 
+                DefinitionNotebookClient`$CurrentNotebook, 
+                "73343394-6e17-4582-aa6c-011b3495685e", 648892777, 
+                "CodeInspectionFileIssue/SuspiciousSessionSymbol", <|
+                "File" -> 
+                 "/Users/schicho/Documents/hep/DRalgo/DRalgo/Kernel/DRalgo.m",
+                  "Editor" -> Automatic, "SourceLineStart" -> 305, 
+                 "SourceColumnStart" -> 5, "SourceLineEnd" -> 305, 
+                 "SourceColumnEnd" -> 10, "Message" -> 
+                 "Suspicious use of session symbol \
+``Print``.\!\(\*StyleBox[\"\\\" (L305,C5) \\\"\", Rule[FontOpacity, 0.65`], \
+Rule[FontSize, Times[0.9`, Inherited]], Rule[PrivateFontOptions, \
+List[Rule[\"OperatorSubstitution\", False]]], Rule[StripOnInput, False]]\)", 
+                 "SourceInformation" -> 
+                 CodeInspector`InspectionObject[
+                  "SuspiciousSessionSymbol", 
+                   "Suspicious use of session symbol ``Print``.", "Warning", <|
+                   CodeParser`Source -> {{305, 5}, {305, 10}}, 
+                    ConfidenceLevel -> 0.55, "File" -> 
+                    "/Users/schicho/Documents/hep/DRalgo/DRalgo/Kernel/DRalgo.\
+m", "Editor" -> Automatic|>], "Hash" -> 1193448317284482898, "Position" -> 
+                 "\!\(\*StyleBox[\"\\\" (L305,C5) \\\"\", Rule[FontOpacity, \
+0.65`], Rule[FontSize, Times[0.9`, Inherited]], Rule[PrivateFontOptions, \
+List[Rule[\"OperatorSubstitution\", False]]], Rule[StripOnInput, \
+False]]\)"|>]; DefinitionNotebookClient`PackageScope`seekAfter[648892777]; 
+              Null], TemplateBox[{
+               PaneBox[
+                TemplateBox[{
+                  RGBColor[
+                  0.49019607843137253`, 0.49019607843137253`, 
+                   0.49019607843137253`]}, "HintPodIconHint"], 
+                ImageSize -> {10, 10}, ImageSizeAction -> "ShrinkToFit", 
+                BaselinePosition -> Scaled[0.1]], "\" \"", 
+               TemplateBox[{"\"Suspicious use of session symbol \"", 
+                 StyleBox[
+                 "Print", "Program", FontWeight -> Medium, 
+                  ShowStringCharacters -> True, StripOnInput -> False], 
+                 "\".\\!\\(\\*StyleBox[\\\"\\\\\\\" (L311,C3) \\\\\\\"\\\", \
+Rule[FontOpacity, 0.65`], Rule[FontSize, Times[0.9`, Inherited]], \
+Rule[PrivateFontOptions, List[Rule[\\\"OperatorSubstitution\\\", False]]], \
+Rule[StripOnInput, False]]\\)\""}, "RowDefault"]}, "RowDefault"] :> 
+            DefinitionNotebookClient`WithCurrentNotebook[
+              EvaluationNotebook[], 
+              DefinitionNotebookClient`LoadDefinitionNotebook[
+               "Paclet", DefinitionNotebookClient`$CurrentNotebook]; 
+              DefinitionNotebookClient`PackageScope`setHint[
+               "Suggestion", "Paclet", 
+                DefinitionNotebookClient`$CurrentNotebook, 
+                "eb64f3f4-fdb2-48c2-9bf3-e913d700de90", 648892777, 
+                "CodeInspectionFileIssue/SuspiciousSessionSymbol", <|
+                "File" -> 
+                 "/Users/schicho/Documents/hep/DRalgo/DRalgo/Kernel/DRalgo.m",
+                  "Editor" -> Automatic, "SourceLineStart" -> 311, 
+                 "SourceColumnStart" -> 3, "SourceLineEnd" -> 311, 
+                 "SourceColumnEnd" -> 8, "Message" -> 
+                 "Suspicious use of session symbol \
+``Print``.\!\(\*StyleBox[\"\\\" (L311,C3) \\\"\", Rule[FontOpacity, 0.65`], \
+Rule[FontSize, Times[0.9`, Inherited]], Rule[PrivateFontOptions, \
+List[Rule[\"OperatorSubstitution\", False]]], Rule[StripOnInput, False]]\)", 
+                 "SourceInformation" -> 
+                 CodeInspector`InspectionObject[
+                  "SuspiciousSessionSymbol", 
+                   "Suspicious use of session symbol ``Print``.", "Warning", <|
+                   CodeParser`Source -> {{311, 3}, {311, 8}}, ConfidenceLevel -> 
+                    0.55, "File" -> 
+                    "/Users/schicho/Documents/hep/DRalgo/DRalgo/Kernel/DRalgo.\
+m", "Editor" -> Automatic|>], "Hash" -> 1193448317284482898, "Position" -> 
+                 "\!\(\*StyleBox[\"\\\" (L311,C3) \\\"\", Rule[FontOpacity, \
+0.65`], Rule[FontSize, Times[0.9`, Inherited]], Rule[PrivateFontOptions, \
+List[Rule[\"OperatorSubstitution\", False]]], Rule[StripOnInput, \
+False]]\)"|>]; DefinitionNotebookClient`PackageScope`seekAfter[648892777]; 
+              Null], TemplateBox[{
+               PaneBox[
+                TemplateBox[{
+                  RGBColor[
+                  0.49019607843137253`, 0.49019607843137253`, 
+                   0.49019607843137253`]}, "HintPodIconHint"], 
+                ImageSize -> {10, 10}, ImageSizeAction -> "ShrinkToFit", 
+                BaselinePosition -> Scaled[0.1]], "\" \"", 
+               TemplateBox[{"\"Suspicious use of session symbol \"", 
+                 StyleBox[
+                 "Print", "Program", FontWeight -> Medium, 
+                  ShowStringCharacters -> True, StripOnInput -> False], 
+                 "\".\\!\\(\\*StyleBox[\\\"\\\\\\\" (L326,C4) \\\\\\\"\\\", \
+Rule[FontOpacity, 0.65`], Rule[FontSize, Times[0.9`, Inherited]], \
+Rule[PrivateFontOptions, List[Rule[\\\"OperatorSubstitution\\\", False]]], \
+Rule[StripOnInput, False]]\\)\""}, "RowDefault"]}, "RowDefault"] :> 
+            DefinitionNotebookClient`WithCurrentNotebook[
+              EvaluationNotebook[], 
+              DefinitionNotebookClient`LoadDefinitionNotebook[
+               "Paclet", DefinitionNotebookClient`$CurrentNotebook]; 
+              DefinitionNotebookClient`PackageScope`setHint[
+               "Suggestion", "Paclet", 
+                DefinitionNotebookClient`$CurrentNotebook, 
+                "6e0f792a-5c76-4422-bb8c-7b44a775bb9a", 648892777, 
+                "CodeInspectionFileIssue/SuspiciousSessionSymbol", <|
+                "File" -> 
+                 "/Users/schicho/Documents/hep/DRalgo/DRalgo/Kernel/DRalgo.m",
+                  "Editor" -> Automatic, "SourceLineStart" -> 326, 
+                 "SourceColumnStart" -> 4, "SourceLineEnd" -> 326, 
+                 "SourceColumnEnd" -> 9, "Message" -> 
+                 "Suspicious use of session symbol \
+``Print``.\!\(\*StyleBox[\"\\\" (L326,C4) \\\"\", Rule[FontOpacity, 0.65`], \
+Rule[FontSize, Times[0.9`, Inherited]], Rule[PrivateFontOptions, \
+List[Rule[\"OperatorSubstitution\", False]]], Rule[StripOnInput, False]]\)", 
+                 "SourceInformation" -> 
+                 CodeInspector`InspectionObject[
+                  "SuspiciousSessionSymbol", 
+                   "Suspicious use of session symbol ``Print``.", "Warning", <|
+                   CodeParser`Source -> {{326, 4}, {326, 9}}, ConfidenceLevel -> 
+                    0.55, "File" -> 
+                    "/Users/schicho/Documents/hep/DRalgo/DRalgo/Kernel/DRalgo.\
+m", "Editor" -> Automatic|>], "Hash" -> 1193448317284482898, "Position" -> 
+                 "\!\(\*StyleBox[\"\\\" (L326,C4) \\\"\", Rule[FontOpacity, \
+0.65`], Rule[FontSize, Times[0.9`, Inherited]], Rule[PrivateFontOptions, \
+List[Rule[\"OperatorSubstitution\", False]]], Rule[StripOnInput, \
+False]]\)"|>]; DefinitionNotebookClient`PackageScope`seekAfter[648892777]; 
+              Null], TemplateBox[{
+               PaneBox[
+                TemplateBox[{
+                  RGBColor[
+                  0.49019607843137253`, 0.49019607843137253`, 
+                   0.49019607843137253`]}, "HintPodIconHint"], 
+                ImageSize -> {10, 10}, ImageSizeAction -> "ShrinkToFit", 
+                BaselinePosition -> Scaled[0.1]], "\" \"", 
+               TemplateBox[{"\"Suspicious use of session symbol \"", 
+                 StyleBox[
+                 "Print", "Program", FontWeight -> Medium, 
+                  ShowStringCharacters -> True, StripOnInput -> False], 
+                 "\".\\!\\(\\*StyleBox[\\\"\\\\\\\" (L337,C2) \\\\\\\"\\\", \
+Rule[FontOpacity, 0.65`], Rule[FontSize, Times[0.9`, Inherited]], \
+Rule[PrivateFontOptions, List[Rule[\\\"OperatorSubstitution\\\", False]]], \
+Rule[StripOnInput, False]]\\)\""}, "RowDefault"]}, "RowDefault"] :> 
+            DefinitionNotebookClient`WithCurrentNotebook[
+              EvaluationNotebook[], 
+              DefinitionNotebookClient`LoadDefinitionNotebook[
+               "Paclet", DefinitionNotebookClient`$CurrentNotebook]; 
+              DefinitionNotebookClient`PackageScope`setHint[
+               "Suggestion", "Paclet", 
+                DefinitionNotebookClient`$CurrentNotebook, 
+                "b25d559f-901e-42c8-aacf-f27cd89c3a07", 648892777, 
+                "CodeInspectionFileIssue/SuspiciousSessionSymbol", <|
+                "File" -> 
+                 "/Users/schicho/Documents/hep/DRalgo/DRalgo/Kernel/DRalgo.m",
+                  "Editor" -> Automatic, "SourceLineStart" -> 337, 
+                 "SourceColumnStart" -> 2, "SourceLineEnd" -> 337, 
+                 "SourceColumnEnd" -> 7, "Message" -> 
+                 "Suspicious use of session symbol \
+``Print``.\!\(\*StyleBox[\"\\\" (L337,C2) \\\"\", Rule[FontOpacity, 0.65`], \
+Rule[FontSize, Times[0.9`, Inherited]], Rule[PrivateFontOptions, \
+List[Rule[\"OperatorSubstitution\", False]]], Rule[StripOnInput, False]]\)", 
+                 "SourceInformation" -> 
+                 CodeInspector`InspectionObject[
+                  "SuspiciousSessionSymbol", 
+                   "Suspicious use of session symbol ``Print``.", "Warning", <|
+                   CodeParser`Source -> {{337, 2}, {337, 7}}, ConfidenceLevel -> 
+                    0.55, "File" -> 
+                    "/Users/schicho/Documents/hep/DRalgo/DRalgo/Kernel/DRalgo.\
+m", "Editor" -> Automatic|>], "Hash" -> 1193448317284482898, "Position" -> 
+                 "\!\(\*StyleBox[\"\\\" (L337,C2) \\\"\", Rule[FontOpacity, \
+0.65`], Rule[FontSize, Times[0.9`, Inherited]], Rule[PrivateFontOptions, \
+List[Rule[\"OperatorSubstitution\", False]]], Rule[StripOnInput, \
+False]]\)"|>]; DefinitionNotebookClient`PackageScope`seekAfter[648892777]; 
+              Null], TemplateBox[{
+               PaneBox[
+                TemplateBox[{
+                  RGBColor[
+                  0.49019607843137253`, 0.49019607843137253`, 
+                   0.49019607843137253`]}, "HintPodIconHint"], 
+                ImageSize -> {10, 10}, ImageSizeAction -> "ShrinkToFit", 
+                BaselinePosition -> Scaled[0.1]], "\" \"", 
+               TemplateBox[{"\"Suspicious use of session symbol \"", 
+                 StyleBox[
+                 "Print", "Program", FontWeight -> Medium, 
+                  ShowStringCharacters -> True, StripOnInput -> False], 
+                 "\".\\!\\(\\*StyleBox[\\\"\\\\\\\" (L338,C2) \\\\\\\"\\\", \
+Rule[FontOpacity, 0.65`], Rule[FontSize, Times[0.9`, Inherited]], \
+Rule[PrivateFontOptions, List[Rule[\\\"OperatorSubstitution\\\", False]]], \
+Rule[StripOnInput, False]]\\)\""}, "RowDefault"]}, "RowDefault"] :> 
+            DefinitionNotebookClient`WithCurrentNotebook[
+              EvaluationNotebook[], 
+              DefinitionNotebookClient`LoadDefinitionNotebook[
+               "Paclet", DefinitionNotebookClient`$CurrentNotebook]; 
+              DefinitionNotebookClient`PackageScope`setHint[
+               "Suggestion", "Paclet", 
+                DefinitionNotebookClient`$CurrentNotebook, 
+                "98fca513-80a7-49b3-8ba4-463238a7d948", 648892777, 
+                "CodeInspectionFileIssue/SuspiciousSessionSymbol", <|
+                "File" -> 
+                 "/Users/schicho/Documents/hep/DRalgo/DRalgo/Kernel/DRalgo.m",
+                  "Editor" -> Automatic, "SourceLineStart" -> 338, 
+                 "SourceColumnStart" -> 2, "SourceLineEnd" -> 338, 
+                 "SourceColumnEnd" -> 7, "Message" -> 
+                 "Suspicious use of session symbol \
+``Print``.\!\(\*StyleBox[\"\\\" (L338,C2) \\\"\", Rule[FontOpacity, 0.65`], \
+Rule[FontSize, Times[0.9`, Inherited]], Rule[PrivateFontOptions, \
+List[Rule[\"OperatorSubstitution\", False]]], Rule[StripOnInput, False]]\)", 
+                 "SourceInformation" -> 
+                 CodeInspector`InspectionObject[
+                  "SuspiciousSessionSymbol", 
+                   "Suspicious use of session symbol ``Print``.", "Warning", <|
+                   CodeParser`Source -> {{338, 2}, {338, 7}}, ConfidenceLevel -> 
+                    0.55, "File" -> 
+                    "/Users/schicho/Documents/hep/DRalgo/DRalgo/Kernel/DRalgo.\
+m", "Editor" -> Automatic|>], "Hash" -> 1193448317284482898, "Position" -> 
+                 "\!\(\*StyleBox[\"\\\" (L338,C2) \\\"\", Rule[FontOpacity, \
+0.65`], Rule[FontSize, Times[0.9`, Inherited]], Rule[PrivateFontOptions, \
+List[Rule[\"OperatorSubstitution\", False]]], Rule[StripOnInput, \
+False]]\)"|>]; DefinitionNotebookClient`PackageScope`seekAfter[648892777]; 
+              Null], TemplateBox[{
+               PaneBox[
+                TemplateBox[{
+                  RGBColor[
+                  0.49019607843137253`, 0.49019607843137253`, 
+                   0.49019607843137253`]}, "HintPodIconHint"], 
+                ImageSize -> {10, 10}, ImageSizeAction -> "ShrinkToFit", 
+                BaselinePosition -> Scaled[0.1]], "\" \"", 
+               TemplateBox[{"\"Suspicious use of session symbol \"", 
+                 StyleBox[
+                 "Print", "Program", FontWeight -> Medium, 
+                  ShowStringCharacters -> True, StripOnInput -> False], 
+                 "\".\\!\\(\\*StyleBox[\\\"\\\\\\\" (L702,C28) \\\\\\\"\\\", \
+Rule[FontOpacity, 0.65`], Rule[FontSize, Times[0.9`, Inherited]], \
+Rule[PrivateFontOptions, List[Rule[\\\"OperatorSubstitution\\\", False]]], \
+Rule[StripOnInput, False]]\\)\""}, "RowDefault"]}, "RowDefault"] :> 
+            DefinitionNotebookClient`WithCurrentNotebook[
+              EvaluationNotebook[], 
+              DefinitionNotebookClient`LoadDefinitionNotebook[
+               "Paclet", DefinitionNotebookClient`$CurrentNotebook]; 
+              DefinitionNotebookClient`PackageScope`setHint[
+               "Suggestion", "Paclet", 
+                DefinitionNotebookClient`$CurrentNotebook, 
+                "f443c5b0-e3ba-446c-980c-32cf6e9ef9bb", 648892777, 
+                "CodeInspectionFileIssue/SuspiciousSessionSymbol", <|
+                "File" -> 
+                 "/Users/schicho/Documents/hep/DRalgo/DRalgo/Kernel/DRalgo.m",
+                  "Editor" -> Automatic, "SourceLineStart" -> 702, 
+                 "SourceColumnStart" -> 28, "SourceLineEnd" -> 702, 
+                 "SourceColumnEnd" -> 33, "Message" -> 
+                 "Suspicious use of session symbol \
+``Print``.\!\(\*StyleBox[\"\\\" (L702,C28) \\\"\", Rule[FontOpacity, 0.65`], \
+Rule[FontSize, Times[0.9`, Inherited]], Rule[PrivateFontOptions, \
+List[Rule[\"OperatorSubstitution\", False]]], Rule[StripOnInput, False]]\)", 
+                 "SourceInformation" -> 
+                 CodeInspector`InspectionObject[
+                  "SuspiciousSessionSymbol", 
+                   "Suspicious use of session symbol ``Print``.", "Warning", <|
+                   CodeParser`Source -> {{702, 28}, {702, 33}}, 
+                    ConfidenceLevel -> 0.55, "File" -> 
+                    "/Users/schicho/Documents/hep/DRalgo/DRalgo/Kernel/DRalgo.\
+m", "Editor" -> Automatic|>], "Hash" -> 1193448317284482898, "Position" -> 
+                 "\!\(\*StyleBox[\"\\\" (L702,C28) \\\"\", Rule[FontOpacity, \
 0.65`], Rule[FontSize, Times[0.9`, Inherited]], Rule[PrivateFontOptions, \
 List[Rule[\"OperatorSubstitution\", False]]], Rule[StripOnInput, \
 False]]\)"|>]; DefinitionNotebookClient`PackageScope`seekAfter[648892777]; 
@@ -9357,7 +9531,7 @@ False]]\)"|>]; DefinitionNotebookClient`PackageScope`seekAfter[648892777];
                  StyleBox[
                  "Definition", "Program", FontWeight -> Medium, 
                   ShowStringCharacters -> True, StripOnInput -> False], 
-                 "\"\\!\\(\\*StyleBox[\\\"\\\\\\\" (L50,C1) \\\\\\\"\\\", \
+                 "\"\\!\\(\\*StyleBox[\\\"\\\\\\\" (L60,C1) \\\\\\\"\\\", \
 Rule[FontOpacity, 0.65`], Rule[FontSize, Times[0.9`, Inherited]], \
 Rule[PrivateFontOptions, List[Rule[\\\"OperatorSubstitution\\\", False]]], \
 Rule[StripOnInput, False]]\\)\""}, "RowDefault"]}, "RowDefault"] :> 
@@ -9367,23 +9541,23 @@ Rule[StripOnInput, False]]\\)\""}, "RowDefault"]}, "RowDefault"] :>
                "Paclet", DefinitionNotebookClient`$CurrentNotebook]; 
               DefinitionNotebookClient`PackageScope`setHint[
                "Warning", "Paclet", DefinitionNotebookClient`$CurrentNotebook,
-                 "d717f063-318d-4e7a-9369-8f0870ac117f", 648892777, 
+                 "4e994297-9651-454b-bf23-bd00c52b4cd5", 648892777, 
                 "CodeInspectionFileIssue/BadSystemDefinition", <|
                 "Definitions" -> {
                    CodeParser`LeafNode[
                    Symbol, "Definition", <|
-                    CodeParser`Source -> {{50, 1}, {50, 11}}|>]}, "Hash" -> 
-                 8550698519583151563, 
+                    CodeParser`Source -> {{60, 1}, {60, 11}}|>]}, "Hash" -> 
+                 1193448317284482898, 
                  "MessageParameters" -> <|
                   "Name" -> "Definition", "CheckboxCell" -> 
                    "Disclosures-WLSystemSymbols", "CheckboxName" -> 
                    "WLSystemSymbols"|>, "Templated" -> True, "File" -> 
                  "/Users/schicho/Documents/hep/DRalgo/DRalgo/Kernel/DRalgo.m",
-                  "Editor" -> Automatic, "SourceLineStart" -> 50, 
-                 "SourceColumnStart" -> 1, "SourceLineEnd" -> 53, 
+                  "Editor" -> Automatic, "SourceLineStart" -> 60, 
+                 "SourceColumnStart" -> 1, "SourceLineEnd" -> 63, 
                  "SourceColumnEnd" -> 6, "Message" -> 
                  "Found undisclosed modifications to system symbol \
-**Definition**\!\(\*StyleBox[\"\\\" (L50,C1) \\\"\", Rule[FontOpacity, \
+**Definition**\!\(\*StyleBox[\"\\\" (L60,C1) \\\"\", Rule[FontOpacity, \
 0.65`], Rule[FontSize, Times[0.9`, Inherited]], Rule[PrivateFontOptions, \
 List[Rule[\"OperatorSubstitution\", False]]], Rule[StripOnInput, False]]\)", 
                  "SourceInformation" -> 
@@ -9391,78 +9565,22 @@ List[Rule[\"OperatorSubstitution\", False]]], Rule[StripOnInput, False]]\)",
                   "BadSystemDefinition", 
                    "Found undisclosed modifications to system symbol \
 **Definition**", "Error", <|
-                   CodeParser`Source -> {{50, 1}, {53, 6}}, 
+                   CodeParser`Source -> {{60, 1}, {63, 6}}, 
                     "Definitions" -> {
                     CodeParser`LeafNode[
                     Symbol, "Definition", <|
-                    CodeParser`Source -> {{50, 1}, {50, 11}}|>]}, "Hash" -> 
-                    661749460762174025, ConfidenceLevel -> 0.99, "Templated" -> 
+                    CodeParser`Source -> {{60, 1}, {60, 11}}|>]}, "Hash" -> 
+                    903044475894349731, ConfidenceLevel -> 0.99, "Templated" -> 
                     True, "File" -> 
                     "/Users/schicho/Documents/hep/DRalgo/DRalgo/Kernel/DRalgo.\
 m", "Editor" -> Automatic|>], "Position" -> 
-                 "\!\(\*StyleBox[\"\\\" (L50,C1) \\\"\", Rule[FontOpacity, \
+                 "\!\(\*StyleBox[\"\\\" (L60,C1) \\\"\", Rule[FontOpacity, \
 0.65`], Rule[FontSize, Times[0.9`, Inherited]], Rule[PrivateFontOptions, \
 List[Rule[\"OperatorSubstitution\", False]]], Rule[StripOnInput, False]]\)", 
                  "Name" -> "Definition", "CheckboxCell" -> 
                  "Disclosures-WLSystemSymbols", "CheckboxName" -> 
                  "WLSystemSymbols"|>]; 
               DefinitionNotebookClient`PackageScope`seekAfter[648892777]; 
-              Null], TemplateBox[{
-               PaneBox[
-                TemplateBox[{
-                  RGBColor[1., 0.4627450980392157, 0.]}, "HintPodIconHint"], 
-                ImageSize -> {10, 10}, ImageSizeAction -> "ShrinkToFit", 
-                BaselinePosition -> Scaled[0.1]], "\" \"", 
-               TemplateBox[{"\"Expected context: \"", 
-                 StyleBox[
-                 "DRalgo`DRalgo`", "Program", FontWeight -> Medium, 
-                  ShowStringCharacters -> True, StripOnInput -> False], 
-                 "\"\\!\\(\\*StyleBox[\\\"\\\\\\\" (L38,C14) \\\\\\\"\\\", \
-Rule[FontOpacity, 0.65`], Rule[FontSize, Times[0.9`, Inherited]], \
-Rule[PrivateFontOptions, List[Rule[\\\"OperatorSubstitution\\\", False]]], \
-Rule[StripOnInput, False]]\\)\""}, "RowDefault"]}, "RowDefault"] :> 
-            DefinitionNotebookClient`WithCurrentNotebook[
-              EvaluationNotebook[], 
-              DefinitionNotebookClient`LoadDefinitionNotebook[
-               "Paclet", DefinitionNotebookClient`$CurrentNotebook]; 
-              DefinitionNotebookClient`PackageScope`setHint[
-               "Warning", "Paclet", DefinitionNotebookClient`$CurrentNotebook,
-                 "074a3eb6-15c7-43ab-8bd7-5503cff1df37", 648892777, 
-                "CodeInspectionFileIssue/NotPublisherContext", <|
-                "Hash" -> 8550698519583151563, 
-                 "MessageParameters" -> {"DRalgo`DRalgo`"}, "Templated" -> 
-                 True, "File" -> 
-                 "/Users/schicho/Documents/hep/DRalgo/DRalgo/Kernel/DRalgo.m",
-                  "Editor" -> Automatic, "SourceLineStart" -> 38, 
-                 "SourceColumnStart" -> 14, "SourceLineEnd" -> 38, 
-                 "SourceColumnEnd" -> 23, "Message" -> 
-                 "Expected context: **DRalgo`DRalgo`**\!\(\*StyleBox[\"\\\" \
-(L38,C14) \\\"\", Rule[FontOpacity, 0.65`], Rule[FontSize, Times[0.9`, \
-Inherited]], Rule[PrivateFontOptions, List[Rule[\"OperatorSubstitution\", \
-False]]], Rule[StripOnInput, False]]\)", "SourceInformation" -> 
-                 CodeInspector`InspectionObject[
-                  "NotPublisherContext", 
-                   "Expected context: **DRalgo`DRalgo`**", "Error", <|
-                   CodeParser`Source -> {{38, 14}, {38, 23}}, "Hash" -> 
-                    661749460762174025, ConfidenceLevel -> 0.99, 
-                    CodeParser`CodeActions -> {
-                    CodeParser`CodeAction[
-                    "Replace with suggested context", 
-                    CodeParser`ReplaceNode, <|
-                    "ReplacementNode" -> CodeParser`ContainerNode[String, {
-                    CodeParser`LeafNode[
-                    String, "\"DRalgo`DRalgo`\"", <|
-                    CodeParser`Source -> {{1, 1}, {1, 17}}|>]}, <|
-                    CodeParser`Source -> {{1, 1}, {1, 17}}|>], 
-                    CodeParser`Source -> {{38, 14}, {38, 23}}|>]}, 
-                    "MessageParameters" -> {"DRalgo`DRalgo`"}, "Templated" -> 
-                    True, "File" -> 
-                    "/Users/schicho/Documents/hep/DRalgo/DRalgo/Kernel/DRalgo.\
-m", "Editor" -> Automatic|>], "Position" -> 
-                 "\!\(\*StyleBox[\"\\\" (L38,C14) \\\"\", Rule[FontOpacity, \
-0.65`], Rule[FontSize, Times[0.9`, Inherited]], Rule[PrivateFontOptions, \
-List[Rule[\"OperatorSubstitution\", False]]], Rule[StripOnInput, \
-False]]\)"|>]; DefinitionNotebookClient`PackageScope`seekAfter[648892777]; 
               Null], TemplateBox[{
                PaneBox[
                 TemplateBox[{
@@ -9486,7 +9604,7 @@ Rule[StripOnInput, False]]\\)\""}, "RowDefault"]}, "RowDefault"] :>
               DefinitionNotebookClient`PackageScope`setHint[
                "Suggestion", "Paclet", 
                 DefinitionNotebookClient`$CurrentNotebook, 
-                "f0e493dd-d0d0-4880-853f-25f2a5397c6c", 1018943573, 
+                "caae61e5-e05d-464c-a153-005af6f50be2", 1018943573, 
                 "CodeInspectionFileIssue/SuspiciousSessionSymbol", <|
                 "File" -> 
                  "/Users/schicho/Documents/hep/DRalgo/DRalgo/Kernel/EffPot.m",
@@ -9532,7 +9650,7 @@ Rule[StripOnInput, False]]\\)\""}, "RowDefault"]}, "RowDefault"] :>
               DefinitionNotebookClient`PackageScope`setHint[
                "Suggestion", "Paclet", 
                 DefinitionNotebookClient`$CurrentNotebook, 
-                "22a9c41c-5617-467d-8cbe-4a552de2d589", 1018943573, 
+                "c103f6b0-44f9-418a-ac87-f0a60c659ed3", 1018943573, 
                 "CodeInspectionFileIssue/SuspiciousSessionSymbol", <|
                 "File" -> 
                  "/Users/schicho/Documents/hep/DRalgo/DRalgo/Kernel/EffPot.m",
@@ -9578,7 +9696,7 @@ Rule[StripOnInput, False]]\\)\""}, "RowDefault"]}, "RowDefault"] :>
               DefinitionNotebookClient`PackageScope`setHint[
                "Suggestion", "Paclet", 
                 DefinitionNotebookClient`$CurrentNotebook, 
-                "fc6e08fd-deee-454c-ba8a-0f5bb00c34b9", 1018943573, 
+                "ad4a07c2-0eb6-416b-9d4e-4f541c03089b", 1018943573, 
                 "CodeInspectionFileIssue/SuspiciousSessionSymbol", <|
                 "File" -> 
                  "/Users/schicho/Documents/hep/DRalgo/DRalgo/Kernel/EffPot.m",
@@ -9624,7 +9742,7 @@ Rule[StripOnInput, False]]\\)\""}, "RowDefault"]}, "RowDefault"] :>
               DefinitionNotebookClient`PackageScope`setHint[
                "Suggestion", "Paclet", 
                 DefinitionNotebookClient`$CurrentNotebook, 
-                "8db03a21-aad3-4920-b149-5640efbbad96", 1018943573, 
+                "42db39a8-e3d6-4cb9-8825-55eadafa3d1d", 1018943573, 
                 "CodeInspectionFileIssue/SuspiciousSessionSymbol", <|
                 "File" -> 
                  "/Users/schicho/Documents/hep/DRalgo/DRalgo/Kernel/EffPot.m",
@@ -9670,7 +9788,7 @@ Rule[StripOnInput, False]]\\)\""}, "RowDefault"]}, "RowDefault"] :>
               DefinitionNotebookClient`PackageScope`setHint[
                "Suggestion", "Paclet", 
                 DefinitionNotebookClient`$CurrentNotebook, 
-                "d813749c-f0bc-4c4b-911d-f13fb5d3886e", 1018943573, 
+                "656e0125-b79a-4948-a926-e0efe68e723b", 1018943573, 
                 "CodeInspectionFileIssue/SuspiciousSessionSymbol", <|
                 "File" -> 
                  "/Users/schicho/Documents/hep/DRalgo/DRalgo/Kernel/EffPot.m",
@@ -9716,7 +9834,7 @@ Rule[StripOnInput, False]]\\)\""}, "RowDefault"]}, "RowDefault"] :>
               DefinitionNotebookClient`PackageScope`setHint[
                "Suggestion", "Paclet", 
                 DefinitionNotebookClient`$CurrentNotebook, 
-                "f3d91177-afcf-4245-b9f4-b93bf00d7c27", 1018943573, 
+                "c2ed407c-9908-46ca-b895-cd45cdd948c4", 1018943573, 
                 "CodeInspectionFileIssue/SuspiciousSessionSymbol", <|
                 "File" -> 
                  "/Users/schicho/Documents/hep/DRalgo/DRalgo/Kernel/EffPot.m",
@@ -9762,7 +9880,7 @@ Rule[StripOnInput, False]]\\)\""}, "RowDefault"]}, "RowDefault"] :>
               DefinitionNotebookClient`PackageScope`setHint[
                "Suggestion", "Paclet", 
                 DefinitionNotebookClient`$CurrentNotebook, 
-                "8aa6de81-7240-4c4f-b64a-eb7159088563", 1018943573, 
+                "3693032d-ddf9-4a7f-ba03-5a569d01ebeb", 1018943573, 
                 "CodeInspectionFileIssue/SuspiciousSessionSymbol", <|
                 "File" -> 
                  "/Users/schicho/Documents/hep/DRalgo/DRalgo/Kernel/EffPot.m",
@@ -9808,7 +9926,7 @@ Rule[StripOnInput, False]]\\)\""}, "RowDefault"]}, "RowDefault"] :>
               DefinitionNotebookClient`PackageScope`setHint[
                "Suggestion", "Paclet", 
                 DefinitionNotebookClient`$CurrentNotebook, 
-                "faf35831-f32e-46ab-bfa3-8c5c7e907c68", 1018943573, 
+                "24b1adaf-5593-4f16-9603-37b59c2667a0", 1018943573, 
                 "CodeInspectionFileIssue/SuspiciousSessionSymbol", <|
                 "File" -> 
                  "/Users/schicho/Documents/hep/DRalgo/DRalgo/Kernel/EffPot.m",
@@ -9854,7 +9972,7 @@ Rule[StripOnInput, False]]\\)\""}, "RowDefault"]}, "RowDefault"] :>
               DefinitionNotebookClient`PackageScope`setHint[
                "Suggestion", "Paclet", 
                 DefinitionNotebookClient`$CurrentNotebook, 
-                "22a33e46-a427-4834-8d0a-8623b10fdf37", 1018943573, 
+                "e9ee1ab4-e43a-47b9-9cf7-7abf7cfe8db8", 1018943573, 
                 "CodeInspectionFileIssue/SuspiciousSessionSymbol", <|
                 "File" -> 
                  "/Users/schicho/Documents/hep/DRalgo/DRalgo/Kernel/EffPot.m",
@@ -9900,7 +10018,7 @@ Rule[StripOnInput, False]]\\)\""}, "RowDefault"]}, "RowDefault"] :>
               DefinitionNotebookClient`PackageScope`setHint[
                "Suggestion", "Paclet", 
                 DefinitionNotebookClient`$CurrentNotebook, 
-                "13bd610c-61ec-430d-bb1f-823ba0256e25", 1018943573, 
+                "a5f621dc-422b-4d3b-8084-659c6166a217", 1018943573, 
                 "CodeInspectionFileIssue/SuspiciousSessionSymbol", <|
                 "File" -> 
                  "/Users/schicho/Documents/hep/DRalgo/DRalgo/Kernel/EffPot.m",
@@ -9943,7 +10061,7 @@ Rule[StripOnInput, False]]\\)\""}, "RowDefault"]}, "RowDefault"] :>
                "Paclet", DefinitionNotebookClient`$CurrentNotebook]; 
               DefinitionNotebookClient`PackageScope`setHint[
                "Warning", "Paclet", DefinitionNotebookClient`$CurrentNotebook,
-                 "7cea3e65-5b51-44ca-a92d-d13e96733e26", 1018943573, 
+                 "95f1e202-ebe9-447e-a1f3-282f579cd369", 1018943573, 
                 "CodeInspectionFileIssue/PatternRule", <|
                 "AdditionalSources" -> {{{59, 71}, {59, 72}}}, "File" -> 
                  "/Users/schicho/Documents/hep/DRalgo/DRalgo/Kernel/EffPot.m",
@@ -9989,7 +10107,7 @@ Rule[StripOnInput, False]]\\)\""}, "RowDefault"]}, "RowDefault"] :>
                "Paclet", DefinitionNotebookClient`$CurrentNotebook]; 
               DefinitionNotebookClient`PackageScope`setHint[
                "Warning", "Paclet", DefinitionNotebookClient`$CurrentNotebook,
-                 "e193abe1-dcef-4a8a-8030-11e810ca1267", 1018943573, 
+                 "9b788bd9-73d1-44c4-9f09-13ee77fe3805", 1018943573, 
                 "CodeInspectionFileIssue/PatternRule", <|
                 "AdditionalSources" -> {{{59, 76}, {59, 77}}}, "File" -> 
                  "/Users/schicho/Documents/hep/DRalgo/DRalgo/Kernel/EffPot.m",
@@ -10035,7 +10153,7 @@ Rule[StripOnInput, False]]\\)\""}, "RowDefault"]}, "RowDefault"] :>
                "Paclet", DefinitionNotebookClient`$CurrentNotebook]; 
               DefinitionNotebookClient`PackageScope`setHint[
                "Warning", "Paclet", DefinitionNotebookClient`$CurrentNotebook,
-                 "282edd28-c9bc-4f95-9e61-c1e8aef3d03e", 1018943573, 
+                 "7957f856-cdc2-4d05-b82c-cbaa7b82e913", 1018943573, 
                 "CodeInspectionFileIssue/PatternRule", <|
                 "AdditionalSources" -> {{{59, 81}, {59, 82}}}, "File" -> 
                  "/Users/schicho/Documents/hep/DRalgo/DRalgo/Kernel/EffPot.m",
@@ -10081,7 +10199,7 @@ Rule[StripOnInput, False]]\\)\""}, "RowDefault"]}, "RowDefault"] :>
                "Paclet", DefinitionNotebookClient`$CurrentNotebook]; 
               DefinitionNotebookClient`PackageScope`setHint[
                "Warning", "Paclet", DefinitionNotebookClient`$CurrentNotebook,
-                 "26251659-08ba-4f5a-8893-97242d3cd997", 1018943573, 
+                 "1e26bdc8-3c43-42a0-bea3-10f7fcce5bf3", 1018943573, 
                 "CodeInspectionFileIssue/PatternRule", <|
                 "AdditionalSources" -> {{{59, 86}, {59, 87}}}, "File" -> 
                  "/Users/schicho/Documents/hep/DRalgo/DRalgo/Kernel/EffPot.m",
@@ -10127,7 +10245,7 @@ Rule[StripOnInput, False]]\\)\""}, "RowDefault"]}, "RowDefault"] :>
                "Paclet", DefinitionNotebookClient`$CurrentNotebook]; 
               DefinitionNotebookClient`PackageScope`setHint[
                "Warning", "Paclet", DefinitionNotebookClient`$CurrentNotebook,
-                 "5d716be2-6780-4961-9d46-b3688d90cbb7", 1018943573, 
+                 "3105ab4d-4d1c-4a27-ae46-285a19ab05b7", 1018943573, 
                 "CodeInspectionFileIssue/PatternRule", <|
                 "AdditionalSources" -> {{{60, 69}, {60, 70}}}, "File" -> 
                  "/Users/schicho/Documents/hep/DRalgo/DRalgo/Kernel/EffPot.m",
@@ -10173,7 +10291,7 @@ Rule[StripOnInput, False]]\\)\""}, "RowDefault"]}, "RowDefault"] :>
                "Paclet", DefinitionNotebookClient`$CurrentNotebook]; 
               DefinitionNotebookClient`PackageScope`setHint[
                "Warning", "Paclet", DefinitionNotebookClient`$CurrentNotebook,
-                 "7e6c581e-d45f-4372-8db3-69ce433f1e24", 1018943573, 
+                 "1ad1fc2b-cd12-4dcd-853b-eaf6827c2a31", 1018943573, 
                 "CodeInspectionFileIssue/PatternRule", <|
                 "AdditionalSources" -> {{{60, 74}, {60, 75}}}, "File" -> 
                  "/Users/schicho/Documents/hep/DRalgo/DRalgo/Kernel/EffPot.m",
@@ -10219,7 +10337,7 @@ Rule[StripOnInput, False]]\\)\""}, "RowDefault"]}, "RowDefault"] :>
                "Paclet", DefinitionNotebookClient`$CurrentNotebook]; 
               DefinitionNotebookClient`PackageScope`setHint[
                "Warning", "Paclet", DefinitionNotebookClient`$CurrentNotebook,
-                 "81481288-8189-46ce-95f3-f1a16609a132", 1018943573, 
+                 "5fb0d820-e1a7-4d53-a3be-f623b3c7aa6a", 1018943573, 
                 "CodeInspectionFileIssue/PatternRule", <|
                 "AdditionalSources" -> {{{60, 79}, {60, 80}}}, "File" -> 
                  "/Users/schicho/Documents/hep/DRalgo/DRalgo/Kernel/EffPot.m",
@@ -10265,7 +10383,7 @@ Rule[StripOnInput, False]]\\)\""}, "RowDefault"]}, "RowDefault"] :>
                "Paclet", DefinitionNotebookClient`$CurrentNotebook]; 
               DefinitionNotebookClient`PackageScope`setHint[
                "Warning", "Paclet", DefinitionNotebookClient`$CurrentNotebook,
-                 "f345dd46-9cc2-4c70-8893-967690fe784d", 1018943573, 
+                 "a2bfccec-8d68-413a-b84d-3830025b724c", 1018943573, 
                 "CodeInspectionFileIssue/PatternRule", <|
                 "AdditionalSources" -> {{{60, 81}, {60, 82}}}, "File" -> 
                  "/Users/schicho/Documents/hep/DRalgo/DRalgo/Kernel/EffPot.m",
@@ -10311,7 +10429,7 @@ Rule[StripOnInput, False]]\\)\""}, "RowDefault"]}, "RowDefault"] :>
                "Paclet", DefinitionNotebookClient`$CurrentNotebook]; 
               DefinitionNotebookClient`PackageScope`setHint[
                "Warning", "Paclet", DefinitionNotebookClient`$CurrentNotebook,
-                 "f8e1ac2f-87c3-4cbf-a0b0-01bd179cb5cf", 1018943573, 
+                 "70b555d5-b244-4e22-916a-32039cac6d06", 1018943573, 
                 "CodeInspectionFileIssue/PatternRule", <|
                 "AdditionalSources" -> {{{70, 67}, {70, 68}}}, "File" -> 
                  "/Users/schicho/Documents/hep/DRalgo/DRalgo/Kernel/EffPot.m",
@@ -10357,7 +10475,7 @@ Rule[StripOnInput, False]]\\)\""}, "RowDefault"]}, "RowDefault"] :>
                "Paclet", DefinitionNotebookClient`$CurrentNotebook]; 
               DefinitionNotebookClient`PackageScope`setHint[
                "Warning", "Paclet", DefinitionNotebookClient`$CurrentNotebook,
-                 "e8704c1b-b8b2-4a57-b0e0-94450b1f08cf", 1018943573, 
+                 "8bb2c511-55fb-42ae-b487-bed138f7ef01", 1018943573, 
                 "CodeInspectionFileIssue/PatternRule", <|
                 "AdditionalSources" -> {{{70, 72}, {70, 73}}}, "File" -> 
                  "/Users/schicho/Documents/hep/DRalgo/DRalgo/Kernel/EffPot.m",
@@ -10404,7 +10522,7 @@ Rule[StripOnInput, False]]\\)\""}, "RowDefault"]}, "RowDefault"] :>
                "Paclet", DefinitionNotebookClient`$CurrentNotebook]; 
               DefinitionNotebookClient`PackageScope`setHint[
                "Warning", "Paclet", DefinitionNotebookClient`$CurrentNotebook,
-                 "1379b0cd-3c0c-488e-98c2-6b4288863250", 1018943573, 
+                 "48fbb539-b4d3-4f06-a335-cb43bf9af85d", 1018943573, 
                 "CodeInspectionFileIssue/ImplicitTimesPseudoCall", <|
                 "File" -> 
                  "/Users/schicho/Documents/hep/DRalgo/DRalgo/Kernel/EffPot.m",
@@ -10464,9 +10582,8 @@ function call.", "Error", <|
                     CodeParser`LeafNode[
                     Token`Fake`ImplicitTimes, "", <|
                     CodeParser`Source -> {{576, 23}, {576, 23}}|>], 
-                    CodeParser`LeafNode[
-                    Symbol, "x", <|CodeParser`Source -> {{576, 23}, {576, 
-                    24}}|>], 
+                    CodeParser`LeafNode[Symbol, "x", <|
+                    CodeParser`Source -> {{576, 23}, {576, 24}}|>], 
                     CodeParser`LeafNode[
                     Token`Fake`ImplicitTimes, "", <|
                     CodeParser`Source -> {{576, 25}, {576, 25}}|>], 
@@ -10667,7 +10784,7 @@ Rule[StripOnInput, False]]\\)\""}, "RowDefault"]}, "RowDefault"] :>
                "Paclet", DefinitionNotebookClient`$CurrentNotebook]; 
               DefinitionNotebookClient`PackageScope`setHint[
                "Warning", "Paclet", DefinitionNotebookClient`$CurrentNotebook,
-                 "189cab20-cd0b-4af8-a6f4-172c8b4ef014", 1018943573, 
+                 "eae8e0f5-c4de-450e-bc84-79de065884dc", 1018943573, 
                 "CodeInspectionFileIssue/ImplicitTimesPseudoCall", <|
                 "File" -> 
                  "/Users/schicho/Documents/hep/DRalgo/DRalgo/Kernel/EffPot.m",
@@ -10741,9 +10858,8 @@ function call.", "Error", <|
                     CodeParser`LeafNode[
                     Token`Fake`ImplicitTimes, "", <|
                     CodeParser`Source -> {{577, 27}, {577, 27}}|>], 
-                    CodeParser`LeafNode[
-                    Symbol, "x", <|CodeParser`Source -> {{577, 27}, {577, 
-                    28}}|>], 
+                    CodeParser`LeafNode[Symbol, "x", <|
+                    CodeParser`Source -> {{577, 27}, {577, 28}}|>], 
                     CodeParser`LeafNode[
                     Token`Fake`ImplicitTimes, "", <|
                     CodeParser`Source -> {{577, 29}, {577, 29}}|>], 
@@ -10751,8 +10867,9 @@ function call.", "Error", <|
                     Symbol, "y", <|CodeParser`Source -> {{577, 29}, {577, 
                     30}}|>]}, <|CodeParser`Source -> {{577, 25}, {577, 
                     30}}|>], 
-                    CodeParser`LeafNode[Token`Plus, "+", <|
-                    CodeParser`Source -> {{577, 30}, {577, 31}}|>], 
+                    CodeParser`LeafNode[
+                    Token`Plus, "+", <|CodeParser`Source -> {{577, 30}, {577, 
+                    31}}|>], 
                     CodeParser`BinaryNode[Power, {
                     CodeParser`LeafNode[
                     Symbol, "y", <|CodeParser`Source -> {{577, 31}, {577, 
@@ -10825,7 +10942,7 @@ Rule[StripOnInput, False]]\\)\""}, "RowDefault"]}, "RowDefault"] :>
                "Paclet", DefinitionNotebookClient`$CurrentNotebook]; 
               DefinitionNotebookClient`PackageScope`setHint[
                "Warning", "Paclet", DefinitionNotebookClient`$CurrentNotebook,
-                 "7c0ff467-a8ed-44c9-ba87-dfa8b170468b", 1018943573, 
+                 "bfec9d12-91c7-4f02-bfff-1b902f8b93fc", 1018943573, 
                 "CodeInspectionFileIssue/ImplicitTimesPseudoCall", <|
                 "File" -> 
                  "/Users/schicho/Documents/hep/DRalgo/DRalgo/Kernel/EffPot.m",
@@ -10919,11 +11036,10 @@ function call.", "Error", <|
                     CodeParser`LeafNode[
                     Token`Caret, "^", <|CodeParser`Source -> {{577, 106}, {
                     577, 107}}|>], 
-                    CodeParser`LeafNode[
-                    Integer, "2", <|CodeParser`Source -> {{577, 107}, {577, 
-                    108}}|>]}, <|CodeParser`Source -> {{577, 105}, {577, 
-                    108}}|>]}, <|CodeParser`Source -> {{577, 95}, {577, 
-                    108}}|>], 
+                    CodeParser`LeafNode[Integer, "2", <|
+                    CodeParser`Source -> {{577, 107}, {577, 108}}|>]}, <|
+                    CodeParser`Source -> {{577, 105}, {577, 108}}|>]}, <|
+                    CodeParser`Source -> {{577, 95}, {577, 108}}|>], 
                     CodeParser`LeafNode[
                     Token`CloseParen, ")", <|
                     CodeParser`Source -> {{577, 108}, {577, 109}}|>]}, <|
@@ -10984,7 +11100,7 @@ Rule[StripOnInput, False]]\\)\""}, "RowDefault"]}, "RowDefault"] :>
                "Paclet", DefinitionNotebookClient`$CurrentNotebook]; 
               DefinitionNotebookClient`PackageScope`setHint[
                "Warning", "Paclet", DefinitionNotebookClient`$CurrentNotebook,
-                 "5dfb1203-5547-48c5-ac43-b41a36a683ce", 1018943573, 
+                 "c2e3ebca-ba78-42fc-b179-af189b4ae200", 1018943573, 
                 "CodeInspectionFileIssue/ImplicitTimesPseudoCall", <|
                 "File" -> 
                  "/Users/schicho/Documents/hep/DRalgo/DRalgo/Kernel/EffPot.m",
@@ -11145,7 +11261,7 @@ Rule[StripOnInput, False]]\\)\""}, "RowDefault"]}, "RowDefault"] :>
               DefinitionNotebookClient`PackageScope`setHint[
                "Suggestion", "Paclet", 
                 DefinitionNotebookClient`$CurrentNotebook, 
-                "2b86ca08-e140-493f-b326-d65d98a62ad5", 1350030233, 
+                "76d3ef88-b665-4f10-9651-9c4f6d4782c1", 1350030233, 
                 "CodeInspectionFileIssue/SuspiciousSessionSymbol", <|
                 "File" -> 
                  "/Users/schicho/Documents/hep/DRalgo/DRalgo/Kernel/\
@@ -11192,7 +11308,7 @@ Rule[StripOnInput, False]]\\)\""}, "RowDefault"]}, "RowDefault"] :>
               DefinitionNotebookClient`PackageScope`setHint[
                "Suggestion", "Paclet", 
                 DefinitionNotebookClient`$CurrentNotebook, 
-                "93f018e2-29ab-438d-92de-c9d081fb47f8", 1350030233, 
+                "431ea336-2d76-4b05-a5dd-f027e1b8bfcb", 1350030233, 
                 "CodeInspectionFileIssue/SuspiciousSessionSymbol", <|
                 "File" -> 
                  "/Users/schicho/Documents/hep/DRalgo/DRalgo/Kernel/\
@@ -11239,7 +11355,7 @@ Rule[StripOnInput, False]]\\)\""}, "RowDefault"]}, "RowDefault"] :>
               DefinitionNotebookClient`PackageScope`setHint[
                "Suggestion", "Paclet", 
                 DefinitionNotebookClient`$CurrentNotebook, 
-                "27cf41eb-2675-4402-861d-5940ee79e477", 1350030233, 
+                "c2189f17-e15c-4933-99dd-c721e7cae857", 1350030233, 
                 "CodeInspectionFileIssue/SuspiciousSessionSymbol", <|
                 "File" -> 
                  "/Users/schicho/Documents/hep/DRalgo/DRalgo/Kernel/\
@@ -11286,7 +11402,7 @@ Rule[StripOnInput, False]]\\)\""}, "RowDefault"]}, "RowDefault"] :>
               DefinitionNotebookClient`PackageScope`setHint[
                "Suggestion", "Paclet", 
                 DefinitionNotebookClient`$CurrentNotebook, 
-                "f023ff05-bb44-47c5-b13e-e4dda56ae80d", 1350030233, 
+                "1302dde5-4986-4e77-87c7-77ca20550113", 1350030233, 
                 "CodeInspectionFileIssue/SuspiciousSessionSymbol", <|
                 "File" -> 
                  "/Users/schicho/Documents/hep/DRalgo/DRalgo/Kernel/\
@@ -11333,7 +11449,7 @@ Rule[StripOnInput, False]]\\)\""}, "RowDefault"]}, "RowDefault"] :>
               DefinitionNotebookClient`PackageScope`setHint[
                "Suggestion", "Paclet", 
                 DefinitionNotebookClient`$CurrentNotebook, 
-                "ef17be2e-9440-4870-9111-92706689ba1a", 1350030233, 
+                "ca8b2dfd-6925-471f-a803-acde1a07307e", 1350030233, 
                 "CodeInspectionFileIssue/SuspiciousSessionSymbol", <|
                 "File" -> 
                  "/Users/schicho/Documents/hep/DRalgo/DRalgo/Kernel/\
@@ -11380,7 +11496,7 @@ Rule[StripOnInput, False]]\\)\""}, "RowDefault"]}, "RowDefault"] :>
               DefinitionNotebookClient`PackageScope`setHint[
                "Suggestion", "Paclet", 
                 DefinitionNotebookClient`$CurrentNotebook, 
-                "def4f028-0bfd-4529-809d-42e30e72016a", 1350030233, 
+                "4d907a1f-8204-4837-be1e-4707b738b0e7", 1350030233, 
                 "CodeInspectionFileIssue/SuspiciousSessionSymbol", <|
                 "File" -> 
                  "/Users/schicho/Documents/hep/DRalgo/DRalgo/Kernel/\
@@ -11427,7 +11543,7 @@ Rule[StripOnInput, False]]\\)\""}, "RowDefault"]}, "RowDefault"] :>
               DefinitionNotebookClient`PackageScope`setHint[
                "Suggestion", "Paclet", 
                 DefinitionNotebookClient`$CurrentNotebook, 
-                "e3df9b02-2320-40fb-9cb7-e4f668e1647c", 1350030233, 
+                "400f654a-4a7e-450a-9c37-7191167156bb", 1350030233, 
                 "CodeInspectionFileIssue/SuspiciousSessionSymbol", <|
                 "File" -> 
                  "/Users/schicho/Documents/hep/DRalgo/DRalgo/Kernel/\
@@ -11474,7 +11590,7 @@ Rule[StripOnInput, False]]\\)\""}, "RowDefault"]}, "RowDefault"] :>
               DefinitionNotebookClient`PackageScope`setHint[
                "Suggestion", "Paclet", 
                 DefinitionNotebookClient`$CurrentNotebook, 
-                "631a733c-cf8a-45b7-ae41-3be579c9a665", 1350030233, 
+                "368e33bc-0755-447e-bf23-6002b8d26c6a", 1350030233, 
                 "CodeInspectionFileIssue/SuspiciousSessionSymbol", <|
                 "File" -> 
                  "/Users/schicho/Documents/hep/DRalgo/DRalgo/Kernel/\
@@ -11522,7 +11638,7 @@ False]]\\)\""}, "RowDefault"]}, "RowDefault"] :>
               DefinitionNotebookClient`PackageScope`setHint[
                "Suggestion", "Paclet", 
                 DefinitionNotebookClient`$CurrentNotebook, 
-                "e2dc8112-a86c-4dd4-a9e3-7a2bbccdc97d", 1350030233, 
+                "2af97f2f-c58a-47df-80b1-e650203cd70a", 1350030233, 
                 "CodeInspectionFileIssue/UnexpectedSemicolon", <|
                 "File" -> 
                  "/Users/schicho/Documents/hep/DRalgo/DRalgo/Kernel/\
@@ -11568,7 +11684,7 @@ Rule[StripOnInput, False]]\\)\""}, "RowDefault"]}, "RowDefault"] :>
               DefinitionNotebookClient`PackageScope`setHint[
                "Suggestion", "Paclet", 
                 DefinitionNotebookClient`$CurrentNotebook, 
-                "869c4652-eb94-4d96-9f29-a04d85427668", 1350030233, 
+                "99e676c5-fb07-4725-8c23-a56ff279871f", 1350030233, 
                 "CodeInspectionFileIssue/SuspiciousSessionSymbol", <|
                 "File" -> 
                  "/Users/schicho/Documents/hep/DRalgo/DRalgo/Kernel/\
@@ -11615,7 +11731,7 @@ Rule[StripOnInput, False]]\\)\""}, "RowDefault"]}, "RowDefault"] :>
               DefinitionNotebookClient`PackageScope`setHint[
                "Suggestion", "Paclet", 
                 DefinitionNotebookClient`$CurrentNotebook, 
-                "39101259-26e4-491d-b27b-7692ff2d58d6", 1350030233, 
+                "3ebe2369-8cda-4a41-aa37-ccd4e0e6c830", 1350030233, 
                 "CodeInspectionFileIssue/SuspiciousSessionSymbol", <|
                 "File" -> 
                  "/Users/schicho/Documents/hep/DRalgo/DRalgo/Kernel/\
@@ -11663,7 +11779,7 @@ False]]\\)\""}, "RowDefault"]}, "RowDefault"] :>
               DefinitionNotebookClient`PackageScope`setHint[
                "Suggestion", "Paclet", 
                 DefinitionNotebookClient`$CurrentNotebook, 
-                "09174410-14de-4efc-bbd3-ebcf86d04b96", 1350030233, 
+                "eb0990bd-f71b-460f-87e6-5779a71d6acc", 1350030233, 
                 "CodeInspectionFileIssue/UnexpectedSemicolon", <|
                 "File" -> 
                  "/Users/schicho/Documents/hep/DRalgo/DRalgo/Kernel/\
@@ -11706,7 +11822,7 @@ Rule[StripOnInput, False]]\\)\""}, "RowDefault"]}, "RowDefault"] :>
                "Paclet", DefinitionNotebookClient`$CurrentNotebook]; 
               DefinitionNotebookClient`PackageScope`setHint[
                "Warning", "Paclet", DefinitionNotebookClient`$CurrentNotebook,
-                 "702d5a0e-a07f-4b44-9a46-280de06494c9", 1350030233, 
+                 "1b5d1e7e-4af1-4dfc-b9c8-d047e7e031be", 1350030233, 
                 "CodeInspectionFileIssue/PatternRule", <|
                 "AdditionalSources" -> {{{2001, 87}, {2001, 89}}}, "File" -> 
                  "/Users/schicho/Documents/hep/DRalgo/DRalgo/Kernel/\
@@ -11743,6 +11859,7 @@ False]]\)"|>]; DefinitionNotebookClient`PackageScope`seekAfter[1350030233];
                  StyleBox[
                  "Rule", "Program", FontWeight -> Medium, 
                   ShowStringCharacters -> True, StripOnInput -> False], 
+                 
                  "\".\\!\\(\\*StyleBox[\\\"\\\\\\\" (L2033,C72) \\\\\\\"\\\", \
 Rule[FontOpacity, 0.65`], Rule[FontSize, Times[0.9`, Inherited]], \
 Rule[PrivateFontOptions, List[Rule[\\\"OperatorSubstitution\\\", False]]], \
@@ -11753,7 +11870,7 @@ Rule[StripOnInput, False]]\\)\""}, "RowDefault"]}, "RowDefault"] :>
                "Paclet", DefinitionNotebookClient`$CurrentNotebook]; 
               DefinitionNotebookClient`PackageScope`setHint[
                "Warning", "Paclet", DefinitionNotebookClient`$CurrentNotebook,
-                 "8f86fc83-0013-4be9-9cf4-e97b32060e2d", 1350030233, 
+                 "abe78bff-40f6-4eea-b812-9305a232451d", 1350030233, 
                 "CodeInspectionFileIssue/PatternRule", <|
                 "AdditionalSources" -> {{{2033, 90}, {2033, 92}}}, "File" -> 
                  "/Users/schicho/Documents/hep/DRalgo/DRalgo/Kernel/\
@@ -11800,7 +11917,7 @@ Rule[StripOnInput, False]]\\)\""}, "RowDefault"]}, "RowDefault"] :>
                "Paclet", DefinitionNotebookClient`$CurrentNotebook]; 
               DefinitionNotebookClient`PackageScope`setHint[
                "Warning", "Paclet", DefinitionNotebookClient`$CurrentNotebook,
-                 "258cdff0-e5bc-404f-87e5-7041ff9123d2", 1350030233, 
+                 "b2cfc844-35c3-4bbb-9354-ed68e5c65943", 1350030233, 
                 "CodeInspectionFileIssue/PatternRule", <|
                 "AdditionalSources" -> {{{2050, 91}, {2050, 93}}}, "File" -> 
                  "/Users/schicho/Documents/hep/DRalgo/DRalgo/Kernel/\
@@ -11847,7 +11964,7 @@ Rule[StripOnInput, False]]\\)\""}, "RowDefault"]}, "RowDefault"] :>
                "Paclet", DefinitionNotebookClient`$CurrentNotebook]; 
               DefinitionNotebookClient`PackageScope`setHint[
                "Warning", "Paclet", DefinitionNotebookClient`$CurrentNotebook,
-                 "d6ada0cc-08a3-45fa-ae7a-e8945e13c8bd", 1350030233, 
+                 "3790e315-021d-4f77-a51c-532b73dd675b", 1350030233, 
                 "CodeInspectionFileIssue/PatternRule", <|
                 "AdditionalSources" -> {{{2589, 91}, {2589, 93}}}, "File" -> 
                  "/Users/schicho/Documents/hep/DRalgo/DRalgo/Kernel/\
@@ -11894,9 +12011,10 @@ Rule[StripOnInput, False]]\\)\""}, "RowDefault"]}, "RowDefault"] :>
                "Paclet", DefinitionNotebookClient`$CurrentNotebook]; 
               DefinitionNotebookClient`PackageScope`setHint[
                "Warning", "Paclet", DefinitionNotebookClient`$CurrentNotebook,
-                 "a9af192e-8314-4553-bdec-ce1dac7ee5a2", 1350030233, 
+                 "ffd7165a-4ffe-47d1-b004-fc8cc9cf9455", 1350030233, 
                 "CodeInspectionFileIssue/PatternRule", <|
                 "AdditionalSources" -> {{{2764, 91}, {2764, 93}}}, "File" -> 
+                 
                  "/Users/schicho/Documents/hep/DRalgo/DRalgo/Kernel/\
 HardToSoft.m", "Editor" -> Automatic, "SourceLineStart" -> 2764, 
                  "SourceColumnStart" -> 71, "SourceLineEnd" -> 2764, 
@@ -11942,7 +12060,7 @@ Rule[StripOnInput, False]]\\)\""}, "RowDefault"]}, "RowDefault"] :>
                "Paclet", DefinitionNotebookClient`$CurrentNotebook]; 
               DefinitionNotebookClient`PackageScope`setHint[
                "Warning", "Paclet", DefinitionNotebookClient`$CurrentNotebook,
-                 "021b480a-7af9-4c95-842c-f4aceac673b1", 1350030233, 
+                 "f3a39057-8159-4a4e-b4ed-cdfdb14bd93e", 1350030233, 
                 "CodeInspectionFileIssue/ImplicitTimesPseudoCall", <|
                 "File" -> 
                  "/Users/schicho/Documents/hep/DRalgo/DRalgo/Kernel/\
@@ -12021,7 +12139,7 @@ Rule[StripOnInput, False]]\\)\""}, "RowDefault"]}, "RowDefault"] :>
                "Paclet", DefinitionNotebookClient`$CurrentNotebook]; 
               DefinitionNotebookClient`PackageScope`setHint[
                "Warning", "Paclet", DefinitionNotebookClient`$CurrentNotebook,
-                 "80d9a24a-f67a-4078-b0fa-22e71db69440", 1350030233, 
+                 "df0ad80d-1e28-4fb4-943a-dff12e2f38e8", 1350030233, 
                 "CodeInspectionFileIssue/ImplicitTimesPseudoCall", <|
                 "File" -> 
                  "/Users/schicho/Documents/hep/DRalgo/DRalgo/Kernel/\
@@ -12091,7 +12209,7 @@ Rule[StripOnInput, False]]\\)\""}, "RowDefault"]}, "RowDefault"] :>
                "Paclet", DefinitionNotebookClient`$CurrentNotebook]; 
               DefinitionNotebookClient`PackageScope`setHint[
                "Warning", "Paclet", DefinitionNotebookClient`$CurrentNotebook,
-                 "09a4d18f-6f95-4942-8b07-5f3edcb72bb2", 1350030233, 
+                 "83bf616e-a6a7-4d5f-96eb-05c2ab1953d6", 1350030233, 
                 "CodeInspectionFileIssue/ImplicitTimesPseudoCall", <|
                 "File" -> 
                  "/Users/schicho/Documents/hep/DRalgo/DRalgo/Kernel/\
@@ -12208,7 +12326,7 @@ Rule[StripOnInput, False]]\\)\""}, "RowDefault"]}, "RowDefault"] :>
                "Paclet", DefinitionNotebookClient`$CurrentNotebook]; 
               DefinitionNotebookClient`PackageScope`setHint[
                "Warning", "Paclet", DefinitionNotebookClient`$CurrentNotebook,
-                 "13a6cbd7-6ae6-44b4-88ee-cf7c2cc56f72", 1350030233, 
+                 "1a82df6b-e4b7-43ca-b4c7-bf4a9283f49a", 1350030233, 
                 "CodeInspectionFileIssue/ImplicitTimesPseudoCall", <|
                 "File" -> 
                  "/Users/schicho/Documents/hep/DRalgo/DRalgo/Kernel/\
@@ -12289,7 +12407,7 @@ Rule[StripOnInput, False]]\\)\""}, "RowDefault"]}, "RowDefault"] :>
                "Paclet", DefinitionNotebookClient`$CurrentNotebook]; 
               DefinitionNotebookClient`PackageScope`setHint[
                "Warning", "Paclet", DefinitionNotebookClient`$CurrentNotebook,
-                 "ed06dc98-b83e-43ec-91e2-c74d0eb02886", 1350030233, 
+                 "7fbd966f-e5fc-4798-9386-605de4692d9f", 1350030233, 
                 "CodeInspectionFileIssue/ImplicitTimesPseudoCall", <|
                 "File" -> 
                  "/Users/schicho/Documents/hep/DRalgo/DRalgo/Kernel/\
@@ -12359,7 +12477,7 @@ Rule[StripOnInput, False]]\\)\""}, "RowDefault"]}, "RowDefault"] :>
                "Paclet", DefinitionNotebookClient`$CurrentNotebook]; 
               DefinitionNotebookClient`PackageScope`setHint[
                "Warning", "Paclet", DefinitionNotebookClient`$CurrentNotebook,
-                 "81d49806-22fb-4adc-bea0-f9fb9fa07fa1", 1350030233, 
+                 "7a23fea6-008b-400b-bdcf-55b46ede79ee", 1350030233, 
                 "CodeInspectionFileIssue/ImplicitTimesPseudoCall", <|
                 "File" -> 
                  "/Users/schicho/Documents/hep/DRalgo/DRalgo/Kernel/\
@@ -12469,7 +12587,7 @@ Rule[StripOnInput, False]]\\)\""}, "RowDefault"]}, "RowDefault"] :>
                "Paclet", DefinitionNotebookClient`$CurrentNotebook]; 
               DefinitionNotebookClient`PackageScope`setHint[
                "Warning", "Paclet", DefinitionNotebookClient`$CurrentNotebook,
-                 "75e89b05-aa7a-4448-9d08-f5fd7455fafe", 1350030233, 
+                 "5aadc4ec-a7c4-493e-9b1e-a7b53afc9709", 1350030233, 
                 "CodeInspectionFileIssue/ImplicitTimesPseudoCall", <|
                 "File" -> 
                  "/Users/schicho/Documents/hep/DRalgo/DRalgo/Kernel/\
@@ -12555,13 +12673,14 @@ Rule[StripOnInput, False]]\\)\""}, "RowDefault"]}, "RowDefault"] :>
                "Paclet", DefinitionNotebookClient`$CurrentNotebook]; 
               DefinitionNotebookClient`PackageScope`setHint[
                "Warning", "Paclet", DefinitionNotebookClient`$CurrentNotebook,
-                 "b1a873aa-a3c4-4971-8309-759c50d33166", 1350030233, 
+                 "9898a1d7-9e3e-4bae-9633-af45254949cd", 1350030233, 
                 "CodeInspectionFileIssue/ImplicitTimesPseudoCall", <|
                 "File" -> 
                  "/Users/schicho/Documents/hep/DRalgo/DRalgo/Kernel/\
 HardToSoft.m", "Editor" -> Automatic, "SourceLineStart" -> 1618, 
                  "SourceColumnStart" -> 17, "SourceLineEnd" -> 1618, 
                  "SourceColumnEnd" -> 17, "Message" -> 
+                 
                  "Suspicious implicit ``Times`` looks like a traditional \
 function call.\!\(\*StyleBox[\"\\\" (L1618,C17) \\\"\", Rule[FontOpacity, \
 0.65`], Rule[FontSize, Times[0.9`, Inherited]], Rule[PrivateFontOptions, \
@@ -12636,7 +12755,7 @@ Rule[StripOnInput, False]]\\)\""}, "RowDefault"]}, "RowDefault"] :>
                "Paclet", DefinitionNotebookClient`$CurrentNotebook]; 
               DefinitionNotebookClient`PackageScope`setHint[
                "Warning", "Paclet", DefinitionNotebookClient`$CurrentNotebook,
-                 "0c51973f-b774-42ba-a7d9-d68055e02912", 1350030233, 
+                 "dd45b519-248e-485c-b628-17ad642af8a2", 1350030233, 
                 "CodeInspectionFileIssue/ImplicitTimesPseudoCall", <|
                 "File" -> 
                  "/Users/schicho/Documents/hep/DRalgo/DRalgo/Kernel/\
@@ -12813,13 +12932,14 @@ Rule[StripOnInput, False]]\\)\""}, "RowDefault"]}, "RowDefault"] :>
                "Paclet", DefinitionNotebookClient`$CurrentNotebook]; 
               DefinitionNotebookClient`PackageScope`setHint[
                "Warning", "Paclet", DefinitionNotebookClient`$CurrentNotebook,
-                 "aca1bd90-7c7a-4463-a16c-f3f13cf54ddc", 1350030233, 
+                 "a75fabfd-9588-4201-bd98-7ecb14d1b2cf", 1350030233, 
                 "CodeInspectionFileIssue/ImplicitTimesPseudoCall", <|
                 "File" -> 
                  "/Users/schicho/Documents/hep/DRalgo/DRalgo/Kernel/\
 HardToSoft.m", "Editor" -> Automatic, "SourceLineStart" -> 1734, 
                  "SourceColumnStart" -> 25, "SourceLineEnd" -> 1734, 
                  "SourceColumnEnd" -> 25, "Message" -> 
+                 
                  "Suspicious implicit ``Times`` looks like a traditional \
 function call.\!\(\*StyleBox[\"\\\" (L1734,C25) \\\"\", Rule[FontOpacity, \
 0.65`], Rule[FontSize, Times[0.9`, Inherited]], Rule[PrivateFontOptions, \
@@ -12924,8 +13044,9 @@ function call.", "Error", <|
                     CodeParser`LeafNode[
                     Integer, "3", <|CodeParser`Source -> {{1734, 98}, {1734, 
                     99}}|>], 
-                    CodeParser`LeafNode[Token`Comma, ",", <|
-                    CodeParser`Source -> {{1734, 99}, {1734, 100}}|>], 
+                    CodeParser`LeafNode[
+                    Token`Comma, ",", <|CodeParser`Source -> {{1734, 99}, {
+                    1734, 100}}|>], 
                     CodeParser`LeafNode[
                     Integer, "2", <|CodeParser`Source -> {{1734, 100}, {1734, 
                     101}}|>], 
@@ -12979,7 +13100,7 @@ Rule[StripOnInput, False]]\\)\""}, "RowDefault"]}, "RowDefault"] :>
               DefinitionNotebookClient`PackageScope`setHint[
                "Suggestion", "Paclet", 
                 DefinitionNotebookClient`$CurrentNotebook, 
-                "892e3b85-2fa0-4950-b57e-9630747fb473", 1793395476, 
+                "bfd1f1e3-588d-4891-9bb5-afcad1e27b8b", 1793395476, 
                 "CodeInspectionFileIssue/SuspiciousSessionSymbol", <|
                 "File" -> 
                  "/Users/schicho/Documents/hep/DRalgo/DRalgo/Kernel/HEFT.m", 
@@ -13025,7 +13146,7 @@ Rule[StripOnInput, False]]\\)\""}, "RowDefault"]}, "RowDefault"] :>
               DefinitionNotebookClient`PackageScope`setHint[
                "Suggestion", "Paclet", 
                 DefinitionNotebookClient`$CurrentNotebook, 
-                "473216ea-10c5-4d48-83be-d13799737604", 1793395476, 
+                "6cc7f74e-0ffa-4407-86d2-fda0edcfd0da", 1793395476, 
                 "CodeInspectionFileIssue/SuspiciousSessionSymbol", <|
                 "File" -> 
                  "/Users/schicho/Documents/hep/DRalgo/DRalgo/Kernel/HEFT.m", 
@@ -13071,7 +13192,7 @@ Rule[StripOnInput, False]]\\)\""}, "RowDefault"]}, "RowDefault"] :>
               DefinitionNotebookClient`PackageScope`setHint[
                "Suggestion", "Paclet", 
                 DefinitionNotebookClient`$CurrentNotebook, 
-                "6c0d71fb-5d7f-4071-8964-98a6c565a244", 1793395476, 
+                "41a5bae0-f6ad-409e-8452-994f4fc7f789", 1793395476, 
                 "CodeInspectionFileIssue/SuspiciousSessionSymbol", <|
                 "File" -> 
                  "/Users/schicho/Documents/hep/DRalgo/DRalgo/Kernel/HEFT.m", 
@@ -13117,7 +13238,7 @@ Rule[StripOnInput, False]]\\)\""}, "RowDefault"]}, "RowDefault"] :>
               DefinitionNotebookClient`PackageScope`setHint[
                "Suggestion", "Paclet", 
                 DefinitionNotebookClient`$CurrentNotebook, 
-                "f2006939-faec-4869-b28c-c6295bd21e0d", 1793395476, 
+                "f9fd403f-44a7-4b20-90b7-1b29f6d9bd97", 1793395476, 
                 "CodeInspectionFileIssue/SuspiciousSessionSymbol", <|
                 "File" -> 
                  "/Users/schicho/Documents/hep/DRalgo/DRalgo/Kernel/HEFT.m", 
@@ -13163,7 +13284,7 @@ Rule[StripOnInput, False]]\\)\""}, "RowDefault"]}, "RowDefault"] :>
               DefinitionNotebookClient`PackageScope`setHint[
                "Suggestion", "Paclet", 
                 DefinitionNotebookClient`$CurrentNotebook, 
-                "a773f003-f193-468e-875f-ab73d82a2cce", 1793395476, 
+                "d25f9164-3136-45ec-a7f0-940664e385e6", 1793395476, 
                 "CodeInspectionFileIssue/SuspiciousSessionSymbol", <|
                 "File" -> 
                  "/Users/schicho/Documents/hep/DRalgo/DRalgo/Kernel/HEFT.m", 
@@ -13209,7 +13330,7 @@ Rule[StripOnInput, False]]\\)\""}, "RowDefault"]}, "RowDefault"] :>
               DefinitionNotebookClient`PackageScope`setHint[
                "Suggestion", "Paclet", 
                 DefinitionNotebookClient`$CurrentNotebook, 
-                "f9292c1a-b442-4d10-8a1a-32dcfba00591", 1793395476, 
+                "de08f396-eeb6-4cf5-8f06-579a467ed0fa", 1793395476, 
                 "CodeInspectionFileIssue/SuspiciousSessionSymbol", <|
                 "File" -> 
                  "/Users/schicho/Documents/hep/DRalgo/DRalgo/Kernel/HEFT.m", 
@@ -13252,7 +13373,7 @@ Rule[StripOnInput, False]]\\)\""}, "RowDefault"]}, "RowDefault"] :>
                "Paclet", DefinitionNotebookClient`$CurrentNotebook]; 
               DefinitionNotebookClient`PackageScope`setHint[
                "Warning", "Paclet", DefinitionNotebookClient`$CurrentNotebook,
-                 "f76cc5cb-a4f7-45bd-b923-14847201ebb9", 1793395476, 
+                 "33328a30-3041-49c0-b367-ff5cb2658f88", 1793395476, 
                 "CodeInspectionFileIssue/PatternRule", <|
                 "AdditionalSources" -> {{{208, 81}, {208, 82}}}, "File" -> 
                  "/Users/schicho/Documents/hep/DRalgo/DRalgo/Kernel/HEFT.m", 
@@ -13298,7 +13419,7 @@ Rule[StripOnInput, False]]\\)\""}, "RowDefault"]}, "RowDefault"] :>
                "Paclet", DefinitionNotebookClient`$CurrentNotebook]; 
               DefinitionNotebookClient`PackageScope`setHint[
                "Warning", "Paclet", DefinitionNotebookClient`$CurrentNotebook,
-                 "ff4d468b-ac19-4106-b1ff-aae49e3911a3", 1793395476, 
+                 "fa9cfbff-01f4-442c-915a-d61ef254b75b", 1793395476, 
                 "CodeInspectionFileIssue/PatternRule", <|
                 "AdditionalSources" -> {{{208, 83}, {208, 84}}}, "File" -> 
                  "/Users/schicho/Documents/hep/DRalgo/DRalgo/Kernel/HEFT.m", 
@@ -13320,7 +13441,6 @@ List[Rule[\"OperatorSubstitution\", False]]], Rule[StripOnInput, False]]\)",
                     "File" -> 
                     "/Users/schicho/Documents/hep/DRalgo/DRalgo/Kernel/HEFT.\
 m", "Editor" -> Automatic|>], "Hash" -> 2973124648927536973, "Position" -> 
-                 
                  "\!\(\*StyleBox[\"\\\" (L208,C51) \\\"\", Rule[FontOpacity, \
 0.65`], Rule[FontSize, Times[0.9`, Inherited]], Rule[PrivateFontOptions, \
 List[Rule[\"OperatorSubstitution\", False]]], Rule[StripOnInput, \
@@ -13345,7 +13465,7 @@ Rule[StripOnInput, False]]\\)\""}, "RowDefault"]}, "RowDefault"] :>
                "Paclet", DefinitionNotebookClient`$CurrentNotebook]; 
               DefinitionNotebookClient`PackageScope`setHint[
                "Warning", "Paclet", DefinitionNotebookClient`$CurrentNotebook,
-                 "be23a013-9c35-4250-9a93-4b3c585df647", 1793395476, 
+                 "a4324f0d-6c33-4ba7-bc49-f3757efb8d4c", 1793395476, 
                 "CodeInspectionFileIssue/PatternRule", <|
                 "AdditionalSources" -> {{{212, 93}, {212, 94}}}, "File" -> 
                  "/Users/schicho/Documents/hep/DRalgo/DRalgo/Kernel/HEFT.m", 
@@ -13391,7 +13511,7 @@ Rule[StripOnInput, False]]\\)\""}, "RowDefault"]}, "RowDefault"] :>
                "Paclet", DefinitionNotebookClient`$CurrentNotebook]; 
               DefinitionNotebookClient`PackageScope`setHint[
                "Warning", "Paclet", DefinitionNotebookClient`$CurrentNotebook,
-                 "9aaea3e9-b276-4d44-bb52-a459041777f6", 1793395476, 
+                 "3d6e8d0f-1300-435c-9b34-c2cb82bcad25", 1793395476, 
                 "CodeInspectionFileIssue/PatternRule", <|
                 "AdditionalSources" -> {{{212, 95}, {212, 96}}}, "File" -> 
                  "/Users/schicho/Documents/hep/DRalgo/DRalgo/Kernel/HEFT.m", 
@@ -13440,7 +13560,7 @@ False]]], Rule[StripOnInput, False]]\\)\""}, "RowDefault"]}, "RowDefault"] :>
               DefinitionNotebookClient`PackageScope`setHint[
                "Suggestion", "Paclet", 
                 DefinitionNotebookClient`$CurrentNotebook, 
-                "a4ad8178-5a1d-4197-9ec8-f54c2b80c2c7", 1664779487, 
+                "50ed94ed-c9ba-4bec-8e80-f79548105ecb", 1664779487, 
                 "CodeInspectionFileIssue/UnexpectedSemicolon", <|
                 "File" -> 
                  "/Users/schicho/Documents/hep/DRalgo/DRalgo/Kernel/\
@@ -13486,7 +13606,7 @@ False]]], Rule[StripOnInput, False]]\\)\""}, "RowDefault"]}, "RowDefault"] :>
               DefinitionNotebookClient`PackageScope`setHint[
                "Suggestion", "Paclet", 
                 DefinitionNotebookClient`$CurrentNotebook, 
-                "29c76e2f-338c-43fd-92fa-b1abb40ea6bf", 1664779487, 
+                "4bd2eaae-f27a-4d61-a571-2d7b277c9f6c", 1664779487, 
                 "CodeInspectionFileIssue/UnexpectedSemicolon", <|
                 "File" -> 
                  "/Users/schicho/Documents/hep/DRalgo/DRalgo/Kernel/\
@@ -13529,7 +13649,7 @@ Rule[StripOnInput, False]]\\)\""}, "RowDefault"]}, "RowDefault"] :>
                "Paclet", DefinitionNotebookClient`$CurrentNotebook]; 
               DefinitionNotebookClient`PackageScope`setHint[
                "Warning", "Paclet", DefinitionNotebookClient`$CurrentNotebook,
-                 "2a8b61df-d98e-4538-a146-728a7704400f", 1664779487, 
+                 "11319053-e913-4266-b8de-b56d6af0fc18", 1664779487, 
                 "CodeInspectionFileIssue/PatternRule", <|
                 "AdditionalSources" -> {{{40, 43}, {40, 44}}}, "File" -> 
                  "/Users/schicho/Documents/hep/DRalgo/DRalgo/Kernel/\
@@ -13576,7 +13696,7 @@ Rule[StripOnInput, False]]\\)\""}, "RowDefault"]}, "RowDefault"] :>
                "Paclet", DefinitionNotebookClient`$CurrentNotebook]; 
               DefinitionNotebookClient`PackageScope`setHint[
                "Warning", "Paclet", DefinitionNotebookClient`$CurrentNotebook,
-                 "74cb088c-68a2-4c31-a241-5e5c23a032f7", 1664779487, 
+                 "5714fa3c-0d9b-474a-a06b-5e5b36866c82", 1664779487, 
                 "CodeInspectionFileIssue/PatternRule", <|
                 "AdditionalSources" -> {{{334, 73}, {334, 74}}}, "File" -> 
                  "/Users/schicho/Documents/hep/DRalgo/DRalgo/Kernel/\
@@ -13623,7 +13743,7 @@ Rule[StripOnInput, False]]\\)\""}, "RowDefault"]}, "RowDefault"] :>
                "Paclet", DefinitionNotebookClient`$CurrentNotebook]; 
               DefinitionNotebookClient`PackageScope`setHint[
                "Warning", "Paclet", DefinitionNotebookClient`$CurrentNotebook,
-                 "8a8280d6-8461-4e11-926a-9a3110f8f879", 1664779487, 
+                 "3080ac34-104f-48b3-ad6b-bd2aa160da8f", 1664779487, 
                 "CodeInspectionFileIssue/PatternRule", <|
                 "AdditionalSources" -> {{{338, 55}, {338, 56}}}, "File" -> 
                  "/Users/schicho/Documents/hep/DRalgo/DRalgo/Kernel/\
@@ -13670,7 +13790,7 @@ Rule[StripOnInput, False]]\\)\""}, "RowDefault"]}, "RowDefault"] :>
                "Paclet", DefinitionNotebookClient`$CurrentNotebook]; 
               DefinitionNotebookClient`PackageScope`setHint[
                "Warning", "Paclet", DefinitionNotebookClient`$CurrentNotebook,
-                 "60a44026-eea9-46f8-9810-def84e6627a6", 1664779487, 
+                 "2b997c0f-528c-4ca1-b770-75df45202f4f", 1664779487, 
                 "CodeInspectionFileIssue/PatternRule", <|
                 "AdditionalSources" -> {{{349, 73}, {349, 74}}}, "File" -> 
                  "/Users/schicho/Documents/hep/DRalgo/DRalgo/Kernel/\
@@ -13717,7 +13837,7 @@ Rule[StripOnInput, False]]\\)\""}, "RowDefault"]}, "RowDefault"] :>
                "Paclet", DefinitionNotebookClient`$CurrentNotebook]; 
               DefinitionNotebookClient`PackageScope`setHint[
                "Warning", "Paclet", DefinitionNotebookClient`$CurrentNotebook,
-                 "40e54d3c-5777-43b0-a7ed-a7c72825ef8a", 1664779487, 
+                 "17b19dfd-d24b-48c8-9a8b-1c042b2ac34a", 1664779487, 
                 "CodeInspectionFileIssue/PatternRule", <|
                 "AdditionalSources" -> {{{353, 55}, {353, 56}}}, "File" -> 
                  "/Users/schicho/Documents/hep/DRalgo/DRalgo/Kernel/\
@@ -13764,7 +13884,7 @@ Rule[StripOnInput, False]]\\)\""}, "RowDefault"]}, "RowDefault"] :>
                "Paclet", DefinitionNotebookClient`$CurrentNotebook]; 
               DefinitionNotebookClient`PackageScope`setHint[
                "Warning", "Paclet", DefinitionNotebookClient`$CurrentNotebook,
-                 "7af2257d-257f-4e4b-bd38-593dded20e0a", 1664779487, 
+                 "33ec00ea-9c09-4cc3-b6cc-e56627ecbfac", 1664779487, 
                 "CodeInspectionFileIssue/PatternRule", <|
                 "AdditionalSources" -> {{{388, 74}, {388, 75}}}, "File" -> 
                  "/Users/schicho/Documents/hep/DRalgo/DRalgo/Kernel/\
@@ -13811,7 +13931,7 @@ Rule[StripOnInput, False]]\\)\""}, "RowDefault"]}, "RowDefault"] :>
                "Paclet", DefinitionNotebookClient`$CurrentNotebook]; 
               DefinitionNotebookClient`PackageScope`setHint[
                "Warning", "Paclet", DefinitionNotebookClient`$CurrentNotebook,
-                 "e223cec8-07fc-4273-b21c-04217a274eb5", 1664779487, 
+                 "2b9ad923-6b73-4f93-b0d1-a484cb059457", 1664779487, 
                 "CodeInspectionFileIssue/PatternRule", <|
                 "AdditionalSources" -> {{{392, 54}, {392, 55}}}, "File" -> 
                  "/Users/schicho/Documents/hep/DRalgo/DRalgo/Kernel/\
@@ -13861,7 +13981,7 @@ Rule[StripOnInput, False]]\\)\""}, "RowDefault"]}, "RowDefault"] :>
               DefinitionNotebookClient`PackageScope`setHint[
                "Suggestion", "Paclet", 
                 DefinitionNotebookClient`$CurrentNotebook, 
-                "ca5d9533-e32a-4f97-9a67-f2f4d51fa09d", 384401246, 
+                "b90e9304-6421-4e5f-bccf-d7f80830097f", 384401246, 
                 "CodeInspectionFileIssue/SuspiciousSessionSymbol", <|
                 "File" -> 
                  "/Users/schicho/Documents/hep/DRalgo/DRalgo/Kernel/SoftToUS.\
@@ -13907,7 +14027,7 @@ Rule[StripOnInput, False]]\\)\""}, "RowDefault"]}, "RowDefault"] :>
               DefinitionNotebookClient`PackageScope`setHint[
                "Suggestion", "Paclet", 
                 DefinitionNotebookClient`$CurrentNotebook, 
-                "e027cb78-a7ff-4ee5-a901-e50053e14f6e", 384401246, 
+                "fbd0fbff-4a5d-4b66-b416-b493d1930471", 384401246, 
                 "CodeInspectionFileIssue/SuspiciousSessionSymbol", <|
                 "File" -> 
                  "/Users/schicho/Documents/hep/DRalgo/DRalgo/Kernel/SoftToUS.\
@@ -13953,7 +14073,7 @@ Rule[StripOnInput, False]]\\)\""}, "RowDefault"]}, "RowDefault"] :>
               DefinitionNotebookClient`PackageScope`setHint[
                "Suggestion", "Paclet", 
                 DefinitionNotebookClient`$CurrentNotebook, 
-                "46922a81-8277-4686-8077-a2f72da3ffdd", 384401246, 
+                "772f68f0-0d6f-4f05-b916-f5e7d6b7a3df", 384401246, 
                 "CodeInspectionFileIssue/SuspiciousSessionSymbol", <|
                 "File" -> 
                  "/Users/schicho/Documents/hep/DRalgo/DRalgo/Kernel/SoftToUS.\
@@ -14000,7 +14120,7 @@ Rule[StripOnInput, False]]\\)\""}, "RowDefault"]}, "RowDefault"] :>
               DefinitionNotebookClient`PackageScope`setHint[
                "Suggestion", "Paclet", 
                 DefinitionNotebookClient`$CurrentNotebook, 
-                "80d43d08-a4a8-4971-ad89-c57713d564ed", 384401246, 
+                "5f1805ef-d1ea-4fca-ba0a-c31acbb75757", 384401246, 
                 "CodeInspectionFileIssue/SuspiciousSessionSymbol", <|
                 "File" -> 
                  "/Users/schicho/Documents/hep/DRalgo/DRalgo/Kernel/SoftToUS.\
@@ -14047,7 +14167,7 @@ Rule[StripOnInput, False]]\\)\""}, "RowDefault"]}, "RowDefault"] :>
               DefinitionNotebookClient`PackageScope`setHint[
                "Suggestion", "Paclet", 
                 DefinitionNotebookClient`$CurrentNotebook, 
-                "2b9fca39-0359-4d29-821e-2c852d79edcd", 384401246, 
+                "57b51e47-2c58-4121-9a44-bd9b558ca32d", 384401246, 
                 "CodeInspectionFileIssue/SuspiciousSessionSymbol", <|
                 "File" -> 
                  "/Users/schicho/Documents/hep/DRalgo/DRalgo/Kernel/SoftToUS.\
@@ -14094,7 +14214,7 @@ Rule[StripOnInput, False]]\\)\""}, "RowDefault"]}, "RowDefault"] :>
               DefinitionNotebookClient`PackageScope`setHint[
                "Suggestion", "Paclet", 
                 DefinitionNotebookClient`$CurrentNotebook, 
-                "0f5ceaf6-50da-4751-8f6a-6ccc168a1bf8", 384401246, 
+                "96c2bce9-3eec-493a-9ec4-788932cd38a6", 384401246, 
                 "CodeInspectionFileIssue/SuspiciousSessionSymbol", <|
                 "File" -> 
                  "/Users/schicho/Documents/hep/DRalgo/DRalgo/Kernel/SoftToUS.\
@@ -14141,7 +14261,7 @@ Rule[StripOnInput, False]]\\)\""}, "RowDefault"]}, "RowDefault"] :>
               DefinitionNotebookClient`PackageScope`setHint[
                "Suggestion", "Paclet", 
                 DefinitionNotebookClient`$CurrentNotebook, 
-                "db541282-59fc-421c-a11a-bddc2d7728eb", 384401246, 
+                "841b8dd8-4d0e-41a0-99a8-aa51c3c69522", 384401246, 
                 "CodeInspectionFileIssue/SuspiciousSessionSymbol", <|
                 "File" -> 
                  "/Users/schicho/Documents/hep/DRalgo/DRalgo/Kernel/SoftToUS.\
@@ -14188,7 +14308,7 @@ Rule[StripOnInput, False]]\\)\""}, "RowDefault"]}, "RowDefault"] :>
               DefinitionNotebookClient`PackageScope`setHint[
                "Suggestion", "Paclet", 
                 DefinitionNotebookClient`$CurrentNotebook, 
-                "c451cf5e-2b02-464e-8f53-f21dac00acec", 384401246, 
+                "ece4217a-8de4-4d15-86e5-ccbc692cc3f9", 384401246, 
                 "CodeInspectionFileIssue/SuspiciousSessionSymbol", <|
                 "File" -> 
                  "/Users/schicho/Documents/hep/DRalgo/DRalgo/Kernel/SoftToUS.\
@@ -14235,7 +14355,7 @@ Rule[StripOnInput, False]]\\)\""}, "RowDefault"]}, "RowDefault"] :>
               DefinitionNotebookClient`PackageScope`setHint[
                "Suggestion", "Paclet", 
                 DefinitionNotebookClient`$CurrentNotebook, 
-                "80a8daec-776c-49f0-b77d-fe48b3e2721c", 384401246, 
+                "0962fa4c-4199-4f44-9be6-5e52ba9612e3", 384401246, 
                 "CodeInspectionFileIssue/UnexpectedSpaceCharacter", <|
                 "File" -> 
                  "/Users/schicho/Documents/hep/DRalgo/DRalgo/Kernel/SoftToUS.\
@@ -14272,7 +14392,6 @@ False]]\)"|>]; DefinitionNotebookClient`PackageScope`seekAfter[384401246];
                  StyleBox[
                  "Print", "Program", FontWeight -> Medium, 
                   ShowStringCharacters -> True, StripOnInput -> False], 
-                 
                  "\".\\!\\(\\*StyleBox[\\\"\\\\\\\" (L565,C12) \\\\\\\"\\\", \
 Rule[FontOpacity, 0.65`], Rule[FontSize, Times[0.9`, Inherited]], \
 Rule[PrivateFontOptions, List[Rule[\\\"OperatorSubstitution\\\", False]]], \
@@ -14284,7 +14403,7 @@ Rule[StripOnInput, False]]\\)\""}, "RowDefault"]}, "RowDefault"] :>
               DefinitionNotebookClient`PackageScope`setHint[
                "Suggestion", "Paclet", 
                 DefinitionNotebookClient`$CurrentNotebook, 
-                "5f95054b-8aed-4df8-9458-9586926239b4", 384401246, 
+                "4b081ccb-d5ec-4e9c-b054-45b961556e66", 384401246, 
                 "CodeInspectionFileIssue/SuspiciousSessionSymbol", <|
                 "File" -> 
                  "/Users/schicho/Documents/hep/DRalgo/DRalgo/Kernel/SoftToUS.\
@@ -14331,7 +14450,7 @@ Rule[StripOnInput, False]]\\)\""}, "RowDefault"]}, "RowDefault"] :>
               DefinitionNotebookClient`PackageScope`setHint[
                "Suggestion", "Paclet", 
                 DefinitionNotebookClient`$CurrentNotebook, 
-                "b99f3213-dcd2-4f3e-b1a8-af247a6f7fad", 384401246, 
+                "f6161410-c0ee-48d7-bd8b-2a9f94763df1", 384401246, 
                 "CodeInspectionFileIssue/SuspiciousSessionSymbol", <|
                 "File" -> 
                  "/Users/schicho/Documents/hep/DRalgo/DRalgo/Kernel/SoftToUS.\
@@ -14375,7 +14494,7 @@ Rule[StripOnInput, False]]\\)\""}, "RowDefault"]}, "RowDefault"] :>
                "Paclet", DefinitionNotebookClient`$CurrentNotebook]; 
               DefinitionNotebookClient`PackageScope`setHint[
                "Warning", "Paclet", DefinitionNotebookClient`$CurrentNotebook,
-                 "2ce8b427-1b88-488e-b905-dd9e0bab7229", 384401246, 
+                 "360d5a26-f2ba-43bb-a6c0-23a49f7ce4ce", 384401246, 
                 "CodeInspectionFileIssue/PatternRule", <|
                 "AdditionalSources" -> {{{755, 72}, {755, 73}}}, "File" -> 
                  "/Users/schicho/Documents/hep/DRalgo/DRalgo/Kernel/SoftToUS.\
@@ -14422,7 +14541,7 @@ Rule[StripOnInput, False]]\\)\""}, "RowDefault"]}, "RowDefault"] :>
                "Paclet", DefinitionNotebookClient`$CurrentNotebook]; 
               DefinitionNotebookClient`PackageScope`setHint[
                "Warning", "Paclet", DefinitionNotebookClient`$CurrentNotebook,
-                 "d2befb6e-9c0a-4d3f-8540-f1dfdafe091c", 384401246, 
+                 "55ed19e7-24a5-494b-8655-43c0c95cf83c", 384401246, 
                 "CodeInspectionFileIssue/PatternRule", <|
                 "AdditionalSources" -> {{{756, 102}, {756, 103}}}, "File" -> 
                  "/Users/schicho/Documents/hep/DRalgo/DRalgo/Kernel/SoftToUS.\
@@ -14469,7 +14588,7 @@ Rule[StripOnInput, False]]\\)\""}, "RowDefault"]}, "RowDefault"] :>
                "Paclet", DefinitionNotebookClient`$CurrentNotebook]; 
               DefinitionNotebookClient`PackageScope`setHint[
                "Warning", "Paclet", DefinitionNotebookClient`$CurrentNotebook,
-                 "23caa790-c302-4375-897e-61ec8f322b2c", 384401246, 
+                 "af67fd85-e4fb-4133-b291-180960d33fa3", 384401246, 
                 "CodeInspectionFileIssue/PatternRule", <|
                 "AdditionalSources" -> {{{763, 69}, {763, 70}}}, "File" -> 
                  "/Users/schicho/Documents/hep/DRalgo/DRalgo/Kernel/SoftToUS.\
@@ -14516,7 +14635,7 @@ Rule[StripOnInput, False]]\\)\""}, "RowDefault"]}, "RowDefault"] :>
                "Paclet", DefinitionNotebookClient`$CurrentNotebook]; 
               DefinitionNotebookClient`PackageScope`setHint[
                "Warning", "Paclet", DefinitionNotebookClient`$CurrentNotebook,
-                 "219150c4-d1a1-4ba8-8526-ee44fd8bea6b", 384401246, 
+                 "0342f8fc-bf94-4b9a-bcba-f22712d42229", 384401246, 
                 "CodeInspectionFileIssue/PatternRule", <|
                 "AdditionalSources" -> {{{908, 76}, {908, 77}}}, "File" -> 
                  "/Users/schicho/Documents/hep/DRalgo/DRalgo/Kernel/SoftToUS.\
@@ -14563,7 +14682,7 @@ Rule[StripOnInput, False]]\\)\""}, "RowDefault"]}, "RowDefault"] :>
                "Paclet", DefinitionNotebookClient`$CurrentNotebook]; 
               DefinitionNotebookClient`PackageScope`setHint[
                "Warning", "Paclet", DefinitionNotebookClient`$CurrentNotebook,
-                 "d1a8264b-7b8c-4474-be8f-0920d50becba", 384401246, 
+                 "39884673-9d48-46e9-8875-6a2512570242", 384401246, 
                 "CodeInspectionFileIssue/PatternRule", <|
                 "AdditionalSources" -> {{{908, 81}, {908, 82}}}, "File" -> 
                  "/Users/schicho/Documents/hep/DRalgo/DRalgo/Kernel/SoftToUS.\
@@ -14610,7 +14729,7 @@ Rule[StripOnInput, False]]\\)\""}, "RowDefault"]}, "RowDefault"] :>
                "Paclet", DefinitionNotebookClient`$CurrentNotebook]; 
               DefinitionNotebookClient`PackageScope`setHint[
                "Warning", "Paclet", DefinitionNotebookClient`$CurrentNotebook,
-                 "c97fd62d-4f2a-4c42-b359-45425b919e77", 384401246, 
+                 "2c2491fa-614e-40b7-ae9a-ed14ce3291c3", 384401246, 
                 "CodeInspectionFileIssue/PatternRule", <|
                 "AdditionalSources" -> {{{908, 86}, {908, 87}}}, "File" -> 
                  "/Users/schicho/Documents/hep/DRalgo/DRalgo/Kernel/SoftToUS.\
@@ -14657,7 +14776,7 @@ Rule[StripOnInput, False]]\\)\""}, "RowDefault"]}, "RowDefault"] :>
                "Paclet", DefinitionNotebookClient`$CurrentNotebook]; 
               DefinitionNotebookClient`PackageScope`setHint[
                "Warning", "Paclet", DefinitionNotebookClient`$CurrentNotebook,
-                 "fb75b225-181f-406d-b1c8-324edf8e1273", 384401246, 
+                 "617fba02-a5bb-4c3f-8342-bd04d6819553", 384401246, 
                 "CodeInspectionFileIssue/PatternRule", <|
                 "AdditionalSources" -> {{{908, 91}, {908, 92}}}, "File" -> 
                  "/Users/schicho/Documents/hep/DRalgo/DRalgo/Kernel/SoftToUS.\
@@ -14704,7 +14823,7 @@ Rule[StripOnInput, False]]\\)\""}, "RowDefault"]}, "RowDefault"] :>
                "Paclet", DefinitionNotebookClient`$CurrentNotebook]; 
               DefinitionNotebookClient`PackageScope`setHint[
                "Warning", "Paclet", DefinitionNotebookClient`$CurrentNotebook,
-                 "98359ee5-8da6-411c-b3a8-213c7db414fe", 384401246, 
+                 "248f8039-5d9f-40cd-856e-01dc4dea05f2", 384401246, 
                 "CodeInspectionFileIssue/PatternRule", <|
                 "AdditionalSources" -> {{{909, 79}, {909, 80}}}, "File" -> 
                  "/Users/schicho/Documents/hep/DRalgo/DRalgo/Kernel/SoftToUS.\
@@ -14751,7 +14870,7 @@ Rule[StripOnInput, False]]\\)\""}, "RowDefault"]}, "RowDefault"] :>
                "Paclet", DefinitionNotebookClient`$CurrentNotebook]; 
               DefinitionNotebookClient`PackageScope`setHint[
                "Warning", "Paclet", DefinitionNotebookClient`$CurrentNotebook,
-                 "55aa2407-8cb0-418f-aaad-2a236e0b5564", 384401246, 
+                 "b6755ff0-44b7-4246-b2e7-dae2ce662ff5", 384401246, 
                 "CodeInspectionFileIssue/PatternRule", <|
                 "AdditionalSources" -> {{{909, 81}, {909, 82}}}, "File" -> 
                  "/Users/schicho/Documents/hep/DRalgo/DRalgo/Kernel/SoftToUS.\
@@ -14798,7 +14917,7 @@ Rule[StripOnInput, False]]\\)\""}, "RowDefault"]}, "RowDefault"] :>
                "Paclet", DefinitionNotebookClient`$CurrentNotebook]; 
               DefinitionNotebookClient`PackageScope`setHint[
                "Warning", "Paclet", DefinitionNotebookClient`$CurrentNotebook,
-                 "c9cbe6b5-ea76-4bc6-b543-0fd00126d5e7", 384401246, 
+                 "a534955b-db0f-4493-b2ae-9dd73d2713d5", 384401246, 
                 "CodeInspectionFileIssue/PatternRule", <|
                 "AdditionalSources" -> {{{909, 83}, {909, 84}}}, "File" -> 
                  "/Users/schicho/Documents/hep/DRalgo/DRalgo/Kernel/SoftToUS.\
@@ -14841,7 +14960,7 @@ False]]\)"|>]; DefinitionNotebookClient`PackageScope`seekAfter[384401246];
               DefinitionNotebookClient`PackageScope`setHint[
                "Suggestion", "Paclet", 
                 DefinitionNotebookClient`$CurrentNotebook, 
-                "340183a8-f335-45bd-af0c-9154b1bdca80", 1062907304, 
+                "a637a296-544d-4d00-8cdf-f07957bca707", 1062907304, 
                 "InvalidFirstVersion", <|
                 "Current" -> "1.3.0", "Published" -> None, 
                  "Selection" -> ("Version" -> "1.3.0"), "PublisherID" -> 
@@ -14863,7 +14982,7 @@ publisher ID (PhilippSchicho)\""}, "RowDefault"] :>
                "Paclet", DefinitionNotebookClient`$CurrentNotebook]; 
               DefinitionNotebookClient`PackageScope`setHint[
                "Warning", "Paclet", DefinitionNotebookClient`$CurrentNotebook,
-                 "fb4c7062-9a74-42b4-b9c3-8a42ba622069", 1062907304, 
+                 "2277044a-b24a-4c68-947f-a833c1740a73", 1062907304, 
                 "NotCurrentPublisherID", <|
                 "Current" -> "PhilippSchicho", "PublisherID" -> "DRalgo", 
                  "PublisherSlug" -> "DRalgo", "None" -> None, 
@@ -14888,7 +15007,7 @@ than 1.25\""}, "RowDefault"] :> DefinitionNotebookClient`WithCurrentNotebook[
               DefinitionNotebookClient`PackageScope`setHint[
                "Suggestion", "Paclet", 
                 DefinitionNotebookClient`$CurrentNotebook, 
-                "3fef97da-a05e-48b6-892f-7cd3c427a797", 445097320, 
+                "65746dc4-b980-4693-a3be-6b572b72ccff", 445097320, 
                 "HeroImageStretched", <|
                 "Actual" -> Rational[551, 400], "Expected" -> 1.25, "Resize" -> {
                    Scaled[1], 
@@ -14913,7 +15032,7 @@ than 1.25\""}, "RowDefault"] :> DefinitionNotebookClient`WithCurrentNotebook[
               DefinitionNotebookClient`PackageScope`setHint[
                "Suggestion", "Paclet", 
                 DefinitionNotebookClient`$CurrentNotebook, 
-                "88d72bf8-0e1d-468f-86ab-fd6a33c3c140", 889292814, 
+                "c6233537-ffea-4d9a-a07d-bddab447e044", 889292814, 
                 "ExtraWhitespace", {
                  Cell[
                   
@@ -14959,7 +15078,7 @@ calculations, Comput. Phys. Commun. 267 (2021) 108085 [2011.01764]"}],
                "Paclet", DefinitionNotebookClient`$CurrentNotebook]; 
               DefinitionNotebookClient`PackageScope`setHint[
                "Warning", "Paclet", DefinitionNotebookClient`$CurrentNotebook,
-                 "895fb1a3-064e-4a26-896d-9ce4f5b1dae8", 758488118, 
+                 "d237e6e5-1ffb-419b-9cdc-5739e0f8105a", 758488118, 
                 "UnableToUseCell", {}]; 
               DefinitionNotebookClient`PackageScope`seekAfter[758488118]; 
               Null], TemplateBox[{
@@ -14979,7 +15098,7 @@ appearing before input\""}, "RowDefault"] :>
               DefinitionNotebookClient`PackageScope`setHint[
                "Suggestion", "Paclet", 
                 DefinitionNotebookClient`$CurrentNotebook, 
-                "854421c1-6277-4429-b4ae-df622de6f863", 7255244, 
+                "db5e2034-62eb-4873-ae6a-7d6ee5ff0a13", 7255244, 
                 "ExampleTextLastCharacter", {}]; 
               DefinitionNotebookClient`PackageScope`seekAfter[7255244]; Null],
              TemplateBox[{
@@ -14999,7 +15118,7 @@ appearing before input\""}, "RowDefault"] :>
               DefinitionNotebookClient`PackageScope`setHint[
                "Suggestion", "Paclet", 
                 DefinitionNotebookClient`$CurrentNotebook, 
-                "3040d776-ab6d-42a5-afed-42f392c1f05d", 776235138, 
+                "d57ba3fd-d1ea-47a3-b57b-68104926a5f7", 776235138, 
                 "ExampleTextLastCharacter", {}]; 
               DefinitionNotebookClient`PackageScope`seekAfter[776235138]; 
               Null], TemplateBox[{
@@ -15019,7 +15138,7 @@ appearing before input\""}, "RowDefault"] :>
               DefinitionNotebookClient`PackageScope`setHint[
                "Suggestion", "Paclet", 
                 DefinitionNotebookClient`$CurrentNotebook, 
-                "b46a8b99-4be7-4a5d-a9e9-5b11f65be5da", 1996365978, 
+                "2d20cd29-da8d-40fb-a7e9-962984fd30e3", 1996365978, 
                 "ExampleTextLastCharacter", {}]; 
               DefinitionNotebookClient`PackageScope`seekAfter[1996365978]; 
               Null], TemplateBox[{
@@ -15039,7 +15158,7 @@ single output\""}, "RowDefault"] :>
               DefinitionNotebookClient`PackageScope`setHint[
                "Suggestion", "Paclet", 
                 DefinitionNotebookClient`$CurrentNotebook, 
-                "385f03bf-9d73-4f6b-8b28-8e2520edb4ce", 1802971633, 
+                "3cbe47b6-e4eb-4372-b349-e81b4084603b", 1802971633, 
                 "MultipleOutputs", {}]; 
               DefinitionNotebookClient`PackageScope`seekAfter[1802971633]; 
               Null], TemplateBox[{
@@ -15059,7 +15178,7 @@ single output\""}, "RowDefault"] :>
               DefinitionNotebookClient`PackageScope`setHint[
                "Suggestion", "Paclet", 
                 DefinitionNotebookClient`$CurrentNotebook, 
-                "bf2426a9-cdb9-4b43-ad59-627636406202", 245311045, 
+                "3b6b383f-f6c6-4b52-9d7d-3861c0303203", 245311045, 
                 "MultipleOutputs", {}]; 
               DefinitionNotebookClient`PackageScope`seekAfter[245311045]; 
               Null], TemplateBox[{
@@ -15079,7 +15198,7 @@ single output\""}, "RowDefault"] :>
               DefinitionNotebookClient`PackageScope`setHint[
                "Suggestion", "Paclet", 
                 DefinitionNotebookClient`$CurrentNotebook, 
-                "c112c711-07ae-465a-a47a-60c08c439a14", 439087537, 
+                "7f95b27a-68f3-4836-b915-9b2cf1a1cdd1", 439087537, 
                 "MultipleOutputs", {}]; 
               DefinitionNotebookClient`PackageScope`seekAfter[439087537]; 
               Null], TemplateBox[{
@@ -15088,7 +15207,6 @@ single output\""}, "RowDefault"] :>
                   RGBColor[1., 0.4627450980392157, 0.]}, "HintPodIconHint"], 
                 ImageSize -> {10, 10}, ImageSizeAction -> "ShrinkToFit", 
                 BaselinePosition -> Scaled[0.1]], "\" \"", 
-               
                "\"This cell takes up a large amount of screen area. Consider \
 reducing the size to avoid potential issues.\""}, "RowDefault"] :> 
             DefinitionNotebookClient`WithCurrentNotebook[
@@ -15097,14 +15215,14 @@ reducing the size to avoid potential issues.\""}, "RowDefault"] :>
                "Paclet", DefinitionNotebookClient`$CurrentNotebook]; 
               DefinitionNotebookClient`PackageScope`setHint[
                "Warning", "Paclet", DefinitionNotebookClient`$CurrentNotebook,
-                 "1a165f79-a9ec-4be6-bfcb-f5204df0d908", 2077908969, 
+                 "304984da-f4ca-467d-86ca-1bfa4394cd8d", 2077908969, 
                 "LargeCellBounds/CellArea", <|
                 "Type" -> "area", "CellID" -> 2077908969, "CellObject" -> 
                  CellObject[
                   "68675d41-cd37-4ab9-a62b-ed8e2352b9e6", 
-                   "39c1f39f-4792-4aaf-a705-1b2fcff9e280"], 
-                 "CellSerialNumber" -> 49554, 
-                 "CellSize" -> {775.9690011792176, 1081.0338245697592`}, 
+                   "2de924ad-b8e1-4e96-9850-16341089c234"], 
+                 "CellSerialNumber" -> 61201, 
+                 "CellSize" -> {768.7703992187501, 1167.8880233307175`}, 
                  "CellTags" -> {}, "ContentData" -> BoxData, 
                  "ContentDataForm" -> StandardForm, "CursorPosition" -> None, 
                  "Evaluatable" -> False, "Evaluating" -> False, 
@@ -15132,7 +15250,7 @@ appears to be unformatted code\""}, "RowDefault"] :>
               DefinitionNotebookClient`PackageScope`setHint[
                "Suggestion", "Paclet", 
                 DefinitionNotebookClient`$CurrentNotebook, 
-                "b4b273fd-9034-4cfe-b7c0-c6da9b6f05fe", 1030498094, 
+                "4064e520-c701-43aa-9a8f-4b9b9e2d62d0", 1030498094, 
                 "FoundUnformattedCode", {
                 "PrepareHET[{scalar_indices},{vector_indices}]"}]; 
               DefinitionNotebookClient`PackageScope`seekAfter[1030498094]; 
@@ -15153,7 +15271,7 @@ appearing before input\""}, "RowDefault"] :>
               DefinitionNotebookClient`PackageScope`setHint[
                "Suggestion", "Paclet", 
                 DefinitionNotebookClient`$CurrentNotebook, 
-                "1a3ce830-3df8-4c56-bf58-ae63cbb77360", 669712774, 
+                "d66bd4d6-f068-47c9-a01e-5f4b9b0353ff", 669712774, 
                 "ExampleTextLastCharacter", {}]; 
               DefinitionNotebookClient`PackageScope`seekAfter[669712774]; 
               Null], TemplateBox[{
@@ -15172,7 +15290,7 @@ code\""}, "RowDefault"] :> DefinitionNotebookClient`WithCurrentNotebook[
               DefinitionNotebookClient`PackageScope`setHint[
                "Suggestion", "Paclet", 
                 DefinitionNotebookClient`$CurrentNotebook, 
-                "2bc794b6-0443-4e6a-9efd-82e30917abf5", 669712774, 
+                "ba28e0fe-fa63-406c-926b-90a2eb464732", 669712774, 
                 "FoundUnformattedCode", {"PerformDRsoft[{}]"}]; 
               DefinitionNotebookClient`PackageScope`seekAfter[669712774]; 
               Null], TemplateBox[{
@@ -15192,7 +15310,7 @@ single output\""}, "RowDefault"] :>
               DefinitionNotebookClient`PackageScope`setHint[
                "Suggestion", "Paclet", 
                 DefinitionNotebookClient`$CurrentNotebook, 
-                "2d3ab98d-3bd6-49bd-96ac-17882e584562", 931042955, 
+                "f2ff7ea4-7ecb-4160-b456-1faa7d555007", 931042955, 
                 "MultipleOutputs", {}]; 
               DefinitionNotebookClient`PackageScope`seekAfter[931042955]; 
               Null], TemplateBox[{
@@ -15212,7 +15330,7 @@ appearing before input\""}, "RowDefault"] :>
               DefinitionNotebookClient`PackageScope`setHint[
                "Suggestion", "Paclet", 
                 DefinitionNotebookClient`$CurrentNotebook, 
-                "5509d4f9-6f25-4d09-90be-45e256a6b414", 1513130888, 
+                "0792d3ab-d8d2-4855-9d59-bf538c18081a", 1513130888, 
                 "ExampleTextLastCharacter", {}]; 
               DefinitionNotebookClient`PackageScope`seekAfter[1513130888]; 
               Null], TemplateBox[{
@@ -15231,7 +15349,7 @@ appearing before input\""}, "RowDefault"] :>
               DefinitionNotebookClient`PackageScope`setHint[
                "Suggestion", "Paclet", 
                 DefinitionNotebookClient`$CurrentNotebook, 
-                "0c181532-67d0-4dd2-b2a9-efaa8a1a4542", 221844804, 
+                "397b5585-6037-405e-8a34-898fea6fbcb4", 221844804, 
                 "ExtraWhitespace", {
                  Cell[
                  "finally, the different orders of the potential can be \
@@ -15252,7 +15370,7 @@ match\""}, "RowDefault"] :> DefinitionNotebookClient`WithCurrentNotebook[
                "Paclet", DefinitionNotebookClient`$CurrentNotebook]; 
               DefinitionNotebookClient`PackageScope`setHint[
                "Warning", "Paclet", DefinitionNotebookClient`$CurrentNotebook,
-                 "b6b991f3-589d-496f-b94d-913d37925c7c", 1960104506, 
+                 "26fc4a1d-652a-4562-8401-ab9f93aab7d5", 1960104506, 
                 "PacletCreatorMismatch", <|
                 "PacletCreator" -> 
                  "\!\(\*TemplateBox[{RowBox[{\"Andreas\", \" \", \
@@ -15287,7 +15405,7 @@ V.I.\", \" \", \"Tenkanen\"}], \
                "Paclet", DefinitionNotebookClient`$CurrentNotebook]; 
               DefinitionNotebookClient`PackageScope`setHint[
                "Warning", "Paclet", DefinitionNotebookClient`$CurrentNotebook,
-                 "d4ba9ad9-e3d3-4115-94e3-cbdbbe07ceec", 2102585604, 
+                 "b8a218d4-7c0d-4c30-a2d5-155e06ece4ec", 2102585604, 
                 "UnableToUseCell", {}]; 
               DefinitionNotebookClient`PackageScope`seekAfter[2102585604]; 
               Null], TemplateBox[{
@@ -15304,7 +15422,7 @@ paclet info value (13.+)\""}, "RowDefault"] :>
                "Paclet", DefinitionNotebookClient`$CurrentNotebook]; 
               DefinitionNotebookClient`PackageScope`setHint[
                "Warning", "Paclet", DefinitionNotebookClient`$CurrentNotebook,
-                 "1ff115eb-40a0-4893-85be-57e6a886dcbe", 534065277, 
+                 "d5eb1a2d-ac25-4b27-bc8f-0bc71ca88432", 534065277, 
                 "PacletWLVersionMismatch", <|
                 "PacletWLVersion" -> "13.+", "ResourceWLVersion" -> "13+"|>]; 
               DefinitionNotebookClient`PackageScope`seekAfter[534065277]; 
@@ -15373,8 +15491,8 @@ paclet info value (13.+)\""}, "RowDefault"] :>
                  Not[
                   FreeQ[
                   DefinitionNotebookClient`Stripes`PackagePrivate`c$, 
-                   "a101dbda-1e55-4640-88aa-043283fdb21b"]]]]]], Appearance -> 
-           None, BoxID -> "a101dbda-1e55-4640-88aa-043283fdb21b", Evaluator -> 
+                   "3586209d-06b8-4a49-9532-1c9a2909a918"]]]]]], Appearance -> 
+           None, BoxID -> "3586209d-06b8-4a49-9532-1c9a2909a918", Evaluator -> 
            Automatic, Method -> "Preemptive"], 
           MouseAppearanceTag["LinkHand"]]}}, 
        GridBoxAlignment -> {"Columns" -> {{Left}}, "Rows" -> {{Baseline}}}, 
@@ -16815,7 +16933,6 @@ h/Fh4QMzDxZ+6PEFAOibv7E=
                    FaceForm[{
                     RGBColor[0.55294, 0.67451, 0.81176], 
                     Opacity[1.]}], 
-                   
                    FilledCurveBox[{{{0, 2, 0}, {0, 1, 0}, {0, 1, 0}}}, {{{
                     103.52, 249.47}, {43.272, 214.76}, {43.335, 284.22}, {
                     103.52, 249.47}}}]}, {
@@ -17659,7 +17776,6 @@ h/Fh4QMzDxZ+6PEFAOibv7E=
                 FaceForm[{
                   RGBColor[0.6902, 0.58824, 0.81176], 
                   Opacity[1.]}], 
-                
                 FilledCurveBox[{{{0, 2, 0}, {0, 1, 0}, {0, 1, 0}}}, {{{120.87,
                   350.62}, {120.8, 281.08}, {60.68, 315.87}, {120.87, 
                  350.62}}}]}, {
@@ -20922,6 +21038,7 @@ FpG1n6WfSeLb27c2Volz+/dhBxtxrIPL2Ar/oQtZg16JsQ879Gyxx3vEuygx
                TemplateBox[{3}, "Spacer1"], FontColor -> GrayLevel[0.4], 
                FontFamily -> "Source Sans Pro", FontWeight -> Plain, FontSize -> 
                12, StripOnInput -> False], 
+              
               StyleBox[#, FontColor -> GrayLevel[0.4], FontFamily -> 
                "Source Sans Pro", FontWeight -> Plain, FontSize -> 12, 
                StripOnInput -> False], 
@@ -22535,7 +22652,6 @@ directory.\""}, "PacletDirectoryChooserErrorTemplate"]], "AttachedMessage"],
                     GraphicsBox[{
                     Thickness[0.02439], 
                     StyleBox[{
-                    
                     FilledCurveBox[{{{0, 2, 0}, {0, 1, 0}, {0, 1, 0}, {0, 1, 
                     0}}}, {{{12.383, 36.391}, {35.711, 36.391}, {35.711, 
                     13.063}, {12.383, 13.063}, {12.383, 36.391}}}]}, {
