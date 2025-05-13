@@ -2087,7 +2087,7 @@ IdentifyTensorsDRalgo[]:=Module[
 		];
 	];
 	
-	(* --- Debye masses --- *);
+	(* --- Debye masses --- *)
 	If[mode>=2,
 		couplingTensor = xLO*aV3D+ xNLO*\[Mu]VabNLO;
 	,
@@ -2155,7 +2155,7 @@ IdentifyTensorsDRalgo[]:=Module[
 PrintCouplingsEffective[]:=Module[{},
 	VerbosePrint["Printing higher-dimension couplings"];
 
-(*Scalar Sextic*);
+(*Scalar Sextic*)
 	VarGauge=Join[\[Lambda]6//Normal//Variables]//DeleteDuplicates;
 	SubGauge=Table[c->Symbol[ToString[c]<>ToString["3d"]],{c,VarGauge}];
 	\[Lambda]6p=\[Lambda]6//Normal//ReplaceAll[#,SubGauge]&;

@@ -19,7 +19,7 @@ PacletObject[
       {
         "Kernel",
         "Root" -> "Kernel",
-        "Context" -> {"DRalgo`", "DRalgo.m"}
+        "Context" -> {"DRalgo`DRalgo`", "DRalgo.m"}
       },
       {
         "FrontEnd",
