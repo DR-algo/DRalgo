@@ -357,15 +357,20 @@ Options[ImportModelDRalgo]={
 Begin["`Private`"]
 
 
-(*
-	Loads all functions.
-*)
-Get[FileNameJoin[{$DRalgoDirectory,"Debye.m"}]]; (*Loads additional functions*)
-Get[FileNameJoin[{$DRalgoDirectory,"HardToSoft.m"}]];(*Loads Hard -> Soft functions*)
-Get[FileNameJoin[{$DRalgoDirectory,"SoftToUS.m"}]];(*Loads Soft -> SS functions*)
-Get[FileNameJoin[{$DRalgoDirectory,"EffPot.m"}]];(*Loads Effective Potential Functions*)
-Get[FileNameJoin[{$DRalgoDirectory,"ModelCreation.m"}]];(*Loads Effective Potential Functions*)
-Get[FileNameJoin[{$DRalgoDirectory,"HEFT.m"}]];(*Loads Higgs-Effective field theory Functions*)
+(* ::Subsection:: *)
+(*Load DRalgo modules*)
+
+
+(* Helper function to load modules from the DRalgo directory *)
+loadModule[file_] := 
+  Get[FileNameJoin[{$DRalgoDirectory, file}]];
+
+loadModule["Debye.m"]; (* Additional functions for Debye mass *) 
+loadModule["HardToSoft.m"]; (* Loads Hard -> Soft functions *)
+loadModule["SoftToUS.m"]; (* Soft -> SS functions *)
+loadModule["EffPot.m"]; (* Effective potential functions *)
+loadModule["ModelCreation.m"]; (* Model creation functions *)
+loadModule["HEFT.m"]; (* Loads Higgs-Effective field theory functions *)
 
 
 (* ::Section:: *)
@@ -376,7 +381,16 @@ Get[FileNameJoin[{$DRalgoDirectory,"HEFT.m"}]];(*Loads Higgs-Effective field the
 	Defines internal tensors from the loaded model. Also creates help-tensors used for
 	intermediate calculations.
 *)
-ImportModelDRalgo[GroupI_,gvvvI_,gvffI_,gvssI_,\[Lambda]1I_,\[Lambda]3I_,\[Lambda]4I_,\[Mu]ijI_,\[Mu]IJFI_,\[Mu]IJFCI_,YsffI_,YsffCI_, OptionsPattern[]]:=Module[{GroupP=GroupI,gvvvP=gvvvI,gvffP=gvffI,gvssP=gvssI,\[Lambda]1IP=\[Lambda]1I,\[Lambda]3P=\[Lambda]3I,\[Lambda]4P=\[Lambda]4I,\[Mu]ijP=\[Mu]ijI,\[Mu]IJFP=\[Mu]IJFI,\[Mu]IJFCP=\[Mu]IJFCI,YsffP=YsffI,YsffCP=YsffCI},
+ImportModelDRalgo[
+	GroupI_,gvvvI_,gvffI_,gvssI_,
+	\[Lambda]1I_,\[Lambda]3I_,\[Lambda]4I_,\[Mu]ijI_,\[Mu]IJFI_,\[Mu]IJFCI_,YsffI_,YsffCI_, 
+	OptionsPattern[]
+	]:=Module[
+	{
+		GroupP=GroupI,
+		gvvvP=gvvvI,gvffP=gvffI,gvssP=gvssI,\[Lambda]1IP=\[Lambda]1I,\[Lambda]3P=\[Lambda]3I,\[Lambda]4P=\[Lambda]4I,
+		\[Mu]ijP=\[Mu]ijI,\[Mu]IJFP=\[Mu]IJFI,\[Mu]IJFCP=\[Mu]IJFCI,YsffP=YsffI,YsffCP=YsffCI
+	},
 
 If[$LoadGroupMath,
 	If[Not[GroupMathCleared] && Not[$GroupMathMultipleModels],
