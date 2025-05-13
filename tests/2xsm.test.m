@@ -3,6 +3,16 @@
 Quit[];
 
 
+PacletUninstall["DRalgo/DRalgo"]
+PacletInstall["/Users/schicho/Documents/hep/DRalgo/DRalgo/build/DRalgo__DRalgo-1.3.0.paclet"]
+
+
+MemberQ[$Packages,"DRalgo`DRalgo`"]
+
+
+Get["DRalgo`"]
+
+
 If[$InputFileName=="",
 	SetDirectory[NotebookDirectory[]],
 	SetDirectory[DirectoryName[$InputFileName]]
@@ -14,7 +24,7 @@ DRalgo`$LoadGroupMath=True;
 DRalgo`$InstallGroupMath=True;
 
 Check[
-    Get["../Kernel/DRalgo.m"],
+    Get["../DRalgo/Kernel/DRalgo.m"],
     Message[Get::noopen, "DRalgo` at "<>ToString[$UserBaseDirectory]<>"/Applications"];
     Abort[];
 ]
