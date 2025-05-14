@@ -11,9 +11,7 @@ Public release of
 # Status
 
 [![license: GPLv3](https://img.shields.io/badge/license-GPLv3-brightgreen.svg)](https://github.com/DR-algo/DRalgo/blob/master/LICENSE)
-
 [![Version](https://img.shields.io/github/v/tag/DR-algo/DRalgo?label=Version)](https://github.com/DR-algo/DRalgo/releases/latest/)
-
 ![compatibility](https://img.shields.io/badge/Mathematica-12.x_13.x_14.x-brightgreen.svg)
 
 ## Installation
