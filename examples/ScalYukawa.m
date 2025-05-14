@@ -4,8 +4,8 @@
 
 
 SetDirectory[NotebookDirectory[]];
-DRalgo`$LoadGroupMath=True;
-<<../DRalgo.m
+DRalgo`DRalgo`$LoadGroupMath=True;
+<<../Kernel/DRalgo.m
 
 
 (* ::Title:: *)
@@ -121,6 +121,4 @@ PrintTadpoles["NLO"]
 PrintPressure["LO"]
 PrintPressure["NLO"]
 PrintPressure["NNLO"]
-
-
 

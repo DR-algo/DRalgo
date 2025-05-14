@@ -4,9 +4,9 @@
 
 
 SetDirectory[NotebookDirectory[]];
-DRalgo`$LoadGroupMath=True;
-DRalgo`$GroupMathMultipleModels=True; (*Put this if you want to create multiple model-files with the same kernel*)
-<<../DRalgo.m
+DRalgo`DRalgo`$LoadGroupMath=True;
+DRalgo`DRalgo`$GroupMathMultipleModels=True; (*Put this if you want to create multiple model-files with the same kernel*)
+<<../Kernel/DRalgo.m
 
 
 (* ::Chapter:: *)
