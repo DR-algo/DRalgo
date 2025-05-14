@@ -3,16 +3,6 @@
 Quit[];
 
 
-PacletUninstall["DRalgo/DRalgo"]
-PacletInstall["/Users/schicho/Documents/hep/DRalgo/DRalgo/build/DRalgo__DRalgo-1.3.0.paclet"]
-
-
-MemberQ[$Packages,"DRalgo`DRalgo`"]
-
-
-Get["DRalgo`"]
-
-
 If[$InputFileName=="",
 	SetDirectory[NotebookDirectory[]],
 	SetDirectory[DirectoryName[$InputFileName]]
@@ -20,11 +10,11 @@ If[$InputFileName=="",
 (*Put this if you want to create multiple model-files with the same kernel*)
 (*DRalgo`$GroupMathMultipleModels=True;*)
 
-DRalgo`$LoadGroupMath=True;
-DRalgo`$InstallGroupMath=True;
+DRalgo`DRalgo`$LoadGroupMath=True;
+DRalgo`DRalgo`$InstallGroupMath=True;
 
 Check[
-    Get["../DRalgo/Kernel/DRalgo.m"],
+    Get["../Kernel/DRalgo.m"],
     Message[Get::noopen, "DRalgo` at "<>ToString[$UserBaseDirectory]<>"/Applications"];
     Abort[];
 ]
@@ -216,6 +206,7 @@ TestCreate[PrintCouplings[]//Expand,
 
 report=TestReport[testList]
 report["ResultsDataset"]
+
 
 
 

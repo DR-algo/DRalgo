@@ -10,11 +10,11 @@ If[$InputFileName=="",
 (*Put this if you want to create multiple model-files with the same kernel*)
 (*DRalgo`$GroupMathMultipleModels=True;*)
 
-DRalgo`$LoadGroupMath=True;
-(*DRalgo`$InstallGroupMath=True;*)
+DRalgo`DRalgo`$LoadGroupMath=True;
+(*DRalgo`DRalgo`$InstallGroupMath=True;*)
 
 Check[
-    Get["../DRalgo.m"],
+    Get["../Kernel/DRalgo.m"],
     Message[Get::noopen, "DRalgo` at "<>ToString[$UserBaseDirectory]<>"/Applications"];
     Abort[];
 ]
@@ -206,6 +206,5 @@ TestCreate[PrintPressure["NNLO"],
 
 report=TestReport[testList]
 report["ResultsDataset"]
-
 
 

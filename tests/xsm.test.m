@@ -14,7 +14,7 @@ DRalgo`DRalgo`$LoadGroupMath=True;
 (*DRalgo`DRalgo`$InstallGroupMath=True;*)
 
 Check[
-    Get["../DRalgo/Kernel/DRalgo.m"],
+    Get["../Kernel/DRalgo.m"],
     Message[Get::noopen, "DRalgo` at "<>ToString[$UserBaseDirectory]<>"/Applications"];
     Abort[];
 ]
@@ -726,8 +726,6 @@ TestCreate[PrintPressureUS["NLO"],
 
 report=TestReport[testList]
 report["ResultsDataset"]
-
-
 
 
 
