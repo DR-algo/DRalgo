@@ -17,6 +17,10 @@ If[$InputFileName=="",
 (*Test direct paclet installation*)
 
 
+(* check if the paclet is installed somewhere *)
+PacletFind["DRalgo/DRalgo"]
+
+
 PacletUninstall["DRalgo/DRalgo"]
 PacletInstall["DRalgo/DRalgo", ForceVersionInstall -> True]
 (*PacletInstall["../build/DRalgo__DRalgo-1.3.0.paclet", ForceVersionInstall -> True]*)
