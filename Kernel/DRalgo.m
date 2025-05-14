@@ -104,8 +104,14 @@ If[pacletInfo =!= {},
 	};
 ];
 
-AppendTo[infoTable,"Reference"->
-        Hyperlink["2205.08815 [hep-ph]","https://arxiv.org/abs/2205.08815"]];
+AppendTo[
+  infoTable,
+  "Reference" -> Row[{
+    Hyperlink["Comput. Phys. Commun. 288 (2023) 108725", "https://doi.org/10.1016/j.cpc.2023.108725"],
+    " \[Bullet] e-Print: ",
+    Hyperlink["2205.08815 [hep-ph]", "https://arxiv.org/abs/2205.08815"]
+  }]
+];
 AppendTo[infoTable,"Model files"->
 	Hyperlink[Mouseover["DRalgo/examples",Style["DRalgo/examples"]],
 	"https://github.com/DR-algo/DRalgo/tree/main/examples"]];
