@@ -8,7 +8,7 @@ The corresponding Mathematica package automatically performs the matching to nex
 Public release of
 [https://arxiv.org/abs/2205.08815](https://arxiv.org/abs/2205.08815).
 
-# Status
+## Status
 
 [![license: GPLv3](https://img.shields.io/badge/license-GPLv3-brightgreen.svg)](https://github.com/DR-algo/DRalgo/blob/master/LICENSE)
 [![Version](https://img.shields.io/github/v/tag/DR-algo/DRalgo?label=Version)](https://github.com/DR-algo/DRalgo/releases/latest/)
