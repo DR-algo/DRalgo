@@ -572,16 +572,18 @@ OutputFormatDR[expr_] := ToExpression @ StringReplace[
 (*
 	Prints constants that appear in the effective theory.
 *)
-PrintConstants[]:=Module[{},
-ToExpression[StringReplace[ToString[StandardForm[{Lb->(Log[\[Mu]^2/T^2]-2 Log[4 \[Pi]]+2EulerGamma),Lf->(Log[\[Mu]^2/T^2]-2 Log[4 \[Pi]]+2EulerGamma+4 Log[2])}]],"DRalgo`Private`"->""]]
+PrintConstants[]:=Module[{constantList},
+	constantList = {Lb->(Log[\[Mu]^2/T^2]-2 Log[4 \[Pi]]+2EulerGamma),Lf->(Log[\[Mu]^2/T^2]-2 Log[4 \[Pi]]+2EulerGamma+4 Log[2])};
+	OutputFormatDR[constantList]
 ];
 
 
 (*
 	Replaces the Glaisher constant by c, which is sometimes used in the litterature. See for example hep-ph: 9508379
 *)
-PrintGenericBasis[]:=Module[{},
-ToExpression[StringReplace[ToString[StandardForm[{Log[Glaisher]->-1/12 (Lb+2cplus-EulerGamma)}]],"DRalgo`Private`"->""]]
+PrintGenericBasis[]:=Module[{basisReplacements},
+	basisReplacements = {Log[Glaisher]->-1/12 (Lb+2cplus-EulerGamma)};
+	OutputFormatDR[basisReplacements]
 ];
 
 
