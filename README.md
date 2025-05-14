@@ -1,3 +1,5 @@
+<img src="https://raw.githubusercontent.com/DR-algo/DRalgo/refs/heads/pacletSetup/FrontEnd/logo.svg" alt="DRalgo" width="100"/>
+
 # DRalgo
 
 **DRalgo** is an algorithmic implementation that constructs an effective,
