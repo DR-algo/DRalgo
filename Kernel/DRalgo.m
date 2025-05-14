@@ -56,12 +56,12 @@ If[! ValueQ[$InstallGroupMath],
 	$InstallGroupMath = False];
 
 
-Unprotect@Definition;
+(*Unprotect@Definition;
 Definition[x_Symbol] /; StringMatchQ[Context[x], "Package`" ~~ ___] :=
     StringReplace[ToString@FullDefinition[x],
         (WordCharacter .. ~~ DigitCharacter ... ~~ "`") .. ~~ s_ :> s
     ];
-Protect@Definition;
+Protect@Definition;*)
 
 
 (*
