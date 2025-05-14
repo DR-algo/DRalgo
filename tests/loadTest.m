@@ -18,8 +18,9 @@ If[$InputFileName=="",
 
 
 PacletUninstall["DRalgo/DRalgo"]
+PacletInstall["DRalgo/DRalgo", ForceVersionInstall -> True]
 (*PacletInstall["../build/DRalgo__DRalgo-1.3.0.paclet", ForceVersionInstall -> True]*)
-PacletInstall["https://github.com/DR-algo/DRalgo/releases/latest/download/DRalgo.paclet", ForceVersionInstall -> True]
+(*PacletInstall["https://github.com/DR-algo/DRalgo/releases/latest/download/DRalgo.paclet", ForceVersionInstall -> True]*)
 
 
 (* Delte GroupMath first *)
