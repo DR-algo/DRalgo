@@ -10,11 +10,11 @@ If[$InputFileName=="",
 (*Put this if you want to create multiple model-files with the same kernel*)
 (*DRalgo`$GroupMathMultipleModels=True;*)
 
-DRalgo`$LoadGroupMath=True;
-(*DRalgo`$InstallGroupMath=True;*)
+DRalgo`DRalgo`$LoadGroupMath=True;
+(*DRalgo`DRalgo`$InstallGroupMath=True;*)
 
 Check[
-    Get["../DRalgo.m"],
+    Get["../Kernel/DRalgo.m"],
     Message[Get::noopen, "DRalgo` at "<>ToString[$UserBaseDirectory]<>"/Applications"];
     Abort[];
 ]
@@ -27,7 +27,7 @@ Check[
 (*see 2102.11145 [hep-ph]*)
 
 
-(* ::Section::Closed:: *)
+(* ::Section:: *)
 (*Model*)
 
 
@@ -316,7 +316,7 @@ TestCreate[PrintScalarMass["NLO"]/.Replacements//Simplify,
 ]];
 
 
-(* ::Subsubsection::Closed:: *)
+(* ::Subsubsection:: *)
 (*Dimension 6 matching relations*)
 
 
@@ -328,9 +328,6 @@ TestCreate[PrintCouplingsEffective[],
 
 (* ::Subsubsection::Closed:: *)
 (*Symmetric pressure*)
-
-
-PrintPressure["NLO"]
 
 
 AppendTo[testList,
@@ -729,7 +726,6 @@ TestCreate[PrintPressureUS["NLO"],
 
 report=TestReport[testList]
 report["ResultsDataset"]
-
 
 
 

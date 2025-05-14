@@ -1,0 +1,65 @@
+permissions:
+  contents: write
+  deployments: write
+
+name: Build and release
+on:
+  push:
+    tags:
+      - "v*.*.*"
+  workflow_dispatch:
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Get the latest tag and date
+        id: version_info
+        run: |
+          echo "tag=$(echo $GITHUB_REF | sed 's/refs\/tags\///')" >> $GITHUB_ENV
+          echo "date=$(date +"(%d-%m-%Y)")" >> $GITHUB_ENV
+
+      - name: Check if DRalgo version matches GitHub tag
+        run: |
+          DRalgoVersion=$(sed -n 's/^\([[:space:]]*\)"Version" -> "\([^.]*\)\.\([^.]*\)\.\([^.]\)",/v\2.\3.\4/p' PacletInfo.m)
+
+          if [ "$DRalgoVersion" == "${{ env.tag }}" ]; then
+              echo "DRalgoVersion matches the tag"
+          else
+              echo "Error: DRalgoVersion ($DRalgoVersion) does not match tag (${{ env.tag }})" 1>&2
+              exit 64
+          fi
+
+      - name: Create Release
+        id: create_release
+        uses: actions/create-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          tag_name: ${{ github.ref }}
+          release_name: Release ${{ github.ref }}
+          draft: false
+          prerelease: false
+
+      - name: Build Release Asset
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          mkdir -p DRalgo
+          cp Kernel/*.m DRalgo
+          zip -r DRalgo.zip DRalgo/*
+          rm -r DRalgo
+          ls -a
+
+      - name: Upload Release Asset
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: ./DRalgo.zip
+          asset_name: DRalgo.zip
+          asset_content_type: application/zip

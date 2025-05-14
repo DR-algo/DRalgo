@@ -17,7 +17,7 @@
 (* ------------------------------------------------------------------------ *)
 
 
-(* ::Section::Closed:: *)
+(* ::Section:: *)
 (*Pressure calculation*)
 
 
@@ -35,7 +35,7 @@ PrintPressureUS[optP_]:=Module[{opt=optP},
 		];
 	];
 (*Printing Result*)
-	ToExpression[StringReplace[ToString[StandardForm[SymmPrint]],"DRalgo`Private`"->""]]
+	OutputFormatDR[SymmPrint]
 ];
 
 PrintPressureUS[]:=Module[{},
@@ -45,7 +45,7 @@ PrintPressureUS[]:=Module[{},
 		SymmPrint=SymmEnergyUS[[1]]+SymmEnergyUS[[2]];
 	];
 (*Printing Result*)
-	ToExpression[StringReplace[ToString[StandardForm[SymmPrint]],"DRalgo`Private`"->""]]
+	OutputFormatDR[SymmPrint]
 ];
 
 
@@ -73,7 +73,7 @@ SymmetricPhaseUSLO[]:=Module[{ContriScalars,VLO},
 (*This just adds the m^3 term for all heavy scalars*)
 	VLO=Sum[-1/(12 \[Pi]) \[Mu]ijL[[i,i]]^3,{i,1,Length[\[Mu]ijL]}];
 
-	ToExpression[StringReplace[ToString[StandardForm[VLO]],"DRalgo`Private`"->""]]
+	OutputFormatDR[VLO]
 ];
 
 
@@ -93,7 +93,7 @@ SymmetricPhaseUSNLO[]:=Module[{fSSV,Vss,TensHelp,Vssvs,Vssv,VNLO},
 
 	VNLO= Vss+Vssv;
 
-	ToExpression[StringReplace[ToString[StandardForm[VNLO]],"DRalgo`Private`"->""]]
+	OutputFormatDR[VNLO]
 ];
 
 
@@ -309,7 +309,7 @@ HeavyScalarMassSS[]:=Module[{},
 ];
 
 
-(* ::Section::Closed:: *)
+(* ::Section:: *)
 (*Effective couplings*)
 
 
@@ -664,9 +664,7 @@ If[verbose,Print["Finding SuperSoft \[Beta]-functions"]];
 
 	PrintPre=Join[PrintPre,ResTadpole]//Normal//FullSimplify//DeleteDuplicates;
 
-	ToExpression[StringReplace[ToString[StandardForm[PrintPre]],"DRalgo`Private`"->""]]
-
-
+	OutputFormatDR[PrintPre]
 ];
 
 
@@ -687,7 +685,7 @@ TadPoleSS[]:=Module[{},
 ];
 
 
-(* ::Section::Closed:: *)
+(* ::Section:: *)
 (*Help functions*)
 
 
@@ -1011,8 +1009,7 @@ PrepareSoftToSuperSoft[ListHardI_]:=Module[{ListP=ListHardI},
 		\[Lambda]4S=\[Lambda]4Light//SparseArray;
 		\[Lambda]4K=\[Lambda]KTotal//SparseArray;
 		gAvss=gvssVTot//SparseArray;
-		ToExpression[StringReplace[ToString[StandardForm[Join[\[Lambda]K,\[Lambda]4S,\[Lambda]4K,\[Lambda]x,\[Lambda]y,gAvss,gvssL,\[Mu]ijL]]],"DRalgo`Private`"->""]];
-
+		OutputFormatDR[Join[\[Lambda]K,\[Lambda]4S,\[Lambda]4K,\[Lambda]x,\[Lambda]y,gAvss,gvssL,\[Mu]ijL]];
 	,
 		\[Lambda]3CTot=\[Lambda]3CSRedUS//SparseArray;
 		A3=Delete[\[Lambda]AAS//ArrayRules,-1];
@@ -1092,7 +1089,7 @@ If[a==1,
     ]
 
 
-(* ::Section::Closed:: *)
+(* ::Section:: *)
 (*Printing functions*)
 
 
@@ -1118,8 +1115,7 @@ If[verbose,Print["Printing Scalar Masses"]];
 		SolMass=SolMassPre/.xLO->0/.xNLO->1;
 	];
 (*Printing Result*)
-	ToExpression[StringReplace[ToString[StandardForm[Join[SolMass]]],"DRalgo`Private`"->""]]
-
+	OutputFormatDR[Join[SolMass]]
 ];
 
 PrintScalarMassUS[]:=Module[{},
@@ -1138,8 +1134,7 @@ If[verbose,Print["Printing Scalar Masses"]];
 	SolMass=SolMassPre/.xLO->1/.xNLO->1;
 	
 (*Printing Result*)
-	ToExpression[StringReplace[ToString[StandardForm[Join[SolMass]]],"DRalgo`Private`"->""]]
-
+	OutputFormatDR[Join[SolMass]]
 ];
 
 
@@ -1217,8 +1212,7 @@ PrintCouplingsUS[]:=Module[{},
 	PrintPre=Join[ResScal,ResGauge,ResGaugeNASS,ResCubicSS]//Normal//FullSimplify//DeleteDuplicates;
 	PrintPre=DeleteCases[PrintPre,0->0];
 
-	ToExpression[StringReplace[ToString[StandardForm[PrintPre]],"DRalgo`Private`"->""]]
-
+	OutputFormatDR[PrintPre]
 ];
 
 
@@ -1238,13 +1232,12 @@ If[verbose,Print["Printing Scalar Masses"]];
 	SolveTemp=var/.ResScalp;
 	SolTadpole=Table[{var[[i]]->SolveTemp[[i]]},{i,1,Length@var}]//Flatten[#,1]&//ReplaceAll[#,IdentMatSS]&;
 
-	ToExpression[StringReplace[ToString[StandardForm[Join[SolTadpole]]],"DRalgo`Private`"->""]]
-
+	OutputFormatDR[Join[SolTadpole]]
 ];
 
 
 PrintIdentificationUS[]:=Module[{},
-	ToExpression[StringReplace[ToString[StandardForm[Join[IdentMatSS]]],"DRalgo`Private`"->""]]
+	OutputFormatDR[Join[IdentMatSS]]
 ];
 
 

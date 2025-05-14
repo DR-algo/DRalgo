@@ -322,7 +322,7 @@ CreateScalarComponents[GroupI_,ScalarRepI_]:=Module[{GroupP=GroupI,ScalarRepP=Sc
 	ScalarComponents=ConstantArray[0,{Length[ScalarRepP]}];(*Contains all subsitution rules*)
 	ScalarComponentsC=ConstantArray[0,{Length[ScalarRepP]}];(*Conjugated components*)
 	ScalarVariables=ConstantArray[0,{Length[ScalarRepP]}]; (*Names of all components*)
-	ScalarVariablesIndices=ConstantArray[0,{Length[ScalarRepP]}]; (*Position of every scalar rep*);
+	ScalarVariablesIndices=ConstantArray[0,{Length[ScalarRepP]}]; (*Position of every scalar rep*)
 
 	Do[
 		SizeRep=DimR[GroupHelp,ScalarRepP[[i]][[1]]//Delete[#,PosU1]&];
@@ -380,7 +380,7 @@ CreateFermionComponents[GroupI_,FermionRepI_]:=Module[{GroupP=GroupI,FermionRepP
 
 	FermionComponents=ConstantArray[0,{Length[FermionRepP]}]; (*Contains all subsitution rules*)
 	FermionVariables=ConstantArray[0,{Length[FermionRepP]}];(*Contains the name of all fermion variables*)
-	FermionVariablesIndices=ConstantArray[0,{Length[FermionRepP]}]; (*Position of every scalar rep*);
+	FermionVariablesIndices=ConstantArray[0,{Length[FermionRepP]}]; (*Position of every scalar rep*)
 
 	Do[
 		SizeRep=DimR[GroupHelp,FermionRepP[[i]][[1]]//Delete[#,PosU1]&];

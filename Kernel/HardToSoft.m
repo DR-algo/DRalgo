@@ -172,7 +172,7 @@ CreateHelpTensors[] := Module[{},
 ];
 
 
-(* ::Section::Closed:: *)
+(* ::Section:: *)
 (*Pressure calculations*)
 
 
@@ -256,10 +256,7 @@ SymmetricPhaseLO[] := Module[
   ];
 
   (* --- Return total contribution, cleaning internal formatting --- *)
-  ToExpression @ StringReplace[
-    ToString[StandardForm[scalarContribution + vectorContribution + fermionContribution]],
-    "DRalgo`Private`" -> ""
-  ]
+  OutputFormatDR[scalarContribution + vectorContribution + fermionContribution]
 ];
 
 
@@ -334,10 +331,7 @@ SymmetricPhaseNLO[] := Module[
     + VssLambda6
     );
 
-  ToExpression @ StringReplace[
-    ToString[StandardForm[FullSimplify[totalNLOPressure]]],
-    "DRalgo`Private`" -> ""
-  ]
+  OutputFormatDR[FullSimplify[totalNLOPressure]]
 ];
 
 
@@ -664,10 +658,7 @@ SymmetricPhaseNNLO[]:=Module[
 		{\[Epsilon],0,0}]//Normal;
 
 	(* Extract \[Epsilon]^0 coefficient and clean namespace *)
-	ToExpression[
-		StringReplace[
-			ToString[StandardForm[Coefficient[Simplify[DiagramsSimplified],\[Epsilon],0]]],
-			"DRalgo`Private`"->""]]
+	OutputFormatDR[Coefficient[Simplify[DiagramsSimplified],\[Epsilon],0]]
 ];
 
 
@@ -2087,7 +2078,7 @@ IdentifyTensorsDRalgo[]:=Module[
 		];
 	];
 	
-	(* --- Debye masses --- *);
+	(* --- Debye masses --- *)
 	If[mode>=2,
 		couplingTensor = xLO*aV3D+ xNLO*\[Mu]VabNLO;
 	,
@@ -2155,7 +2146,7 @@ IdentifyTensorsDRalgo[]:=Module[
 PrintCouplingsEffective[]:=Module[{},
 	VerbosePrint["Printing higher-dimension couplings"];
 
-(*Scalar Sextic*);
+(*Scalar Sextic*)
 	VarGauge=Join[\[Lambda]6//Normal//Variables]//DeleteDuplicates;
 	SubGauge=Table[c->Symbol[ToString[c]<>ToString["3d"]],{c,VarGauge}];
 	\[Lambda]6p=\[Lambda]6//Normal//ReplaceAll[#,SubGauge]&;
@@ -2469,18 +2460,18 @@ PrintTemporalScalarCouplings[]:=Module[
 	(* Quartic: V^4 *)
 	If[mode==0,\[Lambda]AAS=EmptyArray[{nv,nv,nv,nv}]]; (*If mode=0 no couplings are calculated*)
 	quarticVars=\[Lambda]AAS//Normal//Variables;
-	AE=ToExpression[StringReplace[ToString[StandardForm[quarticVars]],"DRalgo`Private`"->""]];
+	AE=OutputFormatDR[quarticVars];
 	quarticList=#->(ReplaceAll[#,PrintIdentification[]])&/@AE;
 
 	(* Cubic: V^2S *)
 	If[mode==0,\[Lambda]vvsLS=EmptyArray[{nv,nv,ns}]]; (*If mode=0 no couplings are calculated*)
 	cubicVars=\[Lambda]vvsLS//Normal//Variables;
-	AE=ToExpression[StringReplace[ToString[StandardForm[cubicVars]],"DRalgo`Private`"->""]];
+	AE=OutputFormatDR[cubicVars];
 	cubicList=#->(ReplaceAll[#,PrintIdentification[]])&/@AE;
 
 	(* Mixed: V^2S^2 *)
 	quarticTempVars=\[Lambda]KVec//Normal//Variables;
-	AE=ToExpression[StringReplace[ToString[StandardForm[quarticTempVars]],"DRalgo`Private`"->""]];
+	AE=OutputFormatDR[quarticTempVars];
 	quarticTempList=#->(ReplaceAll[#,PrintIdentification[]])&/@AE;
 
 	(* Combine and print all temporal couplings *)
@@ -2698,8 +2689,7 @@ CounterTerms4D[]:=Module[{},
 		];
 
 		PrintPre=ReplaceAll[PrintPre,(a_->b_):>a->b/(2 \[Epsilon])];
-		ToExpression[StringReplace[ToString[StandardForm[PrintPre]],"DRalgo`Private`"->""]]
-
+		OutputFormatDR[PrintPre]
 ];
 
 
