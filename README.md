@@ -32,7 +32,6 @@ PacletInstall["https://github.com/DR-algo/DRalgo/releases/latest/download/DRalgo
 > **Note:** Ensure that all dependencies of **DRalgo** are installed. Refer to the [Requirements section](#requirements) for details.
 
 ### Manual Installation
-### Manual Installation
 
 **DRalgo** can also be installed manually by cloning the repository into the **Applications** folder within either the base or user-specific **Mathematica Applications** directory. These directories store Mathematica packages and can be located by evaluating the variables **`$BaseDirectory`** and **`$UserBaseDirectory`** in a Mathematica session. To identify these directories, run the following commands in Mathematica:
 
