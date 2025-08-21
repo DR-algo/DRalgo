@@ -433,7 +433,7 @@ CalculateLOPotentialSS[]:=Module[{},
 	];
 
 
-(* ::Section::Closed:: *)
+(* ::Section:: *)
 (*Rotations and diagonalization*)
 
 
@@ -531,12 +531,9 @@ RotateTensorsCustomMass[DScalarsp_,DVectorsp_,ScalarMass_,vectorMass_,OptionsPat
 		Gvvs\[Phi]=Transpose[DV] . Gvvs\[Phi] . DS//Activate@TensorContract[Inactive@TensorProduct[DV,#],{{1,4}}]&//Transpose[#,{2,1,3}]&//SimplifySparse;
 		gvvv\[Phi]=Transpose[DV] . gvvv\[Phi] . DV//Activate@TensorContract[Inactive@TensorProduct[DV,#],{{1,4}}]&//Transpose[#,{2,1,3}]&//SimplifySparse;
 	];
-	
-
 
 	\[Mu]ab\[Phi]=vectorMass//SparseArray;
 	\[Mu]ij\[Phi]=ScalarMass//SparseArray;
-
 
 	If[DiagonalMatrixQAE[\[Mu]ab\[Phi]]==False,
 		Print["The Vector mass-Matrix is not diagonal"];
