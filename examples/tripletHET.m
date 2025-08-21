@@ -8,7 +8,7 @@ DRalgo`DRalgo`$LoadGroupMath=True;
 <<../Kernel/DRalgo.m
 
 
-(* ::Chapter:: *)
+(* ::Title:: *)
 (*SM+Real SU(2)Triplet*)
 
 
@@ -219,7 +219,7 @@ PrintActionHET["NLO"]
 PrintScalarKineticHET[]//Normal
 
 
-(* ::Title:: *)
+(* ::Chapter:: *)
 (*Keeping temporal gauge bosons*)
 
 
