@@ -49,14 +49,18 @@ we want to return an array with 0 elements; this makes it easier to avoid unnece
 ];
 
 
-(* ::Section::Closed:: *)
+(* ::Section:: *)
 (*Definition of model*)
 
 
 (*
 	Prepares the effective semi-soft/supersoft theory by creating hard and soft coupling tensors
 *)
-PrepareHET[HardScalarI_,HardSVectorI_]:=Module[{ListScalar=HardScalarI,ListVector=HardSVectorI},
+PrepareHET[HardScalarIndices_,HardVectorIndices_]:=Module[
+	{
+		ListScalar=HardScalarIndices,
+		ListVector=HardVectorIndices
+	},
 	
 	If[ValueQ[gvvvEP]==False,
 		Print["You have to define the model, see UseUltraSoftTheory[], UseSoftTheory[], or DefineNewTensorsUS[]"];
@@ -263,17 +267,20 @@ PrintActionHET::badopt =
 
 
 (*
-	Calculates the effective potential.
+   Calculates the effective potential up to NNLO 
+   and stores the results in VTotHET.
 *)
-CalculatePotentialHET[]:=Module[{},
-
-	CalculateLOPotentialHET[];
-	CalculateNLOPotentialHET[];
-	CalculateNNLOPotentialHET[];
-
-	VTotHET={VHETLO,VHETNLO,VHETNNLO};
-	
-
+CalculatePotentialHET[] := Module[{},
+  
+  (* compute contributions at each order *)
+  CalculateLOPotentialHET[];
+  CalculateNLOPotentialHET[];
+  CalculateNNLOPotentialHET[];
+  
+  (* store results in global container *)
+  VTotHET = {VHETLO, VHETNLO, VHETNNLO};
+  
+  Null
 ];
 
 
@@ -282,13 +289,15 @@ CalculatePotentialHET[]:=Module[{},
 
 
 (*
-	Prints the effective potential.
+   Prints the scalar kinetic terms in the effective theory.
 *)
-PrintScalarKineticHET[]:=Module[{},
-	ScalarSelfEnergyHET[];
-
-(*Printing Result*)
-	Return[OutputFormatDR[ZSijHET]]
+PrintScalarKineticHET[] := Module[{},
+  
+  (* compute scalar self-energy corrections *)
+  ScalarSelfEnergyHET[];
+  
+  (* format and return kinetic term matrix *)
+  OutputFormatDR[ZSijHET]
 ];
 
 
