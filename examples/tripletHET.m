@@ -8,7 +8,7 @@ DRalgo`DRalgo`$LoadGroupMath=True;
 <<../Kernel/DRalgo.m
 
 
-(* ::Chapter:: *)
+(* ::Title:: *)
 (*SM+Real SU(2)Triplet*)
 
 
@@ -143,14 +143,7 @@ PrintTensorsVEV[1]//Normal
 (*Integrating out SU (2) bosons*)
 
 
-(*
-PrepareHET[{Scalar_indices},{vector_indices}]
-indicates which particles are integrated out.
-This functions similar to PerformDRsoft[{}], and the indices
-can be found with the commands
-PrintScalarRepPositions[] and 
-PrintGaugeRepPositions[]
-*)
+?PrepareHET
 
 
 (*
@@ -178,19 +171,10 @@ PrintActionHET["NLO"]
 
 
 (*
-The SU(2) gauge bosons also change the scalar fields' kinetic term,
-printed below is the Z factor
+	Compute and print the scalar kinetic terms 
+	in the effective theory.
 *)
-(*
-that is PrintScalarKineticHET[][[i,j]]=\[Delta]Z^ij; (\[Delta]^ij+2 \[Delta]Z^ij)\!\(
-\*SubscriptBox[\(\[Del]\), \(\[Mu]\)]\(R[i]\)\) \[Del]^\[Mu]R[j]
-*)
-(*
-Notice that the kinetic term is different for the Higgs components;
-this reflects that \[CurlyPhi]!=0 breaks the symmetry;
-so the Higgs and Goldstone terms become different
-*)
-
+?PrintScalarKineticHET
 PrintScalarKineticHET[]//Normal
 
 
@@ -219,7 +203,7 @@ PrintActionHET["NLO"]
 PrintScalarKineticHET[]//Normal
 
 
-(* ::Title:: *)
+(* ::Chapter:: *)
 (*Keeping temporal gauge bosons*)
 
 
@@ -252,16 +236,6 @@ PrintTensorsVEV[1]//Normal
 
 
 (*
-PrepareHET[{Scalar_indices},{vector_indices}]
-indicates which particles are integrated out.
-This functions similar to PerformDRsoft[{}], and the indices
-can be found with the commands
-PrintScalarRepPositions[] and 
-PrintGaugeRepPositions[]
-*)
-
-
-(*
 In our case
 SU(2) bosons live on 9,10,11
 U(1) temporal scalars on 8
@@ -290,17 +264,7 @@ PrintActionHET["NLO"]
 
 
 (*
-The SU(2) gauge bosons also change the scalar fields' kinetic term,
-printed below is the Z factor
+	Compute and print the scalar kinetic terms 
+	in the effective theory.
 *)
-(*
-that is PrintScalarKineticHET[][[i,j]]=\[Delta]Z^ij; (\[Delta]^ij+2 \[Delta]Z^ij)\!\(
-\*SubscriptBox[\(\[Del]\), \(\[Mu]\)]\(R[i]\)\) \[Del]^\[Mu]R[j]
-*)
-(*
-Notice that the kinetic term is different for the Higgs components;
-this reflects that \[CurlyPhi]!=0 breaks the symmetry;
-so the Higgs and Goldstone terms become different
-*)
-
 PrintScalarKineticHET[]//Normal

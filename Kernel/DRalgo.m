@@ -262,10 +262,100 @@ UseUltraSoftTheory::usage="\
 Uses ultrasoft couplings to construct the potential";
 UseSoftTheory::usage="\
 Specifies that soft couplings should be used to construct the potential";
-PrepareHET::usage="Remove later";
-PrintActionHET::usage="Remove later";
-CalculatePotentialHET::usage="Remove later";
-PrintScalarKineticHET::usage="Remove later";
+
+
+PrepareHET::usage = "\
+PrepareHET[HardScalarIndices, HardVectorIndices] prepares the effective 
+semi-soft/supersoft theory by identifying hard and soft degrees 
+of freedom and constructing the corresponding mass and coupling tensors.
+
+Arguments:
+  HardScalarIndices 
+	- list of scalar indices that should be integrated out 
+	(treated as heavy scalars).
+  HardVectorIndices
+	- list of vector indices that should be integrated out
+	(treated as heavy vectors).
+
+This functions similar to PerformDRsoft[{}], and the indices \
+can be found with the commands
+PrintScalarRepPositions[] for heavy scalar indices 
+PrintGaugeRepPositions[] for heavy vector indices
+
+Effect:
+  - Defines HeavyScalarsHET and HeavyVectorsHET as the lists of 
+    heavy scalars and vectors to be integrated out.
+  - Defines LightScalarHET and LightVectorHET as the remaining light 
+    degrees of freedom.
+  - Constructs the diagonal mass matrices for heavy scalars (\[Mu]ijHET) 
+    and heavy vectors (\[Mu]abHET).
+  - Prepares the arrays for effective potential calculations, 
+    setting light particle masses to zero if needed.
+
+Notes:
+  - Relevant VEVs should be defined with DefineVEVS[] before calling.
+  - Returns nothing explicitly, but sets the global variables for use 
+    in the effective theory calculations.\
+";
+PrintActionHET::usage = "\
+PrintActionHET[opt] prints the effective potential at the specified \
+perturbative order.
+
+PrintActionHET[] or PrintActionHET[\"All\"] 
+    sums all available contributions in VTotHET (returns 0 if empty).
+
+PrintActionHET[\"LO\"] 
+    gives the leading-order potential (tree + one-loop), \
+computed as VTotHET[[1]] + VTotHET[[2]] if available.
+
+PrintActionHET[\"NLO\"] 
+    gives the next-to-leading-order potential (two-loop), \
+VTotHET[[3]] if available, otherwise 0.\
+";
+CalculatePotentialHET::usage = "\
+CalculatePotentialHET[] computes the effective potential in the 
+semi-soft/supersoft effective theory up to NNLO and stores the 
+results in VTotHET.
+
+Dependencies:
+  - Requires PrepareHET[] to have been called beforehand, so that 
+    heavy and light fields and their couplings are properly defined.
+
+Effect:
+  - Calls CalculateLOPotentialHET[], CalculateNLOPotentialHET[], 
+    and CalculateNNLOPotentialHET[].
+  - Collects the results into the list 
+        VTotHET = { VHETLO, VHETNLO, VHETNNLO }.
+  - The entries of VTotHET can then be accessed by PrintActionHET 
+    or further processing.
+
+Notes:
+  - Does not take arguments; always computes LO, NLO, and NNLO terms.
+  - Returns no explicit value, but updates global variables.
+";
+PrintScalarKineticHET::usage = "\
+PrintScalarKineticHET[] computes and prints the scalar kinetic terms 
+in the effective theory.
+
+Effect:
+  - Calls ScalarSelfEnergyHET[] to compute the scalar two-point function.
+  - Returns the formatted kinetic term matrix ZSijHET.
+
+Dependencies:
+  - Requires PrepareHET[] and CalculatePotentialHET[] to have been called 
+    so that all couplings and masses are available.
+
+Physics:
+  - The gauge bosons modify the kinetic terms of the scalar fields.
+    The Z factor is printed, with
+        PrintScalarKineticHET[][[i,j]] = \[Delta]Z^ij
+    corresponding to
+        (\[Delta]^ij + 2 \[Delta]Z^ij) \[PartialD]_\[Mu] R[i] \[PartialD]^\[Mu] R[j].
+
+  - The kinetic term is different for the Higgs components, reflecting 
+    that \[CurlyPhi] \[NotEqual] 0 breaks the symmetry, so the Higgs and 
+    Goldstone terms are no longer identical.\
+";
 
 
 (* Custom error messages *)
@@ -563,10 +653,15 @@ PerformDRsoft[ListHardP_]:=Module[{ListHardI=ListHardP},
 DRalgoNameSpace = "DRalgo`DRalgo`";
 
 
-OutputFormatDR[expr_] := ToExpression @ StringReplace[
-  ToString[StandardForm[expr]],
-  DRalgoNameSpace<>"Private`" -> ""
-];
+OutputFormatDR[expr_] := Module[{exprI=expr},
+	exprI=If[MatchQ[expr, _SparseArray],exprI//Normal,exprI];
+	exprI=ToExpression @ StringReplace[
+	  ToString[StandardForm[exprI]],
+	  DRalgoNameSpace<>"Private`" -> ""
+	];
+	exprI=If[MatchQ[expr, _SparseArray],exprI//SparseArray,exprI];
+	exprI
+]
 
 
 (*

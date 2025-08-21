@@ -49,14 +49,18 @@ we want to return an array with 0 elements; this makes it easier to avoid unnece
 ];
 
 
-(* ::Section::Closed:: *)
+(* ::Section:: *)
 (*Definition of model*)
 
 
 (*
 	Prepares the effective semi-soft/supersoft theory by creating hard and soft coupling tensors
 *)
-PrepareHET[HardScalarI_,HardSVectorI_]:=Module[{ListScalar=HardScalarI,ListVector=HardSVectorI},
+PrepareHET[HardScalarIndices_,HardVectorIndices_]:=Module[
+	{
+		ListScalar=HardScalarIndices,
+		ListVector=HardVectorIndices
+	},
 	
 	If[ValueQ[gvvvEP]==False,
 		Print["You have to define the model, see UseUltraSoftTheory[], UseSoftTheory[], or DefineNewTensorsUS[]"];
@@ -125,7 +129,7 @@ PrepareHET[HardScalarI_,HardSVectorI_]:=Module[{ListScalar=HardScalarI,ListVecto
 ];
 
 
-(* ::Section::Closed:: *)
+(* ::Section:: *)
 (*Effective potential*)
 
 
@@ -228,39 +232,55 @@ If[verbose==True,Print["Calculating the 2-Loop Effective Potential"]];
 		
 	
 (*Potential*)
-(*
-
-
-	
-	*)
+(*	*)
 	VHETNNLO= Vss+Vsss+Vvs+ Vvvs+  Vssv+ Vvvv+ Vvv+ V\[Eta]\[Eta]v+V1+V2;
 
 ];
 
 
 (*
-	Prints the effective potential.
-*)
-PrintActionHET[optP_]:=Module[{opt=optP},
-	EffActionPrint=Switch[opt,"LO",VTotHET[[1]]+VTotHET[[2]],"NLO",VTotHET[[3]]];
+   Prints the effective potential at a given order.
 
-(*Printing Result*)
-	OutputFormatDR[EffActionPrint]
+   Options:
+     "LO"   \[Dash] leading order (tree + 1-loop)
+     "NLO"  \[Dash] next-to-leading order
+     "All"  \[Dash] (default) sum of all available orders
+*)
+(* no argument \[RightArrow] same as "All" *)
+PrintActionHET[] := PrintActionHET["All"];
+
+PrintActionHET[opt_String] := Module[{effAction},
+
+  effAction = Switch[opt,
+    "LO",   Total[Take[VTotHET, UpTo[2]]],
+    "NLO",  If[Length[VTotHET] >= 3, VTotHET[[3]], 0],
+    "All",  If[VTotHET === {}, 0, Total[VTotHET]],
+    _,      Message[PrintActionHET::badopt, opt]; Return[$Failed]
+  ];
+
+  OutputFormatDR[effAction]
 ];
+
+(* custom message for invalid option *)
+PrintActionHET::badopt = 
+  "Invalid option `1`. Expected \"LO\", \"NLO\", or \"All\".";
 
 
 (*
-	Calculates the effective potential.
+   Calculates the effective potential up to NNLO 
+   and stores the results in VTotHET.
 *)
-CalculatePotentialHET[]:=Module[{},
-
-	CalculateLOPotentialHET[];
-	CalculateNLOPotentialHET[];
-	CalculateNNLOPotentialHET[];
-
-	VTotHET={VHETLO,VHETNLO,VHETNNLO};
-	
-
+CalculatePotentialHET[] := Module[{},
+  
+  (* compute contributions at each order *)
+  CalculateLOPotentialHET[];
+  CalculateNLOPotentialHET[];
+  CalculateNNLOPotentialHET[];
+  
+  (* store results in global container *)
+  VTotHET = {VHETLO, VHETNLO, VHETNNLO};
+  
+  Null
 ];
 
 
@@ -269,13 +289,15 @@ CalculatePotentialHET[]:=Module[{},
 
 
 (*
-	Prints the effective potential.
+   Prints the scalar kinetic terms in the effective theory.
 *)
-PrintScalarKineticHET[]:=Module[{},
-	ScalarSelfEnergyHET[];
-
-(*Printing Result*)
-	Return[OutputFormatDR[ZSijHET]]
+PrintScalarKineticHET[] := Module[{},
+  
+  (* compute scalar self-energy corrections *)
+  ScalarSelfEnergyHET[];
+  
+  (* format and return kinetic term matrix *)
+  OutputFormatDR[ZSijHET]
 ];
 
 
