@@ -125,7 +125,7 @@ PrepareHET[HardScalarI_,HardSVectorI_]:=Module[{ListScalar=HardScalarI,ListVecto
 ];
 
 
-(* ::Section::Closed:: *)
+(* ::Section:: *)
 (*Effective potential*)
 
 
@@ -228,25 +228,38 @@ If[verbose==True,Print["Calculating the 2-Loop Effective Potential"]];
 		
 	
 (*Potential*)
-(*
-
-
-	
-	*)
+(*	*)
 	VHETNNLO= Vss+Vsss+Vvs+ Vvvs+  Vssv+ Vvvv+ Vvv+ V\[Eta]\[Eta]v+V1+V2;
 
 ];
 
 
 (*
-	Prints the effective potential.
-*)
-PrintActionHET[optP_]:=Module[{opt=optP},
-	EffActionPrint=Switch[opt,"LO",VTotHET[[1]]+VTotHET[[2]],"NLO",VTotHET[[3]]];
+   Prints the effective potential at a given order.
 
-(*Printing Result*)
-	OutputFormatDR[EffActionPrint]
+   Options:
+     "LO"   \[Dash] leading order (tree + 1-loop)
+     "NLO"  \[Dash] next-to-leading order
+     "All"  \[Dash] (default) sum of all available orders
+*)
+(* no argument \[RightArrow] same as "All" *)
+PrintActionHET[] := PrintActionHET["All"];
+
+PrintActionHET[opt_String] := Module[{effAction},
+
+  effAction = Switch[opt,
+    "LO",   Total[Take[VTotHET, UpTo[2]]],
+    "NLO",  If[Length[VTotHET] >= 3, VTotHET[[3]], 0],
+    "All",  If[VTotHET === {}, 0, Total[VTotHET]],
+    _,      Message[PrintActionHET::badopt, opt]; Return[$Failed]
+  ];
+
+  OutputFormatDR[effAction]
 ];
+
+(* custom message for invalid option *)
+PrintActionHET::badopt = 
+  "Invalid option `1`. Expected \"LO\", \"NLO\", or \"All\".";
 
 
 (*
