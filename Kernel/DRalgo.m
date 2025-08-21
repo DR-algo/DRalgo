@@ -277,6 +277,11 @@ Arguments:
 	- list of vector indices that should be integrated out
 	(treated as heavy vectors).
 
+This functions similar to PerformDRsoft[{}], and the indices \
+can be found with the commands
+PrintScalarRepPositions[] for heavy scalar indices 
+PrintGaugeRepPositions[] for heavy vector indices
+
 Effect:
   - Defines HeavyScalarsHET and HeavyVectorsHET as the lists of 
     heavy scalars and vectors to be integrated out.
@@ -338,7 +343,18 @@ Effect:
 
 Dependencies:
   - Requires PrepareHET[] and CalculatePotentialHET[] to have been called 
-    so that all couplings and masses are available.\
+    so that all couplings and masses are available.
+
+Physics:
+  - The gauge bosons modify the kinetic terms of the scalar fields.
+    The Z factor is printed, with
+        PrintScalarKineticHET[][[i,j]] = \[Delta]Z^ij
+    corresponding to
+        (\[Delta]^ij + 2 \[Delta]Z^ij) \[PartialD]_\[Mu] R[i] \[PartialD]^\[Mu] R[j].
+
+  - The kinetic term is different for the Higgs components, reflecting 
+    that \[CurlyPhi] \[NotEqual] 0 breaks the symmetry, so the Higgs and 
+    Goldstone terms are no longer identical.\
 ";
 
 
