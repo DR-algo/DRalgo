@@ -17,7 +17,7 @@
 (* ------------------------------------------------------------------------ *)
 
 
-(* ::Section::Closed:: *)
+(* ::Section:: *)
 (*Definition of model*)
 
 
@@ -497,53 +497,110 @@ RotateTensorsUSPostVEV[DScalarsp_,DVectorsp_]:=Module[{DS=DScalarsp,DV=DVectorsp
 ];
 
 
-	Options[RotateTensorsCustomMass] = {FastRotation->False}
+Options[RotateTensorsCustomMass] = {FastRotation->False}
+
+
+(* define custom error message *)
+RotateTensorsCustomMass::notSparse = "`1` must be a SparseArray.";
 
 
 (*
 	Rotates to a diagonal-mass basis.
 *)
-RotateTensorsCustomMass[DScalarsp_,DVectorsp_,ScalarMass_,vectorMass_,OptionsPattern[]]:=Module[{DS=DScalarsp,DV=DVectorsp},
+RotateTensorsCustomMass[
+	DScalarRotation_,
+	DVectorRotation_,
+	scalarMass_,vectorMass_,OptionsPattern[]]:=
+Module[{
+		DS=DScalarRotation,
+		DV=DVectorRotation,
+		nS,nV,
+		RSS,RSSSS,RSSS,RVSS,RVVS,RVVV
+	},
+	
+	(* check inputs *)
+   If[!SparseArrayQ[DScalarRotation],
+      Message[RotateTensorsCustomMass::notSparse, "DScalarRotation"];
+      Return[$Failed]
+   ];
+   
+   If[!SparseArrayQ[DVectorRotation],
+      Message[RotateTensorsCustomMass::notSparse, "DVectorRotation"];
+      Return[$Failed]
+   ];
 	
 	DS=DS//SparseArray;
 	DV=DV//SparseArray;
 	
+	nS = Length[DS];
+	nV = Length[DV];
+	
 	If[OptionValue[FastRotation],
+		Print["FastRotation only rotates diagonal quartic components i.e. \!\(\*SubscriptBox[\(\[Lambda]\), \(iikk\)]\)"];
 		(*For large rotation matrices we can simplify the two-loop calculation by only doing the rotation for Subscript[\[Lambda], iikk] components*)
-		RotHelp=Flatten[TensorProduct[DS,DS],{{2},{4},{1,3}}]//DiagonalTensor2[#,1,2]&;
-		\[Lambda]4\[Phi]=RotHelp . Flatten[\[Lambda]4\[Phi] ,{{1,2},{3,4}}] . Transpose[RotHelp];
 		
-		RotHelp=Flatten[TensorProduct[DS,DS,DS],{{2},{4},{6},{1,3,5}}];
-		\[Lambda]3\[Phi]=RotHelp . Flatten[\[Lambda]3\[Phi]];
+		(*RSS=Flatten[TensorProduct[DS,DS],{{2},{4},{1,3}}]//DiagonalTensor2[#,1,2]&;*)
+		(*\[Lambda]4\[Phi]=RSS . Flatten[\[Lambda]4\[Phi] ,{{1,2},{3,4}}] . Transpose[RotHelp];*)
+		
+		RSSSS=Flatten[TensorProduct[DS,DS,DS,DS],{{2},{4},{6},{8},{1,3,5,7}}];
+		\[Lambda]4\[Phi]=RSSSS . Flatten[\[Lambda]4\[Phi]];
+		
+		RSSS=Flatten[TensorProduct[DS,DS,DS],{{2},{4},{6},{1,3,5}}];
+		\[Lambda]3\[Phi]=RSSS . Flatten[\[Lambda]3\[Phi]];
 
-		RotHelp=Flatten[TensorProduct[DV,DS,DS],{{2},{4},{6},{1,3,5}}];
-		gvss\[Phi]=RotHelp . Flatten[gvss\[Phi]];
+		RVSS=Flatten[TensorProduct[DV,DS,DS],{{2},{4},{6},{1,3,5}}];
+		gvss\[Phi]=RVSS . Flatten[gvss\[Phi]];
 		
-		RotHelp=Flatten[TensorProduct[DV,DV,DS],{{2},{4},{6},{1,3,5}}];
-		Gvvs\[Phi]=RotHelp . Flatten[Gvvs\[Phi]];
+		RVVS=Flatten[TensorProduct[DV,DV,DS],{{2},{4},{6},{1,3,5}}];
+		Gvvs\[Phi]=RVVS . Flatten[Gvvs\[Phi]];
 		
-		RotHelp=Flatten[TensorProduct[DV,DV,DV],{{2},{4},{6},{1,3,5}}];
-		gvvv\[Phi]=RotHelp . Flatten[gvvv\[Phi]];
+		RVVV=Flatten[TensorProduct[DV,DV,DV],{{2},{4},{6},{1,3,5}}];
+		gvvv\[Phi]=RVVV . Flatten[gvvv\[Phi]];
 	,
-		\[Lambda]4\[Phi]=Transpose[DS] . \[Lambda]4\[Phi] . DS//Activate@TensorContract[Inactive@TensorProduct[DS,#],{{1,4}}]&//Transpose[#,{2,1,3,4}]&//Activate@TensorContract[Inactive@TensorProduct[DS,#],{{1,5}}]&//Transpose[#,{3,2,1,4}]&//SimplifySparse;
-		\[Lambda]3\[Phi]=Transpose[DS] . \[Lambda]3\[Phi] . DS//Activate@TensorContract[Inactive@TensorProduct[DS,#],{{1,4}}]&//Transpose[#,{2,1,3}]&//SimplifySparse;
-		gvss\[Phi]=Transpose[DV] . gvss\[Phi] . DS//Activate@TensorContract[Inactive@TensorProduct[DS,#],{{1,4}}]&//Transpose[#,{2,1,3}]&//SimplifySparse;
-		Gvvs\[Phi]=Transpose[DV] . Gvvs\[Phi] . DS//Activate@TensorContract[Inactive@TensorProduct[DV,#],{{1,4}}]&//Transpose[#,{2,1,3}]&//SimplifySparse;
-		gvvv\[Phi]=Transpose[DV] . gvvv\[Phi] . DV//Activate@TensorContract[Inactive@TensorProduct[DV,#],{{1,4}}]&//Transpose[#,{2,1,3}]&//SimplifySparse;
+	
+		\[Lambda]4\[Phi]= 
+			TensorTranspose[DS] . \[Lambda]4\[Phi] . DS//
+			TensorContract[TensorProduct[DS, #], {{1, 4}}] & //
+			TensorTranspose[#, {2, 1, 3, 4}] & //
+			TensorContract[TensorProduct[DS, #], {{1, 5}}] & //
+			TensorTranspose[#, {3, 2, 1, 4}] & //
+			SimplifySparse;
+			
+		\[Lambda]3\[Phi] =
+		   TensorTranspose[DS] . \[Lambda]3\[Phi] . DS //
+		   TensorContract[TensorProduct[DS, #], {{1, 4}}] & //
+		   TensorTranspose[#, {2, 1, 3}] & //
+		   SimplifySparse;
+		
+		gvss\[Phi] =
+		   TensorTranspose[DV] . gvss\[Phi] . DS //
+		   TensorContract[TensorProduct[DS, #], {{1, 4}}] & //
+		   TensorTranspose[#, {2, 1, 3}] & //
+		   SimplifySparse;
+		
+		Gvvs\[Phi] =
+		   TensorTranspose[DV] . Gvvs\[Phi] . DS //
+		   TensorContract[TensorProduct[DV, #], {{1, 4}}] & //
+		   TensorTranspose[#, {2, 1, 3}] & //
+		   SimplifySparse;
+		
+		gvvv\[Phi] =
+		   TensorTranspose[DV] . gvvv\[Phi] . DV //
+		   TensorContract[TensorProduct[DV, #], {{1, 4}}] & //
+		   TensorTranspose[#, {2, 1, 3}] & //
+		   SimplifySparse;
 	];
 
 	\[Mu]ab\[Phi]=vectorMass//SparseArray;
-	\[Mu]ij\[Phi]=ScalarMass//SparseArray;
+	\[Mu]ij\[Phi]=scalarMass//SparseArray;
 
 	If[DiagonalMatrixQAE[\[Mu]ab\[Phi]]==False,
 		Print["The Vector mass-Matrix is not diagonal"];
 	];
 
-
 	If[DiagonalMatrixQAE[\[Mu]ij\[Phi]]==False,
 		Print["The Scalar mass-Matrix is not diagonal"];
 	];
-
 ];
 
 
