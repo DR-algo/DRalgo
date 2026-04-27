@@ -1,7 +1,18 @@
 (* ::Package:: *)
 
-(* ::Title:: *)
-(*HIGHER DIMENSIONAL OPERATORS*)
+(* ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ *)
+
+(* :Title: Higher_Dimensional_Operators                                                          	*)
+
+(*
+       This software is covered by the GNU General Public License 3.
+       Copyright (C) 2025-2026 Fabio Bernardo
+       Copyright (C) 2021-2026 Philipp Schicho
+*)
+
+(* :Summary:	Matches higher-dimensional operators up to dimension 5 and 6 *)	
+
+(* ------------------------------------------------------------------------ *)
 
 
 (* ::Section:: *)
