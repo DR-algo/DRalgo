@@ -264,6 +264,20 @@ UseSoftTheory::usage="\
 Specifies that soft couplings should be used to construct the potential";
 
 
+SymmetrizeTensor::usage="" (* Routine to symmetrize Tensors under given pairs of indices *)
+Zb::usage="" (* Simbolic variable for Bosonic 1 loop integral *)
+Zf::usage="" (* Simbolic variable for Fermionic 1 loop integral *)
+HardThermal1LoopInt::usage="" (* function for 1 loop integral *)
+xi::usage="" (* Simbolic variable for Gauge Fixing parameter *)
+T::usage="" (* Simbolic variable Temperature *)
+Contract::usage="" (* Routine to contract given pairs of indices *)
+
+ODIM5::usage"" (* Functions that returns the Operator Tensor Group of dimension-5 operators *)
+ODIM6::usage"" (* Functions that returns the Operator Tensor Group of dimension-6 operators *)
+DIMENSION5MATCHING::usage="Functions that performs the matching of dimension-5 operators"
+DIMENSION6MATCHING::usage="Functions that performs the matching of dimension-6 operators"
+
+
 PrepareHET::usage = "\
 PrepareHET[HardScalarIndices, HardVectorIndices] prepares the effective 
 semi-soft/supersoft theory by identifying hard and soft degrees 
@@ -467,6 +481,7 @@ loadModule["SoftToUS.m"]; (* Soft -> SS functions *)
 loadModule["EffPot.m"]; (* Effective potential functions *)
 loadModule["ModelCreation.m"]; (* Model creation functions *)
 loadModule["HEFT.m"]; (* Loads Higgs-Effective field theory functions *)
+loadModule["Higher_Dimensional_Operators.m"]; (* Loads dimension 5 and 6 higher-dimensional operator functionality *)
 
 
 (* ::Section:: *)
