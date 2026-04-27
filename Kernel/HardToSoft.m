@@ -17,7 +17,7 @@
 (* ------------------------------------------------------------------------ *)
 
 
-(* ::Section::Closed:: *)
+(* ::Section:: *)
 (*Help routines*)
 
 
@@ -147,6 +147,9 @@ CreateHelpTensors[] := Module[{},
   (* --- Tensors from two Yukawa coupling contractions --- *)
   Ysij = Contract[Ysff, YsffC, {{2, 5}, {3, 6}}] // SimplifySparse;
   YsijC = Contract[YsffC, Ysff, {{2, 5}, {3, 6}}] // SimplifySparse;
+  
+  NS=Dimensions[gvss][[2]];
+  NV=Dimensions[gvss][[1]];
 
   (* --- Mode-dependent contributions --- *)
   If[mode >= 1,

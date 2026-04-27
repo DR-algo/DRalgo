@@ -100,7 +100,7 @@ YsffC=Conjugate[Ysff];*)
 IPERCHARGE={Yq->1/3,Yu->4/3,Yd->-2/3,Yl->-1,Ye->-2};
 
 
-(* ::Section::Closed:: *)
+(* ::Section:: *)
 (*Dimensional Reduction*)
 
 
@@ -257,7 +257,6 @@ WC = DeleteDuplicates[Cases[TensorList//Normal, \[Alpha][__], \[Infinity]]];
 
 
 n={1,2,3,4,5,6,7,8,13,14,15,16,17,18,19,20};
-
 sol=DIMENSION6MATCHING[TensorList[[n]],NList[[n]],WC,3][[1]];
 Collect[sol,{_Zb,_Zf},Factor]/.IPERCHARGE//TableForm
 
