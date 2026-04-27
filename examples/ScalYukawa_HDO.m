@@ -15,9 +15,6 @@ DRalgo`DRalgo`$LoadGroupMath=True;
 (*See 2108.04377 [hep-th] for further details and for independent calculations*)
 
 
-(*<<../Higher_Dimensional_Operators_v1.wl (*HIGHER DIMENSIONAL OPERATORS ROUTINES*)*)
-
-
 (* ::Section::Closed:: *)
 (*Model*)
 
