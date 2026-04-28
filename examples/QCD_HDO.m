@@ -64,13 +64,19 @@ TensorList={Tens1,Tens3,Tens8,Tens12,Tens13,Tens16,Tens17}; (*TensorList is the 
 NList={1,3,8,12,13,16,17}; (*NList is the array that indicate to which operator the group tensors in TensorList refer to*)
 WCs=DeleteDuplicates[Cases[TensorList//Normal, \[Alpha][__], \[Infinity]]]; (*WC is the array of the various Wilson Coefficients \[Alpha][...]*)
 
+(*The matching of the tensor Tens12 takes approximately 10 minutes to complete, as it entails handling an 8×8×8×8×8×8 tensor. It is thus advantageous to first perform 
+the matching for the remaining tensors and subsequently address the A0^6 operator separately. This procedure can be implemented as follows*)
 
-soltot=DIMENSION6MATCHING[TensorList,NList,WCs,3][[1]]; (*DIMENSION6MATCHING and DIMENSION5MATCHING find the values of the Wilson coefficients listed in WC, d is the number of spatial dimensions, Zb and Zf are 1 loop master integral *)
-soltot//Factor//TableForm
+TensorListWithoutA6={Tens1,Tens3,Tens8,Tens13,Tens16,Tens17};
+NListWithoutA6={1,3,8,13,16,17}
+WCsWithoutA6=DeleteDuplicates[Cases[TensorList//Normal, \[Alpha][__], \[Infinity]]]; (*WC is the array of the various Wilson Coefficients \[Alpha][...]*)
+
+solWithoutA6=DIMENSION6MATCHING[TensorListWithoutA6,NListWithoutA6,WCsWithoutA6,3][[1]]; (*DIMENSION6MATCHING and DIMENSION5MATCHING find the values of the Wilson coefficients listed in WC, d is the number of spatial dimensions, Zb and Zf are 1 loop master integral *)
+solWithoutA6//Factor//TableForm
 
 
-sol=DIMENSION6MATCHING[{Tens1},{1},{\[Alpha][F^3]},d][[1]];  (*The matching can be done singularly for each group tensor*)
-sol//Factor//TableForm
+solA6=DIMENSION6MATCHING[{Tens12},{12},{\[Alpha][[A^6,1],\[Alpha][[A^6,2]},d][[1]];  (*The matching can be done singularly for each group tensor*)
+solA6//Factor//TableForm
 
 
 ODIM6[1,d]//MatrixForm (*The functions ODIM6 and ODIM5 return the group tensors of the various operators*)
@@ -82,7 +88,7 @@ ODIM6[1,d]//MatrixForm (*The functions ODIM6 and ODIM5 return the group tensors 
 
 SOST1={\[Alpha][D^2F^2]->c[1],\[Alpha][D^4A^2]->c[1]+c[2],\[Alpha][F^3]->c[3],\[Alpha][D^2A^2F]->+2c[1]-3/2 c[3]-1/2 c[4]+1/2 c[5],\[Alpha][A^2F^2,1]->3/2 c[3]+1/2 c[4]+c[6],\[Alpha][A^2F^2,2]->-3/2 c[3]-1/2 c[4]+c[7],\[Alpha][D^2A^4,1]->2c[1]+c[5]+2c[6]+c[8],\[Alpha][D^2A^4,2]->-2c[1]-c[5]+2c[7]+c[9],\[Alpha][A^6,1]->c[10],\[Alpha][A^6,2]->c[11]};
 solRB={c[1]->2(41-d)/120+2(8-\[Alpha])\[Alpha]/48,c[2]->-2(d-1)(5-d)/(120)+2(d-5)(4+\[Alpha])\[Alpha]/48,c[3]->2(1-d)/180,c[4]->c[5]-2(d-1)(d-5)/60-(d-5)\[Alpha]/6,c[5]->2c[7]+2(d-21)(d-5)/30+(d-5)\[Alpha]/6,c[6]->-c[7]-2(d-5)(d-25)/24,c[8]->2(d-1)(d-3)(d-5)/20+(d-5)(d-3)\[Alpha]/3,c[9]->2(d-1)(d-3)(d-5)/30+(d-5)(d-3)\[Alpha]/6,c[10]->2(d-1)^2 (d-3)(d-5)/180,c[11]->0,c[7]->2(21-d)(5-d)/60};
-
+soltot=Join[solA6,solWithoutA6]
 
 (*The current version of Higher Dimensional Operators routines desn't include field redefinitions*)
 
