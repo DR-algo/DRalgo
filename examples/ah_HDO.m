@@ -66,11 +66,14 @@ PerformDRhard[]
 (* ::Section:: *)
 (*Dimension 6 Matching*)
 
+(*The complex scalar field \phi is decomposed in terms of two real scalar field \\phi_1 and \phi_2 as follows \phi=1/Sqrt[2](\phi_1+i\phi_2) which can be written as \phi=V_i \phi_i,
+therefore we can construct all the tensors using the vector V={1,I}/Sqrt[2], its complex conjugate Vs={1,-I}/Sqrt[2] and the projector on the gauge field, which, since it's the only gauge field of the model, it's just id={1}*)
 
-V=(1/Sqrt[2]){1,I};
+V=(1/Sqrt[2]){1,I}; 
 Vs=(1/Sqrt[2]){1,-I};
 id={1};
 
+(*We define \[Alpha][__] the Wilson coefficients associated to the dimension-6 operator basis defined in arxiv 2503.18904, c[__] are just combination of them*)
 
 Subscript[c, 1]=\[Alpha][ D^2 \[Phi]^4,1]-4\[Alpha][ D^2 \[Phi]^4,2];
 Subscript[c, 2]=-\[Alpha][ D^2 \[Phi]^4,2];
@@ -107,6 +110,8 @@ WC = DeleteDuplicates[Cases[TensorList//Normal, \[Alpha][__], \[Infinity]]]; (*W
 sol=DIMENSION6MATCHING[TensorList,NList,WC,d][[1]]; (*DIMENSION6MATCHING and DIMENSION5MATCHING find the values of the Wilson coefficients listed in WC, d is the number of spatial dimensions, Zb and Zf are 1 loop master integral *)
 sol//Factor//TableForm
 
+(*The solutions of the Wilson Coefficient is left in generic R-\xi gauge, the user can easily check that this gauge dependence is removed once redundancy of the operator basis is removed as well *)
+(*Zb[3,0] is an Hard Thermal 1 loop Integral, its value in d=3 can be reproduce with the function HardThermal1LoopInt["B",3,0,3]*)
 
 sol=DIMENSION6MATCHING[{Tens2},{2},{\[Alpha][\[Phi]^2 F^2]},d][[1]];  (*The matching can be done singularly for each group tensor*)
 sol//Factor//TableForm
@@ -118,6 +123,4 @@ ODIM6[2,d]//MatrixForm (*The functions ODIM6 and ODIM5 return the group tensors 
 (* ::Section:: *)
 (*CROSSCHECK WITH LITERATURE*)
 
-
-(* ::Text:: *)
-(*The effects of Higher Dimensional Operators for the Abelian-Higss model has already been investigated in  arxiv: 2503.18904 *)
+(*The solutions reported by the function DIMENSION6MATCHING are the same as in arxiv: 2503.18904, where the Abelian-Higss model has already been investigated *)
