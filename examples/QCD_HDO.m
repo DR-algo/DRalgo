@@ -88,7 +88,7 @@ ODIM6[1,d]//MatrixForm (*The functions ODIM6 and ODIM5 return the group tensors 
 
 SOST1={\[Alpha][D^2F^2]->c[1],\[Alpha][D^4A^2]->c[1]+c[2],\[Alpha][F^3]->c[3],\[Alpha][D^2A^2F]->+2c[1]-3/2 c[3]-1/2 c[4]+1/2 c[5],\[Alpha][A^2F^2,1]->3/2 c[3]+1/2 c[4]+c[6],\[Alpha][A^2F^2,2]->-3/2 c[3]-1/2 c[4]+c[7],\[Alpha][D^2A^4,1]->2c[1]+c[5]+2c[6]+c[8],\[Alpha][D^2A^4,2]->-2c[1]-c[5]+2c[7]+c[9],\[Alpha][A^6,1]->c[10],\[Alpha][A^6,2]->c[11]};
 solRB={c[1]->2(41-d)/120+2(8-\[Alpha])\[Alpha]/48,c[2]->-2(d-1)(5-d)/(120)+2(d-5)(4+\[Alpha])\[Alpha]/48,c[3]->2(1-d)/180,c[4]->c[5]-2(d-1)(d-5)/60-(d-5)\[Alpha]/6,c[5]->2c[7]+2(d-21)(d-5)/30+(d-5)\[Alpha]/6,c[6]->-c[7]-2(d-5)(d-25)/24,c[8]->2(d-1)(d-3)(d-5)/20+(d-5)(d-3)\[Alpha]/3,c[9]->2(d-1)(d-3)(d-5)/30+(d-5)(d-3)\[Alpha]/6,c[10]->2(d-1)^2 (d-3)(d-5)/180,c[11]->0,c[7]->2(21-d)(5-d)/60};
-soltot=Join[solA6,solWithoutA6]
+soltot=Join[solA6,solWithoutA6];
 
 (*The current version of Higher Dimensional Operators routines desn't include field redefinitions*)
 
