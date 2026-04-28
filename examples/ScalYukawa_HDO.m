@@ -172,6 +172,5 @@ ODIM6[4,d]//MatrixForm (*The functions ODIM6 and ODIM5 return the group tensors 
 (* ::Section:: *)
 (*CROSSCHECK WITH LITERATURE*)
 
-
-(* ::Text:: *)
-(*The effects of Higher Dimensional Operators for Scalar-Yukawa model has already been investigated in  arxiv 2406.02667*)
+(*The Wilson coefficients \Alpha[__] are associated to the basis used in arxiv 2406.02667, where the effects of Higher Dimensional Operators for Scalar-Yukawa model has already been investigated.
+The solutions returned by the functions DIMENSION5MATCHING and DIMENSION6MATCHING are the same of the one reported in 2406.02667*)
