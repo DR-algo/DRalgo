@@ -20,7 +20,9 @@ Group={"SU3"};
 CouplingName={gs};
 RepAdjoint={{1,1}};
 RepScalar={};
-RepFermion={};
+RepFermionL={{{1,0}},"L"};
+RepFermionR={{{1,0}},"R"};
+RepFermion={RepFermionL,RepFermionR};
 
 
 {gvvv,gvff,gvss,\[Lambda]1,\[Lambda]3,\[Lambda]4,\[Mu]ij,\[Mu]IJ,\[Mu]IJC,Ysff,YsffC}=AllocateTensors[Group,RepAdjoint,CouplingName,RepFermion,RepScalar];
