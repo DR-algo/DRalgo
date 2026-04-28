@@ -111,6 +111,10 @@ PerformDRhard[]
 (* ::Section:: *)
 (*Dimension-6 Matching*)
 
+(*The Higgs field H is internally decomposed in single real scalar fields as follows H=(\phi_1+I\phi_3,\phi_2+I\phi_4)^T, which can be compactly be written has H_I=V_{I i}\phi_i with i=1,..,4. 
+All the operator tensors associated to higher dimensional operator can be constructed in terms of the matrix V, and its complex conjugate Vs, the identity projected on the strong gauge fields G idG,
+the identity projected on the Weak gauge fields W idW, the identity projected on the hypercharge gauge field B idB, the vector of the field B ProjB, the pauli matrices (namely the generator in the fundamental 
+representation of SU(2)), the group structure constant of SU(2)_L \[Epsilon]W, the group structure constants of SU(3)_c fG and the structure constant d^{abc} of SU(3)*)
 
 idW = SparseArray[{
    {i_, i_} /; 9 <= i <= 11 -> 1
@@ -178,6 +182,7 @@ X3=Contract[TGadj,TGadj,{{2,6},{3,5}}];
 X4=Contract[TGadj,TGadj,TGadj,TGadj,{{2,12},{3,5},{6,8},{9,11}}];
 X6=Contract[TGadj,TGadj,TGadj,TGadj,TGadj,TGadj,{{2,18},{3,5},{6,8},{9,11},{12,14},{15,17}}];
 
+(*We define \[Alpha][__] our Wilson coefficients *)
 
 Tens1=Factorial[3](\[Alpha][W^3]\[Epsilon]W+\[Alpha][G^3]fG);
 
@@ -255,6 +260,7 @@ TensorList={Tens1,Tens2,Tens3,Tens4,Tens5,Tens6,Tens7,Tens8,Tens9,Tens10,Tens11,
 NList={1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20};
 WC = DeleteDuplicates[Cases[TensorList//Normal, \[Alpha][__], \[Infinity]]];
 
+(* The matching of operators with 6 fields, namely phi^6, phi^4 B0^2, phi^2 B0^4, and B0^6, requires a significant amount of running time. It is therefore convenient to perform the matching of these operators separately. *)
 
 n={1,2,3,4,5,6,7,8,13,14,15,16,17,18,19,20};
 sol=DIMENSION6MATCHING[TensorList[[n]],NList[[n]],WC,3][[1]];
