@@ -119,20 +119,20 @@ id={1};
 
 (*Here we construct the group tensors of the higher dimensional operators*)
 
-Tens2=Factorial[5]\[Alpha][\[Phi]^5]TensorProduct[id,id,id,id,id];
-Tens5=Factorial[2]\[Alpha][\[Phi]^3 D^2]TensorProduct[id,id,id];
+OT[5,2]=\[Alpha][5,1]*TensorProduct[{1},{1},{1},{1},{1}];
+OT[5,5]=\[Beta][5,1]*TensorProduct[{1},{1},{1}];
 
 
-TensorList5={Tens2,Tens5}; (*TensorList is the array of the various group tensors refered to higher dimensional operators*)
+TensorList5={OT[5,2],OT[5,5]}; (*TensorList is the array of the various group tensors refered to higher dimensional operators*)
 NList5={2,5}; (*NList is the array that indicate to which operator the group tensors in TensorList refer to*)
-WC5 = DeleteDuplicates[Cases[TensorList5//Normal, \[Alpha][__], \[Infinity]]]; (*WC is the array of the various Wilson Coefficients \[Alpha][...]*)
+WC5 = {\[Alpha][5,1],\[Beta][5,1]}; (*WC is the array of the various Wilson Coefficients \[Alpha][...]*)
 
 
-sol=DIMENSION5MATCHING[TensorList5,NList5,WC5,d](*[[1]]*) (*DIMENSION6MATCHING and DIMENSION5MATCHING find the values of the Wilson coefficients listed in WC, d is the number of spatial dimensions, Zb and Zf are 1 loop master integral *)
-sol//Factor//TableForm
+sol5=DIMENSION5MATCHING[TensorList5,NList5,WC5,d];
+Collect[sol5,{_Zb,_Zf},Factor]//TableForm
 
 
-sol=DIMENSION5MATCHING[{Tens2},{2},{\[Alpha][\[Phi]^5]},d][[1]];  (*The matching can be done singularly for each group tensor*)
+sol=DIMENSION5MATCHING[{OT[5,2]},{2},{\[Alpha][5,1]},d][[1]];  (*The matching can be done singularly for each group tensor*)
 sol//Factor//TableForm
 
 
@@ -148,29 +148,25 @@ id={1};
 
 (*Here we construct the group tensors of the higher dimensional operators*)
 
-Tens4=-3*Factorial[2]Factorial[2]\[Alpha][\[Phi]^4D^2]TensorProduct[id,id,id,id];
-Tens9=Factorial[6]\[Alpha][\[Phi]^6]TensorProduct[id,id,id,id,id,id];
-Tens15=Factorial[2]\[Alpha][\[Phi]^2D^4]TensorProduct[id,id];
+OT[6,4]=\[Beta][6,2]*TensorProduct[{1},{1},{1}];
+OT[6,9]=\[Alpha][6,1]*TensorProduct[{1},{1},{1},{1},{1},{1}];
+OT[6,15]=\[Beta][6,1]*TensorProduct[{1},{1}];
 
 
-TensorList6={Tens4,Tens9,Tens15}; (*TensorList is the array of the various group tensors refered to higher dimensional operators*)
+TensorList6={OT[6,4],OT[6,9],OT[6,15]}; (*TensorList is the array of the various group tensors refered to higher dimensional operators*)
 NList6={4,9,15}; (*NList is the array that indicate to which operator the group tensors in TensorList refer to*)
-WC6 = DeleteDuplicates[Cases[TensorList6//Normal, \[Alpha][__], \[Infinity]]]; (*WC is the array of the various Wilson Coefficients \[Alpha][...]*)
+WC6 = {\[Alpha][6,1],\[Beta][6,1],\[Beta][6,2]}; (*WC is the array of the various Wilson Coefficients \[Alpha][...]*)
 
 
-sol=DIMENSION6MATCHING[TensorList6,NList6,WC6,d][[1]]; (*DIMENSION6MATCHING and DIMENSION5MATCHING find the values of the Wilson coefficients listed in WC, d is the number of spatial dimensions, Zb and Zf are 1 loop master integral *)
-sol//Factor//TableForm
+sol6=DIMENSION6MATCHING[TensorList6,NList6,WC6,d][[1]]; (*DIMENSION6MATCHING and DIMENSION5MATCHING find the values of the Wilson coefficients listed in WC, d is the number of spatial dimensions, Zb and Zf are 1 loop master integral *)
+sol6//Factor//TableForm
 
 
-sol=DIMENSION6MATCHING[{Tens4},{4},{\[Alpha][\[Phi]^4 D^2]},d][[1]]; (*The matching can be done singularly for each group tensor*)
+sol=DIMENSION6MATCHING[{OT[6,9]},{9},{\[Alpha][6,1]},d][[1]]; (*The matching can be done singularly for each group tensor*)
 sol//Factor//TableForm
 
 
 ODIM6[4,d]//MatrixForm (*The functions ODIM6 and ODIM5 return the group tensors of the various operators*)
 
 
-(* ::Section:: *)
-(*CROSSCHECK WITH LITERATURE*)
-
-(*The Wilson coefficients \Alpha[__] are associated to the basis used in arxiv 2406.02667, where the effects of Higher Dimensional Operators for Scalar-Yukawa model has already been investigated.
-The solutions returned by the functions DIMENSION5MATCHING and DIMENSION6MATCHING are the same of the one reported in 2406.02667*)
+(*The solutions returned by the functions DIMENSION5MATCHING and DIMENSION6MATCHING are consistent with the ones reported in 2406.02667*)
