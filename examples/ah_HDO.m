@@ -120,7 +120,4 @@ sol//Factor//TableForm
 ODIM6[2,d]//MatrixForm (*The functions ODIM6 and ODIM5 return the group tensors of the various operators*)
 
 
-(* ::Section:: *)
-(*CROSSCHECK WITH LITERATURE*)
-
 (*The solutions returned by the DIMENSION6MATCHING function agree with those reported in arXiv:2503.18904, where the Abelian Higgs model has already been studied*)
