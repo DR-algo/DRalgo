@@ -123,4 +123,4 @@ ODIM6[2,d]//MatrixForm (*The functions ODIM6 and ODIM5 return the group tensors 
 (* ::Section:: *)
 (*CROSSCHECK WITH LITERATURE*)
 
-(*The solutions reported by the function DIMENSION6MATCHING are the same as in arxiv: 2503.18904, where the Abelian-Higss model has already been investigated *)
+(*The solutions returned by the DIMENSION6MATCHING function agree with those reported in arXiv:2503.18904, where the Abelian Higgs model has already been studied*)
