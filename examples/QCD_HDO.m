@@ -37,6 +37,7 @@ PerformDRhard[]
 (* ::Section:: *)
 (*Dimension 6 Matching*)
 
+(*Here we construct tensors associated to the group structure constants and its contraction, which will be used for the construction of the operator tensors*)
 
 fvvv=gvvv/gs;
 Tvvv=-I*fvvv;
@@ -49,7 +50,7 @@ X6=Contract[Tvvv,Tvvv,Tvvv,Tvvv,Tvvv,Tvvv,{{2,18},{3,5},{6,8},{9,11},{12,14},{15
 gE=gs;
 
 
-(*Here we construct the group tensors of the higher dimensional operators*)
+(*Here we construct the group tensors of the higher dimensional operators, having defined \[Alpha][__] our Wilson Coefficients*)
 
 Tens1=Factorial[3]I \[Alpha][F^3] gE^3 X3;
 Tens3=SymmetrizeTensor[4(\[Alpha][A^2F^2,1]X4+\[Alpha][A^2F^2,2]Transpose[X4,{1,3,2,4}]),{{1,2},{3,4}}] gE^4;
