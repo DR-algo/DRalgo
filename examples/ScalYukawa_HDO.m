@@ -128,11 +128,11 @@ NList5={2,5}; (*NList is the array that indicate to which operator the group ten
 WC5 = {\[Alpha][5,1],\[Beta][5,1]}; (*WC is the array of the various Wilson Coefficients \[Alpha][...]*)
 
 
-sol5=DIMENSION5MATCHING[TensorList5,NList5,WC5,d];
+sol5=Dimension5Matching[TensorList5,NList5,WC5,d];
 Collect[sol5,{_Zb,_Zf},Factor]//TableForm
 
 
-sol=DIMENSION5MATCHING[{OT[5,2]},{2},{\[Alpha][5,1]},d][[1]];  (*The matching can be done singularly for each group tensor*)
+sol=Dimension5Matching[{OT[5,2]},{2},{\[Alpha][5,1]},d][[1]];  (*The matching can be done singularly for each group tensor*)
 sol//Factor//TableForm
 
 
@@ -158,15 +158,15 @@ NList6={4,9,15}; (*NList is the array that indicate to which operator the group 
 WC6 = {\[Alpha][6,1],\[Beta][6,1],\[Beta][6,2]}; (*WC is the array of the various Wilson Coefficients \[Alpha][...]*)
 
 
-sol6=DIMENSION6MATCHING[TensorList6,NList6,WC6,d][[1]]; (*DIMENSION6MATCHING and DIMENSION5MATCHING find the values of the Wilson coefficients listed in WC, d is the number of spatial dimensions, Zb and Zf are 1 loop master integral *)
+sol6=Dimension6Matching[TensorList6,NList6,WC6,d][[1]]; (*Dimension6Matching and Dimension5Matching find the values of the Wilson coefficients listed in WC, d is the number of spatial dimensions, Zb and Zf are 1 loop master integral *)
 sol6//Factor//TableForm
 
 
-sol=DIMENSION6MATCHING[{OT[6,9]},{9},{\[Alpha][6,1]},d][[1]]; (*The matching can be done singularly for each group tensor*)
+sol=Dimension6Matching[{OT[6,9]},{9},{\[Alpha][6,1]},d][[1]]; (*The matching can be done singularly for each group tensor*)
 sol//Factor//TableForm
 
 
 ODIM6[4,d]//MatrixForm (*The functions ODIM6 and ODIM5 return the group tensors of the various operators*)
 
 
-(*The solutions returned by the functions DIMENSION5MATCHING and DIMENSION6MATCHING are consistent with the ones reported in 2406.02667*)
+(*The solutions returned by the functions Dimension5Matching and Dimension6Matching are consistent with the ones reported in 2406.02667*)
