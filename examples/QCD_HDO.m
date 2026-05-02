@@ -65,11 +65,11 @@ TensorListWithoutA6={OT[6,1],OT[6,3],OT[6,8],OT[6,13],OT[6,16],OT[6,17]};
 NListWithoutA6={1,3,8,13,16,17};
 WCsWithoutA6=DeleteDuplicates[Cases[TensorListWithoutA6//Normal, \[Alpha][__], \[Infinity]]]; (*WC is the array of the various Wilson Coefficients \[Alpha][...]*)
 
-solWithoutA6=DIMENSION6MATCHING[TensorListWithoutA6,NListWithoutA6,WCsWithoutA6,3][[1]]; (*DIMENSION6MATCHING and DIMENSION5MATCHING find the values of the Wilson coefficients listed in WC, d is the number of spatial dimensions, Zb and Zf are 1 loop master integral *)
+solWithoutA6=Dimension6Matching[TensorListWithoutA6,NListWithoutA6,WCsWithoutA6,3][[1]]; (*Dimension6Matching and Dimension5Matching find the values of the Wilson coefficients listed in WC, d is the number of spatial dimensions, Zb and Zf are 1 loop master integral *)
 Collect[solWithoutA6,{_Zb,_Zf},Factor]//TableForm
 
 
-solA6=DIMENSION6MATCHING[{OT[12]},{12},{\[Alpha][A^6,1],\[Alpha][A^6,2]},3][[1]];  (*The matching can be done singularly for each group tensor*)
+solA6=Dimension6Matching[{OT[12]},{12},{\[Alpha][A^6,1],\[Alpha][A^6,2]},3][[1]];  (*The matching can be done singularly for each group tensor*)
 solA6//Factor//TableForm
 
 
