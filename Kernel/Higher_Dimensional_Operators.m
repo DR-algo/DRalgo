@@ -1397,7 +1397,7 @@ ODIM6[x_,d_]:=Module[{T1},
 (*HIGHER DIMENSIONAL OPERATORS MATCHING *)
 
 
-DIMENSION5MATCHING[O_List,n_List,\[Alpha]_List,d_]:=Module[{eqns},
+Dimension5Matching[O_List,n_List,\[Alpha]_List,d_]:=Module[{eqns},
 	CreateHelpTensors[];
 	eqns={};
 	If[MemberQ[n,1],
@@ -1440,7 +1440,7 @@ DIMENSION5MATCHING[O_List,n_List,\[Alpha]_List,d_]:=Module[{eqns},
 ];
 
 
-DIMENSION6MATCHING[O_List,n_List,\[Alpha]_List,d_]:=Module[{eqns},
+Dimension6Matching[O_List,n_List,\[Alpha]_List,d_]:=Module[{eqns},
 	CreateHelpTensors[];
 	eqns={};
 	
