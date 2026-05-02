@@ -263,13 +263,13 @@ WC = DeleteDuplicates[Cases[TensorList//Normal, \[Alpha][__], \[Infinity]]];
 (* The matching of operators with 6 fields, namely phi^6, phi^4 B0^2, phi^2 B0^4, and B0^6, requires a significant amount of running time. It is therefore convenient to perform the matching of these operators separately. *)
 
 n={1,2,3,4,5,6,7,8,13,14,15,16,17,18,19,20};
-sol=DIMENSION6MATCHING[TensorList[[n]],NList[[n]],WC,3][[1]];
+sol=Dimension6Matching[TensorList[[n]],NList[[n]],WC,3][[1]];
 Collect[sol,{_Zb,_Zf},Factor]/.IPERCHARGE//TableForm
 
 
 n={9,10,11,12};
 
-sol6=DIMENSION6MATCHING[TensorList[[n]],NList[[n]],WC,3][[1]];
+sol6=Dimension6Matching[TensorList[[n]],NList[[n]],WC,3][[1]];
 Collect[sol6,{_Zb,_Zf},Factor]/.IPERCHARGE//TableForm
 
 
