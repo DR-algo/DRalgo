@@ -107,17 +107,17 @@ NList={2,3,4,5,6,7,8,9,10,11,12,13,14,15,17}; (*NList is the array that indicate
 WC = DeleteDuplicates[Cases[TensorList//Normal, \[Alpha][__], \[Infinity]]]; (*WC is the array of the various Wilson Coefficients \[Alpha][...]*)
 
 
-sol=DIMENSION6MATCHING[TensorList,NList,WC,d][[1]]; (*DIMENSION6MATCHING and DIMENSION5MATCHING find the values of the Wilson coefficients listed in WC, d is the number of spatial dimensions, Zb and Zf are 1 loop master integral *)
+sol=Dimension6Matching[TensorList,NList,WC,d][[1]]; (*Dimension6Matching and Dimension5Matching find the values of the Wilson coefficients listed in WC, d is the number of spatial dimensions, Zb and Zf are 1 loop master integral *)
 sol//Factor//TableForm
 
 (*The solutions of the Wilson Coefficient is left in generic R-\xi gauge, the user can easily check that this gauge dependence is removed once redundancy of the operator basis is removed as well *)
 (*Zb[3,0] is an Hard Thermal 1 loop Integral, its value in d=3 can be reproduce with the function HardThermal1LoopInt["B",3,0,3]*)
 
-sol=DIMENSION6MATCHING[{Tens2},{2},{\[Alpha][\[Phi]^2 F^2]},d][[1]];  (*The matching can be done singularly for each group tensor*)
+sol=Dimension6Matching[{Tens2},{2},{\[Alpha][\[Phi]^2 F^2]},d][[1]];  (*The matching can be done singularly for each group tensor*)
 sol//Factor//TableForm
 
 
 ODIM6[2,d]//MatrixForm (*The functions ODIM6 and ODIM5 return the group tensors of the various operators*)
 
 
-(*The solutions returned by the DIMENSION6MATCHING function agree with those reported in arXiv:2503.18904, where the Abelian Higgs model has already been studied*)
+(*The solutions returned by the Dimension6Matching function agree with those reported in arXiv:2503.18904, where the Abelian Higgs model has already been studied*)
