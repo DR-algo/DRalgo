@@ -114,11 +114,11 @@ NList={1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17}; (*NList is the array that ind
 WC = DeleteDuplicates[Cases[TensorList//Normal, \[Alpha][__], \[Infinity]]]; (*WC is the array of the various Wilson Coefficients \[Alpha][...]*)
 
 
-soltot=DIMENSION6MATCHING[TensorList,NList,WC,d][[1]]; (*DIMENSION6MATCHING and DIMENSION5MATCHING find the values of the Wilson coefficients listed in WC, d is the number of spatial dimensions, Zb and Zf are 1 loop master integral *)
+soltot=Dimension6Matching[TensorList,NList,WC,d][[1]]; (*Dimension6Matching and Dimension5Matching find the values of the Wilson coefficients listed in WC, d is the number of spatial dimensions, Zb and Zf are 1 loop master integral *)
 soltot//Factor//TableForm
 
 
-sol=DIMENSION6MATCHING[{Tens1},{1},{\[Alpha][W^3]},d][[1]];  (*The matching can be done singularly for each group tensor*)
+sol=Dimension6Matching[{Tens1},{1},{\[Alpha][W^3]},d][[1]];  (*The matching can be done singularly for each group tensor*)
 sol//Factor//TableForm
 
 
