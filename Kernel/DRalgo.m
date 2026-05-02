@@ -274,8 +274,8 @@ Contract::usage="" (* Routine to contract given pairs of indices *)
 
 ODIM5::usage"" (* Functions that returns the Operator Tensor Group of dimension-5 operators *)
 ODIM6::usage"" (* Functions that returns the Operator Tensor Group of dimension-6 operators *)
-DIMENSION5MATCHING::usage="Functions that performs the matching of dimension-5 operators"
-DIMENSION6MATCHING::usage="Functions that performs the matching of dimension-6 operators"
+Dimension5Matching::usage="Functions that performs the matching of dimension-5 operators"
+Dimension6Matching::usage="Functions that performs the matching of dimension-6 operators"
 
 
 PrepareHET::usage = "\
