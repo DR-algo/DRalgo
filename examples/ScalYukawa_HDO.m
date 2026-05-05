@@ -121,9 +121,6 @@ id={1};
 
 OT[5,2]=\[Alpha][5,1]*TensorProduct[{1},{1},{1},{1},{1}];
 OT[5,5]=\[Beta][5,1]*TensorProduct[{1},{1},{1}];
-OT[6,4]=\[Beta][6,2]*TensorProduct[{1},{1},{1}];
-OT[6,9]=\[Alpha][6,1]*TensorProduct[{1},{1},{1},{1},{1},{1}];
-OT[6,15]=\[Beta][6,1]*TensorProduct[{1},{1}];
 
 TensorList5={OT[5,2],OT[5,5]}; (*TensorList is the array of the various group tensors refered to higher dimensional operators*)
 NList5={2,5}; (*NList is the array that indicate to which operator the group tensors in TensorList refer to*)
@@ -132,37 +129,27 @@ WC5 = {\[Alpha][5,1],\[Beta][5,1]}; (*WC is the array of the various Wilson Coef
 sol5=Dimension5Matching[TensorList5,NList5,WC5,d];
 Collect[sol5,{_Zb,_Zf},Factor]//TableForm
 
-
-sol=Dimension5Matching[{OT[5,2]},{2},{\[Alpha][5,1]},d][[1]];  (*The matching can be done singularly for each group tensor*)
-sol//Factor//TableForm
-
-
-ODIM5[2,d]//MatrixForm (*The functions ODIM6 and ODIM5 return the group tensors of the various operators*)
-
-
 (* ::Section:: *)
 (*DIMENSION 6 MATCHING*)
 
-
-id={1};
-
-
-(*Here we construct the group tensors of the higher dimensional operators*)
-
-
-
+OT[6,4]=\[Beta][6,2]*TensorProduct[{1},{1},{1}];
+OT[6,9]=\[Alpha][6,1]*TensorProduct[{1},{1},{1},{1},{1},{1}];
+OT[6,15]=\[Beta][6,1]*TensorProduct[{1},{1}];
 
 TensorList6={OT[6,4],OT[6,9],OT[6,15]}; (*TensorList is the array of the various group tensors refered to higher dimensional operators*)
 NList6={4,9,15}; (*NList is the array that indicate to which operator the group tensors in TensorList refer to*)
 WC6 = {\[Alpha][6,1],\[Beta][6,1],\[Beta][6,2]}; (*WC is the array of the various Wilson Coefficients \[Alpha][...]*)
 
-
 sol6=Dimension6Matching[TensorList6,NList6,WC6,d][[1]]; (*Dimension6Matching and Dimension5Matching find the values of the Wilson coefficients listed in WC, d is the number of spatial dimensions, Zb and Zf are 1 loop master integral *)
-sol6//Factor//TableForm
+Collect[sol6,{_Zb,_Zf},Factor]//TableForm
 
-
-sol=Dimension6Matching[{OT[6,9]},{9},{\[Alpha][6,1]},d][[1]]; (*The matching can be done singularly for each group tensor*)
+sol=Dimension5Matching[{OT[5,2]},{2},{\[Alpha][5,1]},d][[1]];  (*The matching can be done singularly for each group tensor*)
 sol//Factor//TableForm
+
+sol=Dimension6Matching[{OT[6,4],OT[6,15]},{4,15},{\[Beta][6,1],\[Beta][6,2]},d][[1]]; (*The matching can be done singularly for each group tensor*)
+sol//Factor//TableForm
+
+ODIM5[5,d]//MatrixForm (*The functions ODIM6 and ODIM5 return the group tensors of the various operators*)
 
 
 ODIM6[4,d]//MatrixForm (*The functions ODIM6 and ODIM5 return the group tensors of the various operators*)
