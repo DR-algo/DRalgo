@@ -121,12 +121,13 @@ id={1};
 
 OT[5,2]=\[Alpha][5,1]*TensorProduct[{1},{1},{1},{1},{1}];
 OT[5,5]=\[Beta][5,1]*TensorProduct[{1},{1},{1}];
-
+OT[6,4]=\[Beta][6,2]*TensorProduct[{1},{1},{1}];
+OT[6,9]=\[Alpha][6,1]*TensorProduct[{1},{1},{1},{1},{1},{1}];
+OT[6,15]=\[Beta][6,1]*TensorProduct[{1},{1}];
 
 TensorList5={OT[5,2],OT[5,5]}; (*TensorList is the array of the various group tensors refered to higher dimensional operators*)
 NList5={2,5}; (*NList is the array that indicate to which operator the group tensors in TensorList refer to*)
 WC5 = {\[Alpha][5,1],\[Beta][5,1]}; (*WC is the array of the various Wilson Coefficients \[Alpha][...]*)
-
 
 sol5=Dimension5Matching[TensorList5,NList5,WC5,d];
 Collect[sol5,{_Zb,_Zf},Factor]//TableForm
@@ -148,9 +149,7 @@ id={1};
 
 (*Here we construct the group tensors of the higher dimensional operators*)
 
-OT[6,4]=\[Beta][6,2]*TensorProduct[{1},{1},{1}];
-OT[6,9]=\[Alpha][6,1]*TensorProduct[{1},{1},{1},{1},{1},{1}];
-OT[6,15]=\[Beta][6,1]*TensorProduct[{1},{1}];
+
 
 
 TensorList6={OT[6,4],OT[6,9],OT[6,15]}; (*TensorList is the array of the various group tensors refered to higher dimensional operators*)
