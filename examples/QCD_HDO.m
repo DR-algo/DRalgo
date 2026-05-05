@@ -58,6 +58,13 @@ OT[6,16]=\[Alpha][D^2 A^2 F]X3;
 OT[6,17]=\[Alpha][D^4A^2]X2;
 
 
+TensorList={OT[6,1],OT[6,3],OT[6,8],OT[6,12],OT[6,13],OT[6,16],OT[6,17]};
+NList={1,3,8,12,13,16,17};
+WCs=DeleteDuplicates[Cases[TensorList//Normal, \[Alpha][__], \[Infinity]]]; (*WC is the array of the various Wilson Coefficients \[Alpha][...]*)
+
+sol6=Dimension6Matching[TensorList,NList,WCs,3][[1]]; (*Dimension6Matching and Dimension5Matching find the values of the Wilson coefficients listed in WC, d is the number of spatial dimensions, Zb and Zf are 1 loop master integral *)
+Collect[sol6,{_Zb,_Zf},Factor]//TableForm
+
 (*The matching of the tensor Tens12 takes approximately 10 minutes to complete, as it entails handling an 8\[Times]8\[Times]8\[Times]8\[Times]8\[Times]8 tensor. It is thus advantageous to first perform 
 the matching for the remaining tensors and subsequently address the A0^6 operator separately. This procedure can be implemented as follows*)
 
@@ -72,6 +79,11 @@ Collect[solWithoutA6,{_Zb,_Zf},Factor]//TableForm
 solA6=Dimension6Matching[{OT[12]},{12},{\[Alpha][A^6,1],\[Alpha][A^6,2]},3][[1]];  (*The matching can be done singularly for each group tensor*)
 solA6//Factor//TableForm
 
+
+
+(*The matching can be performed on individual operators*)
+sol=Dimension6Matching[{OT[6,1]},{1},{(*@$\alpha$@*)[F^3]},3][[1]];
+Collect[sol,{_Zb,_Zf},Factor]//TableForm
 
 ODIM6[1,d]//MatrixForm (*The functions ODIM6 and ODIM5 return the group tensors of the various operators*)
 
