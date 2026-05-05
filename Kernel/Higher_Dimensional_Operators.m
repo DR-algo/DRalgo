@@ -76,9 +76,9 @@ ComposePermutation[p1_,p2_]:=p2[[p1]];
 (*HIGHER DIMENSIONAL OPERATORS GROUP TENSORS *)
 
 
-HardThermal1LoopInt[B,a_,b_,d_]:=((\[CapitalLambda]^2 Exp[EulerGamma])/(4\[Pi]))^((3-d)/2) 2 T (2\[Pi] T)^(d-2a+2b)/(4\[Pi])^(d/2) Gamma[a-d/2]/Gamma[a] Zeta[2a-2b-d];
+HardThermal1LoopInt["B",a_,b_,d_]:=((\[CapitalLambda]^2 Exp[EulerGamma])/(4\[Pi]))^((3-d)/2) 2 T (2\[Pi] T)^(d-2a+2b)/(4\[Pi])^(d/2) Gamma[a-d/2]/Gamma[a] Zeta[2a-2b-d];
 
-HardThermal1LoopInt[F,a_,b_,d_]:=(2^(2a-2b-d)-1)HardThermal1LoopInt[B,a,b,d];
+HardThermal1LoopInt["F",a_,b_,d_]:=(2^(2a-2b-d)-1)HardThermal1LoopInt["B",a,b,d];
 
 
 S1V2D2B[x_]:=Module[{T},
