@@ -82,10 +82,11 @@ solA6//Factor//TableForm
 
 
 (*The matching can be performed on individual operators*)
-sol=Dimension6Matching[{OT[6,1]},{1},{(*@$\alpha$@*)[F^3]},3][[1]];
+sol=Dimension6Matching[{OT[6,1]},{1},{\[Alpha][F^3]},3][[1]];
 Collect[sol,{_Zb,_Zf},Factor]//TableForm
 
-ODIM6[1,d]//MatrixForm (*The functions ODIM6 and ODIM5 return the group tensors of the various operators*)
+ODIM6[1,3]//MatrixForm (*The functions ODIM6 and ODIM5 return the group tensors of the various operators*)
+ODIM6[17,3]//MatrixForm (*The functions ODIM6 and ODIM5 return the group tensors of the various operators*)
 
 
 (* ::Section:: *)
