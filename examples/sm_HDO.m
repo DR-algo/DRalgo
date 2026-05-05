@@ -177,6 +177,19 @@ dG[[1 ;; 8, 1 ;; 8, 1 ;; 8]] = Table[
   {a, 8}, {b, 8}, {c, 8}
 ];
 
+(*the matching can be performed on individual operator*)
+
+OT[6,18]=I \[Alpha][B0 B^2 D]TensorProduct[idB,ProjB]+I \[Alpha][B0 W^2 D]TensorProduct[ProjB,idW]+I \[Alpha][W0 B W D,1]Transpose[TensorProduct[ProjB,idW],{2,1,3}]+\
+		I \[Alpha][W0 B W D,2]TensorProduct[idW,ProjB]+I \[Alpha][W0 W^2 D]\[Epsilon]W+\[Alpha][B0 G^2 D]TensorProduct[ProjB,idG]+I \[Alpha][G0 B G D,1]Transpose[TensorProduct[ProjB,idG],{2,1,3}]+\
+		I \[Alpha][G0 B G D,2]TensorProduct[idG,ProjB]+I \[Alpha][G0 G^2 D,1]fG+\[Alpha][G0 G^2 D,2]dG;	
+
+WCs = Cases[OT[6,18]//Normal, \[Alpha][__], \[Infinity]];
+
+sol=Dimension6Matching[{O[6,18]},{18},3][[1]];
+Collect[sol,{_Zb,_Zf},Factor]//TableForm
+
+(*below we construct the full list of tensors*)
+
 X2=Contract[TGadj,TGadj,{{2,6},{3,5}}];
 X3=Contract[TGadj,TGadj,{{2,6},{3,5}}];
 X4=Contract[TGadj,TGadj,TGadj,TGadj,{{2,12},{3,5},{6,8},{9,11}}];
