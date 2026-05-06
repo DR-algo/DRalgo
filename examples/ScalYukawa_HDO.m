@@ -129,7 +129,7 @@ Collect[sol5,{_Zb,_Zf},Factor]//TableForm
 (* ::Section:: *)
 (*DIMENSION 6 MATCHING*)
 
-OT[6,4]=\[Beta][6,2]*TensorProduct[{1},{1},{1}];
+OT[6,4]=\[Beta][6,2]*TensorProduct[{1},{1},{1},{1}];
 OT[6,9]=\[Alpha][6,1]*TensorProduct[{1},{1},{1},{1},{1},{1}];
 OT[6,15]=\[Beta][6,1]*TensorProduct[{1},{1}];
 
