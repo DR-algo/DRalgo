@@ -5,6 +5,7 @@ Quit[];
 
 SetDirectory[NotebookDirectory[]];
 DRalgo`DRalgo`$LoadGroupMath=True;
+DRalgo`DRalgo`$GroupMathMultipleModels=True; (*Put this if you want to create multiple model-files with the same kernel*)
 <<../Kernel/DRalgo.m
 
 
@@ -12,7 +13,7 @@ DRalgo`DRalgo`$LoadGroupMath=True;
 (*QCD*)
 
 
-(* ::Section::Closed:: *)
+(* ::Section:: *)
 (*Model*)
 
 
@@ -28,7 +29,7 @@ RepFermion={RepFermionL,RepFermionR};
 {gvvv,gvff,gvss,\[Lambda]1,\[Lambda]3,\[Lambda]4,\[Mu]ij,\[Mu]IJ,\[Mu]IJC,Ysff,YsffC}=AllocateTensors[Group,RepAdjoint,CouplingName,RepFermion,RepScalar];
 
 
-(* ::Section::Closed:: *)
+(* ::Section:: *)
 (*Dimensional Reduction*)
 
 
@@ -39,7 +40,9 @@ PerformDRhard[]
 (* ::Section:: *)
 (*Dimension 6 Matching*)
 
-(*Here we construct tensors associated to the group structure constants and its contraction*)
+
+(*
+	Here we construct tensors associated to the group structure constants and its contraction*)
 
 Tadj=-I gvvv/gs;
 X2=Contract[Tadj,Tadj,{{2,6},{3,5}}];
@@ -60,41 +63,75 @@ OT[6,17]=\[Alpha][D^4A^2]X2;
 
 TensorList={OT[6,1],OT[6,3],OT[6,8],OT[6,12],OT[6,13],OT[6,16],OT[6,17]};
 NList={1,3,8,12,13,16,17};
-WCs=DeleteDuplicates[Cases[TensorList//Normal, \[Alpha][__], \[Infinity]]]; (*WC is the array of the various Wilson Coefficients \[Alpha][...]*)
+(*
+	WC is the array of the various Wilson Coefficients \[Alpha][...]
+*)
+WCs=DeleteDuplicates[Cases[TensorList//Normal, \[Alpha][__], \[Infinity]]];
 
-sol6=Dimension6Matching[TensorList,NList,WCs,3][[1]]; (*Dimension6Matching and Dimension5Matching find the values of the Wilson coefficients listed in WC, d is the number of spatial dimensions, Zb and Zf are 1 loop master integral *)
+(*
+	Dimension6Matching and Dimension5Matching find the values of
+	the Wilson coefficients listed in WC, d is the number of spatial dimensions,
+	Zb and Zf are 1 loop master integral
+*)
+sol6=Dimension6Matching[TensorList,NList,WCs,3][[1]];
 Collect[sol6,{_Zb,_Zf},Factor]//TableForm
 
-(*The matching of the tensor Tens12 takes approximately 10 minutes to complete, as it entails handling an 8\[Times]8\[Times]8\[Times]8\[Times]8\[Times]8 tensor. It is thus advantageous to first perform 
-the matching for the remaining tensors and subsequently address the A0^6 operator separately. This procedure can be implemented as follows*)
 
+(*
+	The matching of the tensor Tens12 takes approximately 10 minutes to complete,
+	as it entails handling an 8\[Times]8\[Times]8\[Times]8\[Times]8\[Times]8 tensor.
+	It is thus advantageous to first perform 
+	the matching for the remaining tensors and subsequently address the A0^6 operator separately.
+	This procedure can be implemented as follows
+*)
 TensorListWithoutA6={OT[6,1],OT[6,3],OT[6,8],OT[6,13],OT[6,16],OT[6,17]};
 NListWithoutA6={1,3,8,13,16,17};
-WCsWithoutA6=DeleteDuplicates[Cases[TensorListWithoutA6//Normal, \[Alpha][__], \[Infinity]]]; (*WC is the array of the various Wilson Coefficients \[Alpha][...]*)
+(*
+	WC is the array of the various Wilson Coefficients \[Alpha][...]
+*)
+WCsWithoutA6=DeleteDuplicates[Cases[TensorListWithoutA6//Normal, \[Alpha][__], \[Infinity]]];
 
-solWithoutA6=Dimension6Matching[TensorListWithoutA6,NListWithoutA6,WCsWithoutA6,3][[1]]; (*Dimension6Matching and Dimension5Matching find the values of the Wilson coefficients listed in WC, d is the number of spatial dimensions, Zb and Zf are 1 loop master integral *)
+(*
+	Dimension6Matching and Dimension5Matching find the values of
+	the Wilson coefficients listed in WC, d is the number of spatial dimensions,
+	Zb and Zf are 1 loop master integral
+*)
+solWithoutA6=Dimension6Matching[TensorListWithoutA6,NListWithoutA6,WCsWithoutA6,3][[1]];
 Collect[solWithoutA6,{_Zb,_Zf},Factor]//TableForm
 
 
-solA6=Dimension6Matching[{OT[12]},{12},{\[Alpha][A^6,1],\[Alpha][A^6,2]},3][[1]];  (*The matching can be done singularly for each group tensor*)
+(*
+	The matching can be done singularly for each group tensor
+*)
+solA6=Dimension6Matching[{OT[12]},{12},{\[Alpha][A^6,1],\[Alpha][A^6,2]},3][[1]];
 solA6//Factor//TableForm
 
 
-
-(*The matching can be performed on individual operators*)
+(*
+	The matching can be performed on individual operators
+*)
 sol=Dimension6Matching[{OT[6,1]},{1},{\[Alpha][F^3]},3][[1]];
 Collect[sol,{_Zb,_Zf},Factor]//TableForm
 
-ODIM6[1,3]//MatrixForm (*The functions ODIM6 and ODIM5 return the group tensors of the various operators*)
-ODIM6[17,3]//MatrixForm (*The functions ODIM6 and ODIM5 return the group tensors of the various operators*)
+
+(*
+	The functions ODIM6 and ODIM5 return the group tensors of the various operators
+*)
+ODIM6[1,3]//MatrixForm
+ODIM6[17,3]//MatrixForm 
 
 
 (* ::Section:: *)
 (*FIELD REDEFINITIONS*)
 
-(*The current version of Higher Dimensional Operators routines desn't include field redefinitions*)
-(*Through field redefinition is it possible to check gauge dependence cancellation*)
 
+(*
+	The current version of Higher Dimensional Operators routines
+	does not include field redefinitions
+*)
+(*
+	Through field redefinition is it possible to check gauge dependence cancellation
+*)
 gE=gs Sqrt[T];
 solDRalgo=Join[solA6,solWithoutA6];
 
