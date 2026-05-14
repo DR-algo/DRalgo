@@ -113,8 +113,8 @@ HardThermal1LoopInt["B",a_,b_,d_]:=((\[CapitalLambda]^2 Exp[EulerGamma])/(4\[Pi]
 HardThermal1LoopInt["F",a_,b_,d_]:=(2^(2a-2b-d)-1)HardThermal1LoopInt["B",a,b,d];
 
 
-S1V2D2B[x_]:=Module[{T},
-	T=
+S1V2D2B[x_]:=Module[{terms},
+	terms=
 		Which[
 			x==1,
 			1/3 (
@@ -139,15 +139,14 @@ S1V2D2B[x_]:=Module[{T},
 
 			True, "NOT ALLOWED X VALUE"
 			];
-	T
+	terms
 ];
 
 S1V2D2[x_]:=S1V2D2B[x];
 
 
-S3D2B[x_]:=Module[{T},
-	
-	T=
+S3D2B[x_]:=Module[{terms},
+	terms=
 		Which[
 			x==1,
 			1/3 (
@@ -160,14 +159,14 @@ S3D2B[x_]:=Module[{T},
 			
 			True, "NOT ALLOWED X VALUE"
 			];
-	T
+	terms
 ];
 
 S3D2[x_]:=S3D2B[x];
 
 
-S5B[x_]:=Module[{T},
-	T=
+S5B[x_]:=Module[{terms},
+	terms=
 		Which[
 			x==1,
 			(
@@ -446,14 +445,14 @@ S5B[x_]:=Module[{T},
 			
 			True, "NOT ALLOWED X VALUE"
 			];
-	T
+	terms
 ];
 
 S5[x_]:=S5B[x];
 
 
-S3V2B[x_]:=Module[{T},
-	T=
+S3V2B[x_]:=Module[{terms},
+	terms=
 		Which[
 			x==1,
 			1/6 (
@@ -578,14 +577,14 @@ S3V2B[x_]:=Module[{T},
 			
 			True, "NOT ALLOWED X VALUE"
 			];
-	T
+	terms
 ];
 
 S3V2[x_]:=S3V2B[x];
 
 
-S1V4B[x_]:=Module[{T},
-	T=
+S1V4B[x_]:=Module[{terms},
+	terms=
 		Which[
 			x==1,
 			1/3 (
@@ -668,14 +667,14 @@ S1V4B[x_]:=Module[{T},
 			
 			True, "NOT ALLOWED X VALUE"
 			];
-	T
+	terms
 ];
 
 S1V4[x_]:=S1V4B[x];
 
 
-V2D4B[x_]:=Module[{T},
-	T=
+V2D4B[x_]:=Module[{terms},
+	terms=
 		Which[
 			x==1,
 			1/60 (
@@ -701,11 +700,11 @@ V2D4B[x_]:=Module[{T},
 			
 			True, "NOT ALLOWED X VALUE"
 			];
-	T
+	terms
 ];
 
-V2D4F[x_]:=Module[{T},
-	T=
+V2D4F[x_]:=Module[{terms},
+	terms=
 		Which[
 			x==1,
 			1/15 (-1+N) Contract[gvff,gvff,{{3,5},{2,6}}] Zf[3,0],
@@ -715,14 +714,14 @@ V2D4F[x_]:=Module[{T},
 			
 			True, "NOT ALLOWED X VALUE"
 			];
-	T
+	terms
 ];
 
 V2D4[x_]:=V2D4B[x]+V2D4F[x];
 
 
-S2D4B[x_]:=Module[{T},
-	T=
+S2D4B[x_]:=Module[{terms},
+	terms=
 		Which[
 			x==1,
 			-(1/3) (-5+3 xi) Contract[gvss,gvss,{{3,5},{1,4}}] Zb[3,0]
@@ -730,11 +729,11 @@ S2D4B[x_]:=Module[{T},
 			
 			True, "NOT ALLOWED X VALUE"
 			];
-	T
+	terms
 ];
 
-S2D4F[x_]:=Module[{T},
-	T=
+S2D4F[x_]:=Module[{terms},
+	terms=
 		Which[
 			x==1,
 			1/6 (
@@ -744,14 +743,14 @@ S2D4F[x_]:=Module[{T},
 			
 			True, "NOT ALLOWED X VALUE"
 			];
-	T
+	terms
 ];
 
 S2D4[x_]:=S2D4B[x]+S2D4F[x];
 
 
-V3D3B[x_]:=Module[{T},
-	T=
+V3D3B[x_]:=Module[{terms},
+	terms=
 		Which[
 			x==1,
 			1/30 I (
@@ -800,11 +799,11 @@ V3D3B[x_]:=Module[{T},
 			
 			True, "NOT ALLOWED X VALUE"
 			];
-	T
+	terms
 ];
 
-V3D3F[x_]:=Module[{T},
-	T=
+V3D3F[x_]:=Module[{terms},
+	terms=
 		Which[
 			x==1,
 			1/15 (
@@ -835,14 +834,14 @@ V3D3F[x_]:=Module[{T},
 			
 			True, "NOT ALLOWED X VALUE"
 			];
-	T
+	terms
 ];
 
 V3D3[x_]:=V3D3B[x]+V3D3F[x];
 
 
-V4D2B[x_]:=Module[{T},
-	T=
+V4D2B[x_]:=Module[{terms},
+	terms=
 		Which[
 			x==1,
 			-(1/(120 xi^2)) (
@@ -1222,11 +1221,11 @@ V4D2B[x_]:=Module[{T},
 			
 			True, "NOT ALLOWED X VALUE"
 			];
-	T
+	terms
 ];
 
-V4D2F[x_]:=Module[{T},
-	T=
+V4D2F[x_]:=Module[{terms},
+	terms=
 		Which[
 			x==1,
 			1/15 (-1+N) (
@@ -1283,14 +1282,14 @@ V4D2F[x_]:=Module[{T},
 			
 			True, "NOT ALLOWED X VALUE"
 			];
-	T
+	terms
 ];
 
 V4D2[x_]:=V4D2B[x]+V4D2F[x];
 
 
-S4D2B[x_]:=Module[{T},
-	T=
+S4D2B[x_]:=Module[{terms},
+	terms=
 		Which[
 			x==1,
 			1/12 (
@@ -1358,11 +1357,11 @@ S4D2B[x_]:=Module[{T},
 			
 			True, "NOT ALLOWED X VALUE"
 			];
-	T
+	terms
 ];
 
-S4D2F[x_]:=Module[{T},
-	T=
+S4D2F[x_]:=Module[{terms},
+	terms=
 		Which[
 			x==1,
 			2/3 (
@@ -1376,14 +1375,14 @@ S4D2F[x_]:=Module[{T},
 			
 			True, "NOT ALLOWED X VALUE"
 			];
-	T
+	terms
 ];
 
 S4D2[x_]:=S4D2B[x]+S4D2F[x];
 
 
-S2V1D3B[x_]:=Module[{T},
-	T=
+S2V1D3B[x_]:=Module[{terms},
+	terms=
 		Which[
 			x==1,
 			1/3 I (
@@ -1396,11 +1395,11 @@ S2V1D3B[x_]:=Module[{T},
 			
 			True, "NOT ALLOWED X VALUE"
 			];
-	T
+	terms
 ];
 
-S2V1D3F[x_]:=Module[{T},
-	T=
+S2V1D3F[x_]:=Module[{terms},
+	terms=
 		Which[
 			x==1,
 			-(2/3) (
@@ -1410,14 +1409,14 @@ S2V1D3F[x_]:=Module[{T},
 			
 			True, "NOT ALLOWED X VALUE"
 			];
-	T
+	terms
 ];
 
 S2V1D3[x_]:=S2V1D3B[x]+S2V1D3F[x];
 
 
-S2V2D2B[x_]:=Module[{T},
-	T=
+S2V2D2B[x_]:=Module[{terms},
+	terms=
 		Which[
 			x==1,
 			1/12 (
@@ -1706,11 +1705,11 @@ S2V2D2B[x_]:=Module[{T},
 			
 			True, "NOT ALLOWED X VALUE"
 			];
-	T
+	terms
 ];
 
-S2V2D2F[x_]:=Module[{T},
-	T=
+S2V2D2F[x_]:=Module[{terms},
+	terms=
 		Which[
 			x==1,
 			1/3 (
@@ -1790,14 +1789,14 @@ S2V2D2F[x_]:=Module[{T},
 			
 			True, "NOT ALLOWED X VALUE"
 			];
-	T
+	terms
 ];
 
 S2V2D2[x_]:=S2V2D2B[x]+S2V2D2F[x];
 
 
-S6B[x_]:=Module[{T},
-	T=
+S6B[x_]:=Module[{terms},
+	terms=
 		Which[
 			x==1,
 			(
@@ -4601,11 +4600,11 @@ S6B[x_]:=Module[{T},
 			
 			True, "NOT ALLOWED X VALUE"
 			];
-	T
+	terms
 ];
 
-S6F[x_]:=Module[{T},
-	T=
+S6F[x_]:=Module[{terms},
+	terms=
 		Which[
 			x==1,
 			2 (
@@ -4733,14 +4732,14 @@ S6F[x_]:=Module[{T},
 			
 			True, "NOT ALLOWED X VALUE"
 			];
-	T
+	terms
 ];
 
 S6[x_]:=S6B[x]+S6F[x];
 
 
-S4V2B[x_]:=Module[{T},
-	T=
+S4V2B[x_]:=Module[{terms},
+	terms=
 		Which[
 			x==1,
 			1/(6 xi) (
@@ -8184,11 +8183,11 @@ S4V2B[x_]:=Module[{T},
 			
 			True, "NOT ALLOWED X VALUE"
 			];
-	T
+	terms
 ];
 
-S4V2F[x_]:=Module[{T},
-	T=
+S4V2F[x_]:=Module[{terms},
+	terms=
 		Which[
 			x==1,
 			2/3 (
@@ -8388,14 +8387,14 @@ S4V2F[x_]:=Module[{T},
 			
 			True, "NOT ALLOWED X VALUE"
 			];
-	T
+	terms
 ];
 
 S4V2[x_]:=S4V2B[x]+S4V2F[x];
 
 
-S2V4B[x_]:=Module[{T},
-	T=
+S2V4B[x_]:=Module[{terms},
+	terms=
 		Which[
 			x==1,
 			-(1/(48 xi^2)) (
@@ -14507,11 +14506,11 @@ S2V4B[x_]:=Module[{T},
 			
 			True, "NOT ALLOWED X VALUE"
 			];
-	T
+	terms
 ];
 
-S2V4F[x_]:=Module[{T},
-	T=
+S2V4F[x_]:=Module[{terms},
+	terms=
 		Which[
 			x==1,
 			1/3 (
@@ -14783,14 +14782,14 @@ S2V4F[x_]:=Module[{T},
 			
 			True, "NOT ALLOWED X VALUE"
 			];
-	T
+	terms
 ];
 
 S2V4[x_]:=S2V4B[x]+S2V4F[x];
 
 
-V6B[x_]:=Module[{T},
-	T=
+V6B[x_]:=Module[{terms},
+	terms=
 		Which[
 			x==1,
 			(
@@ -15992,11 +15991,11 @@ V6B[x_]:=Module[{T},
 			
 			True, "NOT ALLOWED X VALUE"
 			];
-	T
+	terms
 ];
 
-V6F[x_]:=Module[{T},
-	T=
+V6F[x_]:=Module[{terms},
+	terms=
 		Which[
 			x==1,
 			2/15 (-5+N) (-3+N) (-1+N) (
@@ -16124,15 +16123,15 @@ V6F[x_]:=Module[{T},
 			
 			True, "NOT ALLOWED X VALUE"
 			];
-	T
+	terms
 ];
 
 V6[x_]:=V6B[x]+V6F[x];
 
 
-ODIM5[x_,d_]:=Module[{T1},
+ODIM5[x_,d_]:=Module[{terms},
 	CreateHelpTensors[];
-	T1=
+	terms=
 		Which[
 			x==1,
 			1/(2N-2)S1V2D2[3]T^(3/2-1),
@@ -16160,13 +16159,13 @@ ODIM5[x_,d_]:=Module[{T1},
 			
 			True, "NOT ALLOWED X VALUE"			
 			];
-	Normal[T1]/.{N->d}// SparseArray // SimplifySparse
+	Normal[terms]/.{N->d}// SparseArray // SimplifySparse
 ];
 
 
-ODIM6[x_,d_]:=Module[{T1},
+ODIM6[x_,d_]:=Module[{terms},
 	CreateHelpTensors[];
-	T1=
+	terms=
 		Which[
 			x==1,
 			I/(N-2)*(V3D3[1]-2I Contract[V2D4[2],gvvv,{{2,5}}]+I/(N-1) Transpose[Contract[V2D4[2],gvvv,{{2,5}}],{3,1,2}])T^(3/2-1),
@@ -16230,7 +16229,7 @@ ODIM6[x_,d_]:=Module[{T1},
 			
 			True, "NOT ALLOWED X VALUE"
 			];
-	Normal[T1]/.{N->d}// SparseArray // SimplifySparse
+	Normal[terms]/.{N->d}// SparseArray // SimplifySparse
 ];
 
 
