@@ -3,8 +3,13 @@
 Quit[];
 
 
-SetDirectory[NotebookDirectory[]];
+If[$InputFileName=="",
+	SetDirectory[NotebookDirectory[]],
+	SetDirectory[DirectoryName[$InputFileName]]
+];
+
 DRalgo`DRalgo`$LoadGroupMath=True;
+DRalgo`DRalgo`$GroupMathMultipleModels=True;
 <<../Kernel/DRalgo.m
 
 
@@ -110,7 +115,7 @@ TestCreate[
 		\[Alpha][A^4 D^2,3]->0,\[Alpha][D^2 F^2]->1/180 (333 gs^2 Zb[3,0]-90 gs^2 xi Zb[3,0]-15 gs^2 xi^2 Zb[3,0]-16 gs^2 Zf[3,0]),
 		\[Alpha][A^2 D^2 F]->-(1/90) I (-267 gs^3 Sqrt[T] Zb[3,0]+30 gs^3 Sqrt[T] xi Zb[3,0]+15 gs^3 Sqrt[T] xi^2 Zb[3,0]+14 gs^3 Sqrt[T] Zf[3,0]),
 		\[Alpha][A^2 D^4]->1/180 (159 gs^2 Zb[3,0]+90 gs^2 xi Zb[3,0]-45 gs^2 xi^2 Zb[3,0]-8 gs^2 Zf[3,0])
-		}
+	}
 ]];
 
 

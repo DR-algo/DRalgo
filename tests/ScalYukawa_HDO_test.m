@@ -3,8 +3,13 @@
 Quit[];
 
 
-SetDirectory[NotebookDirectory[]];
+If[$InputFileName=="",
+	SetDirectory[NotebookDirectory[]],
+	SetDirectory[DirectoryName[$InputFileName]]
+];
+
 DRalgo`DRalgo`$LoadGroupMath=True;
+DRalgo`DRalgo`$GroupMathMultipleModels=True;
 <<../Kernel/DRalgo.m
 
 
@@ -207,3 +212,6 @@ TestCreate[HardThermal1LoopInt["F",3,0,3],
 
 report=TestReport[testList]
 report["ResultsDataset"]
+
+
+
