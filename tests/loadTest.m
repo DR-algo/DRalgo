@@ -14,7 +14,7 @@ If[$InputFileName=="",
 
 
 (* ::Subsection:: *)
-(*Test direct paclet installation*)
+(*Test Wolfram direct paclet installation*)
 
 
 (* check if the paclet is installed somewhere *)
@@ -69,4 +69,7 @@ Check[
     Message[Get::noopen, "DRalgo` at "<>ToString[$UserBaseDirectory]<>"/Applications"];
     Abort[];
 ]
+
+
+
 
