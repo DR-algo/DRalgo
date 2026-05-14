@@ -1023,8 +1023,13 @@ S2V1D3B[x_]:=Module[{T},
 	T=
 		Which[
 			x==1,
-			1/3 I (4 Transpose[Contract[gvss,gvss,gvss,{{5,9},{3,6},{1,7}}],{2,3,1}]+18 Transpose[Contract[gvss,gvvv,gvss,{{5,7},{2,9},{1,6}}],{2,3,1}]-8 xi Transpose[Contract[gvss,gvvv,gvss,{{5,7},{2,9},{1,6}}],{2,3,1}]-\
-			(xi^2) Transpose[Contract[gvss,gvvv,gvss,{{5,7},{2,9},{1,6}}],{2,3,1}]) Zb[3,0]+1/10 I Transpose[Contract[\[Lambda]3,gvss,\[Lambda]3,{{5,9},{3,6},{1,8}}],{2,3,1}] Zb[4,0],
+			1/3 I (
+				+4 Transpose[Contract[gvss,gvss,gvss,{{5,9},{3,6},{1,7}}],{2,3,1}]
+				+18 Transpose[Contract[gvss,gvvv,gvss,{{5,7},{2,9},{1,6}}],{2,3,1}]
+				-8 xi Transpose[Contract[gvss,gvvv,gvss,{{5,7},{2,9},{1,6}}],{2,3,1}]
+				-(xi^2) Transpose[Contract[gvss,gvvv,gvss,{{5,7},{2,9},{1,6}}],{2,3,1}]
+			) Zb[3,0]
+			+1/10 I Transpose[Contract[\[Lambda]3,gvss,\[Lambda]3,{{5,9},{3,6},{1,8}}],{2,3,1}] Zb[4,0],
 			
 			True, "NOT ALLOWED X VALUE"
 			];
@@ -1035,7 +1040,10 @@ S2V1D3F[x_]:=Module[{T},
 	T=
 		Which[
 			x==1,
-			-(2/3) (Transpose[Contract[gvff,YsffC,Ysff,{{5,8},{3,9},{2,6}}],{3,1,2}]-Transpose[Contract[gvff,YsffC,Ysff,{{5,8},{3,9},{2,6}}],{3,2,1}]) Zf[3,0],
+			-(2/3) (
+				+Transpose[Contract[gvff,YsffC,Ysff,{{5,8},{3,9},{2,6}}],{3,1,2}]
+				-Transpose[Contract[gvff,YsffC,Ysff,{{5,8},{3,9},{2,6}}],{3,2,1}]
+			) Zf[3,0],
 			
 			True, "NOT ALLOWED X VALUE"
 			];
