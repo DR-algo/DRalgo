@@ -799,131 +799,377 @@ V4D2B[x_]:=Module[{T},
 	T=
 		Which[
 			x==1,
-			-(1/(120 xi^2))(20 xi^2 Contract[HabijV,HabijV,{{4,8},{3,7}}]+1152 xi^2 Contract[gvss,gvss,gvss,gvss,{{6,12},{5,9},{3,11},{2,8}}]-336 N xi^2 Contract[gvss,gvss,gvss,gvss,{{6,12},{5,9},{3,11},{2,8}}]+\
-			24 N^2 xi^2 Contract[gvss,gvss,gvss,gvss,{{6,12},{5,9},{3,11},{2,8}}]+1152 xi^2 Contract[gvss,gvss,gvss,gvss,{{9,12},{6,8},{3,11},{2,5}}]-336 N xi^2 Contract[gvss,gvss,gvss,gvss,{{9,12},{6,8},{3,11},{2,5}}]+\
-			24 N^2 xi^2 Contract[gvss,gvss,gvss,gvss,{{9,12},{6,8},{3,11},{2,5}}]+1536 xi^2 Contract[gvss,gvss,gvss,gvss,{{9,12},{6,11},{3,8},{2,5}}]-448 N xi^2 Contract[gvss,gvss,gvss,gvss,{{9,12},{6,11},{3,8},{2,5}}]+\
-			32 N^2 xi^2 Contract[gvss,gvss,gvss,gvss,{{9,12},{6,11},{3,8},{2,5}}]-120 xi Contract[gvvv,gvvv,gvvv,gvvv,{{6,9},{5,12},{3,8},{2,10}}]+140 N xi Contract[gvvv,gvvv,gvvv,gvvv,{{6,9},{5,12},{3,8},{2,10}}]-\
-			40 N^2 xi Contract[gvvv,gvvv,gvvv,gvvv,{{6,9},{5,12},{3,8},{2,10}}]-240 xi^2 Contract[gvvv,gvvv,gvvv,gvvv,{{6,9},{5,12},{3,8},{2,10}}]-340 N xi^2 Contract[gvvv,gvvv,gvvv,gvvv,{{6,9},{5,12},{3,8},{2,10}}]+\
-			60 N^2 xi^2 Contract[gvvv,gvvv,gvvv,gvvv,{{6,9},{5,12},{3,8},{2,10}}]-840 xi^3 Contract[gvvv,gvvv,gvvv,gvvv,{{6,9},{5,12},{3,8},{2,10}}]+580 N xi^3 Contract[gvvv,gvvv,gvvv,gvvv,{{6,9},{5,12},{3,8},{2,10}}]-\
-			80 N^2 xi^3 Contract[gvvv,gvvv,gvvv,gvvv,{{6,9},{5,12},{3,8},{2,10}}]-100 N xi^4 Contract[gvvv,gvvv,gvvv,gvvv,{{6,9},{5,12},{3,8},{2,10}}]+20 N^2 xi^4 Contract[gvvv,gvvv,gvvv,gvvv,{{6,9},{5,12},{3,8},{2,10}}]-\
-			8 Contract[gvvv,gvvv,gvvv,gvvv,{{6,12},{4,7},{3,9},{2,10}}]+4 N Contract[gvvv,gvvv,gvvv,gvvv,{{6,12},{4,7},{3,9},{2,10}}]-N^2 Contract[gvvv,gvvv,gvvv,gvvv,{{6,12},{4,7},{3,9},{2,10}}]+\
-			12 xi Contract[gvvv,gvvv,gvvv,gvvv,{{6,12},{4,7},{3,9},{2,10}}]-26 N xi Contract[gvvv,gvvv,gvvv,gvvv,{{6,12},{4,7},{3,9},{2,10}}]+4 N^2 xi Contract[gvvv,gvvv,gvvv,gvvv,{{6,12},{4,7},{3,9},{2,10}}]+\
-			22 xi^2 Contract[gvvv,gvvv,gvvv,gvvv,{{6,12},{4,7},{3,9},{2,10}}]+14 N xi^2 Contract[gvvv,gvvv,gvvv,gvvv,{{6,12},{4,7},{3,9},{2,10}}]-6 N^2 xi^2 Contract[gvvv,gvvv,gvvv,gvvv,{{6,12},{4,7},{3,9},{2,10}}]-\
-			8 xi^3 Contract[gvvv,gvvv,gvvv,gvvv,{{6,12},{4,7},{3,9},{2,10}}]-6 N xi^3 Contract[gvvv,gvvv,gvvv,gvvv,{{6,12},{4,7},{3,9},{2,10}}]+4 N^2 xi^3 Contract[gvvv,gvvv,gvvv,gvvv,{{6,12},{4,7},{3,9},{2,10}}]+\
-			2 xi^4 Contract[gvvv,gvvv,gvvv,gvvv,{{6,12},{4,7},{3,9},{2,10}}]-6 N xi^4 Contract[gvvv,gvvv,gvvv,gvvv,{{6,12},{4,7},{3,9},{2,10}}]-N^2 xi^4 Contract[gvvv,gvvv,gvvv,gvvv,{{6,12},{4,7},{3,9},{2,10}}]-\
-			8 Contract[gvvv,gvvv,gvvv,gvvv,{{6,12},{5,8},{3,9},{2,10}}]+4 N Contract[gvvv,gvvv,gvvv,gvvv,{{6,12},{5,8},{3,9},{2,10}}]-N^2 Contract[gvvv,gvvv,gvvv,gvvv,{{6,12},{5,8},{3,9},{2,10}}]+\
-			12 xi Contract[gvvv,gvvv,gvvv,gvvv,{{6,12},{5,8},{3,9},{2,10}}]-26 N xi Contract[gvvv,gvvv,gvvv,gvvv,{{6,12},{5,8},{3,9},{2,10}}]+4 N^2 xi Contract[gvvv,gvvv,gvvv,gvvv,{{6,12},{5,8},{3,9},{2,10}}]+\
-			22 xi^2 Contract[gvvv,gvvv,gvvv,gvvv,{{6,12},{5,8},{3,9},{2,10}}]+14 N xi^2 Contract[gvvv,gvvv,gvvv,gvvv,{{6,12},{5,8},{3,9},{2,10}}]-6 N^2 xi^2 Contract[gvvv,gvvv,gvvv,gvvv,{{6,12},{5,8},{3,9},{2,10}}]-\
-			8 xi^3 Contract[gvvv,gvvv,gvvv,gvvv,{{6,12},{5,8},{3,9},{2,10}}]-6 N xi^3 Contract[gvvv,gvvv,gvvv,gvvv,{{6,12},{5,8},{3,9},{2,10}}]+4 N^2 xi^3 Contract[gvvv,gvvv,gvvv,gvvv,{{6,12},{5,8},{3,9},{2,10}}]+\
-			2 xi^4 Contract[gvvv,gvvv,gvvv,gvvv,{{6,12},{5,8},{3,9},{2,10}}]-6 N xi^4 Contract[gvvv,gvvv,gvvv,gvvv,{{6,12},{5,8},{3,9},{2,10}}]-N^2 xi^4 Contract[gvvv,gvvv,gvvv,gvvv,{{6,12},{5,8},{3,9},{2,10}}]-\
-			220 xi Contract[gvvv,gvvv,gvvv,gvvv,{{6,12},{5,9},{3,10},{2,7}}]+310 N xi Contract[gvvv,gvvv,gvvv,gvvv,{{6,12},{5,9},{3,10},{2,7}}]-70 N^2 xi Contract[gvvv,gvvv,gvvv,gvvv,{{6,12},{5,9},{3,10},{2,7}}]-\
-			1452 xi^2 Contract[gvvv,gvvv,gvvv,gvvv,{{6,12},{5,9},{3,10},{2,7}}]-362 N xi^2 Contract[gvvv,gvvv,gvvv,gvvv,{{6,12},{5,9},{3,10},{2,7}}]+10 N^2 xi^2 Contract[gvvv,gvvv,gvvv,gvvv,{{6,12},{5,9},{3,10},{2,7}}]+\
-			24 N^3 xi^2 Contract[gvvv,gvvv,gvvv,gvvv,{{6,12},{5,9},{3,10},{2,7}}]-3060 xi^3 Contract[gvvv,gvvv,gvvv,gvvv,{{6,12},{5,9},{3,10},{2,7}}]+2050 N xi^3 Contract[gvvv,gvvv,gvvv,gvvv,{{6,12},{5,9},{3,10},{2,7}}]-\
-			290 N^2 xi^3 Contract[gvvv,gvvv,gvvv,gvvv,{{6,12},{5,9},{3,10},{2,7}}]-20 xi^4 Contract[gvvv,gvvv,gvvv,gvvv,{{6,12},{5,9},{3,10},{2,7}}]-150 N xi^4 Contract[gvvv,gvvv,gvvv,gvvv,{{6,12},{5,9},{3,10},{2,7}}]+\
-			30 N^2 xi^4 Contract[gvvv,gvvv,gvvv,gvvv,{{6,12},{5,9},{3,10},{2,7}}]-16 Contract[gvvv,gvvv,gvvv,gvvv,{{7,10},{5,9},{3,6},{2,12}}]+8 N Contract[gvvv,gvvv,gvvv,gvvv,{{7,10},{5,9},{3,6},{2,12}}]-\
-			2 N^2 Contract[gvvv,gvvv,gvvv,gvvv,{{7,10},{5,9},{3,6},{2,12}}]+124 xi Contract[gvvv,gvvv,gvvv,gvvv,{{7,10},{5,9},{3,6},{2,12}}]-222 N xi Contract[gvvv,gvvv,gvvv,gvvv,{{7,10},{5,9},{3,6},{2,12}}]+\
-			38 N^2 xi Contract[gvvv,gvvv,gvvv,gvvv,{{7,10},{5,9},{3,6},{2,12}}]+44 xi^2 Contract[gvvv,gvvv,gvvv,gvvv,{{7,10},{5,9},{3,6},{2,12}}]+178 N xi^2 Contract[gvvv,gvvv,gvvv,gvvv,{{7,10},{5,9},{3,6},{2,12}}]-\
-			42 N^2 xi^2 Contract[gvvv,gvvv,gvvv,gvvv,{{7,10},{5,9},{3,6},{2,12}}]+84 xi^3 Contract[gvvv,gvvv,gvvv,gvvv,{{7,10},{5,9},{3,6},{2,12}}]-282 N xi^3 Contract[gvvv,gvvv,gvvv,gvvv,{{7,10},{5,9},{3,6},{2,12}}]+\
-			58 N^2 xi^3 Contract[gvvv,gvvv,gvvv,gvvv,{{7,10},{5,9},{3,6},{2,12}}]+4 xi^4 Contract[gvvv,gvvv,gvvv,gvvv,{{7,10},{5,9},{3,6},{2,12}}]+38 N xi^4 Contract[gvvv,gvvv,gvvv,gvvv,{{7,10},{5,9},{3,6},{2,12}}]-\
-			12 N^2 xi^4 Contract[gvvv,gvvv,gvvv,gvvv,{{7,10},{5,9},{3,6},{2,12}}]-16 Contract[gvvv,gvvv,gvvv,gvvv,{{7,10},{5,12},{3,6},{2,9}}]+8 N Contract[gvvv,gvvv,gvvv,gvvv,{{7,10},{5,12},{3,6},{2,9}}]-\
-			2 N^2 Contract[gvvv,gvvv,gvvv,gvvv,{{7,10},{5,12},{3,6},{2,9}}]+124 xi Contract[gvvv,gvvv,gvvv,gvvv,{{7,10},{5,12},{3,6},{2,9}}]-222 N xi Contract[gvvv,gvvv,gvvv,gvvv,{{7,10},{5,12},{3,6},{2,9}}]+\
-			38 N^2 xi Contract[gvvv,gvvv,gvvv,gvvv,{{7,10},{5,12},{3,6},{2,9}}]+44 xi^2 Contract[gvvv,gvvv,gvvv,gvvv,{{7,10},{5,12},{3,6},{2,9}}]+178 N xi^2 Contract[gvvv,gvvv,gvvv,gvvv,{{7,10},{5,12},{3,6},{2,9}}]-\
-			42 N^2 xi^2 Contract[gvvv,gvvv,gvvv,gvvv,{{7,10},{5,12},{3,6},{2,9}}]+84 xi^3 Contract[gvvv,gvvv,gvvv,gvvv,{{7,10},{5,12},{3,6},{2,9}}]-282 N xi^3 Contract[gvvv,gvvv,gvvv,gvvv,{{7,10},{5,12},{3,6},{2,9}}]+\
-			58 N^2 xi^3 Contract[gvvv,gvvv,gvvv,gvvv,{{7,10},{5,12},{3,6},{2,9}}]+4 xi^4 Contract[gvvv,gvvv,gvvv,gvvv,{{7,10},{5,12},{3,6},{2,9}}]+38 N xi^4 Contract[gvvv,gvvv,gvvv,gvvv,{{7,10},{5,12},{3,6},{2,9}}]-\
-			12 N^2 xi^4 Contract[gvvv,gvvv,gvvv,gvvv,{{7,10},{5,12},{3,6},{2,9}}]+8 Contract[gvvv,gvvv,gvvv,gvvv,{{7,10},{6,12},{3,9},{2,5}}]-4 N Contract[gvvv,gvvv,gvvv,gvvv,{{7,10},{6,12},{3,9},{2,5}}]+\
-			(N^2) Contract[gvvv,gvvv,gvvv,gvvv,{{7,10},{6,12},{3,9},{2,5}}]-12 xi Contract[gvvv,gvvv,gvvv,gvvv,{{7,10},{6,12},{3,9},{2,5}}]+26 N xi Contract[gvvv,gvvv,gvvv,gvvv,{{7,10},{6,12},{3,9},{2,5}}]-\
-			4 N^2 xi Contract[gvvv,gvvv,gvvv,gvvv,{{7,10},{6,12},{3,9},{2,5}}]-22 xi^2 Contract[gvvv,gvvv,gvvv,gvvv,{{7,10},{6,12},{3,9},{2,5}}]-14 N xi^2 Contract[gvvv,gvvv,gvvv,gvvv,{{7,10},{6,12},{3,9},{2,5}}]+\
-			6 N^2 xi^2 Contract[gvvv,gvvv,gvvv,gvvv,{{7,10},{6,12},{3,9},{2,5}}]+8 xi^3 Contract[gvvv,gvvv,gvvv,gvvv,{{7,10},{6,12},{3,9},{2,5}}]+6 N xi^3 Contract[gvvv,gvvv,gvvv,gvvv,{{7,10},{6,12},{3,9},{2,5}}]-\
-			4 N^2 xi^3 Contract[gvvv,gvvv,gvvv,gvvv,{{7,10},{6,12},{3,9},{2,5}}]-2 xi^4 Contract[gvvv,gvvv,gvvv,gvvv,{{7,10},{6,12},{3,9},{2,5}}]+6 N xi^4 Contract[gvvv,gvvv,gvvv,gvvv,{{7,10},{6,12},{3,9},{2,5}}]+\
-			(N^2) xi^4 Contract[gvvv,gvvv,gvvv,gvvv,{{7,10},{6,12},{3,9},{2,5}}]-120 xi Contract[gvvv,gvvv,gvvv,gvvv,{{8,12},{6,9},{3,5},{2,10}}]+140 N xi Contract[gvvv,gvvv,gvvv,gvvv,{{8,12},{6,9},{3,5},{2,10}}]-\
-			40 N^2 xi Contract[gvvv,gvvv,gvvv,gvvv,{{8,12},{6,9},{3,5},{2,10}}]-240 xi^2 Contract[gvvv,gvvv,gvvv,gvvv,{{8,12},{6,9},{3,5},{2,10}}]-340 N xi^2 Contract[gvvv,gvvv,gvvv,gvvv,{{8,12},{6,9},{3,5},{2,10}}]+\
-			60 N^2 xi^2 Contract[gvvv,gvvv,gvvv,gvvv,{{8,12},{6,9},{3,5},{2,10}}]-840 xi^3 Contract[gvvv,gvvv,gvvv,gvvv,{{8,12},{6,9},{3,5},{2,10}}]+580 N xi^3 Contract[gvvv,gvvv,gvvv,gvvv,{{8,12},{6,9},{3,5},{2,10}}]-\
-			80 N^2 xi^3 Contract[gvvv,gvvv,gvvv,gvvv,{{8,12},{6,9},{3,5},{2,10}}]-100 N xi^4 Contract[gvvv,gvvv,gvvv,gvvv,{{8,12},{6,9},{3,5},{2,10}}]+20 N^2 xi^4 Contract[gvvv,gvvv,gvvv,gvvv,{{8,12},{6,9},{3,5},{2,10}}]-\
-			8 Contract[gvvv,gvvv,gvvv,gvvv,{{9,12},{4,7},{3,6},{2,10}}]+4 N Contract[gvvv,gvvv,gvvv,gvvv,{{9,12},{4,7},{3,6},{2,10}}]-N^2 Contract[gvvv,gvvv,gvvv,gvvv,{{9,12},{4,7},{3,6},{2,10}}]+\
-			12 xi Contract[gvvv,gvvv,gvvv,gvvv,{{9,12},{4,7},{3,6},{2,10}}]-26 N xi Contract[gvvv,gvvv,gvvv,gvvv,{{9,12},{4,7},{3,6},{2,10}}]+4 N^2 xi Contract[gvvv,gvvv,gvvv,gvvv,{{9,12},{4,7},{3,6},{2,10}}]+\
-			22 xi^2 Contract[gvvv,gvvv,gvvv,gvvv,{{9,12},{4,7},{3,6},{2,10}}]+14 N xi^2 Contract[gvvv,gvvv,gvvv,gvvv,{{9,12},{4,7},{3,6},{2,10}}]-6 N^2 xi^2 Contract[gvvv,gvvv,gvvv,gvvv,{{9,12},{4,7},{3,6},{2,10}}]-\
-			8 xi^3 Contract[gvvv,gvvv,gvvv,gvvv,{{9,12},{4,7},{3,6},{2,10}}]-6 N xi^3 Contract[gvvv,gvvv,gvvv,gvvv,{{9,12},{4,7},{3,6},{2,10}}]+4 N^2 xi^3 Contract[gvvv,gvvv,gvvv,gvvv,{{9,12},{4,7},{3,6},{2,10}}]+\
-			2 xi^4 Contract[gvvv,gvvv,gvvv,gvvv,{{9,12},{4,7},{3,6},{2,10}}]-6 N xi^4 Contract[gvvv,gvvv,gvvv,gvvv,{{9,12},{4,7},{3,6},{2,10}}]-N^2 xi^4 Contract[gvvv,gvvv,gvvv,gvvv,{{9,12},{4,7},{3,6},{2,10}}]-\
-			8 Contract[gvvv,gvvv,gvvv,gvvv,{{9,12},{5,8},{3,6},{2,10}}]+4 N Contract[gvvv,gvvv,gvvv,gvvv,{{9,12},{5,8},{3,6},{2,10}}]-N^2 Contract[gvvv,gvvv,gvvv,gvvv,{{9,12},{5,8},{3,6},{2,10}}]+\
-			12 xi Contract[gvvv,gvvv,gvvv,gvvv,{{9,12},{5,8},{3,6},{2,10}}]-26 N xi Contract[gvvv,gvvv,gvvv,gvvv,{{9,12},{5,8},{3,6},{2,10}}]+4 N^2 xi Contract[gvvv,gvvv,gvvv,gvvv,{{9,12},{5,8},{3,6},{2,10}}]+\
-			22 xi^2 Contract[gvvv,gvvv,gvvv,gvvv,{{9,12},{5,8},{3,6},{2,10}}]+14 N xi^2 Contract[gvvv,gvvv,gvvv,gvvv,{{9,12},{5,8},{3,6},{2,10}}]-6 N^2 xi^2 Contract[gvvv,gvvv,gvvv,gvvv,{{9,12},{5,8},{3,6},{2,10}}]-\
-			8 xi^3 Contract[gvvv,gvvv,gvvv,gvvv,{{9,12},{5,8},{3,6},{2,10}}]-6 N xi^3 Contract[gvvv,gvvv,gvvv,gvvv,{{9,12},{5,8},{3,6},{2,10}}]+4 N^2 xi^3 Contract[gvvv,gvvv,gvvv,gvvv,{{9,12},{5,8},{3,6},{2,10}}]+\
-			2 xi^4 Contract[gvvv,gvvv,gvvv,gvvv,{{9,12},{5,8},{3,6},{2,10}}]-6 N xi^4 Contract[gvvv,gvvv,gvvv,gvvv,{{9,12},{5,8},{3,6},{2,10}}]-N^2 xi^4 Contract[gvvv,gvvv,gvvv,gvvv,{{9,12},{5,8},{3,6},{2,10}}]+\
-			8 Contract[gvvv,gvvv,gvvv,gvvv,{{9,12},{5,10},{3,6},{2,7}}]-4 N Contract[gvvv,gvvv,gvvv,gvvv,{{9,12},{5,10},{3,6},{2,7}}]+N^2 Contract[gvvv,gvvv,gvvv,gvvv,{{9,12},{5,10},{3,6},{2,7}}]-\
-			12 xi Contract[gvvv,gvvv,gvvv,gvvv,{{9,12},{5,10},{3,6},{2,7}}]+26 N xi Contract[gvvv,gvvv,gvvv,gvvv,{{9,12},{5,10},{3,6},{2,7}}]-4 N^2 xi Contract[gvvv,gvvv,gvvv,gvvv,{{9,12},{5,10},{3,6},{2,7}}]-\
-			22 xi^2 Contract[gvvv,gvvv,gvvv,gvvv,{{9,12},{5,10},{3,6},{2,7}}]-14 N xi^2 Contract[gvvv,gvvv,gvvv,gvvv,{{9,12},{5,10},{3,6},{2,7}}]+6 N^2 xi^2 Contract[gvvv,gvvv,gvvv,gvvv,{{9,12},{5,10},{3,6},{2,7}}]+\
-			8 xi^3 Contract[gvvv,gvvv,gvvv,gvvv,{{9,12},{5,10},{3,6},{2,7}}]+6 N xi^3 Contract[gvvv,gvvv,gvvv,gvvv,{{9,12},{5,10},{3,6},{2,7}}]-4 N^2 xi^3 Contract[gvvv,gvvv,gvvv,gvvv,{{9,12},{5,10},{3,6},{2,7}}]-\
-			2 xi^4 Contract[gvvv,gvvv,gvvv,gvvv,{{9,12},{5,10},{3,6},{2,7}}]+6 N xi^4 Contract[gvvv,gvvv,gvvv,gvvv,{{9,12},{5,10},{3,6},{2,7}}]+N^2 xi^4 Contract[gvvv,gvvv,gvvv,gvvv,{{9,12},{5,10},{3,6},{2,7}}]+\
-			20 xi^2 Transpose[Contract[HabijV,HabijV,{{4,8},{3,7}}],{1,3,2,4}]+240 xi^2 Transpose[Contract[gvss,HabijV,gvss,{{6,10},{3,7},{2,9}}],{2,3,4,1}]-40 N xi^2 Transpose[Contract[gvss,HabijV,gvss,{{6,10},{3,7},{2,9}}],{2,3,4,1}]+\
-			240 xi^2 Transpose[Contract[gvss,HabijV,gvss,{{6,10},{3,7},{2,9}}],{3,2,4,1}]-40 N xi^2 Transpose[Contract[gvss,HabijV,gvss,{{6,10},{3,7},{2,9}}],{3,2,4,1}]+240 xi^2 Transpose[Contract[gvss,HabijV,gvss,{{6,10},{3,7},{2,9}}],{4,1,2,3}]-\
-			40 N xi^2 Transpose[Contract[gvss,HabijV,gvss,{{6,10},{3,7},{2,9}}],{4,1,2,3}]+240 xi^2 Transpose[Contract[gvss,HabijV,gvss,{{6,10},{3,7},{2,9}}],{4,1,3,2}]-40 N xi^2 Transpose[Contract[gvss,HabijV,gvss,{{6,10},{3,7},{2,9}}],{4,1,3,2}]+\
-			240 xi^2 Transpose[Contract[gvss,HabijV,gvss,{{6,10},{3,7},{2,9}}],{4,2,3,1}]-40 N xi^2 Transpose[Contract[gvss,HabijV,gvss,{{6,10},{3,7},{2,9}}],{4,2,3,1}]-220 xi Transpose[Contract[gvvv,gvvv,gvvv,gvvv,{{6,12},{5,9},{3,10},{2,7}}],{1,3,2,4}]+\
-			310 N xi Transpose[Contract[gvvv,gvvv,gvvv,gvvv,{{6,12},{5,9},{3,10},{2,7}}],{1,3,2,4}]-70 N^2 xi Transpose[Contract[gvvv,gvvv,gvvv,gvvv,{{6,12},{5,9},{3,10},{2,7}}],{1,3,2,4}]-1452 xi^2 Transpose[Contract[gvvv,gvvv,gvvv,gvvv,{{6,12},{5,9},{3,10},{2,7}}],{1,3,2,4}]-\
-			362 N xi^2 Transpose[Contract[gvvv,gvvv,gvvv,gvvv,{{6,12},{5,9},{3,10},{2,7}}],{1,3,2,4}]+10 N^2 xi^2 Transpose[Contract[gvvv,gvvv,gvvv,gvvv,{{6,12},{5,9},{3,10},{2,7}}],{1,3,2,4}]+24 N^3 xi^2 Transpose[Contract[gvvv,gvvv,gvvv,gvvv,{{6,12},{5,9},{3,10},{2,7}}],{1,3,2,4}]-\
-			3060 xi^3 Transpose[Contract[gvvv,gvvv,gvvv,gvvv,{{6,12},{5,9},{3,10},{2,7}}],{1,3,2,4}]+2050 N xi^3 Transpose[Contract[gvvv,gvvv,gvvv,gvvv,{{6,12},{5,9},{3,10},{2,7}}],{1,3,2,4}]-290 N^2 xi^3 Transpose[Contract[gvvv,gvvv,gvvv,gvvv,{{6,12},{5,9},{3,10},{2,7}}],{1,3,2,4}]-\
-			20 xi^4 Transpose[Contract[gvvv,gvvv,gvvv,gvvv,{{6,12},{5,9},{3,10},{2,7}}],{1,3,2,4}]-150 N xi^4 Transpose[Contract[gvvv,gvvv,gvvv,gvvv,{{6,12},{5,9},{3,10},{2,7}}],{1,3,2,4}]+30 N^2 xi^4 Transpose[Contract[gvvv,gvvv,gvvv,gvvv,{{6,12},{5,9},{3,10},{2,7}}],{1,3,2,4}]-\
-			16 Transpose[Contract[gvvv,gvvv,gvvv,gvvv,{{7,10},{5,9},{3,6},{2,12}}],{1,3,2,4}]+8 N Transpose[Contract[gvvv,gvvv,gvvv,gvvv,{{7,10},{5,9},{3,6},{2,12}}],{1,3,2,4}]-2 N^2 Transpose[Contract[gvvv,gvvv,gvvv,gvvv,{{7,10},{5,9},{3,6},{2,12}}],{1,3,2,4}]+\
-			124 xi Transpose[Contract[gvvv,gvvv,gvvv,gvvv,{{7,10},{5,9},{3,6},{2,12}}],{1,3,2,4}]-222 N xi Transpose[Contract[gvvv,gvvv,gvvv,gvvv,{{7,10},{5,9},{3,6},{2,12}}],{1,3,2,4}]+38 N^2 xi Transpose[Contract[gvvv,gvvv,gvvv,gvvv,{{7,10},{5,9},{3,6},{2,12}}],{1,3,2,4}]+\
-			44 xi^2 Transpose[Contract[gvvv,gvvv,gvvv,gvvv,{{7,10},{5,9},{3,6},{2,12}}],{1,3,2,4}]+178 N xi^2 Transpose[Contract[gvvv,gvvv,gvvv,gvvv,{{7,10},{5,9},{3,6},{2,12}}],{1,3,2,4}]-42 N^2 xi^2 Transpose[Contract[gvvv,gvvv,gvvv,gvvv,{{7,10},{5,9},{3,6},{2,12}}],{1,3,2,4}]+\
-			84 xi^3 Transpose[Contract[gvvv,gvvv,gvvv,gvvv,{{7,10},{5,9},{3,6},{2,12}}],{1,3,2,4}]-282 N xi^3 Transpose[Contract[gvvv,gvvv,gvvv,gvvv,{{7,10},{5,9},{3,6},{2,12}}],{1,3,2,4}]+58 N^2 xi^3 Transpose[Contract[gvvv,gvvv,gvvv,gvvv,{{7,10},{5,9},{3,6},{2,12}}],{1,3,2,4}]+\
-			4 xi^4 Transpose[Contract[gvvv,gvvv,gvvv,gvvv,{{7,10},{5,9},{3,6},{2,12}}],{1,3,2,4}]+38 N xi^4 Transpose[Contract[gvvv,gvvv,gvvv,gvvv,{{7,10},{5,9},{3,6},{2,12}}],{1,3,2,4}]-12 N^2 xi^4 Transpose[Contract[gvvv,gvvv,gvvv,gvvv,{{7,10},{5,9},{3,6},{2,12}}],{1,3,2,4}]-\
-			16 Transpose[Contract[gvvv,gvvv,gvvv,gvvv,{{7,10},{5,12},{3,6},{2,9}}],{1,3,2,4}]+8 N Transpose[Contract[gvvv,gvvv,gvvv,gvvv,{{7,10},{5,12},{3,6},{2,9}}],{1,3,2,4}]-2 N^2 Transpose[Contract[gvvv,gvvv,gvvv,gvvv,{{7,10},{5,12},{3,6},{2,9}}],{1,3,2,4}]+\
-			124 xi Transpose[Contract[gvvv,gvvv,gvvv,gvvv,{{7,10},{5,12},{3,6},{2,9}}],{1,3,2,4}]-222 N xi Transpose[Contract[gvvv,gvvv,gvvv,gvvv,{{7,10},{5,12},{3,6},{2,9}}],{1,3,2,4}]+38 N^2 xi Transpose[Contract[gvvv,gvvv,gvvv,gvvv,{{7,10},{5,12},{3,6},{2,9}}],{1,3,2,4}]+\
-			44 xi^2 Transpose[Contract[gvvv,gvvv,gvvv,gvvv,{{7,10},{5,12},{3,6},{2,9}}],{1,3,2,4}]+178 N xi^2 Transpose[Contract[gvvv,gvvv,gvvv,gvvv,{{7,10},{5,12},{3,6},{2,9}}],{1,3,2,4}]-42 N^2 xi^2 Transpose[Contract[gvvv,gvvv,gvvv,gvvv,{{7,10},{5,12},{3,6},{2,9}}],{1,3,2,4}]+\
-			84 xi^3 Transpose[Contract[gvvv,gvvv,gvvv,gvvv,{{7,10},{5,12},{3,6},{2,9}}],{1,3,2,4}]-282 N xi^3 Transpose[Contract[gvvv,gvvv,gvvv,gvvv,{{7,10},{5,12},{3,6},{2,9}}],{1,3,2,4}]+58 N^2 xi^3 Transpose[Contract[gvvv,gvvv,gvvv,gvvv,{{7,10},{5,12},{3,6},{2,9}}],{1,3,2,4}]+\
-			4 xi^4 Transpose[Contract[gvvv,gvvv,gvvv,gvvv,{{7,10},{5,12},{3,6},{2,9}}],{1,3,2,4}]+38 N xi^4 Transpose[Contract[gvvv,gvvv,gvvv,gvvv,{{7,10},{5,12},{3,6},{2,9}}],{1,3,2,4}]-12 N^2 xi^4 Transpose[Contract[gvvv,gvvv,gvvv,gvvv,{{7,10},{5,12},{3,6},{2,9}}],{1,3,2,4}]+\
-			8 Transpose[Contract[gvvv,gvvv,gvvv,gvvv,{{7,10},{6,12},{3,9},{2,5}}],{1,3,2,4}]-4 N Transpose[Contract[gvvv,gvvv,gvvv,gvvv,{{7,10},{6,12},{3,9},{2,5}}],{1,3,2,4}]+N^2 Transpose[Contract[gvvv,gvvv,gvvv,gvvv,{{7,10},{6,12},{3,9},{2,5}}],{1,3,2,4}]-\
-			12 xi Transpose[Contract[gvvv,gvvv,gvvv,gvvv,{{7,10},{6,12},{3,9},{2,5}}],{1,3,2,4}]+26 N xi Transpose[Contract[gvvv,gvvv,gvvv,gvvv,{{7,10},{6,12},{3,9},{2,5}}],{1,3,2,4}]-4 N^2 xi Transpose[Contract[gvvv,gvvv,gvvv,gvvv,{{7,10},{6,12},{3,9},{2,5}}],{1,3,2,4}]-\
-			22 xi^2 Transpose[Contract[gvvv,gvvv,gvvv,gvvv,{{7,10},{6,12},{3,9},{2,5}}],{1,3,2,4}]-14 N xi^2 Transpose[Contract[gvvv,gvvv,gvvv,gvvv,{{7,10},{6,12},{3,9},{2,5}}],{1,3,2,4}]+6 N^2 xi^2 Transpose[Contract[gvvv,gvvv,gvvv,gvvv,{{7,10},{6,12},{3,9},{2,5}}],{1,3,2,4}]+\
-			8 xi^3 Transpose[Contract[gvvv,gvvv,gvvv,gvvv,{{7,10},{6,12},{3,9},{2,5}}],{1,3,2,4}]+6 N xi^3 Transpose[Contract[gvvv,gvvv,gvvv,gvvv,{{7,10},{6,12},{3,9},{2,5}}],{1,3,2,4}]-4 N^2 xi^3 Transpose[Contract[gvvv,gvvv,gvvv,gvvv,{{7,10},{6,12},{3,9},{2,5}}],{1,3,2,4}]-\
-			2 xi^4 Transpose[Contract[gvvv,gvvv,gvvv,gvvv,{{7,10},{6,12},{3,9},{2,5}}],{1,3,2,4}]+6 N xi^4 Transpose[Contract[gvvv,gvvv,gvvv,gvvv,{{7,10},{6,12},{3,9},{2,5}}],{1,3,2,4}]+N^2 xi^4 Transpose[Contract[gvvv,gvvv,gvvv,gvvv,{{7,10},{6,12},{3,9},{2,5}}],{1,3,2,4}]+\
-			16 Transpose[Contract[gvvv,gvvv,gvvv,gvvv,{{8,12},{6,9},{3,5},{2,10}}],{1,2,4,3}]-8 N Transpose[Contract[gvvv,gvvv,gvvv,gvvv,{{8,12},{6,9},{3,5},{2,10}}],{1,2,4,3}]+2 N^2 Transpose[Contract[gvvv,gvvv,gvvv,gvvv,{{8,12},{6,9},{3,5},{2,10}}],{1,2,4,3}]-\
-			124 xi Transpose[Contract[gvvv,gvvv,gvvv,gvvv,{{8,12},{6,9},{3,5},{2,10}}],{1,2,4,3}]+222 N xi Transpose[Contract[gvvv,gvvv,gvvv,gvvv,{{8,12},{6,9},{3,5},{2,10}}],{1,2,4,3}]-38 N^2 xi Transpose[Contract[gvvv,gvvv,gvvv,gvvv,{{8,12},{6,9},{3,5},{2,10}}],{1,2,4,3}]-\
-			44 xi^2 Transpose[Contract[gvvv,gvvv,gvvv,gvvv,{{8,12},{6,9},{3,5},{2,10}}],{1,2,4,3}]-178 N xi^2 Transpose[Contract[gvvv,gvvv,gvvv,gvvv,{{8,12},{6,9},{3,5},{2,10}}],{1,2,4,3}]+42 N^2 xi^2 Transpose[Contract[gvvv,gvvv,gvvv,gvvv,{{8,12},{6,9},{3,5},{2,10}}],{1,2,4,3}]-\
-			84 xi^3 Transpose[Contract[gvvv,gvvv,gvvv,gvvv,{{8,12},{6,9},{3,5},{2,10}}],{1,2,4,3}]+282 N xi^3 Transpose[Contract[gvvv,gvvv,gvvv,gvvv,{{8,12},{6,9},{3,5},{2,10}}],{1,2,4,3}]-58 N^2 xi^3 Transpose[Contract[gvvv,gvvv,gvvv,gvvv,{{8,12},{6,9},{3,5},{2,10}}],{1,2,4,3}]-\
-			4 xi^4 Transpose[Contract[gvvv,gvvv,gvvv,gvvv,{{8,12},{6,9},{3,5},{2,10}}],{1,2,4,3}]-38 N xi^4 Transpose[Contract[gvvv,gvvv,gvvv,gvvv,{{8,12},{6,9},{3,5},{2,10}}],{1,2,4,3}]+12 N^2 xi^4 Transpose[Contract[gvvv,gvvv,gvvv,gvvv,{{8,12},{6,9},{3,5},{2,10}}],{1,2,4,3}]-\
-			16 Transpose[Contract[gvvv,gvvv,gvvv,gvvv,{{8,12},{6,9},{3,5},{2,10}}],{1,3,4,2}]+8 N Transpose[Contract[gvvv,gvvv,gvvv,gvvv,{{8,12},{6,9},{3,5},{2,10}}],{1,3,4,2}]-2 N^2 Transpose[Contract[gvvv,gvvv,gvvv,gvvv,{{8,12},{6,9},{3,5},{2,10}}],{1,3,4,2}]+\
-			324 xi Transpose[Contract[gvvv,gvvv,gvvv,gvvv,{{8,12},{6,9},{3,5},{2,10}}],{1,3,4,2}]-562 N xi Transpose[Contract[gvvv,gvvv,gvvv,gvvv,{{8,12},{6,9},{3,5},{2,10}}],{1,3,4,2}]+98 N^2 xi Transpose[Contract[gvvv,gvvv,gvvv,gvvv,{{8,12},{6,9},{3,5},{2,10}}],{1,3,4,2}]+\
-			1620 xi^2 Transpose[Contract[gvvv,gvvv,gvvv,gvvv,{{8,12},{6,9},{3,5},{2,10}}],{1,3,4,2}]+334 N xi^2 Transpose[Contract[gvvv,gvvv,gvvv,gvvv,{{8,12},{6,9},{3,5},{2,10}}],{1,3,4,2}]+58 N^2 xi^2 Transpose[Contract[gvvv,gvvv,gvvv,gvvv,{{8,12},{6,9},{3,5},{2,10}}],{1,3,4,2}]-\
-			32 N^3 xi^2 Transpose[Contract[gvvv,gvvv,gvvv,gvvv,{{8,12},{6,9},{3,5},{2,10}}],{1,3,4,2}]+3244 xi^3 Transpose[Contract[gvvv,gvvv,gvvv,gvvv,{{8,12},{6,9},{3,5},{2,10}}],{1,3,4,2}]-2262 N xi^3 Transpose[Contract[gvvv,gvvv,gvvv,gvvv,{{8,12},{6,9},{3,5},{2,10}}],{1,3,4,2}]+\
-			318 N^2 xi^3 Transpose[Contract[gvvv,gvvv,gvvv,gvvv,{{8,12},{6,9},{3,5},{2,10}}],{1,3,4,2}]-36 xi^4 Transpose[Contract[gvvv,gvvv,gvvv,gvvv,{{8,12},{6,9},{3,5},{2,10}}],{1,3,4,2}]+138 N xi^4 Transpose[Contract[gvvv,gvvv,gvvv,gvvv,{{8,12},{6,9},{3,5},{2,10}}],{1,3,4,2}]-\
-			32 N^2 xi^4 Transpose[Contract[gvvv,gvvv,gvvv,gvvv,{{8,12},{6,9},{3,5},{2,10}}],{1,3,4,2}]+8 Transpose[Contract[gvvv,gvvv,gvvv,gvvv,{{9,12},{5,10},{3,6},{2,7}}],{1,3,2,4}]-4 N Transpose[Contract[gvvv,gvvv,gvvv,gvvv,{{9,12},{5,10},{3,6},{2,7}}],{1,3,2,4}]+\
-			(N^2) Transpose[Contract[gvvv,gvvv,gvvv,gvvv,{{9,12},{5,10},{3,6},{2,7}}],{1,3,2,4}]-12 xi Transpose[Contract[gvvv,gvvv,gvvv,gvvv,{{9,12},{5,10},{3,6},{2,7}}],{1,3,2,4}]+26 N xi Transpose[Contract[gvvv,gvvv,gvvv,gvvv,{{9,12},{5,10},{3,6},{2,7}}],{1,3,2,4}]-\
-			4 N^2 xi Transpose[Contract[gvvv,gvvv,gvvv,gvvv,{{9,12},{5,10},{3,6},{2,7}}],{1,3,2,4}]-22 xi^2 Transpose[Contract[gvvv,gvvv,gvvv,gvvv,{{9,12},{5,10},{3,6},{2,7}}],{1,3,2,4}]-14 N xi^2 Transpose[Contract[gvvv,gvvv,gvvv,gvvv,{{9,12},{5,10},{3,6},{2,7}}],{1,3,2,4}]+\
-			6 N^2 xi^2 Transpose[Contract[gvvv,gvvv,gvvv,gvvv,{{9,12},{5,10},{3,6},{2,7}}],{1,3,2,4}]+8 xi^3 Transpose[Contract[gvvv,gvvv,gvvv,gvvv,{{9,12},{5,10},{3,6},{2,7}}],{1,3,2,4}]+6 N xi^3 Transpose[Contract[gvvv,gvvv,gvvv,gvvv,{{9,12},{5,10},{3,6},{2,7}}],{1,3,2,4}]-\
-			4 N^2 xi^3 Transpose[Contract[gvvv,gvvv,gvvv,gvvv,{{9,12},{5,10},{3,6},{2,7}}],{1,3,2,4}]-2 xi^4 Transpose[Contract[gvvv,gvvv,gvvv,gvvv,{{9,12},{5,10},{3,6},{2,7}}],{1,3,2,4}]+6 N xi^4 Transpose[Contract[gvvv,gvvv,gvvv,gvvv,{{9,12},{5,10},{3,6},{2,7}}],{1,3,2,4}]+\
-			(N^2) xi^4 Transpose[Contract[gvvv,gvvv,gvvv,gvvv,{{9,12},{5,10},{3,6},{2,7}}],{1,3,2,4}]) Zb[3,0],
+			-(1/(120 xi^2)) (
+				+20 xi^2 Contract[HabijV,HabijV,{{4,8},{3,7}}]
+				+1152 xi^2 Contract[gvss,gvss,gvss,gvss,{{6,12},{5,9},{3,11},{2,8}}]
+				-336 N xi^2 Contract[gvss,gvss,gvss,gvss,{{6,12},{5,9},{3,11},{2,8}}]
+				+24 N^2 xi^2 Contract[gvss,gvss,gvss,gvss,{{6,12},{5,9},{3,11},{2,8}}]
+				+1152 xi^2 Contract[gvss,gvss,gvss,gvss,{{9,12},{6,8},{3,11},{2,5}}]
+				-336 N xi^2 Contract[gvss,gvss,gvss,gvss,{{9,12},{6,8},{3,11},{2,5}}]
+				+24 N^2 xi^2 Contract[gvss,gvss,gvss,gvss,{{9,12},{6,8},{3,11},{2,5}}]
+				+1536 xi^2 Contract[gvss,gvss,gvss,gvss,{{9,12},{6,11},{3,8},{2,5}}]
+				-448 N xi^2 Contract[gvss,gvss,gvss,gvss,{{9,12},{6,11},{3,8},{2,5}}]
+				+32 N^2 xi^2 Contract[gvss,gvss,gvss,gvss,{{9,12},{6,11},{3,8},{2,5}}]
+				-120 xi Contract[gvvv,gvvv,gvvv,gvvv,{{6,9},{5,12},{3,8},{2,10}}]
+				+140 N xi Contract[gvvv,gvvv,gvvv,gvvv,{{6,9},{5,12},{3,8},{2,10}}]
+				-40 N^2 xi Contract[gvvv,gvvv,gvvv,gvvv,{{6,9},{5,12},{3,8},{2,10}}]
+				-240 xi^2 Contract[gvvv,gvvv,gvvv,gvvv,{{6,9},{5,12},{3,8},{2,10}}]
+				-340 N xi^2 Contract[gvvv,gvvv,gvvv,gvvv,{{6,9},{5,12},{3,8},{2,10}}]
+				+60 N^2 xi^2 Contract[gvvv,gvvv,gvvv,gvvv,{{6,9},{5,12},{3,8},{2,10}}]
+				-840 xi^3 Contract[gvvv,gvvv,gvvv,gvvv,{{6,9},{5,12},{3,8},{2,10}}]
+				+580 N xi^3 Contract[gvvv,gvvv,gvvv,gvvv,{{6,9},{5,12},{3,8},{2,10}}]
+				-80 N^2 xi^3 Contract[gvvv,gvvv,gvvv,gvvv,{{6,9},{5,12},{3,8},{2,10}}]
+				-100 N xi^4 Contract[gvvv,gvvv,gvvv,gvvv,{{6,9},{5,12},{3,8},{2,10}}]
+				+20 N^2 xi^4 Contract[gvvv,gvvv,gvvv,gvvv,{{6,9},{5,12},{3,8},{2,10}}]
+				-8 Contract[gvvv,gvvv,gvvv,gvvv,{{6,12},{4,7},{3,9},{2,10}}]
+				+4 N Contract[gvvv,gvvv,gvvv,gvvv,{{6,12},{4,7},{3,9},{2,10}}]
+				-N^2 Contract[gvvv,gvvv,gvvv,gvvv,{{6,12},{4,7},{3,9},{2,10}}]
+				+12 xi Contract[gvvv,gvvv,gvvv,gvvv,{{6,12},{4,7},{3,9},{2,10}}]
+				-26 N xi Contract[gvvv,gvvv,gvvv,gvvv,{{6,12},{4,7},{3,9},{2,10}}]
+				+4 N^2 xi Contract[gvvv,gvvv,gvvv,gvvv,{{6,12},{4,7},{3,9},{2,10}}]
+				+22 xi^2 Contract[gvvv,gvvv,gvvv,gvvv,{{6,12},{4,7},{3,9},{2,10}}]
+				+14 N xi^2 Contract[gvvv,gvvv,gvvv,gvvv,{{6,12},{4,7},{3,9},{2,10}}]
+				-6 N^2 xi^2 Contract[gvvv,gvvv,gvvv,gvvv,{{6,12},{4,7},{3,9},{2,10}}]
+				-8 xi^3 Contract[gvvv,gvvv,gvvv,gvvv,{{6,12},{4,7},{3,9},{2,10}}]
+				-6 N xi^3 Contract[gvvv,gvvv,gvvv,gvvv,{{6,12},{4,7},{3,9},{2,10}}]
+				+4 N^2 xi^3 Contract[gvvv,gvvv,gvvv,gvvv,{{6,12},{4,7},{3,9},{2,10}}]
+				+2 xi^4 Contract[gvvv,gvvv,gvvv,gvvv,{{6,12},{4,7},{3,9},{2,10}}]
+				-6 N xi^4 Contract[gvvv,gvvv,gvvv,gvvv,{{6,12},{4,7},{3,9},{2,10}}]
+				-N^2 xi^4 Contract[gvvv,gvvv,gvvv,gvvv,{{6,12},{4,7},{3,9},{2,10}}]
+				-8 Contract[gvvv,gvvv,gvvv,gvvv,{{6,12},{5,8},{3,9},{2,10}}]
+				+4 N Contract[gvvv,gvvv,gvvv,gvvv,{{6,12},{5,8},{3,9},{2,10}}]
+				-N^2 Contract[gvvv,gvvv,gvvv,gvvv,{{6,12},{5,8},{3,9},{2,10}}]
+				+12 xi Contract[gvvv,gvvv,gvvv,gvvv,{{6,12},{5,8},{3,9},{2,10}}]
+				-26 N xi Contract[gvvv,gvvv,gvvv,gvvv,{{6,12},{5,8},{3,9},{2,10}}]
+				+4 N^2 xi Contract[gvvv,gvvv,gvvv,gvvv,{{6,12},{5,8},{3,9},{2,10}}]
+				+22 xi^2 Contract[gvvv,gvvv,gvvv,gvvv,{{6,12},{5,8},{3,9},{2,10}}]
+				+14 N xi^2 Contract[gvvv,gvvv,gvvv,gvvv,{{6,12},{5,8},{3,9},{2,10}}]
+				-6 N^2 xi^2 Contract[gvvv,gvvv,gvvv,gvvv,{{6,12},{5,8},{3,9},{2,10}}]
+				-8 xi^3 Contract[gvvv,gvvv,gvvv,gvvv,{{6,12},{5,8},{3,9},{2,10}}]
+				-6 N xi^3 Contract[gvvv,gvvv,gvvv,gvvv,{{6,12},{5,8},{3,9},{2,10}}]
+				+4 N^2 xi^3 Contract[gvvv,gvvv,gvvv,gvvv,{{6,12},{5,8},{3,9},{2,10}}]
+				+2 xi^4 Contract[gvvv,gvvv,gvvv,gvvv,{{6,12},{5,8},{3,9},{2,10}}]
+				-6 N xi^4 Contract[gvvv,gvvv,gvvv,gvvv,{{6,12},{5,8},{3,9},{2,10}}]
+				-N^2 xi^4 Contract[gvvv,gvvv,gvvv,gvvv,{{6,12},{5,8},{3,9},{2,10}}]
+				-220 xi Contract[gvvv,gvvv,gvvv,gvvv,{{6,12},{5,9},{3,10},{2,7}}]
+				+310 N xi Contract[gvvv,gvvv,gvvv,gvvv,{{6,12},{5,9},{3,10},{2,7}}]
+				-70 N^2 xi Contract[gvvv,gvvv,gvvv,gvvv,{{6,12},{5,9},{3,10},{2,7}}]
+				-1452 xi^2 Contract[gvvv,gvvv,gvvv,gvvv,{{6,12},{5,9},{3,10},{2,7}}]
+				-362 N xi^2 Contract[gvvv,gvvv,gvvv,gvvv,{{6,12},{5,9},{3,10},{2,7}}]
+				+10 N^2 xi^2 Contract[gvvv,gvvv,gvvv,gvvv,{{6,12},{5,9},{3,10},{2,7}}]
+				+24 N^3 xi^2 Contract[gvvv,gvvv,gvvv,gvvv,{{6,12},{5,9},{3,10},{2,7}}]
+				-3060 xi^3 Contract[gvvv,gvvv,gvvv,gvvv,{{6,12},{5,9},{3,10},{2,7}}]
+				+2050 N xi^3 Contract[gvvv,gvvv,gvvv,gvvv,{{6,12},{5,9},{3,10},{2,7}}]
+				-290 N^2 xi^3 Contract[gvvv,gvvv,gvvv,gvvv,{{6,12},{5,9},{3,10},{2,7}}]
+				-20 xi^4 Contract[gvvv,gvvv,gvvv,gvvv,{{6,12},{5,9},{3,10},{2,7}}]
+				-150 N xi^4 Contract[gvvv,gvvv,gvvv,gvvv,{{6,12},{5,9},{3,10},{2,7}}]
+				+30 N^2 xi^4 Contract[gvvv,gvvv,gvvv,gvvv,{{6,12},{5,9},{3,10},{2,7}}]
+				-16 Contract[gvvv,gvvv,gvvv,gvvv,{{7,10},{5,9},{3,6},{2,12}}]
+				+8 N Contract[gvvv,gvvv,gvvv,gvvv,{{7,10},{5,9},{3,6},{2,12}}]
+				-2 N^2 Contract[gvvv,gvvv,gvvv,gvvv,{{7,10},{5,9},{3,6},{2,12}}]
+				+124 xi Contract[gvvv,gvvv,gvvv,gvvv,{{7,10},{5,9},{3,6},{2,12}}]
+				-222 N xi Contract[gvvv,gvvv,gvvv,gvvv,{{7,10},{5,9},{3,6},{2,12}}]
+				+38 N^2 xi Contract[gvvv,gvvv,gvvv,gvvv,{{7,10},{5,9},{3,6},{2,12}}]
+				+44 xi^2 Contract[gvvv,gvvv,gvvv,gvvv,{{7,10},{5,9},{3,6},{2,12}}]
+				+178 N xi^2 Contract[gvvv,gvvv,gvvv,gvvv,{{7,10},{5,9},{3,6},{2,12}}]
+				-42 N^2 xi^2 Contract[gvvv,gvvv,gvvv,gvvv,{{7,10},{5,9},{3,6},{2,12}}]
+				+84 xi^3 Contract[gvvv,gvvv,gvvv,gvvv,{{7,10},{5,9},{3,6},{2,12}}]
+				-282 N xi^3 Contract[gvvv,gvvv,gvvv,gvvv,{{7,10},{5,9},{3,6},{2,12}}]
+				+58 N^2 xi^3 Contract[gvvv,gvvv,gvvv,gvvv,{{7,10},{5,9},{3,6},{2,12}}]
+				+4 xi^4 Contract[gvvv,gvvv,gvvv,gvvv,{{7,10},{5,9},{3,6},{2,12}}]
+				+38 N xi^4 Contract[gvvv,gvvv,gvvv,gvvv,{{7,10},{5,9},{3,6},{2,12}}]
+				-12 N^2 xi^4 Contract[gvvv,gvvv,gvvv,gvvv,{{7,10},{5,9},{3,6},{2,12}}]
+				-16 Contract[gvvv,gvvv,gvvv,gvvv,{{7,10},{5,12},{3,6},{2,9}}]
+				+8 N Contract[gvvv,gvvv,gvvv,gvvv,{{7,10},{5,12},{3,6},{2,9}}]
+				-2 N^2 Contract[gvvv,gvvv,gvvv,gvvv,{{7,10},{5,12},{3,6},{2,9}}]
+				+124 xi Contract[gvvv,gvvv,gvvv,gvvv,{{7,10},{5,12},{3,6},{2,9}}]
+				-222 N xi Contract[gvvv,gvvv,gvvv,gvvv,{{7,10},{5,12},{3,6},{2,9}}]
+				+38 N^2 xi Contract[gvvv,gvvv,gvvv,gvvv,{{7,10},{5,12},{3,6},{2,9}}]
+				+44 xi^2 Contract[gvvv,gvvv,gvvv,gvvv,{{7,10},{5,12},{3,6},{2,9}}]
+				+178 N xi^2 Contract[gvvv,gvvv,gvvv,gvvv,{{7,10},{5,12},{3,6},{2,9}}]
+				-42 N^2 xi^2 Contract[gvvv,gvvv,gvvv,gvvv,{{7,10},{5,12},{3,6},{2,9}}]
+				+84 xi^3 Contract[gvvv,gvvv,gvvv,gvvv,{{7,10},{5,12},{3,6},{2,9}}]
+				-282 N xi^3 Contract[gvvv,gvvv,gvvv,gvvv,{{7,10},{5,12},{3,6},{2,9}}]
+				+58 N^2 xi^3 Contract[gvvv,gvvv,gvvv,gvvv,{{7,10},{5,12},{3,6},{2,9}}]
+				+4 xi^4 Contract[gvvv,gvvv,gvvv,gvvv,{{7,10},{5,12},{3,6},{2,9}}]
+				+38 N xi^4 Contract[gvvv,gvvv,gvvv,gvvv,{{7,10},{5,12},{3,6},{2,9}}]
+				-12 N^2 xi^4 Contract[gvvv,gvvv,gvvv,gvvv,{{7,10},{5,12},{3,6},{2,9}}]
+				+8 Contract[gvvv,gvvv,gvvv,gvvv,{{7,10},{6,12},{3,9},{2,5}}]
+				-4 N Contract[gvvv,gvvv,gvvv,gvvv,{{7,10},{6,12},{3,9},{2,5}}]
+				+(N^2) Contract[gvvv,gvvv,gvvv,gvvv,{{7,10},{6,12},{3,9},{2,5}}]
+				-12 xi Contract[gvvv,gvvv,gvvv,gvvv,{{7,10},{6,12},{3,9},{2,5}}]
+				+26 N xi Contract[gvvv,gvvv,gvvv,gvvv,{{7,10},{6,12},{3,9},{2,5}}]
+				-4 N^2 xi Contract[gvvv,gvvv,gvvv,gvvv,{{7,10},{6,12},{3,9},{2,5}}]
+				-22 xi^2 Contract[gvvv,gvvv,gvvv,gvvv,{{7,10},{6,12},{3,9},{2,5}}]
+				-14 N xi^2 Contract[gvvv,gvvv,gvvv,gvvv,{{7,10},{6,12},{3,9},{2,5}}]
+				+6 N^2 xi^2 Contract[gvvv,gvvv,gvvv,gvvv,{{7,10},{6,12},{3,9},{2,5}}]
+				+8 xi^3 Contract[gvvv,gvvv,gvvv,gvvv,{{7,10},{6,12},{3,9},{2,5}}]
+				+6 N xi^3 Contract[gvvv,gvvv,gvvv,gvvv,{{7,10},{6,12},{3,9},{2,5}}]
+				-4 N^2 xi^3 Contract[gvvv,gvvv,gvvv,gvvv,{{7,10},{6,12},{3,9},{2,5}}]
+				-2 xi^4 Contract[gvvv,gvvv,gvvv,gvvv,{{7,10},{6,12},{3,9},{2,5}}]
+				+6 N xi^4 Contract[gvvv,gvvv,gvvv,gvvv,{{7,10},{6,12},{3,9},{2,5}}]
+				+(N^2) xi^4 Contract[gvvv,gvvv,gvvv,gvvv,{{7,10},{6,12},{3,9},{2,5}}]
+				-120 xi Contract[gvvv,gvvv,gvvv,gvvv,{{8,12},{6,9},{3,5},{2,10}}]
+				+140 N xi Contract[gvvv,gvvv,gvvv,gvvv,{{8,12},{6,9},{3,5},{2,10}}]
+				-40 N^2 xi Contract[gvvv,gvvv,gvvv,gvvv,{{8,12},{6,9},{3,5},{2,10}}]
+				-240 xi^2 Contract[gvvv,gvvv,gvvv,gvvv,{{8,12},{6,9},{3,5},{2,10}}]
+				-340 N xi^2 Contract[gvvv,gvvv,gvvv,gvvv,{{8,12},{6,9},{3,5},{2,10}}]
+				+60 N^2 xi^2 Contract[gvvv,gvvv,gvvv,gvvv,{{8,12},{6,9},{3,5},{2,10}}]
+				-840 xi^3 Contract[gvvv,gvvv,gvvv,gvvv,{{8,12},{6,9},{3,5},{2,10}}]
+				+580 N xi^3 Contract[gvvv,gvvv,gvvv,gvvv,{{8,12},{6,9},{3,5},{2,10}}]
+				-80 N^2 xi^3 Contract[gvvv,gvvv,gvvv,gvvv,{{8,12},{6,9},{3,5},{2,10}}]
+				-100 N xi^4 Contract[gvvv,gvvv,gvvv,gvvv,{{8,12},{6,9},{3,5},{2,10}}]
+				+20 N^2 xi^4 Contract[gvvv,gvvv,gvvv,gvvv,{{8,12},{6,9},{3,5},{2,10}}]
+				-8 Contract[gvvv,gvvv,gvvv,gvvv,{{9,12},{4,7},{3,6},{2,10}}]
+				+4 N Contract[gvvv,gvvv,gvvv,gvvv,{{9,12},{4,7},{3,6},{2,10}}]
+				-N^2 Contract[gvvv,gvvv,gvvv,gvvv,{{9,12},{4,7},{3,6},{2,10}}]
+				+12 xi Contract[gvvv,gvvv,gvvv,gvvv,{{9,12},{4,7},{3,6},{2,10}}]
+				-26 N xi Contract[gvvv,gvvv,gvvv,gvvv,{{9,12},{4,7},{3,6},{2,10}}]
+				+4 N^2 xi Contract[gvvv,gvvv,gvvv,gvvv,{{9,12},{4,7},{3,6},{2,10}}]
+				+22 xi^2 Contract[gvvv,gvvv,gvvv,gvvv,{{9,12},{4,7},{3,6},{2,10}}]
+				+14 N xi^2 Contract[gvvv,gvvv,gvvv,gvvv,{{9,12},{4,7},{3,6},{2,10}}]
+				-6 N^2 xi^2 Contract[gvvv,gvvv,gvvv,gvvv,{{9,12},{4,7},{3,6},{2,10}}]
+				-8 xi^3 Contract[gvvv,gvvv,gvvv,gvvv,{{9,12},{4,7},{3,6},{2,10}}]
+				-6 N xi^3 Contract[gvvv,gvvv,gvvv,gvvv,{{9,12},{4,7},{3,6},{2,10}}]
+				+4 N^2 xi^3 Contract[gvvv,gvvv,gvvv,gvvv,{{9,12},{4,7},{3,6},{2,10}}]
+				+2 xi^4 Contract[gvvv,gvvv,gvvv,gvvv,{{9,12},{4,7},{3,6},{2,10}}]
+				-6 N xi^4 Contract[gvvv,gvvv,gvvv,gvvv,{{9,12},{4,7},{3,6},{2,10}}]
+				-N^2 xi^4 Contract[gvvv,gvvv,gvvv,gvvv,{{9,12},{4,7},{3,6},{2,10}}]
+				-8 Contract[gvvv,gvvv,gvvv,gvvv,{{9,12},{5,8},{3,6},{2,10}}]
+				+4 N Contract[gvvv,gvvv,gvvv,gvvv,{{9,12},{5,8},{3,6},{2,10}}]
+				-N^2 Contract[gvvv,gvvv,gvvv,gvvv,{{9,12},{5,8},{3,6},{2,10}}]
+				+12 xi Contract[gvvv,gvvv,gvvv,gvvv,{{9,12},{5,8},{3,6},{2,10}}]
+				-26 N xi Contract[gvvv,gvvv,gvvv,gvvv,{{9,12},{5,8},{3,6},{2,10}}]
+				+4 N^2 xi Contract[gvvv,gvvv,gvvv,gvvv,{{9,12},{5,8},{3,6},{2,10}}]
+				+22 xi^2 Contract[gvvv,gvvv,gvvv,gvvv,{{9,12},{5,8},{3,6},{2,10}}]
+				+14 N xi^2 Contract[gvvv,gvvv,gvvv,gvvv,{{9,12},{5,8},{3,6},{2,10}}]
+				-6 N^2 xi^2 Contract[gvvv,gvvv,gvvv,gvvv,{{9,12},{5,8},{3,6},{2,10}}]
+				-8 xi^3 Contract[gvvv,gvvv,gvvv,gvvv,{{9,12},{5,8},{3,6},{2,10}}]
+				-6 N xi^3 Contract[gvvv,gvvv,gvvv,gvvv,{{9,12},{5,8},{3,6},{2,10}}]
+				+4 N^2 xi^3 Contract[gvvv,gvvv,gvvv,gvvv,{{9,12},{5,8},{3,6},{2,10}}]
+				+2 xi^4 Contract[gvvv,gvvv,gvvv,gvvv,{{9,12},{5,8},{3,6},{2,10}}]
+				-6 N xi^4 Contract[gvvv,gvvv,gvvv,gvvv,{{9,12},{5,8},{3,6},{2,10}}]
+				-N^2 xi^4 Contract[gvvv,gvvv,gvvv,gvvv,{{9,12},{5,8},{3,6},{2,10}}]
+				+8 Contract[gvvv,gvvv,gvvv,gvvv,{{9,12},{5,10},{3,6},{2,7}}]
+				-4 N Contract[gvvv,gvvv,gvvv,gvvv,{{9,12},{5,10},{3,6},{2,7}}]
+				+N^2 Contract[gvvv,gvvv,gvvv,gvvv,{{9,12},{5,10},{3,6},{2,7}}]
+				-12 xi Contract[gvvv,gvvv,gvvv,gvvv,{{9,12},{5,10},{3,6},{2,7}}]
+				+26 N xi Contract[gvvv,gvvv,gvvv,gvvv,{{9,12},{5,10},{3,6},{2,7}}]
+				-4 N^2 xi Contract[gvvv,gvvv,gvvv,gvvv,{{9,12},{5,10},{3,6},{2,7}}]
+				-22 xi^2 Contract[gvvv,gvvv,gvvv,gvvv,{{9,12},{5,10},{3,6},{2,7}}]
+				-14 N xi^2 Contract[gvvv,gvvv,gvvv,gvvv,{{9,12},{5,10},{3,6},{2,7}}]
+				+6 N^2 xi^2 Contract[gvvv,gvvv,gvvv,gvvv,{{9,12},{5,10},{3,6},{2,7}}]
+				+8 xi^3 Contract[gvvv,gvvv,gvvv,gvvv,{{9,12},{5,10},{3,6},{2,7}}]
+				+6 N xi^3 Contract[gvvv,gvvv,gvvv,gvvv,{{9,12},{5,10},{3,6},{2,7}}]
+				-4 N^2 xi^3 Contract[gvvv,gvvv,gvvv,gvvv,{{9,12},{5,10},{3,6},{2,7}}]
+				-2 xi^4 Contract[gvvv,gvvv,gvvv,gvvv,{{9,12},{5,10},{3,6},{2,7}}]
+				+6 N xi^4 Contract[gvvv,gvvv,gvvv,gvvv,{{9,12},{5,10},{3,6},{2,7}}]
+				+N^2 xi^4 Contract[gvvv,gvvv,gvvv,gvvv,{{9,12},{5,10},{3,6},{2,7}}]
+				+20 xi^2 Transpose[Contract[HabijV,HabijV,{{4,8},{3,7}}],{1,3,2,4}]
+				+240 xi^2 Transpose[Contract[gvss,HabijV,gvss,{{6,10},{3,7},{2,9}}],{2,3,4,1}]
+				-40 N xi^2 Transpose[Contract[gvss,HabijV,gvss,{{6,10},{3,7},{2,9}}],{2,3,4,1}]
+				+240 xi^2 Transpose[Contract[gvss,HabijV,gvss,{{6,10},{3,7},{2,9}}],{3,2,4,1}]
+				-40 N xi^2 Transpose[Contract[gvss,HabijV,gvss,{{6,10},{3,7},{2,9}}],{3,2,4,1}]
+				+240 xi^2 Transpose[Contract[gvss,HabijV,gvss,{{6,10},{3,7},{2,9}}],{4,1,2,3}]
+				-40 N xi^2 Transpose[Contract[gvss,HabijV,gvss,{{6,10},{3,7},{2,9}}],{4,1,2,3}]
+				+240 xi^2 Transpose[Contract[gvss,HabijV,gvss,{{6,10},{3,7},{2,9}}],{4,1,3,2}]
+				-40 N xi^2 Transpose[Contract[gvss,HabijV,gvss,{{6,10},{3,7},{2,9}}],{4,1,3,2}]
+				+240 xi^2 Transpose[Contract[gvss,HabijV,gvss,{{6,10},{3,7},{2,9}}],{4,2,3,1}]
+				-40 N xi^2 Transpose[Contract[gvss,HabijV,gvss,{{6,10},{3,7},{2,9}}],{4,2,3,1}]
+				-220 xi Transpose[Contract[gvvv,gvvv,gvvv,gvvv,{{6,12},{5,9},{3,10},{2,7}}],{1,3,2,4}]
+				+310 N xi Transpose[Contract[gvvv,gvvv,gvvv,gvvv,{{6,12},{5,9},{3,10},{2,7}}],{1,3,2,4}]
+				-70 N^2 xi Transpose[Contract[gvvv,gvvv,gvvv,gvvv,{{6,12},{5,9},{3,10},{2,7}}],{1,3,2,4}]
+				-1452 xi^2 Transpose[Contract[gvvv,gvvv,gvvv,gvvv,{{6,12},{5,9},{3,10},{2,7}}],{1,3,2,4}]
+				-362 N xi^2 Transpose[Contract[gvvv,gvvv,gvvv,gvvv,{{6,12},{5,9},{3,10},{2,7}}],{1,3,2,4}]
+				+10 N^2 xi^2 Transpose[Contract[gvvv,gvvv,gvvv,gvvv,{{6,12},{5,9},{3,10},{2,7}}],{1,3,2,4}]
+				+24 N^3 xi^2 Transpose[Contract[gvvv,gvvv,gvvv,gvvv,{{6,12},{5,9},{3,10},{2,7}}],{1,3,2,4}]
+				-3060 xi^3 Transpose[Contract[gvvv,gvvv,gvvv,gvvv,{{6,12},{5,9},{3,10},{2,7}}],{1,3,2,4}]
+				+2050 N xi^3 Transpose[Contract[gvvv,gvvv,gvvv,gvvv,{{6,12},{5,9},{3,10},{2,7}}],{1,3,2,4}]
+				-290 N^2 xi^3 Transpose[Contract[gvvv,gvvv,gvvv,gvvv,{{6,12},{5,9},{3,10},{2,7}}],{1,3,2,4}]
+				-20 xi^4 Transpose[Contract[gvvv,gvvv,gvvv,gvvv,{{6,12},{5,9},{3,10},{2,7}}],{1,3,2,4}]
+				-150 N xi^4 Transpose[Contract[gvvv,gvvv,gvvv,gvvv,{{6,12},{5,9},{3,10},{2,7}}],{1,3,2,4}]
+				+30 N^2 xi^4 Transpose[Contract[gvvv,gvvv,gvvv,gvvv,{{6,12},{5,9},{3,10},{2,7}}],{1,3,2,4}]
+				-16 Transpose[Contract[gvvv,gvvv,gvvv,gvvv,{{7,10},{5,9},{3,6},{2,12}}],{1,3,2,4}]
+				+8 N Transpose[Contract[gvvv,gvvv,gvvv,gvvv,{{7,10},{5,9},{3,6},{2,12}}],{1,3,2,4}]
+				-2 N^2 Transpose[Contract[gvvv,gvvv,gvvv,gvvv,{{7,10},{5,9},{3,6},{2,12}}],{1,3,2,4}]
+				+124 xi Transpose[Contract[gvvv,gvvv,gvvv,gvvv,{{7,10},{5,9},{3,6},{2,12}}],{1,3,2,4}]
+				-222 N xi Transpose[Contract[gvvv,gvvv,gvvv,gvvv,{{7,10},{5,9},{3,6},{2,12}}],{1,3,2,4}]
+				+38 N^2 xi Transpose[Contract[gvvv,gvvv,gvvv,gvvv,{{7,10},{5,9},{3,6},{2,12}}],{1,3,2,4}]
+				+44 xi^2 Transpose[Contract[gvvv,gvvv,gvvv,gvvv,{{7,10},{5,9},{3,6},{2,12}}],{1,3,2,4}]
+				+178 N xi^2 Transpose[Contract[gvvv,gvvv,gvvv,gvvv,{{7,10},{5,9},{3,6},{2,12}}],{1,3,2,4}]
+				-42 N^2 xi^2 Transpose[Contract[gvvv,gvvv,gvvv,gvvv,{{7,10},{5,9},{3,6},{2,12}}],{1,3,2,4}]
+				+84 xi^3 Transpose[Contract[gvvv,gvvv,gvvv,gvvv,{{7,10},{5,9},{3,6},{2,12}}],{1,3,2,4}]
+				-282 N xi^3 Transpose[Contract[gvvv,gvvv,gvvv,gvvv,{{7,10},{5,9},{3,6},{2,12}}],{1,3,2,4}]
+				+58 N^2 xi^3 Transpose[Contract[gvvv,gvvv,gvvv,gvvv,{{7,10},{5,9},{3,6},{2,12}}],{1,3,2,4}]
+				+4 xi^4 Transpose[Contract[gvvv,gvvv,gvvv,gvvv,{{7,10},{5,9},{3,6},{2,12}}],{1,3,2,4}]
+				+38 N xi^4 Transpose[Contract[gvvv,gvvv,gvvv,gvvv,{{7,10},{5,9},{3,6},{2,12}}],{1,3,2,4}]
+				-12 N^2 xi^4 Transpose[Contract[gvvv,gvvv,gvvv,gvvv,{{7,10},{5,9},{3,6},{2,12}}],{1,3,2,4}]
+				-16 Transpose[Contract[gvvv,gvvv,gvvv,gvvv,{{7,10},{5,12},{3,6},{2,9}}],{1,3,2,4}]
+				+8 N Transpose[Contract[gvvv,gvvv,gvvv,gvvv,{{7,10},{5,12},{3,6},{2,9}}],{1,3,2,4}]
+				-2 N^2 Transpose[Contract[gvvv,gvvv,gvvv,gvvv,{{7,10},{5,12},{3,6},{2,9}}],{1,3,2,4}]
+				+124 xi Transpose[Contract[gvvv,gvvv,gvvv,gvvv,{{7,10},{5,12},{3,6},{2,9}}],{1,3,2,4}]
+				-222 N xi Transpose[Contract[gvvv,gvvv,gvvv,gvvv,{{7,10},{5,12},{3,6},{2,9}}],{1,3,2,4}]
+				+38 N^2 xi Transpose[Contract[gvvv,gvvv,gvvv,gvvv,{{7,10},{5,12},{3,6},{2,9}}],{1,3,2,4}]
+				+44 xi^2 Transpose[Contract[gvvv,gvvv,gvvv,gvvv,{{7,10},{5,12},{3,6},{2,9}}],{1,3,2,4}]
+				+178 N xi^2 Transpose[Contract[gvvv,gvvv,gvvv,gvvv,{{7,10},{5,12},{3,6},{2,9}}],{1,3,2,4}]
+				-42 N^2 xi^2 Transpose[Contract[gvvv,gvvv,gvvv,gvvv,{{7,10},{5,12},{3,6},{2,9}}],{1,3,2,4}]
+				+84 xi^3 Transpose[Contract[gvvv,gvvv,gvvv,gvvv,{{7,10},{5,12},{3,6},{2,9}}],{1,3,2,4}]
+				-282 N xi^3 Transpose[Contract[gvvv,gvvv,gvvv,gvvv,{{7,10},{5,12},{3,6},{2,9}}],{1,3,2,4}]
+				+58 N^2 xi^3 Transpose[Contract[gvvv,gvvv,gvvv,gvvv,{{7,10},{5,12},{3,6},{2,9}}],{1,3,2,4}]
+				+4 xi^4 Transpose[Contract[gvvv,gvvv,gvvv,gvvv,{{7,10},{5,12},{3,6},{2,9}}],{1,3,2,4}]
+				+38 N xi^4 Transpose[Contract[gvvv,gvvv,gvvv,gvvv,{{7,10},{5,12},{3,6},{2,9}}],{1,3,2,4}]
+				-12 N^2 xi^4 Transpose[Contract[gvvv,gvvv,gvvv,gvvv,{{7,10},{5,12},{3,6},{2,9}}],{1,3,2,4}]
+				+8 Transpose[Contract[gvvv,gvvv,gvvv,gvvv,{{7,10},{6,12},{3,9},{2,5}}],{1,3,2,4}]
+				-4 N Transpose[Contract[gvvv,gvvv,gvvv,gvvv,{{7,10},{6,12},{3,9},{2,5}}],{1,3,2,4}]
+				+N^2 Transpose[Contract[gvvv,gvvv,gvvv,gvvv,{{7,10},{6,12},{3,9},{2,5}}],{1,3,2,4}]
+				-12 xi Transpose[Contract[gvvv,gvvv,gvvv,gvvv,{{7,10},{6,12},{3,9},{2,5}}],{1,3,2,4}]
+				+26 N xi Transpose[Contract[gvvv,gvvv,gvvv,gvvv,{{7,10},{6,12},{3,9},{2,5}}],{1,3,2,4}]
+				-4 N^2 xi Transpose[Contract[gvvv,gvvv,gvvv,gvvv,{{7,10},{6,12},{3,9},{2,5}}],{1,3,2,4}]
+				-22 xi^2 Transpose[Contract[gvvv,gvvv,gvvv,gvvv,{{7,10},{6,12},{3,9},{2,5}}],{1,3,2,4}]
+				-14 N xi^2 Transpose[Contract[gvvv,gvvv,gvvv,gvvv,{{7,10},{6,12},{3,9},{2,5}}],{1,3,2,4}]
+				+6 N^2 xi^2 Transpose[Contract[gvvv,gvvv,gvvv,gvvv,{{7,10},{6,12},{3,9},{2,5}}],{1,3,2,4}]
+				+8 xi^3 Transpose[Contract[gvvv,gvvv,gvvv,gvvv,{{7,10},{6,12},{3,9},{2,5}}],{1,3,2,4}]
+				+6 N xi^3 Transpose[Contract[gvvv,gvvv,gvvv,gvvv,{{7,10},{6,12},{3,9},{2,5}}],{1,3,2,4}]
+				-4 N^2 xi^3 Transpose[Contract[gvvv,gvvv,gvvv,gvvv,{{7,10},{6,12},{3,9},{2,5}}],{1,3,2,4}]
+				-2 xi^4 Transpose[Contract[gvvv,gvvv,gvvv,gvvv,{{7,10},{6,12},{3,9},{2,5}}],{1,3,2,4}]
+				+6 N xi^4 Transpose[Contract[gvvv,gvvv,gvvv,gvvv,{{7,10},{6,12},{3,9},{2,5}}],{1,3,2,4}]
+				+N^2 xi^4 Transpose[Contract[gvvv,gvvv,gvvv,gvvv,{{7,10},{6,12},{3,9},{2,5}}],{1,3,2,4}]
+				+16 Transpose[Contract[gvvv,gvvv,gvvv,gvvv,{{8,12},{6,9},{3,5},{2,10}}],{1,2,4,3}]
+				-8 N Transpose[Contract[gvvv,gvvv,gvvv,gvvv,{{8,12},{6,9},{3,5},{2,10}}],{1,2,4,3}]
+				+2 N^2 Transpose[Contract[gvvv,gvvv,gvvv,gvvv,{{8,12},{6,9},{3,5},{2,10}}],{1,2,4,3}]
+				-124 xi Transpose[Contract[gvvv,gvvv,gvvv,gvvv,{{8,12},{6,9},{3,5},{2,10}}],{1,2,4,3}]
+				+222 N xi Transpose[Contract[gvvv,gvvv,gvvv,gvvv,{{8,12},{6,9},{3,5},{2,10}}],{1,2,4,3}]
+				-38 N^2 xi Transpose[Contract[gvvv,gvvv,gvvv,gvvv,{{8,12},{6,9},{3,5},{2,10}}],{1,2,4,3}]
+				-44 xi^2 Transpose[Contract[gvvv,gvvv,gvvv,gvvv,{{8,12},{6,9},{3,5},{2,10}}],{1,2,4,3}]
+				-178 N xi^2 Transpose[Contract[gvvv,gvvv,gvvv,gvvv,{{8,12},{6,9},{3,5},{2,10}}],{1,2,4,3}]
+				+42 N^2 xi^2 Transpose[Contract[gvvv,gvvv,gvvv,gvvv,{{8,12},{6,9},{3,5},{2,10}}],{1,2,4,3}]
+				-84 xi^3 Transpose[Contract[gvvv,gvvv,gvvv,gvvv,{{8,12},{6,9},{3,5},{2,10}}],{1,2,4,3}]
+				+282 N xi^3 Transpose[Contract[gvvv,gvvv,gvvv,gvvv,{{8,12},{6,9},{3,5},{2,10}}],{1,2,4,3}]
+				-58 N^2 xi^3 Transpose[Contract[gvvv,gvvv,gvvv,gvvv,{{8,12},{6,9},{3,5},{2,10}}],{1,2,4,3}]
+				-4 xi^4 Transpose[Contract[gvvv,gvvv,gvvv,gvvv,{{8,12},{6,9},{3,5},{2,10}}],{1,2,4,3}]
+				-38 N xi^4 Transpose[Contract[gvvv,gvvv,gvvv,gvvv,{{8,12},{6,9},{3,5},{2,10}}],{1,2,4,3}]
+				+12 N^2 xi^4 Transpose[Contract[gvvv,gvvv,gvvv,gvvv,{{8,12},{6,9},{3,5},{2,10}}],{1,2,4,3}]
+				-16 Transpose[Contract[gvvv,gvvv,gvvv,gvvv,{{8,12},{6,9},{3,5},{2,10}}],{1,3,4,2}]
+				+8 N Transpose[Contract[gvvv,gvvv,gvvv,gvvv,{{8,12},{6,9},{3,5},{2,10}}],{1,3,4,2}]
+				-2 N^2 Transpose[Contract[gvvv,gvvv,gvvv,gvvv,{{8,12},{6,9},{3,5},{2,10}}],{1,3,4,2}]
+				+324 xi Transpose[Contract[gvvv,gvvv,gvvv,gvvv,{{8,12},{6,9},{3,5},{2,10}}],{1,3,4,2}]
+				-562 N xi Transpose[Contract[gvvv,gvvv,gvvv,gvvv,{{8,12},{6,9},{3,5},{2,10}}],{1,3,4,2}]
+				+98 N^2 xi Transpose[Contract[gvvv,gvvv,gvvv,gvvv,{{8,12},{6,9},{3,5},{2,10}}],{1,3,4,2}]
+				+1620 xi^2 Transpose[Contract[gvvv,gvvv,gvvv,gvvv,{{8,12},{6,9},{3,5},{2,10}}],{1,3,4,2}]
+				+334 N xi^2 Transpose[Contract[gvvv,gvvv,gvvv,gvvv,{{8,12},{6,9},{3,5},{2,10}}],{1,3,4,2}]
+				+58 N^2 xi^2 Transpose[Contract[gvvv,gvvv,gvvv,gvvv,{{8,12},{6,9},{3,5},{2,10}}],{1,3,4,2}]
+				-32 N^3 xi^2 Transpose[Contract[gvvv,gvvv,gvvv,gvvv,{{8,12},{6,9},{3,5},{2,10}}],{1,3,4,2}]
+				+3244 xi^3 Transpose[Contract[gvvv,gvvv,gvvv,gvvv,{{8,12},{6,9},{3,5},{2,10}}],{1,3,4,2}]
+				-2262 N xi^3 Transpose[Contract[gvvv,gvvv,gvvv,gvvv,{{8,12},{6,9},{3,5},{2,10}}],{1,3,4,2}]
+				+318 N^2 xi^3 Transpose[Contract[gvvv,gvvv,gvvv,gvvv,{{8,12},{6,9},{3,5},{2,10}}],{1,3,4,2}]
+				-36 xi^4 Transpose[Contract[gvvv,gvvv,gvvv,gvvv,{{8,12},{6,9},{3,5},{2,10}}],{1,3,4,2}]
+				+138 N xi^4 Transpose[Contract[gvvv,gvvv,gvvv,gvvv,{{8,12},{6,9},{3,5},{2,10}}],{1,3,4,2}]
+				-32 N^2 xi^4 Transpose[Contract[gvvv,gvvv,gvvv,gvvv,{{8,12},{6,9},{3,5},{2,10}}],{1,3,4,2}]
+				+8 Transpose[Contract[gvvv,gvvv,gvvv,gvvv,{{9,12},{5,10},{3,6},{2,7}}],{1,3,2,4}]
+				-4 N Transpose[Contract[gvvv,gvvv,gvvv,gvvv,{{9,12},{5,10},{3,6},{2,7}}],{1,3,2,4}]
+				+(N^2) Transpose[Contract[gvvv,gvvv,gvvv,gvvv,{{9,12},{5,10},{3,6},{2,7}}],{1,3,2,4}]
+				-12 xi Transpose[Contract[gvvv,gvvv,gvvv,gvvv,{{9,12},{5,10},{3,6},{2,7}}],{1,3,2,4}]
+				+26 N xi Transpose[Contract[gvvv,gvvv,gvvv,gvvv,{{9,12},{5,10},{3,6},{2,7}}],{1,3,2,4}]
+				-4 N^2 xi Transpose[Contract[gvvv,gvvv,gvvv,gvvv,{{9,12},{5,10},{3,6},{2,7}}],{1,3,2,4}]
+				-22 xi^2 Transpose[Contract[gvvv,gvvv,gvvv,gvvv,{{9,12},{5,10},{3,6},{2,7}}],{1,3,2,4}]
+				-14 N xi^2 Transpose[Contract[gvvv,gvvv,gvvv,gvvv,{{9,12},{5,10},{3,6},{2,7}}],{1,3,2,4}]
+				+6 N^2 xi^2 Transpose[Contract[gvvv,gvvv,gvvv,gvvv,{{9,12},{5,10},{3,6},{2,7}}],{1,3,2,4}]
+				+8 xi^3 Transpose[Contract[gvvv,gvvv,gvvv,gvvv,{{9,12},{5,10},{3,6},{2,7}}],{1,3,2,4}]
+				+6 N xi^3 Transpose[Contract[gvvv,gvvv,gvvv,gvvv,{{9,12},{5,10},{3,6},{2,7}}],{1,3,2,4}]
+				-4 N^2 xi^3 Transpose[Contract[gvvv,gvvv,gvvv,gvvv,{{9,12},{5,10},{3,6},{2,7}}],{1,3,2,4}]
+				-2 xi^4 Transpose[Contract[gvvv,gvvv,gvvv,gvvv,{{9,12},{5,10},{3,6},{2,7}}],{1,3,2,4}]
+				+6 N xi^4 Transpose[Contract[gvvv,gvvv,gvvv,gvvv,{{9,12},{5,10},{3,6},{2,7}}],{1,3,2,4}]
+				+(N^2) xi^4 Transpose[Contract[gvvv,gvvv,gvvv,gvvv,{{9,12},{5,10},{3,6},{2,7}}],{1,3,2,4}]
+			) Zb[3,0],
 			
 			x==2,
-			-(1/(12 xi))(-24 xi Contract[gvss,gvss,gvss,gvss,{{9,12},{6,8},{3,11},{2,5}}]+4 N xi Contract[gvss,gvss,gvss,gvss,{{9,12},{6,8},{3,11},{2,5}}]-24 xi Contract[gvss,gvss,gvss,gvss,{{9,12},{6,11},{3,8},{2,5}}]+\
-			4 N xi Contract[gvss,gvss,gvss,gvss,{{9,12},{6,11},{3,8},{2,5}}]-10 Contract[gvvv,gvvv,gvvv,gvvv,{{6,10},{4,7},{3,12},{2,9}}]+N Contract[gvvv,gvvv,gvvv,gvvv,{{6,10},{4,7},{3,12},{2,9}}]+\
-			22 xi Contract[gvvv,gvvv,gvvv,gvvv,{{6,10},{4,7},{3,12},{2,9}}]+3 N xi Contract[gvvv,gvvv,gvvv,gvvv,{{6,10},{4,7},{3,12},{2,9}}]+26 xi^2 Contract[gvvv,gvvv,gvvv,gvvv,{{6,10},{4,7},{3,12},{2,9}}]-\
-			5 N xi^2 Contract[gvvv,gvvv,gvvv,gvvv,{{6,10},{4,7},{3,12},{2,9}}]-6 xi^3 Contract[gvvv,gvvv,gvvv,gvvv,{{6,10},{4,7},{3,12},{2,9}}]+N xi^3 Contract[gvvv,gvvv,gvvv,gvvv,{{6,10},{4,7},{3,12},{2,9}}]-\
-			20 Contract[gvvv,gvvv,gvvv,gvvv,{{6,12},{5,9},{3,10},{2,7}}]+2 N Contract[gvvv,gvvv,gvvv,gvvv,{{6,12},{5,9},{3,10},{2,7}}]+380 xi Contract[gvvv,gvvv,gvvv,gvvv,{{6,12},{5,9},{3,10},{2,7}}]-\
-			66 N xi Contract[gvvv,gvvv,gvvv,gvvv,{{6,12},{5,9},{3,10},{2,7}}]+36 xi^2 Contract[gvvv,gvvv,gvvv,gvvv,{{6,12},{5,9},{3,10},{2,7}}]-2 N xi^2 Contract[gvvv,gvvv,gvvv,gvvv,{{6,12},{5,9},{3,10},{2,7}}]-\
-			12 xi^3 Contract[gvvv,gvvv,gvvv,gvvv,{{6,12},{5,9},{3,10},{2,7}}]+2 N xi^3 Contract[gvvv,gvvv,gvvv,gvvv,{{6,12},{5,9},{3,10},{2,7}}]-8 Contract[gvvv,gvvv,gvvv,gvvv,{{7,10},{5,9},{3,6},{2,12}}]+\
-			2 N Contract[gvvv,gvvv,gvvv,gvvv,{{7,10},{5,9},{3,6},{2,12}}]-84 xi Contract[gvvv,gvvv,gvvv,gvvv,{{7,10},{5,9},{3,6},{2,12}}]-8 xi^2 Contract[gvvv,gvvv,gvvv,gvvv,{{7,10},{5,9},{3,6},{2,12}}]+\
-			2 N xi^2 Contract[gvvv,gvvv,gvvv,gvvv,{{7,10},{5,9},{3,6},{2,12}}]-8 Contract[gvvv,gvvv,gvvv,gvvv,{{7,10},{5,12},{3,6},{2,9}}]+2 N Contract[gvvv,gvvv,gvvv,gvvv,{{7,10},{5,12},{3,6},{2,9}}]-\
-			84 xi Contract[gvvv,gvvv,gvvv,gvvv,{{7,10},{5,12},{3,6},{2,9}}]-8 xi^2 Contract[gvvv,gvvv,gvvv,gvvv,{{7,10},{5,12},{3,6},{2,9}}]+2 N xi^2 Contract[gvvv,gvvv,gvvv,gvvv,{{7,10},{5,12},{3,6},{2,9}}]-\
-			4 xi Transpose[Contract[gvss,HabijV,gvss,{{6,10},{3,7},{2,9}}],{4,1,2,3}]-6 Transpose[Contract[gvvv,gvvv,gvvv,gvvv,{{6,12},{5,9},{3,10},{2,7}}],{1,3,2,4}]-7 N Transpose[Contract[gvvv,gvvv,gvvv,gvvv,{{6,12},{5,9},{3,10},{2,7}}],{1,3,2,4}]+\
-			394 xi Transpose[Contract[gvvv,gvvv,gvvv,gvvv,{{6,12},{5,9},{3,10},{2,7}}],{1,3,2,4}]-79 N xi Transpose[Contract[gvvv,gvvv,gvvv,gvvv,{{6,12},{5,9},{3,10},{2,7}}],{1,3,2,4}]+4 N^2 xi Transpose[Contract[gvvv,gvvv,gvvv,gvvv,{{6,12},{5,9},{3,10},{2,7}}],{1,3,2,4}]+\
-			14 xi^2 Transpose[Contract[gvvv,gvvv,gvvv,gvvv,{{6,12},{5,9},{3,10},{2,7}}],{1,3,2,4}]-5 N xi^2 Transpose[Contract[gvvv,gvvv,gvvv,gvvv,{{6,12},{5,9},{3,10},{2,7}}],{1,3,2,4}]+6 xi^3 Transpose[Contract[gvvv,gvvv,gvvv,gvvv,{{6,12},{5,9},{3,10},{2,7}}],{1,3,2,4}]-\
-			N xi^3 Transpose[Contract[gvvv,gvvv,gvvv,gvvv,{{6,12},{5,9},{3,10},{2,7}}],{1,3,2,4}]+10 Transpose[Contract[gvvv,gvvv,gvvv,gvvv,{{7,10},{5,9},{3,6},{2,12}}],{1,3,2,4}]-N Transpose[Contract[gvvv,gvvv,gvvv,gvvv,{{7,10},{5,9},{3,6},{2,12}}],{1,3,2,4}]-\
-			22 xi Transpose[Contract[gvvv,gvvv,gvvv,gvvv,{{7,10},{5,9},{3,6},{2,12}}],{1,3,2,4}]-3 N xi Transpose[Contract[gvvv,gvvv,gvvv,gvvv,{{7,10},{5,9},{3,6},{2,12}}],{1,3,2,4}]-26 xi^2 Transpose[Contract[gvvv,gvvv,gvvv,gvvv,{{7,10},{5,9},{3,6},{2,12}}],{1,3,2,4}]+\
-			5 N xi^2 Transpose[Contract[gvvv,gvvv,gvvv,gvvv,{{7,10},{5,9},{3,6},{2,12}}],{1,3,2,4}]+6 xi^3 Transpose[Contract[gvvv,gvvv,gvvv,gvvv,{{7,10},{5,9},{3,6},{2,12}}],{1,3,2,4}]-N xi^3 Transpose[Contract[gvvv,gvvv,gvvv,gvvv,{{7,10},{5,9},{3,6},{2,12}}],{1,3,2,4}]+\
-			14 Transpose[Contract[gvvv,gvvv,gvvv,gvvv,{{7,10},{5,12},{3,6},{2,9}}],{1,3,2,4}]+5 N Transpose[Contract[gvvv,gvvv,gvvv,gvvv,{{7,10},{5,12},{3,6},{2,9}}],{1,3,2,4}]+22 xi Transpose[Contract[gvvv,gvvv,gvvv,gvvv,{{7,10},{5,12},{3,6},{2,9}}],{1,3,2,4}]-\
-			5 N xi Transpose[Contract[gvvv,gvvv,gvvv,gvvv,{{7,10},{5,12},{3,6},{2,9}}],{1,3,2,4}]+2 xi^2 Transpose[Contract[gvvv,gvvv,gvvv,gvvv,{{7,10},{5,12},{3,6},{2,9}}],{1,3,2,4}]-N xi^2 Transpose[Contract[gvvv,gvvv,gvvv,gvvv,{{7,10},{5,12},{3,6},{2,9}}],{1,3,2,4}]-\
-			6 xi^3 Transpose[Contract[gvvv,gvvv,gvvv,gvvv,{{7,10},{5,12},{3,6},{2,9}}],{1,3,2,4}]+N xi^3 Transpose[Contract[gvvv,gvvv,gvvv,gvvv,{{7,10},{5,12},{3,6},{2,9}}],{1,3,2,4}]+14 Transpose[Contract[gvvv,gvvv,gvvv,gvvv,{{7,10},{5,12},{3,6},{2,9}}],{1,4,2,3}]+\
-			5 N Transpose[Contract[gvvv,gvvv,gvvv,gvvv,{{7,10},{5,12},{3,6},{2,9}}],{1,4,2,3}]+22 xi Transpose[Contract[gvvv,gvvv,gvvv,gvvv,{{7,10},{5,12},{3,6},{2,9}}],{1,4,2,3}]-5 N xi Transpose[Contract[gvvv,gvvv,gvvv,gvvv,{{7,10},{5,12},{3,6},{2,9}}],{1,4,2,3}]+\
-			2 xi^2 Transpose[Contract[gvvv,gvvv,gvvv,gvvv,{{7,10},{5,12},{3,6},{2,9}}],{1,4,2,3}]-N xi^2 Transpose[Contract[gvvv,gvvv,gvvv,gvvv,{{7,10},{5,12},{3,6},{2,9}}],{1,4,2,3}]-6 xi^3 Transpose[Contract[gvvv,gvvv,gvvv,gvvv,{{7,10},{5,12},{3,6},{2,9}}],{1,4,2,3}]+\
-			N xi^3 Transpose[Contract[gvvv,gvvv,gvvv,gvvv,{{7,10},{5,12},{3,6},{2,9}}],{1,4,2,3}]+6 Transpose[Contract[gvvv,gvvv,gvvv,gvvv,{{8,12},{6,9},{3,5},{2,10}}],{1,3,4,2}]+7 N Transpose[Contract[gvvv,gvvv,gvvv,gvvv,{{8,12},{6,9},{3,5},{2,10}}],{1,3,4,2}]-\
-			394 xi Transpose[Contract[gvvv,gvvv,gvvv,gvvv,{{8,12},{6,9},{3,5},{2,10}}],{1,3,4,2}]+79 N xi Transpose[Contract[gvvv,gvvv,gvvv,gvvv,{{8,12},{6,9},{3,5},{2,10}}],{1,3,4,2}]-4 N^2 xi Transpose[Contract[gvvv,gvvv,gvvv,gvvv,{{8,12},{6,9},{3,5},{2,10}}],{1,3,4,2}]-\
-			14 xi^2 Transpose[Contract[gvvv,gvvv,gvvv,gvvv,{{8,12},{6,9},{3,5},{2,10}}],{1,3,4,2}]+5 N xi^2 Transpose[Contract[gvvv,gvvv,gvvv,gvvv,{{8,12},{6,9},{3,5},{2,10}}],{1,3,4,2}]-6 xi^3 Transpose[Contract[gvvv,gvvv,gvvv,gvvv,{{8,12},{6,9},{3,5},{2,10}}],{1,3,4,2}]+\
-			N xi^3 Transpose[Contract[gvvv,gvvv,gvvv,gvvv,{{8,12},{6,9},{3,5},{2,10}}],{1,3,4,2}]+4 xi Transpose[Contract[gvvv,gvvv,gvvv,gvvv,{{9,11},{6,10},{4,7},{3,12}}],{1,3,2,4}]+6 N xi Transpose[Contract[gvvv,gvvv,gvvv,gvvv,{{9,11},{6,10},{4,7},{3,12}}],{1,3,2,4}]+\
-			40 xi^2 Transpose[Contract[gvvv,gvvv,gvvv,gvvv,{{9,11},{6,10},{4,7},{3,12}}],{1,3,2,4}]-8 N xi^2 Transpose[Contract[gvvv,gvvv,gvvv,gvvv,{{9,11},{6,10},{4,7},{3,12}}],{1,3,2,4}]-12 xi^3 Transpose[Contract[gvvv,gvvv,gvvv,gvvv,{{9,11},{6,10},{4,7},{3,12}}],{1,3,2,4}]+\
-			2 N xi^3 Transpose[Contract[gvvv,gvvv,gvvv,gvvv,{{9,11},{6,10},{4,7},{3,12}}],{1,3,2,4}]+4 xi Transpose[Contract[gvvv,gvvv,gvvv,gvvv,{{9,11},{6,10},{4,7},{3,12}}],{1,4,2,3}]+6 N xi Transpose[Contract[gvvv,gvvv,gvvv,gvvv,{{9,11},{6,10},{4,7},{3,12}}],{1,4,2,3}]+\
-			40 xi^2 Transpose[Contract[gvvv,gvvv,gvvv,gvvv,{{9,11},{6,10},{4,7},{3,12}}],{1,4,2,3}]-8 N xi^2 Transpose[Contract[gvvv,gvvv,gvvv,gvvv,{{9,11},{6,10},{4,7},{3,12}}],{1,4,2,3}]-12 xi^3 Transpose[Contract[gvvv,gvvv,gvvv,gvvv,{{9,11},{6,10},{4,7},{3,12}}],{1,4,2,3}]+\
-			2 N xi^3 Transpose[Contract[gvvv,gvvv,gvvv,gvvv,{{9,11},{6,10},{4,7},{3,12}}],{1,4,2,3}]) Zb[3,0],
+			-(1/(12 xi)) (
+				-24 xi Contract[gvss,gvss,gvss,gvss,{{9,12},{6,8},{3,11},{2,5}}]
+				+4 N xi Contract[gvss,gvss,gvss,gvss,{{9,12},{6,8},{3,11},{2,5}}]
+				-24 xi Contract[gvss,gvss,gvss,gvss,{{9,12},{6,11},{3,8},{2,5}}]
+				+4 N xi Contract[gvss,gvss,gvss,gvss,{{9,12},{6,11},{3,8},{2,5}}]
+				-10 Contract[gvvv,gvvv,gvvv,gvvv,{{6,10},{4,7},{3,12},{2,9}}]
+				+N Contract[gvvv,gvvv,gvvv,gvvv,{{6,10},{4,7},{3,12},{2,9}}]
+				+22 xi Contract[gvvv,gvvv,gvvv,gvvv,{{6,10},{4,7},{3,12},{2,9}}]
+				+3 N xi Contract[gvvv,gvvv,gvvv,gvvv,{{6,10},{4,7},{3,12},{2,9}}]
+				+26 xi^2 Contract[gvvv,gvvv,gvvv,gvvv,{{6,10},{4,7},{3,12},{2,9}}]
+				-5 N xi^2 Contract[gvvv,gvvv,gvvv,gvvv,{{6,10},{4,7},{3,12},{2,9}}]
+				-6 xi^3 Contract[gvvv,gvvv,gvvv,gvvv,{{6,10},{4,7},{3,12},{2,9}}]
+				+N xi^3 Contract[gvvv,gvvv,gvvv,gvvv,{{6,10},{4,7},{3,12},{2,9}}]
+				-20 Contract[gvvv,gvvv,gvvv,gvvv,{{6,12},{5,9},{3,10},{2,7}}]
+				+2 N Contract[gvvv,gvvv,gvvv,gvvv,{{6,12},{5,9},{3,10},{2,7}}]
+				+380 xi Contract[gvvv,gvvv,gvvv,gvvv,{{6,12},{5,9},{3,10},{2,7}}]
+				-66 N xi Contract[gvvv,gvvv,gvvv,gvvv,{{6,12},{5,9},{3,10},{2,7}}]
+				+36 xi^2 Contract[gvvv,gvvv,gvvv,gvvv,{{6,12},{5,9},{3,10},{2,7}}]
+				-2 N xi^2 Contract[gvvv,gvvv,gvvv,gvvv,{{6,12},{5,9},{3,10},{2,7}}]
+				-12 xi^3 Contract[gvvv,gvvv,gvvv,gvvv,{{6,12},{5,9},{3,10},{2,7}}]
+				+2 N xi^3 Contract[gvvv,gvvv,gvvv,gvvv,{{6,12},{5,9},{3,10},{2,7}}]
+				-8 Contract[gvvv,gvvv,gvvv,gvvv,{{7,10},{5,9},{3,6},{2,12}}]
+				+2 N Contract[gvvv,gvvv,gvvv,gvvv,{{7,10},{5,9},{3,6},{2,12}}]
+				-84 xi Contract[gvvv,gvvv,gvvv,gvvv,{{7,10},{5,9},{3,6},{2,12}}]
+				-8 xi^2 Contract[gvvv,gvvv,gvvv,gvvv,{{7,10},{5,9},{3,6},{2,12}}]
+				+2 N xi^2 Contract[gvvv,gvvv,gvvv,gvvv,{{7,10},{5,9},{3,6},{2,12}}]
+				-8 Contract[gvvv,gvvv,gvvv,gvvv,{{7,10},{5,12},{3,6},{2,9}}]
+				+2 N Contract[gvvv,gvvv,gvvv,gvvv,{{7,10},{5,12},{3,6},{2,9}}]
+				-84 xi Contract[gvvv,gvvv,gvvv,gvvv,{{7,10},{5,12},{3,6},{2,9}}]
+				-8 xi^2 Contract[gvvv,gvvv,gvvv,gvvv,{{7,10},{5,12},{3,6},{2,9}}]
+				+2 N xi^2 Contract[gvvv,gvvv,gvvv,gvvv,{{7,10},{5,12},{3,6},{2,9}}]
+				-4 xi Transpose[Contract[gvss,HabijV,gvss,{{6,10},{3,7},{2,9}}],{4,1,2,3}]
+				-6 Transpose[Contract[gvvv,gvvv,gvvv,gvvv,{{6,12},{5,9},{3,10},{2,7}}],{1,3,2,4}]
+				-7 N Transpose[Contract[gvvv,gvvv,gvvv,gvvv,{{6,12},{5,9},{3,10},{2,7}}],{1,3,2,4}]
+				+394 xi Transpose[Contract[gvvv,gvvv,gvvv,gvvv,{{6,12},{5,9},{3,10},{2,7}}],{1,3,2,4}]
+				-79 N xi Transpose[Contract[gvvv,gvvv,gvvv,gvvv,{{6,12},{5,9},{3,10},{2,7}}],{1,3,2,4}]
+				+4 N^2 xi Transpose[Contract[gvvv,gvvv,gvvv,gvvv,{{6,12},{5,9},{3,10},{2,7}}],{1,3,2,4}]
+				+14 xi^2 Transpose[Contract[gvvv,gvvv,gvvv,gvvv,{{6,12},{5,9},{3,10},{2,7}}],{1,3,2,4}]
+				-5 N xi^2 Transpose[Contract[gvvv,gvvv,gvvv,gvvv,{{6,12},{5,9},{3,10},{2,7}}],{1,3,2,4}]
+				+6 xi^3 Transpose[Contract[gvvv,gvvv,gvvv,gvvv,{{6,12},{5,9},{3,10},{2,7}}],{1,3,2,4}]
+				-N xi^3 Transpose[Contract[gvvv,gvvv,gvvv,gvvv,{{6,12},{5,9},{3,10},{2,7}}],{1,3,2,4}]
+				+10 Transpose[Contract[gvvv,gvvv,gvvv,gvvv,{{7,10},{5,9},{3,6},{2,12}}],{1,3,2,4}]
+				-N Transpose[Contract[gvvv,gvvv,gvvv,gvvv,{{7,10},{5,9},{3,6},{2,12}}],{1,3,2,4}]
+				-22 xi Transpose[Contract[gvvv,gvvv,gvvv,gvvv,{{7,10},{5,9},{3,6},{2,12}}],{1,3,2,4}]
+				-3 N xi Transpose[Contract[gvvv,gvvv,gvvv,gvvv,{{7,10},{5,9},{3,6},{2,12}}],{1,3,2,4}]
+				-26 xi^2 Transpose[Contract[gvvv,gvvv,gvvv,gvvv,{{7,10},{5,9},{3,6},{2,12}}],{1,3,2,4}]
+				+5 N xi^2 Transpose[Contract[gvvv,gvvv,gvvv,gvvv,{{7,10},{5,9},{3,6},{2,12}}],{1,3,2,4}]
+				+6 xi^3 Transpose[Contract[gvvv,gvvv,gvvv,gvvv,{{7,10},{5,9},{3,6},{2,12}}],{1,3,2,4}]
+				-N xi^3 Transpose[Contract[gvvv,gvvv,gvvv,gvvv,{{7,10},{5,9},{3,6},{2,12}}],{1,3,2,4}]
+				+14 Transpose[Contract[gvvv,gvvv,gvvv,gvvv,{{7,10},{5,12},{3,6},{2,9}}],{1,3,2,4}]
+				+5 N Transpose[Contract[gvvv,gvvv,gvvv,gvvv,{{7,10},{5,12},{3,6},{2,9}}],{1,3,2,4}]
+				+22 xi Transpose[Contract[gvvv,gvvv,gvvv,gvvv,{{7,10},{5,12},{3,6},{2,9}}],{1,3,2,4}]
+				-5 N xi Transpose[Contract[gvvv,gvvv,gvvv,gvvv,{{7,10},{5,12},{3,6},{2,9}}],{1,3,2,4}]
+				+2 xi^2 Transpose[Contract[gvvv,gvvv,gvvv,gvvv,{{7,10},{5,12},{3,6},{2,9}}],{1,3,2,4}]
+				-N xi^2 Transpose[Contract[gvvv,gvvv,gvvv,gvvv,{{7,10},{5,12},{3,6},{2,9}}],{1,3,2,4}]
+				-6 xi^3 Transpose[Contract[gvvv,gvvv,gvvv,gvvv,{{7,10},{5,12},{3,6},{2,9}}],{1,3,2,4}]
+				+N xi^3 Transpose[Contract[gvvv,gvvv,gvvv,gvvv,{{7,10},{5,12},{3,6},{2,9}}],{1,3,2,4}]
+				+14 Transpose[Contract[gvvv,gvvv,gvvv,gvvv,{{7,10},{5,12},{3,6},{2,9}}],{1,4,2,3}]
+				+5 N Transpose[Contract[gvvv,gvvv,gvvv,gvvv,{{7,10},{5,12},{3,6},{2,9}}],{1,4,2,3}]
+				+22 xi Transpose[Contract[gvvv,gvvv,gvvv,gvvv,{{7,10},{5,12},{3,6},{2,9}}],{1,4,2,3}]
+				-5 N xi Transpose[Contract[gvvv,gvvv,gvvv,gvvv,{{7,10},{5,12},{3,6},{2,9}}],{1,4,2,3}]
+				+2 xi^2 Transpose[Contract[gvvv,gvvv,gvvv,gvvv,{{7,10},{5,12},{3,6},{2,9}}],{1,4,2,3}]
+				-N xi^2 Transpose[Contract[gvvv,gvvv,gvvv,gvvv,{{7,10},{5,12},{3,6},{2,9}}],{1,4,2,3}]
+				-6 xi^3 Transpose[Contract[gvvv,gvvv,gvvv,gvvv,{{7,10},{5,12},{3,6},{2,9}}],{1,4,2,3}]
+				+N xi^3 Transpose[Contract[gvvv,gvvv,gvvv,gvvv,{{7,10},{5,12},{3,6},{2,9}}],{1,4,2,3}]
+				+6 Transpose[Contract[gvvv,gvvv,gvvv,gvvv,{{8,12},{6,9},{3,5},{2,10}}],{1,3,4,2}]
+				+7 N Transpose[Contract[gvvv,gvvv,gvvv,gvvv,{{8,12},{6,9},{3,5},{2,10}}],{1,3,4,2}]
+				-394 xi Transpose[Contract[gvvv,gvvv,gvvv,gvvv,{{8,12},{6,9},{3,5},{2,10}}],{1,3,4,2}]
+				+79 N xi Transpose[Contract[gvvv,gvvv,gvvv,gvvv,{{8,12},{6,9},{3,5},{2,10}}],{1,3,4,2}]
+				-4 N^2 xi Transpose[Contract[gvvv,gvvv,gvvv,gvvv,{{8,12},{6,9},{3,5},{2,10}}],{1,3,4,2}]
+				-14 xi^2 Transpose[Contract[gvvv,gvvv,gvvv,gvvv,{{8,12},{6,9},{3,5},{2,10}}],{1,3,4,2}]
+				+5 N xi^2 Transpose[Contract[gvvv,gvvv,gvvv,gvvv,{{8,12},{6,9},{3,5},{2,10}}],{1,3,4,2}]
+				-6 xi^3 Transpose[Contract[gvvv,gvvv,gvvv,gvvv,{{8,12},{6,9},{3,5},{2,10}}],{1,3,4,2}]
+				+N xi^3 Transpose[Contract[gvvv,gvvv,gvvv,gvvv,{{8,12},{6,9},{3,5},{2,10}}],{1,3,4,2}]
+				+4 xi Transpose[Contract[gvvv,gvvv,gvvv,gvvv,{{9,11},{6,10},{4,7},{3,12}}],{1,3,2,4}]
+				+6 N xi Transpose[Contract[gvvv,gvvv,gvvv,gvvv,{{9,11},{6,10},{4,7},{3,12}}],{1,3,2,4}]
+				+40 xi^2 Transpose[Contract[gvvv,gvvv,gvvv,gvvv,{{9,11},{6,10},{4,7},{3,12}}],{1,3,2,4}]
+				-8 N xi^2 Transpose[Contract[gvvv,gvvv,gvvv,gvvv,{{9,11},{6,10},{4,7},{3,12}}],{1,3,2,4}]
+				-12 xi^3 Transpose[Contract[gvvv,gvvv,gvvv,gvvv,{{9,11},{6,10},{4,7},{3,12}}],{1,3,2,4}]
+				+2 N xi^3 Transpose[Contract[gvvv,gvvv,gvvv,gvvv,{{9,11},{6,10},{4,7},{3,12}}],{1,3,2,4}]
+				+4 xi Transpose[Contract[gvvv,gvvv,gvvv,gvvv,{{9,11},{6,10},{4,7},{3,12}}],{1,4,2,3}]
+				+6 N xi Transpose[Contract[gvvv,gvvv,gvvv,gvvv,{{9,11},{6,10},{4,7},{3,12}}],{1,4,2,3}]
+				+40 xi^2 Transpose[Contract[gvvv,gvvv,gvvv,gvvv,{{9,11},{6,10},{4,7},{3,12}}],{1,4,2,3}]
+				-8 N xi^2 Transpose[Contract[gvvv,gvvv,gvvv,gvvv,{{9,11},{6,10},{4,7},{3,12}}],{1,4,2,3}]
+				-12 xi^3 Transpose[Contract[gvvv,gvvv,gvvv,gvvv,{{9,11},{6,10},{4,7},{3,12}}],{1,4,2,3}]
+				+2 N xi^3 Transpose[Contract[gvvv,gvvv,gvvv,gvvv,{{9,11},{6,10},{4,7},{3,12}}],{1,4,2,3}]
+			) Zb[3,0],
 			
 			x==3,
 			SparseArray[{},{NV,NV,NV,NV}],
