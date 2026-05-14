@@ -930,24 +930,68 @@ S4D2B[x_]:=Module[{T},
 	T=
 		Which[
 			x==1,
-			1/12 (-5 Contract[HabijV,HabijV,{{2,6},{1,5}}]-2 N Contract[HabijV,HabijV,{{2,6},{1,5}}]+10 xi Contract[HabijV,HabijV,{{2,6},{1,5}}]-7 xi^2 Contract[HabijV,HabijV,{{2,6},{1,5}}]-\
-			2 Contract[\[Lambda]4,\[Lambda]4,{{4,7},{2,5}}]+12 xi Contract[\[Lambda]4,gvss,gvss,{{5,8},{4,10},{3,7}}]-28 xi^2 Contract[gvss,gvss,gvss,gvss,{{7,10},{6,12},{3,9},{1,4}}]-5 Transpose[Contract[HabijV,HabijV,{{2,6},{1,5}}],{1,3,2,4}]-\
-			2 N Transpose[Contract[HabijV,HabijV,{{2,6},{1,5}}],{1,3,2,4}]+10 xi Transpose[Contract[HabijV,HabijV,{{2,6},{1,5}}],{1,3,2,4}]-7 xi^2 Transpose[Contract[HabijV,HabijV,{{2,6},{1,5}}],{1,3,2,4}]-2 Transpose[Contract[\[Lambda]4,\[Lambda]4,{{4,7},{2,5}}],{1,3,2,4}]+\
-			20 xi Transpose[Contract[gvss,HabijV,gvss,{{4,8},{2,9},{1,5}}],{4,1,2,3}]-20 xi^2 Transpose[Contract[gvss,HabijV,gvss,{{4,8},{2,9},{1,5}}],{4,1,2,3}]+20 xi Transpose[Contract[gvss,HabijV,gvss,{{4,8},{2,9},{1,5}}],{4,1,3,2}]-\
-			20 xi^2 Transpose[Contract[gvss,HabijV,gvss,{{4,8},{2,9},{1,5}}],{4,1,3,2}]-20 xi Transpose[Contract[gvss,HabijV,gvss,{{4,8},{2,10},{1,5}}],{2,3,4,1}]+20 xi^2 Transpose[Contract[gvss,HabijV,gvss,{{4,8},{2,10},{1,5}}],{2,3,4,1}]-\
-			20 xi Transpose[Contract[gvss,HabijV,gvss,{{4,8},{2,10},{1,5}}],{3,2,4,1}]+20 xi^2 Transpose[Contract[gvss,HabijV,gvss,{{4,8},{2,10},{1,5}}],{3,2,4,1}]-40 Transpose[Contract[gvss,HabijV,gvss,{{4,8},{2,10},{1,5}}],{4,2,3,1}]+\
-			12 xi^2 Transpose[Contract[gvss,HabijV,gvss,{{4,8},{2,10},{1,5}}],{4,2,3,1}]+12 xi Transpose[Contract[\[Lambda]4,gvss,gvss,{{5,8},{4,10},{2,7}}],{2,4,1,3}]+12 xi Transpose[Contract[\[Lambda]4,gvss,gvss,{{5,8},{4,10},{2,7}}],{3,4,1,2}]+\
-			12 xi Transpose[Contract[\[Lambda]4,gvss,gvss,{{5,8},{4,10},{3,7}}],{1,3,2,4}]-40 Transpose[Contract[\[Lambda]4,gvss,gvss,{{5,8},{4,10},{3,7}}],{2,3,1,4}]+24 xi Transpose[Contract[\[Lambda]4,gvss,gvss,{{5,8},{4,10},{3,7}}],{2,3,1,4}]+\
-			12 xi^2 Transpose[Contract[gvss,gvss,gvss,gvss,{{7,10},{6,12},{3,8},{1,4}}],{1,2,4,3}]+28 xi^2 Transpose[Contract[gvss,gvss,gvss,gvss,{{7,10},{6,12},{3,8},{1,4}}],{1,3,2,4}]+12 xi^2 Transpose[Contract[gvss,gvss,gvss,gvss,{{7,10},{6,12},{3,8},{1,4}}],{1,3,4,2}]-\
-			40 xi Transpose[Contract[gvss,gvss,gvss,gvss,{{7,10},{6,12},{3,8},{1,4}}],{1,4,2,3}]+24 xi^2 Transpose[Contract[gvss,gvss,gvss,gvss,{{7,10},{6,12},{3,8},{1,4}}],{1,4,2,3}]-40 xi Transpose[Contract[gvss,gvss,gvss,gvss,{{7,10},{6,12},{3,8},{1,4}}],{1,4,3,2}]+\
-			24 xi^2 Transpose[Contract[gvss,gvss,gvss,gvss,{{7,10},{6,12},{3,8},{1,4}}],{1,4,3,2}]) Zb[3,0]+1/2 (Contract[\[Lambda]4,\[Lambda]3,\[Lambda]3,{{5,8},{4,10},{3,7}}]-3 xi Contract[gvss,gvss,\[Lambda]3,\[Lambda]3,{{9,12},{6,11},{3,8},{1,4}}]+\
-			Transpose[Contract[\[Lambda]4,\[Lambda]3,\[Lambda]3,{{5,8},{4,10},{3,7}}],{1,3,2,4}]+Transpose[Contract[\[Lambda]4,\[Lambda]3,\[Lambda]3,{{6,8},{4,10},{2,7}}],{2,4,1,3}]+Transpose[Contract[\[Lambda]4,\[Lambda]3,\[Lambda]3,{{6,8},{4,10},{2,7}}],{3,4,1,2}]+Transpose[Contract[\[Lambda]4,\[Lambda]3,\[Lambda]3,{{6,8},{4,10},{3,7}}],{2,3,1,4}]+\
-			2 xi Transpose[Contract[gvss,gvss,\[Lambda]3,\[Lambda]3,{{8,10},{6,12},{2,9},{1,4}}],{4,2,1,3}]+2 xi Transpose[Contract[gvss,gvss,\[Lambda]3,\[Lambda]3,{{8,10},{6,12},{2,9},{1,4}}],{4,3,1,2}]-3 xi Transpose[Contract[gvss,gvss,\[Lambda]3,\[Lambda]3,{{8,10},{6,12},{3,9},{1,4}}],{3,4,1,2}]+\
-			xi Transpose[Contract[gvss,gvss,\[Lambda]3,\[Lambda]3,{{9,10},{6,12},{2,8},{1,4}}],{2,3,1,4}]+xi Transpose[Contract[gvss,gvss,\[Lambda]3,\[Lambda]3,{{9,10},{6,12},{2,8},{1,4}}],{3,2,1,4}]+3 xi Transpose[Contract[gvss,gvss,\[Lambda]3,\[Lambda]3,{{9,11},{6,12},{2,8},{1,4}}],{2,4,1,3}]-\
-			3 xi Transpose[Contract[gvss,gvss,\[Lambda]3,\[Lambda]3,{{9,11},{6,12},{3,7},{1,4}}],{1,3,2,4}]+7 Transpose[Contract[gvss,gvss,\[Lambda]3,\[Lambda]3,{{9,11},{6,12},{3,7},{1,4}}],{1,4,2,3}]-5 xi Transpose[Contract[gvss,gvss,\[Lambda]3,\[Lambda]3,{{9,11},{6,12},{3,7},{1,4}}],{1,4,2,3}]+\
-			7 Transpose[Contract[gvss,gvss,\[Lambda]3,\[Lambda]3,{{9,11},{6,12},{3,7},{1,4}}],{1,4,3,2}]-5 xi Transpose[Contract[gvss,gvss,\[Lambda]3,\[Lambda]3,{{9,11},{6,12},{3,7},{1,4}}],{1,4,3,2}]-2 xi Transpose[Contract[gvss,gvss,\[Lambda]3,\[Lambda]3,{{9,12},{6,11},{3,7},{1,4}}],{1,2,4,3}]-\
-			2 xi Transpose[Contract[gvss,gvss,\[Lambda]3,\[Lambda]3,{{9,12},{6,11},{3,7},{1,4}}],{1,3,4,2}]) Zb[4,0]+1/5 (-4 Contract[\[Lambda]3,\[Lambda]3,\[Lambda]3,\[Lambda]3,{{9,12},{6,11},{3,8},{2,4}}]-3 Transpose[Contract[\[Lambda]3,\[Lambda]3,\[Lambda]3,\[Lambda]3,{{9,12},{6,11},{3,7},{2,4}}],{1,2,4,3}]-\
-			3 Transpose[Contract[\[Lambda]3,\[Lambda]3,\[Lambda]3,\[Lambda]3,{{9,12},{6,11},{3,7},{2,4}}],{1,3,4,2}]) Zb[5,0],
+			1/12 (
+				-5 Contract[HabijV,HabijV,{{2,6},{1,5}}]
+				-2 N Contract[HabijV,HabijV,{{2,6},{1,5}}]
+				+10 xi Contract[HabijV,HabijV,{{2,6},{1,5}}]
+				-7 xi^2 Contract[HabijV,HabijV,{{2,6},{1,5}}]
+				-2 Contract[\[Lambda]4,\[Lambda]4,{{4,7},{2,5}}]
+				+12 xi Contract[\[Lambda]4,gvss,gvss,{{5,8},{4,10},{3,7}}]
+				-28 xi^2 Contract[gvss,gvss,gvss,gvss,{{7,10},{6,12},{3,9},{1,4}}]
+				-5 Transpose[Contract[HabijV,HabijV,{{2,6},{1,5}}],{1,3,2,4}]
+				-2 N Transpose[Contract[HabijV,HabijV,{{2,6},{1,5}}],{1,3,2,4}]
+				+10 xi Transpose[Contract[HabijV,HabijV,{{2,6},{1,5}}],{1,3,2,4}]
+				-7 xi^2 Transpose[Contract[HabijV,HabijV,{{2,6},{1,5}}],{1,3,2,4}]
+				-2 Transpose[Contract[\[Lambda]4,\[Lambda]4,{{4,7},{2,5}}],{1,3,2,4}]
+				+20 xi Transpose[Contract[gvss,HabijV,gvss,{{4,8},{2,9},{1,5}}],{4,1,2,3}]
+				-20 xi^2 Transpose[Contract[gvss,HabijV,gvss,{{4,8},{2,9},{1,5}}],{4,1,2,3}]
+				+20 xi Transpose[Contract[gvss,HabijV,gvss,{{4,8},{2,9},{1,5}}],{4,1,3,2}]
+				-20 xi^2 Transpose[Contract[gvss,HabijV,gvss,{{4,8},{2,9},{1,5}}],{4,1,3,2}]
+				-20 xi Transpose[Contract[gvss,HabijV,gvss,{{4,8},{2,10},{1,5}}],{2,3,4,1}]
+				+20 xi^2 Transpose[Contract[gvss,HabijV,gvss,{{4,8},{2,10},{1,5}}],{2,3,4,1}]
+				-20 xi Transpose[Contract[gvss,HabijV,gvss,{{4,8},{2,10},{1,5}}],{3,2,4,1}]
+				+20 xi^2 Transpose[Contract[gvss,HabijV,gvss,{{4,8},{2,10},{1,5}}],{3,2,4,1}]
+				-40 Transpose[Contract[gvss,HabijV,gvss,{{4,8},{2,10},{1,5}}],{4,2,3,1}]
+				+12 xi^2 Transpose[Contract[gvss,HabijV,gvss,{{4,8},{2,10},{1,5}}],{4,2,3,1}]
+				+12 xi Transpose[Contract[\[Lambda]4,gvss,gvss,{{5,8},{4,10},{2,7}}],{2,4,1,3}]
+				+12 xi Transpose[Contract[\[Lambda]4,gvss,gvss,{{5,8},{4,10},{2,7}}],{3,4,1,2}]
+				+12 xi Transpose[Contract[\[Lambda]4,gvss,gvss,{{5,8},{4,10},{3,7}}],{1,3,2,4}]
+				-40 Transpose[Contract[\[Lambda]4,gvss,gvss,{{5,8},{4,10},{3,7}}],{2,3,1,4}]
+				+24 xi Transpose[Contract[\[Lambda]4,gvss,gvss,{{5,8},{4,10},{3,7}}],{2,3,1,4}]
+				+12 xi^2 Transpose[Contract[gvss,gvss,gvss,gvss,{{7,10},{6,12},{3,8},{1,4}}],{1,2,4,3}]
+				+28 xi^2 Transpose[Contract[gvss,gvss,gvss,gvss,{{7,10},{6,12},{3,8},{1,4}}],{1,3,2,4}]
+				+12 xi^2 Transpose[Contract[gvss,gvss,gvss,gvss,{{7,10},{6,12},{3,8},{1,4}}],{1,3,4,2}]
+				-40 xi Transpose[Contract[gvss,gvss,gvss,gvss,{{7,10},{6,12},{3,8},{1,4}}],{1,4,2,3}]
+				+24 xi^2 Transpose[Contract[gvss,gvss,gvss,gvss,{{7,10},{6,12},{3,8},{1,4}}],{1,4,2,3}]
+				-40 xi Transpose[Contract[gvss,gvss,gvss,gvss,{{7,10},{6,12},{3,8},{1,4}}],{1,4,3,2}]
+				+24 xi^2 Transpose[Contract[gvss,gvss,gvss,gvss,{{7,10},{6,12},{3,8},{1,4}}],{1,4,3,2}]
+			) Zb[3,0]
+			+1/2 (
+				+Contract[\[Lambda]4,\[Lambda]3,\[Lambda]3,{{5,8},{4,10},{3,7}}]
+				-3 xi Contract[gvss,gvss,\[Lambda]3,\[Lambda]3,{{9,12},{6,11},{3,8},{1,4}}]
+				+Transpose[Contract[\[Lambda]4,\[Lambda]3,\[Lambda]3,{{5,8},{4,10},{3,7}}],{1,3,2,4}]
+				+Transpose[Contract[\[Lambda]4,\[Lambda]3,\[Lambda]3,{{6,8},{4,10},{2,7}}],{2,4,1,3}]
+				+Transpose[Contract[\[Lambda]4,\[Lambda]3,\[Lambda]3,{{6,8},{4,10},{2,7}}],{3,4,1,2}]
+				+Transpose[Contract[\[Lambda]4,\[Lambda]3,\[Lambda]3,{{6,8},{4,10},{3,7}}],{2,3,1,4}]
+				+2 xi Transpose[Contract[gvss,gvss,\[Lambda]3,\[Lambda]3,{{8,10},{6,12},{2,9},{1,4}}],{4,2,1,3}]
+				+2 xi Transpose[Contract[gvss,gvss,\[Lambda]3,\[Lambda]3,{{8,10},{6,12},{2,9},{1,4}}],{4,3,1,2}]
+				-3 xi Transpose[Contract[gvss,gvss,\[Lambda]3,\[Lambda]3,{{8,10},{6,12},{3,9},{1,4}}],{3,4,1,2}]
+				+xi Transpose[Contract[gvss,gvss,\[Lambda]3,\[Lambda]3,{{9,10},{6,12},{2,8},{1,4}}],{2,3,1,4}]
+				+xi Transpose[Contract[gvss,gvss,\[Lambda]3,\[Lambda]3,{{9,10},{6,12},{2,8},{1,4}}],{3,2,1,4}]
+				+3 xi Transpose[Contract[gvss,gvss,\[Lambda]3,\[Lambda]3,{{9,11},{6,12},{2,8},{1,4}}],{2,4,1,3}]
+				-3 xi Transpose[Contract[gvss,gvss,\[Lambda]3,\[Lambda]3,{{9,11},{6,12},{3,7},{1,4}}],{1,3,2,4}]
+				+7 Transpose[Contract[gvss,gvss,\[Lambda]3,\[Lambda]3,{{9,11},{6,12},{3,7},{1,4}}],{1,4,2,3}]
+				-5 xi Transpose[Contract[gvss,gvss,\[Lambda]3,\[Lambda]3,{{9,11},{6,12},{3,7},{1,4}}],{1,4,2,3}]
+				+7 Transpose[Contract[gvss,gvss,\[Lambda]3,\[Lambda]3,{{9,11},{6,12},{3,7},{1,4}}],{1,4,3,2}]
+				-5 xi Transpose[Contract[gvss,gvss,\[Lambda]3,\[Lambda]3,{{9,11},{6,12},{3,7},{1,4}}],{1,4,3,2}]
+				-2 xi Transpose[Contract[gvss,gvss,\[Lambda]3,\[Lambda]3,{{9,12},{6,11},{3,7},{1,4}}],{1,2,4,3}]
+				-2 xi Transpose[Contract[gvss,gvss,\[Lambda]3,\[Lambda]3,{{9,12},{6,11},{3,7},{1,4}}],{1,3,4,2}]
+			) Zb[4,0]
+			+1/5 (
+				-4 Contract[\[Lambda]3,\[Lambda]3,\[Lambda]3,\[Lambda]3,{{9,12},{6,11},{3,8},{2,4}}]
+				-3 Transpose[Contract[\[Lambda]3,\[Lambda]3,\[Lambda]3,\[Lambda]3,{{9,12},{6,11},{3,7},{2,4}}],{1,2,4,3}]
+				-3 Transpose[Contract[\[Lambda]3,\[Lambda]3,\[Lambda]3,\[Lambda]3,{{9,12},{6,11},{3,7},{2,4}}],{1,3,4,2}]
+			) Zb[5,0],
 			
 			True, "NOT ALLOWED X VALUE"
 			];
