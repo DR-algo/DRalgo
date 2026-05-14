@@ -561,11 +561,26 @@ V2D4B[x_]:=Module[{T},
 	T=
 		Which[
 			x==1,
-			1/60 (12 Contract[gvss,gvss,{{3,6},{2,5}}]-2 N Contract[gvss,gvss,{{3,6},{2,5}}]+2 Contract[gvvv,gvvv,{{3,6},{2,4}}]+11 N Contract[gvvv,gvvv,{{3,6},{2,4}}]+2 N^2 Contract[gvvv,gvvv,{{3,6},{2,4}}]+\
-			120 xi Contract[gvvv,gvvv,{{3,6},{2,4}}]-30 N xi Contract[gvvv,gvvv,{{3,6},{2,4}}]-30 xi^2 Contract[gvvv,gvvv,{{3,6},{2,4}}]+5 N xi^2 Contract[gvvv,gvvv,{{3,6},{2,4}}]) Zb[3,0],
+			1/60 (
+				+12 Contract[gvss,gvss,{{3,6},{2,5}}]
+				-2 N Contract[gvss,gvss,{{3,6},{2,5}}]
+				+2 Contract[gvvv,gvvv,{{3,6},{2,4}}]
+				+11 N Contract[gvvv,gvvv,{{3,6},{2,4}}]
+				+2 N^2 Contract[gvvv,gvvv,{{3,6},{2,4}}]
+				+120 xi Contract[gvvv,gvvv,{{3,6},{2,4}}]
+				-30 N xi Contract[gvvv,gvvv,{{3,6},{2,4}}]
+				-30 xi^2 Contract[gvvv,gvvv,{{3,6},{2,4}}]
+				+5 N xi^2 Contract[gvvv,gvvv,{{3,6},{2,4}}]
+			) Zb[3,0],
 				
 			x==2,
-			1/60 (-1+N) (2 Contract[gvss,gvss,{{3,6},{2,5}}]+117 Contract[gvvv,gvvv,{{3,6},{2,4}}]-2 N Contract[gvvv,gvvv,{{3,6},{2,4}}]-30 xi Contract[gvvv,gvvv,{{3,6},{2,4}}]-5 xi^2 Contract[gvvv,gvvv,{{3,6},{2,4}}]) Zb[3,0],
+			1/60 (-1+N) (
+				+2 Contract[gvss,gvss,{{3,6},{2,5}}]
+				+117 Contract[gvvv,gvvv,{{3,6},{2,4}}]
+				-2 N Contract[gvvv,gvvv,{{3,6},{2,4}}]
+				-30 xi Contract[gvvv,gvvv,{{3,6},{2,4}}]
+				-5 xi^2 Contract[gvvv,gvvv,{{3,6},{2,4}}]
+			) Zb[3,0],
 			
 			True, "NOT ALLOWED X VALUE"
 			];
