@@ -45,7 +45,7 @@ ReplaceLb={
   Uses Inactive TensorProduct to delay evaluation until after contraction.
   Automatically activates the resulting expression.
 *)
-Contract[tensors__SparseArray, indices_] := Module[
+Contract[tensors__, indices_] := Module[
   {
     product,
     tensorList = {tensors}

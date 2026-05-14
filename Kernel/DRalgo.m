@@ -293,10 +293,10 @@ Results are gauge-independent once operator-basis redundancies are removed";
 T::usage="\
 T is the symbolic temperature variable";
 Contract::usage="\
-Contract[t1, t2, pairs] contracts two tensors (up to four supported) \
+Contract[t1, t2, pairs] contracts tensors by first forming their tensor product \
 over the index pairs specified in pairs.
 Arguments:
-  t1, t2, ...: tensors to contract (between 2 and 4 tensors)
+	t1, t2, ...: tensors to contract (two or more tensors)
   pairs:       list of index pairs {{i,j},...} to contract over";
 
 ODIM5::usage="\

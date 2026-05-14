@@ -33,24 +33,6 @@
 
 
 (*
-	Contract:
-	Forms an inactive TensorProduct of the supplied tensors, performs the given
-	contractions, and activates the result. Separate arities are defined to keep
-	evaluation predictable for the large explicit tensor expressions below.
-*)
-Contract[tensor1_,tensor2_,indices_]:=Activate @ TensorContract[
-        Inactive[TensorProduct][tensor1,tensor2], indices]
-Contract[tensor1_,tensor2_,tensor3_,indices_]:=Activate @ TensorContract[
-        Inactive[TensorProduct][tensor1,tensor2,tensor3], indices]
-Contract[tensor1_,tensor2_,tensor3_,tensor4_,indices_]:=Activate @ TensorContract[
-        Inactive[TensorProduct][tensor1,tensor2,tensor3,tensor4], indices]
-Contract[tensor1_,tensor2_,tensor3_,tensor4_,tensor5_,indices_]:=Activate @ TensorContract[
-        Inactive[TensorProduct][tensor1,tensor2,tensor3,tensor4,tensor5], indices]
-Contract[tensor1_,tensor2_,tensor3_,tensor4_,tensor5_,tensor6_,indices_]:=Activate @ TensorContract[
-        Inactive[TensorProduct][tensor1,tensor2,tensor3,tensor4,tensor5,tensor6], indices] 
-
-
-(*
 	this function symmetrizes tensor D over the indices in indexgroups
 *)
 SymmetrizeTensor[DT_,indexGroups_]:=Module[{symDT,numPermutations,symDTFinal},
