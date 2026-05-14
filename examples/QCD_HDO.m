@@ -147,7 +147,7 @@ ODIM6[17,3]//MatrixForm
 	Through field redefinition is it possible to check gauge dependence cancellation
 *)
 gE=gs Sqrt[T];
-solDRalgo=Join[solA6,solWithoutA6];
+solDRalgo=sol6;
 
 \[Alpha][F^3]/.solDRalgo//Factor
 \[Alpha][A^2F^2,1]/.solDRalgo//Factor
@@ -155,3 +155,6 @@ solDRalgo=Join[solA6,solWithoutA6];
 (\[Alpha][D^2A^4,2]-1/2 \[Alpha][D^2A^4,1]-6 I gE \[Alpha][D^2A^2F]-6gE^2 \[Alpha][D^2F^2])/.solDRalgo//Factor
 \[Alpha][A^6,1]/.solDRalgo//Factor
 \[Alpha][A^6,2]/.solDRalgo//Factor
+
+
+
