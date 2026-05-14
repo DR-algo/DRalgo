@@ -85,7 +85,7 @@ WCs=DeleteDuplicates[Cases[TensorList//Normal, \[Alpha][__], \[Infinity]]];
 (*
 	Dimension6Matching and Dimension5Matching find the values of
 	the Wilson coefficients listed in WC, d is the number of spatial dimensions,
-	Zb and Zf are 1 loop master integral
+	Zb and Zf are 1-loop master integrals
 *)
 sol6=Dimension6Matching[TensorList,NList,WCs,3][[1]];
 Collect[sol6,{_Zb,_Zf},Factor]//TableForm
@@ -108,16 +108,16 @@ WCsWithoutA6=DeleteDuplicates[Cases[TensorListWithoutA6//Normal, \[Alpha][__], \
 (*
 	Dimension6Matching and Dimension5Matching find the values of
 	the Wilson coefficients listed in WC, d is the number of spatial dimensions,
-	Zb and Zf are 1 loop master integral
+	Zb and Zf are 1-loop master integrals
 *)
 solWithoutA6=Dimension6Matching[TensorListWithoutA6,NListWithoutA6,WCsWithoutA6,3][[1]];
 Collect[solWithoutA6,{_Zb,_Zf},Factor]//TableForm
 
 
 (*
-	The matching can be done singularly for each group tensor
+	The matching can be done individually for each group tensor
 *)
-solA6=Dimension6Matching[{OT[12]},{12},{\[Alpha][A^6,1],\[Alpha][A^6,2]},3][[1]];
+solA6=Dimension6Matching[{OT[6,12]},{12},{\[Alpha][A^6,1],\[Alpha][A^6,2]},3][[1]];
 solA6//Factor//TableForm
 
 

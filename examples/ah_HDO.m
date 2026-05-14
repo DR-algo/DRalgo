@@ -13,6 +13,9 @@ DRalgo`DRalgo`$GroupMathMultipleModels=True; (*Put this if you want to create mu
 (*Abelian Higgs*)
 
 
+(*See 2503.18904 [hep-ph] for the dimension-6 operator matching*)
+
+
 (* ::Section::Closed:: *)
 (*Model*)
 
@@ -70,7 +73,7 @@ PerformDRhard[]
 
 (*
 	The complex scalar field \phi is decomposed in terms of
-	two real scalar field \\phi_1 and \phi_2
+	two real scalar fields \phi_1 and \phi_2
 	as follows \phi=1/Sqrt[2](\phi_1+i\phi_2) which can be written
 	as \phi=V_i \phi_i,
 	therefore we can construct all the tensors using
@@ -86,7 +89,7 @@ id={1};
 (*
 	We define \[Alpha][__] the Wilson coefficients associated to
 	the dimension-6 operator basis defined in arxiv 2503.18904,
-	c[__] are just combination of them
+	c[__] are just combinations of them
 *)
 Subscript[c, 1]=\[Alpha][ D^2 \[Phi]^4,1]-4\[Alpha][ D^2 \[Phi]^4,2];
 Subscript[c, 2]=-\[Alpha][ D^2 \[Phi]^4,2];
@@ -117,15 +120,15 @@ Tens17=2\[Alpha][ D^4 B0^2]TensorProduct[id,id];
 
 
 (*
-	TensorList is the array of the various group tensors refered to
-	higher dimensional operators
+	TensorList is the array of the various group tensors referred to
+	higher-dimensional operators
 *)
 TensorList={
 	Tens2,Tens3,Tens4,Tens5,Tens6,Tens7,Tens8,Tens9,Tens10,
 	Tens11,Tens12,Tens13,Tens14,Tens15,Tens17
 };
 (*
-	NList is the array that indicate to which operator
+	NList is the array that indicates to which operator
 	the group tensors in TensorList refer to
 *)
 NList={2,3,4,5,6,7,8,9,10,11,12,13,14,15,17};
@@ -139,24 +142,24 @@ WC = DeleteDuplicates[Cases[TensorList//Normal, \[Alpha][__], \[Infinity]]];
 	Dimension6Matching and Dimension5Matching find the values of
 	the Wilson coefficients listed in WC,
 	d is the number of spatial dimensions,
-	Zb and Zf are 1 loop master integral
+	Zb and Zf are 1-loop master integrals
 *)
 sol=Dimension6Matching[TensorList,NList,WC,d][[1]];
 sol//Factor//TableForm
 
 (*
-	The solutions of the Wilson Coefficient is
+	The solutions of the Wilson Coefficients are
 	left in generic R-\xi gauge,
 	the user can easily check that this gauge dependence
 	is removed once redundancy of the operator basis is removed as well
 	*)
 (*
-	Zb[3,0] is an Hard Thermal 1 loop Integral,
-	its value in d=3 can be reproduce with
+	Zb[3,0] is a Hard Thermal 1-loop integral,
+	its value in d=3 can be reproduced with
 	the function HardThermal1LoopInt["B",3,0,3]
 *)
 (*
-	The matching can be done singularly for each group tensor
+	The matching can be done individually for each group tensor
 *)
 sol=Dimension6Matching[{Tens2},{2},{\[Alpha][\[Phi]^2 F^2]},d][[1]];
 sol//Factor//TableForm

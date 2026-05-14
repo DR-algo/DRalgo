@@ -13,6 +13,9 @@ DRalgo`DRalgo`$GroupMathMultipleModels=True; (*Put this if you want to create mu
 (*SU2+Higgs*)
 
 
+(*See 2503.20016 [hep-ph] for the dimension-6 operator matching and field-redefinition comparisons*)
+
+
 (* ::Section::Closed:: *)
 (*Model*)
 
@@ -67,15 +70,15 @@ PerformDRhard[]
 
 (*
 	The scalar field \phi in the fundamental representation is
-	internally decomposed in single real scalar field as follows
+	internally decomposed into single real scalar fields as follows
 	H=(\phi_1+I\phi_3,\phi_2+I\phi_4)^T,
-	which can be compactly be written has H_I=V_{I i}\phi_i with i=1,..,4. 
-	All the operator tensors associated to higher dimensional operator
+	which can be compactly written as H_I=V_{I i}\phi_i with i=1,..,4. 
+	All the operator tensors associated to higher-dimensional operators
 	can be constructed in terms of
 	the matrix V, and its complex conjugate Vs,
 	the identity on the gauge fields id, which,
 	since they are 3, it is a 3x3 identity matrix, 
-	the Generator in the fundamental representation, namely
+	the generators in the fundamental representation, namely
 	the Pauli matrices Sigma, and the group structure constants of SU(2) LC
 *)
 id=IdentityMatrix[3];
@@ -143,7 +146,7 @@ WC = DeleteDuplicates[Cases[TensorList//Normal, \[Alpha][__], \[Infinity]]];
 	Dimension6Matching and Dimension5Matching find the values of
 	the Wilson coefficients listed in WC,
 	d is the number of spatial dimensions,
-	Zb and Zf are 1 loop master integrals
+	Zb and Zf are 1-loop master integrals
 *)
 soltot=Dimension6Matching[TensorList,NList,WC,d][[1]];
 soltot//Factor//TableForm

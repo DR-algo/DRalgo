@@ -13,7 +13,10 @@ DRalgo`DRalgo`$GroupMathMultipleModels=True; (*Put this if you want to create mu
 (*Standard Model*)
 
 
-(*See 1106.0034 [hep-ph] for a review*)
+(*
+	See 1106.0034 [hep-ph] for a review of the Standard Model, and
+	2503.20016 [hep-ph] for the dimension-6 operator matching
+*)
 
 
 (* ::Section:: *)
@@ -120,17 +123,17 @@ PerformDRhard[]
 (*
 	The Higgs field H is internally decomposed in single real scalar fields
 	as follows H=(\phi_1+I\phi_3,\phi_2+I\phi_4)^T,
-	which can be compactly be written has H_I=V_{I i}\phi_i with i=1,..,4. 
+	which can be compactly written as H_I=V_{I i}\phi_i with i=1,..,4. 
 	All the operator tensors associated to higher dimensional operators
 	can be constructed in terms of the matrix V, and its complex conjugate Vs,
 	the identity projected on the strong gauge fields G idG,
 	the identity projected on the Weak gauge fields W idW,
 	the identity projected on the hypercharge gauge field B idB,
 	the vector of the field B ProjB,
-	the pauli matrices (namely the generator in the fundamental representation of SU(2)),
-	the group structure constant of SU(2)_L \[Epsilon]W,
+	the Pauli matrices (namely the generators in the fundamental representation of SU(2)),
+	the group structure constants of SU(2)_L \[Epsilon]W,
 	the group structure constants of SU(3)_c fG, and
-	the structure constant d^{abc} of SU(3)
+	the structure constants d^{abc} of SU(3) dG
 *)
 
 idW = SparseArray[{
@@ -177,6 +180,9 @@ TGfund=Coefficient[gvff,gs];
 TGadj=-I fG;
 dG=SymmetrizeTensor[Contract[TGfund,TGfund,TGfund,{{2,9},{3,5},{6,8}}],{{1,2,3}}];
 
+(*
+	Redefine dG using explicit Gell-Mann matrices
+*)
 (* Gell-Mann Matrices *)
 lambda[1] = {{0, 1, 0}, {1, 0, 0}, {0, 0, 0}};
 lambda[2] = {{0, -I, 0}, {I, 0, 0}, {0, 0, 0}};
@@ -477,6 +483,6 @@ solTex=Collect[Join[sol,sol6]/.HYPERCHARGE/.{\[Lambda]1H->l4,\[Xi]->xi},{_Zb,_Zf
 
 
 (*
-	The Wilson coefficients related to the electro-weak sector only
+	The Wilson coefficients related to the electroweak sector only
 	agree with what is reported in arxiv 2503.20016
 *)
