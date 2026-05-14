@@ -14151,138 +14151,272 @@ S2V4F[x_]:=Module[{T},
 	T=
 		Which[
 			x==1,
-			1/3 (6 Transpose[Contract[gvff,gvff,YsffC,Ysff,gvff,gvff,{{9,14},{8,11},{6,12},{5,18},{3,17},{2,15}}],{5,6,1,2,3,4}]-6 N Transpose[Contract[gvff,gvff,YsffC,Ysff,gvff,gvff,{{9,14},{8,11},{6,12},{5,18},{3,17},{2,15}}],{5,6,1,2,3,4}]+\
-			(N^2) Transpose[Contract[gvff,gvff,YsffC,Ysff,gvff,gvff,{{9,14},{8,11},{6,12},{5,18},{3,17},{2,15}}],{5,6,1,2,3,4}]+6 Transpose[Contract[gvff,gvff,YsffC,Ysff,gvff,gvff,{{9,14},{8,11},{6,12},{5,18},{3,17},{2,15}}],{5,6,2,1,3,4}]-\
-			6 N Transpose[Contract[gvff,gvff,YsffC,Ysff,gvff,gvff,{{9,14},{8,11},{6,12},{5,18},{3,17},{2,15}}],{5,6,2,1,3,4}]+N^2 Transpose[Contract[gvff,gvff,YsffC,Ysff,gvff,gvff,{{9,14},{8,11},{6,12},{5,18},{3,17},{2,15}}],{5,6,2,1,3,4}]+\
-			6 Transpose[Contract[gvff,gvff,YsffC,Ysff,gvff,gvff,{{9,14},{8,11},{6,17},{5,15},{3,12},{2,18}}],{5,6,1,2,3,4}]-6 N Transpose[Contract[gvff,gvff,YsffC,Ysff,gvff,gvff,{{9,14},{8,11},{6,17},{5,15},{3,12},{2,18}}],{5,6,1,2,3,4}]+\
-			(N^2) Transpose[Contract[gvff,gvff,YsffC,Ysff,gvff,gvff,{{9,14},{8,11},{6,17},{5,15},{3,12},{2,18}}],{5,6,1,2,3,4}]+6 Transpose[Contract[gvff,gvff,YsffC,Ysff,gvff,gvff,{{9,14},{8,11},{6,17},{5,15},{3,12},{2,18}}],{5,6,2,1,3,4}]-\
-			6 N Transpose[Contract[gvff,gvff,YsffC,Ysff,gvff,gvff,{{9,14},{8,11},{6,17},{5,15},{3,12},{2,18}}],{5,6,2,1,3,4}]+N^2 Transpose[Contract[gvff,gvff,YsffC,Ysff,gvff,gvff,{{9,14},{8,11},{6,17},{5,15},{3,12},{2,18}}],{5,6,2,1,3,4}]+\
-			6 Transpose[Contract[gvff,gvff,YsffC,Ysff,gvff,gvff,{{9,14},{8,17},{6,12},{5,15},{3,11},{2,18}}],{5,6,2,1,3,4}]+6 Transpose[Contract[gvff,gvff,YsffC,Ysff,gvff,gvff,{{9,17},{8,11},{6,12},{5,15},{3,14},{2,18}}],{5,6,1,2,3,4}]-\
-			6 N Transpose[Contract[gvff,gvff,YsffC,Ysff,gvff,gvff,{{9,17},{8,11},{6,12},{5,15},{3,14},{2,18}}],{5,6,1,2,3,4}]+N^2 Transpose[Contract[gvff,gvff,YsffC,Ysff,gvff,gvff,{{9,17},{8,11},{6,12},{5,15},{3,14},{2,18}}],{5,6,1,2,3,4}]+\
-			6 Transpose[Contract[gvff,gvff,YsffC,Ysff,gvff,gvff,{{9,17},{8,11},{6,12},{5,15},{3,14},{2,18}}],{5,6,2,1,3,4}]-6 N Transpose[Contract[gvff,gvff,YsffC,Ysff,gvff,gvff,{{9,17},{8,11},{6,12},{5,15},{3,14},{2,18}}],{5,6,2,1,3,4}]+\
-			(N^2) Transpose[Contract[gvff,gvff,YsffC,Ysff,gvff,gvff,{{9,17},{8,11},{6,12},{5,15},{3,14},{2,18}}],{5,6,2,1,3,4}]+6 Transpose[Contract[gvff,gvff,YsffC,Ysff,gvff,gvff,{{9,17},{8,11},{6,14},{5,18},{3,12},{2,15}}],{5,6,1,2,3,4}]-\
-			6 N Transpose[Contract[gvff,gvff,YsffC,Ysff,gvff,gvff,{{9,17},{8,11},{6,14},{5,18},{3,12},{2,15}}],{5,6,1,2,3,4}]+N^2 Transpose[Contract[gvff,gvff,YsffC,Ysff,gvff,gvff,{{9,17},{8,11},{6,14},{5,18},{3,12},{2,15}}],{5,6,1,2,3,4}]+\
-			6 Transpose[Contract[gvff,gvff,YsffC,Ysff,gvff,gvff,{{9,17},{8,11},{6,14},{5,18},{3,12},{2,15}}],{5,6,2,1,3,4}]-6 N Transpose[Contract[gvff,gvff,YsffC,Ysff,gvff,gvff,{{9,17},{8,11},{6,14},{5,18},{3,12},{2,15}}],{5,6,2,1,3,4}]+\
-			(N^2) Transpose[Contract[gvff,gvff,YsffC,Ysff,gvff,gvff,{{9,17},{8,11},{6,14},{5,18},{3,12},{2,15}}],{5,6,2,1,3,4}]+6 Transpose[Contract[gvff,gvff,YsffC,Ysff,gvff,gvff,{{9,17},{8,14},{6,11},{5,15},{3,12},{2,18}}],{5,6,1,2,3,4}]+\
-			6 Transpose[Contract[gvff,gvff,YsffC,Ysff,gvff,gvff,{{9,17},{8,14},{6,12},{5,18},{3,11},{2,15}}],{5,6,1,2,3,4}]+6 Transpose[Contract[gvff,gvff,YsffC,Ysff,gvff,gvff,{{9,17},{8,14},{6,12},{5,18},{3,11},{2,15}}],{5,6,2,1,3,4}]-\
-			6 Transpose[Contract[gvff,gvff,YsffC,Ysff,gvff,gvff,{{11,15},{8,14},{6,12},{5,18},{3,17},{2,9}}],{5,6,1,2,3,4}]+2 N Transpose[Contract[gvff,gvff,YsffC,Ysff,gvff,gvff,{{11,15},{8,14},{6,12},{5,18},{3,17},{2,9}}],{5,6,1,2,3,4}]-\
-			6 Transpose[Contract[gvff,gvff,YsffC,Ysff,gvff,gvff,{{11,15},{8,14},{6,12},{5,18},{3,17},{2,9}}],{5,6,2,1,3,4}]+2 N Transpose[Contract[gvff,gvff,YsffC,Ysff,gvff,gvff,{{11,15},{8,14},{6,12},{5,18},{3,17},{2,9}}],{5,6,2,1,3,4}]-\
-			6 Transpose[Contract[gvff,gvff,YsffC,Ysff,gvff,gvff,{{11,15},{8,14},{6,17},{5,9},{3,12},{2,18}}],{5,6,1,2,3,4}]+2 N Transpose[Contract[gvff,gvff,YsffC,Ysff,gvff,gvff,{{11,15},{8,14},{6,17},{5,9},{3,12},{2,18}}],{5,6,1,2,3,4}]-\
-			6 Transpose[Contract[gvff,gvff,YsffC,Ysff,gvff,gvff,{{11,15},{8,14},{6,17},{5,9},{3,12},{2,18}}],{5,6,2,1,3,4}]+2 N Transpose[Contract[gvff,gvff,YsffC,Ysff,gvff,gvff,{{11,15},{8,14},{6,17},{5,9},{3,12},{2,18}}],{5,6,2,1,3,4}]-\
-			6 Transpose[Contract[gvff,gvff,YsffC,Ysff,gvff,gvff,{{11,15},{9,17},{6,12},{5,8},{3,14},{2,18}}],{5,6,2,1,3,4}]+2 N Transpose[Contract[gvff,gvff,YsffC,Ysff,gvff,gvff,{{11,15},{9,17},{6,12},{5,8},{3,14},{2,18}}],{5,6,2,1,3,4}]+\
-			6 Transpose[Contract[gvff,gvff,YsffC,Ysff,gvff,gvff,{{11,15},{9,17},{6,12},{5,18},{3,14},{2,8}}],{5,6,2,1,3,4}]+6 Transpose[Contract[gvff,gvff,YsffC,Ysff,gvff,gvff,{{11,15},{9,17},{6,14},{5,8},{3,12},{2,18}}],{5,6,2,1,3,4}]-\
-			6 Transpose[Contract[gvff,gvff,YsffC,Ysff,gvff,gvff,{{11,15},{9,17},{6,14},{5,18},{3,12},{2,8}}],{5,6,2,1,3,4}]+2 N Transpose[Contract[gvff,gvff,YsffC,Ysff,gvff,gvff,{{11,15},{9,17},{6,14},{5,18},{3,12},{2,8}}],{5,6,2,1,3,4}]-\
-			6 Transpose[Contract[gvff,gvff,YsffC,Ysff,gvff,gvff,{{11,15},{9,17},{8,14},{5,18},{3,12},{2,6}}],{5,6,1,2,3,4}]+2 N Transpose[Contract[gvff,gvff,YsffC,Ysff,gvff,gvff,{{11,15},{9,17},{8,14},{5,18},{3,12},{2,6}}],{5,6,1,2,3,4}]-\
-			6 Transpose[Contract[gvff,gvff,YsffC,Ysff,gvff,gvff,{{11,15},{9,17},{8,14},{5,18},{3,12},{2,6}}],{5,6,2,1,3,4}]+2 N Transpose[Contract[gvff,gvff,YsffC,Ysff,gvff,gvff,{{11,15},{9,17},{8,14},{5,18},{3,12},{2,6}}],{5,6,2,1,3,4}]-\
-			6 Transpose[Contract[gvff,gvff,YsffC,Ysff,gvff,gvff,{{11,15},{9,17},{8,14},{6,12},{3,5},{2,18}}],{5,6,1,2,3,4}]+2 N Transpose[Contract[gvff,gvff,YsffC,Ysff,gvff,gvff,{{11,15},{9,17},{8,14},{6,12},{3,5},{2,18}}],{5,6,1,2,3,4}]-\
-			6 Transpose[Contract[gvff,gvff,YsffC,Ysff,gvff,gvff,{{11,15},{9,17},{8,14},{6,12},{3,5},{2,18}}],{5,6,2,1,3,4}]+2 N Transpose[Contract[gvff,gvff,YsffC,Ysff,gvff,gvff,{{11,15},{9,17},{8,14},{6,12},{3,5},{2,18}}],{5,6,2,1,3,4}]-\
-			6 Transpose[Contract[gvff,gvff,YsffC,Ysff,gvff,gvff,{{11,18},{8,17},{6,12},{5,15},{3,14},{2,9}}],{5,6,1,2,3,4}]+2 N Transpose[Contract[gvff,gvff,YsffC,Ysff,gvff,gvff,{{11,18},{8,17},{6,12},{5,15},{3,14},{2,9}}],{5,6,1,2,3,4}]-\
-			6 Transpose[Contract[gvff,gvff,YsffC,Ysff,gvff,gvff,{{11,18},{8,17},{6,12},{5,15},{3,14},{2,9}}],{5,6,2,1,3,4}]+2 N Transpose[Contract[gvff,gvff,YsffC,Ysff,gvff,gvff,{{11,18},{8,17},{6,12},{5,15},{3,14},{2,9}}],{5,6,2,1,3,4}]-\
-			6 Transpose[Contract[gvff,gvff,YsffC,Ysff,gvff,gvff,{{11,18},{8,17},{6,14},{5,9},{3,12},{2,15}}],{5,6,1,2,3,4}]+2 N Transpose[Contract[gvff,gvff,YsffC,Ysff,gvff,gvff,{{11,18},{8,17},{6,14},{5,9},{3,12},{2,15}}],{5,6,1,2,3,4}]-\
-			6 Transpose[Contract[gvff,gvff,YsffC,Ysff,gvff,gvff,{{11,18},{8,17},{6,14},{5,9},{3,12},{2,15}}],{5,6,2,1,3,4}]+2 N Transpose[Contract[gvff,gvff,YsffC,Ysff,gvff,gvff,{{11,18},{8,17},{6,14},{5,9},{3,12},{2,15}}],{5,6,2,1,3,4}]-\
-			6 Transpose[Contract[gvff,gvff,YsffC,Ysff,gvff,gvff,{{11,18},{9,14},{6,12},{5,8},{3,17},{2,15}}],{5,6,2,1,3,4}]+2 N Transpose[Contract[gvff,gvff,YsffC,Ysff,gvff,gvff,{{11,18},{9,14},{6,12},{5,8},{3,17},{2,15}}],{5,6,2,1,3,4}]+\
-			6 Transpose[Contract[gvff,gvff,YsffC,Ysff,gvff,gvff,{{11,18},{9,14},{6,12},{5,15},{3,17},{2,8}}],{5,6,2,1,3,4}]+6 Transpose[Contract[gvff,gvff,YsffC,Ysff,gvff,gvff,{{11,18},{9,14},{6,17},{5,8},{3,12},{2,15}}],{5,6,2,1,3,4}]-\
-			6 Transpose[Contract[gvff,gvff,YsffC,Ysff,gvff,gvff,{{11,18},{9,14},{6,17},{5,15},{3,12},{2,8}}],{5,6,2,1,3,4}]+2 N Transpose[Contract[gvff,gvff,YsffC,Ysff,gvff,gvff,{{11,18},{9,14},{6,17},{5,15},{3,12},{2,8}}],{5,6,2,1,3,4}]-\
-			6 Transpose[Contract[gvff,gvff,YsffC,Ysff,gvff,gvff,{{11,18},{9,14},{8,17},{5,15},{3,12},{2,6}}],{5,6,2,1,3,4}]+2 N Transpose[Contract[gvff,gvff,YsffC,Ysff,gvff,gvff,{{11,18},{9,14},{8,17},{5,15},{3,12},{2,6}}],{5,6,2,1,3,4}]-\
-			6 Transpose[Contract[gvff,gvff,YsffC,Ysff,gvff,gvff,{{11,18},{9,14},{8,17},{6,12},{3,5},{2,15}}],{5,6,2,1,3,4}]+2 N Transpose[Contract[gvff,gvff,YsffC,Ysff,gvff,gvff,{{11,18},{9,14},{8,17},{6,12},{3,5},{2,15}}],{5,6,2,1,3,4}]-\
-			6 Transpose[Contract[gvff,gvff,YsffC,Ysff,gvff,gvff,{{11,18},{9,17},{8,14},{5,15},{3,12},{2,6}}],{5,6,1,2,3,4}]+2 N Transpose[Contract[gvff,gvff,YsffC,Ysff,gvff,gvff,{{11,18},{9,17},{8,14},{5,15},{3,12},{2,6}}],{5,6,1,2,3,4}]-\
-			6 Transpose[Contract[gvff,gvff,YsffC,Ysff,gvff,gvff,{{11,18},{9,17},{8,14},{6,12},{3,5},{2,15}}],{5,6,1,2,3,4}]+2 N Transpose[Contract[gvff,gvff,YsffC,Ysff,gvff,gvff,{{11,18},{9,17},{8,14},{6,12},{3,5},{2,15}}],{5,6,1,2,3,4}]+\
-			6 Transpose[Contract[gvff,gvff,YsffC,Ysff,gvff,gvff,{{12,15},{8,11},{6,14},{5,18},{3,17},{2,9}}],{5,6,1,2,3,4}]-6 N Transpose[Contract[gvff,gvff,YsffC,Ysff,gvff,gvff,{{12,15},{8,11},{6,14},{5,18},{3,17},{2,9}}],{5,6,1,2,3,4}]+\
-			(N^2) Transpose[Contract[gvff,gvff,YsffC,Ysff,gvff,gvff,{{12,15},{8,11},{6,14},{5,18},{3,17},{2,9}}],{5,6,1,2,3,4}]+6 Transpose[Contract[gvff,gvff,YsffC,Ysff,gvff,gvff,{{12,15},{8,11},{6,14},{5,18},{3,17},{2,9}}],{5,6,2,1,3,4}]-\
-			6 N Transpose[Contract[gvff,gvff,YsffC,Ysff,gvff,gvff,{{12,15},{8,11},{6,14},{5,18},{3,17},{2,9}}],{5,6,2,1,3,4}]+N^2 Transpose[Contract[gvff,gvff,YsffC,Ysff,gvff,gvff,{{12,15},{8,11},{6,14},{5,18},{3,17},{2,9}}],{5,6,2,1,3,4}]+\
-			6 Transpose[Contract[gvff,gvff,YsffC,Ysff,gvff,gvff,{{12,15},{8,11},{6,17},{5,9},{3,14},{2,18}}],{5,6,1,2,3,4}]-6 N Transpose[Contract[gvff,gvff,YsffC,Ysff,gvff,gvff,{{12,15},{8,11},{6,17},{5,9},{3,14},{2,18}}],{5,6,1,2,3,4}]+\
-			(N^2) Transpose[Contract[gvff,gvff,YsffC,Ysff,gvff,gvff,{{12,15},{8,11},{6,17},{5,9},{3,14},{2,18}}],{5,6,1,2,3,4}]+6 Transpose[Contract[gvff,gvff,YsffC,Ysff,gvff,gvff,{{12,15},{8,11},{6,17},{5,9},{3,14},{2,18}}],{5,6,2,1,3,4}]-\
-			6 N Transpose[Contract[gvff,gvff,YsffC,Ysff,gvff,gvff,{{12,15},{8,11},{6,17},{5,9},{3,14},{2,18}}],{5,6,2,1,3,4}]+N^2 Transpose[Contract[gvff,gvff,YsffC,Ysff,gvff,gvff,{{12,15},{8,11},{6,17},{5,9},{3,14},{2,18}}],{5,6,2,1,3,4}]-\
-			6 Transpose[Contract[gvff,gvff,YsffC,Ysff,gvff,gvff,{{12,15},{8,17},{6,11},{5,9},{3,14},{2,18}}],{5,6,1,2,3,4}]+2 N Transpose[Contract[gvff,gvff,YsffC,Ysff,gvff,gvff,{{12,15},{8,17},{6,11},{5,9},{3,14},{2,18}}],{5,6,1,2,3,4}]+\
-			6 Transpose[Contract[gvff,gvff,YsffC,Ysff,gvff,gvff,{{12,15},{8,17},{6,11},{5,18},{3,14},{2,9}}],{5,6,1,2,3,4}]+6 Transpose[Contract[gvff,gvff,YsffC,Ysff,gvff,gvff,{{12,15},{8,17},{6,14},{5,9},{3,11},{2,18}}],{5,6,1,2,3,4}]-\
-			6 Transpose[Contract[gvff,gvff,YsffC,Ysff,gvff,gvff,{{12,15},{8,17},{6,14},{5,18},{3,11},{2,9}}],{5,6,1,2,3,4}]+2 N Transpose[Contract[gvff,gvff,YsffC,Ysff,gvff,gvff,{{12,15},{8,17},{6,14},{5,18},{3,11},{2,9}}],{5,6,1,2,3,4}]+\
-			6 Transpose[Contract[gvff,gvff,YsffC,Ysff,gvff,gvff,{{12,15},{9,17},{8,11},{5,18},{3,14},{2,6}}],{5,6,1,2,3,4}]-6 N Transpose[Contract[gvff,gvff,YsffC,Ysff,gvff,gvff,{{12,15},{9,17},{8,11},{5,18},{3,14},{2,6}}],{5,6,1,2,3,4}]+\
-			(N^2) Transpose[Contract[gvff,gvff,YsffC,Ysff,gvff,gvff,{{12,15},{9,17},{8,11},{5,18},{3,14},{2,6}}],{5,6,1,2,3,4}]+6 Transpose[Contract[gvff,gvff,YsffC,Ysff,gvff,gvff,{{12,15},{9,17},{8,11},{5,18},{3,14},{2,6}}],{5,6,2,1,3,4}]-\
-			6 N Transpose[Contract[gvff,gvff,YsffC,Ysff,gvff,gvff,{{12,15},{9,17},{8,11},{5,18},{3,14},{2,6}}],{5,6,2,1,3,4}]+N^2 Transpose[Contract[gvff,gvff,YsffC,Ysff,gvff,gvff,{{12,15},{9,17},{8,11},{5,18},{3,14},{2,6}}],{5,6,2,1,3,4}]+\
-			6 Transpose[Contract[gvff,gvff,YsffC,Ysff,gvff,gvff,{{12,15},{9,17},{8,11},{6,14},{3,5},{2,18}}],{5,6,1,2,3,4}]-6 N Transpose[Contract[gvff,gvff,YsffC,Ysff,gvff,gvff,{{12,15},{9,17},{8,11},{6,14},{3,5},{2,18}}],{5,6,1,2,3,4}]+\
-			(N^2) Transpose[Contract[gvff,gvff,YsffC,Ysff,gvff,gvff,{{12,15},{9,17},{8,11},{6,14},{3,5},{2,18}}],{5,6,1,2,3,4}]+6 Transpose[Contract[gvff,gvff,YsffC,Ysff,gvff,gvff,{{12,15},{9,17},{8,11},{6,14},{3,5},{2,18}}],{5,6,2,1,3,4}]-\
-			6 N Transpose[Contract[gvff,gvff,YsffC,Ysff,gvff,gvff,{{12,15},{9,17},{8,11},{6,14},{3,5},{2,18}}],{5,6,2,1,3,4}]+N^2 Transpose[Contract[gvff,gvff,YsffC,Ysff,gvff,gvff,{{12,15},{9,17},{8,11},{6,14},{3,5},{2,18}}],{5,6,2,1,3,4}]+\
-			6 Transpose[Contract[gvff,gvff,YsffC,Ysff,gvff,gvff,{{12,15},{11,18},{6,14},{5,9},{3,17},{2,8}}],{5,6,1,2,3,4}]-6 Transpose[Contract[gvff,gvff,YsffC,Ysff,gvff,gvff,{{12,15},{11,18},{8,17},{5,9},{3,14},{2,6}}],{5,6,1,2,3,4}]+\
-			2 N Transpose[Contract[gvff,gvff,YsffC,Ysff,gvff,gvff,{{12,15},{11,18},{8,17},{5,9},{3,14},{2,6}}],{5,6,1,2,3,4}]-6 Transpose[Contract[gvff,gvff,YsffC,Ysff,gvff,gvff,{{12,15},{11,18},{8,17},{6,14},{3,5},{2,9}}],{5,6,1,2,3,4}]+\
-			2 N Transpose[Contract[gvff,gvff,YsffC,Ysff,gvff,gvff,{{12,15},{11,18},{8,17},{6,14},{3,5},{2,9}}],{5,6,1,2,3,4}]+6 Transpose[Contract[gvff,gvff,YsffC,Ysff,gvff,gvff,{{12,18},{8,11},{6,14},{5,9},{3,17},{2,15}}],{5,6,1,2,3,4}]-\
-			6 N Transpose[Contract[gvff,gvff,YsffC,Ysff,gvff,gvff,{{12,18},{8,11},{6,14},{5,9},{3,17},{2,15}}],{5,6,1,2,3,4}]+N^2 Transpose[Contract[gvff,gvff,YsffC,Ysff,gvff,gvff,{{12,18},{8,11},{6,14},{5,9},{3,17},{2,15}}],{5,6,1,2,3,4}]+\
-			6 Transpose[Contract[gvff,gvff,YsffC,Ysff,gvff,gvff,{{12,18},{8,11},{6,14},{5,9},{3,17},{2,15}}],{5,6,2,1,3,4}]-6 N Transpose[Contract[gvff,gvff,YsffC,Ysff,gvff,gvff,{{12,18},{8,11},{6,14},{5,9},{3,17},{2,15}}],{5,6,2,1,3,4}]+\
-			(N^2) Transpose[Contract[gvff,gvff,YsffC,Ysff,gvff,gvff,{{12,18},{8,11},{6,14},{5,9},{3,17},{2,15}}],{5,6,2,1,3,4}]+6 Transpose[Contract[gvff,gvff,YsffC,Ysff,gvff,gvff,{{12,18},{8,11},{6,17},{5,15},{3,14},{2,9}}],{5,6,1,2,3,4}]-\
-			6 N Transpose[Contract[gvff,gvff,YsffC,Ysff,gvff,gvff,{{12,18},{8,11},{6,17},{5,15},{3,14},{2,9}}],{5,6,1,2,3,4}]+N^2 Transpose[Contract[gvff,gvff,YsffC,Ysff,gvff,gvff,{{12,18},{8,11},{6,17},{5,15},{3,14},{2,9}}],{5,6,1,2,3,4}]+\
-			6 Transpose[Contract[gvff,gvff,YsffC,Ysff,gvff,gvff,{{12,18},{8,11},{6,17},{5,15},{3,14},{2,9}}],{5,6,2,1,3,4}]-6 N Transpose[Contract[gvff,gvff,YsffC,Ysff,gvff,gvff,{{12,18},{8,11},{6,17},{5,15},{3,14},{2,9}}],{5,6,2,1,3,4}]+\
-			(N^2) Transpose[Contract[gvff,gvff,YsffC,Ysff,gvff,gvff,{{12,18},{8,11},{6,17},{5,15},{3,14},{2,9}}],{5,6,2,1,3,4}]-6 Transpose[Contract[gvff,gvff,YsffC,Ysff,gvff,gvff,{{12,18},{8,14},{6,11},{5,9},{3,17},{2,15}}],{5,6,1,2,3,4}]+\
-			2 N Transpose[Contract[gvff,gvff,YsffC,Ysff,gvff,gvff,{{12,18},{8,14},{6,11},{5,9},{3,17},{2,15}}],{5,6,1,2,3,4}]+6 Transpose[Contract[gvff,gvff,YsffC,Ysff,gvff,gvff,{{12,18},{8,14},{6,11},{5,15},{3,17},{2,9}}],{5,6,1,2,3,4}]+\
-			6 Transpose[Contract[gvff,gvff,YsffC,Ysff,gvff,gvff,{{12,18},{8,14},{6,17},{5,9},{3,11},{2,15}}],{5,6,1,2,3,4}]-6 Transpose[Contract[gvff,gvff,YsffC,Ysff,gvff,gvff,{{12,18},{8,14},{6,17},{5,15},{3,11},{2,9}}],{5,6,1,2,3,4}]+\
-			2 N Transpose[Contract[gvff,gvff,YsffC,Ysff,gvff,gvff,{{12,18},{8,14},{6,17},{5,15},{3,11},{2,9}}],{5,6,1,2,3,4}]+6 Transpose[Contract[gvff,gvff,YsffC,Ysff,gvff,gvff,{{12,18},{9,14},{8,11},{5,15},{3,17},{2,6}}],{5,6,1,2,3,4}]-\
-			6 N Transpose[Contract[gvff,gvff,YsffC,Ysff,gvff,gvff,{{12,18},{9,14},{8,11},{5,15},{3,17},{2,6}}],{5,6,1,2,3,4}]+N^2 Transpose[Contract[gvff,gvff,YsffC,Ysff,gvff,gvff,{{12,18},{9,14},{8,11},{5,15},{3,17},{2,6}}],{5,6,1,2,3,4}]+\
-			6 Transpose[Contract[gvff,gvff,YsffC,Ysff,gvff,gvff,{{12,18},{9,14},{8,11},{5,15},{3,17},{2,6}}],{5,6,2,1,3,4}]-6 N Transpose[Contract[gvff,gvff,YsffC,Ysff,gvff,gvff,{{12,18},{9,14},{8,11},{5,15},{3,17},{2,6}}],{5,6,2,1,3,4}]+\
-			(N^2) Transpose[Contract[gvff,gvff,YsffC,Ysff,gvff,gvff,{{12,18},{9,14},{8,11},{5,15},{3,17},{2,6}}],{5,6,2,1,3,4}]+6 Transpose[Contract[gvff,gvff,YsffC,Ysff,gvff,gvff,{{12,18},{9,14},{8,11},{6,17},{3,5},{2,15}}],{5,6,1,2,3,4}]-\
-			6 N Transpose[Contract[gvff,gvff,YsffC,Ysff,gvff,gvff,{{12,18},{9,14},{8,11},{6,17},{3,5},{2,15}}],{5,6,1,2,3,4}]+N^2 Transpose[Contract[gvff,gvff,YsffC,Ysff,gvff,gvff,{{12,18},{9,14},{8,11},{6,17},{3,5},{2,15}}],{5,6,1,2,3,4}]+\
-			6 Transpose[Contract[gvff,gvff,YsffC,Ysff,gvff,gvff,{{12,18},{9,14},{8,11},{6,17},{3,5},{2,15}}],{5,6,2,1,3,4}]-6 N Transpose[Contract[gvff,gvff,YsffC,Ysff,gvff,gvff,{{12,18},{9,14},{8,11},{6,17},{3,5},{2,15}}],{5,6,2,1,3,4}]+\
-			(N^2) Transpose[Contract[gvff,gvff,YsffC,Ysff,gvff,gvff,{{12,18},{9,14},{8,11},{6,17},{3,5},{2,15}}],{5,6,2,1,3,4}]+6 Transpose[Contract[gvff,gvff,YsffC,Ysff,gvff,gvff,{{12,18},{11,15},{6,14},{5,8},{3,17},{2,9}}],{5,6,2,1,3,4}]+\
-			6 Transpose[Contract[gvff,gvff,YsffC,Ysff,gvff,gvff,{{12,18},{11,15},{6,17},{5,9},{3,14},{2,8}}],{5,6,1,2,3,4}]+6 Transpose[Contract[gvff,gvff,YsffC,Ysff,gvff,gvff,{{12,18},{11,15},{6,17},{5,9},{3,14},{2,8}}],{5,6,2,1,3,4}]-\
-			6 Transpose[Contract[gvff,gvff,YsffC,Ysff,gvff,gvff,{{12,18},{11,15},{8,14},{5,9},{3,17},{2,6}}],{5,6,1,2,3,4}]+2 N Transpose[Contract[gvff,gvff,YsffC,Ysff,gvff,gvff,{{12,18},{11,15},{8,14},{5,9},{3,17},{2,6}}],{5,6,1,2,3,4}]-\
-			6 Transpose[Contract[gvff,gvff,YsffC,Ysff,gvff,gvff,{{12,18},{11,15},{8,14},{5,9},{3,17},{2,6}}],{5,6,2,1,3,4}]+2 N Transpose[Contract[gvff,gvff,YsffC,Ysff,gvff,gvff,{{12,18},{11,15},{8,14},{5,9},{3,17},{2,6}}],{5,6,2,1,3,4}]-\
-			6 Transpose[Contract[gvff,gvff,YsffC,Ysff,gvff,gvff,{{12,18},{11,15},{8,14},{6,17},{3,5},{2,9}}],{5,6,1,2,3,4}]+2 N Transpose[Contract[gvff,gvff,YsffC,Ysff,gvff,gvff,{{12,18},{11,15},{8,14},{6,17},{3,5},{2,9}}],{5,6,1,2,3,4}]-\
-			6 Transpose[Contract[gvff,gvff,YsffC,Ysff,gvff,gvff,{{12,18},{11,15},{8,14},{6,17},{3,5},{2,9}}],{5,6,2,1,3,4}]+2 N Transpose[Contract[gvff,gvff,YsffC,Ysff,gvff,gvff,{{12,18},{11,15},{8,14},{6,17},{3,5},{2,9}}],{5,6,2,1,3,4}]-\
-			6 Transpose[Contract[gvff,gvff,YsffC,Ysff,gvff,gvff,{{12,18},{11,15},{8,17},{5,9},{3,14},{2,6}}],{5,6,2,1,3,4}]+2 N Transpose[Contract[gvff,gvff,YsffC,Ysff,gvff,gvff,{{12,18},{11,15},{8,17},{5,9},{3,14},{2,6}}],{5,6,2,1,3,4}]-\
-			6 Transpose[Contract[gvff,gvff,YsffC,Ysff,gvff,gvff,{{12,18},{11,15},{8,17},{6,14},{3,5},{2,9}}],{5,6,2,1,3,4}]+2 N Transpose[Contract[gvff,gvff,YsffC,Ysff,gvff,gvff,{{12,18},{11,15},{8,17},{6,14},{3,5},{2,9}}],{5,6,2,1,3,4}]+\
-			6 Transpose[Contract[gvff,gvff,YsffC,Ysff,gvff,gvff,{{14,18},{8,11},{6,12},{5,15},{3,17},{2,9}}],{5,6,1,2,3,4}]-6 N Transpose[Contract[gvff,gvff,YsffC,Ysff,gvff,gvff,{{14,18},{8,11},{6,12},{5,15},{3,17},{2,9}}],{5,6,1,2,3,4}]+\
-			(N^2) Transpose[Contract[gvff,gvff,YsffC,Ysff,gvff,gvff,{{14,18},{8,11},{6,12},{5,15},{3,17},{2,9}}],{5,6,1,2,3,4}]+6 Transpose[Contract[gvff,gvff,YsffC,Ysff,gvff,gvff,{{14,18},{8,11},{6,12},{5,15},{3,17},{2,9}}],{5,6,2,1,3,4}]-\
-			6 N Transpose[Contract[gvff,gvff,YsffC,Ysff,gvff,gvff,{{14,18},{8,11},{6,12},{5,15},{3,17},{2,9}}],{5,6,2,1,3,4}]+N^2 Transpose[Contract[gvff,gvff,YsffC,Ysff,gvff,gvff,{{14,18},{8,11},{6,12},{5,15},{3,17},{2,9}}],{5,6,2,1,3,4}]+\
-			6 Transpose[Contract[gvff,gvff,YsffC,Ysff,gvff,gvff,{{14,18},{8,11},{6,17},{5,9},{3,12},{2,15}}],{5,6,1,2,3,4}]-6 N Transpose[Contract[gvff,gvff,YsffC,Ysff,gvff,gvff,{{14,18},{8,11},{6,17},{5,9},{3,12},{2,15}}],{5,6,1,2,3,4}]+\
-			(N^2) Transpose[Contract[gvff,gvff,YsffC,Ysff,gvff,gvff,{{14,18},{8,11},{6,17},{5,9},{3,12},{2,15}}],{5,6,1,2,3,4}]+6 Transpose[Contract[gvff,gvff,YsffC,Ysff,gvff,gvff,{{14,18},{8,11},{6,17},{5,9},{3,12},{2,15}}],{5,6,2,1,3,4}]-\
-			6 N Transpose[Contract[gvff,gvff,YsffC,Ysff,gvff,gvff,{{14,18},{8,11},{6,17},{5,9},{3,12},{2,15}}],{5,6,2,1,3,4}]+N^2 Transpose[Contract[gvff,gvff,YsffC,Ysff,gvff,gvff,{{14,18},{8,11},{6,17},{5,9},{3,12},{2,15}}],{5,6,2,1,3,4}]-\
-			6 Transpose[Contract[gvff,gvff,YsffC,Ysff,gvff,gvff,{{14,18},{8,17},{6,11},{5,9},{3,12},{2,15}}],{5,6,1,2,3,4}]+2 N Transpose[Contract[gvff,gvff,YsffC,Ysff,gvff,gvff,{{14,18},{8,17},{6,11},{5,9},{3,12},{2,15}}],{5,6,1,2,3,4}]-\
-			6 Transpose[Contract[gvff,gvff,YsffC,Ysff,gvff,gvff,{{14,18},{8,17},{6,12},{5,15},{3,11},{2,9}}],{5,6,1,2,3,4}]+2 N Transpose[Contract[gvff,gvff,YsffC,Ysff,gvff,gvff,{{14,18},{8,17},{6,12},{5,15},{3,11},{2,9}}],{5,6,1,2,3,4}]-\
-			6 Transpose[Contract[gvff,gvff,YsffC,Ysff,gvff,gvff,{{14,18},{9,17},{6,12},{5,8},{3,11},{2,15}}],{5,6,2,1,3,4}]+2 N Transpose[Contract[gvff,gvff,YsffC,Ysff,gvff,gvff,{{14,18},{9,17},{6,12},{5,8},{3,11},{2,15}}],{5,6,2,1,3,4}]-\
-			6 Transpose[Contract[gvff,gvff,YsffC,Ysff,gvff,gvff,{{14,18},{9,17},{6,12},{5,15},{3,11},{2,8}}],{5,6,2,1,3,4}]+2 N Transpose[Contract[gvff,gvff,YsffC,Ysff,gvff,gvff,{{14,18},{9,17},{6,12},{5,15},{3,11},{2,8}}],{5,6,2,1,3,4}]+\
-			6 Transpose[Contract[gvff,gvff,YsffC,Ysff,gvff,gvff,{{14,18},{9,17},{8,11},{5,15},{3,12},{2,6}}],{5,6,1,2,3,4}]-6 N Transpose[Contract[gvff,gvff,YsffC,Ysff,gvff,gvff,{{14,18},{9,17},{8,11},{5,15},{3,12},{2,6}}],{5,6,1,2,3,4}]+\
-			(N^2) Transpose[Contract[gvff,gvff,YsffC,Ysff,gvff,gvff,{{14,18},{9,17},{8,11},{5,15},{3,12},{2,6}}],{5,6,1,2,3,4}]+6 Transpose[Contract[gvff,gvff,YsffC,Ysff,gvff,gvff,{{14,18},{9,17},{8,11},{5,15},{3,12},{2,6}}],{5,6,2,1,3,4}]-\
-			6 N Transpose[Contract[gvff,gvff,YsffC,Ysff,gvff,gvff,{{14,18},{9,17},{8,11},{5,15},{3,12},{2,6}}],{5,6,2,1,3,4}]+N^2 Transpose[Contract[gvff,gvff,YsffC,Ysff,gvff,gvff,{{14,18},{9,17},{8,11},{5,15},{3,12},{2,6}}],{5,6,2,1,3,4}]+\
-			6 Transpose[Contract[gvff,gvff,YsffC,Ysff,gvff,gvff,{{14,18},{9,17},{8,11},{6,12},{3,5},{2,15}}],{5,6,1,2,3,4}]-6 N Transpose[Contract[gvff,gvff,YsffC,Ysff,gvff,gvff,{{14,18},{9,17},{8,11},{6,12},{3,5},{2,15}}],{5,6,1,2,3,4}]+\
-			(N^2) Transpose[Contract[gvff,gvff,YsffC,Ysff,gvff,gvff,{{14,18},{9,17},{8,11},{6,12},{3,5},{2,15}}],{5,6,1,2,3,4}]+6 Transpose[Contract[gvff,gvff,YsffC,Ysff,gvff,gvff,{{14,18},{9,17},{8,11},{6,12},{3,5},{2,15}}],{5,6,2,1,3,4}]-\
-			6 N Transpose[Contract[gvff,gvff,YsffC,Ysff,gvff,gvff,{{14,18},{9,17},{8,11},{6,12},{3,5},{2,15}}],{5,6,2,1,3,4}]+N^2 Transpose[Contract[gvff,gvff,YsffC,Ysff,gvff,gvff,{{14,18},{9,17},{8,11},{6,12},{3,5},{2,15}}],{5,6,2,1,3,4}]-\
-			6 Transpose[Contract[gvff,gvff,YsffC,Ysff,gvff,gvff,{{14,18},{11,15},{6,12},{5,8},{3,17},{2,9}}],{5,6,2,1,3,4}]+2 N Transpose[Contract[gvff,gvff,YsffC,Ysff,gvff,gvff,{{14,18},{11,15},{6,12},{5,8},{3,17},{2,9}}],{5,6,2,1,3,4}]-\
-			6 Transpose[Contract[gvff,gvff,YsffC,Ysff,gvff,gvff,{{14,18},{11,15},{6,17},{5,9},{3,12},{2,8}}],{5,6,2,1,3,4}]+2 N Transpose[Contract[gvff,gvff,YsffC,Ysff,gvff,gvff,{{14,18},{11,15},{6,17},{5,9},{3,12},{2,8}}],{5,6,2,1,3,4}]+\
-			6 Transpose[Contract[gvff,gvff,YsffC,Ysff,gvff,gvff,{{14,18},{11,15},{8,17},{5,9},{3,12},{2,6}}],{5,6,1,2,3,4}]+6 Transpose[Contract[gvff,gvff,YsffC,Ysff,gvff,gvff,{{14,18},{11,15},{8,17},{5,9},{3,12},{2,6}}],{5,6,2,1,3,4}]+\
-			6 Transpose[Contract[gvff,gvff,YsffC,Ysff,gvff,gvff,{{14,18},{11,15},{8,17},{6,12},{3,5},{2,9}}],{5,6,1,2,3,4}]+6 Transpose[Contract[gvff,gvff,YsffC,Ysff,gvff,gvff,{{14,18},{11,15},{8,17},{6,12},{3,5},{2,9}}],{5,6,2,1,3,4}]-\
-			6 Transpose[Contract[gvff,gvff,YsffC,Ysff,gvff,gvff,{{14,18},{12,15},{6,11},{5,9},{3,17},{2,8}}],{5,6,1,2,3,4}]+2 N Transpose[Contract[gvff,gvff,YsffC,Ysff,gvff,gvff,{{14,18},{12,15},{6,11},{5,9},{3,17},{2,8}}],{5,6,1,2,3,4}]-\
-			6 Transpose[Contract[gvff,gvff,YsffC,Ysff,gvff,gvff,{{14,18},{12,15},{6,17},{5,9},{3,11},{2,8}}],{5,6,1,2,3,4}]+2 N Transpose[Contract[gvff,gvff,YsffC,Ysff,gvff,gvff,{{14,18},{12,15},{6,17},{5,9},{3,11},{2,8}}],{5,6,1,2,3,4}]+\
-			6 Transpose[Contract[gvff,gvff,YsffC,Ysff,gvff,gvff,{{14,18},{12,15},{8,11},{5,9},{3,17},{2,6}}],{5,6,1,2,3,4}]-6 N Transpose[Contract[gvff,gvff,YsffC,Ysff,gvff,gvff,{{14,18},{12,15},{8,11},{5,9},{3,17},{2,6}}],{5,6,1,2,3,4}]+\
-			(N^2) Transpose[Contract[gvff,gvff,YsffC,Ysff,gvff,gvff,{{14,18},{12,15},{8,11},{5,9},{3,17},{2,6}}],{5,6,1,2,3,4}]+6 Transpose[Contract[gvff,gvff,YsffC,Ysff,gvff,gvff,{{14,18},{12,15},{8,11},{5,9},{3,17},{2,6}}],{5,6,2,1,3,4}]-\
-			6 N Transpose[Contract[gvff,gvff,YsffC,Ysff,gvff,gvff,{{14,18},{12,15},{8,11},{5,9},{3,17},{2,6}}],{5,6,2,1,3,4}]+N^2 Transpose[Contract[gvff,gvff,YsffC,Ysff,gvff,gvff,{{14,18},{12,15},{8,11},{5,9},{3,17},{2,6}}],{5,6,2,1,3,4}]+\
-			6 Transpose[Contract[gvff,gvff,YsffC,Ysff,gvff,gvff,{{14,18},{12,15},{8,11},{6,17},{3,5},{2,9}}],{5,6,1,2,3,4}]-6 N Transpose[Contract[gvff,gvff,YsffC,Ysff,gvff,gvff,{{14,18},{12,15},{8,11},{6,17},{3,5},{2,9}}],{5,6,1,2,3,4}]+\
-			(N^2) Transpose[Contract[gvff,gvff,YsffC,Ysff,gvff,gvff,{{14,18},{12,15},{8,11},{6,17},{3,5},{2,9}}],{5,6,1,2,3,4}]+6 Transpose[Contract[gvff,gvff,YsffC,Ysff,gvff,gvff,{{14,18},{12,15},{8,11},{6,17},{3,5},{2,9}}],{5,6,2,1,3,4}]-\
-			6 N Transpose[Contract[gvff,gvff,YsffC,Ysff,gvff,gvff,{{14,18},{12,15},{8,11},{6,17},{3,5},{2,9}}],{5,6,2,1,3,4}]+N^2 Transpose[Contract[gvff,gvff,YsffC,Ysff,gvff,gvff,{{14,18},{12,15},{8,11},{6,17},{3,5},{2,9}}],{5,6,2,1,3,4}]+\
-			6 Transpose[Contract[gvff,gvff,YsffC,Ysff,gvff,gvff,{{15,17},{8,11},{6,12},{5,18},{3,14},{2,9}}],{5,6,1,2,3,4}]-6 N Transpose[Contract[gvff,gvff,YsffC,Ysff,gvff,gvff,{{15,17},{8,11},{6,12},{5,18},{3,14},{2,9}}],{5,6,1,2,3,4}]+\
-			(N^2) Transpose[Contract[gvff,gvff,YsffC,Ysff,gvff,gvff,{{15,17},{8,11},{6,12},{5,18},{3,14},{2,9}}],{5,6,1,2,3,4}]+6 Transpose[Contract[gvff,gvff,YsffC,Ysff,gvff,gvff,{{15,17},{8,11},{6,12},{5,18},{3,14},{2,9}}],{5,6,2,1,3,4}]-\
-			6 N Transpose[Contract[gvff,gvff,YsffC,Ysff,gvff,gvff,{{15,17},{8,11},{6,12},{5,18},{3,14},{2,9}}],{5,6,2,1,3,4}]+N^2 Transpose[Contract[gvff,gvff,YsffC,Ysff,gvff,gvff,{{15,17},{8,11},{6,12},{5,18},{3,14},{2,9}}],{5,6,2,1,3,4}]+\
-			6 Transpose[Contract[gvff,gvff,YsffC,Ysff,gvff,gvff,{{15,17},{8,11},{6,14},{5,9},{3,12},{2,18}}],{5,6,1,2,3,4}]-6 N Transpose[Contract[gvff,gvff,YsffC,Ysff,gvff,gvff,{{15,17},{8,11},{6,14},{5,9},{3,12},{2,18}}],{5,6,1,2,3,4}]+\
-			(N^2) Transpose[Contract[gvff,gvff,YsffC,Ysff,gvff,gvff,{{15,17},{8,11},{6,14},{5,9},{3,12},{2,18}}],{5,6,1,2,3,4}]+6 Transpose[Contract[gvff,gvff,YsffC,Ysff,gvff,gvff,{{15,17},{8,11},{6,14},{5,9},{3,12},{2,18}}],{5,6,2,1,3,4}]-\
-			6 N Transpose[Contract[gvff,gvff,YsffC,Ysff,gvff,gvff,{{15,17},{8,11},{6,14},{5,9},{3,12},{2,18}}],{5,6,2,1,3,4}]+N^2 Transpose[Contract[gvff,gvff,YsffC,Ysff,gvff,gvff,{{15,17},{8,11},{6,14},{5,9},{3,12},{2,18}}],{5,6,2,1,3,4}]-\
-			6 Transpose[Contract[gvff,gvff,YsffC,Ysff,gvff,gvff,{{15,17},{8,14},{6,11},{5,9},{3,12},{2,18}}],{5,6,1,2,3,4}]+2 N Transpose[Contract[gvff,gvff,YsffC,Ysff,gvff,gvff,{{15,17},{8,14},{6,11},{5,9},{3,12},{2,18}}],{5,6,1,2,3,4}]-\
-			6 Transpose[Contract[gvff,gvff,YsffC,Ysff,gvff,gvff,{{15,17},{8,14},{6,12},{5,18},{3,11},{2,9}}],{5,6,1,2,3,4}]+2 N Transpose[Contract[gvff,gvff,YsffC,Ysff,gvff,gvff,{{15,17},{8,14},{6,12},{5,18},{3,11},{2,9}}],{5,6,1,2,3,4}]-\
-			6 Transpose[Contract[gvff,gvff,YsffC,Ysff,gvff,gvff,{{15,17},{9,14},{6,12},{5,8},{3,11},{2,18}}],{5,6,2,1,3,4}]+2 N Transpose[Contract[gvff,gvff,YsffC,Ysff,gvff,gvff,{{15,17},{9,14},{6,12},{5,8},{3,11},{2,18}}],{5,6,2,1,3,4}]-\
-			6 Transpose[Contract[gvff,gvff,YsffC,Ysff,gvff,gvff,{{15,17},{9,14},{6,12},{5,18},{3,11},{2,8}}],{5,6,2,1,3,4}]+2 N Transpose[Contract[gvff,gvff,YsffC,Ysff,gvff,gvff,{{15,17},{9,14},{6,12},{5,18},{3,11},{2,8}}],{5,6,2,1,3,4}]+\
-			6 Transpose[Contract[gvff,gvff,YsffC,Ysff,gvff,gvff,{{15,17},{9,14},{8,11},{5,18},{3,12},{2,6}}],{5,6,1,2,3,4}]-6 N Transpose[Contract[gvff,gvff,YsffC,Ysff,gvff,gvff,{{15,17},{9,14},{8,11},{5,18},{3,12},{2,6}}],{5,6,1,2,3,4}]+\
-			(N^2) Transpose[Contract[gvff,gvff,YsffC,Ysff,gvff,gvff,{{15,17},{9,14},{8,11},{5,18},{3,12},{2,6}}],{5,6,1,2,3,4}]+6 Transpose[Contract[gvff,gvff,YsffC,Ysff,gvff,gvff,{{15,17},{9,14},{8,11},{5,18},{3,12},{2,6}}],{5,6,2,1,3,4}]-\
-			6 N Transpose[Contract[gvff,gvff,YsffC,Ysff,gvff,gvff,{{15,17},{9,14},{8,11},{5,18},{3,12},{2,6}}],{5,6,2,1,3,4}]+N^2 Transpose[Contract[gvff,gvff,YsffC,Ysff,gvff,gvff,{{15,17},{9,14},{8,11},{5,18},{3,12},{2,6}}],{5,6,2,1,3,4}]+\
-			6 Transpose[Contract[gvff,gvff,YsffC,Ysff,gvff,gvff,{{15,17},{9,14},{8,11},{6,12},{3,5},{2,18}}],{5,6,1,2,3,4}]-6 N Transpose[Contract[gvff,gvff,YsffC,Ysff,gvff,gvff,{{15,17},{9,14},{8,11},{6,12},{3,5},{2,18}}],{5,6,1,2,3,4}]+\
-			(N^2) Transpose[Contract[gvff,gvff,YsffC,Ysff,gvff,gvff,{{15,17},{9,14},{8,11},{6,12},{3,5},{2,18}}],{5,6,1,2,3,4}]+6 Transpose[Contract[gvff,gvff,YsffC,Ysff,gvff,gvff,{{15,17},{9,14},{8,11},{6,12},{3,5},{2,18}}],{5,6,2,1,3,4}]-\
-			6 N Transpose[Contract[gvff,gvff,YsffC,Ysff,gvff,gvff,{{15,17},{9,14},{8,11},{6,12},{3,5},{2,18}}],{5,6,2,1,3,4}]+N^2 Transpose[Contract[gvff,gvff,YsffC,Ysff,gvff,gvff,{{15,17},{9,14},{8,11},{6,12},{3,5},{2,18}}],{5,6,2,1,3,4}]-\
-			6 Transpose[Contract[gvff,gvff,YsffC,Ysff,gvff,gvff,{{15,17},{11,18},{6,12},{5,8},{3,14},{2,9}}],{5,6,2,1,3,4}]+2 N Transpose[Contract[gvff,gvff,YsffC,Ysff,gvff,gvff,{{15,17},{11,18},{6,12},{5,8},{3,14},{2,9}}],{5,6,2,1,3,4}]-\
-			6 Transpose[Contract[gvff,gvff,YsffC,Ysff,gvff,gvff,{{15,17},{11,18},{6,14},{5,9},{3,12},{2,8}}],{5,6,2,1,3,4}]+2 N Transpose[Contract[gvff,gvff,YsffC,Ysff,gvff,gvff,{{15,17},{11,18},{6,14},{5,9},{3,12},{2,8}}],{5,6,2,1,3,4}]+\
-			6 Transpose[Contract[gvff,gvff,YsffC,Ysff,gvff,gvff,{{15,17},{11,18},{8,14},{5,9},{3,12},{2,6}}],{5,6,1,2,3,4}]+6 Transpose[Contract[gvff,gvff,YsffC,Ysff,gvff,gvff,{{15,17},{11,18},{8,14},{5,9},{3,12},{2,6}}],{5,6,2,1,3,4}]+\
-			6 Transpose[Contract[gvff,gvff,YsffC,Ysff,gvff,gvff,{{15,17},{11,18},{8,14},{6,12},{3,5},{2,9}}],{5,6,1,2,3,4}]+6 Transpose[Contract[gvff,gvff,YsffC,Ysff,gvff,gvff,{{15,17},{11,18},{8,14},{6,12},{3,5},{2,9}}],{5,6,2,1,3,4}]-\
-			6 Transpose[Contract[gvff,gvff,YsffC,Ysff,gvff,gvff,{{15,17},{12,18},{6,11},{5,9},{3,14},{2,8}}],{5,6,1,2,3,4}]+2 N Transpose[Contract[gvff,gvff,YsffC,Ysff,gvff,gvff,{{15,17},{12,18},{6,11},{5,9},{3,14},{2,8}}],{5,6,1,2,3,4}]-\
-			6 Transpose[Contract[gvff,gvff,YsffC,Ysff,gvff,gvff,{{15,17},{12,18},{6,14},{5,9},{3,11},{2,8}}],{5,6,1,2,3,4}]+2 N Transpose[Contract[gvff,gvff,YsffC,Ysff,gvff,gvff,{{15,17},{12,18},{6,14},{5,9},{3,11},{2,8}}],{5,6,1,2,3,4}]+\
-			6 Transpose[Contract[gvff,gvff,YsffC,Ysff,gvff,gvff,{{15,17},{12,18},{8,11},{5,9},{3,14},{2,6}}],{5,6,1,2,3,4}]-6 N Transpose[Contract[gvff,gvff,YsffC,Ysff,gvff,gvff,{{15,17},{12,18},{8,11},{5,9},{3,14},{2,6}}],{5,6,1,2,3,4}]+\
-			(N^2) Transpose[Contract[gvff,gvff,YsffC,Ysff,gvff,gvff,{{15,17},{12,18},{8,11},{5,9},{3,14},{2,6}}],{5,6,1,2,3,4}]+6 Transpose[Contract[gvff,gvff,YsffC,Ysff,gvff,gvff,{{15,17},{12,18},{8,11},{5,9},{3,14},{2,6}}],{5,6,2,1,3,4}]-\
-			6 N Transpose[Contract[gvff,gvff,YsffC,Ysff,gvff,gvff,{{15,17},{12,18},{8,11},{5,9},{3,14},{2,6}}],{5,6,2,1,3,4}]+N^2 Transpose[Contract[gvff,gvff,YsffC,Ysff,gvff,gvff,{{15,17},{12,18},{8,11},{5,9},{3,14},{2,6}}],{5,6,2,1,3,4}]+\
-			6 Transpose[Contract[gvff,gvff,YsffC,Ysff,gvff,gvff,{{15,17},{12,18},{8,11},{6,14},{3,5},{2,9}}],{5,6,1,2,3,4}]-6 N Transpose[Contract[gvff,gvff,YsffC,Ysff,gvff,gvff,{{15,17},{12,18},{8,11},{6,14},{3,5},{2,9}}],{5,6,1,2,3,4}]+\
-			(N^2) Transpose[Contract[gvff,gvff,YsffC,Ysff,gvff,gvff,{{15,17},{12,18},{8,11},{6,14},{3,5},{2,9}}],{5,6,1,2,3,4}]+6 Transpose[Contract[gvff,gvff,YsffC,Ysff,gvff,gvff,{{15,17},{12,18},{8,11},{6,14},{3,5},{2,9}}],{5,6,2,1,3,4}]-\
-			6 N Transpose[Contract[gvff,gvff,YsffC,Ysff,gvff,gvff,{{15,17},{12,18},{8,11},{6,14},{3,5},{2,9}}],{5,6,2,1,3,4}]+N^2 Transpose[Contract[gvff,gvff,YsffC,Ysff,gvff,gvff,{{15,17},{12,18},{8,11},{6,14},{3,5},{2,9}}],{5,6,2,1,3,4}]) Zf[3,0],
+			1/3 (
+				+6 Transpose[Contract[gvff,gvff,YsffC,Ysff,gvff,gvff,{{9,14},{8,11},{6,12},{5,18},{3,17},{2,15}}],{5,6,1,2,3,4}]
+				-6 N Transpose[Contract[gvff,gvff,YsffC,Ysff,gvff,gvff,{{9,14},{8,11},{6,12},{5,18},{3,17},{2,15}}],{5,6,1,2,3,4}]
+				+(N^2) Transpose[Contract[gvff,gvff,YsffC,Ysff,gvff,gvff,{{9,14},{8,11},{6,12},{5,18},{3,17},{2,15}}],{5,6,1,2,3,4}]
+				+6 Transpose[Contract[gvff,gvff,YsffC,Ysff,gvff,gvff,{{9,14},{8,11},{6,12},{5,18},{3,17},{2,15}}],{5,6,2,1,3,4}]
+				-6 N Transpose[Contract[gvff,gvff,YsffC,Ysff,gvff,gvff,{{9,14},{8,11},{6,12},{5,18},{3,17},{2,15}}],{5,6,2,1,3,4}]
+				+N^2 Transpose[Contract[gvff,gvff,YsffC,Ysff,gvff,gvff,{{9,14},{8,11},{6,12},{5,18},{3,17},{2,15}}],{5,6,2,1,3,4}]
+				+6 Transpose[Contract[gvff,gvff,YsffC,Ysff,gvff,gvff,{{9,14},{8,11},{6,17},{5,15},{3,12},{2,18}}],{5,6,1,2,3,4}]
+				-6 N Transpose[Contract[gvff,gvff,YsffC,Ysff,gvff,gvff,{{9,14},{8,11},{6,17},{5,15},{3,12},{2,18}}],{5,6,1,2,3,4}]
+				+(N^2) Transpose[Contract[gvff,gvff,YsffC,Ysff,gvff,gvff,{{9,14},{8,11},{6,17},{5,15},{3,12},{2,18}}],{5,6,1,2,3,4}]
+				+6 Transpose[Contract[gvff,gvff,YsffC,Ysff,gvff,gvff,{{9,14},{8,11},{6,17},{5,15},{3,12},{2,18}}],{5,6,2,1,3,4}]
+				-6 N Transpose[Contract[gvff,gvff,YsffC,Ysff,gvff,gvff,{{9,14},{8,11},{6,17},{5,15},{3,12},{2,18}}],{5,6,2,1,3,4}]
+				+N^2 Transpose[Contract[gvff,gvff,YsffC,Ysff,gvff,gvff,{{9,14},{8,11},{6,17},{5,15},{3,12},{2,18}}],{5,6,2,1,3,4}]
+				+6 Transpose[Contract[gvff,gvff,YsffC,Ysff,gvff,gvff,{{9,14},{8,17},{6,12},{5,15},{3,11},{2,18}}],{5,6,2,1,3,4}]
+				+6 Transpose[Contract[gvff,gvff,YsffC,Ysff,gvff,gvff,{{9,17},{8,11},{6,12},{5,15},{3,14},{2,18}}],{5,6,1,2,3,4}]
+				-6 N Transpose[Contract[gvff,gvff,YsffC,Ysff,gvff,gvff,{{9,17},{8,11},{6,12},{5,15},{3,14},{2,18}}],{5,6,1,2,3,4}]
+				+N^2 Transpose[Contract[gvff,gvff,YsffC,Ysff,gvff,gvff,{{9,17},{8,11},{6,12},{5,15},{3,14},{2,18}}],{5,6,1,2,3,4}]
+				+6 Transpose[Contract[gvff,gvff,YsffC,Ysff,gvff,gvff,{{9,17},{8,11},{6,12},{5,15},{3,14},{2,18}}],{5,6,2,1,3,4}]
+				-6 N Transpose[Contract[gvff,gvff,YsffC,Ysff,gvff,gvff,{{9,17},{8,11},{6,12},{5,15},{3,14},{2,18}}],{5,6,2,1,3,4}]
+				+(N^2) Transpose[Contract[gvff,gvff,YsffC,Ysff,gvff,gvff,{{9,17},{8,11},{6,12},{5,15},{3,14},{2,18}}],{5,6,2,1,3,4}]
+				+6 Transpose[Contract[gvff,gvff,YsffC,Ysff,gvff,gvff,{{9,17},{8,11},{6,14},{5,18},{3,12},{2,15}}],{5,6,1,2,3,4}]
+				-6 N Transpose[Contract[gvff,gvff,YsffC,Ysff,gvff,gvff,{{9,17},{8,11},{6,14},{5,18},{3,12},{2,15}}],{5,6,1,2,3,4}]
+				+N^2 Transpose[Contract[gvff,gvff,YsffC,Ysff,gvff,gvff,{{9,17},{8,11},{6,14},{5,18},{3,12},{2,15}}],{5,6,1,2,3,4}]
+				+6 Transpose[Contract[gvff,gvff,YsffC,Ysff,gvff,gvff,{{9,17},{8,11},{6,14},{5,18},{3,12},{2,15}}],{5,6,2,1,3,4}]
+				-6 N Transpose[Contract[gvff,gvff,YsffC,Ysff,gvff,gvff,{{9,17},{8,11},{6,14},{5,18},{3,12},{2,15}}],{5,6,2,1,3,4}]
+				+(N^2) Transpose[Contract[gvff,gvff,YsffC,Ysff,gvff,gvff,{{9,17},{8,11},{6,14},{5,18},{3,12},{2,15}}],{5,6,2,1,3,4}]
+				+6 Transpose[Contract[gvff,gvff,YsffC,Ysff,gvff,gvff,{{9,17},{8,14},{6,11},{5,15},{3,12},{2,18}}],{5,6,1,2,3,4}]
+				+6 Transpose[Contract[gvff,gvff,YsffC,Ysff,gvff,gvff,{{9,17},{8,14},{6,12},{5,18},{3,11},{2,15}}],{5,6,1,2,3,4}]
+				+6 Transpose[Contract[gvff,gvff,YsffC,Ysff,gvff,gvff,{{9,17},{8,14},{6,12},{5,18},{3,11},{2,15}}],{5,6,2,1,3,4}]
+				-6 Transpose[Contract[gvff,gvff,YsffC,Ysff,gvff,gvff,{{11,15},{8,14},{6,12},{5,18},{3,17},{2,9}}],{5,6,1,2,3,4}]
+				+2 N Transpose[Contract[gvff,gvff,YsffC,Ysff,gvff,gvff,{{11,15},{8,14},{6,12},{5,18},{3,17},{2,9}}],{5,6,1,2,3,4}]
+				-6 Transpose[Contract[gvff,gvff,YsffC,Ysff,gvff,gvff,{{11,15},{8,14},{6,12},{5,18},{3,17},{2,9}}],{5,6,2,1,3,4}]
+				+2 N Transpose[Contract[gvff,gvff,YsffC,Ysff,gvff,gvff,{{11,15},{8,14},{6,12},{5,18},{3,17},{2,9}}],{5,6,2,1,3,4}]
+				-6 Transpose[Contract[gvff,gvff,YsffC,Ysff,gvff,gvff,{{11,15},{8,14},{6,17},{5,9},{3,12},{2,18}}],{5,6,1,2,3,4}]
+				+2 N Transpose[Contract[gvff,gvff,YsffC,Ysff,gvff,gvff,{{11,15},{8,14},{6,17},{5,9},{3,12},{2,18}}],{5,6,1,2,3,4}]
+				-6 Transpose[Contract[gvff,gvff,YsffC,Ysff,gvff,gvff,{{11,15},{8,14},{6,17},{5,9},{3,12},{2,18}}],{5,6,2,1,3,4}]
+				+2 N Transpose[Contract[gvff,gvff,YsffC,Ysff,gvff,gvff,{{11,15},{8,14},{6,17},{5,9},{3,12},{2,18}}],{5,6,2,1,3,4}]
+				-6 Transpose[Contract[gvff,gvff,YsffC,Ysff,gvff,gvff,{{11,15},{9,17},{6,12},{5,8},{3,14},{2,18}}],{5,6,2,1,3,4}]
+				+2 N Transpose[Contract[gvff,gvff,YsffC,Ysff,gvff,gvff,{{11,15},{9,17},{6,12},{5,8},{3,14},{2,18}}],{5,6,2,1,3,4}]
+				+6 Transpose[Contract[gvff,gvff,YsffC,Ysff,gvff,gvff,{{11,15},{9,17},{6,12},{5,18},{3,14},{2,8}}],{5,6,2,1,3,4}]
+				+6 Transpose[Contract[gvff,gvff,YsffC,Ysff,gvff,gvff,{{11,15},{9,17},{6,14},{5,8},{3,12},{2,18}}],{5,6,2,1,3,4}]
+				-6 Transpose[Contract[gvff,gvff,YsffC,Ysff,gvff,gvff,{{11,15},{9,17},{6,14},{5,18},{3,12},{2,8}}],{5,6,2,1,3,4}]
+				+2 N Transpose[Contract[gvff,gvff,YsffC,Ysff,gvff,gvff,{{11,15},{9,17},{6,14},{5,18},{3,12},{2,8}}],{5,6,2,1,3,4}]
+				-6 Transpose[Contract[gvff,gvff,YsffC,Ysff,gvff,gvff,{{11,15},{9,17},{8,14},{5,18},{3,12},{2,6}}],{5,6,1,2,3,4}]
+				+2 N Transpose[Contract[gvff,gvff,YsffC,Ysff,gvff,gvff,{{11,15},{9,17},{8,14},{5,18},{3,12},{2,6}}],{5,6,1,2,3,4}]
+				-6 Transpose[Contract[gvff,gvff,YsffC,Ysff,gvff,gvff,{{11,15},{9,17},{8,14},{5,18},{3,12},{2,6}}],{5,6,2,1,3,4}]
+				+2 N Transpose[Contract[gvff,gvff,YsffC,Ysff,gvff,gvff,{{11,15},{9,17},{8,14},{5,18},{3,12},{2,6}}],{5,6,2,1,3,4}]
+				-6 Transpose[Contract[gvff,gvff,YsffC,Ysff,gvff,gvff,{{11,15},{9,17},{8,14},{6,12},{3,5},{2,18}}],{5,6,1,2,3,4}]
+				+2 N Transpose[Contract[gvff,gvff,YsffC,Ysff,gvff,gvff,{{11,15},{9,17},{8,14},{6,12},{3,5},{2,18}}],{5,6,1,2,3,4}]
+				-6 Transpose[Contract[gvff,gvff,YsffC,Ysff,gvff,gvff,{{11,15},{9,17},{8,14},{6,12},{3,5},{2,18}}],{5,6,2,1,3,4}]
+				+2 N Transpose[Contract[gvff,gvff,YsffC,Ysff,gvff,gvff,{{11,15},{9,17},{8,14},{6,12},{3,5},{2,18}}],{5,6,2,1,3,4}]
+				-6 Transpose[Contract[gvff,gvff,YsffC,Ysff,gvff,gvff,{{11,18},{8,17},{6,12},{5,15},{3,14},{2,9}}],{5,6,1,2,3,4}]
+				+2 N Transpose[Contract[gvff,gvff,YsffC,Ysff,gvff,gvff,{{11,18},{8,17},{6,12},{5,15},{3,14},{2,9}}],{5,6,1,2,3,4}]
+				-6 Transpose[Contract[gvff,gvff,YsffC,Ysff,gvff,gvff,{{11,18},{8,17},{6,12},{5,15},{3,14},{2,9}}],{5,6,2,1,3,4}]
+				+2 N Transpose[Contract[gvff,gvff,YsffC,Ysff,gvff,gvff,{{11,18},{8,17},{6,12},{5,15},{3,14},{2,9}}],{5,6,2,1,3,4}]
+				-6 Transpose[Contract[gvff,gvff,YsffC,Ysff,gvff,gvff,{{11,18},{8,17},{6,14},{5,9},{3,12},{2,15}}],{5,6,1,2,3,4}]
+				+2 N Transpose[Contract[gvff,gvff,YsffC,Ysff,gvff,gvff,{{11,18},{8,17},{6,14},{5,9},{3,12},{2,15}}],{5,6,1,2,3,4}]
+				-6 Transpose[Contract[gvff,gvff,YsffC,Ysff,gvff,gvff,{{11,18},{8,17},{6,14},{5,9},{3,12},{2,15}}],{5,6,2,1,3,4}]
+				+2 N Transpose[Contract[gvff,gvff,YsffC,Ysff,gvff,gvff,{{11,18},{8,17},{6,14},{5,9},{3,12},{2,15}}],{5,6,2,1,3,4}]
+				-6 Transpose[Contract[gvff,gvff,YsffC,Ysff,gvff,gvff,{{11,18},{9,14},{6,12},{5,8},{3,17},{2,15}}],{5,6,2,1,3,4}]
+				+2 N Transpose[Contract[gvff,gvff,YsffC,Ysff,gvff,gvff,{{11,18},{9,14},{6,12},{5,8},{3,17},{2,15}}],{5,6,2,1,3,4}]
+				+6 Transpose[Contract[gvff,gvff,YsffC,Ysff,gvff,gvff,{{11,18},{9,14},{6,12},{5,15},{3,17},{2,8}}],{5,6,2,1,3,4}]
+				+6 Transpose[Contract[gvff,gvff,YsffC,Ysff,gvff,gvff,{{11,18},{9,14},{6,17},{5,8},{3,12},{2,15}}],{5,6,2,1,3,4}]
+				-6 Transpose[Contract[gvff,gvff,YsffC,Ysff,gvff,gvff,{{11,18},{9,14},{6,17},{5,15},{3,12},{2,8}}],{5,6,2,1,3,4}]
+				+2 N Transpose[Contract[gvff,gvff,YsffC,Ysff,gvff,gvff,{{11,18},{9,14},{6,17},{5,15},{3,12},{2,8}}],{5,6,2,1,3,4}]
+				-6 Transpose[Contract[gvff,gvff,YsffC,Ysff,gvff,gvff,{{11,18},{9,14},{8,17},{5,15},{3,12},{2,6}}],{5,6,2,1,3,4}]
+				+2 N Transpose[Contract[gvff,gvff,YsffC,Ysff,gvff,gvff,{{11,18},{9,14},{8,17},{5,15},{3,12},{2,6}}],{5,6,2,1,3,4}]
+				-6 Transpose[Contract[gvff,gvff,YsffC,Ysff,gvff,gvff,{{11,18},{9,14},{8,17},{6,12},{3,5},{2,15}}],{5,6,2,1,3,4}]
+				+2 N Transpose[Contract[gvff,gvff,YsffC,Ysff,gvff,gvff,{{11,18},{9,14},{8,17},{6,12},{3,5},{2,15}}],{5,6,2,1,3,4}]
+				-6 Transpose[Contract[gvff,gvff,YsffC,Ysff,gvff,gvff,{{11,18},{9,17},{8,14},{5,15},{3,12},{2,6}}],{5,6,1,2,3,4}]
+				+2 N Transpose[Contract[gvff,gvff,YsffC,Ysff,gvff,gvff,{{11,18},{9,17},{8,14},{5,15},{3,12},{2,6}}],{5,6,1,2,3,4}]
+				-6 Transpose[Contract[gvff,gvff,YsffC,Ysff,gvff,gvff,{{11,18},{9,17},{8,14},{6,12},{3,5},{2,15}}],{5,6,1,2,3,4}]
+				+2 N Transpose[Contract[gvff,gvff,YsffC,Ysff,gvff,gvff,{{11,18},{9,17},{8,14},{6,12},{3,5},{2,15}}],{5,6,1,2,3,4}]
+				+6 Transpose[Contract[gvff,gvff,YsffC,Ysff,gvff,gvff,{{12,15},{8,11},{6,14},{5,18},{3,17},{2,9}}],{5,6,1,2,3,4}]
+				-6 N Transpose[Contract[gvff,gvff,YsffC,Ysff,gvff,gvff,{{12,15},{8,11},{6,14},{5,18},{3,17},{2,9}}],{5,6,1,2,3,4}]
+				+(N^2) Transpose[Contract[gvff,gvff,YsffC,Ysff,gvff,gvff,{{12,15},{8,11},{6,14},{5,18},{3,17},{2,9}}],{5,6,1,2,3,4}]
+				+6 Transpose[Contract[gvff,gvff,YsffC,Ysff,gvff,gvff,{{12,15},{8,11},{6,14},{5,18},{3,17},{2,9}}],{5,6,2,1,3,4}]
+				-6 N Transpose[Contract[gvff,gvff,YsffC,Ysff,gvff,gvff,{{12,15},{8,11},{6,14},{5,18},{3,17},{2,9}}],{5,6,2,1,3,4}]
+				+N^2 Transpose[Contract[gvff,gvff,YsffC,Ysff,gvff,gvff,{{12,15},{8,11},{6,14},{5,18},{3,17},{2,9}}],{5,6,2,1,3,4}]
+				+6 Transpose[Contract[gvff,gvff,YsffC,Ysff,gvff,gvff,{{12,15},{8,11},{6,17},{5,9},{3,14},{2,18}}],{5,6,1,2,3,4}]
+				-6 N Transpose[Contract[gvff,gvff,YsffC,Ysff,gvff,gvff,{{12,15},{8,11},{6,17},{5,9},{3,14},{2,18}}],{5,6,1,2,3,4}]
+				+(N^2) Transpose[Contract[gvff,gvff,YsffC,Ysff,gvff,gvff,{{12,15},{8,11},{6,17},{5,9},{3,14},{2,18}}],{5,6,1,2,3,4}]
+				+6 Transpose[Contract[gvff,gvff,YsffC,Ysff,gvff,gvff,{{12,15},{8,11},{6,17},{5,9},{3,14},{2,18}}],{5,6,2,1,3,4}]
+				-6 N Transpose[Contract[gvff,gvff,YsffC,Ysff,gvff,gvff,{{12,15},{8,11},{6,17},{5,9},{3,14},{2,18}}],{5,6,2,1,3,4}]
+				+N^2 Transpose[Contract[gvff,gvff,YsffC,Ysff,gvff,gvff,{{12,15},{8,11},{6,17},{5,9},{3,14},{2,18}}],{5,6,2,1,3,4}]
+				-6 Transpose[Contract[gvff,gvff,YsffC,Ysff,gvff,gvff,{{12,15},{8,17},{6,11},{5,9},{3,14},{2,18}}],{5,6,1,2,3,4}]
+				+2 N Transpose[Contract[gvff,gvff,YsffC,Ysff,gvff,gvff,{{12,15},{8,17},{6,11},{5,9},{3,14},{2,18}}],{5,6,1,2,3,4}]
+				+6 Transpose[Contract[gvff,gvff,YsffC,Ysff,gvff,gvff,{{12,15},{8,17},{6,11},{5,18},{3,14},{2,9}}],{5,6,1,2,3,4}]
+				+6 Transpose[Contract[gvff,gvff,YsffC,Ysff,gvff,gvff,{{12,15},{8,17},{6,14},{5,9},{3,11},{2,18}}],{5,6,1,2,3,4}]
+				-6 Transpose[Contract[gvff,gvff,YsffC,Ysff,gvff,gvff,{{12,15},{8,17},{6,14},{5,18},{3,11},{2,9}}],{5,6,1,2,3,4}]
+				+2 N Transpose[Contract[gvff,gvff,YsffC,Ysff,gvff,gvff,{{12,15},{8,17},{6,14},{5,18},{3,11},{2,9}}],{5,6,1,2,3,4}]
+				+6 Transpose[Contract[gvff,gvff,YsffC,Ysff,gvff,gvff,{{12,15},{9,17},{8,11},{5,18},{3,14},{2,6}}],{5,6,1,2,3,4}]
+				-6 N Transpose[Contract[gvff,gvff,YsffC,Ysff,gvff,gvff,{{12,15},{9,17},{8,11},{5,18},{3,14},{2,6}}],{5,6,1,2,3,4}]
+				+(N^2) Transpose[Contract[gvff,gvff,YsffC,Ysff,gvff,gvff,{{12,15},{9,17},{8,11},{5,18},{3,14},{2,6}}],{5,6,1,2,3,4}]
+				+6 Transpose[Contract[gvff,gvff,YsffC,Ysff,gvff,gvff,{{12,15},{9,17},{8,11},{5,18},{3,14},{2,6}}],{5,6,2,1,3,4}]
+				-6 N Transpose[Contract[gvff,gvff,YsffC,Ysff,gvff,gvff,{{12,15},{9,17},{8,11},{5,18},{3,14},{2,6}}],{5,6,2,1,3,4}]
+				+N^2 Transpose[Contract[gvff,gvff,YsffC,Ysff,gvff,gvff,{{12,15},{9,17},{8,11},{5,18},{3,14},{2,6}}],{5,6,2,1,3,4}]
+				+6 Transpose[Contract[gvff,gvff,YsffC,Ysff,gvff,gvff,{{12,15},{9,17},{8,11},{6,14},{3,5},{2,18}}],{5,6,1,2,3,4}]
+				-6 N Transpose[Contract[gvff,gvff,YsffC,Ysff,gvff,gvff,{{12,15},{9,17},{8,11},{6,14},{3,5},{2,18}}],{5,6,1,2,3,4}]
+				+(N^2) Transpose[Contract[gvff,gvff,YsffC,Ysff,gvff,gvff,{{12,15},{9,17},{8,11},{6,14},{3,5},{2,18}}],{5,6,1,2,3,4}]
+				+6 Transpose[Contract[gvff,gvff,YsffC,Ysff,gvff,gvff,{{12,15},{9,17},{8,11},{6,14},{3,5},{2,18}}],{5,6,2,1,3,4}]
+				-6 N Transpose[Contract[gvff,gvff,YsffC,Ysff,gvff,gvff,{{12,15},{9,17},{8,11},{6,14},{3,5},{2,18}}],{5,6,2,1,3,4}]
+				+N^2 Transpose[Contract[gvff,gvff,YsffC,Ysff,gvff,gvff,{{12,15},{9,17},{8,11},{6,14},{3,5},{2,18}}],{5,6,2,1,3,4}]
+				+6 Transpose[Contract[gvff,gvff,YsffC,Ysff,gvff,gvff,{{12,15},{11,18},{6,14},{5,9},{3,17},{2,8}}],{5,6,1,2,3,4}]
+				-6 Transpose[Contract[gvff,gvff,YsffC,Ysff,gvff,gvff,{{12,15},{11,18},{8,17},{5,9},{3,14},{2,6}}],{5,6,1,2,3,4}]
+				+2 N Transpose[Contract[gvff,gvff,YsffC,Ysff,gvff,gvff,{{12,15},{11,18},{8,17},{5,9},{3,14},{2,6}}],{5,6,1,2,3,4}]
+				-6 Transpose[Contract[gvff,gvff,YsffC,Ysff,gvff,gvff,{{12,15},{11,18},{8,17},{6,14},{3,5},{2,9}}],{5,6,1,2,3,4}]
+				+2 N Transpose[Contract[gvff,gvff,YsffC,Ysff,gvff,gvff,{{12,15},{11,18},{8,17},{6,14},{3,5},{2,9}}],{5,6,1,2,3,4}]
+				+6 Transpose[Contract[gvff,gvff,YsffC,Ysff,gvff,gvff,{{12,18},{8,11},{6,14},{5,9},{3,17},{2,15}}],{5,6,1,2,3,4}]
+				-6 N Transpose[Contract[gvff,gvff,YsffC,Ysff,gvff,gvff,{{12,18},{8,11},{6,14},{5,9},{3,17},{2,15}}],{5,6,1,2,3,4}]
+				+N^2 Transpose[Contract[gvff,gvff,YsffC,Ysff,gvff,gvff,{{12,18},{8,11},{6,14},{5,9},{3,17},{2,15}}],{5,6,1,2,3,4}]
+				+6 Transpose[Contract[gvff,gvff,YsffC,Ysff,gvff,gvff,{{12,18},{8,11},{6,14},{5,9},{3,17},{2,15}}],{5,6,2,1,3,4}]
+				-6 N Transpose[Contract[gvff,gvff,YsffC,Ysff,gvff,gvff,{{12,18},{8,11},{6,14},{5,9},{3,17},{2,15}}],{5,6,2,1,3,4}]
+				+(N^2) Transpose[Contract[gvff,gvff,YsffC,Ysff,gvff,gvff,{{12,18},{8,11},{6,14},{5,9},{3,17},{2,15}}],{5,6,2,1,3,4}]
+				+6 Transpose[Contract[gvff,gvff,YsffC,Ysff,gvff,gvff,{{12,18},{8,11},{6,17},{5,15},{3,14},{2,9}}],{5,6,1,2,3,4}]
+				-6 N Transpose[Contract[gvff,gvff,YsffC,Ysff,gvff,gvff,{{12,18},{8,11},{6,17},{5,15},{3,14},{2,9}}],{5,6,1,2,3,4}]
+				+N^2 Transpose[Contract[gvff,gvff,YsffC,Ysff,gvff,gvff,{{12,18},{8,11},{6,17},{5,15},{3,14},{2,9}}],{5,6,1,2,3,4}]
+				+6 Transpose[Contract[gvff,gvff,YsffC,Ysff,gvff,gvff,{{12,18},{8,11},{6,17},{5,15},{3,14},{2,9}}],{5,6,2,1,3,4}]
+				-6 N Transpose[Contract[gvff,gvff,YsffC,Ysff,gvff,gvff,{{12,18},{8,11},{6,17},{5,15},{3,14},{2,9}}],{5,6,2,1,3,4}]
+				+(N^2) Transpose[Contract[gvff,gvff,YsffC,Ysff,gvff,gvff,{{12,18},{8,11},{6,17},{5,15},{3,14},{2,9}}],{5,6,2,1,3,4}]
+				-6 Transpose[Contract[gvff,gvff,YsffC,Ysff,gvff,gvff,{{12,18},{8,14},{6,11},{5,9},{3,17},{2,15}}],{5,6,1,2,3,4}]
+				+2 N Transpose[Contract[gvff,gvff,YsffC,Ysff,gvff,gvff,{{12,18},{8,14},{6,11},{5,9},{3,17},{2,15}}],{5,6,1,2,3,4}]
+				+6 Transpose[Contract[gvff,gvff,YsffC,Ysff,gvff,gvff,{{12,18},{8,14},{6,11},{5,15},{3,17},{2,9}}],{5,6,1,2,3,4}]
+				+6 Transpose[Contract[gvff,gvff,YsffC,Ysff,gvff,gvff,{{12,18},{8,14},{6,17},{5,9},{3,11},{2,15}}],{5,6,1,2,3,4}]
+				-6 Transpose[Contract[gvff,gvff,YsffC,Ysff,gvff,gvff,{{12,18},{8,14},{6,17},{5,15},{3,11},{2,9}}],{5,6,1,2,3,4}]
+				+2 N Transpose[Contract[gvff,gvff,YsffC,Ysff,gvff,gvff,{{12,18},{8,14},{6,17},{5,15},{3,11},{2,9}}],{5,6,1,2,3,4}]
+				+6 Transpose[Contract[gvff,gvff,YsffC,Ysff,gvff,gvff,{{12,18},{9,14},{8,11},{5,15},{3,17},{2,6}}],{5,6,1,2,3,4}]
+				-6 N Transpose[Contract[gvff,gvff,YsffC,Ysff,gvff,gvff,{{12,18},{9,14},{8,11},{5,15},{3,17},{2,6}}],{5,6,1,2,3,4}]
+				+N^2 Transpose[Contract[gvff,gvff,YsffC,Ysff,gvff,gvff,{{12,18},{9,14},{8,11},{5,15},{3,17},{2,6}}],{5,6,1,2,3,4}]
+				+6 Transpose[Contract[gvff,gvff,YsffC,Ysff,gvff,gvff,{{12,18},{9,14},{8,11},{5,15},{3,17},{2,6}}],{5,6,2,1,3,4}]
+				-6 N Transpose[Contract[gvff,gvff,YsffC,Ysff,gvff,gvff,{{12,18},{9,14},{8,11},{5,15},{3,17},{2,6}}],{5,6,2,1,3,4}]
+				+(N^2) Transpose[Contract[gvff,gvff,YsffC,Ysff,gvff,gvff,{{12,18},{9,14},{8,11},{5,15},{3,17},{2,6}}],{5,6,2,1,3,4}]
+				+6 Transpose[Contract[gvff,gvff,YsffC,Ysff,gvff,gvff,{{12,18},{9,14},{8,11},{6,17},{3,5},{2,15}}],{5,6,1,2,3,4}]
+				-6 N Transpose[Contract[gvff,gvff,YsffC,Ysff,gvff,gvff,{{12,18},{9,14},{8,11},{6,17},{3,5},{2,15}}],{5,6,1,2,3,4}]
+				+N^2 Transpose[Contract[gvff,gvff,YsffC,Ysff,gvff,gvff,{{12,18},{9,14},{8,11},{6,17},{3,5},{2,15}}],{5,6,1,2,3,4}]
+				+6 Transpose[Contract[gvff,gvff,YsffC,Ysff,gvff,gvff,{{12,18},{9,14},{8,11},{6,17},{3,5},{2,15}}],{5,6,2,1,3,4}]
+				-6 N Transpose[Contract[gvff,gvff,YsffC,Ysff,gvff,gvff,{{12,18},{9,14},{8,11},{6,17},{3,5},{2,15}}],{5,6,2,1,3,4}]
+				+(N^2) Transpose[Contract[gvff,gvff,YsffC,Ysff,gvff,gvff,{{12,18},{9,14},{8,11},{6,17},{3,5},{2,15}}],{5,6,2,1,3,4}]
+				+6 Transpose[Contract[gvff,gvff,YsffC,Ysff,gvff,gvff,{{12,18},{11,15},{6,14},{5,8},{3,17},{2,9}}],{5,6,2,1,3,4}]
+				+6 Transpose[Contract[gvff,gvff,YsffC,Ysff,gvff,gvff,{{12,18},{11,15},{6,17},{5,9},{3,14},{2,8}}],{5,6,1,2,3,4}]
+				+6 Transpose[Contract[gvff,gvff,YsffC,Ysff,gvff,gvff,{{12,18},{11,15},{6,17},{5,9},{3,14},{2,8}}],{5,6,2,1,3,4}]
+				-6 Transpose[Contract[gvff,gvff,YsffC,Ysff,gvff,gvff,{{12,18},{11,15},{8,14},{5,9},{3,17},{2,6}}],{5,6,1,2,3,4}]
+				+2 N Transpose[Contract[gvff,gvff,YsffC,Ysff,gvff,gvff,{{12,18},{11,15},{8,14},{5,9},{3,17},{2,6}}],{5,6,1,2,3,4}]
+				-6 Transpose[Contract[gvff,gvff,YsffC,Ysff,gvff,gvff,{{12,18},{11,15},{8,14},{5,9},{3,17},{2,6}}],{5,6,2,1,3,4}]
+				+2 N Transpose[Contract[gvff,gvff,YsffC,Ysff,gvff,gvff,{{12,18},{11,15},{8,14},{5,9},{3,17},{2,6}}],{5,6,2,1,3,4}]
+				-6 Transpose[Contract[gvff,gvff,YsffC,Ysff,gvff,gvff,{{12,18},{11,15},{8,14},{6,17},{3,5},{2,9}}],{5,6,1,2,3,4}]
+				+2 N Transpose[Contract[gvff,gvff,YsffC,Ysff,gvff,gvff,{{12,18},{11,15},{8,14},{6,17},{3,5},{2,9}}],{5,6,1,2,3,4}]
+				-6 Transpose[Contract[gvff,gvff,YsffC,Ysff,gvff,gvff,{{12,18},{11,15},{8,14},{6,17},{3,5},{2,9}}],{5,6,2,1,3,4}]
+				+2 N Transpose[Contract[gvff,gvff,YsffC,Ysff,gvff,gvff,{{12,18},{11,15},{8,14},{6,17},{3,5},{2,9}}],{5,6,2,1,3,4}]
+				-6 Transpose[Contract[gvff,gvff,YsffC,Ysff,gvff,gvff,{{12,18},{11,15},{8,17},{5,9},{3,14},{2,6}}],{5,6,2,1,3,4}]
+				+2 N Transpose[Contract[gvff,gvff,YsffC,Ysff,gvff,gvff,{{12,18},{11,15},{8,17},{5,9},{3,14},{2,6}}],{5,6,2,1,3,4}]
+				-6 Transpose[Contract[gvff,gvff,YsffC,Ysff,gvff,gvff,{{12,18},{11,15},{8,17},{6,14},{3,5},{2,9}}],{5,6,2,1,3,4}]
+				+2 N Transpose[Contract[gvff,gvff,YsffC,Ysff,gvff,gvff,{{12,18},{11,15},{8,17},{6,14},{3,5},{2,9}}],{5,6,2,1,3,4}]
+				+6 Transpose[Contract[gvff,gvff,YsffC,Ysff,gvff,gvff,{{14,18},{8,11},{6,12},{5,15},{3,17},{2,9}}],{5,6,1,2,3,4}]
+				-6 N Transpose[Contract[gvff,gvff,YsffC,Ysff,gvff,gvff,{{14,18},{8,11},{6,12},{5,15},{3,17},{2,9}}],{5,6,1,2,3,4}]
+				+(N^2) Transpose[Contract[gvff,gvff,YsffC,Ysff,gvff,gvff,{{14,18},{8,11},{6,12},{5,15},{3,17},{2,9}}],{5,6,1,2,3,4}]
+				+6 Transpose[Contract[gvff,gvff,YsffC,Ysff,gvff,gvff,{{14,18},{8,11},{6,12},{5,15},{3,17},{2,9}}],{5,6,2,1,3,4}]
+				-6 N Transpose[Contract[gvff,gvff,YsffC,Ysff,gvff,gvff,{{14,18},{8,11},{6,12},{5,15},{3,17},{2,9}}],{5,6,2,1,3,4}]
+				+N^2 Transpose[Contract[gvff,gvff,YsffC,Ysff,gvff,gvff,{{14,18},{8,11},{6,12},{5,15},{3,17},{2,9}}],{5,6,2,1,3,4}]
+				+6 Transpose[Contract[gvff,gvff,YsffC,Ysff,gvff,gvff,{{14,18},{8,11},{6,17},{5,9},{3,12},{2,15}}],{5,6,1,2,3,4}]
+				-6 N Transpose[Contract[gvff,gvff,YsffC,Ysff,gvff,gvff,{{14,18},{8,11},{6,17},{5,9},{3,12},{2,15}}],{5,6,1,2,3,4}]
+				+(N^2) Transpose[Contract[gvff,gvff,YsffC,Ysff,gvff,gvff,{{14,18},{8,11},{6,17},{5,9},{3,12},{2,15}}],{5,6,1,2,3,4}]
+				+6 Transpose[Contract[gvff,gvff,YsffC,Ysff,gvff,gvff,{{14,18},{8,11},{6,17},{5,9},{3,12},{2,15}}],{5,6,2,1,3,4}]
+				-6 N Transpose[Contract[gvff,gvff,YsffC,Ysff,gvff,gvff,{{14,18},{8,11},{6,17},{5,9},{3,12},{2,15}}],{5,6,2,1,3,4}]
+				+N^2 Transpose[Contract[gvff,gvff,YsffC,Ysff,gvff,gvff,{{14,18},{8,11},{6,17},{5,9},{3,12},{2,15}}],{5,6,2,1,3,4}]
+				-6 Transpose[Contract[gvff,gvff,YsffC,Ysff,gvff,gvff,{{14,18},{8,17},{6,11},{5,9},{3,12},{2,15}}],{5,6,1,2,3,4}]
+				+2 N Transpose[Contract[gvff,gvff,YsffC,Ysff,gvff,gvff,{{14,18},{8,17},{6,11},{5,9},{3,12},{2,15}}],{5,6,1,2,3,4}]
+				-6 Transpose[Contract[gvff,gvff,YsffC,Ysff,gvff,gvff,{{14,18},{8,17},{6,12},{5,15},{3,11},{2,9}}],{5,6,1,2,3,4}]
+				+2 N Transpose[Contract[gvff,gvff,YsffC,Ysff,gvff,gvff,{{14,18},{8,17},{6,12},{5,15},{3,11},{2,9}}],{5,6,1,2,3,4}]
+				-6 Transpose[Contract[gvff,gvff,YsffC,Ysff,gvff,gvff,{{14,18},{9,17},{6,12},{5,8},{3,11},{2,15}}],{5,6,2,1,3,4}]
+				+2 N Transpose[Contract[gvff,gvff,YsffC,Ysff,gvff,gvff,{{14,18},{9,17},{6,12},{5,8},{3,11},{2,15}}],{5,6,2,1,3,4}]
+				-6 Transpose[Contract[gvff,gvff,YsffC,Ysff,gvff,gvff,{{14,18},{9,17},{6,12},{5,15},{3,11},{2,8}}],{5,6,2,1,3,4}]
+				+2 N Transpose[Contract[gvff,gvff,YsffC,Ysff,gvff,gvff,{{14,18},{9,17},{6,12},{5,15},{3,11},{2,8}}],{5,6,2,1,3,4}]
+				+6 Transpose[Contract[gvff,gvff,YsffC,Ysff,gvff,gvff,{{14,18},{9,17},{8,11},{5,15},{3,12},{2,6}}],{5,6,1,2,3,4}]
+				-6 N Transpose[Contract[gvff,gvff,YsffC,Ysff,gvff,gvff,{{14,18},{9,17},{8,11},{5,15},{3,12},{2,6}}],{5,6,1,2,3,4}]
+				+(N^2) Transpose[Contract[gvff,gvff,YsffC,Ysff,gvff,gvff,{{14,18},{9,17},{8,11},{5,15},{3,12},{2,6}}],{5,6,1,2,3,4}]
+				+6 Transpose[Contract[gvff,gvff,YsffC,Ysff,gvff,gvff,{{14,18},{9,17},{8,11},{5,15},{3,12},{2,6}}],{5,6,2,1,3,4}]
+				-6 N Transpose[Contract[gvff,gvff,YsffC,Ysff,gvff,gvff,{{14,18},{9,17},{8,11},{5,15},{3,12},{2,6}}],{5,6,2,1,3,4}]
+				+N^2 Transpose[Contract[gvff,gvff,YsffC,Ysff,gvff,gvff,{{14,18},{9,17},{8,11},{5,15},{3,12},{2,6}}],{5,6,2,1,3,4}]
+				+6 Transpose[Contract[gvff,gvff,YsffC,Ysff,gvff,gvff,{{14,18},{9,17},{8,11},{6,12},{3,5},{2,15}}],{5,6,1,2,3,4}]
+				-6 N Transpose[Contract[gvff,gvff,YsffC,Ysff,gvff,gvff,{{14,18},{9,17},{8,11},{6,12},{3,5},{2,15}}],{5,6,1,2,3,4}]
+				+(N^2) Transpose[Contract[gvff,gvff,YsffC,Ysff,gvff,gvff,{{14,18},{9,17},{8,11},{6,12},{3,5},{2,15}}],{5,6,1,2,3,4}]
+				+6 Transpose[Contract[gvff,gvff,YsffC,Ysff,gvff,gvff,{{14,18},{9,17},{8,11},{6,12},{3,5},{2,15}}],{5,6,2,1,3,4}]
+				-6 N Transpose[Contract[gvff,gvff,YsffC,Ysff,gvff,gvff,{{14,18},{9,17},{8,11},{6,12},{3,5},{2,15}}],{5,6,2,1,3,4}]
+				+N^2 Transpose[Contract[gvff,gvff,YsffC,Ysff,gvff,gvff,{{14,18},{9,17},{8,11},{6,12},{3,5},{2,15}}],{5,6,2,1,3,4}]
+				-6 Transpose[Contract[gvff,gvff,YsffC,Ysff,gvff,gvff,{{14,18},{11,15},{6,12},{5,8},{3,17},{2,9}}],{5,6,2,1,3,4}]
+				+2 N Transpose[Contract[gvff,gvff,YsffC,Ysff,gvff,gvff,{{14,18},{11,15},{6,12},{5,8},{3,17},{2,9}}],{5,6,2,1,3,4}]
+				-6 Transpose[Contract[gvff,gvff,YsffC,Ysff,gvff,gvff,{{14,18},{11,15},{6,17},{5,9},{3,12},{2,8}}],{5,6,2,1,3,4}]
+				+2 N Transpose[Contract[gvff,gvff,YsffC,Ysff,gvff,gvff,{{14,18},{11,15},{6,17},{5,9},{3,12},{2,8}}],{5,6,2,1,3,4}]
+				+6 Transpose[Contract[gvff,gvff,YsffC,Ysff,gvff,gvff,{{14,18},{11,15},{8,17},{5,9},{3,12},{2,6}}],{5,6,1,2,3,4}]
+				+6 Transpose[Contract[gvff,gvff,YsffC,Ysff,gvff,gvff,{{14,18},{11,15},{8,17},{5,9},{3,12},{2,6}}],{5,6,2,1,3,4}]
+				+6 Transpose[Contract[gvff,gvff,YsffC,Ysff,gvff,gvff,{{14,18},{11,15},{8,17},{6,12},{3,5},{2,9}}],{5,6,1,2,3,4}]
+				+6 Transpose[Contract[gvff,gvff,YsffC,Ysff,gvff,gvff,{{14,18},{11,15},{8,17},{6,12},{3,5},{2,9}}],{5,6,2,1,3,4}]
+				-6 Transpose[Contract[gvff,gvff,YsffC,Ysff,gvff,gvff,{{14,18},{12,15},{6,11},{5,9},{3,17},{2,8}}],{5,6,1,2,3,4}]
+				+2 N Transpose[Contract[gvff,gvff,YsffC,Ysff,gvff,gvff,{{14,18},{12,15},{6,11},{5,9},{3,17},{2,8}}],{5,6,1,2,3,4}]
+				-6 Transpose[Contract[gvff,gvff,YsffC,Ysff,gvff,gvff,{{14,18},{12,15},{6,17},{5,9},{3,11},{2,8}}],{5,6,1,2,3,4}]
+				+2 N Transpose[Contract[gvff,gvff,YsffC,Ysff,gvff,gvff,{{14,18},{12,15},{6,17},{5,9},{3,11},{2,8}}],{5,6,1,2,3,4}]
+				+6 Transpose[Contract[gvff,gvff,YsffC,Ysff,gvff,gvff,{{14,18},{12,15},{8,11},{5,9},{3,17},{2,6}}],{5,6,1,2,3,4}]
+				-6 N Transpose[Contract[gvff,gvff,YsffC,Ysff,gvff,gvff,{{14,18},{12,15},{8,11},{5,9},{3,17},{2,6}}],{5,6,1,2,3,4}]
+				+(N^2) Transpose[Contract[gvff,gvff,YsffC,Ysff,gvff,gvff,{{14,18},{12,15},{8,11},{5,9},{3,17},{2,6}}],{5,6,1,2,3,4}]
+				+6 Transpose[Contract[gvff,gvff,YsffC,Ysff,gvff,gvff,{{14,18},{12,15},{8,11},{5,9},{3,17},{2,6}}],{5,6,2,1,3,4}]
+				-6 N Transpose[Contract[gvff,gvff,YsffC,Ysff,gvff,gvff,{{14,18},{12,15},{8,11},{5,9},{3,17},{2,6}}],{5,6,2,1,3,4}]
+				+N^2 Transpose[Contract[gvff,gvff,YsffC,Ysff,gvff,gvff,{{14,18},{12,15},{8,11},{5,9},{3,17},{2,6}}],{5,6,2,1,3,4}]
+				+6 Transpose[Contract[gvff,gvff,YsffC,Ysff,gvff,gvff,{{14,18},{12,15},{8,11},{6,17},{3,5},{2,9}}],{5,6,1,2,3,4}]
+				-6 N Transpose[Contract[gvff,gvff,YsffC,Ysff,gvff,gvff,{{14,18},{12,15},{8,11},{6,17},{3,5},{2,9}}],{5,6,1,2,3,4}]
+				+(N^2) Transpose[Contract[gvff,gvff,YsffC,Ysff,gvff,gvff,{{14,18},{12,15},{8,11},{6,17},{3,5},{2,9}}],{5,6,1,2,3,4}]
+				+6 Transpose[Contract[gvff,gvff,YsffC,Ysff,gvff,gvff,{{14,18},{12,15},{8,11},{6,17},{3,5},{2,9}}],{5,6,2,1,3,4}]
+				-6 N Transpose[Contract[gvff,gvff,YsffC,Ysff,gvff,gvff,{{14,18},{12,15},{8,11},{6,17},{3,5},{2,9}}],{5,6,2,1,3,4}]
+				+N^2 Transpose[Contract[gvff,gvff,YsffC,Ysff,gvff,gvff,{{14,18},{12,15},{8,11},{6,17},{3,5},{2,9}}],{5,6,2,1,3,4}]
+				+6 Transpose[Contract[gvff,gvff,YsffC,Ysff,gvff,gvff,{{15,17},{8,11},{6,12},{5,18},{3,14},{2,9}}],{5,6,1,2,3,4}]
+				-6 N Transpose[Contract[gvff,gvff,YsffC,Ysff,gvff,gvff,{{15,17},{8,11},{6,12},{5,18},{3,14},{2,9}}],{5,6,1,2,3,4}]
+				+(N^2) Transpose[Contract[gvff,gvff,YsffC,Ysff,gvff,gvff,{{15,17},{8,11},{6,12},{5,18},{3,14},{2,9}}],{5,6,1,2,3,4}]
+				+6 Transpose[Contract[gvff,gvff,YsffC,Ysff,gvff,gvff,{{15,17},{8,11},{6,12},{5,18},{3,14},{2,9}}],{5,6,2,1,3,4}]
+				-6 N Transpose[Contract[gvff,gvff,YsffC,Ysff,gvff,gvff,{{15,17},{8,11},{6,12},{5,18},{3,14},{2,9}}],{5,6,2,1,3,4}]
+				+N^2 Transpose[Contract[gvff,gvff,YsffC,Ysff,gvff,gvff,{{15,17},{8,11},{6,12},{5,18},{3,14},{2,9}}],{5,6,2,1,3,4}]
+				+6 Transpose[Contract[gvff,gvff,YsffC,Ysff,gvff,gvff,{{15,17},{8,11},{6,14},{5,9},{3,12},{2,18}}],{5,6,1,2,3,4}]
+				-6 N Transpose[Contract[gvff,gvff,YsffC,Ysff,gvff,gvff,{{15,17},{8,11},{6,14},{5,9},{3,12},{2,18}}],{5,6,1,2,3,4}]
+				+(N^2) Transpose[Contract[gvff,gvff,YsffC,Ysff,gvff,gvff,{{15,17},{8,11},{6,14},{5,9},{3,12},{2,18}}],{5,6,1,2,3,4}]
+				+6 Transpose[Contract[gvff,gvff,YsffC,Ysff,gvff,gvff,{{15,17},{8,11},{6,14},{5,9},{3,12},{2,18}}],{5,6,2,1,3,4}]
+				-6 N Transpose[Contract[gvff,gvff,YsffC,Ysff,gvff,gvff,{{15,17},{8,11},{6,14},{5,9},{3,12},{2,18}}],{5,6,2,1,3,4}]
+				+N^2 Transpose[Contract[gvff,gvff,YsffC,Ysff,gvff,gvff,{{15,17},{8,11},{6,14},{5,9},{3,12},{2,18}}],{5,6,2,1,3,4}]
+				-6 Transpose[Contract[gvff,gvff,YsffC,Ysff,gvff,gvff,{{15,17},{8,14},{6,11},{5,9},{3,12},{2,18}}],{5,6,1,2,3,4}]
+				+2 N Transpose[Contract[gvff,gvff,YsffC,Ysff,gvff,gvff,{{15,17},{8,14},{6,11},{5,9},{3,12},{2,18}}],{5,6,1,2,3,4}]
+				-6 Transpose[Contract[gvff,gvff,YsffC,Ysff,gvff,gvff,{{15,17},{8,14},{6,12},{5,18},{3,11},{2,9}}],{5,6,1,2,3,4}]
+				+2 N Transpose[Contract[gvff,gvff,YsffC,Ysff,gvff,gvff,{{15,17},{8,14},{6,12},{5,18},{3,11},{2,9}}],{5,6,1,2,3,4}]
+				-6 Transpose[Contract[gvff,gvff,YsffC,Ysff,gvff,gvff,{{15,17},{9,14},{6,12},{5,8},{3,11},{2,18}}],{5,6,2,1,3,4}]
+				+2 N Transpose[Contract[gvff,gvff,YsffC,Ysff,gvff,gvff,{{15,17},{9,14},{6,12},{5,8},{3,11},{2,18}}],{5,6,2,1,3,4}]
+				-6 Transpose[Contract[gvff,gvff,YsffC,Ysff,gvff,gvff,{{15,17},{9,14},{6,12},{5,18},{3,11},{2,8}}],{5,6,2,1,3,4}]
+				+2 N Transpose[Contract[gvff,gvff,YsffC,Ysff,gvff,gvff,{{15,17},{9,14},{6,12},{5,18},{3,11},{2,8}}],{5,6,2,1,3,4}]
+				+6 Transpose[Contract[gvff,gvff,YsffC,Ysff,gvff,gvff,{{15,17},{9,14},{8,11},{5,18},{3,12},{2,6}}],{5,6,1,2,3,4}]
+				-6 N Transpose[Contract[gvff,gvff,YsffC,Ysff,gvff,gvff,{{15,17},{9,14},{8,11},{5,18},{3,12},{2,6}}],{5,6,1,2,3,4}]
+				+(N^2) Transpose[Contract[gvff,gvff,YsffC,Ysff,gvff,gvff,{{15,17},{9,14},{8,11},{5,18},{3,12},{2,6}}],{5,6,1,2,3,4}]
+				+6 Transpose[Contract[gvff,gvff,YsffC,Ysff,gvff,gvff,{{15,17},{9,14},{8,11},{5,18},{3,12},{2,6}}],{5,6,2,1,3,4}]
+				-6 N Transpose[Contract[gvff,gvff,YsffC,Ysff,gvff,gvff,{{15,17},{9,14},{8,11},{5,18},{3,12},{2,6}}],{5,6,2,1,3,4}]
+				+N^2 Transpose[Contract[gvff,gvff,YsffC,Ysff,gvff,gvff,{{15,17},{9,14},{8,11},{5,18},{3,12},{2,6}}],{5,6,2,1,3,4}]
+				+6 Transpose[Contract[gvff,gvff,YsffC,Ysff,gvff,gvff,{{15,17},{9,14},{8,11},{6,12},{3,5},{2,18}}],{5,6,1,2,3,4}]
+				-6 N Transpose[Contract[gvff,gvff,YsffC,Ysff,gvff,gvff,{{15,17},{9,14},{8,11},{6,12},{3,5},{2,18}}],{5,6,1,2,3,4}]
+				+(N^2) Transpose[Contract[gvff,gvff,YsffC,Ysff,gvff,gvff,{{15,17},{9,14},{8,11},{6,12},{3,5},{2,18}}],{5,6,1,2,3,4}]
+				+6 Transpose[Contract[gvff,gvff,YsffC,Ysff,gvff,gvff,{{15,17},{9,14},{8,11},{6,12},{3,5},{2,18}}],{5,6,2,1,3,4}]
+				-6 N Transpose[Contract[gvff,gvff,YsffC,Ysff,gvff,gvff,{{15,17},{9,14},{8,11},{6,12},{3,5},{2,18}}],{5,6,2,1,3,4}]
+				+N^2 Transpose[Contract[gvff,gvff,YsffC,Ysff,gvff,gvff,{{15,17},{9,14},{8,11},{6,12},{3,5},{2,18}}],{5,6,2,1,3,4}]
+				-6 Transpose[Contract[gvff,gvff,YsffC,Ysff,gvff,gvff,{{15,17},{11,18},{6,12},{5,8},{3,14},{2,9}}],{5,6,2,1,3,4}]
+				+2 N Transpose[Contract[gvff,gvff,YsffC,Ysff,gvff,gvff,{{15,17},{11,18},{6,12},{5,8},{3,14},{2,9}}],{5,6,2,1,3,4}]
+				-6 Transpose[Contract[gvff,gvff,YsffC,Ysff,gvff,gvff,{{15,17},{11,18},{6,14},{5,9},{3,12},{2,8}}],{5,6,2,1,3,4}]
+				+2 N Transpose[Contract[gvff,gvff,YsffC,Ysff,gvff,gvff,{{15,17},{11,18},{6,14},{5,9},{3,12},{2,8}}],{5,6,2,1,3,4}]
+				+6 Transpose[Contract[gvff,gvff,YsffC,Ysff,gvff,gvff,{{15,17},{11,18},{8,14},{5,9},{3,12},{2,6}}],{5,6,1,2,3,4}]
+				+6 Transpose[Contract[gvff,gvff,YsffC,Ysff,gvff,gvff,{{15,17},{11,18},{8,14},{5,9},{3,12},{2,6}}],{5,6,2,1,3,4}]
+				+6 Transpose[Contract[gvff,gvff,YsffC,Ysff,gvff,gvff,{{15,17},{11,18},{8,14},{6,12},{3,5},{2,9}}],{5,6,1,2,3,4}]
+				+6 Transpose[Contract[gvff,gvff,YsffC,Ysff,gvff,gvff,{{15,17},{11,18},{8,14},{6,12},{3,5},{2,9}}],{5,6,2,1,3,4}]
+				-6 Transpose[Contract[gvff,gvff,YsffC,Ysff,gvff,gvff,{{15,17},{12,18},{6,11},{5,9},{3,14},{2,8}}],{5,6,1,2,3,4}]
+				+2 N Transpose[Contract[gvff,gvff,YsffC,Ysff,gvff,gvff,{{15,17},{12,18},{6,11},{5,9},{3,14},{2,8}}],{5,6,1,2,3,4}]
+				-6 Transpose[Contract[gvff,gvff,YsffC,Ysff,gvff,gvff,{{15,17},{12,18},{6,14},{5,9},{3,11},{2,8}}],{5,6,1,2,3,4}]
+				+2 N Transpose[Contract[gvff,gvff,YsffC,Ysff,gvff,gvff,{{15,17},{12,18},{6,14},{5,9},{3,11},{2,8}}],{5,6,1,2,3,4}]
+				+6 Transpose[Contract[gvff,gvff,YsffC,Ysff,gvff,gvff,{{15,17},{12,18},{8,11},{5,9},{3,14},{2,6}}],{5,6,1,2,3,4}]
+				-6 N Transpose[Contract[gvff,gvff,YsffC,Ysff,gvff,gvff,{{15,17},{12,18},{8,11},{5,9},{3,14},{2,6}}],{5,6,1,2,3,4}]
+				+(N^2) Transpose[Contract[gvff,gvff,YsffC,Ysff,gvff,gvff,{{15,17},{12,18},{8,11},{5,9},{3,14},{2,6}}],{5,6,1,2,3,4}]
+				+6 Transpose[Contract[gvff,gvff,YsffC,Ysff,gvff,gvff,{{15,17},{12,18},{8,11},{5,9},{3,14},{2,6}}],{5,6,2,1,3,4}]
+				-6 N Transpose[Contract[gvff,gvff,YsffC,Ysff,gvff,gvff,{{15,17},{12,18},{8,11},{5,9},{3,14},{2,6}}],{5,6,2,1,3,4}]
+				+N^2 Transpose[Contract[gvff,gvff,YsffC,Ysff,gvff,gvff,{{15,17},{12,18},{8,11},{5,9},{3,14},{2,6}}],{5,6,2,1,3,4}]
+				+6 Transpose[Contract[gvff,gvff,YsffC,Ysff,gvff,gvff,{{15,17},{12,18},{8,11},{6,14},{3,5},{2,9}}],{5,6,1,2,3,4}]
+				-6 N Transpose[Contract[gvff,gvff,YsffC,Ysff,gvff,gvff,{{15,17},{12,18},{8,11},{6,14},{3,5},{2,9}}],{5,6,1,2,3,4}]
+				+(N^2) Transpose[Contract[gvff,gvff,YsffC,Ysff,gvff,gvff,{{15,17},{12,18},{8,11},{6,14},{3,5},{2,9}}],{5,6,1,2,3,4}]
+				+6 Transpose[Contract[gvff,gvff,YsffC,Ysff,gvff,gvff,{{15,17},{12,18},{8,11},{6,14},{3,5},{2,9}}],{5,6,2,1,3,4}]
+				-6 N Transpose[Contract[gvff,gvff,YsffC,Ysff,gvff,gvff,{{15,17},{12,18},{8,11},{6,14},{3,5},{2,9}}],{5,6,2,1,3,4}]
+				+N^2 Transpose[Contract[gvff,gvff,YsffC,Ysff,gvff,gvff,{{15,17},{12,18},{8,11},{6,14},{3,5},{2,9}}],{5,6,2,1,3,4}]
+			) Zf[3,0],
 			
 			True, "NOT ALLOWED X VALUE"
 			];
