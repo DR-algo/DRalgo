@@ -27,7 +27,7 @@ Group={"SU2"};
 RepAdjoint={{2}};
 HiggsDoublet={{{1}},"C"};
 RepScalar={HiggsDoublet};
-CouplingName={g2};
+CouplingName={gw};
 
 
 RepFermion={};
@@ -59,7 +59,7 @@ VQuartic=\[Lambda]1H*QuarticTerm1;
 \[Lambda]4=GradQuartic[VQuartic];
 
 
-(* ::Section::Closed:: *)
+(* ::Section:: *)
 (*Dimensional Reduction*)
 
 
@@ -91,7 +91,7 @@ Sigma={{{0,1},{1,0}},{{0,-I},{I,0}},{{1,0},{0,-1}}};
 LC=LeviCivitaTensor[3];
 
 
-ge=g2*Sqrt[T];
+ge=gw*Sqrt[T];
 Subscript[C, 1]=\[Alpha][W0^2 W^2,1]-(1/2)ge*\[Alpha][W0^2 W D^2];
 Subscript[C, 2]=\[Alpha][W0^2 W^2,2]+(1/2)ge*\[Alpha][W0^2 W D^2];
 Subscript[C, 3]=(\[Alpha][\[Phi]^4 D^2,2]-2\[Alpha][\[Phi]^4 D^2,1]);
@@ -192,7 +192,7 @@ ODIM6[1,d]//MatrixForm
 *)
 
 
-ge=g2*Sqrt[T];
+ge=gw*Sqrt[T];
 (*
 	Higher Dimensional operators found with DRalgo
 *)
@@ -244,15 +244,15 @@ solLit={
 };
 
 
-\[Alpha][W^3]/.solDralgo/.{Global`g2->g2}//Factor
+\[Alpha][W^3]/.solDralgo//Factor
 \[Alpha][W^3]/.solLit//Factor
 
 
-\[Alpha][\[Phi]^6]+\[Lambda][1](4*\[Alpha][\[Phi]^4 D^2,1]+ge^2 \[Alpha][W^2D^2]-2*ge*\[Alpha][\[Phi]^2W D^2]+4*\[Lambda][1]\[Alpha][\[Phi]^2D^4])/.solDralgo/.{Global`g2->g2}//Factor
+\[Alpha][\[Phi]^6]+\[Lambda][1](4*\[Alpha][\[Phi]^4 D^2,1]+ge^2 \[Alpha][W^2D^2]-2*ge*\[Alpha][\[Phi]^2W D^2]+4*\[Lambda][1]\[Alpha][\[Phi]^2D^4])/.solDralgo//Factor
 \[Alpha][\[Phi]^6]+\[Lambda][1](4\[Alpha][\[Phi]^4 D^2,1]+g2^2 \[Alpha][W^2D^2]-2*g2*\[Alpha][\[Phi]^2W D^2]+4\[Lambda][1]\[Alpha][\[Phi]^2D^4])//.solLit//Factor
 
 
-\[Alpha][\[Phi]^4 W0^2,1]+4\[Lambda][1]\[Alpha][\[Phi]^2W0^2D^2,4]+2\[Alpha][\[Phi]^2 W0^2 D^2,1](\[Lambda][1]-\[Lambda][2])+2\[Lambda][2]\[Alpha][\[Phi]^4 D^2,1]+2\[Lambda][2]\[Alpha][\[Phi]^2W0^2D^2,5]-ge*\[Lambda][2]\[Alpha][\[Phi]^2 W D^2]+(1/2)\[Lambda][2]ge^2 \[Alpha][W^2 D^2]+4\[Lambda][1]\[Lambda][2]\[Alpha][\[Phi]^2D^4]+4\[Lambda][2]^2 \[Alpha][W0^2D^4]/.solDralgo/.{Global`g2->g2}//Factor
+\[Alpha][\[Phi]^4 W0^2,1]+4\[Lambda][1]\[Alpha][\[Phi]^2W0^2D^2,4]+2\[Alpha][\[Phi]^2 W0^2 D^2,1](\[Lambda][1]-\[Lambda][2])+2\[Lambda][2]\[Alpha][\[Phi]^4 D^2,1]+2\[Lambda][2]\[Alpha][\[Phi]^2W0^2D^2,5]-ge*\[Lambda][2]\[Alpha][\[Phi]^2 W D^2]+(1/2)\[Lambda][2]ge^2 \[Alpha][W^2 D^2]+4\[Lambda][1]\[Lambda][2]\[Alpha][\[Phi]^2D^4]+4\[Lambda][2]^2 \[Alpha][W0^2D^4]/.solDralgo//Factor
 \[Alpha][\[Phi]^4 W0^2,1]+4\[Lambda][1]\[Alpha][\[Phi]^2W0^2D^2,4]+2\[Alpha][\[Phi]^2 W0^2 D^2,1](\[Lambda][1]-\[Lambda][2])+2\[Lambda][2]\[Alpha][\[Phi]^4 D^2,1]+2\[Lambda][2]\[Alpha][\[Phi]^2W0^2D^2,5]-g2*\[Lambda][2]\[Alpha][\[Phi]^2 W D^2]+(1/2)\[Lambda][2]g2^2 \[Alpha][W^2 D^2]+4\[Lambda][1]\[Lambda][2]\[Alpha][\[Phi]^2D^4]+4\[Lambda][2]^2 \[Alpha][W0^2D^4]//.solLit//Factor
 
 
@@ -260,7 +260,7 @@ solLit={
 \[Alpha][\[Phi]^4 W0^2,2]//.solLit//Factor
 
 
-\[Alpha][\[Phi]^2 W0^4]+\[Lambda][2](-2\[Alpha][W0^4 D^2,1]+\[Alpha][\[Phi]^2W0^2 D^2,1]+2\[Alpha][\[Phi]^2W0^2D^2,4]+2ge*\[Alpha][W0^2W D^2]-2ge^2 \[Alpha][W^2D^2]+\[Lambda][2]\[Alpha][\[Phi]^2D^4])/.solDralgo/.{Global`g2->g2}//Factor
+\[Alpha][\[Phi]^2 W0^4]+\[Lambda][2](-2\[Alpha][W0^4 D^2,1]+\[Alpha][\[Phi]^2W0^2 D^2,1]+2\[Alpha][\[Phi]^2W0^2D^2,4]+2ge*\[Alpha][W0^2W D^2]-2ge^2 \[Alpha][W^2D^2]+\[Lambda][2]\[Alpha][\[Phi]^2D^4])/.solDralgo//Factor
 \[Alpha][\[Phi]^2 W0^4]+\[Lambda][2](-2\[Alpha][W0^4 D^2,1]+\[Alpha][\[Phi]^2W0^2 D^2,1]+2\[Alpha][\[Phi]^2W0^2D^2,4]+2g2*\[Alpha][W0^2W D^2]-2g2^2 \[Alpha][W^2D^2]+\[Lambda][2]\[Alpha][\[Phi]^2D^4])//.solLit//Factor
 
 
@@ -272,27 +272,27 @@ solLit={
 \[Alpha][\[Phi]^4 D^2,2]//.solLit//Factor
 
 
-2\[Alpha][\[Phi]^4 D^2,1]+\[Alpha][\[Phi]^4 D^2,3]-(3/2)ge (2\[Alpha][\[Phi]^2 W D^2]-ge \[Alpha][W^2 D^2])/.solDralgo/.{Global`g2->g2}//Factor
+2\[Alpha][\[Phi]^4 D^2,1]+\[Alpha][\[Phi]^4 D^2,3]-(3/2)ge (2\[Alpha][\[Phi]^2 W D^2]-ge \[Alpha][W^2 D^2])/.solDralgo//Factor
 2\[Alpha][\[Phi]^4 D^2,1]+\[Alpha][\[Phi]^4 D^2,3]-(3/2)g2 (2\[Alpha][\[Phi]^2 W D^2]-g2 \[Alpha][W^2 D^2])//.solLit//Factor
 
 
-\[Alpha][\[Phi]^2 W0^2 D^2,1]/.solDralgo/.{Global`g2->g2} //Factor
+\[Alpha][\[Phi]^2 W0^2 D^2,1]/.solDralgo//Factor
 \[Alpha][\[Phi]^2 W0^2 D^2,1]//.solLit//Factor
 
 
-2\[Alpha][\[Phi]^2 W0^2 D^2,2]-ge*(\[Alpha][W0^2 W D^2]+2(\[Alpha][\[Phi]^2 W D^2]-ge*\[Alpha][W^2D^2]))/.solDralgo/.{Global`g2->g2}//Factor
+2\[Alpha][\[Phi]^2 W0^2 D^2,2]-ge*(\[Alpha][W0^2 W D^2]+2(\[Alpha][\[Phi]^2 W D^2]-ge*\[Alpha][W^2D^2]))/.solDralgo//Factor
 2\[Alpha][\[Phi]^2 W0^2 D^2,2]-g2*(\[Alpha][W0^2 W D^2]+2(\[Alpha][\[Phi]^2 W D^2]-g2*\[Alpha][W^2D^2]))//.solLit//Factor
 
 
-\[Alpha][\[Phi]^2W^2]/.solDralgo/.{Global`g2->g2}//Factor
+\[Alpha][\[Phi]^2W^2]/.solDralgo//Factor
 \[Alpha][\[Phi]^2W^2]//.solLit//Factor
 
 
-\[Alpha][W0^2W^2,2]+(1/2)ge*\[Alpha][W0^2W D^2]/.solDralgo/.{Global`g2->g2}//Factor
+\[Alpha][W0^2W^2,2]+(1/2)ge*\[Alpha][W0^2W D^2]/.solDralgo//Factor
 \[Alpha][W0^2W^2,2]+(1/2)g2*\[Alpha][W0^2W D^2]//.solLit//Factor
 
 
-\[Alpha][W0^2W^2,1]-(1/2)ge*\[Alpha][W0^2W D^2]/.solDralgo/.{Global`g2->g2}//Factor
+\[Alpha][W0^2W^2,1]-(1/2)ge*\[Alpha][W0^2W D^2]/.solDralgo//Factor
 \[Alpha][W0^2W^2,1]-(1/2)g2*\[Alpha][W0^2W D^2]//.solLit//Factor
 
 
