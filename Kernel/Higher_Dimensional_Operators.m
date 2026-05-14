@@ -10,7 +10,12 @@
        Copyright (C) 2021-2026 Philipp Schicho
 *)
 
-(* :Summary:	Matches higher-dimensional operators up to dimension 5 and 6 *)	
+(* :Summary:	Provides tensor-contraction helpers, hard-thermal 1-loop integral
+             building blocks, and group-tensor routines for higher-dimensional
+             scalar and gauge operators. Exposes Dimension5Matching and
+             Dimension6Matching, which determine the Wilson coefficients of all
+             independent operators up to mass dimension 5 and 6 arising in the
+             hard-to-soft (3d) reduction. *)	
 
 (* ------------------------------------------------------------------------ *)
 
@@ -31,15 +36,21 @@ Contract[tensor1_,tensor2_,tensor3_,tensor4_,tensor5_,tensor6_,indices_]:=Activa
         Inactive[TensorProduct][tensor1,tensor2,tensor3,tensor4,tensor5,tensor6], indices] 
 
 
-(*this function symmetrize tensor D over the indices in indexgroups*)
-SymmetrizeTensor[DT_,indexGroups_]:=Module[{symDT,numPermutations,symDTFinal},(*Simmetrizza il tensore su ogni gruppo di indici*)symDT=DT;
-numPermutations=1;
-Do[symDT=Symmetrize[symDT,Symmetric[group]];
-numPermutations=numPermutations*(Factorial[Length[group]]),{group,indexGroups}];
-(*symDT=symDT*numPermutations;*);
-symDT]
+(*
+	this function symmetrizes tensor D over the indices in indexgroups
+*)
+SymmetrizeTensor[DT_,indexGroups_]:=Module[{symDT,numPermutations,symDTFinal},
+	(*Simmetrizza il tensore su ogni gruppo di indici*)
+	symDT=DT;
+	numPermutations=1;
+	Do[symDT=Symmetrize[symDT,Symmetric[group]];
+	numPermutations=numPermutations*(Factorial[Length[group]]),{group,indexGroups}];
+	symDT
+];
 
-(*this function swaps tensor D over the indices in swaps*)
+(*
+	this function swaps tensor D over the indices in swaps
+*)
 ApplySwaps[swaps_List, N_Integer] := Module[{indices, rules, result},
   indices = Range[N];
   rules = Flatten[{#1 -> #2} & @@@ swaps];
@@ -51,23 +62,29 @@ ApplySwaps[swaps_List, N_Integer] := Module[{indices, rules, result},
 SwapIndices[T_,Swaps_]:=Transpose[T,ApplySwaps[Swaps,TensorRank[T]]]
 
 
-(*this function symmetrize the Tensor T over the pairs of indices in pairGroups*)
-SymmetrizePair[T_,pairGroups_]:=Module[{rank,allPerms,perms,symmetrizedT,normalizedFactor,indexList,permutedIndices},rank=TensorRank[T];
-If[rank==0,Return[T]];
-allPerms={Range[rank]};Do[perms=GeneratePairPermutations[rank,group];
-allPerms=Flatten[Outer[ComposePermutation,allPerms,perms,1],1];,{group,pairGroups}];
-allPerms=DeleteDuplicates[allPerms];
-normalizedFactor=1/Length[allPerms];
-symmetrizedT=normalizedFactor*Sum[TensorTranspose[T,perm],{perm,allPerms}];
-Return[symmetrizedT];];
+(*
+	this function symmetrize the Tensor T over the pairs of indices in pairGroups
+*)
+SymmetrizePair[T_,pairGroups_]:=Module[{rank,allPerms,perms,symmetrizedT,normalizedFactor,indexList,permutedIndices},
+	rank=TensorRank[T];
+	If[rank==0,Return[T]];
+	allPerms={Range[rank]};Do[perms=GeneratePairPermutations[rank,group];
+	allPerms=Flatten[Outer[ComposePermutation,allPerms,perms,1],1];,{group,pairGroups}];
+	allPerms=DeleteDuplicates[allPerms];
+	normalizedFactor=1/Length[allPerms];
+	symmetrizedT=normalizedFactor*Sum[TensorTranspose[T,perm],{perm,allPerms}];
+	Return[symmetrizedT];
+];
 
 
-GeneratePairPermutations[rank_,pairGroup_]:=Module[{perms,nPairs,tempPerm,swappedPerm},If[pairGroup=={},Return[{Range[rank]}]];
-nPairs=Length[pairGroup];
-perms=Permutations[pairGroup];
-Table[tempPerm=Range[rank];
-Do[tempPerm[[pairGroup[[i]]]]=perm[[i]];,{i,nPairs}];
-tempPerm,{perm,perms}]];
+GeneratePairPermutations[rank_,pairGroup_]:=Module[{perms,nPairs,tempPerm,swappedPerm},
+	If[pairGroup=={},Return[{Range[rank]}]];
+	nPairs=Length[pairGroup];
+	perms=Permutations[pairGroup];
+	Table[tempPerm=Range[rank];
+	Do[tempPerm[[pairGroup[[i]]]]=perm[[i]];,{i,nPairs}];
+	tempPerm,{perm,perms}]
+];
 
 ComposePermutation[p1_,p2_]:=p2[[p1]];
 
@@ -76,8 +93,23 @@ ComposePermutation[p1_,p2_]:=p2[[p1]];
 (*HIGHER DIMENSIONAL OPERATORS GROUP TENSORS *)
 
 
+(*
+	HardThermal1LoopInt["B", a, b, d]
+   Bosonic hard-thermal 1-loop sum-integral I_B(a,b) in d dimensions.
+   a : power of the loop momentum in the denominator (propagator power),
+   b : power of the spatial loop momentum in the numerator,
+   d : spacetime dimension (d->3 for the 3d EFT).
+   Evaluates to the closed form in terms of the Riemann Zeta function
+   and Gamma functions after performing the bosonic Matsubara frequency sum.
+*)
 HardThermal1LoopInt["B",a_,b_,d_]:=((\[CapitalLambda]^2 Exp[EulerGamma])/(4\[Pi]))^((3-d)/2) 2 T (2\[Pi] T)^(d-2a+2b)/(4\[Pi])^(d/2) Gamma[a-d/2]/Gamma[a] Zeta[2a-2b-d];
 
+(* 
+	HardThermal1LoopInt["F", a, b, d]
+   Fermionic hard-thermal 1-loop sum-integral I_F(a,b) in d dimensions.
+   Related to the bosonic case by the overall factor (2^(2a-2b-d)-1) that
+   accounts for the half-integer fermionic Matsubara frequencies.
+*)
 HardThermal1LoopInt["F",a_,b_,d_]:=(2^(2a-2b-d)-1)HardThermal1LoopInt["B",a,b,d];
 
 
@@ -85,13 +117,22 @@ S1V2D2B[x_]:=Module[{T},
 	T=
 		Which[
 			x==1,
-			1/3 (-((-6+N) Contract[\[Lambda]3,gvss,gvss,{{6,9},{3,8},{2,5}}])+Transpose[Contract[HabijV,\[Lambda]3,{{4,7},{3,6}}],{2,3,1}]) Zb[3,0],
+			1/3 (
+				-((-6+N) Contract[\[Lambda]3,gvss,gvss,{{6,9},{3,8},{2,5}}])
+				+Transpose[Contract[HabijV,\[Lambda]3,{{4,7},{3,6}}],{2,3,1}]
+			) Zb[3,0],
 			
 			x==2,
-			1/6 (-2 (-6+N) Contract[\[Lambda]3,gvss,gvss,{{6,9},{3,8},{2,5}}]+Transpose[Contract[HabijV,\[Lambda]3,{{4,7},{3,6}}],{2,3,1}]) Zb[3,0],
+			1/6 (
+				-2 (-6+N) Contract[\[Lambda]3,gvss,gvss,{{6,9},{3,8},{2,5}}]
+				+Transpose[Contract[HabijV,\[Lambda]3,{{4,7},{3,6}}],{2,3,1}]
+			) Zb[3,0],
 			
 			x==3,
-			1/3 ((1+N) Contract[\[Lambda]3,gvss,gvss,{{6,9},{3,8},{2,5}}]+N Transpose[Contract[HabijV,\[Lambda]3,{{4,7},{3,6}}],{2,3,1}]) Zb[3,0],
+			1/3 (
+				+(1+N) Contract[\[Lambda]3,gvss,gvss,{{6,9},{3,8},{2,5}}]
+				+N Transpose[Contract[HabijV,\[Lambda]3,{{4,7},{3,6}}],{2,3,1}]
+			) Zb[3,0],
 			
 			x==4,
 			SparseArray[{},{NS,NV,NV}],
