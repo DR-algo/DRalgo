@@ -866,24 +866,57 @@ V4D2F[x_]:=Module[{T},
 	T=
 		Which[
 			x==1,
-			1/15 (-1+N) (-14 Contract[gvff,gvff,gvff,gvff,{{6,8},{5,12},{3,11},{2,9}}]+3 N Contract[gvff,gvff,gvff,gvff,{{6,8},{5,12},{3,11},{2,9}}]-14 Contract[gvff,gvff,gvff,gvff,{{6,11},{5,9},{3,8},{2,12}}]+\
-			3 N Contract[gvff,gvff,gvff,gvff,{{6,11},{5,9},{3,8},{2,12}}]-14 Contract[gvff,gvff,gvff,gvff,{{8,12},{5,9},{3,11},{2,6}}]+3 N Contract[gvff,gvff,gvff,gvff,{{8,12},{5,9},{3,11},{2,6}}]-\
-			22 Contract[gvff,gvff,gvff,gvff,{{8,12},{6,11},{3,5},{2,9}}]+4 N Contract[gvff,gvff,gvff,gvff,{{8,12},{6,11},{3,5},{2,9}}]-7 Contract[gvff,gvff,gvff,gvff,{{9,11},{5,12},{3,8},{2,6}}]-\
-			N Contract[gvff,gvff,gvff,gvff,{{9,11},{5,12},{3,8},{2,6}}]-14 Contract[gvff,gvff,gvff,gvff,{{9,11},{6,8},{3,5},{2,12}}]+3 N Contract[gvff,gvff,gvff,gvff,{{9,11},{6,8},{3,5},{2,12}}]) Zf[3,0],
+			1/15 (-1+N) (
+				-14 Contract[gvff,gvff,gvff,gvff,{{6,8},{5,12},{3,11},{2,9}}]
+				+3 N Contract[gvff,gvff,gvff,gvff,{{6,8},{5,12},{3,11},{2,9}}]
+				-14 Contract[gvff,gvff,gvff,gvff,{{6,11},{5,9},{3,8},{2,12}}]
+				+3 N Contract[gvff,gvff,gvff,gvff,{{6,11},{5,9},{3,8},{2,12}}]
+				-14 Contract[gvff,gvff,gvff,gvff,{{8,12},{5,9},{3,11},{2,6}}]
+				+3 N Contract[gvff,gvff,gvff,gvff,{{8,12},{5,9},{3,11},{2,6}}]
+				-22 Contract[gvff,gvff,gvff,gvff,{{8,12},{6,11},{3,5},{2,9}}]
+				+4 N Contract[gvff,gvff,gvff,gvff,{{8,12},{6,11},{3,5},{2,9}}]
+				-7 Contract[gvff,gvff,gvff,gvff,{{9,11},{5,12},{3,8},{2,6}}]
+				-N Contract[gvff,gvff,gvff,gvff,{{9,11},{5,12},{3,8},{2,6}}]
+				-14 Contract[gvff,gvff,gvff,gvff,{{9,11},{6,8},{3,5},{2,12}}]
+				+3 N Contract[gvff,gvff,gvff,gvff,{{9,11},{6,8},{3,5},{2,12}}]
+			) Zf[3,0],
 			
 			x==2,
-			1/12 (-52 Contract[gvff,gvff,gvff,gvff,{{6,8},{5,12},{3,11},{2,9}}]+38 N Contract[gvff,gvff,gvff,gvff,{{6,8},{5,12},{3,11},{2,9}}]-6 N^2 Contract[gvff,gvff,gvff,gvff,{{6,8},{5,12},{3,11},{2,9}}]-\
-			34 Contract[gvff,gvff,gvff,gvff,{{6,11},{5,9},{3,8},{2,12}}]+29 N Contract[gvff,gvff,gvff,gvff,{{6,11},{5,9},{3,8},{2,12}}]-5 N^2 Contract[gvff,gvff,gvff,gvff,{{6,11},{5,9},{3,8},{2,12}}]-\
-			60 Contract[gvff,gvff,gvff,gvff,{{8,12},{5,9},{3,11},{2,6}}]+42 N Contract[gvff,gvff,gvff,gvff,{{8,12},{5,9},{3,11},{2,6}}]-6 N^2 Contract[gvff,gvff,gvff,gvff,{{8,12},{5,9},{3,11},{2,6}}]-\
-			78 Contract[gvff,gvff,gvff,gvff,{{8,12},{6,11},{3,5},{2,9}}]+57 N Contract[gvff,gvff,gvff,gvff,{{8,12},{6,11},{3,5},{2,9}}]-9 N^2 Contract[gvff,gvff,gvff,gvff,{{8,12},{6,11},{3,5},{2,9}}]-\
-			60 Contract[gvff,gvff,gvff,gvff,{{9,11},{5,12},{3,8},{2,6}}]+42 N Contract[gvff,gvff,gvff,gvff,{{9,11},{5,12},{3,8},{2,6}}]-6 N^2 Contract[gvff,gvff,gvff,gvff,{{9,11},{5,12},{3,8},{2,6}}]-\
-			78 Contract[gvff,gvff,gvff,gvff,{{9,11},{6,8},{3,5},{2,12}}]+57 N Contract[gvff,gvff,gvff,gvff,{{9,11},{6,8},{3,5},{2,12}}]-9 N^2 Contract[gvff,gvff,gvff,gvff,{{9,11},{6,8},{3,5},{2,12}}]) Zf[3,0],
+			1/12 (
+				-52 Contract[gvff,gvff,gvff,gvff,{{6,8},{5,12},{3,11},{2,9}}]
+				+38 N Contract[gvff,gvff,gvff,gvff,{{6,8},{5,12},{3,11},{2,9}}]
+				-6 N^2 Contract[gvff,gvff,gvff,gvff,{{6,8},{5,12},{3,11},{2,9}}]
+				-34 Contract[gvff,gvff,gvff,gvff,{{6,11},{5,9},{3,8},{2,12}}]
+				+29 N Contract[gvff,gvff,gvff,gvff,{{6,11},{5,9},{3,8},{2,12}}]
+				-5 N^2 Contract[gvff,gvff,gvff,gvff,{{6,11},{5,9},{3,8},{2,12}}]
+				-\60 Contract[gvff,gvff,gvff,gvff,{{8,12},{5,9},{3,11},{2,6}}]
+				+42 N Contract[gvff,gvff,gvff,gvff,{{8,12},{5,9},{3,11},{2,6}}]
+				-6 N^2 Contract[gvff,gvff,gvff,gvff,{{8,12},{5,9},{3,11},{2,6}}]
+				-\78 Contract[gvff,gvff,gvff,gvff,{{8,12},{6,11},{3,5},{2,9}}]
+				+57 N Contract[gvff,gvff,gvff,gvff,{{8,12},{6,11},{3,5},{2,9}}]
+				-9 N^2 Contract[gvff,gvff,gvff,gvff,{{8,12},{6,11},{3,5},{2,9}}]
+				-\60 Contract[gvff,gvff,gvff,gvff,{{9,11},{5,12},{3,8},{2,6}}]
+				+42 N Contract[gvff,gvff,gvff,gvff,{{9,11},{5,12},{3,8},{2,6}}]
+				-6 N^2 Contract[gvff,gvff,gvff,gvff,{{9,11},{5,12},{3,8},{2,6}}]
+				-\78 Contract[gvff,gvff,gvff,gvff,{{9,11},{6,8},{3,5},{2,12}}]
+				+57 N Contract[gvff,gvff,gvff,gvff,{{9,11},{6,8},{3,5},{2,12}}]
+				-9 N^2 Contract[gvff,gvff,gvff,gvff,{{9,11},{6,8},{3,5},{2,12}}]
+			) Zf[3,0],
 			
 			x==3,
-			1/3 (3 Contract[gvff,gvff,gvff,gvff,{{6,11},{5,9},{3,8},{2,12}}]-4 N Contract[gvff,gvff,gvff,gvff,{{6,11},{5,9},{3,8},{2,12}}]+N^2 Contract[gvff,gvff,gvff,gvff,{{6,11},{5,9},{3,8},{2,12}}]+\
-			9 Contract[gvff,gvff,gvff,gvff,{{8,12},{5,9},{3,11},{2,6}}]-2 N Contract[gvff,gvff,gvff,gvff,{{8,12},{5,9},{3,11},{2,6}}]+9 Contract[gvff,gvff,gvff,gvff,{{8,12},{6,11},{3,5},{2,9}}]-\
-			2 N Contract[gvff,gvff,gvff,gvff,{{8,12},{6,11},{3,5},{2,9}}]-6 Contract[gvff,gvff,gvff,gvff,{{9,11},{5,12},{3,8},{2,6}}]+N Contract[gvff,gvff,gvff,gvff,{{9,11},{5,12},{3,8},{2,6}}]-\
-			6 Contract[gvff,gvff,gvff,gvff,{{9,11},{6,8},{3,5},{2,12}}]+N Contract[gvff,gvff,gvff,gvff,{{9,11},{6,8},{3,5},{2,12}}]) Zf[3,0],
+			1/3 (
+				+3 Contract[gvff,gvff,gvff,gvff,{{6,11},{5,9},{3,8},{2,12}}]
+				-4 N Contract[gvff,gvff,gvff,gvff,{{6,11},{5,9},{3,8},{2,12}}]
+				+N^2 Contract[gvff,gvff,gvff,gvff,{{6,11},{5,9},{3,8},{2,12}}]
+				+9 Contract[gvff,gvff,gvff,gvff,{{8,12},{5,9},{3,11},{2,6}}]
+				-2 N Contract[gvff,gvff,gvff,gvff,{{8,12},{5,9},{3,11},{2,6}}]
+				+9 Contract[gvff,gvff,gvff,gvff,{{8,12},{6,11},{3,5},{2,9}}]
+				-2 N Contract[gvff,gvff,gvff,gvff,{{8,12},{6,11},{3,5},{2,9}}]
+				-6 Contract[gvff,gvff,gvff,gvff,{{9,11},{5,12},{3,8},{2,6}}]
+				+N Contract[gvff,gvff,gvff,gvff,{{9,11},{5,12},{3,8},{2,6}}]
+				-6 Contract[gvff,gvff,gvff,gvff,{{9,11},{6,8},{3,5},{2,12}}]
+				+N Contract[gvff,gvff,gvff,gvff,{{9,11},{6,8},{3,5},{2,12}}]
+			) Zf[3,0],
 			
 			True, "NOT ALLOWED X VALUE"
 			];
