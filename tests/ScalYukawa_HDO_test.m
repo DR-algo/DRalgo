@@ -8,11 +8,13 @@ DRalgo`DRalgo`$LoadGroupMath=True;
 <<../Kernel/DRalgo.m
 
 
-(* ::Title:: *)
-(*A real-scalar + Dirac-fermion model; model created by Oliver Gould  and Joonas Hirvonen (07-07-2022)*)
+(* ::Chapter:: *)
+(*A real-scalar + Dirac-fermion model with higher-order operator matching*)
 
 
-(*See 2108.04377 [hep-th] for further details and for independent calculations*)
+(*
+	See 2108.04377 [hep-th] for further details and for independent calculations
+*)
 
 
 (* ::Section::Closed:: *)
