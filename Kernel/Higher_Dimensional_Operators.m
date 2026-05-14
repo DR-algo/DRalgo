@@ -608,7 +608,8 @@ S2D4B[x_]:=Module[{T},
 	T=
 		Which[
 			x==1,
-			-(1/3) (-5+3 xi) Contract[gvss,gvss,{{3,5},{1,4}}] Zb[3,0]+1/20 Contract[\[Lambda]3,\[Lambda]3,{{3,6},{2,4}}] Zb[4,0],
+			-(1/3) (-5+3 xi) Contract[gvss,gvss,{{3,5},{1,4}}] Zb[3,0]
+			+1/20 Contract[\[Lambda]3,\[Lambda]3,{{3,6},{2,4}}] Zb[4,0],
 			
 			True, "NOT ALLOWED X VALUE"
 			];
