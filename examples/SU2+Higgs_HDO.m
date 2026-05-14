@@ -170,7 +170,7 @@ ODIM6[1,d]//MatrixForm
 
 
 (* ::Section:: *)
-(*FIELD REDEFINITIONS (BOSONIC CONTR)*)
+(*Field Redefinitions (Bosonic contributions)*)
 
 
 (*
