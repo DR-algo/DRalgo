@@ -124,117 +124,279 @@ S5B[x_]:=Module[{T},
 	T=
 		Which[
 			x==1,
-			(xi Contract[gvss,gvss,\[Lambda]3,\[Lambda]4,{{9,13},{6,8},{3,12},{1,4}}]+xi Contract[gvss,gvss,\[Lambda]3,\[Lambda]4,{{9,13},{6,12},{3,8},{1,4}}]-Transpose[Contract[\[Lambda]4,\[Lambda]3,\[Lambda]4,{{5,9},{4,11},{1,7}}],{4,5,2,1,3}]-\
-			Transpose[Contract[\[Lambda]4,\[Lambda]3,\[Lambda]4,{{5,9},{4,11},{1,7}}],{4,5,3,1,2}]-Transpose[Contract[\[Lambda]4,\[Lambda]3,\[Lambda]4,{{5,9},{4,11},{2,6}}],{2,4,5,1,3}]-Transpose[Contract[\[Lambda]4,\[Lambda]3,\[Lambda]4,{{5,9},{4,11},{2,6}}],{2,5,4,1,3}]-\
-			Transpose[Contract[\[Lambda]4,\[Lambda]3,\[Lambda]4,{{5,9},{4,11},{2,6}}],{3,4,5,1,2}]-Transpose[Contract[\[Lambda]4,\[Lambda]3,\[Lambda]4,{{5,9},{4,11},{2,6}}],{3,5,4,1,2}]-Transpose[Contract[\[Lambda]4,\[Lambda]3,\[Lambda]4,{{5,9},{4,11},{2,7}}],{2,4,3,1,5}]-\
-			Transpose[Contract[\[Lambda]4,\[Lambda]3,\[Lambda]4,{{5,9},{4,11},{2,7}}],{2,5,3,1,4}]-Transpose[Contract[\[Lambda]4,\[Lambda]3,\[Lambda]4,{{5,9},{4,11},{2,7}}],{3,4,2,1,5}]-Transpose[Contract[\[Lambda]4,\[Lambda]3,\[Lambda]4,{{5,9},{4,11},{2,7}}],{3,5,2,1,4}]-\
-			Transpose[Contract[\[Lambda]4,\[Lambda]3,\[Lambda]4,{{5,9},{4,11},{3,6}}],{2,3,4,1,5}]-Transpose[Contract[\[Lambda]4,\[Lambda]3,\[Lambda]4,{{5,9},{4,11},{3,6}}],{2,3,5,1,4}]-Transpose[Contract[\[Lambda]4,\[Lambda]3,\[Lambda]4,{{6,8},{4,11},{1,7}}],{4,5,1,2,3}]-\
-			Transpose[Contract[\[Lambda]4,\[Lambda]3,\[Lambda]4,{{6,8},{4,11},{2,7}}],{3,4,1,2,5}]-Transpose[Contract[\[Lambda]4,\[Lambda]3,\[Lambda]4,{{6,8},{4,11},{2,7}}],{3,5,1,2,4}]-xi Transpose[Contract[gvss,gvss,\[Lambda]3,\[Lambda]4,{{9,12},{6,13},{2,7},{1,4}}],{2,4,3,1,5}]-\
-			xi Transpose[Contract[gvss,gvss,\[Lambda]3,\[Lambda]4,{{9,12},{6,13},{2,7},{1,4}}],{2,5,3,1,4}]-xi Transpose[Contract[gvss,gvss,\[Lambda]3,\[Lambda]4,{{9,12},{6,13},{2,7},{1,4}}],{2,5,4,1,3}]-xi Transpose[Contract[gvss,gvss,\[Lambda]3,\[Lambda]4,{{9,12},{6,13},{2,7},{1,4}}],{3,4,2,1,5}]-\
-			xi Transpose[Contract[gvss,gvss,\[Lambda]3,\[Lambda]4,{{9,12},{6,13},{2,7},{1,4}}],{3,5,2,1,4}]-xi Transpose[Contract[gvss,gvss,\[Lambda]3,\[Lambda]4,{{9,12},{6,13},{2,7},{1,4}}],{3,5,4,1,2}]-xi Transpose[Contract[gvss,gvss,\[Lambda]3,\[Lambda]4,{{9,12},{6,13},{2,7},{1,4}}],{4,3,2,1,5}]-\
-			xi Transpose[Contract[gvss,gvss,\[Lambda]3,\[Lambda]4,{{9,12},{6,13},{2,7},{1,4}}],{4,5,2,1,3}]-xi Transpose[Contract[gvss,gvss,\[Lambda]3,\[Lambda]4,{{9,12},{6,13},{2,7},{1,4}}],{4,5,3,1,2}]-xi Transpose[Contract[gvss,gvss,\[Lambda]3,\[Lambda]4,{{9,12},{6,13},{2,7},{1,4}}],{5,3,2,1,4}]-\
-			xi Transpose[Contract[gvss,gvss,\[Lambda]3,\[Lambda]4,{{9,12},{6,13},{2,7},{1,4}}],{5,4,2,1,3}]-xi Transpose[Contract[gvss,gvss,\[Lambda]3,\[Lambda]4,{{9,12},{6,13},{2,7},{1,4}}],{5,4,3,1,2}]-xi Transpose[Contract[gvss,gvss,\[Lambda]3,\[Lambda]4,{{9,12},{6,13},{2,8},{1,4}}],{2,3,1,4,5}]-\
-			xi Transpose[Contract[gvss,gvss,\[Lambda]3,\[Lambda]4,{{9,12},{6,13},{2,8},{1,4}}],{2,4,1,3,5}]-xi Transpose[Contract[gvss,gvss,\[Lambda]3,\[Lambda]4,{{9,12},{6,13},{2,8},{1,4}}],{2,5,1,3,4}]-xi Transpose[Contract[gvss,gvss,\[Lambda]3,\[Lambda]4,{{9,12},{6,13},{2,8},{1,4}}],{3,2,1,4,5}]-\
-			xi Transpose[Contract[gvss,gvss,\[Lambda]3,\[Lambda]4,{{9,12},{6,13},{2,8},{1,4}}],{3,4,1,2,5}]-xi Transpose[Contract[gvss,gvss,\[Lambda]3,\[Lambda]4,{{9,12},{6,13},{2,8},{1,4}}],{3,5,1,2,4}]-xi Transpose[Contract[gvss,gvss,\[Lambda]3,\[Lambda]4,{{9,12},{6,13},{2,8},{1,4}}],{4,2,1,3,5}]-\
-			xi Transpose[Contract[gvss,gvss,\[Lambda]3,\[Lambda]4,{{9,12},{6,13},{2,8},{1,4}}],{4,3,1,2,5}]-xi Transpose[Contract[gvss,gvss,\[Lambda]3,\[Lambda]4,{{9,12},{6,13},{2,8},{1,4}}],{4,5,1,2,3}]-xi Transpose[Contract[gvss,gvss,\[Lambda]3,\[Lambda]4,{{9,12},{6,13},{2,8},{1,4}}],{5,2,1,3,4}]-\
-			xi Transpose[Contract[gvss,gvss,\[Lambda]3,\[Lambda]4,{{9,12},{6,13},{2,8},{1,4}}],{5,3,1,2,4}]-xi Transpose[Contract[gvss,gvss,\[Lambda]3,\[Lambda]4,{{9,12},{6,13},{2,8},{1,4}}],{5,4,1,2,3}]+xi Transpose[Contract[gvss,gvss,\[Lambda]3,\[Lambda]4,{{9,12},{6,13},{3,7},{1,4}}],{1,3,2,4,5}]+\
-			xi Transpose[Contract[gvss,gvss,\[Lambda]3,\[Lambda]4,{{9,12},{6,13},{3,7},{1,4}}],{1,4,2,3,5}]+xi Transpose[Contract[gvss,gvss,\[Lambda]3,\[Lambda]4,{{9,12},{6,13},{3,7},{1,4}}],{1,4,3,2,5}]+xi Transpose[Contract[gvss,gvss,\[Lambda]3,\[Lambda]4,{{9,12},{6,13},{3,7},{1,4}}],{1,5,2,3,4}]+\
-			xi Transpose[Contract[gvss,gvss,\[Lambda]3,\[Lambda]4,{{9,12},{6,13},{3,7},{1,4}}],{1,5,3,2,4}]+xi Transpose[Contract[gvss,gvss,\[Lambda]3,\[Lambda]4,{{9,12},{6,13},{3,7},{1,4}}],{1,5,4,2,3}]-xi Transpose[Contract[gvss,gvss,\[Lambda]3,\[Lambda]4,{{9,13},{5,7},{3,12},{1,4}}],{1,4,5,2,3}]-\
-			xi Transpose[Contract[gvss,gvss,\[Lambda]3,\[Lambda]4,{{9,13},{5,7},{3,12},{1,4}}],{1,5,4,2,3}]-xi Transpose[Contract[gvss,gvss,\[Lambda]3,\[Lambda]4,{{9,13},{5,7},{3,12},{1,4}}],{2,4,5,1,3}]-xi Transpose[Contract[gvss,gvss,\[Lambda]3,\[Lambda]4,{{9,13},{5,7},{3,12},{1,4}}],{2,5,4,1,3}]-\
-			xi Transpose[Contract[gvss,gvss,\[Lambda]3,\[Lambda]4,{{9,13},{5,7},{3,12},{1,4}}],{3,4,5,1,2}]-xi Transpose[Contract[gvss,gvss,\[Lambda]3,\[Lambda]4,{{9,13},{5,7},{3,12},{1,4}}],{3,5,4,1,2}]-xi Transpose[Contract[gvss,gvss,\[Lambda]3,\[Lambda]4,{{9,13},{5,8},{3,12},{1,4}}],{1,4,2,3,5}]-\
-			xi Transpose[Contract[gvss,gvss,\[Lambda]3,\[Lambda]4,{{9,13},{5,8},{3,12},{1,4}}],{1,4,3,2,5}]-xi Transpose[Contract[gvss,gvss,\[Lambda]3,\[Lambda]4,{{9,13},{5,8},{3,12},{1,4}}],{1,5,2,3,4}]-xi Transpose[Contract[gvss,gvss,\[Lambda]3,\[Lambda]4,{{9,13},{5,8},{3,12},{1,4}}],{1,5,3,2,4}]-\
-			xi Transpose[Contract[gvss,gvss,\[Lambda]3,\[Lambda]4,{{9,13},{5,8},{3,12},{1,4}}],{2,4,3,1,5}]-xi Transpose[Contract[gvss,gvss,\[Lambda]3,\[Lambda]4,{{9,13},{5,8},{3,12},{1,4}}],{2,5,3,1,4}]+xi Transpose[Contract[gvss,gvss,\[Lambda]3,\[Lambda]4,{{9,13},{6,7},{3,12},{1,4}}],{1,2,4,3,5}]+\
-			xi Transpose[Contract[gvss,gvss,\[Lambda]3,\[Lambda]4,{{9,13},{6,7},{3,12},{1,4}}],{1,2,5,3,4}]+xi Transpose[Contract[gvss,gvss,\[Lambda]3,\[Lambda]4,{{9,13},{6,7},{3,12},{1,4}}],{1,3,4,2,5}]+xi Transpose[Contract[gvss,gvss,\[Lambda]3,\[Lambda]4,{{9,13},{6,7},{3,12},{1,4}}],{1,3,5,2,4}]+\
-			xi Transpose[Contract[gvss,gvss,\[Lambda]3,\[Lambda]4,{{9,13},{6,7},{3,12},{1,4}}],{2,3,4,1,5}]+xi Transpose[Contract[gvss,gvss,\[Lambda]3,\[Lambda]4,{{9,13},{6,7},{3,12},{1,4}}],{2,3,5,1,4}]+xi Transpose[Contract[gvss,gvss,\[Lambda]3,\[Lambda]4,{{9,13},{6,8},{3,12},{1,4}}],{1,3,2,4,5}]+\
-			xi Transpose[Contract[gvss,gvss,\[Lambda]3,\[Lambda]4,{{9,13},{6,12},{3,7},{1,4}}],{1,2,4,3,5}]+xi Transpose[Contract[gvss,gvss,\[Lambda]3,\[Lambda]4,{{9,13},{6,12},{3,7},{1,4}}],{1,2,5,3,4}]+xi Transpose[Contract[gvss,gvss,\[Lambda]3,\[Lambda]4,{{9,13},{6,12},{3,7},{1,4}}],{1,3,4,2,5}]+\
-			xi Transpose[Contract[gvss,gvss,\[Lambda]3,\[Lambda]4,{{9,13},{6,12},{3,7},{1,4}}],{1,3,5,2,4}]+xi Transpose[Contract[gvss,gvss,\[Lambda]3,\[Lambda]4,{{9,13},{6,12},{3,7},{1,4}}],{1,4,5,2,3}]+xi Transpose[Contract[gvss,gvss,\[Lambda]3,\[Lambda]4,{{9,13},{6,12},{3,7},{1,4}}],{2,3,4,1,5}]+\
-			xi Transpose[Contract[gvss,gvss,\[Lambda]3,\[Lambda]4,{{9,13},{6,12},{3,7},{1,4}}],{2,3,5,1,4}]+xi Transpose[Contract[gvss,gvss,\[Lambda]3,\[Lambda]4,{{9,13},{6,12},{3,7},{1,4}}],{2,4,5,1,3}]+xi Transpose[Contract[gvss,gvss,\[Lambda]3,\[Lambda]4,{{9,13},{6,12},{3,7},{1,4}}],{3,4,5,1,2}]-\
-			(xi^2) Transpose[Contract[HabijV,gvss,gvss,\[Lambda]3,{{9,11},{6,12},{2,5},{1,8}}],{1,2,4,3,5}]-xi^2 Transpose[Contract[HabijV,gvss,gvss,\[Lambda]3,{{9,11},{6,12},{2,5},{1,8}}],{1,2,5,3,4}]-xi^2 Transpose[Contract[HabijV,gvss,gvss,\[Lambda]3,{{9,11},{6,12},{2,5},{1,8}}],{1,3,4,2,5}]-\
-			(xi^2) Transpose[Contract[HabijV,gvss,gvss,\[Lambda]3,{{9,11},{6,12},{2,5},{1,8}}],{1,3,5,2,4}]-xi^2 Transpose[Contract[HabijV,gvss,gvss,\[Lambda]3,{{9,11},{6,13},{2,5},{1,8}}],{1,2,5,4,3}]-xi^2 Transpose[Contract[HabijV,gvss,gvss,\[Lambda]3,{{9,11},{6,13},{2,5},{1,8}}],{1,3,5,4,2}]-\
-			(xi^2) Transpose[Contract[HabijV,gvss,gvss,\[Lambda]3,{{9,11},{6,13},{2,5},{1,8}}],{1,4,5,2,3}]-xi^2 Transpose[Contract[HabijV,gvss,gvss,\[Lambda]3,{{9,11},{6,13},{2,5},{1,8}}],{1,4,5,3,2}]-xi^2 Transpose[Contract[HabijV,gvss,gvss,\[Lambda]3,{{9,11},{6,13},{2,5},{1,8}}],{1,5,4,2,3}]-\
-			(xi^2) Transpose[Contract[HabijV,gvss,gvss,\[Lambda]3,{{9,11},{6,13},{2,5},{1,8}}],{1,5,4,3,2}]+xi^2 Transpose[Contract[HabijV,gvss,gvss,\[Lambda]3,{{9,11},{7,12},{2,5},{1,8}}],{1,4,3,2,5}]+xi^2 Transpose[Contract[HabijV,gvss,gvss,\[Lambda]3,{{9,11},{7,12},{2,5},{1,8}}],{1,5,3,2,4}]-\
-			(xi^2) Transpose[Contract[HabijV,gvss,gvss,\[Lambda]3,{{9,12},{6,13},{2,5},{1,8}}],{2,3,5,4,1}]-xi^2 Transpose[Contract[HabijV,gvss,gvss,\[Lambda]3,{{9,12},{6,13},{2,5},{1,8}}],{2,4,5,3,1}]-xi^2 Transpose[Contract[HabijV,gvss,gvss,\[Lambda]3,{{9,12},{6,13},{2,5},{1,8}}],{2,5,4,3,1}]-\
-			(xi^2) Transpose[Contract[HabijV,gvss,gvss,\[Lambda]3,{{9,12},{6,13},{2,5},{1,8}}],{3,4,5,2,1}]-xi^2 Transpose[Contract[HabijV,gvss,gvss,\[Lambda]3,{{9,12},{6,13},{2,5},{1,8}}],{3,5,4,2,1}]+xi^2 Transpose[Contract[HabijV,gvss,gvss,\[Lambda]3,{{9,12},{7,13},{2,5},{1,8}}],{4,5,3,2,1}]+\
-			(xi^2) Transpose[Contract[HabijV,gvss,gvss,\[Lambda]3,{{10,11},{6,12},{2,5},{1,8}}],{2,3,4,1,5}]+xi^2 Transpose[Contract[HabijV,gvss,gvss,\[Lambda]3,{{10,11},{6,12},{2,5},{1,8}}],{2,3,5,1,4}]+xi^2 Transpose[Contract[HabijV,gvss,gvss,\[Lambda]3,{{10,11},{6,13},{2,5},{1,8}}],{2,4,5,1,3}]+\
-			(xi^2) Transpose[Contract[HabijV,gvss,gvss,\[Lambda]3,{{10,11},{6,13},{2,5},{1,8}}],{2,5,4,1,3}]+xi^2 Transpose[Contract[HabijV,gvss,gvss,\[Lambda]3,{{10,11},{6,13},{2,5},{1,8}}],{3,4,5,1,2}]+xi^2 Transpose[Contract[HabijV,gvss,gvss,\[Lambda]3,{{10,11},{6,13},{2,5},{1,8}}],{3,5,4,1,2}]-\
-			(xi^2) Transpose[Contract[HabijV,gvss,gvss,\[Lambda]3,{{10,11},{7,12},{2,5},{1,8}}],{2,4,3,1,5}]-xi^2 Transpose[Contract[HabijV,gvss,gvss,\[Lambda]3,{{10,11},{7,12},{2,5},{1,8}}],{2,5,3,1,4}]-xi^2 Transpose[Contract[HabijV,gvss,gvss,\[Lambda]3,{{10,11},{7,12},{2,5},{1,8}}],{3,4,2,1,5}]-\
-			(xi^2) Transpose[Contract[HabijV,gvss,gvss,\[Lambda]3,{{10,11},{7,12},{2,5},{1,8}}],{3,5,2,1,4}]-xi^2 Transpose[Contract[HabijV,gvss,gvss,\[Lambda]3,{{10,11},{7,13},{2,5},{1,8}}],{4,5,2,1,3}]-xi^2 Transpose[Contract[HabijV,gvss,gvss,\[Lambda]3,{{10,11},{7,13},{2,5},{1,8}}],{4,5,3,1,2}]-\
-			(xi^2) Transpose[Contract[gvss,gvss,\[Lambda]3,gvss,gvss,{{10,13},{7,12},{6,9},{3,15},{1,4}}],{2,3,4,1,5}]-xi^2 Transpose[Contract[gvss,gvss,\[Lambda]3,gvss,gvss,{{10,13},{7,12},{6,9},{3,15},{1,4}}],{2,3,5,1,4}]-\
-			(xi^2) Transpose[Contract[gvss,gvss,\[Lambda]3,gvss,gvss,{{10,13},{7,12},{6,9},{3,15},{1,4}}],{2,4,3,1,5}]-xi^2 Transpose[Contract[gvss,gvss,\[Lambda]3,gvss,gvss,{{10,13},{7,12},{6,9},{3,15},{1,4}}],{2,4,5,1,3}]-\
-			(xi^2) Transpose[Contract[gvss,gvss,\[Lambda]3,gvss,gvss,{{10,13},{7,12},{6,9},{3,15},{1,4}}],{2,5,3,1,4}]-xi^2 Transpose[Contract[gvss,gvss,\[Lambda]3,gvss,gvss,{{10,13},{7,12},{6,9},{3,15},{1,4}}],{2,5,4,1,3}]-\
-			(xi^2) Transpose[Contract[gvss,gvss,\[Lambda]3,gvss,gvss,{{10,13},{7,12},{6,9},{3,15},{1,4}}],{3,4,2,1,5}]-xi^2 Transpose[Contract[gvss,gvss,\[Lambda]3,gvss,gvss,{{10,13},{7,12},{6,9},{3,15},{1,4}}],{3,4,5,1,2}]-\
-			(xi^2) Transpose[Contract[gvss,gvss,\[Lambda]3,gvss,gvss,{{10,13},{7,12},{6,9},{3,15},{1,4}}],{3,5,2,1,4}]-xi^2 Transpose[Contract[gvss,gvss,\[Lambda]3,gvss,gvss,{{10,13},{7,12},{6,9},{3,15},{1,4}}],{3,5,4,1,2}]-\
-			(xi^2) Transpose[Contract[gvss,gvss,\[Lambda]3,gvss,gvss,{{10,13},{7,12},{6,9},{3,15},{1,4}}],{4,5,2,1,3}]-xi^2 Transpose[Contract[gvss,gvss,\[Lambda]3,gvss,gvss,{{10,13},{7,12},{6,15},{3,9},{1,4}}],{2,3,4,1,5}]-\
-			(xi^2) Transpose[Contract[gvss,gvss,\[Lambda]3,gvss,gvss,{{10,13},{7,12},{6,15},{3,9},{1,4}}],{2,3,5,1,4}]-xi^2 Transpose[Contract[gvss,gvss,\[Lambda]3,gvss,gvss,{{10,13},{7,12},{6,15},{3,9},{1,4}}],{2,4,3,1,5}]-\
-			(xi^2) Transpose[Contract[gvss,gvss,\[Lambda]3,gvss,gvss,{{10,13},{7,12},{6,15},{3,9},{1,4}}],{2,4,5,1,3}]-xi^2 Transpose[Contract[gvss,gvss,\[Lambda]3,gvss,gvss,{{10,13},{7,12},{6,15},{3,9},{1,4}}],{2,5,3,1,4}]-\
-			(xi^2) Transpose[Contract[gvss,gvss,\[Lambda]3,gvss,gvss,{{10,13},{7,12},{6,15},{3,9},{1,4}}],{2,5,4,1,3}]-xi^2 Transpose[Contract[gvss,gvss,\[Lambda]3,gvss,gvss,{{10,13},{7,12},{6,15},{3,9},{1,4}}],{3,4,2,1,5}]-\
-			(xi^2) Transpose[Contract[gvss,gvss,\[Lambda]3,gvss,gvss,{{10,13},{7,12},{6,15},{3,9},{1,4}}],{3,4,5,1,2}]-xi^2 Transpose[Contract[gvss,gvss,\[Lambda]3,gvss,gvss,{{10,13},{7,12},{6,15},{3,9},{1,4}}],{3,5,2,1,4}]-\
-			(xi^2) Transpose[Contract[gvss,gvss,\[Lambda]3,gvss,gvss,{{10,13},{7,12},{6,15},{3,9},{1,4}}],{3,5,4,1,2}]-xi^2 Transpose[Contract[gvss,gvss,\[Lambda]3,gvss,gvss,{{10,13},{7,12},{6,15},{3,9},{1,4}}],{4,5,2,1,3}]-\
-			(xi^2) Transpose[Contract[gvss,gvss,\[Lambda]3,gvss,gvss,{{10,13},{8,12},{6,9},{3,15},{1,4}}],{4,5,3,1,2}]-xi^2 Transpose[Contract[gvss,gvss,\[Lambda]3,gvss,gvss,{{10,13},{8,12},{6,15},{3,9},{1,4}}],{4,5,3,1,2}]+\
-			(xi^2) Transpose[Contract[gvss,gvss,\[Lambda]3,gvss,gvss,{{10,13},{8,15},{5,12},{3,9},{1,4}}],{2,4,5,1,3}]+xi^2 Transpose[Contract[gvss,gvss,\[Lambda]3,gvss,gvss,{{10,13},{8,15},{5,12},{3,9},{1,4}}],{2,5,3,1,4}]+\
-			(xi^2) Transpose[Contract[gvss,gvss,\[Lambda]3,gvss,gvss,{{10,13},{8,15},{5,12},{3,9},{1,4}}],{2,5,4,1,3}]+xi^2 Transpose[Contract[gvss,gvss,\[Lambda]3,gvss,gvss,{{10,13},{8,15},{5,12},{3,9},{1,4}}],{3,4,5,1,2}]+\
-			(xi^2) Transpose[Contract[gvss,gvss,\[Lambda]3,gvss,gvss,{{10,13},{8,15},{5,12},{3,9},{1,4}}],{3,5,2,1,4}]+xi^2 Transpose[Contract[gvss,gvss,\[Lambda]3,gvss,gvss,{{10,13},{8,15},{5,12},{3,9},{1,4}}],{3,5,4,1,2}]+\
-			(xi^2) Transpose[Contract[gvss,gvss,\[Lambda]3,gvss,gvss,{{10,13},{8,15},{6,9},{2,12},{1,4}}],{2,3,4,1,5}]+xi^2 Transpose[Contract[gvss,gvss,\[Lambda]3,gvss,gvss,{{10,13},{8,15},{6,9},{2,12},{1,4}}],{2,3,5,1,4}]+\
-			(xi^2) Transpose[Contract[gvss,gvss,\[Lambda]3,gvss,gvss,{{10,13},{8,15},{6,9},{2,12},{1,4}}],{2,4,3,1,5}]+xi^2 Transpose[Contract[gvss,gvss,\[Lambda]3,gvss,gvss,{{10,13},{8,15},{6,9},{2,12},{1,4}}],{2,4,5,1,3}]+\
-			(xi^2) Transpose[Contract[gvss,gvss,\[Lambda]3,gvss,gvss,{{10,13},{8,15},{6,9},{2,12},{1,4}}],{2,5,3,1,4}]+xi^2 Transpose[Contract[gvss,gvss,\[Lambda]3,gvss,gvss,{{10,13},{8,15},{6,9},{2,12},{1,4}}],{2,5,4,1,3}]+\
-			(xi^2) Transpose[Contract[gvss,gvss,\[Lambda]3,gvss,gvss,{{10,13},{8,15},{6,9},{2,12},{1,4}}],{3,2,4,1,5}]+xi^2 Transpose[Contract[gvss,gvss,\[Lambda]3,gvss,gvss,{{10,13},{8,15},{6,9},{2,12},{1,4}}],{3,2,5,1,4}]+\
-			(xi^2) Transpose[Contract[gvss,gvss,\[Lambda]3,gvss,gvss,{{10,13},{8,15},{6,9},{2,12},{1,4}}],{3,4,2,1,5}]+xi^2 Transpose[Contract[gvss,gvss,\[Lambda]3,gvss,gvss,{{10,13},{8,15},{6,9},{2,12},{1,4}}],{3,5,2,1,4}]+\
-			(xi^2) Transpose[Contract[gvss,gvss,\[Lambda]3,gvss,gvss,{{10,13},{8,15},{6,9},{2,12},{1,4}}],{4,2,3,1,5}]+xi^2 Transpose[Contract[gvss,gvss,\[Lambda]3,gvss,gvss,{{10,13},{8,15},{6,9},{2,12},{1,4}}],{4,3,2,1,5}]+\
-			(xi^2) Transpose[Contract[gvss,gvss,\[Lambda]3,gvss,gvss,{{10,13},{8,15},{6,9},{2,12},{1,4}}],{4,5,2,1,3}]+xi^2 Transpose[Contract[gvss,gvss,\[Lambda]3,gvss,gvss,{{10,13},{8,15},{6,9},{2,12},{1,4}}],{4,5,3,1,2}]+\
-			(xi^2) Transpose[Contract[gvss,gvss,\[Lambda]3,gvss,gvss,{{10,13},{8,15},{6,9},{2,12},{1,4}}],{5,4,2,1,3}]+xi^2 Transpose[Contract[gvss,gvss,\[Lambda]3,gvss,gvss,{{10,13},{8,15},{6,9},{2,12},{1,4}}],{5,4,3,1,2}]-\
-			(xi^2) Transpose[Contract[gvss,gvss,\[Lambda]3,gvss,gvss,{{10,13},{8,15},{6,9},{3,12},{1,4}}],{3,4,5,1,2}]-xi^2 Transpose[Contract[gvss,gvss,\[Lambda]3,gvss,gvss,{{10,13},{8,15},{6,9},{3,12},{1,4}}],{3,5,4,1,2}]-\
-			(xi^2) Transpose[Contract[gvss,gvss,\[Lambda]3,gvss,gvss,{{10,13},{9,11},{6,15},{2,8},{1,4}}],{2,3,1,4,5}]-xi^2 Transpose[Contract[gvss,gvss,\[Lambda]3,gvss,gvss,{{10,13},{9,11},{6,15},{2,8},{1,4}}],{2,3,1,5,4}]-\
-			(xi^2) Transpose[Contract[gvss,gvss,\[Lambda]3,gvss,gvss,{{10,13},{9,11},{6,15},{2,8},{1,4}}],{3,2,1,4,5}]-xi^2 Transpose[Contract[gvss,gvss,\[Lambda]3,gvss,gvss,{{10,13},{9,11},{6,15},{2,8},{1,4}}],{3,2,1,5,4}]+\
-			(xi^2) Transpose[Contract[gvss,gvss,\[Lambda]3,gvss,gvss,{{10,13},{9,12},{6,15},{2,8},{1,4}}],{2,4,1,3,5}]+xi^2 Transpose[Contract[gvss,gvss,\[Lambda]3,gvss,gvss,{{10,13},{9,12},{6,15},{2,8},{1,4}}],{2,5,1,3,4}]-\
-			(xi^2) Transpose[Contract[gvss,gvss,\[Lambda]3,gvss,gvss,{{10,13},{9,14},{6,12},{2,8},{1,4}}],{2,4,1,3,5}]-xi^2 Transpose[Contract[gvss,gvss,\[Lambda]3,gvss,gvss,{{10,13},{9,14},{6,12},{2,8},{1,4}}],{2,5,1,3,4}]-\
-			(xi^2) Transpose[Contract[gvss,gvss,\[Lambda]3,gvss,gvss,{{10,13},{9,14},{6,12},{2,8},{1,4}}],{3,4,1,2,5}]-xi^2 Transpose[Contract[gvss,gvss,\[Lambda]3,gvss,gvss,{{10,13},{9,14},{6,12},{2,8},{1,4}}],{3,5,1,2,4}]-\
-			(xi^2) Transpose[Contract[gvss,gvss,\[Lambda]3,gvss,gvss,{{10,13},{9,14},{6,12},{2,8},{1,4}}],{4,2,1,3,5}]-xi^2 Transpose[Contract[gvss,gvss,\[Lambda]3,gvss,gvss,{{10,13},{9,14},{6,12},{2,8},{1,4}}],{4,3,1,2,5}]) Zb[3,0]+\
-			(Contract[\[Lambda]3,\[Lambda]3,\[Lambda]3,\[Lambda]4,{{9,13},{6,8},{3,12},{2,4}}]+Contract[\[Lambda]3,\[Lambda]3,\[Lambda]3,\[Lambda]4,{{9,13},{6,12},{3,8},{2,4}}]-xi Contract[\[Lambda]3,\[Lambda]3,\[Lambda]3,gvss,gvss,{{10,13},{9,12},{6,15},{3,8},{2,4}}]+\
-			xi Contract[\[Lambda]3,\[Lambda]3,\[Lambda]3,gvss,gvss,{{10,13},{9,15},{6,8},{3,11},{2,4}}]-xi Contract[\[Lambda]3,\[Lambda]3,\[Lambda]3,gvss,gvss,{{10,13},{9,15},{6,12},{3,8},{2,4}}]+Transpose[Contract[\[Lambda]3,\[Lambda]3,\[Lambda]3,\[Lambda]4,{{9,13},{5,7},{3,12},{1,4}}],{2,4,5,1,3}]+\
-			Transpose[Contract[\[Lambda]3,\[Lambda]3,\[Lambda]3,\[Lambda]4,{{9,13},{5,7},{3,12},{1,4}}],{2,5,4,1,3}]+Transpose[Contract[\[Lambda]3,\[Lambda]3,\[Lambda]3,\[Lambda]4,{{9,13},{5,7},{3,12},{1,4}}],{3,4,5,1,2}]+Transpose[Contract[\[Lambda]3,\[Lambda]3,\[Lambda]3,\[Lambda]4,{{9,13},{5,7},{3,12},{1,4}}],{3,5,4,1,2}]+\
-			Transpose[Contract[\[Lambda]3,\[Lambda]3,\[Lambda]3,\[Lambda]4,{{9,13},{5,7},{3,12},{2,4}}],{1,4,5,2,3}]+Transpose[Contract[\[Lambda]3,\[Lambda]3,\[Lambda]3,\[Lambda]4,{{9,13},{5,7},{3,12},{2,4}}],{1,5,4,2,3}]+Transpose[Contract[\[Lambda]3,\[Lambda]3,\[Lambda]3,\[Lambda]4,{{9,13},{5,8},{3,12},{1,4}}],{2,4,3,1,5}]+\
-			Transpose[Contract[\[Lambda]3,\[Lambda]3,\[Lambda]3,\[Lambda]4,{{9,13},{5,8},{3,12},{1,4}}],{2,5,3,1,4}]+Transpose[Contract[\[Lambda]3,\[Lambda]3,\[Lambda]3,\[Lambda]4,{{9,13},{5,8},{3,12},{2,4}}],{1,4,2,3,5}]+Transpose[Contract[\[Lambda]3,\[Lambda]3,\[Lambda]3,\[Lambda]4,{{9,13},{5,8},{3,12},{2,4}}],{1,4,3,2,5}]+\
-			Transpose[Contract[\[Lambda]3,\[Lambda]3,\[Lambda]3,\[Lambda]4,{{9,13},{5,8},{3,12},{2,4}}],{1,5,2,3,4}]+Transpose[Contract[\[Lambda]3,\[Lambda]3,\[Lambda]3,\[Lambda]4,{{9,13},{5,8},{3,12},{2,4}}],{1,5,3,2,4}]+Transpose[Contract[\[Lambda]3,\[Lambda]3,\[Lambda]3,\[Lambda]4,{{9,13},{6,7},{3,12},{1,4}}],{2,3,4,1,5}]+\
-			Transpose[Contract[\[Lambda]3,\[Lambda]3,\[Lambda]3,\[Lambda]4,{{9,13},{6,7},{3,12},{1,4}}],{2,3,5,1,4}]+Transpose[Contract[\[Lambda]3,\[Lambda]3,\[Lambda]3,\[Lambda]4,{{9,13},{6,7},{3,12},{2,4}}],{1,2,4,3,5}]+Transpose[Contract[\[Lambda]3,\[Lambda]3,\[Lambda]3,\[Lambda]4,{{9,13},{6,7},{3,12},{2,4}}],{1,2,5,3,4}]+\
-			Transpose[Contract[\[Lambda]3,\[Lambda]3,\[Lambda]3,\[Lambda]4,{{9,13},{6,7},{3,12},{2,4}}],{1,3,4,2,5}]+Transpose[Contract[\[Lambda]3,\[Lambda]3,\[Lambda]3,\[Lambda]4,{{9,13},{6,7},{3,12},{2,4}}],{1,3,5,2,4}]+Transpose[Contract[\[Lambda]3,\[Lambda]3,\[Lambda]3,\[Lambda]4,{{9,13},{6,8},{3,12},{2,4}}],{1,3,2,4,5}]+\
-			Transpose[Contract[\[Lambda]3,\[Lambda]3,\[Lambda]3,\[Lambda]4,{{9,13},{6,12},{3,7},{1,4}}],{2,3,4,1,5}]+Transpose[Contract[\[Lambda]3,\[Lambda]3,\[Lambda]3,\[Lambda]4,{{9,13},{6,12},{3,7},{1,4}}],{2,3,5,1,4}]+Transpose[Contract[\[Lambda]3,\[Lambda]3,\[Lambda]3,\[Lambda]4,{{9,13},{6,12},{3,7},{1,4}}],{2,4,5,1,3}]+\
-			Transpose[Contract[\[Lambda]3,\[Lambda]3,\[Lambda]3,\[Lambda]4,{{9,13},{6,12},{3,7},{1,4}}],{3,4,5,1,2}]+Transpose[Contract[\[Lambda]3,\[Lambda]3,\[Lambda]3,\[Lambda]4,{{9,13},{6,12},{3,7},{2,4}}],{1,2,4,3,5}]+Transpose[Contract[\[Lambda]3,\[Lambda]3,\[Lambda]3,\[Lambda]4,{{9,13},{6,12},{3,7},{2,4}}],{1,2,5,3,4}]+\
-			Transpose[Contract[\[Lambda]3,\[Lambda]3,\[Lambda]3,\[Lambda]4,{{9,13},{6,12},{3,7},{2,4}}],{1,3,4,2,5}]+Transpose[Contract[\[Lambda]3,\[Lambda]3,\[Lambda]3,\[Lambda]4,{{9,13},{6,12},{3,7},{2,4}}],{1,3,5,2,4}]+Transpose[Contract[\[Lambda]3,\[Lambda]3,\[Lambda]3,\[Lambda]4,{{9,13},{6,12},{3,7},{2,4}}],{1,4,5,2,3}]-\
-			xi Transpose[Contract[\[Lambda]3,\[Lambda]3,\[Lambda]3,gvss,gvss,{{10,13},{6,8},{4,12},{3,9},{2,15}}],{2,4,5,1,3}]-xi Transpose[Contract[\[Lambda]3,\[Lambda]3,\[Lambda]3,gvss,gvss,{{10,13},{6,8},{4,12},{3,9},{2,15}}],{2,5,4,1,3}]-\
-			xi Transpose[Contract[\[Lambda]3,\[Lambda]3,\[Lambda]3,gvss,gvss,{{10,13},{6,8},{4,12},{3,9},{2,15}}],{3,4,5,1,2}]-xi Transpose[Contract[\[Lambda]3,\[Lambda]3,\[Lambda]3,gvss,gvss,{{10,13},{6,8},{4,12},{3,9},{2,15}}],{3,5,4,1,2}]-\
-			xi Transpose[Contract[\[Lambda]3,\[Lambda]3,\[Lambda]3,gvss,gvss,{{10,13},{6,9},{5,15},{3,8},{1,12}}],{2,3,4,1,5}]-xi Transpose[Contract[\[Lambda]3,\[Lambda]3,\[Lambda]3,gvss,gvss,{{10,13},{6,9},{5,15},{3,8},{1,12}}],{2,3,5,1,4}]-\
-			xi Transpose[Contract[\[Lambda]3,\[Lambda]3,\[Lambda]3,gvss,gvss,{{10,13},{6,9},{5,15},{3,8},{1,12}}],{2,4,5,1,3}]-xi Transpose[Contract[\[Lambda]3,\[Lambda]3,\[Lambda]3,gvss,gvss,{{10,13},{6,9},{5,15},{3,8},{1,12}}],{3,2,4,1,5}]-\
-			xi Transpose[Contract[\[Lambda]3,\[Lambda]3,\[Lambda]3,gvss,gvss,{{10,13},{6,9},{5,15},{3,8},{1,12}}],{3,2,5,1,4}]-xi Transpose[Contract[\[Lambda]3,\[Lambda]3,\[Lambda]3,gvss,gvss,{{10,13},{6,9},{5,15},{3,8},{1,12}}],{4,2,3,1,5}]-\
-			xi Transpose[Contract[\[Lambda]3,\[Lambda]3,\[Lambda]3,gvss,gvss,{{10,13},{6,9},{5,15},{3,8},{2,12}}],{3,4,5,1,2}]+xi Transpose[Contract[\[Lambda]3,\[Lambda]3,\[Lambda]3,gvss,gvss,{{10,13},{6,15},{5,9},{3,7},{2,11}}],{1,2,4,3,5}]+\
-			xi Transpose[Contract[\[Lambda]3,\[Lambda]3,\[Lambda]3,gvss,gvss,{{10,13},{6,15},{5,9},{3,7},{2,11}}],{1,2,5,3,4}]+xi Transpose[Contract[\[Lambda]3,\[Lambda]3,\[Lambda]3,gvss,gvss,{{10,13},{6,15},{5,9},{3,7},{2,11}}],{1,2,5,4,3}]+\
-			xi Transpose[Contract[\[Lambda]3,\[Lambda]3,\[Lambda]3,gvss,gvss,{{10,13},{6,15},{5,9},{3,7},{2,11}}],{1,3,4,2,5}]+xi Transpose[Contract[\[Lambda]3,\[Lambda]3,\[Lambda]3,gvss,gvss,{{10,13},{6,15},{5,9},{3,7},{2,11}}],{1,3,5,2,4}]+\
-			xi Transpose[Contract[\[Lambda]3,\[Lambda]3,\[Lambda]3,gvss,gvss,{{10,13},{6,15},{5,9},{3,7},{2,11}}],{1,3,5,4,2}]-xi Transpose[Contract[\[Lambda]3,\[Lambda]3,\[Lambda]3,gvss,gvss,{{10,13},{7,12},{5,9},{3,6},{2,15}}],{2,3,5,1,4}]-\
-			xi Transpose[Contract[\[Lambda]3,\[Lambda]3,\[Lambda]3,gvss,gvss,{{10,13},{7,12},{5,15},{3,6},{2,9}}],{2,3,5,1,4}]-xi Transpose[Contract[\[Lambda]3,\[Lambda]3,\[Lambda]3,gvss,gvss,{{10,13},{8,15},{4,12},{3,9},{2,6}}],{2,4,5,1,3}]-\
-			xi Transpose[Contract[\[Lambda]3,\[Lambda]3,\[Lambda]3,gvss,gvss,{{10,13},{8,15},{4,12},{3,9},{2,6}}],{2,5,4,1,3}]-xi Transpose[Contract[\[Lambda]3,\[Lambda]3,\[Lambda]3,gvss,gvss,{{10,13},{8,15},{4,12},{3,9},{2,6}}],{3,4,5,1,2}]-\
-			xi Transpose[Contract[\[Lambda]3,\[Lambda]3,\[Lambda]3,gvss,gvss,{{10,13},{8,15},{4,12},{3,9},{2,6}}],{3,5,4,1,2}]-xi Transpose[Contract[\[Lambda]3,\[Lambda]3,\[Lambda]3,gvss,gvss,{{10,13},{8,15},{6,9},{3,5},{1,12}}],{2,3,4,1,5}]-\
-			xi Transpose[Contract[\[Lambda]3,\[Lambda]3,\[Lambda]3,gvss,gvss,{{10,13},{8,15},{6,9},{3,5},{1,12}}],{2,3,5,1,4}]-xi Transpose[Contract[\[Lambda]3,\[Lambda]3,\[Lambda]3,gvss,gvss,{{10,13},{8,15},{6,9},{3,5},{1,12}}],{2,4,5,1,3}]-\
-			xi Transpose[Contract[\[Lambda]3,\[Lambda]3,\[Lambda]3,gvss,gvss,{{10,13},{8,15},{6,9},{3,5},{1,12}}],{3,2,4,1,5}]-xi Transpose[Contract[\[Lambda]3,\[Lambda]3,\[Lambda]3,gvss,gvss,{{10,13},{8,15},{6,9},{3,5},{1,12}}],{3,2,5,1,4}]-\
-			xi Transpose[Contract[\[Lambda]3,\[Lambda]3,\[Lambda]3,gvss,gvss,{{10,13},{8,15},{6,9},{3,5},{1,12}}],{4,2,3,1,5}]-xi Transpose[Contract[\[Lambda]3,\[Lambda]3,\[Lambda]3,gvss,gvss,{{10,13},{8,15},{6,9},{3,5},{2,12}}],{3,4,5,1,2}]+\
-			xi Transpose[Contract[\[Lambda]3,\[Lambda]3,\[Lambda]3,gvss,gvss,{{10,13},{9,12},{6,8},{3,14},{2,4}}],{1,2,4,3,5}]+xi Transpose[Contract[\[Lambda]3,\[Lambda]3,\[Lambda]3,gvss,gvss,{{10,13},{9,12},{6,8},{3,14},{2,4}}],{1,2,5,3,4}]+\
-			xi Transpose[Contract[\[Lambda]3,\[Lambda]3,\[Lambda]3,gvss,gvss,{{10,13},{9,12},{6,8},{3,14},{2,4}}],{1,3,4,2,5}]+xi Transpose[Contract[\[Lambda]3,\[Lambda]3,\[Lambda]3,gvss,gvss,{{10,13},{9,12},{6,8},{3,14},{2,4}}],{1,3,5,2,4}]+\
-			xi Transpose[Contract[\[Lambda]3,\[Lambda]3,\[Lambda]3,gvss,gvss,{{10,13},{9,12},{6,8},{3,14},{2,4}}],{1,4,2,3,5}]+xi Transpose[Contract[\[Lambda]3,\[Lambda]3,\[Lambda]3,gvss,gvss,{{10,13},{9,12},{6,8},{3,14},{2,4}}],{1,4,3,2,5}]-\
-			xi Transpose[Contract[\[Lambda]3,\[Lambda]3,\[Lambda]3,gvss,gvss,{{10,13},{9,12},{6,15},{3,7},{2,4}}],{1,2,4,3,5}]-xi Transpose[Contract[\[Lambda]3,\[Lambda]3,\[Lambda]3,gvss,gvss,{{10,13},{9,12},{6,15},{3,7},{2,4}}],{1,2,5,3,4}]-\
-			xi Transpose[Contract[\[Lambda]3,\[Lambda]3,\[Lambda]3,gvss,gvss,{{10,13},{9,12},{6,15},{3,7},{2,4}}],{1,3,4,2,5}]-xi Transpose[Contract[\[Lambda]3,\[Lambda]3,\[Lambda]3,gvss,gvss,{{10,13},{9,12},{6,15},{3,7},{2,4}}],{1,3,5,2,4}]-\
-			xi Transpose[Contract[\[Lambda]3,\[Lambda]3,\[Lambda]3,gvss,gvss,{{10,13},{9,12},{6,15},{3,7},{2,4}}],{1,4,5,2,3}]+xi Transpose[Contract[\[Lambda]3,\[Lambda]3,\[Lambda]3,gvss,gvss,{{10,13},{9,15},{6,8},{3,4},{2,11}}],{1,4,5,2,3}]+\
-			xi Transpose[Contract[\[Lambda]3,\[Lambda]3,\[Lambda]3,gvss,gvss,{{10,13},{9,15},{6,8},{3,4},{2,11}}],{1,4,5,3,2}]+xi Transpose[Contract[\[Lambda]3,\[Lambda]3,\[Lambda]3,gvss,gvss,{{10,13},{9,15},{6,8},{3,4},{2,11}}],{1,5,4,2,3}]+\
-			xi Transpose[Contract[\[Lambda]3,\[Lambda]3,\[Lambda]3,gvss,gvss,{{10,13},{9,15},{6,8},{3,4},{2,11}}],{1,5,4,3,2}]+xi Transpose[Contract[\[Lambda]3,\[Lambda]3,\[Lambda]3,gvss,gvss,{{10,13},{9,15},{6,8},{3,5},{2,11}}],{1,3,4,2,5}]+\
-			xi Transpose[Contract[\[Lambda]3,\[Lambda]3,\[Lambda]3,gvss,gvss,{{10,13},{9,15},{6,8},{3,5},{2,11}}],{1,3,5,2,4}]+xi Transpose[Contract[\[Lambda]3,\[Lambda]3,\[Lambda]3,gvss,gvss,{{10,13},{9,15},{6,8},{3,11},{2,4}}],{1,2,3,5,4}]+\
-			xi Transpose[Contract[\[Lambda]3,\[Lambda]3,\[Lambda]3,gvss,gvss,{{10,13},{9,15},{6,8},{3,11},{2,4}}],{1,3,2,4,5}]+xi Transpose[Contract[\[Lambda]3,\[Lambda]3,\[Lambda]3,gvss,gvss,{{10,13},{9,15},{6,8},{3,11},{2,4}}],{1,3,2,5,4}]-\
-			xi Transpose[Contract[\[Lambda]3,\[Lambda]3,\[Lambda]3,gvss,gvss,{{10,13},{9,15},{6,8},{3,12},{2,4}}],{1,2,4,3,5}]-xi Transpose[Contract[\[Lambda]3,\[Lambda]3,\[Lambda]3,gvss,gvss,{{10,13},{9,15},{6,8},{3,12},{2,4}}],{1,2,5,3,4}]-\
-			xi Transpose[Contract[\[Lambda]3,\[Lambda]3,\[Lambda]3,gvss,gvss,{{10,13},{9,15},{6,12},{3,7},{2,4}}],{1,2,4,3,5}]-xi Transpose[Contract[\[Lambda]3,\[Lambda]3,\[Lambda]3,gvss,gvss,{{10,13},{9,15},{6,12},{3,7},{2,4}}],{1,2,5,3,4}]-\
-			xi Transpose[Contract[\[Lambda]3,\[Lambda]3,\[Lambda]3,gvss,gvss,{{10,13},{9,15},{6,12},{3,7},{2,4}}],{1,3,4,2,5}]-xi Transpose[Contract[\[Lambda]3,\[Lambda]3,\[Lambda]3,gvss,gvss,{{10,13},{9,15},{6,12},{3,7},{2,4}}],{1,3,5,2,4}]-\
-			xi Transpose[Contract[\[Lambda]3,\[Lambda]3,\[Lambda]3,gvss,gvss,{{10,13},{9,15},{6,12},{3,7},{2,4}}],{1,4,5,2,3}]) Zb[4,0]+(-Transpose[Contract[\[Lambda]3,\[Lambda]3,\[Lambda]3,\[Lambda]3,\[Lambda]3,{{11,13},{6,8},{4,12},{3,9},{2,15}}],{2,4,5,1,3}]-\
-			Transpose[Contract[\[Lambda]3,\[Lambda]3,\[Lambda]3,\[Lambda]3,\[Lambda]3,{{11,13},{6,8},{4,12},{3,9},{2,15}}],{2,5,4,1,3}]-Transpose[Contract[\[Lambda]3,\[Lambda]3,\[Lambda]3,\[Lambda]3,\[Lambda]3,{{11,13},{6,8},{4,12},{3,9},{2,15}}],{3,4,5,1,2}]-\
-			Transpose[Contract[\[Lambda]3,\[Lambda]3,\[Lambda]3,\[Lambda]3,\[Lambda]3,{{11,13},{6,8},{4,12},{3,9},{2,15}}],{3,5,4,1,2}]-Transpose[Contract[\[Lambda]3,\[Lambda]3,\[Lambda]3,\[Lambda]3,\[Lambda]3,{{11,13},{6,9},{5,15},{3,8},{2,12}}],{3,4,5,1,2}]-\
-			Transpose[Contract[\[Lambda]3,\[Lambda]3,\[Lambda]3,\[Lambda]3,\[Lambda]3,{{11,13},{7,12},{5,9},{3,6},{2,15}}],{2,3,5,1,4}]-Transpose[Contract[\[Lambda]3,\[Lambda]3,\[Lambda]3,\[Lambda]3,\[Lambda]3,{{11,13},{7,12},{5,15},{3,6},{2,9}}],{2,3,5,1,4}]-\
-			Transpose[Contract[\[Lambda]3,\[Lambda]3,\[Lambda]3,\[Lambda]3,\[Lambda]3,{{11,13},{8,15},{4,12},{3,9},{2,6}}],{2,4,5,1,3}]-Transpose[Contract[\[Lambda]3,\[Lambda]3,\[Lambda]3,\[Lambda]3,\[Lambda]3,{{11,13},{8,15},{4,12},{3,9},{2,6}}],{2,5,4,1,3}]-\
-			Transpose[Contract[\[Lambda]3,\[Lambda]3,\[Lambda]3,\[Lambda]3,\[Lambda]3,{{11,13},{8,15},{4,12},{3,9},{2,6}}],{3,4,5,1,2}]-Transpose[Contract[\[Lambda]3,\[Lambda]3,\[Lambda]3,\[Lambda]3,\[Lambda]3,{{11,13},{8,15},{4,12},{3,9},{2,6}}],{3,5,4,1,2}]-\
-			Transpose[Contract[\[Lambda]3,\[Lambda]3,\[Lambda]3,\[Lambda]3,\[Lambda]3,{{11,13},{8,15},{6,9},{3,5},{2,12}}],{3,4,5,1,2}]) Zb[5,0],
+			(
+				+xi Contract[gvss,gvss,\[Lambda]3,\[Lambda]4,{{9,13},{6,8},{3,12},{1,4}}]
+				+xi Contract[gvss,gvss,\[Lambda]3,\[Lambda]4,{{9,13},{6,12},{3,8},{1,4}}]
+				-Transpose[Contract[\[Lambda]4,\[Lambda]3,\[Lambda]4,{{5,9},{4,11},{1,7}}],{4,5,2,1,3}]
+				-Transpose[Contract[\[Lambda]4,\[Lambda]3,\[Lambda]4,{{5,9},{4,11},{1,7}}],{4,5,3,1,2}]
+				-Transpose[Contract[\[Lambda]4,\[Lambda]3,\[Lambda]4,{{5,9},{4,11},{2,6}}],{2,4,5,1,3}]
+				-Transpose[Contract[\[Lambda]4,\[Lambda]3,\[Lambda]4,{{5,9},{4,11},{2,6}}],{2,5,4,1,3}]
+				-Transpose[Contract[\[Lambda]4,\[Lambda]3,\[Lambda]4,{{5,9},{4,11},{2,6}}],{3,4,5,1,2}]
+				-Transpose[Contract[\[Lambda]4,\[Lambda]3,\[Lambda]4,{{5,9},{4,11},{2,6}}],{3,5,4,1,2}]
+				-Transpose[Contract[\[Lambda]4,\[Lambda]3,\[Lambda]4,{{5,9},{4,11},{2,7}}],{2,4,3,1,5}]
+				-Transpose[Contract[\[Lambda]4,\[Lambda]3,\[Lambda]4,{{5,9},{4,11},{2,7}}],{2,5,3,1,4}]
+				-Transpose[Contract[\[Lambda]4,\[Lambda]3,\[Lambda]4,{{5,9},{4,11},{2,7}}],{3,4,2,1,5}]
+				-Transpose[Contract[\[Lambda]4,\[Lambda]3,\[Lambda]4,{{5,9},{4,11},{2,7}}],{3,5,2,1,4}]
+				-Transpose[Contract[\[Lambda]4,\[Lambda]3,\[Lambda]4,{{5,9},{4,11},{3,6}}],{2,3,4,1,5}]
+				-Transpose[Contract[\[Lambda]4,\[Lambda]3,\[Lambda]4,{{5,9},{4,11},{3,6}}],{2,3,5,1,4}]
+				-Transpose[Contract[\[Lambda]4,\[Lambda]3,\[Lambda]4,{{6,8},{4,11},{1,7}}],{4,5,1,2,3}]
+				-Transpose[Contract[\[Lambda]4,\[Lambda]3,\[Lambda]4,{{6,8},{4,11},{2,7}}],{3,4,1,2,5}]
+				-Transpose[Contract[\[Lambda]4,\[Lambda]3,\[Lambda]4,{{6,8},{4,11},{2,7}}],{3,5,1,2,4}]
+				-xi Transpose[Contract[gvss,gvss,\[Lambda]3,\[Lambda]4,{{9,12},{6,13},{2,7},{1,4}}],{2,4,3,1,5}]
+				-xi Transpose[Contract[gvss,gvss,\[Lambda]3,\[Lambda]4,{{9,12},{6,13},{2,7},{1,4}}],{2,5,3,1,4}]
+				-xi Transpose[Contract[gvss,gvss,\[Lambda]3,\[Lambda]4,{{9,12},{6,13},{2,7},{1,4}}],{2,5,4,1,3}]
+				-xi Transpose[Contract[gvss,gvss,\[Lambda]3,\[Lambda]4,{{9,12},{6,13},{2,7},{1,4}}],{3,4,2,1,5}]
+				-xi Transpose[Contract[gvss,gvss,\[Lambda]3,\[Lambda]4,{{9,12},{6,13},{2,7},{1,4}}],{3,5,2,1,4}]
+				-xi Transpose[Contract[gvss,gvss,\[Lambda]3,\[Lambda]4,{{9,12},{6,13},{2,7},{1,4}}],{3,5,4,1,2}]
+				-xi Transpose[Contract[gvss,gvss,\[Lambda]3,\[Lambda]4,{{9,12},{6,13},{2,7},{1,4}}],{4,3,2,1,5}]
+				-xi Transpose[Contract[gvss,gvss,\[Lambda]3,\[Lambda]4,{{9,12},{6,13},{2,7},{1,4}}],{4,5,2,1,3}]
+				-xi Transpose[Contract[gvss,gvss,\[Lambda]3,\[Lambda]4,{{9,12},{6,13},{2,7},{1,4}}],{4,5,3,1,2}]
+				-xi Transpose[Contract[gvss,gvss,\[Lambda]3,\[Lambda]4,{{9,12},{6,13},{2,7},{1,4}}],{5,3,2,1,4}]
+				-xi Transpose[Contract[gvss,gvss,\[Lambda]3,\[Lambda]4,{{9,12},{6,13},{2,7},{1,4}}],{5,4,2,1,3}]
+				-xi Transpose[Contract[gvss,gvss,\[Lambda]3,\[Lambda]4,{{9,12},{6,13},{2,7},{1,4}}],{5,4,3,1,2}]
+				-xi Transpose[Contract[gvss,gvss,\[Lambda]3,\[Lambda]4,{{9,12},{6,13},{2,8},{1,4}}],{2,3,1,4,5}]
+				-xi Transpose[Contract[gvss,gvss,\[Lambda]3,\[Lambda]4,{{9,12},{6,13},{2,8},{1,4}}],{2,4,1,3,5}]
+				-xi Transpose[Contract[gvss,gvss,\[Lambda]3,\[Lambda]4,{{9,12},{6,13},{2,8},{1,4}}],{2,5,1,3,4}]
+				-xi Transpose[Contract[gvss,gvss,\[Lambda]3,\[Lambda]4,{{9,12},{6,13},{2,8},{1,4}}],{3,2,1,4,5}]
+				-xi Transpose[Contract[gvss,gvss,\[Lambda]3,\[Lambda]4,{{9,12},{6,13},{2,8},{1,4}}],{3,4,1,2,5}]
+				-xi Transpose[Contract[gvss,gvss,\[Lambda]3,\[Lambda]4,{{9,12},{6,13},{2,8},{1,4}}],{3,5,1,2,4}]
+				-xi Transpose[Contract[gvss,gvss,\[Lambda]3,\[Lambda]4,{{9,12},{6,13},{2,8},{1,4}}],{4,2,1,3,5}]
+				-xi Transpose[Contract[gvss,gvss,\[Lambda]3,\[Lambda]4,{{9,12},{6,13},{2,8},{1,4}}],{4,3,1,2,5}]
+				-xi Transpose[Contract[gvss,gvss,\[Lambda]3,\[Lambda]4,{{9,12},{6,13},{2,8},{1,4}}],{4,5,1,2,3}]
+				-xi Transpose[Contract[gvss,gvss,\[Lambda]3,\[Lambda]4,{{9,12},{6,13},{2,8},{1,4}}],{5,2,1,3,4}]
+				-xi Transpose[Contract[gvss,gvss,\[Lambda]3,\[Lambda]4,{{9,12},{6,13},{2,8},{1,4}}],{5,3,1,2,4}]
+				-xi Transpose[Contract[gvss,gvss,\[Lambda]3,\[Lambda]4,{{9,12},{6,13},{2,8},{1,4}}],{5,4,1,2,3}]
+				+xi Transpose[Contract[gvss,gvss,\[Lambda]3,\[Lambda]4,{{9,12},{6,13},{3,7},{1,4}}],{1,3,2,4,5}]
+				+xi Transpose[Contract[gvss,gvss,\[Lambda]3,\[Lambda]4,{{9,12},{6,13},{3,7},{1,4}}],{1,4,2,3,5}]
+				+xi Transpose[Contract[gvss,gvss,\[Lambda]3,\[Lambda]4,{{9,12},{6,13},{3,7},{1,4}}],{1,4,3,2,5}]
+				+xi Transpose[Contract[gvss,gvss,\[Lambda]3,\[Lambda]4,{{9,12},{6,13},{3,7},{1,4}}],{1,5,2,3,4}]
+				+xi Transpose[Contract[gvss,gvss,\[Lambda]3,\[Lambda]4,{{9,12},{6,13},{3,7},{1,4}}],{1,5,3,2,4}]
+				+xi Transpose[Contract[gvss,gvss,\[Lambda]3,\[Lambda]4,{{9,12},{6,13},{3,7},{1,4}}],{1,5,4,2,3}]
+				-xi Transpose[Contract[gvss,gvss,\[Lambda]3,\[Lambda]4,{{9,13},{5,7},{3,12},{1,4}}],{1,4,5,2,3}]
+				-xi Transpose[Contract[gvss,gvss,\[Lambda]3,\[Lambda]4,{{9,13},{5,7},{3,12},{1,4}}],{1,5,4,2,3}]
+				-xi Transpose[Contract[gvss,gvss,\[Lambda]3,\[Lambda]4,{{9,13},{5,7},{3,12},{1,4}}],{2,4,5,1,3}]
+				-xi Transpose[Contract[gvss,gvss,\[Lambda]3,\[Lambda]4,{{9,13},{5,7},{3,12},{1,4}}],{2,5,4,1,3}]
+				-xi Transpose[Contract[gvss,gvss,\[Lambda]3,\[Lambda]4,{{9,13},{5,7},{3,12},{1,4}}],{3,4,5,1,2}]
+				-xi Transpose[Contract[gvss,gvss,\[Lambda]3,\[Lambda]4,{{9,13},{5,7},{3,12},{1,4}}],{3,5,4,1,2}]
+				-xi Transpose[Contract[gvss,gvss,\[Lambda]3,\[Lambda]4,{{9,13},{5,8},{3,12},{1,4}}],{1,4,2,3,5}]
+				-xi Transpose[Contract[gvss,gvss,\[Lambda]3,\[Lambda]4,{{9,13},{5,8},{3,12},{1,4}}],{1,4,3,2,5}]
+				-xi Transpose[Contract[gvss,gvss,\[Lambda]3,\[Lambda]4,{{9,13},{5,8},{3,12},{1,4}}],{1,5,2,3,4}]
+				-xi Transpose[Contract[gvss,gvss,\[Lambda]3,\[Lambda]4,{{9,13},{5,8},{3,12},{1,4}}],{1,5,3,2,4}]
+				-xi Transpose[Contract[gvss,gvss,\[Lambda]3,\[Lambda]4,{{9,13},{5,8},{3,12},{1,4}}],{2,4,3,1,5}]
+				-xi Transpose[Contract[gvss,gvss,\[Lambda]3,\[Lambda]4,{{9,13},{5,8},{3,12},{1,4}}],{2,5,3,1,4}]
+				+xi Transpose[Contract[gvss,gvss,\[Lambda]3,\[Lambda]4,{{9,13},{6,7},{3,12},{1,4}}],{1,2,4,3,5}]
+				+xi Transpose[Contract[gvss,gvss,\[Lambda]3,\[Lambda]4,{{9,13},{6,7},{3,12},{1,4}}],{1,2,5,3,4}]
+				+xi Transpose[Contract[gvss,gvss,\[Lambda]3,\[Lambda]4,{{9,13},{6,7},{3,12},{1,4}}],{1,3,4,2,5}]
+				+xi Transpose[Contract[gvss,gvss,\[Lambda]3,\[Lambda]4,{{9,13},{6,7},{3,12},{1,4}}],{1,3,5,2,4}]
+				+xi Transpose[Contract[gvss,gvss,\[Lambda]3,\[Lambda]4,{{9,13},{6,7},{3,12},{1,4}}],{2,3,4,1,5}]
+				+xi Transpose[Contract[gvss,gvss,\[Lambda]3,\[Lambda]4,{{9,13},{6,7},{3,12},{1,4}}],{2,3,5,1,4}]
+				+xi Transpose[Contract[gvss,gvss,\[Lambda]3,\[Lambda]4,{{9,13},{6,8},{3,12},{1,4}}],{1,3,2,4,5}]
+				+xi Transpose[Contract[gvss,gvss,\[Lambda]3,\[Lambda]4,{{9,13},{6,12},{3,7},{1,4}}],{1,2,4,3,5}]
+				+xi Transpose[Contract[gvss,gvss,\[Lambda]3,\[Lambda]4,{{9,13},{6,12},{3,7},{1,4}}],{1,2,5,3,4}]
+				+xi Transpose[Contract[gvss,gvss,\[Lambda]3,\[Lambda]4,{{9,13},{6,12},{3,7},{1,4}}],{1,3,4,2,5}]
+				+xi Transpose[Contract[gvss,gvss,\[Lambda]3,\[Lambda]4,{{9,13},{6,12},{3,7},{1,4}}],{1,3,5,2,4}]
+				+xi Transpose[Contract[gvss,gvss,\[Lambda]3,\[Lambda]4,{{9,13},{6,12},{3,7},{1,4}}],{1,4,5,2,3}]
+				+xi Transpose[Contract[gvss,gvss,\[Lambda]3,\[Lambda]4,{{9,13},{6,12},{3,7},{1,4}}],{2,3,4,1,5}]
+				+xi Transpose[Contract[gvss,gvss,\[Lambda]3,\[Lambda]4,{{9,13},{6,12},{3,7},{1,4}}],{2,3,5,1,4}]
+				+xi Transpose[Contract[gvss,gvss,\[Lambda]3,\[Lambda]4,{{9,13},{6,12},{3,7},{1,4}}],{2,4,5,1,3}]
+				+xi Transpose[Contract[gvss,gvss,\[Lambda]3,\[Lambda]4,{{9,13},{6,12},{3,7},{1,4}}],{3,4,5,1,2}]
+				-xi^2 Transpose[Contract[HabijV,gvss,gvss,\[Lambda]3,{{9,11},{6,12},{2,5},{1,8}}],{1,2,4,3,5}]
+				-xi^2 Transpose[Contract[HabijV,gvss,gvss,\[Lambda]3,{{9,11},{6,12},{2,5},{1,8}}],{1,2,5,3,4}]
+				-xi^2 Transpose[Contract[HabijV,gvss,gvss,\[Lambda]3,{{9,11},{6,12},{2,5},{1,8}}],{1,3,4,2,5}]
+				-xi^2 Transpose[Contract[HabijV,gvss,gvss,\[Lambda]3,{{9,11},{6,12},{2,5},{1,8}}],{1,3,5,2,4}]
+				-xi^2 Transpose[Contract[HabijV,gvss,gvss,\[Lambda]3,{{9,11},{6,13},{2,5},{1,8}}],{1,2,5,4,3}]
+				-xi^2 Transpose[Contract[HabijV,gvss,gvss,\[Lambda]3,{{9,11},{6,13},{2,5},{1,8}}],{1,3,5,4,2}]
+				-xi^2 Transpose[Contract[HabijV,gvss,gvss,\[Lambda]3,{{9,11},{6,13},{2,5},{1,8}}],{1,4,5,2,3}]
+				-xi^2 Transpose[Contract[HabijV,gvss,gvss,\[Lambda]3,{{9,11},{6,13},{2,5},{1,8}}],{1,4,5,3,2}]
+				-xi^2 Transpose[Contract[HabijV,gvss,gvss,\[Lambda]3,{{9,11},{6,13},{2,5},{1,8}}],{1,5,4,2,3}]
+				-xi^2 Transpose[Contract[HabijV,gvss,gvss,\[Lambda]3,{{9,11},{6,13},{2,5},{1,8}}],{1,5,4,3,2}]
+				+xi^2 Transpose[Contract[HabijV,gvss,gvss,\[Lambda]3,{{9,11},{7,12},{2,5},{1,8}}],{1,4,3,2,5}]
+				+xi^2 Transpose[Contract[HabijV,gvss,gvss,\[Lambda]3,{{9,11},{7,12},{2,5},{1,8}}],{1,5,3,2,4}]
+				-xi^2 Transpose[Contract[HabijV,gvss,gvss,\[Lambda]3,{{9,12},{6,13},{2,5},{1,8}}],{2,3,5,4,1}]
+				-xi^2 Transpose[Contract[HabijV,gvss,gvss,\[Lambda]3,{{9,12},{6,13},{2,5},{1,8}}],{2,4,5,3,1}]
+				-xi^2 Transpose[Contract[HabijV,gvss,gvss,\[Lambda]3,{{9,12},{6,13},{2,5},{1,8}}],{2,5,4,3,1}]
+				-xi^2 Transpose[Contract[HabijV,gvss,gvss,\[Lambda]3,{{9,12},{6,13},{2,5},{1,8}}],{3,4,5,2,1}]
+				-xi^2 Transpose[Contract[HabijV,gvss,gvss,\[Lambda]3,{{9,12},{6,13},{2,5},{1,8}}],{3,5,4,2,1}]
+				+xi^2 Transpose[Contract[HabijV,gvss,gvss,\[Lambda]3,{{9,12},{7,13},{2,5},{1,8}}],{4,5,3,2,1}]
+				+xi^2 Transpose[Contract[HabijV,gvss,gvss,\[Lambda]3,{{10,11},{6,12},{2,5},{1,8}}],{2,3,4,1,5}]
+				+xi^2 Transpose[Contract[HabijV,gvss,gvss,\[Lambda]3,{{10,11},{6,12},{2,5},{1,8}}],{2,3,5,1,4}]
+				+xi^2 Transpose[Contract[HabijV,gvss,gvss,\[Lambda]3,{{10,11},{6,13},{2,5},{1,8}}],{2,4,5,1,3}]
+				+xi^2 Transpose[Contract[HabijV,gvss,gvss,\[Lambda]3,{{10,11},{6,13},{2,5},{1,8}}],{2,5,4,1,3}]
+				+xi^2 Transpose[Contract[HabijV,gvss,gvss,\[Lambda]3,{{10,11},{6,13},{2,5},{1,8}}],{3,4,5,1,2}]
+				+xi^2 Transpose[Contract[HabijV,gvss,gvss,\[Lambda]3,{{10,11},{6,13},{2,5},{1,8}}],{3,5,4,1,2}]
+				-xi^2 Transpose[Contract[HabijV,gvss,gvss,\[Lambda]3,{{10,11},{7,12},{2,5},{1,8}}],{2,4,3,1,5}]
+				-xi^2 Transpose[Contract[HabijV,gvss,gvss,\[Lambda]3,{{10,11},{7,12},{2,5},{1,8}}],{2,5,3,1,4}]
+				-xi^2 Transpose[Contract[HabijV,gvss,gvss,\[Lambda]3,{{10,11},{7,12},{2,5},{1,8}}],{3,4,2,1,5}]
+				-xi^2 Transpose[Contract[HabijV,gvss,gvss,\[Lambda]3,{{10,11},{7,12},{2,5},{1,8}}],{3,5,2,1,4}]
+				-xi^2 Transpose[Contract[HabijV,gvss,gvss,\[Lambda]3,{{10,11},{7,13},{2,5},{1,8}}],{4,5,2,1,3}]
+				-xi^2 Transpose[Contract[HabijV,gvss,gvss,\[Lambda]3,{{10,11},{7,13},{2,5},{1,8}}],{4,5,3,1,2}]
+				-xi^2 Transpose[Contract[gvss,gvss,\[Lambda]3,gvss,gvss,{{10,13},{7,12},{6,9},{3,15},{1,4}}],{2,3,4,1,5}]
+				-xi^2 Transpose[Contract[gvss,gvss,\[Lambda]3,gvss,gvss,{{10,13},{7,12},{6,9},{3,15},{1,4}}],{2,3,5,1,4}]
+				-xi^2 Transpose[Contract[gvss,gvss,\[Lambda]3,gvss,gvss,{{10,13},{7,12},{6,9},{3,15},{1,4}}],{2,4,3,1,5}]
+				-xi^2 Transpose[Contract[gvss,gvss,\[Lambda]3,gvss,gvss,{{10,13},{7,12},{6,9},{3,15},{1,4}}],{2,4,5,1,3}]
+				-xi^2 Transpose[Contract[gvss,gvss,\[Lambda]3,gvss,gvss,{{10,13},{7,12},{6,9},{3,15},{1,4}}],{2,5,3,1,4}]
+				-xi^2 Transpose[Contract[gvss,gvss,\[Lambda]3,gvss,gvss,{{10,13},{7,12},{6,9},{3,15},{1,4}}],{2,5,4,1,3}]
+				-xi^2 Transpose[Contract[gvss,gvss,\[Lambda]3,gvss,gvss,{{10,13},{7,12},{6,9},{3,15},{1,4}}],{3,4,2,1,5}]
+				-xi^2 Transpose[Contract[gvss,gvss,\[Lambda]3,gvss,gvss,{{10,13},{7,12},{6,9},{3,15},{1,4}}],{3,4,5,1,2}]
+				-xi^2 Transpose[Contract[gvss,gvss,\[Lambda]3,gvss,gvss,{{10,13},{7,12},{6,9},{3,15},{1,4}}],{3,5,2,1,4}]
+				-xi^2 Transpose[Contract[gvss,gvss,\[Lambda]3,gvss,gvss,{{10,13},{7,12},{6,9},{3,15},{1,4}}],{3,5,4,1,2}]
+				-xi^2 Transpose[Contract[gvss,gvss,\[Lambda]3,gvss,gvss,{{10,13},{7,12},{6,9},{3,15},{1,4}}],{4,5,2,1,3}]
+				-xi^2 Transpose[Contract[gvss,gvss,\[Lambda]3,gvss,gvss,{{10,13},{7,12},{6,15},{3,9},{1,4}}],{2,3,4,1,5}]
+				-xi^2 Transpose[Contract[gvss,gvss,\[Lambda]3,gvss,gvss,{{10,13},{7,12},{6,15},{3,9},{1,4}}],{2,3,5,1,4}]
+				-xi^2 Transpose[Contract[gvss,gvss,\[Lambda]3,gvss,gvss,{{10,13},{7,12},{6,15},{3,9},{1,4}}],{2,4,3,1,5}]
+				-xi^2 Transpose[Contract[gvss,gvss,\[Lambda]3,gvss,gvss,{{10,13},{7,12},{6,15},{3,9},{1,4}}],{2,4,5,1,3}]
+				-xi^2 Transpose[Contract[gvss,gvss,\[Lambda]3,gvss,gvss,{{10,13},{7,12},{6,15},{3,9},{1,4}}],{2,5,3,1,4}]
+				-xi^2 Transpose[Contract[gvss,gvss,\[Lambda]3,gvss,gvss,{{10,13},{7,12},{6,15},{3,9},{1,4}}],{2,5,4,1,3}]
+				-xi^2 Transpose[Contract[gvss,gvss,\[Lambda]3,gvss,gvss,{{10,13},{7,12},{6,15},{3,9},{1,4}}],{3,4,2,1,5}]
+				-xi^2 Transpose[Contract[gvss,gvss,\[Lambda]3,gvss,gvss,{{10,13},{7,12},{6,15},{3,9},{1,4}}],{3,4,5,1,2}]
+				-xi^2 Transpose[Contract[gvss,gvss,\[Lambda]3,gvss,gvss,{{10,13},{7,12},{6,15},{3,9},{1,4}}],{3,5,2,1,4}]
+				-xi^2 Transpose[Contract[gvss,gvss,\[Lambda]3,gvss,gvss,{{10,13},{7,12},{6,15},{3,9},{1,4}}],{3,5,4,1,2}]
+				-xi^2 Transpose[Contract[gvss,gvss,\[Lambda]3,gvss,gvss,{{10,13},{7,12},{6,15},{3,9},{1,4}}],{4,5,2,1,3}]
+				-xi^2 Transpose[Contract[gvss,gvss,\[Lambda]3,gvss,gvss,{{10,13},{8,12},{6,9},{3,15},{1,4}}],{4,5,3,1,2}]
+				-xi^2 Transpose[Contract[gvss,gvss,\[Lambda]3,gvss,gvss,{{10,13},{8,12},{6,15},{3,9},{1,4}}],{4,5,3,1,2}]
+				+xi^2 Transpose[Contract[gvss,gvss,\[Lambda]3,gvss,gvss,{{10,13},{8,15},{5,12},{3,9},{1,4}}],{2,4,5,1,3}]
+				+xi^2 Transpose[Contract[gvss,gvss,\[Lambda]3,gvss,gvss,{{10,13},{8,15},{5,12},{3,9},{1,4}}],{2,5,3,1,4}]
+				+xi^2 Transpose[Contract[gvss,gvss,\[Lambda]3,gvss,gvss,{{10,13},{8,15},{5,12},{3,9},{1,4}}],{2,5,4,1,3}]
+				+xi^2 Transpose[Contract[gvss,gvss,\[Lambda]3,gvss,gvss,{{10,13},{8,15},{5,12},{3,9},{1,4}}],{3,4,5,1,2}]
+				+xi^2 Transpose[Contract[gvss,gvss,\[Lambda]3,gvss,gvss,{{10,13},{8,15},{5,12},{3,9},{1,4}}],{3,5,2,1,4}]
+				+xi^2 Transpose[Contract[gvss,gvss,\[Lambda]3,gvss,gvss,{{10,13},{8,15},{5,12},{3,9},{1,4}}],{3,5,4,1,2}]
+				+xi^2 Transpose[Contract[gvss,gvss,\[Lambda]3,gvss,gvss,{{10,13},{8,15},{6,9},{2,12},{1,4}}],{2,3,4,1,5}]
+				+xi^2 Transpose[Contract[gvss,gvss,\[Lambda]3,gvss,gvss,{{10,13},{8,15},{6,9},{2,12},{1,4}}],{2,3,5,1,4}]
+				+xi^2 Transpose[Contract[gvss,gvss,\[Lambda]3,gvss,gvss,{{10,13},{8,15},{6,9},{2,12},{1,4}}],{2,4,3,1,5}]
+				+xi^2 Transpose[Contract[gvss,gvss,\[Lambda]3,gvss,gvss,{{10,13},{8,15},{6,9},{2,12},{1,4}}],{2,4,5,1,3}]
+				+xi^2 Transpose[Contract[gvss,gvss,\[Lambda]3,gvss,gvss,{{10,13},{8,15},{6,9},{2,12},{1,4}}],{2,5,3,1,4}]
+				+xi^2 Transpose[Contract[gvss,gvss,\[Lambda]3,gvss,gvss,{{10,13},{8,15},{6,9},{2,12},{1,4}}],{2,5,4,1,3}]
+				+xi^2 Transpose[Contract[gvss,gvss,\[Lambda]3,gvss,gvss,{{10,13},{8,15},{6,9},{2,12},{1,4}}],{3,2,4,1,5}]
+				+xi^2 Transpose[Contract[gvss,gvss,\[Lambda]3,gvss,gvss,{{10,13},{8,15},{6,9},{2,12},{1,4}}],{3,2,5,1,4}]
+				+xi^2 Transpose[Contract[gvss,gvss,\[Lambda]3,gvss,gvss,{{10,13},{8,15},{6,9},{2,12},{1,4}}],{3,4,2,1,5}]
+				+xi^2 Transpose[Contract[gvss,gvss,\[Lambda]3,gvss,gvss,{{10,13},{8,15},{6,9},{2,12},{1,4}}],{3,5,2,1,4}]
+				+xi^2 Transpose[Contract[gvss,gvss,\[Lambda]3,gvss,gvss,{{10,13},{8,15},{6,9},{2,12},{1,4}}],{4,2,3,1,5}]
+				+xi^2 Transpose[Contract[gvss,gvss,\[Lambda]3,gvss,gvss,{{10,13},{8,15},{6,9},{2,12},{1,4}}],{4,3,2,1,5}]
+				+xi^2 Transpose[Contract[gvss,gvss,\[Lambda]3,gvss,gvss,{{10,13},{8,15},{6,9},{2,12},{1,4}}],{4,5,2,1,3}]
+				+xi^2 Transpose[Contract[gvss,gvss,\[Lambda]3,gvss,gvss,{{10,13},{8,15},{6,9},{2,12},{1,4}}],{4,5,3,1,2}]
+				+xi^2 Transpose[Contract[gvss,gvss,\[Lambda]3,gvss,gvss,{{10,13},{8,15},{6,9},{2,12},{1,4}}],{5,4,2,1,3}]
+				+xi^2 Transpose[Contract[gvss,gvss,\[Lambda]3,gvss,gvss,{{10,13},{8,15},{6,9},{2,12},{1,4}}],{5,4,3,1,2}]
+				-xi^2 Transpose[Contract[gvss,gvss,\[Lambda]3,gvss,gvss,{{10,13},{8,15},{6,9},{3,12},{1,4}}],{3,4,5,1,2}]
+				-xi^2 Transpose[Contract[gvss,gvss,\[Lambda]3,gvss,gvss,{{10,13},{8,15},{6,9},{3,12},{1,4}}],{3,5,4,1,2}]
+				-xi^2 Transpose[Contract[gvss,gvss,\[Lambda]3,gvss,gvss,{{10,13},{9,11},{6,15},{2,8},{1,4}}],{2,3,1,4,5}]
+				-xi^2 Transpose[Contract[gvss,gvss,\[Lambda]3,gvss,gvss,{{10,13},{9,11},{6,15},{2,8},{1,4}}],{2,3,1,5,4}]
+				-xi^2 Transpose[Contract[gvss,gvss,\[Lambda]3,gvss,gvss,{{10,13},{9,11},{6,15},{2,8},{1,4}}],{3,2,1,4,5}]
+				-xi^2 Transpose[Contract[gvss,gvss,\[Lambda]3,gvss,gvss,{{10,13},{9,11},{6,15},{2,8},{1,4}}],{3,2,1,5,4}]
+				+xi^2 Transpose[Contract[gvss,gvss,\[Lambda]3,gvss,gvss,{{10,13},{9,12},{6,15},{2,8},{1,4}}],{2,4,1,3,5}]
+				+xi^2 Transpose[Contract[gvss,gvss,\[Lambda]3,gvss,gvss,{{10,13},{9,12},{6,15},{2,8},{1,4}}],{2,5,1,3,4}]
+				-xi^2 Transpose[Contract[gvss,gvss,\[Lambda]3,gvss,gvss,{{10,13},{9,14},{6,12},{2,8},{1,4}}],{2,4,1,3,5}]
+				-xi^2 Transpose[Contract[gvss,gvss,\[Lambda]3,gvss,gvss,{{10,13},{9,14},{6,12},{2,8},{1,4}}],{2,5,1,3,4}]
+				-xi^2 Transpose[Contract[gvss,gvss,\[Lambda]3,gvss,gvss,{{10,13},{9,14},{6,12},{2,8},{1,4}}],{3,4,1,2,5}]
+				-xi^2 Transpose[Contract[gvss,gvss,\[Lambda]3,gvss,gvss,{{10,13},{9,14},{6,12},{2,8},{1,4}}],{3,5,1,2,4}]
+				-xi^2 Transpose[Contract[gvss,gvss,\[Lambda]3,gvss,gvss,{{10,13},{9,14},{6,12},{2,8},{1,4}}],{4,2,1,3,5}]
+				-xi^2 Transpose[Contract[gvss,gvss,\[Lambda]3,gvss,gvss,{{10,13},{9,14},{6,12},{2,8},{1,4}}],{4,3,1,2,5}]
+			) Zb[3,0]
+			+(
+				+Contract[\[Lambda]3,\[Lambda]3,\[Lambda]3,\[Lambda]4,{{9,13},{6,8},{3,12},{2,4}}]
+				+Contract[\[Lambda]3,\[Lambda]3,\[Lambda]3,\[Lambda]4,{{9,13},{6,12},{3,8},{2,4}}]
+				-xi Contract[\[Lambda]3,\[Lambda]3,\[Lambda]3,gvss,gvss,{{10,13},{9,12},{6,15},{3,8},{2,4}}]
+				+xi Contract[\[Lambda]3,\[Lambda]3,\[Lambda]3,gvss,gvss,{{10,13},{9,15},{6,8},{3,11},{2,4}}]
+				-xi Contract[\[Lambda]3,\[Lambda]3,\[Lambda]3,gvss,gvss,{{10,13},{9,15},{6,12},{3,8},{2,4}}]
+				+Transpose[Contract[\[Lambda]3,\[Lambda]3,\[Lambda]3,\[Lambda]4,{{9,13},{5,7},{3,12},{1,4}}],{2,4,5,1,3}]
+				+Transpose[Contract[\[Lambda]3,\[Lambda]3,\[Lambda]3,\[Lambda]4,{{9,13},{5,7},{3,12},{1,4}}],{2,5,4,1,3}]
+				+Transpose[Contract[\[Lambda]3,\[Lambda]3,\[Lambda]3,\[Lambda]4,{{9,13},{5,7},{3,12},{1,4}}],{3,4,5,1,2}]
+				+Transpose[Contract[\[Lambda]3,\[Lambda]3,\[Lambda]3,\[Lambda]4,{{9,13},{5,7},{3,12},{1,4}}],{3,5,4,1,2}]
+				+Transpose[Contract[\[Lambda]3,\[Lambda]3,\[Lambda]3,\[Lambda]4,{{9,13},{5,7},{3,12},{2,4}}],{1,4,5,2,3}]
+				+Transpose[Contract[\[Lambda]3,\[Lambda]3,\[Lambda]3,\[Lambda]4,{{9,13},{5,7},{3,12},{2,4}}],{1,5,4,2,3}]
+				+Transpose[Contract[\[Lambda]3,\[Lambda]3,\[Lambda]3,\[Lambda]4,{{9,13},{5,8},{3,12},{1,4}}],{2,4,3,1,5}]
+				+Transpose[Contract[\[Lambda]3,\[Lambda]3,\[Lambda]3,\[Lambda]4,{{9,13},{5,8},{3,12},{1,4}}],{2,5,3,1,4}]
+				+Transpose[Contract[\[Lambda]3,\[Lambda]3,\[Lambda]3,\[Lambda]4,{{9,13},{5,8},{3,12},{2,4}}],{1,4,2,3,5}]
+				+Transpose[Contract[\[Lambda]3,\[Lambda]3,\[Lambda]3,\[Lambda]4,{{9,13},{5,8},{3,12},{2,4}}],{1,4,3,2,5}]
+				+Transpose[Contract[\[Lambda]3,\[Lambda]3,\[Lambda]3,\[Lambda]4,{{9,13},{5,8},{3,12},{2,4}}],{1,5,2,3,4}]
+				+Transpose[Contract[\[Lambda]3,\[Lambda]3,\[Lambda]3,\[Lambda]4,{{9,13},{5,8},{3,12},{2,4}}],{1,5,3,2,4}]
+				+Transpose[Contract[\[Lambda]3,\[Lambda]3,\[Lambda]3,\[Lambda]4,{{9,13},{6,7},{3,12},{1,4}}],{2,3,4,1,5}]
+				+Transpose[Contract[\[Lambda]3,\[Lambda]3,\[Lambda]3,\[Lambda]4,{{9,13},{6,7},{3,12},{1,4}}],{2,3,5,1,4}]
+				+Transpose[Contract[\[Lambda]3,\[Lambda]3,\[Lambda]3,\[Lambda]4,{{9,13},{6,7},{3,12},{2,4}}],{1,2,4,3,5}]
+				+Transpose[Contract[\[Lambda]3,\[Lambda]3,\[Lambda]3,\[Lambda]4,{{9,13},{6,7},{3,12},{2,4}}],{1,2,5,3,4}]
+				+Transpose[Contract[\[Lambda]3,\[Lambda]3,\[Lambda]3,\[Lambda]4,{{9,13},{6,7},{3,12},{2,4}}],{1,3,4,2,5}]
+				+Transpose[Contract[\[Lambda]3,\[Lambda]3,\[Lambda]3,\[Lambda]4,{{9,13},{6,7},{3,12},{2,4}}],{1,3,5,2,4}]
+				+Transpose[Contract[\[Lambda]3,\[Lambda]3,\[Lambda]3,\[Lambda]4,{{9,13},{6,8},{3,12},{2,4}}],{1,3,2,4,5}]
+				+Transpose[Contract[\[Lambda]3,\[Lambda]3,\[Lambda]3,\[Lambda]4,{{9,13},{6,12},{3,7},{1,4}}],{2,3,4,1,5}]
+				+Transpose[Contract[\[Lambda]3,\[Lambda]3,\[Lambda]3,\[Lambda]4,{{9,13},{6,12},{3,7},{1,4}}],{2,3,5,1,4}]
+				+Transpose[Contract[\[Lambda]3,\[Lambda]3,\[Lambda]3,\[Lambda]4,{{9,13},{6,12},{3,7},{1,4}}],{2,4,5,1,3}]
+				+Transpose[Contract[\[Lambda]3,\[Lambda]3,\[Lambda]3,\[Lambda]4,{{9,13},{6,12},{3,7},{1,4}}],{3,4,5,1,2}]
+				+Transpose[Contract[\[Lambda]3,\[Lambda]3,\[Lambda]3,\[Lambda]4,{{9,13},{6,12},{3,7},{2,4}}],{1,2,4,3,5}]
+				+Transpose[Contract[\[Lambda]3,\[Lambda]3,\[Lambda]3,\[Lambda]4,{{9,13},{6,12},{3,7},{2,4}}],{1,2,5,3,4}]
+				+Transpose[Contract[\[Lambda]3,\[Lambda]3,\[Lambda]3,\[Lambda]4,{{9,13},{6,12},{3,7},{2,4}}],{1,3,4,2,5}]
+				+Transpose[Contract[\[Lambda]3,\[Lambda]3,\[Lambda]3,\[Lambda]4,{{9,13},{6,12},{3,7},{2,4}}],{1,3,5,2,4}]
+				+Transpose[Contract[\[Lambda]3,\[Lambda]3,\[Lambda]3,\[Lambda]4,{{9,13},{6,12},{3,7},{2,4}}],{1,4,5,2,3}]
+				-xi Transpose[Contract[\[Lambda]3,\[Lambda]3,\[Lambda]3,gvss,gvss,{{10,13},{6,8},{4,12},{3,9},{2,15}}],{2,4,5,1,3}]
+				-xi Transpose[Contract[\[Lambda]3,\[Lambda]3,\[Lambda]3,gvss,gvss,{{10,13},{6,8},{4,12},{3,9},{2,15}}],{2,5,4,1,3}]
+				-xi Transpose[Contract[\[Lambda]3,\[Lambda]3,\[Lambda]3,gvss,gvss,{{10,13},{6,8},{4,12},{3,9},{2,15}}],{3,4,5,1,2}]
+				-xi Transpose[Contract[\[Lambda]3,\[Lambda]3,\[Lambda]3,gvss,gvss,{{10,13},{6,8},{4,12},{3,9},{2,15}}],{3,5,4,1,2}]
+				-xi Transpose[Contract[\[Lambda]3,\[Lambda]3,\[Lambda]3,gvss,gvss,{{10,13},{6,9},{5,15},{3,8},{1,12}}],{2,3,4,1,5}]
+				-xi Transpose[Contract[\[Lambda]3,\[Lambda]3,\[Lambda]3,gvss,gvss,{{10,13},{6,9},{5,15},{3,8},{1,12}}],{2,3,5,1,4}]
+				-xi Transpose[Contract[\[Lambda]3,\[Lambda]3,\[Lambda]3,gvss,gvss,{{10,13},{6,9},{5,15},{3,8},{1,12}}],{2,4,5,1,3}]
+				-xi Transpose[Contract[\[Lambda]3,\[Lambda]3,\[Lambda]3,gvss,gvss,{{10,13},{6,9},{5,15},{3,8},{1,12}}],{3,2,4,1,5}]
+				-xi Transpose[Contract[\[Lambda]3,\[Lambda]3,\[Lambda]3,gvss,gvss,{{10,13},{6,9},{5,15},{3,8},{1,12}}],{3,2,5,1,4}]
+				-xi Transpose[Contract[\[Lambda]3,\[Lambda]3,\[Lambda]3,gvss,gvss,{{10,13},{6,9},{5,15},{3,8},{1,12}}],{4,2,3,1,5}]
+				-xi Transpose[Contract[\[Lambda]3,\[Lambda]3,\[Lambda]3,gvss,gvss,{{10,13},{6,9},{5,15},{3,8},{2,12}}],{3,4,5,1,2}]
+				+xi Transpose[Contract[\[Lambda]3,\[Lambda]3,\[Lambda]3,gvss,gvss,{{10,13},{6,15},{5,9},{3,7},{2,11}}],{1,2,4,3,5}]
+				+xi Transpose[Contract[\[Lambda]3,\[Lambda]3,\[Lambda]3,gvss,gvss,{{10,13},{6,15},{5,9},{3,7},{2,11}}],{1,2,5,3,4}]
+				+xi Transpose[Contract[\[Lambda]3,\[Lambda]3,\[Lambda]3,gvss,gvss,{{10,13},{6,15},{5,9},{3,7},{2,11}}],{1,2,5,4,3}]
+				+xi Transpose[Contract[\[Lambda]3,\[Lambda]3,\[Lambda]3,gvss,gvss,{{10,13},{6,15},{5,9},{3,7},{2,11}}],{1,3,4,2,5}]
+				+xi Transpose[Contract[\[Lambda]3,\[Lambda]3,\[Lambda]3,gvss,gvss,{{10,13},{6,15},{5,9},{3,7},{2,11}}],{1,3,5,2,4}]
+				+xi Transpose[Contract[\[Lambda]3,\[Lambda]3,\[Lambda]3,gvss,gvss,{{10,13},{6,15},{5,9},{3,7},{2,11}}],{1,3,5,4,2}]
+				-xi Transpose[Contract[\[Lambda]3,\[Lambda]3,\[Lambda]3,gvss,gvss,{{10,13},{7,12},{5,9},{3,6},{2,15}}],{2,3,5,1,4}]
+				-xi Transpose[Contract[\[Lambda]3,\[Lambda]3,\[Lambda]3,gvss,gvss,{{10,13},{7,12},{5,15},{3,6},{2,9}}],{2,3,5,1,4}]
+				-xi Transpose[Contract[\[Lambda]3,\[Lambda]3,\[Lambda]3,gvss,gvss,{{10,13},{8,15},{4,12},{3,9},{2,6}}],{2,4,5,1,3}]
+				-xi Transpose[Contract[\[Lambda]3,\[Lambda]3,\[Lambda]3,gvss,gvss,{{10,13},{8,15},{4,12},{3,9},{2,6}}],{2,5,4,1,3}]
+				-xi Transpose[Contract[\[Lambda]3,\[Lambda]3,\[Lambda]3,gvss,gvss,{{10,13},{8,15},{4,12},{3,9},{2,6}}],{3,4,5,1,2}]
+				-xi Transpose[Contract[\[Lambda]3,\[Lambda]3,\[Lambda]3,gvss,gvss,{{10,13},{8,15},{4,12},{3,9},{2,6}}],{3,5,4,1,2}]
+				-xi Transpose[Contract[\[Lambda]3,\[Lambda]3,\[Lambda]3,gvss,gvss,{{10,13},{8,15},{6,9},{3,5},{1,12}}],{2,3,4,1,5}]
+				-xi Transpose[Contract[\[Lambda]3,\[Lambda]3,\[Lambda]3,gvss,gvss,{{10,13},{8,15},{6,9},{3,5},{1,12}}],{2,3,5,1,4}]
+				-xi Transpose[Contract[\[Lambda]3,\[Lambda]3,\[Lambda]3,gvss,gvss,{{10,13},{8,15},{6,9},{3,5},{1,12}}],{2,4,5,1,3}]
+				-xi Transpose[Contract[\[Lambda]3,\[Lambda]3,\[Lambda]3,gvss,gvss,{{10,13},{8,15},{6,9},{3,5},{1,12}}],{3,2,4,1,5}]
+				-xi Transpose[Contract[\[Lambda]3,\[Lambda]3,\[Lambda]3,gvss,gvss,{{10,13},{8,15},{6,9},{3,5},{1,12}}],{3,2,5,1,4}]
+				-xi Transpose[Contract[\[Lambda]3,\[Lambda]3,\[Lambda]3,gvss,gvss,{{10,13},{8,15},{6,9},{3,5},{1,12}}],{4,2,3,1,5}]
+				-xi Transpose[Contract[\[Lambda]3,\[Lambda]3,\[Lambda]3,gvss,gvss,{{10,13},{8,15},{6,9},{3,5},{2,12}}],{3,4,5,1,2}]
+				+xi Transpose[Contract[\[Lambda]3,\[Lambda]3,\[Lambda]3,gvss,gvss,{{10,13},{9,12},{6,8},{3,14},{2,4}}],{1,2,4,3,5}]
+				+xi Transpose[Contract[\[Lambda]3,\[Lambda]3,\[Lambda]3,gvss,gvss,{{10,13},{9,12},{6,8},{3,14},{2,4}}],{1,2,5,3,4}]
+				+xi Transpose[Contract[\[Lambda]3,\[Lambda]3,\[Lambda]3,gvss,gvss,{{10,13},{9,12},{6,8},{3,14},{2,4}}],{1,3,4,2,5}]
+				+xi Transpose[Contract[\[Lambda]3,\[Lambda]3,\[Lambda]3,gvss,gvss,{{10,13},{9,12},{6,8},{3,14},{2,4}}],{1,3,5,2,4}]
+				+xi Transpose[Contract[\[Lambda]3,\[Lambda]3,\[Lambda]3,gvss,gvss,{{10,13},{9,12},{6,8},{3,14},{2,4}}],{1,4,2,3,5}]
+				+xi Transpose[Contract[\[Lambda]3,\[Lambda]3,\[Lambda]3,gvss,gvss,{{10,13},{9,12},{6,8},{3,14},{2,4}}],{1,4,3,2,5}]
+				-xi Transpose[Contract[\[Lambda]3,\[Lambda]3,\[Lambda]3,gvss,gvss,{{10,13},{9,12},{6,15},{3,7},{2,4}}],{1,2,4,3,5}]
+				-xi Transpose[Contract[\[Lambda]3,\[Lambda]3,\[Lambda]3,gvss,gvss,{{10,13},{9,12},{6,15},{3,7},{2,4}}],{1,2,5,3,4}]
+				-xi Transpose[Contract[\[Lambda]3,\[Lambda]3,\[Lambda]3,gvss,gvss,{{10,13},{9,12},{6,15},{3,7},{2,4}}],{1,3,4,2,5}]
+				-xi Transpose[Contract[\[Lambda]3,\[Lambda]3,\[Lambda]3,gvss,gvss,{{10,13},{9,12},{6,15},{3,7},{2,4}}],{1,3,5,2,4}]
+				-xi Transpose[Contract[\[Lambda]3,\[Lambda]3,\[Lambda]3,gvss,gvss,{{10,13},{9,12},{6,15},{3,7},{2,4}}],{1,4,5,2,3}]
+				+xi Transpose[Contract[\[Lambda]3,\[Lambda]3,\[Lambda]3,gvss,gvss,{{10,13},{9,15},{6,8},{3,4},{2,11}}],{1,4,5,2,3}]
+				+xi Transpose[Contract[\[Lambda]3,\[Lambda]3,\[Lambda]3,gvss,gvss,{{10,13},{9,15},{6,8},{3,4},{2,11}}],{1,4,5,3,2}]
+				+xi Transpose[Contract[\[Lambda]3,\[Lambda]3,\[Lambda]3,gvss,gvss,{{10,13},{9,15},{6,8},{3,4},{2,11}}],{1,5,4,2,3}]
+				+xi Transpose[Contract[\[Lambda]3,\[Lambda]3,\[Lambda]3,gvss,gvss,{{10,13},{9,15},{6,8},{3,4},{2,11}}],{1,5,4,3,2}]
+				+xi Transpose[Contract[\[Lambda]3,\[Lambda]3,\[Lambda]3,gvss,gvss,{{10,13},{9,15},{6,8},{3,5},{2,11}}],{1,3,4,2,5}]
+				+xi Transpose[Contract[\[Lambda]3,\[Lambda]3,\[Lambda]3,gvss,gvss,{{10,13},{9,15},{6,8},{3,5},{2,11}}],{1,3,5,2,4}]
+				+xi Transpose[Contract[\[Lambda]3,\[Lambda]3,\[Lambda]3,gvss,gvss,{{10,13},{9,15},{6,8},{3,11},{2,4}}],{1,2,3,5,4}]
+				+xi Transpose[Contract[\[Lambda]3,\[Lambda]3,\[Lambda]3,gvss,gvss,{{10,13},{9,15},{6,8},{3,11},{2,4}}],{1,3,2,4,5}]
+				+xi Transpose[Contract[\[Lambda]3,\[Lambda]3,\[Lambda]3,gvss,gvss,{{10,13},{9,15},{6,8},{3,11},{2,4}}],{1,3,2,5,4}]
+				-xi Transpose[Contract[\[Lambda]3,\[Lambda]3,\[Lambda]3,gvss,gvss,{{10,13},{9,15},{6,8},{3,12},{2,4}}],{1,2,4,3,5}]
+				-xi Transpose[Contract[\[Lambda]3,\[Lambda]3,\[Lambda]3,gvss,gvss,{{10,13},{9,15},{6,8},{3,12},{2,4}}],{1,2,5,3,4}]
+				-xi Transpose[Contract[\[Lambda]3,\[Lambda]3,\[Lambda]3,gvss,gvss,{{10,13},{9,15},{6,12},{3,7},{2,4}}],{1,2,4,3,5}]
+				-xi Transpose[Contract[\[Lambda]3,\[Lambda]3,\[Lambda]3,gvss,gvss,{{10,13},{9,15},{6,12},{3,7},{2,4}}],{1,2,5,3,4}]
+				-xi Transpose[Contract[\[Lambda]3,\[Lambda]3,\[Lambda]3,gvss,gvss,{{10,13},{9,15},{6,12},{3,7},{2,4}}],{1,3,4,2,5}]
+				-xi Transpose[Contract[\[Lambda]3,\[Lambda]3,\[Lambda]3,gvss,gvss,{{10,13},{9,15},{6,12},{3,7},{2,4}}],{1,3,5,2,4}]
+				-xi Transpose[Contract[\[Lambda]3,\[Lambda]3,\[Lambda]3,gvss,gvss,{{10,13},{9,15},{6,12},{3,7},{2,4}}],{1,4,5,2,3}]
+			) Zb[4,0]
+			+(
+				-Transpose[Contract[\[Lambda]3,\[Lambda]3,\[Lambda]3,\[Lambda]3,\[Lambda]3,{{11,13},{6,8},{4,12},{3,9},{2,15}}],{2,4,5,1,3}]
+				-Transpose[Contract[\[Lambda]3,\[Lambda]3,\[Lambda]3,\[Lambda]3,\[Lambda]3,{{11,13},{6,8},{4,12},{3,9},{2,15}}],{2,5,4,1,3}]
+				-Transpose[Contract[\[Lambda]3,\[Lambda]3,\[Lambda]3,\[Lambda]3,\[Lambda]3,{{11,13},{6,8},{4,12},{3,9},{2,15}}],{3,4,5,1,2}]
+				-Transpose[Contract[\[Lambda]3,\[Lambda]3,\[Lambda]3,\[Lambda]3,\[Lambda]3,{{11,13},{6,8},{4,12},{3,9},{2,15}}],{3,5,4,1,2}]
+				-Transpose[Contract[\[Lambda]3,\[Lambda]3,\[Lambda]3,\[Lambda]3,\[Lambda]3,{{11,13},{6,9},{5,15},{3,8},{2,12}}],{3,4,5,1,2}]
+				-Transpose[Contract[\[Lambda]3,\[Lambda]3,\[Lambda]3,\[Lambda]3,\[Lambda]3,{{11,13},{7,12},{5,9},{3,6},{2,15}}],{2,3,5,1,4}]
+				-Transpose[Contract[\[Lambda]3,\[Lambda]3,\[Lambda]3,\[Lambda]3,\[Lambda]3,{{11,13},{7,12},{5,15},{3,6},{2,9}}],{2,3,5,1,4}]
+				-Transpose[Contract[\[Lambda]3,\[Lambda]3,\[Lambda]3,\[Lambda]3,\[Lambda]3,{{11,13},{8,15},{4,12},{3,9},{2,6}}],{2,4,5,1,3}]
+				-Transpose[Contract[\[Lambda]3,\[Lambda]3,\[Lambda]3,\[Lambda]3,\[Lambda]3,{{11,13},{8,15},{4,12},{3,9},{2,6}}],{2,5,4,1,3}]
+				-Transpose[Contract[\[Lambda]3,\[Lambda]3,\[Lambda]3,\[Lambda]3,\[Lambda]3,{{11,13},{8,15},{4,12},{3,9},{2,6}}],{3,4,5,1,2}]
+				-Transpose[Contract[\[Lambda]3,\[Lambda]3,\[Lambda]3,\[Lambda]3,\[Lambda]3,{{11,13},{8,15},{4,12},{3,9},{2,6}}],{3,5,4,1,2}]
+				-Transpose[Contract[\[Lambda]3,\[Lambda]3,\[Lambda]3,\[Lambda]3,\[Lambda]3,{{11,13},{8,15},{6,9},{3,5},{2,12}}],{3,4,5,1,2}]
+			) Zb[5,0],
 			
 			True, "NOT ALLOWED X VALUE"
 			];
