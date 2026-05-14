@@ -889,7 +889,7 @@ V4D2F[x_]:=Module[{T},
 				-34 Contract[gvff,gvff,gvff,gvff,{{6,11},{5,9},{3,8},{2,12}}]
 				+29 N Contract[gvff,gvff,gvff,gvff,{{6,11},{5,9},{3,8},{2,12}}]
 				-5 N^2 Contract[gvff,gvff,gvff,gvff,{{6,11},{5,9},{3,8},{2,12}}]
-				-\60 Contract[gvff,gvff,gvff,gvff,{{8,12},{5,9},{3,11},{2,6}}]
+				-60 Contract[gvff,gvff,gvff,gvff,{{8,12},{5,9},{3,11},{2,6}}]
 				+42 N Contract[gvff,gvff,gvff,gvff,{{8,12},{5,9},{3,11},{2,6}}]
 				-6 N^2 Contract[gvff,gvff,gvff,gvff,{{8,12},{5,9},{3,11},{2,6}}]
 				-\78 Contract[gvff,gvff,gvff,gvff,{{8,12},{6,11},{3,5},{2,9}}]
@@ -898,7 +898,7 @@ V4D2F[x_]:=Module[{T},
 				-\60 Contract[gvff,gvff,gvff,gvff,{{9,11},{5,12},{3,8},{2,6}}]
 				+42 N Contract[gvff,gvff,gvff,gvff,{{9,11},{5,12},{3,8},{2,6}}]
 				-6 N^2 Contract[gvff,gvff,gvff,gvff,{{9,11},{5,12},{3,8},{2,6}}]
-				-\78 Contract[gvff,gvff,gvff,gvff,{{9,11},{6,8},{3,5},{2,12}}]
+				-78 Contract[gvff,gvff,gvff,gvff,{{9,11},{6,8},{3,5},{2,12}}]
 				+57 N Contract[gvff,gvff,gvff,gvff,{{9,11},{6,8},{3,5},{2,12}}]
 				-9 N^2 Contract[gvff,gvff,gvff,gvff,{{9,11},{6,8},{3,5},{2,12}}]
 			) Zf[3,0],
