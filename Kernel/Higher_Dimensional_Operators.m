@@ -690,16 +690,31 @@ V3D3F[x_]:=Module[{T},
 	T=
 		Which[
 			x==1,
-			1/15 (14 Transpose[Contract[gvff,gvff,gvff,{{5,9},{3,8},{2,6}}],{3,1,2}]-9 N Transpose[Contract[gvff,gvff,gvff,{{5,9},{3,8},{2,6}}],{3,1,2}]+16 Transpose[Contract[gvff,gvff,gvff,{{6,8},{3,5},{2,9}}],{3,1,2}]-\
-			16 N Transpose[Contract[gvff,gvff,gvff,{{6,8},{3,5},{2,9}}],{3,1,2}]+5 N^2 Transpose[Contract[gvff,gvff,gvff,{{6,8},{3,5},{2,9}}],{3,1,2}]) Zf[3,0],
+			1/15 (
+				+14 Transpose[Contract[gvff,gvff,gvff,{{5,9},{3,8},{2,6}}],{3,1,2}]
+				-9 N Transpose[Contract[gvff,gvff,gvff,{{5,9},{3,8},{2,6}}],{3,1,2}]
+				+16 Transpose[Contract[gvff,gvff,gvff,{{6,8},{3,5},{2,9}}],{3,1,2}]
+				-16 N Transpose[Contract[gvff,gvff,gvff,{{6,8},{3,5},{2,9}}],{3,1,2}]
+				+5 N^2 Transpose[Contract[gvff,gvff,gvff,{{6,8},{3,5},{2,9}}],{3,1,2}]
+			) Zf[3,0],
 						
 			x==2,
-			1/30 (14 Transpose[Contract[gvff,gvff,gvff,{{5,9},{3,8},{2,6}}],{3,1,2}]-29 N Transpose[Contract[gvff,gvff,gvff,{{5,9},{3,8},{2,6}}],{3,1,2}]+5 N^2 Transpose[Contract[gvff,gvff,gvff,{{5,9},{3,8},{2,6}}],{3,1,2}]-\
-			44 Transpose[Contract[gvff,gvff,gvff,{{6,8},{3,5},{2,9}}],{3,1,2}]+9 N Transpose[Contract[gvff,gvff,gvff,{{6,8},{3,5},{2,9}}],{3,1,2}]+5 N^2 Transpose[Contract[gvff,gvff,gvff,{{6,8},{3,5},{2,9}}],{3,1,2}]) Zf[3,0],
+			1/30 (
+				+14 Transpose[Contract[gvff,gvff,gvff,{{5,9},{3,8},{2,6}}],{3,1,2}]
+				-29 N Transpose[Contract[gvff,gvff,gvff,{{5,9},{3,8},{2,6}}],{3,1,2}]
+				+5 N^2 Transpose[Contract[gvff,gvff,gvff,{{5,9},{3,8},{2,6}}],{3,1,2}]
+				-44 Transpose[Contract[gvff,gvff,gvff,{{6,8},{3,5},{2,9}}],{3,1,2}]
+				+9 N Transpose[Contract[gvff,gvff,gvff,{{6,8},{3,5},{2,9}}],{3,1,2}]
+				+5 N^2 Transpose[Contract[gvff,gvff,gvff,{{6,8},{3,5},{2,9}}],{3,1,2}]
+			) Zf[3,0],
 			
 			x==3,
-			1/6 (-2 Transpose[Contract[gvff,gvff,gvff,{{5,9},{3,8},{2,6}}],{3,1,2}]+3 N Transpose[Contract[gvff,gvff,gvff,{{5,9},{3,8},{2,6}}],{3,1,2}]-N^2 Transpose[Contract[gvff,gvff,gvff,{{5,9},{3,8},{2,6}}],{3,1,2}]-\
-			2 Transpose[Contract[gvff,gvff,gvff,{{6,8},{3,5},{2,9}}],{3,1,2}]) Zf[3,0],
+			1/6 (
+				-2 Transpose[Contract[gvff,gvff,gvff,{{5,9},{3,8},{2,6}}],{3,1,2}]
+				+3 N Transpose[Contract[gvff,gvff,gvff,{{5,9},{3,8},{2,6}}],{3,1,2}]
+				-N^2 Transpose[Contract[gvff,gvff,gvff,{{5,9},{3,8},{2,6}}],{3,1,2}]
+				-2 Transpose[Contract[gvff,gvff,gvff,{{6,8},{3,5},{2,9}}],{3,1,2}]
+			) Zf[3,0],
 			
 			True, "NOT ALLOWED X VALUE"
 			];
