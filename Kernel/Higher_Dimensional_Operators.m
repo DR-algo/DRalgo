@@ -1002,8 +1002,14 @@ S4D2F[x_]:=Module[{T},
 	T=
 		Which[
 			x==1,
-			2/3 (2 Contract[YsffC,YsffC,Ysff,Ysff,{{6,12},{5,9},{3,11},{2,8}}]+2 Transpose[Contract[YsffC,YsffC,Ysff,Ysff,{{6,12},{5,9},{3,11},{2,8}}],{1,3,2,4}]+Transpose[Contract[YsffC,YsffC,Ysff,Ysff,{{6,12},{5,9},{3,11},{2,8}}],{1,4,2,3}]+\
-			Transpose[Contract[YsffC,YsffC,Ysff,Ysff,{{6,12},{5,9},{3,11},{2,8}}],{2,3,1,4}]+2 Transpose[Contract[YsffC,YsffC,Ysff,Ysff,{{6,12},{5,9},{3,11},{2,8}}],{2,4,1,3}]+2 Transpose[Contract[YsffC,YsffC,Ysff,Ysff,{{6,12},{5,9},{3,11},{2,8}}],{3,4,1,2}]) Zf[3,0],
+			2/3 (
+				+2 Contract[YsffC,YsffC,Ysff,Ysff,{{6,12},{5,9},{3,11},{2,8}}]
+				+2 Transpose[Contract[YsffC,YsffC,Ysff,Ysff,{{6,12},{5,9},{3,11},{2,8}}],{1,3,2,4}]
+				+Transpose[Contract[YsffC,YsffC,Ysff,Ysff,{{6,12},{5,9},{3,11},{2,8}}],{1,4,2,3}]
+				+Transpose[Contract[YsffC,YsffC,Ysff,Ysff,{{6,12},{5,9},{3,11},{2,8}}],{2,3,1,4}]
+				+2 Transpose[Contract[YsffC,YsffC,Ysff,Ysff,{{6,12},{5,9},{3,11},{2,8}}],{2,4,1,3}]
+				+2 Transpose[Contract[YsffC,YsffC,Ysff,Ysff,{{6,12},{5,9},{3,11},{2,8}}],{3,4,1,2}]
+			) Zf[3,0],
 			
 			True, "NOT ALLOWED X VALUE"
 			];
