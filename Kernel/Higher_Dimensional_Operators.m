@@ -620,7 +620,10 @@ S2D4F[x_]:=Module[{T},
 	T=
 		Which[
 			x==1,
-			1/6 (Contract[YsffC,Ysff,{{3,6},{2,5}}]+Transpose[Contract[YsffC,Ysff,{{3,6},{2,5}}],{2,1}]) Zf[3,0],
+			1/6 (
+				+Contract[YsffC,Ysff,{{3,6},{2,5}}]
+				+Transpose[Contract[YsffC,Ysff,{{3,6},{2,5}}],{2,1}]
+			) Zf[3,0],
 			
 			True, "NOT ALLOWED X VALUE"
 			];
