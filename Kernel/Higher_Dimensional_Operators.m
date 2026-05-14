@@ -150,8 +150,13 @@ S3D2B[x_]:=Module[{T},
 	T=
 		Which[
 			x==1,
-			1/3 (-2 (-5+3 xi) (Contract[\[Lambda]3,gvss,gvss,{{4,7},{3,9},{2,5}}]-Transpose[Contract[\[Lambda]3,gvss,gvss,{{4,7},{3,9},{1,6}}],{2,1,3}])+\
-			Transpose[(-Contract[\[Lambda]3,\[Lambda]4,{{3,7},{1,5}}]+10 Contract[\[Lambda]3,gvss,gvss,{{4,7},{3,9},{2,6}}]),{3,1,2}]) Zb[3,0]+1/2 Transpose[Contract[\[Lambda]3,\[Lambda]3,\[Lambda]3,{{5,7},{3,9},{2,6}}],{3,1,2}] Zb[4,0],
+			1/3 (
+				-2 (-5+3 xi) (Contract[\[Lambda]3,gvss,gvss,{{4,7},{3,9},{2,5}}]
+				-Transpose[Contract[\[Lambda]3,gvss,gvss,{{4,7},{3,9},{1,6}}],{2,1,3}])
+				+Transpose[(-Contract[\[Lambda]3,\[Lambda]4,{{3,7},{1,5}}]
+				+10 Contract[\[Lambda]3,gvss,gvss,{{4,7},{3,9},{2,6}}]),{3,1,2}]
+			) Zb[3,0]
+			+1/2 Transpose[Contract[\[Lambda]3,\[Lambda]3,\[Lambda]3,{{5,7},{3,9},{2,6}}],{3,1,2}] Zb[4,0],
 			
 			True, "NOT ALLOWED X VALUE"
 			];
