@@ -42,7 +42,7 @@ PerformDRhard[]
 
 (*
 	Here we construct tensors associated to the group structure constants and
-	its contraction
+	their contractions
 *)
 Tadj=-I gvvv/gs;
 X2=Contract[Tadj,Tadj,{{2,6},{3,5}}];
@@ -85,7 +85,7 @@ WCsWithoutA6=DeleteDuplicates[Cases[TensorListWithoutA6//Normal, \[Alpha][__], \
 	Dimension6Matching and Dimension5Matching find the values of
 	the Wilson coefficients listed in WC,
 	d is the number of spatial dimensions,
-	Zb and Zf are 1 loop master integral
+	Zb and Zf are 1-loop master integrals
 *)
 solWithoutA6=Dimension6Matching[TensorListWithoutA6,NListWithoutA6,WCsWithoutA6,3][[1]];
 

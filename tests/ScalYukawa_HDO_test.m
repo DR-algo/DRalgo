@@ -123,12 +123,12 @@ OT[5,2]=\[Alpha][5,1]*TensorProduct[{1},{1},{1},{1},{1}];
 OT[5,5]=\[Beta][5,1]*TensorProduct[{1},{1},{1}];
 
 (*
-	TensorList is the array of the various group tensors refered to
-	higher dimensional operators
+	TensorList is the array of the various group tensors referred to
+	higher-dimensional operators
 *)
 TensorList5={OT[5,2],OT[5,5]};
 (*
-	NList is the array that indicate to which operator
+	NList is the array that indicates to which operator
 	the group tensors in TensorList refer to
 *)
 NList5={2,5};
@@ -144,12 +144,12 @@ OT[6,9]=\[Alpha][6,1]*TensorProduct[{1},{1},{1},{1},{1},{1}];
 OT[6,15]=\[Beta][6,1]*TensorProduct[{1},{1}];
 
 (*
-	TensorList is the array of the various group tensors refered to
-	higher dimensional operators
+	TensorList is the array of the various group tensors referred to
+	higher-dimensional operators
 *)
 TensorList6={OT[6,4],OT[6,9],OT[6,15]};
 (*
-	NList is the array that indicate to which operator
+	NList is the array that indicates to which operator
 	the group tensors in TensorList refer to
 *)
 NList6={4,9,15};
@@ -162,7 +162,7 @@ WC6 = {\[Alpha][6,1],\[Beta][6,1],\[Beta][6,2]};
 	Dimension6Matching and Dimension5Matching find the values of
 	the Wilson coefficients listed in WC,
 	d is the number of spatial dimensions,
-	Zb and Zf are 1 loop master integral
+	Zb and Zf are 1-loop master integrals
 *)
 sol6=Dimension6Matching[TensorList6,NList6,WC6,d][[1]];
 
