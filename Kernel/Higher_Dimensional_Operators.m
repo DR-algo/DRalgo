@@ -10,12 +10,13 @@
        Copyright (C) 2021-2026 Philipp Schicho
 *)
 
-(* :Summary:	Provides tensor-contraction helpers, hard-thermal 1-loop integral
-             building blocks, and group-tensor routines for higher-dimensional
-             scalar and gauge operators. Exposes Dimension5Matching and
-             Dimension6Matching, which determine the Wilson coefficients of all
-             independent operators up to mass dimension 5 and 6 arising in the
-             hard-to-soft (3d) reduction. *)	
+(* :Summary:	Provides the tensor algebra and operator basis needed for the
+			 hard-to-soft matching of higher-dimensional operators. The file is
+			 organized in three layers: low-level tensor helpers, explicit
+			 tensor expressions for each operator topology, and the public
+			 routines Dimension5Matching and Dimension6Matching, which solve
+			 for the Wilson coefficients of the independent dimension-5 and
+			 dimension-6 operators in the 3d EFT. *)	
 
 (* ------------------------------------------------------------------------ *)
 
@@ -23,7 +24,20 @@
 (* ::Section:: *)
 (* HELP ROUTINES*)
 
+(*
+	This section collects the small tensor-manipulation primitives used by the
+	generated operator expressions below. They are intentionally lightweight:
+	most of the file consists of explicit contractions, and these helpers keep
+	those expressions readable without introducing extra abstraction layers.
+*)
 
+
+(*
+	Contract:
+	Forms an inactive TensorProduct of the supplied tensors, performs the given
+	contractions, and activates the result. Separate arities are defined to keep
+	evaluation predictable for the large explicit tensor expressions below.
+*)
 Contract[tensor1_,tensor2_,indices_]:=Activate @ TensorContract[
         Inactive[TensorProduct][tensor1,tensor2], indices]
 Contract[tensor1_,tensor2_,tensor3_,indices_]:=Activate @ TensorContract[
@@ -91,6 +105,20 @@ ComposePermutation[p1_,p2_]:=p2[[p1]];
 
 (* ::Section:: *)
 (*HIGHER DIMENSIONAL OPERATORS GROUP TENSORS *)
+
+(*
+	The bulk of this file enumerates tensor representatives for the independent
+	operator structures that appear in the 3d EFT. The naming convention is:
+
+		S / V   scalar or gauge external legs,
+		D       spatial derivatives,
+		trailing B / F   purely bosonic or fermionic hard-mode contribution,
+		no suffix         full contribution after summing the relevant sectors.
+
+	For example, S1V2D2B denotes the bosonic contribution to an operator with
+	one scalar leg, two gauge legs, and two derivatives. The integer selector x
+	labels the basis element within a fixed field-content class.
+*)
 
 
 (*
@@ -16129,6 +16157,13 @@ V6F[x_]:=Module[{terms},
 V6[x_]:=V6B[x]+V6F[x];
 
 
+(*
+	ODIM5[x, d] and ODIM6[x, d] assemble the final tensor basis used during
+	matching. Each case in the Which statement selects one canonically
+	normalized operator representative, evaluates the necessary helper tensors,
+	and finally substitutes N -> d so the result can be compared against a basis
+	defined in the requested spacetime dimension.
+*)
 ODIM5[x_,d_]:=Module[{terms},
 	CreateHelpTensors[];
 	terms=
@@ -16237,6 +16272,13 @@ ODIM6[x_,d_]:=Module[{terms},
 (*HIGHER DIMENSIONAL OPERATORS MATCHING *)
 
 
+(*
+	MatchingEquations:
+	Converts a list of user-supplied operator tensors O into the component-wise
+	linear equations needed for matching. The companion list n assigns each
+	tensor in O to its internal basis label. Missing labels are skipped, which
+	lets callers solve for only the subset of operators they care about.
+*)
 MatchingEquations[operator_, max_Integer, O_List, n_List, d_] := Module[{positions},
 	positions = PositionIndex[n];
 	Flatten@Table[
@@ -16248,6 +16290,11 @@ MatchingEquations[operator_, max_Integer, O_List, n_List, d_] := Module[{positio
 ];
 
 
+(*
+	Dimension5Matching:
+	Solves for the coefficient list \[Alpha] by matching the caller-provided
+	tensors O onto the 8-element dimension-5 basis encoded in ODIM5.
+*)
 Dimension5Matching[O_List,n_List,\[Alpha]_List,d_]:=Module[{eqns},
 	CreateHelpTensors[];
 	eqns = MatchingEquations[ODIM5, 8, O, n, d];
@@ -16255,6 +16302,12 @@ Dimension5Matching[O_List,n_List,\[Alpha]_List,d_]:=Module[{eqns},
 ];
 
 
+(*
+	Dimension6Matching:
+	Dimension-6 matching on the 20-element basis encoded in ODIM6. Duplicate
+	equations are removed after simplification because index symmetries can make
+	several tensor components equivalent.
+*)
 Dimension6Matching[O_List,n_List,\[Alpha]_List,d_]:=Module[{eqns},
 	CreateHelpTensors[];
 	eqns = DeleteDuplicates[FullSimplify[MatchingEquations[ODIM6, 20, O, n, d]]];
