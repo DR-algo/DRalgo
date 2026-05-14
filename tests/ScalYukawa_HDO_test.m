@@ -119,7 +119,6 @@ PerformDRhard[]
 (*
 	Here we construct the group tensors of the higher dimensional operators
 *)
-
 OT[5,2]=\[Alpha][5,1]*TensorProduct[{1},{1},{1},{1},{1}];
 OT[5,5]=\[Beta][5,1]*TensorProduct[{1},{1},{1}];
 
