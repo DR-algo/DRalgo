@@ -110,18 +110,31 @@ ImportModelDRalgo[Group,gvvv,gvff,gvss,\[Lambda]1,\[Lambda]3,\[Lambda]4,\[Mu]ij,
 PerformDRhard[]
 
 
-(* ::Section::Closed:: *)
+(* ::Section:: *)
 (*DIMENSION 5 and DIMENSION 6 MATCHING*)
 
 
-(*Here we construct the group tensors of the higher dimensional operators*)
+(*
+	Here we construct the group tensors of the higher dimensional operators
+*)
 
 OT[5,2]=\[Alpha][5,1]*TensorProduct[{1},{1},{1},{1},{1}];
 OT[5,5]=\[Beta][5,1]*TensorProduct[{1},{1},{1}];
 
-TensorList5={OT[5,2],OT[5,5]}; (*TensorList is the array of the various group tensors refered to higher dimensional operators*)
-NList5={2,5}; (*NList is the array that indicate to which operator the group tensors in TensorList refer to*)
-WC5 = {\[Alpha][5,1],\[Beta][5,1]}; (*WC is the array of the various Wilson Coefficients \[Alpha][...]*)
+(*
+	TensorList is the array of the various group tensors refered to
+	higher dimensional operators
+*)
+TensorList5={OT[5,2],OT[5,5]};
+(*
+	NList is the array that indicate to which operator
+	the group tensors in TensorList refer to
+*)
+NList5={2,5};
+(*
+	WC is the array of the various Wilson Coefficients \[Alpha][...]
+*)
+WC5 = {\[Alpha][5,1],\[Beta][5,1]};
 
 sol5=Dimension5Matching[TensorList5,NList5,WC5,d][[1]];
 
@@ -129,11 +142,28 @@ OT[6,4]=\[Beta][6,2]*TensorProduct[{1},{1},{1}];
 OT[6,9]=\[Alpha][6,1]*TensorProduct[{1},{1},{1},{1},{1},{1}];
 OT[6,15]=\[Beta][6,1]*TensorProduct[{1},{1}];
 
-TensorList6={OT[6,4],OT[6,9],OT[6,15]}; (*TensorList is the array of the various group tensors refered to higher dimensional operators*)
-NList6={4,9,15}; (*NList is the array that indicate to which operator the group tensors in TensorList refer to*)
-WC6 = {\[Alpha][6,1],\[Beta][6,1],\[Beta][6,2]}; (*WC is the array of the various Wilson Coefficients \[Alpha][...]*)
+(*
+	TensorList is the array of the various group tensors refered to
+	higher dimensional operators
+*)
+TensorList6={OT[6,4],OT[6,9],OT[6,15]};
+(*
+	NList is the array that indicate to which operator
+	the group tensors in TensorList refer to
+*)
+NList6={4,9,15};
+(*
+	WC is the array of the various Wilson Coefficients \[Alpha][...]
+*)
+WC6 = {\[Alpha][6,1],\[Beta][6,1],\[Beta][6,2]};
 
-sol6=Dimension6Matching[TensorList6,NList6,WC6,d][[1]]; (*Dimension6Matching and Dimension5Matching find the values of the Wilson coefficients listed in WC, d is the number of spatial dimensions, Zb and Zf are 1 loop master integral *)
+(*
+	Dimension6Matching and Dimension5Matching find the values of
+	the Wilson coefficients listed in WC,
+	d is the number of spatial dimensions,
+	Zb and Zf are 1 loop master integral
+*)
+sol6=Dimension6Matching[TensorList6,NList6,WC6,d][[1]];
 
 
 (* ::Section:: *)
@@ -176,6 +206,3 @@ TestCreate[HardThermal1LoopInt["F",3,0,3],
 
 report=TestReport[testList]
 report["ResultsDataset"]
-
-
-
