@@ -16237,153 +16237,26 @@ ODIM6[x_,d_]:=Module[{terms},
 (*HIGHER DIMENSIONAL OPERATORS MATCHING *)
 
 
+MatchingEquations[operator_, max_Integer, O_List, n_List, d_] := Module[{positions},
+	positions = PositionIndex[n];
+	Flatten@Table[
+		With[{position = Lookup[positions, i, {}]},
+			If[position === {}, {}, Thread[Flatten[O[[First[position]]]] == Flatten[operator[i, d]]]]
+		],
+		{i, max}
+	]
+];
+
+
 Dimension5Matching[O_List,n_List,\[Alpha]_List,d_]:=Module[{eqns},
 	CreateHelpTensors[];
-	eqns={};
-	If[MemberQ[n,1],
-		eqns=Join[eqns,Thread[Flatten[O[[Position[n,1][[1,1]]]]]==Flatten[ODIM5[1,d]]]];
-		];
-	
-	If[ MemberQ[n,2],
-		
-		eqns=Join[eqns,Thread[Flatten[O[[Position[n,2][[1,1]]]]]==Flatten[ODIM5[2,d]]]];
-		];
-	
-	If[ MemberQ[n,3],
-		
-		eqns=Join[eqns,Thread[Flatten[O[[Position[n,3][[1,1]]]]]==Flatten[ODIM5[3,d]]]];
-		];
-		
-	If[ MemberQ[n,4],
-		
-		eqns=Join[eqns,Thread[Flatten[O[[Position[n,4][[1,1]]]]]==Flatten[ODIM5[4,d]]]];
-		];
-		
-	If[ MemberQ[n,5],
-		
-		eqns=Join[eqns,Thread[Flatten[O[[Position[n,5][[1,1]]]]]==Flatten[ODIM5[5,d]]]];
-		];
-		
-	If[ MemberQ[n,6],
-		
-		eqns=Join[eqns,Thread[Flatten[O[[Position[n,6][[1,1]]]]]==Flatten[ODIM5[6,d]]]];
-		];
-
-	If[ MemberQ[n,7],		
-		eqns=Join[eqns,Thread[Flatten[O[[Position[n,7][[1,1]]]]]==Flatten[ODIM5[7,d]]]];
-		];
-		
-	If[ MemberQ[n,8],
-		eqns=Join[eqns,Thread[Flatten[O[[Position[n,8][[1,1]]]]]==Flatten[ODIM5[8,d]]]];
-		];
+	eqns = MatchingEquations[ODIM5, 8, O, n, d];
 	Solve[eqns,\[Alpha]]
 ];
 
 
 Dimension6Matching[O_List,n_List,\[Alpha]_List,d_]:=Module[{eqns},
 	CreateHelpTensors[];
-	eqns={};
-	
-	If[MemberQ[n,1],
-		
-		eqns=Join[eqns,Thread[Flatten[O[[Position[n,1][[1,1]]]]]==Flatten[ODIM6[1,d]]]];
-		];
-	
-	If[MemberQ[n,2],
-		
-		eqns=Join[eqns,Thread[Flatten[O[[Position[n,2][[1,1]]]]]==Flatten[ODIM6[2,d]]]];
-		];
-	
-	If[MemberQ[n,3],
-		
-		eqns=Join[eqns,Thread[Flatten[O[[Position[n,3][[1,1]]]]]==Flatten[ODIM6[3,d]]]];
-		];
-		
-	If[MemberQ[n,4],
-		
-		eqns=Join[eqns,Thread[Flatten[O[[Position[n,4][[1,1]]]]]==Flatten[ODIM6[4,d]]]];
-		];
-		
-	If[MemberQ[n,5],
-		
-		eqns=Join[eqns,Thread[Flatten[O[[Position[n,5][[1,1]]]]]==Flatten[ODIM6[5,d]]]];
-		];
-	
-	If[MemberQ[n,6],
-		
-		eqns=Join[eqns,Thread[Flatten[O[[Position[n,6][[1,1]]]]]==Flatten[ODIM6[6,d]]]];
-		];
-	
-	If[MemberQ[n,7],
-		
-		eqns=Join[eqns,Thread[Flatten[O[[Position[n,7][[1,1]]]]]==Flatten[ODIM6[7,d]]]];		
-		];
-	
-	If[MemberQ[n,8],
-		
-		eqns=Join[eqns,Thread[Flatten[O[[Position[n,8][[1,1]]]]]==Flatten[ODIM6[8,d]]]];
-		];
-	
-	If[MemberQ[n,9],
-		
-		eqns=Join[eqns,Thread[Flatten[O[[Position[n, 9][[1, 1]]]]]==Flatten[ODIM6[9,d]]]];
-		];
-		
-	If[MemberQ[n,10],
-		
-		eqns=Join[eqns,Thread[Flatten[O[[Position[n,10][[1,1]]]]]==Flatten[ODIM6[10,d]]]];
-		];
-		
-	If[MemberQ[n,11],
-
-		eqns=Join[eqns,Thread[Flatten[O[[Position[n,11][[1,1]]]]]==Flatten[ODIM6[11,d]]]];
-		];
-		
-	If[MemberQ[n,12],
-
-		eqns=Join[eqns,Thread[Flatten[O[[Position[n,12][[1,1]]]]]==Flatten[ODIM6[12,d]]]];
-		];
-	
-	If[MemberQ[n,13],
-		
-		eqns=Join[eqns,Thread[Flatten[O[[Position[n,13][[1,1]]]]]==Flatten[ODIM6[13,d]]]];
-		];
-		
-	If[MemberQ[n,14],
-		
-		eqns=Join[eqns,Thread[Flatten[O[[Position[n,14][[1,1]]]]]==Flatten[ODIM6[14,d]]]];
-		];
-		
-	If[MemberQ[n,15],
-		
-		eqns=Join[eqns,Thread[Flatten[O[[Position[n,15][[1,1]]]]]==Flatten[ODIM6[15,d]]]];
-		];
-	
-	If[MemberQ[n,16],
-		
-		eqns=Join[eqns,Thread[Flatten[O[[Position[n,16][[1,1]]]]]==Flatten[ODIM6[16,d]]]];
-		];
-		
-	If[MemberQ[n,17],
-		
-		eqns=Join[eqns,Thread[Flatten[O[[Position[n,17][[1,1]]]]]==Flatten[ODIM6[17,d]]]];	
-		];
-	
-	If[MemberQ[n,18],
-		
-		eqns=Join[eqns,Thread[Flatten[O[[Position[n,18][[1,1]]]]]==Flatten[ODIM6[18,d]]]];
-		];
-	
-	If[MemberQ[n,19],
-		
-		eqns=Join[eqns,Thread[Flatten[O[[Position[n,19][[1,1]]]]]==Flatten[ODIM6[19,d]]]];
-		];
-		
-	If[MemberQ[n,20],
-		
-		eqns=Join[eqns,Thread[Flatten[O[[Position[n,20][[1,1]]]]]==Flatten[ODIM6[20,d]]]];		
-		];
-	
-	eqns = DeleteDuplicates[FullSimplify[eqns]];
+	eqns = DeleteDuplicates[FullSimplify[MatchingEquations[ODIM6, 20, O, n, d]]];
 	Solve[eqns,\[Alpha]]
 ];
