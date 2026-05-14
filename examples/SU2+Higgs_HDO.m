@@ -13,7 +13,10 @@ DRalgo`DRalgo`$GroupMathMultipleModels=True; (*Put this if you want to create mu
 (*SU2+Higgs*)
 
 
-(*See 2503.20016 [hep-ph] for the dimension-6 operator matching and field-redefinition comparisons*)
+(*
+	See 2503.20016 [hep-ph] for the dimension-6 operator matching and
+	field-redefinition comparisons
+*)
 
 
 (* ::Section::Closed:: *)

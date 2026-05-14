@@ -13,7 +13,9 @@ DRalgo`DRalgo`$GroupMathMultipleModels=True; (*Put this if you want to create mu
 (*Abelian Higgs*)
 
 
-(*See 2503.18904 [hep-ph] for the dimension-6 operator matching*)
+(*
+	See 2503.18904 [hep-ph] for the dimension-6 operator matching
+*)
 
 
 (* ::Section::Closed:: *)
