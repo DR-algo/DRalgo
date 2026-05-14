@@ -16,7 +16,7 @@ DRalgo`DRalgo`$GroupMathMultipleModels=True; (*Put this if you want to create mu
 (*See 1106.0034 [hep-ph] for a review*)
 
 
-(* ::Section::Closed:: *)
+(* ::Section:: *)
 (*Model*)
 
 
@@ -98,7 +98,7 @@ Ysff=2SymmetrizeTensor[(yl Contract[V,Llmat,Ermat,{{1,3}}]+yd Contract[V,Qlmat,D
 YsffC=Conjugate[Ysff];*)
 
 
-IPERCHARGE={Yq->1/3,Yu->4/3,Yd->-2/3,Yl->-1,Ye->-2};
+HYPERCHARGE={Yq->1/3,Yu->4/3,Yd->-2/3,Yl->-1,Ye->-2};
 
 
 (* ::Section:: *)
@@ -111,6 +111,10 @@ PerformDRhard[]
 
 (* ::Section:: *)
 (*Dimension-6 Matching*)
+
+
+(* ::Subsection:: *)
+(*Definitions*)
 
 
 (*
@@ -190,17 +194,35 @@ dG[[1 ;; 8, 1 ;; 8, 1 ;; 8]] = Table[
   {a, 8}, {b, 8}, {c, 8}
 ];
 
+
+(* ::Subsection:: *)
+(*Individual operator matching*)
+
+
 (*
 	the matching can be performed on individual operators
 *)
-OT[6,18]=I \[Alpha][B0 B^2 D]TensorProduct[idB,ProjB]+I \[Alpha][B0 W^2 D]TensorProduct[ProjB,idW]+I \[Alpha][W0 B W D,1]Transpose[TensorProduct[ProjB,idW],{2,1,3}]+\
-		I \[Alpha][W0 B W D,2]TensorProduct[idW,ProjB]+I \[Alpha][W0 W^2 D]\[Epsilon]W+\[Alpha][B0 G^2 D]TensorProduct[ProjB,idG]+I \[Alpha][G0 B G D,1]Transpose[TensorProduct[ProjB,idG],{2,1,3}]+\
-		I \[Alpha][G0 B G D,2]TensorProduct[idG,ProjB]+I \[Alpha][G0 G^2 D,1]fG+\[Alpha][G0 G^2 D,2]dG;	
+OT[6,18]=(
+	+I \[Alpha][B0 B^2 D]TensorProduct[idB,ProjB]
+	+I \[Alpha][B0 W^2 D]TensorProduct[ProjB,idW]
+	+I \[Alpha][W0 B W D,1]Transpose[TensorProduct[ProjB,idW],{2,1,3}]
+	+I \[Alpha][W0 B W D,2]TensorProduct[idW,ProjB]
+	+I \[Alpha][W0 W^2 D]\[Epsilon]W
+	+\[Alpha][B0 G^2 D]TensorProduct[ProjB,idG]
+	+I \[Alpha][G0 B G D,1]Transpose[TensorProduct[ProjB,idG],{2,1,3}]
+	+I \[Alpha][G0 B G D,2]TensorProduct[idG,ProjB]
+	+I \[Alpha][G0 G^2 D,1]fG+\[Alpha][G0 G^2 D,2]dG
+	);	
 
 WCs = Cases[OT[6,18]//Normal, \[Alpha][__], \[Infinity]];
 
-sol=Dimension6Matching[{O[6,18]},{18},3][[1]];
+sol=Dimension6Matching[{OT[6,18]},{18},3][[1]];
 Collect[sol,{_Zb,_Zf},Factor]//TableForm
+
+
+(* ::Subsection:: *)
+(*Full matching*)
+
 
 (*
 	below we construct the full list of tensors
@@ -423,7 +445,10 @@ Tens20=(
 	);
 
 
-TensorList={Tens1,Tens2,Tens3,Tens4,Tens5,Tens6,Tens7,Tens8,Tens9,Tens10,Tens11,Tens12,Tens13,Tens14,Tens15,Tens16,Tens17,Tens18,Tens19,Tens20};
+TensorList={
+	Tens1,Tens2,Tens3,Tens4,Tens5,Tens6,Tens7,Tens8,Tens9,Tens10,
+	Tens11,Tens12,Tens13,Tens14,Tens15,Tens16,Tens17,Tens18,Tens19,Tens20
+	};
 NList={1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20};
 WC = DeleteDuplicates[Cases[TensorList//Normal, \[Alpha][__], \[Infinity]]];
 
@@ -435,16 +460,16 @@ WC = DeleteDuplicates[Cases[TensorList//Normal, \[Alpha][__], \[Infinity]]];
 *)
 n={1,2,3,4,5,6,7,8,13,14,15,16,17,18,19,20};
 sol=Dimension6Matching[TensorList[[n]],NList[[n]],WC,3][[1]];
-Collect[sol,{_Zb,_Zf},Factor]/.IPERCHARGE//TableForm
+Collect[sol,{_Zb,_Zf},Factor]/.HYPERCHARGE//TableForm
 
 
 n={9,10,11,12};
 
-sol6=Dimension6Matching[TensorList[[n]],NList[[n]],WC,3][[1]];
-Collect[sol6,{_Zb,_Zf},Factor]/.IPERCHARGE//TableForm
+sol6=Dimension6Matching[TensorList[[n]],NList[[n]],WC,3][[1]];//AbsoluteTiming
+Collect[sol6,{_Zb,_Zf},Factor]/.HYPERCHARGE//TableForm
 
 
-solTex=Collect[Join[sol,sol6]/.IPERCHARGE/.{\[Lambda]1H->l4,\[Xi]->xi},{_Zb,_Zf},Factor]//TableForm
+solTex=Collect[Join[sol,sol6]/.HYPERCHARGE/.{\[Lambda]1H->l4,\[Xi]->xi},{_Zb,_Zf},Factor]//TableForm
 
 
 (* ::Section:: *)
