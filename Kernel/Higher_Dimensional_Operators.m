@@ -637,20 +637,46 @@ V3D3B[x_]:=Module[{T},
 	T=
 		Which[
 			x==1,
-			1/30 I (-2 Transpose[Contract[gvss,gvss,gvss,{{5,8},{3,9},{2,6}}],{3,1,2}]+2 N Transpose[Contract[gvss,gvss,gvss,{{5,8},{3,9},{2,6}}],{3,1,2}]-347 Transpose[Contract[gvvv,gvvv,gvvv,{{6,8},{3,9},{1,5}}],{2,1,3}]+\
-			234 N Transpose[Contract[gvvv,gvvv,gvvv,{{6,8},{3,9},{1,5}}],{2,1,3}]-2 N^2 Transpose[Contract[gvvv,gvvv,gvvv,{{6,8},{3,9},{1,5}}],{2,1,3}]+90 xi Transpose[Contract[gvvv,gvvv,gvvv,{{6,8},{3,9},{1,5}}],{2,1,3}]-\
-			60 N xi Transpose[Contract[gvvv,gvvv,gvvv,{{6,8},{3,9},{1,5}}],{2,1,3}]+15 xi^2 Transpose[Contract[gvvv,gvvv,gvvv,{{6,8},{3,9},{1,5}}],{2,1,3}]-10 N xi^2 Transpose[Contract[gvvv,gvvv,gvvv,{{6,8},{3,9},{1,5}}],{2,1,3}]) Zb[3,0],
+			1/30 I (
+				-2 Transpose[Contract[gvss,gvss,gvss,{{5,8},{3,9},{2,6}}],{3,1,2}]
+				+2 N Transpose[Contract[gvss,gvss,gvss,{{5,8},{3,9},{2,6}}],{3,1,2}]
+				-347 Transpose[Contract[gvvv,gvvv,gvvv,{{6,8},{3,9},{1,5}}],{2,1,3}]
+				+234 N Transpose[Contract[gvvv,gvvv,gvvv,{{6,8},{3,9},{1,5}}],{2,1,3}]
+				-2 N^2 Transpose[Contract[gvvv,gvvv,gvvv,{{6,8},{3,9},{1,5}}],{2,1,3}]
+				+90 xi Transpose[Contract[gvvv,gvvv,gvvv,{{6,8},{3,9},{1,5}}],{2,1,3}]
+				-60 N xi Transpose[Contract[gvvv,gvvv,gvvv,{{6,8},{3,9},{1,5}}],{2,1,3}]
+				+15 xi^2 Transpose[Contract[gvvv,gvvv,gvvv,{{6,8},{3,9},{1,5}}],{2,1,3}]
+				-10 N xi^2 Transpose[Contract[gvvv,gvvv,gvvv,{{6,8},{3,9},{1,5}}],{2,1,3}]
+			) Zb[3,0],
 			
 			x==2,
-			1/(60 xi) I (-60 xi Contract[gvvv,gvvv,gvvv,{{3,9},{2,6},{1,5}}]+30 N xi Contract[gvvv,gvvv,gvvv,{{3,9},{2,6},{1,5}}]+200 xi^2 Contract[gvvv,gvvv,gvvv,{{3,9},{2,6},{1,5}}]-\
-			40 N xi^2 Contract[gvvv,gvvv,gvvv,{{3,9},{2,6},{1,5}}]-60 xi^3 Contract[gvvv,gvvv,gvvv,{{3,9},{2,6},{1,5}}]+10 N xi^3 Contract[gvvv,gvvv,gvvv,{{3,9},{2,6},{1,5}}]+\
-			48 xi Transpose[Contract[gvss,gvss,gvss,{{5,8},{3,9},{2,6}}],{3,1,2}]-8 N xi Transpose[Contract[gvss,gvss,gvss,{{5,8},{3,9},{2,6}}],{3,1,2}]-30 Transpose[Contract[gvvv,gvvv,gvvv,{{6,8},{3,9},{1,5}}],{2,1,3}]+\
-			15 N Transpose[Contract[gvvv,gvvv,gvvv,{{6,8},{3,9},{1,5}}],{2,1,3}]+518 xi Transpose[Contract[gvvv,gvvv,gvvv,{{6,8},{3,9},{1,5}}],{2,1,3}]+79 N xi Transpose[Contract[gvvv,gvvv,gvvv,{{6,8},{3,9},{1,5}}],{2,1,3}]+\
-			8 N^2 xi Transpose[Contract[gvvv,gvvv,gvvv,{{6,8},{3,9},{1,5}}],{2,1,3}]+630 xi^2 Transpose[Contract[gvvv,gvvv,gvvv,{{6,8},{3,9},{1,5}}],{2,1,3}]-175 N xi^2 Transpose[Contract[gvvv,gvvv,gvvv,{{6,8},{3,9},{1,5}}],{2,1,3}]-\
-			190 xi^3 Transpose[Contract[gvvv,gvvv,gvvv,{{6,8},{3,9},{1,5}}],{2,1,3}]+25 N xi^3 Transpose[Contract[gvvv,gvvv,gvvv,{{6,8},{3,9},{1,5}}],{2,1,3}]-30 Transpose[Contract[gvvv,gvvv,gvvv,{{6,8},{3,9},{1,5}}],{3,1,2}]+\
-			15 N Transpose[Contract[gvvv,gvvv,gvvv,{{6,8},{3,9},{1,5}}],{3,1,2}]+70 xi Transpose[Contract[gvvv,gvvv,gvvv,{{6,8},{3,9},{1,5}}],{3,1,2}]-5 N xi Transpose[Contract[gvvv,gvvv,gvvv,{{6,8},{3,9},{1,5}}],{3,1,2}]+\
-			70 xi^2 Transpose[Contract[gvvv,gvvv,gvvv,{{6,8},{3,9},{1,5}}],{3,1,2}]-15 N xi^2 Transpose[Contract[gvvv,gvvv,gvvv,{{6,8},{3,9},{1,5}}],{3,1,2}]-30 xi^3 Transpose[Contract[gvvv,gvvv,gvvv,{{6,8},{3,9},{1,5}}],{3,1,2}]+\
-			5 N xi^3 Transpose[Contract[gvvv,gvvv,gvvv,{{6,8},{3,9},{1,5}}],{3,1,2}]) Zb[3,0],
+			1/(60 xi) I (
+				-60 xi Contract[gvvv,gvvv,gvvv,{{3,9},{2,6},{1,5}}]
+				+30 N xi Contract[gvvv,gvvv,gvvv,{{3,9},{2,6},{1,5}}]
+				+200 xi^2 Contract[gvvv,gvvv,gvvv,{{3,9},{2,6},{1,5}}]
+				-40 N xi^2 Contract[gvvv,gvvv,gvvv,{{3,9},{2,6},{1,5}}]
+				-60 xi^3 Contract[gvvv,gvvv,gvvv,{{3,9},{2,6},{1,5}}]
+				+10 N xi^3 Contract[gvvv,gvvv,gvvv,{{3,9},{2,6},{1,5}}]
+				+48 xi Transpose[Contract[gvss,gvss,gvss,{{5,8},{3,9},{2,6}}],{3,1,2}]
+				-8 N xi Transpose[Contract[gvss,gvss,gvss,{{5,8},{3,9},{2,6}}],{3,1,2}]
+				-30 Transpose[Contract[gvvv,gvvv,gvvv,{{6,8},{3,9},{1,5}}],{2,1,3}]
+				+15 N Transpose[Contract[gvvv,gvvv,gvvv,{{6,8},{3,9},{1,5}}],{2,1,3}]
+				+518 xi Transpose[Contract[gvvv,gvvv,gvvv,{{6,8},{3,9},{1,5}}],{2,1,3}]
+				+79 N xi Transpose[Contract[gvvv,gvvv,gvvv,{{6,8},{3,9},{1,5}}],{2,1,3}]
+				+8 N^2 xi Transpose[Contract[gvvv,gvvv,gvvv,{{6,8},{3,9},{1,5}}],{2,1,3}]
+				+630 xi^2 Transpose[Contract[gvvv,gvvv,gvvv,{{6,8},{3,9},{1,5}}],{2,1,3}]
+				-175 N xi^2 Transpose[Contract[gvvv,gvvv,gvvv,{{6,8},{3,9},{1,5}}],{2,1,3}]
+				-190 xi^3 Transpose[Contract[gvvv,gvvv,gvvv,{{6,8},{3,9},{1,5}}],{2,1,3}]
+				+25 N xi^3 Transpose[Contract[gvvv,gvvv,gvvv,{{6,8},{3,9},{1,5}}],{2,1,3}]
+				-30 Transpose[Contract[gvvv,gvvv,gvvv,{{6,8},{3,9},{1,5}}],{3,1,2}]
+				+15 N Transpose[Contract[gvvv,gvvv,gvvv,{{6,8},{3,9},{1,5}}],{3,1,2}]
+				+70 xi Transpose[Contract[gvvv,gvvv,gvvv,{{6,8},{3,9},{1,5}}],{3,1,2}]
+				-5 N xi Transpose[Contract[gvvv,gvvv,gvvv,{{6,8},{3,9},{1,5}}],{3,1,2}]
+				+70 xi^2 Transpose[Contract[gvvv,gvvv,gvvv,{{6,8},{3,9},{1,5}}],{3,1,2}]
+				-15 N xi^2 Transpose[Contract[gvvv,gvvv,gvvv,{{6,8},{3,9},{1,5}}],{3,1,2}]
+				-30 xi^3 Transpose[Contract[gvvv,gvvv,gvvv,{{6,8},{3,9},{1,5}}],{3,1,2}]
+				+5 N xi^3 Transpose[Contract[gvvv,gvvv,gvvv,{{6,8},{3,9},{1,5}}],{3,1,2}]
+			) Zb[3,0],
 			
 			x==3,
 			SparseArray[{},{NV,NV,NV}],
