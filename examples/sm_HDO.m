@@ -19,7 +19,7 @@ DRalgo`DRalgo`$GroupMathMultipleModels=True; (*Put this if you want to create mu
 *)
 
 
-(* ::Section:: *)
+(* ::Section::Closed:: *)
 (*Model*)
 
 
