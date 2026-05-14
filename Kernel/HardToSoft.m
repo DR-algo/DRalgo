@@ -6,9 +6,9 @@
 
 (*
       	This software is covered by the GNU General Public License 3.
-       	Copyright (C) 2021-2025 Andreas Ekstedt
-       	Copyright (C) 2021-2025 Philipp Schicho
-       	Copyright (C) 2021-2025 Tuomas V.I. Tenkanen
+       	Copyright (C) 2021-2026 Andreas Ekstedt
+       	Copyright (C) 2021-2026 Philipp Schicho
+       	Copyright (C) 2021-2026 Tuomas V.I. Tenkanen
 
 *)
 
@@ -17,7 +17,7 @@
 (* ------------------------------------------------------------------------ *)
 
 
-(* ::Section::Closed:: *)
+(* ::Section:: *)
 (*Help routines*)
 
 
@@ -45,7 +45,7 @@ ReplaceLb={
   Uses Inactive TensorProduct to delay evaluation until after contraction.
   Automatically activates the resulting expression.
 *)
-Contract[tensors__SparseArray, indices_] := Module[
+Contract[tensors__, indices_] := Module[
   {
     product,
     tensorList = {tensors}
@@ -147,6 +147,9 @@ CreateHelpTensors[] := Module[{},
   (* --- Tensors from two Yukawa coupling contractions --- *)
   Ysij = Contract[Ysff, YsffC, {{2, 5}, {3, 6}}] // SimplifySparse;
   YsijC = Contract[YsffC, Ysff, {{2, 5}, {3, 6}}] // SimplifySparse;
+  
+  NS=Dimensions[gvss][[2]];
+  NV=Dimensions[gvss][[1]];
 
   (* --- Mode-dependent contributions --- *)
   If[mode >= 1,

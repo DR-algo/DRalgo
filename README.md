@@ -4,9 +4,13 @@
 
 **DRalgo** is an algorithmic implementation that constructs an effective,
 dimensionally reduced, high-temperature field theory for generic models.
-The corresponding Mathematica package automatically performs the matching to next-to-leading order. 
+The corresponding `Mathematica` package automatically performs the matching to next-to-leading order.
+It also includes functionality for dimension-5 and dimension-6 operator matching.
+
 Public release of
-[https://arxiv.org/abs/2205.08815](https://arxiv.org/abs/2205.08815).
+[https://arxiv.org/abs/2205.08815](https://arxiv.org/abs/2205.08815) and
+[https://arxiv.org/abs/2605.xxxxx](https://arxiv.org/abs/2605.xxxxx).
+
 
 ## Status
 

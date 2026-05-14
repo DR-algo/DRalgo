@@ -5,9 +5,9 @@
 
 (*
       	This software is covered by the GNU General Public License 3.
-       	Copyright (C) 2021-2025 Andreas Ekstedt
-       	Copyright (C) 2021-2025 Philipp Schicho
-       	Copyright (C) 2021-2025 Tuomas V.I. Tenkanen
+       	Copyright (C) 2021-2026 Andreas Ekstedt
+       	Copyright (C) 2021-2026 Philipp Schicho
+       	Copyright (C) 2021-2026 Tuomas V.I. Tenkanen
 *)
 
 (* :Summary:	DRalgo is an algorithm that constructs
@@ -41,7 +41,7 @@ BeginPackage["DRalgo`DRalgo`"]
 
 
 (* --- Set the version number --- *)
-$DRalgoVersion = "1.3.0";
+$DRalgoVersion = "1.5.0";
 
 
 $DRalgoVersion::usage =
@@ -99,18 +99,24 @@ If[pacletInfo =!= {},
 		"Version"->$DRalgoVersion,
 		"Description"->"DRalgo constructs an effective, dimensionally reduced, high-temperature field theory for generic models",
 		"WolframVersion"->"13.+",
-		"Creator"->"\!\(\*TemplateBox[{RowBox[{\"Andreas\", \" \", \"Ekstedt\"}], {URL[\"https://inspirehep.net/authors/1799400\"], None}, \"https://inspirehep.net/authors/1799400\", \"HyperlinkActionRecycled\", {\"HyperlinkActive\"}, BaseStyle -> {\"Hyperlink\"}, HyperlinkAction -> \"Recycled\"},\"HyperlinkTemplate\"]\), \!\(\*TemplateBox[{RowBox[{\"Philipp\", \" \", \"Schicho\"}], {URL[\"https://inspirehep.net/authors/1639147\"], None}, \"https://inspirehep.net/authors/1639147\", \"HyperlinkActionRecycled\", {\"HyperlinkActive\"}, BaseStyle -> {\"Hyperlink\"}, HyperlinkAction -> \"Recycled\"},\"HyperlinkTemplate\"]\), \!\(\*TemplateBox[{RowBox[{\"Tuomas V.I.\", \" \", \"Tenkanen\"}], {URL[\"https://inspirehep.net/authors/1507627\"], None}, \"https://inspirehep.net/authors/1507627\", \"HyperlinkActionRecycled\", {\"HyperlinkActive\"}, BaseStyle -> {\"Hyperlink\"}, HyperlinkAction -> \"Recycled\"},\"HyperlinkTemplate\"]\)",
+		"Creator"->"\!\(\*TemplateBox[{RowBox[{\"Andreas\", \" \", \"Ekstedt\"}], {URL[\"https://inspirehep.net/authors/1799400\"], None}, \"https://inspirehep.net/authors/1799400\", \"HyperlinkActionRecycled\", {\"HyperlinkActive\"}, BaseStyle -> {\"Hyperlink\"}, HyperlinkAction -> \"Recycled\"},\"HyperlinkTemplate\"]\), \!\(\*TemplateBox[{RowBox[{\"Philipp\", \" \", \"Schicho\"}], {URL[\"https://inspirehep.net/authors/1639147\"], None}, \"https://inspirehep.net/authors/1639147\", \"HyperlinkActionRecycled\", {\"HyperlinkActive\"}, BaseStyle -> {\"Hyperlink\"}, HyperlinkAction -> \"Recycled\"},\"HyperlinkTemplate\"]\), \!\(\*TemplateBox[{RowBox[{\"Tuomas V.I.\", \" \", \"Tenkanen\"}], {URL[\"https://inspirehep.net/authors/1507627\"], None}, \"https://inspirehep.net/authors/1507627\", \"HyperlinkActionRecycled\", {\"HyperlinkActive\"}, BaseStyle -> {\"Hyperlink\"}, HyperlinkAction -> \"Recycled\"},\"HyperlinkTemplate\"]\), \!\(\*TemplateBox[{RowBox[{\"Fabio\", \" \", \"Bernardo\"}], {URL[\"https://inspirehep.net/authors/2914610\"], None}, \"https://inspirehep.net/authors/2914610\", \"HyperlinkActionRecycled\", {\"HyperlinkActive\"}, BaseStyle -> {\"Hyperlink\"}, HyperlinkAction -> \"Recycled\"},\"HyperlinkTemplate\"]\)",
 		"URL"->Hyperlink[Mouseover["github.com/DR-algo/DRalgo",Style["github.com/DR-algo/DRalgo"]],"https://github.com/DR-algo/DRalgo"]
 	};
 ];
 
 AppendTo[
   infoTable,
-  "Reference" -> Row[{
-    Hyperlink["Comput. Phys. Commun. 288 (2023) 108725", "https://doi.org/10.1016/j.cpc.2023.108725"],
-    " \[Bullet] e-Print: ",
-    Hyperlink["2205.08815 [hep-ph]", "https://arxiv.org/abs/2205.08815"]
-  }]
+	"Reference" -> Column[{
+		Row[{
+			Hyperlink["Comput. Phys. Commun. 288 (2023) 108725", "https://doi.org/10.1016/j.cpc.2023.108725"],
+			" \[Bullet] e-Print: ",
+			Hyperlink["2205.08815 [hep-ph]", "https://arxiv.org/abs/2205.08815"]
+		}],
+		Row[{
+			"e-Print: ",
+			Hyperlink["2605.xxxxx [hep-ph]", "https://arxiv.org/abs/2605.xxxxx"]
+		}]
+	}]
 ];
 AppendTo[infoTable,"Model files"->
 	Hyperlink[Mouseover["DRalgo/examples",Style["DRalgo/examples"]],
@@ -262,6 +268,73 @@ UseUltraSoftTheory::usage="\
 Uses ultrasoft couplings to construct the potential";
 UseSoftTheory::usage="\
 Specifies that soft couplings should be used to construct the potential";
+
+
+SymmetrizeTensor::usage="\
+SymmetrizeTensor[tensor, groups] symmetrizes tensor by averaging over \
+all permutations of the indices within each group.
+Arguments:
+  tensor: the tensor to symmetrize
+  groups: list of index groups, e.g. {{1,2},{3,4}} symmetrizes \
+over indices 1,2 and over indices 3,4 independently";
+Zb::usage="\
+Zb[s, alpha] is a symbolic placeholder for the bosonic hard thermal \
+1-loop integral. Its numerical value in d=3 can be obtained with \
+HardThermal1LoopInt[\"B\", s, alpha, 3]";
+Zf::usage="\
+Zf[s, alpha] is a symbolic placeholder for the fermionic hard thermal \
+1-loop integral. Its numerical value in d=3 can be obtained with \
+HardThermal1LoopInt[\"F\", s, alpha, 3]";
+HardThermal1LoopInt::usage="\
+HardThermal1LoopInt[statistics, s, alpha, d] evaluates a hard thermal 1-loop \
+integral numerically.
+Arguments:
+  statistics: \"B\" for bosonic, \"F\" for fermionic
+  s:    power index of the integral (corresponds to first index of Zb/Zf)
+  alpha:    mass parameter (corresponds to second index of Zb/Zf)
+  d:    number of spatial dimensions";
+xi::usage="\
+xi is the symbolic gauge-fixing parameter (R\[Xi] gauge). \
+Results are gauge-independent once operator-basis redundancies are removed";
+T::usage="\
+T is the symbolic temperature variable";
+Contract::usage="\
+Contract[t1, t2, pairs] contracts tensors by first forming their tensor product \
+over the index pairs specified in pairs.
+Arguments:
+	t1, t2, ...: tensors to contract (two or more tensors)
+  pairs:       list of index pairs {{i,j},...} to contract over";
+
+ODIM5::usage="\
+ODIM5[n, d] returns the dimension-5 operator tensor for operator n \
+in d spatial dimensions, constructed by contracting the DRalgo tensors.
+Arguments:
+  n: operator index labelling the element of the dimension-5 basis
+  d: number of spatial dimensions (typically d=3)";
+ODIM6::usage="\
+ODIM6[n, d] returns the dimension-6 operator tensor for operator n \
+in d spatial dimensions, constructed by contracting the DRalgo tensors.
+Arguments:
+  n: operator index labelling the element of the dimension-6 basis
+  d: number of spatial dimensions (typically d=3)";
+Dimension5Matching::usage="\
+Dimension5Matching[TensorList, NList, WC, d] performs the hard-to-soft \
+matching of dimension-5 operators and returns the Wilson coefficients.
+Arguments:
+  TensorList: list of group-tensor structures for each operator
+  NList:      list of operator indices corresponding to TensorList
+  WC:         list of Wilson-coefficient symbols to solve for
+  d:          number of spatial dimensions
+Returns a list whose first element is a replacement rule for WC.";
+Dimension6Matching::usage="\
+Dimension6Matching[TensorList, NList, WC, d] performs the hard-to-soft \
+matching of dimension-6 operators and returns the Wilson coefficients.
+Arguments:
+  TensorList: list of group-tensor structures for each operator
+  NList:      list of operator indices corresponding to TensorList
+  WC:         list of Wilson-coefficient symbols to solve for
+  d:          number of spatial dimensions
+Returns a list whose first element is a replacement rule for WC.";
 
 
 PrepareHET::usage = "\
@@ -467,6 +540,7 @@ loadModule["SoftToUS.m"]; (* Soft -> SS functions *)
 loadModule["EffPot.m"]; (* Effective potential functions *)
 loadModule["ModelCreation.m"]; (* Model creation functions *)
 loadModule["HEFT.m"]; (* Loads Higgs-Effective field theory functions *)
+loadModule["Higher_Dimensional_Operators.m"]; (* Loads dimension 5 and 6 higher-dimensional operator functionality *)
 
 
 (* ::Section:: *)
