@@ -13,7 +13,7 @@ DRalgo`DRalgo`$GroupMathMultipleModels=True; (*Put this if you want to create mu
 (*QCD*)
 
 
-(* ::Section:: *)
+(* ::Section::Closed:: *)
 (*Model*)
 
 
@@ -42,20 +42,34 @@ PerformDRhard[]
 
 
 (*
-	Here we construct tensors associated to the group structure constants and its contraction*)
-
+	Here we construct tensors associated to
+	the group structure constants and its contraction
+*)
 Tadj=-I gvvv/gs;
 X2=Contract[Tadj,Tadj,{{2,6},{3,5}}];
 X3=Contract[Tadj,Tadj,Tadj,{{2,9},{3,5},{6,8}}];
 X4=Contract[Tadj,Tadj,Tadj,Tadj,{{2,12},{3,5},{6,8},{9,11}}];
 X6=Contract[Tadj,Tadj,Tadj,Tadj,Tadj,Tadj,{{2,18},{3,5},{6,8},{9,11},{12,14},{15,17}}];
 
-(*Below we construct the group tensors of the higher dimensional operators, having defined \[Alpha][__] our Wilson Coefficients*)
-
+(*
+	Below we construct the group tensors of the higher dimensional operators,
+	having defined \[Alpha][__] our Wilson Coefficients
+*)
 OT[6,1]=\[Alpha][F^3] X3;
-OT[6,3]=SymmetrizeTensor[\[Alpha][A^2F^2,1]X4+\[Alpha][A^2F^2,2]Transpose[X4,{1,3,2,4}]+\[Alpha][A^2F^2,3]TensorProduct[X2,X2],{{1,2},{3,4}}];
-OT[6,8]=SymmetrizeTensor[\[Alpha][D^2A^4,1]X4+\[Alpha][D^2A^4,2]Transpose[X4,{1,3,2,4}]+\[Alpha][D^2A^4,3]TensorProduct[X2,X2],{{1,2},{3,4}}];
-OT[6,12]=SymmetrizeTensor[\[Alpha][A^6,1]X6+\[Alpha][A^6,2]TensorProduct[X4,X2],{{1,2,3,4,5,6}}];
+OT[6,3]=SymmetrizeTensor[
+	+\[Alpha][A^2F^2,1]X4
+	+\[Alpha][A^2F^2,2]Transpose[X4,{1,3,2,4}]
+	+\[Alpha][A^2F^2,3]TensorProduct[X2,X2],{{1,2},{3,4}}
+	];
+OT[6,8]=SymmetrizeTensor[
+	+\[Alpha][D^2A^4,1]X4
+	+\[Alpha][D^2A^4,2]Transpose[X4,{1,3,2,4}]
+	+\[Alpha][D^2A^4,3]TensorProduct[X2,X2],{{1,2},{3,4}}
+	];
+OT[6,12]=SymmetrizeTensor[
+	+\[Alpha][A^6,1]X6
+	+\[Alpha][A^6,2]TensorProduct[X4,X2],{{1,2,3,4,5,6}}
+	];
 OT[6,13]=\[Alpha][D^2F^2]X2;
 OT[6,16]=\[Alpha][D^2 A^2 F]X3;
 OT[6,17]=\[Alpha][D^4A^2]X2;

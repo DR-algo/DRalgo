@@ -198,6 +198,9 @@ sol//Factor//TableForm
 ODIM5[5,d]//MatrixForm
 
 
+ODIM6[4,d]//MatrixForm
+
+
 (*
 	The functions ODIM6 and ODIM5 return the group tensors of the various operators
 *)
