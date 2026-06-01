@@ -114,7 +114,7 @@ AppendTo[
 		}],
 		Row[{
 			"e-Print: ",
-			Hyperlink["2605.xxxxx [hep-ph]", "https://arxiv.org/abs/2605.xxxxx"]
+			Hyperlink["2605.15176 [hep-ph]", "https://arxiv.org/abs/2605.15176"]
 		}]
 	}]
 ];
@@ -540,7 +540,7 @@ loadModule["SoftToUS.m"]; (* Soft -> SS functions *)
 loadModule["EffPot.m"]; (* Effective potential functions *)
 loadModule["ModelCreation.m"]; (* Model creation functions *)
 loadModule["HEFT.m"]; (* Loads Higgs-Effective field theory functions *)
-loadModule["Higher_Dimensional_Operators.m"]; (* Loads dimension 5 and 6 higher-dimensional operator functionality *)
+loadModule["HigherDimensionalOperators.m"]; (* Loads dimension 5 and 6 higher-dimensional operator functionality *)
 
 
 (* ::Section:: *)
