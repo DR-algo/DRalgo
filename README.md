@@ -160,9 +160,8 @@ DRalgo/
 │   ├── sm_HDO.m                      Standard Model with higher-dimensional operators.
 │   ├── ScalYukawa_HDO.m              Scalar–Yukawa model with higher-dimensional operators.
 │   ├── QCD_HDO.m                     QCD with higher-dimensional operators.
-│   ├── SU2+Higgs_HDO.m               SU(2)–Higgs model with higher-dimensional operators.
-│   └── Makefile                      Makefile to batch-run all example scripts.
-├── manual/
+│   └── SU2+Higgs_HDO.m               SU(2)–Higgs model with higher-dimensional operators.
+│                                     the Wolfram Repository.
 ├── PacletInfo.m                      Paclet metadata (name, version, dependencies).
 │                                     the Wolfram Repository.
 ├── README.md                         This file; installation and usage instructions.
