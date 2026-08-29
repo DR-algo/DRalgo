@@ -115,7 +115,7 @@ Ensure that an active `WolframKernel` is available for the above command to work
 
 ## Package Structure
 
-The following describes the top-level directory layout of the **DRalgo** package and the purpose of each file and directory.
+The following describes the main top-level directory layout of the **DRalgo** package and the purpose of the most relevant files and directories (non-exhaustive).
 
 ```
 DRalgo/
