@@ -136,73 +136,80 @@ PrepareHET[HardScalarIndices_,HardVectorIndices_]:=Module[
 (*
 	Calculates the tree-level effective potential.
 *)
-CalculateLOPotentialHET[]:=Module[{V1,V2,V3},
-	If[verbose==True,Print["Calculating the Tree-Level Effective Potential"]];
+CalculateLOPotentialHET[]:=Module[
+	{V1,V2,V3},
+	
+	VerbosePrint["Calculating the Tree-Level Effective Potential"];
 	
 	V1=\[Lambda]4EP . \[Phi]Vev . \[Phi]Vev . \[Phi]Vev . \[Phi]Vev;
 	V2=\[Mu]ijEP . \[Phi]Vev . \[Phi]Vev;
 	V3=\[Lambda]3EP . \[Phi]Vev . \[Phi]Vev . \[Phi]Vev;
-	VHETLO=1/4! V1+V2/2!+V3/3!;
-	];
+	
+	1/4!*V1 + 1/2!*V2 + 1/3!*V3
+];
 
 
 (*
 	Calculates the one-loop effective potential.
 *)
 CalculateNLOPotentialHET[]:=Module[{V1,V2,ALog},
-If[verbose==True,Print["Calculating the 1-Loop Effective Potential"]];
+	VerbosePrint["Calculating the 1-Loop Effective Potential"];
 	(*Log integral*)
 	ALog[x_]:=-(x^(3/2)/(12 \[Pi]));
 	
 	V1=Sum[ALog[\[Mu]ijHET[[i,i]]],{i,1,nHETS}];
 	V2=2*Sum[ALog[\[Mu]abHET[[i,i]]],{i,1,nHETV}];
 
-	VHETNLO=V1+V2;
+	V1+V2
 ];
 
 
 (*
 	Calculates the two-loop effective potential.
 *)
-CalculateNNLOPotentialHET[]:=Module[{fvvv,f\[Eta]\[Eta]v,fssv,fvvs,fsss,fss,fvs,fvv,ss,sss,vs,vvs,ssv,vv,vvv,ggv,
-							Vss,Vsss,Vvs,Vvvs,Vssv,Vvvv,Vvv,V\[Eta]\[Eta]v,
-							\[Mu]ab\[Phi]Pert,\[Mu]ijPert,helpTens,V1,V2,AD},
-If[verbose==True,Print["Calculating the 2-Loop Effective Potential"]];
+CalculateNNLOPotentialHET[]:=Module[
+	{
+		fvvv,f\[Eta]\[Eta]v,fssv,fvvs,fsss,fss,fvs,fvv,ss,sss,vs,vvs,ssv,vv,vvv,ggv,
+		Vss,Vsss,Vvs,Vvvs,Vssv,Vvvv,Vvv,V\[Eta]\[Eta]v,
+		\[Mu]ab\[Phi]Pert,\[Mu]ijPert,helpTens,V1,V2,AD
+	},
+	VerbosePrint["Calculating the 2-Loop Effective Potential"];
 
 
 	(*Loading two-loop master integrals*)
 	{fvvv,f\[Eta]\[Eta]v,fssv,fvvs,fsss,fss,fvs,fvv}=TwoLoopFunctions[];
-(*scalar-scalar bubble*)	
-	ss=1/8 TensorProduct[\[Lambda]4\[Phi]];
+	
+(*scalar-scalar bubble*)
+	ss=1/8*TensorProduct[\[Lambda]4\[Phi]];
 	Vss=Sum[ss[[j,j,k,k]]fss[asF[[j]],asF[[k]]],{j,nsEP},{k,nsEP}];
 
 (*scalar-scalar-scalar sunset*)	
-	sss=1/12 TensorProduct[\[Lambda]3\[Phi],\[Lambda]3\[Phi]];
+	sss=1/12*TensorProduct[\[Lambda]3\[Phi],\[Lambda]3\[Phi]];
 	Vsss=Sum[sss[[i,j,k,i,j,k]]fsss[asF[[i]],asF[[j]],asF[[k]]],{j,nsEP},{k,nsEP},{i,nsEP}];
 	
 (*scalar-vector bubble*)
-	vs=1/2 TensorProduct[gvss\[Phi],gvss\[Phi]];
+	vs=1/2*TensorProduct[gvss\[Phi],gvss\[Phi]];
 	Vvs=Sum[vs[[a,i,j,a,i,j]]fvs[asF[[i]],avF[[a]]],{a,nvEP},{j,nsEP},{i,nsEP}];
 
 
 (*Vector-vector-scalar sunset diagrams*)
-	vvs=1/4 TensorProduct[Gvvs\[Phi],Gvvs\[Phi]];
+	vvs=1/4*TensorProduct[Gvvs\[Phi],Gvvs\[Phi]];
 	Vvvs=Sum[vvs[[a,b,i,a,b,i]]fvvs[avF[[a]],avF[[b]],asF[[i]]],{a,nvEP},{b,nvEP},{i,nsEP}];
 	
 (*Scalar-Scalar-vector sunset diagrams*)									
-	ssv=1/4 TensorProduct[gvss\[Phi],gvss\[Phi]];
+	ssv=1/4*TensorProduct[gvss\[Phi],gvss\[Phi]];
 	Vssv=Sum[ssv[[a,i,j,a,i,j]]fssv[asF[[i]],asF[[j]],avF[[a]]],{a,nvEP},{j,nsEP},{i,nsEP}];
 
 (*vector-vector-vector sunset diagrams*)	
-	vvv=1/12 TensorProduct[gvvv\[Phi],gvvv\[Phi]];
+	vvv=1/12*TensorProduct[gvvv\[Phi],gvvv\[Phi]];
 	Vvvv=Sum[vvv[[a,b,c,a,b,c]]fvvv[avF[[a]],avF[[b]],avF[[c]]],{a,nvEP},{b,nvEP},{c,nvEP}];
 	
 (*vector-vector bubble diagrams*)	
-	vv=1/4 TensorProduct[gvvv\[Phi],gvvv\[Phi]];
+	vv=1/4*TensorProduct[gvvv\[Phi],gvvv\[Phi]];
 	Vvv=Sum[vv[[a,b,c,a,b,c]]fvv[avF[[a]],avF[[b]]],{a,nvEP},{b,nvEP},{c,nvEP}];
 	
 (*ghost diagrams*)
-	ggv=1/4 TensorProduct[gvvv\[Phi],gvvv\[Phi]];
+	ggv=1/4*TensorProduct[gvvv\[Phi],gvvv\[Phi]];
 	V\[Eta]\[Eta]v=Sum[ggv[[a,b,c,a,b,c]]f\[Eta]\[Eta]v[0,0,avF[[b]]],{a,nvEP},{b,nvEP},{c,nvEP}];
 	
 
@@ -232,9 +239,28 @@ If[verbose==True,Print["Calculating the 2-Loop Effective Potential"]];
 		
 	
 (*Potential*)
-(*	*)
-	VHETNNLO= Vss+Vsss+Vvs+ Vvvs+  Vssv+ Vvvv+ Vvv+ V\[Eta]\[Eta]v+V1+V2;
+	Vss + Vsss + Vvs + Vvvs + Vssv + Vvvv + Vvv + V\[Eta]\[Eta]v + V1 + V2
+];
 
+
+(*
+   Calculates the effective potential up to NNLO 
+   and stores the results in VTotHET.
+*)
+CalculatePotentialHET[] := Module[
+	{
+		VHETLO, VHETNLO, VHETNNLO
+	},
+  
+  (* compute contributions at each order *)
+  VHETLO = CalculateLOPotentialHET[];
+  VHETNLO = CalculateNLOPotentialHET[];
+  VHETNNLO = CalculateNNLOPotentialHET[];
+  
+  (* store results in global container *)
+  VTotHET = {VHETLO, VHETNLO, VHETNNLO};
+  
+  Null
 ];
 
 
@@ -264,24 +290,6 @@ PrintActionHET[opt_String] := Module[{effAction},
 (* custom message for invalid option *)
 PrintActionHET::badopt = 
   "Invalid option `1`. Expected \"LO\", \"NLO\", or \"All\".";
-
-
-(*
-   Calculates the effective potential up to NNLO 
-   and stores the results in VTotHET.
-*)
-CalculatePotentialHET[] := Module[{},
-  
-  (* compute contributions at each order *)
-  CalculateLOPotentialHET[];
-  CalculateNLOPotentialHET[];
-  CalculateNNLOPotentialHET[];
-  
-  (* store results in global container *)
-  VTotHET = {VHETLO, VHETNLO, VHETNNLO};
-  
-  Null
-];
 
 
 (* ::Section:: *)
