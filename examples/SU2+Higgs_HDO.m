@@ -295,5 +295,73 @@ solLit={
 \[Alpha][W0^2W^2,1]-(1/2)ge*\[Alpha][W0^2W D^2]/.solDralgo//Factor
 \[Alpha][W0^2W^2,1]-(1/2)g2*\[Alpha][W0^2W D^2]//.solLit//Factor
 
+(* ::Section:: *)
+(*Physical Dimension 6 Matching*)
 
+(* 
+	We can perform the matching directly on the physical (on-shell) basis
+*)
+
+id=IdentityMatrix[3];
+V={{1,0,I,0},{0,1,0,I}}/Sqrt[2];
+Vs={{1,0,-I,0},{0,1,0,-I}}/Sqrt[2];
+Sigma={{{0,1},{1,0}},{{0,-I},{I,0}},{{1,0},{0,-1}}};
+LC=LeviCivitaTensor[3];
+
+Xb=Contract[V,Vs,{{1,3}}];
+Qb=I (Contract[V,Vs,{{1,3}}]-Contract[Vs,V,{{1,3}}]);
+Zeps=Contract[Sigma,V,Vs,LC,{{1,8},{2,6},{3,4}}];
+
+(*
+  SymmetrizeTensor constructs group tensors with the proper symmetry.
+  It takes as input an operator with 4 indices, O_{ijkl}, where (ij) and (kl)
+  are the two pairs of indices:
+
+  SymmetrizeTensor[<Tensor>, "SS"]: symmetrizes in the first two and in the last two indices,
+                                    O_{ijkl} = O_{jikl} = O_{ijlk}.
+  SymmetrizeTensor[<Tensor>, "AA"]: antisymmetrizes in the first two and in the last two indices,
+                                    O_{ijkl} = -O_{jikl} = -O_{ijlk}.
+  SymmetrizeTensor[<Tensor>, "P"]:  projects onto the physical operators. The result is symmetric
+                                    in the first two and in the last two indices, symmetric under
+                                    the exchange of the two pairs, O_{ijkl} = O_{klij}, and satisfies
+                                    O_{ijkl} + O_{ikjl} + O_{iljk} = 0.
+*)
+
+OTP[1]=Factorial[3] \[Beta][W^3] LC;
+OTP[2]=4 \[Beta][\[Phi]^2 W^2] SymmetrizeTensor[Contract[V,Vs,id,{{1,3}}],{{1,2}}];
+OTP[3]=4 \[Beta][W0^2 W^2,1] TensorProduct[id,id]+4 \[Beta][W0^2 W^2,2] SymmetrizeTensor[Transpose[TensorProduct[id,id],{1,3,4,2}],{{1,2},{3,4}}];
+OTP[4]=SymmetrizeTensor[\[Beta][D^2 \[Phi]^4,1] SymmetrizeTensor[Transpose[TensorProduct[Qb,Qb],{1,3,2,4}],{{1,2},{3,4}}]
+ + \[Beta][D^2 \[Phi]^4,2] (SymmetrizeTensor[TensorProduct[Xb,Xb],{{1,2},{3,4}}]
+      - SymmetrizeTensor[Transpose[TensorProduct[Xb,Xb],{1,3,4,2}],{{1,2},{3,4}}]),"P"];
+OTP[5]=SymmetrizeTensor[4 \[Beta][D^2 \[Phi]^2 W0^2,1] SymmetrizeTensor[Contract[V,Vs,id,{{1,3}}],{{1,2}}],"SS"];
+OTP[6]=SymmetrizeTensor[-I \[Beta][D^2 \[Phi]^2 W0^2,2] (Zeps-Conjugate[Zeps]),"AA"];
+OTP[7]=SymmetrizeTensor[\[Beta][D^2 \[Phi]^2 W0^2,3] (SymmetrizeTensor[Transpose[TensorProduct[id,id],{1,3,4,2}],{{1,2},{3,4}}]-TensorProduct[id,id]),"P"];
+OTP[8]=Factorial[6] \[Beta][\[Phi]^6] SymmetrizeTensor[Contract[V,Vs,V,Vs,V,Vs,{{1,3},{5,7},{9,11}}],{{1,2,3,4,5,6}}];
+OTP[9]=Factorial[2] Factorial[4] (
+    \[Beta][\[Phi]^4 W0^2,1] SymmetrizeTensor[Contract[V,Vs,V,Vs,id,{{1,3},{5,7}}],{{1,2,3,4},{5,6}}]
+  + \[Beta][\[Phi]^4 W0^2,2] SymmetrizeTensor[Contract[Vs,V,Vs,V,Sigma,Sigma,{{1,10},{3,11},{5,13},{7,14}}],{{1,2,3,4},{5,6}}]);
+OTP[10]=Factorial[2] Factorial[4] \[Beta][\[Phi]^2 W0^4] SymmetrizeTensor[Contract[V,Vs,id,id,{{1,3}}],{{1,2},{3,4,5,6}}];
+OTP[11]=Factorial[6] \[Beta][W0^6] SymmetrizeTensor[TensorProduct[id,id,id],{{1,2,3,4,5,6}}];
+
+TensorListP={OTP[1],OTP[2],OTP[3],OTP[4],OTP[5],OTP[6],OTP[7],OTP[8],OTP[9],OTP[10],OTP[11]};
+NListP={1,2,3,4,5,6,7,8,9,10,11};
+WCsP=DeleteDuplicates[Cases[TensorListP//Normal,\[Beta][__],\[Infinity]]];
+
+sol6P=Dimension6Matching["PHYS",TensorListP,NListP,WCsP,d][[1]];
+sol6P//Factor//TableForm
+
+(* 
+	In the physical basis, the results are manifestly gauge invariant
+*)
+
+(* 
+	We can perform the matching directly on the physical (on-shell) basis for individual operators
+*)
+solP=Dimension6Matching["PHYS",{OTP[8]},{8},{\[Beta][\[Phi]^6]},d][[1]];
+Collect[solP,{_Zb,_Zf},Factor]//TableForm
+
+(* 
+	With the option "PHYS", the functions ODIM5 and ODIM6 return the group tensors of the operators of the physical basis
+*)
+ODIM6["PHYS",3,d]//MatrixForm
 
