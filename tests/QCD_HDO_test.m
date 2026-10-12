@@ -94,6 +94,23 @@ WCsWithoutA6=DeleteDuplicates[Cases[TensorListWithoutA6//Normal, \[Alpha][__], \
 *)
 solWithoutA6=Dimension6Matching[TensorListWithoutA6,NListWithoutA6,WCsWithoutA6,3][[1]];
 
+(* ::Section:: *)
+(*Physical Dimension 6 Matching*)
+
+(*Group tensors of the operators of the physical basis, having defined \[Beta][__] our Wilson Coefficients*)
+
+OTP[1]=\[Beta][F^3] X3;
+OTP[3]=SymmetrizeTensor[\[Beta][A^2F^2,1] X4+\[Beta][A^2F^2,2] Transpose[X4,{1,3,2,4}]+\[Beta][A^2F^2,3] TensorProduct[X2,X2],{{1,2},{3,4}}];
+OTP[7]=SymmetrizeTensor[\[Beta][D^2A^4,1] X4+\[Beta][D^2A^4,2] TensorProduct[X2,X2],"P"];
+OTP[11]=SymmetrizeTensor[\[Beta][A^6,1] X6+\[Beta][A^6,2] TensorProduct[X4,X2],{{1,2,3,4,5,6}}];
+
+TensorListP={OTP[1],OTP[3],OTP[7]};
+NListP={1,3,7};
+WCsP=DeleteDuplicates[Cases[TensorListP//Normal,\[Beta][__],\[Infinity]]];
+
+sol6PWithoutA6=Dimension6Matching["PHYS",TensorListP,NListP,WCsP,3][[1]];
+
+sol6PWithoutA6
 
 (* ::Section:: *)
 (*TESTS*)
@@ -141,6 +158,43 @@ AppendTo[testList,
 TestCreate[
 	HardThermal1LoopInt["F",3,0,3],
 	(7 Zeta[3])/(128 \[Pi]^4 T^2)
+]];
+
+AppendTo[testList,
+TestCreate[sol6PWithoutA6,
+	{	\[Beta][F^3]->-(2/45) I (3 gs^3 Sqrt[T] Zb[3,0]-gs^3 Sqrt[T] Zf[3,0]),
+		\[Beta][A^2 F^2,1]->-(2/405) (1971 gs^4 Zb[3,0]-37 gs^4 Zf[3,0]),
+		\[Beta][A^2 F^2,2]->-(2/405) (999 gs^4 Zb[3,0]-23 gs^4 Zf[3,0]),
+		\[Beta][A^2 F^2,3]->0,
+		\[Beta][A^4 D^2,1]->1/45 (3 gs^4 T Zb[3,0]-gs^4 T Zf[3,0]),
+		\[Beta][A^4 D^2,2]->0}
+]];
+
+AppendTo[testList,
+TestCreate[ODIM6["PHYS",1,3][[1,2,3]],
+	1/15 gs^3 Sqrt[T] (3 Zb[3,0]-Zf[3,0])
+]];
+
+AppendTo[testList,
+TestCreate[
+	With[{T1=Normal[ODIM6["PHYS",7,3]]},
+		Union[Flatten[Simplify[{
+			T1-Transpose[T1,{2,1,3,4}],
+			T1-Transpose[T1,{1,2,4,3}],
+			T1-Transpose[T1,{3,4,1,2}],
+			T1+Transpose[T1,{1,3,2,4}]+Transpose[T1,{1,4,3,2}]}]]]],
+	{0}
+]];
+
+AppendTo[testList,
+TestCreate[Simplify[(\[Beta][F^3]/.sol6P)-(-(2/45) I (3 gs^3 Sqrt[T] Zb[3,0]-gs^3 Sqrt[T] Zf[3,0]))],
+	0
+]];
+
+AppendTo[testList,
+TestCreate[
+	Union[Simplify[D[sol6P[[All,2]],xi]]],
+	{0}
 ]];
 
 
