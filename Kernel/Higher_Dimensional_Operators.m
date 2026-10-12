@@ -16295,3 +16295,118 @@ Dimension6Matching[O_List,n_List,\[Alpha]_List,d_]:=Module[{eqns},
 	eqns = DeleteDuplicates[FullSimplify[MatchingEquations[ODIM6, 20, O, n, d]]];
 	Solve[eqns,\[Alpha]]
 ];
+
+(* ::Section:: *)
+(*PHYSICAL BASIS HIGHER DIMENSIONAL OPERATORS*)
+
+
+(*Symmetrization routines*)
+SymmetrizeTensor[O_, P_String] := Module[{S},
+  Switch[P,
+   "1S", (1/2)(Transpose[O,{1,2,3,4}]+Transpose[O,{2,1,3,4}]),
+   "2S", (1/2)(Transpose[O,{1,2,3,4}]+Transpose[O,{1,2,4,3}]),
+   "1A", (1/2)(Transpose[O,{1,2,3,4}]-Transpose[O,{2,1,3,4}]),
+   "2A", (1/2)(Transpose[O,{1,2,3,4}]-Transpose[O,{1,2,4,3}]),
+   "SS", (1/4)(Transpose[O,{1,2,3,4}]+Transpose[O,{2,1,3,4}]+Transpose[O,{1,2,4,3}]+Transpose[O,{2,1,4,3}]),
+   "AS", (1/4)(Transpose[O,{1,2,3,4}]-Transpose[O,{2,1,3,4}]+Transpose[O,{1,2,4,3}]-Transpose[O,{2,1,4,3}]),
+   "SA", (1/4)(Transpose[O,{1,2,3,4}]+Transpose[O,{2,1,3,4}]-Transpose[O,{1,2,4,3}]-Transpose[O,{2,1,4,3}]),
+   "AA", (1/4)(Transpose[O,{1,2,3,4}]-Transpose[O,{2,1,3,4}]-Transpose[O,{1,2,4,3}]+Transpose[O,{2,1,4,3}]),
+   "P", S = SymmetrizeTensor[O,"SS"];(1/3)(Transpose[S,{1,2,3,4}]+Transpose[S,{3,4,1,2}]-(1/2)(Transpose[S,{3,2,1,4}]+Transpose[S,{4,2,3,1}]+Transpose[S,{1,3,2,4}]+Transpose[S,{1,4,3,2}])),
+   "K", S = SymmetrizeTensor[O,"SS"]; 2S-Transpose[S,{2,3,4,1}],
+   _, Message[SymmetrizeTensor::badlabel, P]; $Failed
+  ]
+];
+
+
+ODIM5["PHYS",x_,d_]:=Module[{T1},
+	CreateHelpTensors[];
+	T1=
+		Which[
+			x==1,
+			ODIM5[1,d],
+			
+			x==2,
+			SymmetrizeTensor[ODIM5[2,d]+10 Contract[\[Lambda]4,ODIM5[5,d],{{4,5}}]T+10 Contract[\[Lambda]3,\[Lambda]4,ODIM6[15,d],{{1,8},{4,9}}]T^(3/2)-5 Contract[\[Lambda]3,SymmetrizeTensor[ODIM6[4,d],"K"],{{1,4}}]T^(1/2),{{1,2,3,4,5}}],
+			
+			x==3,
+			SymmetrizeTensor[ODIM5[3,d]+12Transpose[Contract[-HabijV/4,ODIM5[5,d],{{4,5}}],{4,5,1,2,3}]T+Contract[\[Lambda]4,ODIM5[6,d],{{4,5}}]T+24Transpose[Contract[-HabijV/4,ODIM5[7,d],{{2,6}}],{4,1,2,3,5}]T+12 Transpose[Contract[-HabijV/4,\[Lambda]3,ODIM6[15,d],{{3,8},{5,9}}],{4,5,1,2,3}]T^(3/2)-(3/2) Contract[\[Lambda]3,SymmetrizeTensor[ODIM6[5,d],"SS"],{{1,4}}]T^(3/2)-3 Contract[\[Lambda]3,SymmetrizeTensor[ODIM6[6,d],"AS"],{{1,4}}]T^(3/2),{{1,2,3},{4,5}}],
+			
+			x==4,
+			SymmetrizeTensor[ODIM5[4,d]+24Transpose[Contract[-HabijV/4,ODIM5[6,d],{{4,5}}],{2,3,1,4,5}]T,{{2,3,4,5}}],
+			
+			x==5,
+			ODIM5[8,d],
+			
+			True, "NOT ALLOWED X VALUE"			
+			];
+	Normal[T1]/.{N->d}// SparseArray // SimplifySparse
+];
+
+ODIM6["PHYS",x_,d_]:=Module[{T1},
+	CreateHelpTensors[];
+	T1=
+		Which[
+			x==1, ODIM6[1,d],
+			
+			x==2, ODIM6[2,d],
+			
+			x==3, ODIM6[3,d],
+			
+			x==4,
+			(1/4)SymmetrizeTensor[ODIM6[4,d]+2 T Transpose[Contract[gvss,gvss,ODIM6[13,d],{{1,7},{4,8}}],{1,3,2,4}]-4T^(1/2) Transpose[Contract[gvss,ODIM6[14,d],{{1,6}}],{2,4,3,1}],"P"],
+			
+			x==5,
+			SymmetrizeTensor[-(1/2)ODIM6[5,d]+ODIM6[6,d]-(1/2)ODIM6[7,d],"SS"],
+			
+			x==6,
+			SymmetrizeTensor[ODIM6[6,d]+T Contract[gvss,gvvv,ODIM6[13,d],{{1,7},{4,8}}]+T^(1/2) Transpose[Contract[gvvv,ODIM6[14,d],{{1,6}}],{3,4,1,2}]+T^(1/2) Contract[gvss,ODIM6[16,d],{{1,4}}],"AA"],
+			
+			x==7,
+			(1/4) SymmetrizeTensor[ODIM6[8,d]+2 T Transpose[Contract[gvvv,gvvv,ODIM6[13,d],{{1,7},{4,8}}],{1,3,2,4}]+4T^(1/2) Transpose[Contract[gvvv,ODIM6[16,d],{{3,4}}],{2,4,1,3}],"P"],
+			
+			x==8,
+			SymmetrizeTensor[ODIM6[9,d]+10 T^2 Contract[\[Lambda]4,\[Lambda]4,ODIM6[15,d],{{4,9},{8,10}}]-10 T Contract[\[Lambda]4,SymmetrizeTensor[ODIM6[4,d],"K"],{{1,5}}],{{1,2,3,4,5,6}}],
+			
+			x==9,
+			SymmetrizeTensor[ODIM6[10,d]+16 T^2 Transpose[Contract[-HabijV/4,\[Lambda]4,ODIM6[15,d],{{4,9},{8,10}}],{5,6,1,2,3,4}]+96 T^2 Transpose[Contract[-HabijV/4,-HabijV/4,ODIM6[17,d],{{2,9},{6,10}}],{5,1,2,6,3,4}]-8 T Transpose[Contract[-HabijV/4,SymmetrizeTensor[ODIM6[4,d],"K"],{{3,5}}],{5,6,1,2,3,4}]-2T Contract[\[Lambda]4,SymmetrizeTensor[ODIM6[5,d],"SS"],{{1,5}}]-4T Contract[\[Lambda]4,SymmetrizeTensor[ODIM6[6,d],"AS"],{{1,5}}]+48T Transpose[Contract[-HabijV/4,SymmetrizeTensor[ODIM6[6,d],"SA"],{{1,8}}],{5,1,2,3,4,6}]-24T Transpose[Contract[-HabijV/4,SymmetrizeTensor[ODIM6[7,d],"SS"],{{1,8}}],{5,1,2,3,4,6}],{{1,2,3,4},{5,6}}],
+			
+			x==10,
+			SymmetrizeTensor[ODIM6[11,d]+96 T^2 Transpose[Contract[-HabijV/4,-HabijV/4,ODIM6[15,d],{{4,9},{8,10}}],{3,4,1,5,6,2}]-24T Transpose[Contract[-HabijV/4,SymmetrizeTensor[ODIM6[5,d],"SS"],{{3,5}}],{3,4,1,2,5,6}]-48T Transpose[Contract[-HabijV/4,SymmetrizeTensor[ODIM6[6,d],"AS"],{{3,5}}],{3,4,1,2,5,6}]-8T Transpose[Contract[-HabijV/4,SymmetrizeTensor[ODIM6[8,d],"K"],{{1,5}}],{3,1,2,4,5,6}],{{1,2},{3,4,5,6}}],
+			
+			x==11,
+			ODIM6[12,d],
+			
+			x==12,
+			ODIM6[19,d]+T^(1/2) Contract[gvss,ODIM6[18,d],{{1,6}}],
+			
+			x==13,
+			SymmetrizeTensor[ODIM6[20,d]+2 T^(1/2) Transpose[Contract[gvvv,ODIM6[18,d],{{1,6}}],{2,3,1,4}],{{1,2}}],
+			
+			True, "NOT ALLOWED X VALUE"			
+			];
+	Normal[T1]/.{N->d}// SparseArray // SimplifySparse
+];
+
+
+(* ::Section:: *)
+(*PHYSICAL BASIS HIGHER DIMENSIONAL OPERATORS MATCHING*)
+
+
+(*
+	Physical-basis matching: same logic as Dimension5Matching/Dimension6Matching,
+	reusing MatchingEquations with the "PHYS" tensors ODIM5["PHYS",i,d] and
+	ODIM6["PHYS",i,d]. Normal makes sure the tensors are plain lists, so that
+	Flatten/Thread produce one equation per component.
+	Physical classes: 5 in dimension 5, 13 in dimension 6.
+*)
+Dimension5Matching["PHYS",O_List,n_List,\[Alpha]_List,d_]:=Module[{eqns},
+	CreateHelpTensors[];
+	eqns = MatchingEquations[Normal@ODIM5["PHYS",#1,#2]&, 5, O, n, d];
+	Solve[eqns,\[Alpha]]
+];
+
+Dimension6Matching["PHYS",O_List,n_List,\[Alpha]_List,d_]:=Module[{eqns},
+	CreateHelpTensors[];
+	eqns = MatchingEquations[Normal@ODIM6["PHYS",#1,#2]&, 13, O, n, d];
+	Solve[eqns,\[Alpha]]
+];
