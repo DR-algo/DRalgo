@@ -181,7 +181,7 @@ ODIM6[2,d]//MatrixForm
 *)
 
 (* ::Section:: *)
-(*PHYSICAL DIMENSION 6 MATCHING*)
+(*Physical Dimension 6 Matching*)
 
 (* 
 	We can perform the matching directly on the physical (on-shell) basis
