@@ -208,7 +208,9 @@ ODIM6[4,d]//MatrixForm
 (* ::Section:: *)
 (*PHYSICAL DIM5 / DIM6 MATCHING*)
 
-(* We can perform the matching directly on the physical (on-shell) basis. *)
+(* 
+	We can perform the matching directly on the physical (on-shell) basis
+*)
 
 OTP[5,2]=\[Alpha][5,1]*TensorProduct[{1},{1},{1},{1},{1}];
 OTP[6,8]=\[Alpha][6,1]*TensorProduct[{1},{1},{1},{1},{1},{1}];
@@ -219,4 +221,8 @@ sol6PHYS=Dimension6Matching["PHYS",{OTP[6,8]},{8},{\[Alpha][6,1]},d][[1]];
 Collect[sol5PHYS,{_Zb,_Zf},Factor]//TableForm
 Collect[sol6PHYS,{_Zb,_Zf},Factor]//TableForm
 
-ODIM6["PHYS",8,d]//MatrixForm (* With the option "PHYS", the functions ODIM5 and ODIM6 return the group tensors of the operators of the physical basis. *)
+ (*
+ 	With the option "PHYS", the functions ODIM5 and ODIM6 return the group tensors of the operators of the physical basis
+ *)
+
+ODIM6["PHYS",8,d]//MatrixForm
