@@ -106,6 +106,37 @@ WC=DeleteDuplicates[Cases[TensorList//Normal, \[Alpha][__], \[Infinity]]];
 
 soltot=Dimension6Matching[TensorList,NList,WC,3][[1]];
 
+(* ::Section:: *)
+(*Physical Dimension 6 Matching*)
+
+Xb=Contract[V,Vs,{{1,3}}];
+Qb=I (Contract[V,Vs,{{1,3}}]-Contract[Vs,V,{{1,3}}]);
+Zeps=Contract[Sigma,V,Vs,LC,{{1,8},{2,6},{3,4}}];
+ 
+OTP[1]=Factorial[3] \[Beta][W^3] LC;
+OTP[2]=4 \[Beta][\[Phi]^2 W^2] SymmetrizeTensor[Contract[V,Vs,id,{{1,3}}],{{1,2}}];
+OTP[3]=4 \[Beta][W0^2 W^2,1] TensorProduct[id,id]+4 \[Beta][W0^2 W^2,2] SymmetrizeTensor[Transpose[TensorProduct[id,id],{1,3,4,2}],{{1,2},{3,4}}];
+OTP[4]=SymmetrizeTensor[
+    \[Beta][D^2 \[Phi]^4,1] SymmetrizeTensor[Transpose[TensorProduct[Qb,Qb],{1,3,2,4}],{{1,2},{3,4}}]
+  + \[Beta][D^2 \[Phi]^4,2] (SymmetrizeTensor[TensorProduct[Xb,Xb],{{1,2},{3,4}}]
+      - SymmetrizeTensor[Transpose[TensorProduct[Xb,Xb],{1,3,4,2}],{{1,2},{3,4}}]),"P"];
+OTP[5]=SymmetrizeTensor[4 \[Beta][D^2 \[Phi]^2 W0^2,1] SymmetrizeTensor[Contract[V,Vs,id,{{1,3}}],{{1,2}}],"SS"];
+OTP[6]=SymmetrizeTensor[-I \[Beta][D^2 \[Phi]^2 W0^2,2] (Zeps-Conjugate[Zeps]),"AA"];
+OTP[7]=SymmetrizeTensor[\[Beta][D^2 \[Phi]^2 W0^2,3] (SymmetrizeTensor[Transpose[TensorProduct[id,id],{1,3,4,2}],{{1,2},{3,4}}]-TensorProduct[id,id]),"P"];
+OTP[8]=Factorial[6] \[Beta][\[Phi]^6] SymmetrizeTensor[Contract[V,Vs,V,Vs,V,Vs,{{1,3},{5,7},{9,11}}],{{1,2,3,4,5,6}}];
+OTP[9]=Factorial[2] Factorial[4] (
+    \[Beta][\[Phi]^4 W0^2,1] SymmetrizeTensor[Contract[V,Vs,V,Vs,id,{{1,3},{5,7}}],{{1,2,3,4},{5,6}}]
+  + \[Beta][\[Phi]^4 W0^2,2] SymmetrizeTensor[Contract[Vs,V,Vs,V,Sigma,Sigma,{{1,10},{3,11},{5,13},{7,14}}],{{1,2,3,4},{5,6}}]);
+OTP[10]=Factorial[2] Factorial[4] \[Beta][\[Phi]^2 W0^4] SymmetrizeTensor[Contract[V,Vs,id,id,{{1,3}}],{{1,2},{3,4,5,6}}];
+OTP[11]=Factorial[6] \[Beta][W0^6] SymmetrizeTensor[TensorProduct[id,id,id],{{1,2,3,4,5,6}}];
+ 
+TensorListP={OTP[1],OTP[2],OTP[3],OTP[4],OTP[5],OTP[6],OTP[7],OTP[8],OTP[9],OTP[10],OTP[11]};
+NListP={1,2,3,4,5,6,7,8,9,10,11};
+WCsP=DeleteDuplicates[Cases[TensorListP//Normal,\[Beta][__],\[Infinity]]];
+ 
+solP=Dimension6Matching["PHYS",TensorListP,NListP,WCsP,3][[1]];
+ 
+solP
 
 (* ::Section:: *)
 (*TESTS*)
@@ -155,6 +186,68 @@ TestCreate[
 	-1/6 (gw^2 (-22+6 xi+xi^2) Zb[3,0])
 ]];
 
+expectedP={
+ \[Beta][W^3]->gw^3 Sqrt[T] Zb[3,0]/36,
+ \[Beta][\[Phi]^2 W^2]->(101 gw^4 T Zb[3,0]-24 gw^2 T \[Lambda]1H Zb[3,0])/96,
+ \[Beta][W0^2 W^2,1]->-(29/12) gw^4 Zb[3,0],
+ \[Beta][W0^2 W^2,2]->-(39/8) gw^4 Zb[3,0],
+ \[Beta][D^2 \[Phi]^4,1]->-(1/96) T (23 gw^4-160 gw^2 \[Lambda]1H+64 \[Lambda]1H^2) Zb[3,0],
+ \[Beta][D^2 \[Phi]^4,2]->-(1/24) T (23 gw^4-160 gw^2 \[Lambda]1H+64 \[Lambda]1H^2) Zb[3,0],
+ \[Beta][D^2 \[Phi]^2 W0^2,1]->(1/96) gw^2 T (101 gw^2-24 \[Lambda]1H) Zb[3,0],
+ \[Beta][D^2 \[Phi]^2 W0^2,2]->(1/24) gw^4 T Zb[3,0],
+ \[Beta][D^2 \[Phi]^2 W0^2,3]->-(1/36) gw^4 T Zb[3,0],
+ \[Beta][\[Phi]^6]->(1/48) T^2 (9 gw^6-84 gw^4 \[Lambda]1H+80 gw^2 \[Lambda]1H^2+1408 \[Lambda]1H^3) Zb[3,0],
+ \[Beta][W0^2 \[Phi]^4,1]->(1/48) gw^2 T^2 (-101 gw^4+508 gw^2 \[Lambda]1H-544 \[Lambda]1H^2) Zb[3,0],
+ \[Beta][W0^2 \[Phi]^4,2]->0,
+ \[Beta][W0^4 \[Phi]^2]->(175/72) gw^6 T^2 Zb[3,0],
+ \[Beta][W0^6]->0};
+ 
+AppendTo[testList,
+TestCreate[Union[Simplify[(First/@expectedP/.solP)-(Last/@expectedP)]],
+	{0}
+]];
+ 
+AppendTo[testList,
+TestCreate[
+	ODIM6["PHYS",1,3][[1,2,3]],
+	gw^3 Sqrt[T] Zb[3,0]/6
+]];
+ 
+AppendTo[testList,
+TestCreate[
+	Table[
+		With[{T4=Normal[ODIM6["PHYS",n,3]]},
+			Union[Flatten[Simplify[{
+				T4-Transpose[T4,{2,1,3,4}],
+				T4-Transpose[T4,{1,2,4,3}],
+				T4-Transpose[T4,{3,4,1,2}],
+				T4+Transpose[T4,{1,3,2,4}]+Transpose[T4,{1,4,3,2}]}]]]],
+		{n,{4,7}}],
+	{{0},{0}}
+]];
+ 
+AppendTo[testList,
+TestCreate[
+	With[{T5=Normal[ODIM6["PHYS",5,3]],T6=Normal[ODIM6["PHYS",6,3]]},
+		Union[Flatten[Simplify[{
+			T5-Transpose[T5,{2,1,3,4}],T5-Transpose[T5,{1,2,4,3}],
+			T6+Transpose[T6,{2,1,3,4}],T6+Transpose[T6,{1,2,4,3}]}]]]],
+	{0}
+]];
+ 
+AppendTo[testList,
+TestCreate[
+	Union[Flatten[MapThread[
+		Simplify[(Normal[#1]/.solP)-Normal[ODIM6["PHYS",#2,3]]]&,
+		{TensorListP,NListP}]]],
+	{0}
+]];
+ 
+AppendTo[testList,
+TestCreate[
+	Union[Simplify[D[solP[[All,2]],xi]]],
+	{0}
+]];
 
 report=TestReport[testList];
 Print[report["ResultsDataset"]]
