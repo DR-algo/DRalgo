@@ -488,7 +488,7 @@ solTex=Collect[Join[sol,sol6]/.HYPERCHARGE/.{\[Lambda]1H->l4,\[Xi]->xi},{_Zb,_Zf
 *)
 
 (* ::Section:: *)
-(*PHYSICAL DIM6 MATCHING*)
+(*Physical Dimension 6 Matching *)
 
 (* 
 	We can perform the matching directly on the physical (on-shell) basis for individual operators
