@@ -187,13 +187,13 @@ TestCreate[
 ]];
 
 AppendTo[testList,
-TestCreate[Simplify[(\[Beta][F^3]/.sol6P)-(-(2/45) I (3 gs^3 Sqrt[T] Zb[3,0]-gs^3 Sqrt[T] Zf[3,0]))],
+TestCreate[Simplify[(\[Beta][F^3]/.sol6PWithoutA6)-(-(2/45) I (3 gs^3 Sqrt[T] Zb[3,0]-gs^3 Sqrt[T] Zf[3,0]))],
 	0
 ]];
 
 AppendTo[testList,
 TestCreate[
-	Union[Simplify[D[sol6P[[All,2]],xi]]],
+	Union[Simplify[D[sol6PWithoutA6[[All,2]],xi]]],
 	{0}
 ]];
 
