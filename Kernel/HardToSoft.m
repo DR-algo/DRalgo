@@ -2461,6 +2461,8 @@ PrintIdentification[]:=Module[{},
 
 (*
 	Prints anomalous dimensions of 4d fields.
+	ComponentsI={pos1,pos2} are entries of PrintScalarRepPositions[], PrintGaugeRepPositions[],
+	or PrintFermionRepPositions[]; the first index of each is used.
 *)
 AnomDim4D[ParticleI_,ComponentsI_]:=Module[
 	{
@@ -2475,13 +2477,14 @@ AnomDim4D[ParticleI_,ComponentsI_]:=Module[
 		\[Gamma]ab=EmptyArray[{nv,nv}];
 		
 	]; 
+(*No ";" inside the branches: "expr;" evaluates to Null*)
 	Ret = Switch[ParticleP,
 		"S",
-			\[Gamma]ij[[ComponentsP[[1]][[1]],ComponentsP[[2]][[1]]]];,
+			\[Gamma]ij[[ComponentsP[[1]][[1]],ComponentsP[[2]][[1]]]],
 		"F",
-			\[Gamma]IJF[[ComponentsP[[1]][[1]],ComponentsP[[2]][[1]]]];,
+			\[Gamma]IJF[[ComponentsP[[1]][[1]],ComponentsP[[2]][[1]]]],
 		"V",
-			\[Gamma]ab[[ComponentsP[[1]][[1]],ComponentsP[[2]][[1]]]];
+			\[Gamma]ab[[ComponentsP[[1]][[1]],ComponentsP[[2]][[1]]]]
 		];
 
 	OutputFormatDR[Ret]

@@ -207,7 +207,10 @@ Prints the effective potential in the supersoft theory";
 PrintScalarMassUS::usage="\
 Prints scalar masses in the supersoft theory";
 AnomDim4D::usage="\
-Prints anomalous dimensions in the 4d theory";
+AnomDim4D[\"S\"|\"F\"|\"V\", {pos1, pos2}] \
+prints the one-loop anomalous dimension (Landau gauge) of the 4d scalars, fermions, or vectors \
+between the representations at the positions pos1 and pos2, \
+as given by PrintScalarRepPositions[], PrintFermionRepPositions[], or PrintGaugeRepPositions[]";
 BetaFunctions4D::usage="\
 Prints beta-functions in the 4d theory";
 BetaFunctions3DS::usage="\
