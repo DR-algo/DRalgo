@@ -16353,7 +16353,7 @@ ODIM5["PHYS",x_,d_]:=Module[{terms},
 			SymmetrizeTensor[ODIM5[2,d]+10 Contract[\[Lambda]4,ODIM5[5,d],{{4,5}}]T+10 Contract[\[Lambda]3,\[Lambda]4,ODIM6[15,d],{{1,8},{4,9}}]T^(3/2)-5 Contract[\[Lambda]3,SymmetrizeTensor[ODIM6[4,d],"K"],{{1,4}}]T^(1/2),{{1,2,3,4,5}}],
 			
 			x==3,
-			SymmetrizeTensor[ODIM5[3,d]+12Transpose[Contract[-HabijV/4,ODIM5[5,d],{{4,5}}],{4,5,1,2,3}]T+Contract[\[Lambda]4,ODIM5[6,d],{{4,5}}]T+24Transpose[Contract[-HabijV/4,ODIM5[7,d],{{2,6}}],{4,1,2,3,5}]T+12 Transpose[Contract[-HabijV/4,\[Lambda]3,ODIM6[15,d],{{3,8},{5,9}}],{4,5,1,2,3}]T^(3/2)-(3/2) Contract[\[Lambda]3,SymmetrizeTensor[ODIM6[5,d],"SS"],{{1,4}}]T^(3/2)-3 Contract[\[Lambda]3,SymmetrizeTensor[ODIM6[6,d],"AS"],{{1,4}}]T^(3/2),{{1,2,3},{4,5}}],
+			SymmetrizeTensor[ODIM5[3,d]+12Transpose[Contract[-HabijV/4,ODIM5[5,d],{{4,5}}],{4,5,1,2,3}]T+Contract[\[Lambda]4,ODIM5[6,d],{{4,5}}]T+24Transpose[Contract[-HabijV/4,ODIM5[7,d],{{2,6}}],{4,1,2,3,5}]T+12 Transpose[Contract[-HabijV/4,\[Lambda]3,ODIM6[15,d],{{3,8},{5,9}}],{4,5,1,2,3}]T^(3/2)-(3/2) Contract[\[Lambda]3,SymmetrizeTensor[ODIM6[5,d],"SS"],{{1,4}}]T^(1/2)-3 Contract[\[Lambda]3,SymmetrizeTensor[ODIM6[6,d],"AS"],{{1,4}}]T^(1/2),{{1,2,3},{4,5}}],
 			
 			x==4,
 			SymmetrizeTensor[ODIM5[4,d]+24Transpose[Contract[-HabijV/4,ODIM5[6,d],{{4,5}}],{2,3,1,4,5}]T,{{2,3,4,5}}],
