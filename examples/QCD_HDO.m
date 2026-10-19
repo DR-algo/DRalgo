@@ -159,7 +159,7 @@ solDRalgo=sol6;
 (* ::Section:: *)
 (*Physical Dimension 6 Matching*)
 
-(* 
+(*
 	We can perform the matching directly on the physical (on-shell) basis
 *)
 
@@ -181,17 +181,17 @@ WCsP=DeleteDuplicates[Cases[TensorListP//Normal, \[Beta][__], \[Infinity]]];
 sol6P=Dimension6Matching["PHYS",TensorListP,NListP,WCsP,3][[1]];
 Collect[sol6P,{_Zb,_Zf},Factor]//TableForm
 
-(* 
+(*
 	In the physical basis, the results are manifestly gauge invariant
 *)
 
-(* 
+(*
 	We can perform the matching directly on the physical (on-shell) basis for individual operators
 *)
 solP=Dimension6Matching["PHYS",{OTP[1]},{1},{\[Beta][F^3]},3][[1]];
 Collect[solP,{_Zb,_Zf},Factor]//TableForm
 
-(* 
+(*
 	With the option "PHYS", the functions ODIM5 and ODIM6 return the group tensors of the operators of the physical basis
 *)
 ODIM6["PHYS",3,d]//MatrixForm

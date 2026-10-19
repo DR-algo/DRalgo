@@ -97,7 +97,7 @@ solWithoutA6=Dimension6Matching[TensorListWithoutA6,NListWithoutA6,WCsWithoutA6,
 (* ::Section:: *)
 (*Physical Dimension 6 Matching*)
 
-(*Group tensors of the operators of the physical basis, having defined \[Beta][__] our Wilson Coefficients*)
+(*Group tensors of the physical-basis operators, with Wilson coefficients \[Beta][__]; as above, A^6 is left out*)
 
 OTP[1]=\[Beta][F^3] X3;
 OTP[3]=SymmetrizeTensor[\[Beta][A^2F^2,1] X4+\[Beta][A^2F^2,2] Transpose[X4,{1,3,2,4}]+\[Beta][A^2F^2,3] TensorProduct[X2,X2],{{1,2},{3,4}}];

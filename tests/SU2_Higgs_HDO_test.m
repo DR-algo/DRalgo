@@ -112,7 +112,7 @@ soltot=Dimension6Matching[TensorList,NList,WC,3][[1]];
 Xb=Contract[V,Vs,{{1,3}}];
 Qb=I (Contract[V,Vs,{{1,3}}]-Contract[Vs,V,{{1,3}}]);
 Zeps=Contract[Sigma,V,Vs,LC,{{1,8},{2,6},{3,4}}];
- 
+
 OTP[1]=Factorial[3] \[Beta][W^3] LC;
 OTP[2]=4 \[Beta][\[Phi]^2 W^2] SymmetrizeTensor[Contract[V,Vs,id,{{1,3}}],{{1,2}}];
 OTP[3]=4 \[Beta][W0^2 W^2,1] TensorProduct[id,id]+4 \[Beta][W0^2 W^2,2] SymmetrizeTensor[Transpose[TensorProduct[id,id],{1,3,4,2}],{{1,2},{3,4}}];
@@ -129,13 +129,13 @@ OTP[9]=Factorial[2] Factorial[4] (
   + \[Beta][\[Phi]^4 W0^2,2] SymmetrizeTensor[Contract[Vs,V,Vs,V,Sigma,Sigma,{{1,10},{3,11},{5,13},{7,14}}],{{1,2,3,4},{5,6}}]);
 OTP[10]=Factorial[2] Factorial[4] \[Beta][\[Phi]^2 W0^4] SymmetrizeTensor[Contract[V,Vs,id,id,{{1,3}}],{{1,2},{3,4,5,6}}];
 OTP[11]=Factorial[6] \[Beta][W0^6] SymmetrizeTensor[TensorProduct[id,id,id],{{1,2,3,4,5,6}}];
- 
+
 TensorListP={OTP[1],OTP[2],OTP[3],OTP[4],OTP[5],OTP[6],OTP[7],OTP[8],OTP[9],OTP[10],OTP[11]};
 NListP={1,2,3,4,5,6,7,8,9,10,11};
 WCsP=DeleteDuplicates[Cases[TensorListP//Normal,\[Beta][__],\[Infinity]]];
- 
+
 solP=Dimension6Matching["PHYS",TensorListP,NListP,WCsP,3][[1]];
- 
+
 solP
 
 (* ::Section:: *)
@@ -201,18 +201,18 @@ expectedP={
  \[Beta][W0^2 \[Phi]^4,2]->0,
  \[Beta][W0^4 \[Phi]^2]->(175/72) gw^6 T^2 Zb[3,0],
  \[Beta][W0^6]->0};
- 
+
 AppendTo[testList,
 TestCreate[Union[Simplify[(First/@expectedP/.solP)-(Last/@expectedP)]],
 	{0}
 ]];
- 
+
 AppendTo[testList,
 TestCreate[
 	ODIM6["PHYS",1,3][[1,2,3]],
 	gw^3 Sqrt[T] Zb[3,0]/6
 ]];
- 
+
 AppendTo[testList,
 TestCreate[
 	Table[
@@ -225,7 +225,7 @@ TestCreate[
 		{n,{4,7}}],
 	{{0},{0}}
 ]];
- 
+
 AppendTo[testList,
 TestCreate[
 	With[{T5=Normal[ODIM6["PHYS",5,3]],T6=Normal[ODIM6["PHYS",6,3]]},
@@ -234,7 +234,7 @@ TestCreate[
 			T6+Transpose[T6,{2,1,3,4}],T6+Transpose[T6,{1,2,4,3}]}]]]],
 	{0}
 ]];
- 
+
 AppendTo[testList,
 TestCreate[
 	Union[Flatten[MapThread[
@@ -242,7 +242,7 @@ TestCreate[
 		{TensorListP,NListP}]]],
 	{0}
 ]];
- 
+
 AppendTo[testList,
 TestCreate[
 	Union[Simplify[D[solP[[All,2]],xi]]],

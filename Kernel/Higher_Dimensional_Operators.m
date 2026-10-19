@@ -16296,31 +16296,55 @@ Dimension6Matching[O_List,n_List,\[Alpha]_List,d_]:=Module[{eqns},
 	Solve[eqns,\[Alpha]]
 ];
 
+
 (* ::Section:: *)
 (*PHYSICAL BASIS HIGHER DIMENSIONAL OPERATORS*)
 
 
-(*Symmetrization routines*)
-SymmetrizeTensor[O_, P_String] := Module[{S},
-  Switch[P,
-   "1S", (1/2)(Transpose[O,{1,2,3,4}]+Transpose[O,{2,1,3,4}]),
-   "2S", (1/2)(Transpose[O,{1,2,3,4}]+Transpose[O,{1,2,4,3}]),
-   "1A", (1/2)(Transpose[O,{1,2,3,4}]-Transpose[O,{2,1,3,4}]),
-   "2A", (1/2)(Transpose[O,{1,2,3,4}]-Transpose[O,{1,2,4,3}]),
-   "SS", (1/4)(Transpose[O,{1,2,3,4}]+Transpose[O,{2,1,3,4}]+Transpose[O,{1,2,4,3}]+Transpose[O,{2,1,4,3}]),
-   "AS", (1/4)(Transpose[O,{1,2,3,4}]-Transpose[O,{2,1,3,4}]+Transpose[O,{1,2,4,3}]-Transpose[O,{2,1,4,3}]),
-   "SA", (1/4)(Transpose[O,{1,2,3,4}]+Transpose[O,{2,1,3,4}]-Transpose[O,{1,2,4,3}]-Transpose[O,{2,1,4,3}]),
-   "AA", (1/4)(Transpose[O,{1,2,3,4}]-Transpose[O,{2,1,3,4}]-Transpose[O,{1,2,4,3}]+Transpose[O,{2,1,4,3}]),
-   "P", S = SymmetrizeTensor[O,"SS"];(1/3)(Transpose[S,{1,2,3,4}]+Transpose[S,{3,4,1,2}]-(1/2)(Transpose[S,{3,2,1,4}]+Transpose[S,{4,2,3,1}]+Transpose[S,{1,3,2,4}]+Transpose[S,{1,4,3,2}])),
-   "K", S = SymmetrizeTensor[O,"SS"]; 2S-Transpose[S,{2,3,4,1}],
-   _, Message[SymmetrizeTensor::badlabel, P]; $Failed
-  ]
+(*
+	SymmetrizeTensor[O, label]:
+	Projections of a rank-4 tensor O_{ijkl}, whose indices form the two pairs
+	(ij) and (kl). The first character of a two-character label refers to the
+	pair (ij), the second to (kl): "S" symmetrizes, "A" antisymmetrizes.
+	"1S", "1A", "2S", "2A" act on a single pair only.
+	"P" projects onto the physical (on-shell) structure: symmetric within each
+	pair, symmetric under (ij) <-> (kl), and O_{ijkl}+O_{ikjl}+O_{iljk}=0.
+	"K" gives 2 S_{ijkl} - S_{jkli} with S the "SS" part of O; it is used in
+	the reduction to the physical basis below.
+*)
+SymmetrizeTensor[O_,P_String]:=Module[{S},
+	Switch[P,
+		"1S", (1/2)(Transpose[O,{1,2,3,4}]+Transpose[O,{2,1,3,4}]),
+		"2S", (1/2)(Transpose[O,{1,2,3,4}]+Transpose[O,{1,2,4,3}]),
+		"1A", (1/2)(Transpose[O,{1,2,3,4}]-Transpose[O,{2,1,3,4}]),
+		"2A", (1/2)(Transpose[O,{1,2,3,4}]-Transpose[O,{1,2,4,3}]),
+		"SS", (1/4)(Transpose[O,{1,2,3,4}]+Transpose[O,{2,1,3,4}]+Transpose[O,{1,2,4,3}]+Transpose[O,{2,1,4,3}]),
+		"AS", (1/4)(Transpose[O,{1,2,3,4}]-Transpose[O,{2,1,3,4}]+Transpose[O,{1,2,4,3}]-Transpose[O,{2,1,4,3}]),
+		"SA", (1/4)(Transpose[O,{1,2,3,4}]+Transpose[O,{2,1,3,4}]-Transpose[O,{1,2,4,3}]-Transpose[O,{2,1,4,3}]),
+		"AA", (1/4)(Transpose[O,{1,2,3,4}]-Transpose[O,{2,1,3,4}]-Transpose[O,{1,2,4,3}]+Transpose[O,{2,1,4,3}]),
+		"P",
+		S=SymmetrizeTensor[O,"SS"];
+		(1/3)(Transpose[S,{1,2,3,4}]+Transpose[S,{3,4,1,2}]
+			-(1/2)(Transpose[S,{3,2,1,4}]+Transpose[S,{4,2,3,1}]+Transpose[S,{1,3,2,4}]+Transpose[S,{1,4,3,2}])),
+		"K",
+		S=SymmetrizeTensor[O,"SS"];
+		2S-Transpose[S,{2,3,4,1}],
+		_, Message[SymmetrizeTensor::badlabel,P]; $Failed
+	]
 ];
 
 
-ODIM5["PHYS",x_,d_]:=Module[{T1},
+(*
+	ODIM5["PHYS", x, d] and ODIM6["PHYS", x, d] return the tensors of the
+	physical (on-shell) basis: 5 operator classes in dimension 5 and 13 in
+	dimension 6. Each is a combination of the off-shell tensors ODIM5[x, d]
+	and ODIM6[x, d] above, in which the redundant operators have been
+	eliminated, projected onto the index symmetry of the physical operator.
+	The resulting Wilson coefficients are gauge independent.
+*)
+ODIM5["PHYS",x_,d_]:=Module[{terms},
 	CreateHelpTensors[];
-	T1=
+	terms=
 		Which[
 			x==1,
 			ODIM5[1,d],
@@ -16339,12 +16363,12 @@ ODIM5["PHYS",x_,d_]:=Module[{T1},
 			
 			True, "NOT ALLOWED X VALUE"			
 			];
-	Normal[T1]/.{N->d}// SparseArray // SimplifySparse
+	Normal[terms]/.{N->d}// SparseArray // SimplifySparse
 ];
 
-ODIM6["PHYS",x_,d_]:=Module[{T1},
+ODIM6["PHYS",x_,d_]:=Module[{terms},
 	CreateHelpTensors[];
-	T1=
+	terms=
 		Which[
 			x==1, ODIM6[1,d],
 			
@@ -16384,7 +16408,7 @@ ODIM6["PHYS",x_,d_]:=Module[{T1},
 			
 			True, "NOT ALLOWED X VALUE"			
 			];
-	Normal[T1]/.{N->d}// SparseArray // SimplifySparse
+	Normal[terms]/.{N->d}// SparseArray // SimplifySparse
 ];
 
 

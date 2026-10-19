@@ -490,7 +490,7 @@ solTex=Collect[Join[sol,sol6]/.HYPERCHARGE/.{\[Lambda]1H->l4,\[Xi]->xi},{_Zb,_Zf
 (* ::Section:: *)
 (*Physical Dimension 6 Matching *)
 
-(* 
+(*
 	We can perform the matching directly on the physical (on-shell) basis for individual operators
 *)
 
@@ -502,6 +502,6 @@ OTP[8]=Factorial[6] SymmetrizeTensor[\[Beta][H^6]TensorProduct[HdH,HdH,HdH],{{1,
 solP=Dimension6Matching["PHYS",{OTP[8]},{8},{\[Beta][H^6]},3][[1]];
 Collect[solP,{_Zb,_Zf},Factor]//TableForm
 
-(* 
-	In the physical basis, the results are manifestly gauge invariant 
+(*
+	In the physical basis, the results are manifestly gauge invariant
 *)

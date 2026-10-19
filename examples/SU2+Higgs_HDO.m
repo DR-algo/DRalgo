@@ -298,7 +298,7 @@ solLit={
 (* ::Section:: *)
 (*Physical Dimension 6 Matching*)
 
-(* 
+(*
 	We can perform the matching directly on the physical (on-shell) basis
 *)
 
@@ -350,17 +350,17 @@ WCsP=DeleteDuplicates[Cases[TensorListP//Normal,\[Beta][__],\[Infinity]]];
 sol6P=Dimension6Matching["PHYS",TensorListP,NListP,WCsP,d][[1]];
 sol6P//Factor//TableForm
 
-(* 
+(*
 	In the physical basis, the results are manifestly gauge invariant
 *)
 
-(* 
+(*
 	We can perform the matching directly on the physical (on-shell) basis for individual operators
 *)
 solP=Dimension6Matching["PHYS",{OTP[8]},{8},{\[Beta][\[Phi]^6]},d][[1]];
 Collect[solP,{_Zb,_Zf},Factor]//TableForm
 
-(* 
+(*
 	With the option "PHYS", the functions ODIM5 and ODIM6 return the group tensors of the operators of the physical basis
 *)
 ODIM6["PHYS",3,d]//MatrixForm

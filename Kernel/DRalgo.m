@@ -273,10 +273,18 @@ Specifies that soft couplings should be used to construct the potential";
 SymmetrizeTensor::usage="\
 SymmetrizeTensor[tensor, groups] symmetrizes tensor by averaging over \
 all permutations of the indices within each group.
+SymmetrizeTensor[tensor, label] projects a rank-4 tensor O_{ijkl}, with \
+index pairs (ij) and (kl), onto the symmetry given by label.
 Arguments:
   tensor: the tensor to symmetrize
   groups: list of index groups, e.g. {{1,2},{3,4}} symmetrizes \
-over indices 1,2 and over indices 3,4 independently";
+over indices 1,2 and over indices 3,4 independently
+  label:  \"SS\", \"AS\", \"SA\", \"AA\" (anti)symmetrize in (ij) and (kl), \
+where the first character refers to (ij) and the second to (kl); \
+\"1S\", \"1A\", \"2S\", \"2A\" act on (ij) or (kl) only; \
+\"P\" projects onto the physical structure, symmetric in (ij), in (kl) and \
+under (ij) <-> (kl), with O_{ijkl}+O_{ikjl}+O_{iljk}=0; \
+\"K\" returns 2 S_{ijkl}-S_{jkli} with S the \"SS\" part of O";
 Zb::usage="\
 Zb[s, alpha] is a symbolic placeholder for the bosonic hard thermal \
 1-loop integral. Its numerical value in d=3 can be obtained with \
@@ -308,18 +316,27 @@ Arguments:
 ODIM5::usage="\
 ODIM5[n, d] returns the dimension-5 operator tensor for operator n \
 in d spatial dimensions, constructed by contracting the DRalgo tensors.
+ODIM5[\"PHYS\", n, d] returns the tensor of operator n of the physical \
+(on-shell) dimension-5 basis.
 Arguments:
-  n: operator index labelling the element of the dimension-5 basis
+  n: operator index labelling the element of the dimension-5 basis \
+(1 to 8, or 1 to 5 for \"PHYS\")
   d: number of spatial dimensions (typically d=3)";
 ODIM6::usage="\
 ODIM6[n, d] returns the dimension-6 operator tensor for operator n \
 in d spatial dimensions, constructed by contracting the DRalgo tensors.
+ODIM6[\"PHYS\", n, d] returns the tensor of operator n of the physical \
+(on-shell) dimension-6 basis.
 Arguments:
-  n: operator index labelling the element of the dimension-6 basis
+  n: operator index labelling the element of the dimension-6 basis \
+(1 to 20, or 1 to 13 for \"PHYS\")
   d: number of spatial dimensions (typically d=3)";
 Dimension5Matching::usage="\
 Dimension5Matching[TensorList, NList, WC, d] performs the hard-to-soft \
 matching of dimension-5 operators and returns the Wilson coefficients.
+Dimension5Matching[\"PHYS\", TensorList, NList, WC, d] matches onto the \
+physical (on-shell) basis ODIM5[\"PHYS\", n, d]; the Wilson coefficients \
+are gauge independent.
 Arguments:
   TensorList: list of group-tensor structures for each operator
   NList:      list of operator indices corresponding to TensorList
@@ -329,6 +346,9 @@ Returns a list whose first element is a replacement rule for WC.";
 Dimension6Matching::usage="\
 Dimension6Matching[TensorList, NList, WC, d] performs the hard-to-soft \
 matching of dimension-6 operators and returns the Wilson coefficients.
+Dimension6Matching[\"PHYS\", TensorList, NList, WC, d] matches onto the \
+physical (on-shell) basis ODIM6[\"PHYS\", n, d]; the Wilson coefficients \
+are gauge independent.
 Arguments:
   TensorList: list of group-tensor structures for each operator
   NList:      list of operator indices corresponding to TensorList
@@ -441,6 +461,7 @@ The problem reads: `1`";
 
 Contract::argcount = "Contract expects between 2 and 4 tensors, but `1` were provided.";
 PrintResults::badopt = "Unknown option `1`. Use \"LO\", \"NLO\", or \"All\" only.";
+SymmetrizeTensor::badlabel = "Unknown label `1`. Use \"1S\", \"2S\", \"1A\", \"2A\", \"SS\", \"AS\", \"SA\", \"AA\", \"P\", or \"K\".";
 
 
 $DRalgoDirectory=DirectoryName[$InputFileName];

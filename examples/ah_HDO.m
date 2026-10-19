@@ -183,7 +183,7 @@ ODIM6[2,d]//MatrixForm
 (* ::Section:: *)
 (*Physical Dimension 6 Matching*)
 
-(* 
+(*
 	We can perform the matching directly on the physical (on-shell) basis
 *)
 
@@ -207,7 +207,7 @@ WCsP=DeleteDuplicates[Cases[TensorListP // Normal, \[Beta][__], \[Infinity]]];
 sol6P=Dimension6Matching["PHYS",TensorListP,NListP,WCsP,d][[1]];
 Collect[sol6P,{_Zb,_Zf},Factor]//TableForm
 
-(* 
+(*
 	In the physical basis, the results are manifestly gauge invariant
 *)
 
