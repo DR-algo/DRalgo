@@ -9,7 +9,7 @@ It also includes functionality for dimension-5 and dimension-6 operator matching
 
 Public release of
 [https://arxiv.org/abs/2205.08815](https://arxiv.org/abs/2205.08815) and
-[https://arxiv.org/abs/2605.xxxxx](https://arxiv.org/abs/2605.xxxxx).
+[https://arxiv.org/abs/2605.15176](https://arxiv.org/abs/2605.15176).
 
 
 ## Status
@@ -24,11 +24,11 @@ Public release of
 
 **DRalgo** can be installed as a Wolfram Paclet by running one of the following commands in Mathematica:
 
-#### From the Wolfram Repository
+<!-- #### From the Wolfram Repository
 ```mathematica
 PacletInstall["DRalgo/DRalgo"]
 ```
-[Visit the Wolfram Repository](https://resources.wolframcloud.com/PacletRepository/resources/DRalgo/DRalgo/)
+[Visit the Wolfram Repository](https://resources.wolframcloud.com/PacletRepository/resources/DRalgo/DRalgo/) -->
 
 #### From the GitHub Repository
 ```mathematica
@@ -112,6 +112,61 @@ $ wolframscript -file examples/xsm.m
 ```
 
 Ensure that an active `WolframKernel` is available for the above command to work.
+
+## Package Structure
+
+The following describes the main top-level directory layout of the **DRalgo** package and the purpose of the most relevant files and directories (non-exhaustive).
+
+```
+DRalgo/
+├── Kernel/
+│   ├── DRalgo.m                      Main package file; initializes the package, sets the version number,
+│   │                                 and loads all sub-modules.
+│   ├── ModelCreation.m               Constructs representation matrices and coupling tensors from a
+│   │                                 user-supplied model file; relies on GroupMath for Lie-algebra routines.
+│   ├── HardToSoft.m                  Performs the NLO hard-to-soft dimensional reduction step, computing
+│   │                                 thermal mass corrections and matching the 4d theory onto the 3d EFT.
+│   ├── SoftToUS.m                    Performs the NLO soft-to-ultrasoft dimensional reduction step,
+│   │                                 integrating out the soft Debye modes.
+│   ├── Debye.m                       Identifies and names the Debye (thermal) masses of gauge bosons in
+│   │                                 the dimensionally reduced effective theory.
+│   ├── EffPot.m                      Computes the effective potential at LO and NLO in the 3d EFT.
+│   ├── HEFT.m                        Heavy-field EFT routines; integrates out scalars that acquire large
+│   │                                 field-dependent masses.
+│   └── HigherDimensionalOperators.m  Tensor algebra and operator basis for the hard-to-soft matching
+│                                     of dimension-5 and dimension-6 operators; exposes the public
+│                                     routines Dimension5Matching and Dimension6Matching.
+├── examples/
+│   ├── xsm.m                         Real singlet extension of the Standard Model (xSM).
+│   ├── cxsm.m                        Complex singlet extension of the Standard Model (CxSM).
+│   ├── 2xsm.m                        Two real singlet extensions of the Standard Model.
+│   ├── ah.m                          Abelian Higgs model.
+│   ├── ah-thermo.m                   Abelian Higgs model with thermodynamic output.
+│   ├── sm.m                          Standard Model.
+│   ├── smCKM.m                       Standard Model with CKM mixing.
+│   ├── smDim6.m                      Standard Model with dimension-6 operators.
+│   ├── smZp.m                        Standard Model extended with a Z′ boson.
+│   ├── 2hdm.m                        Two-Higgs-doublet model (2HDM).
+│   ├── 3hdm.m                        Three-Higgs-doublet model (3HDM).
+│   ├── htm.m                         Higgs triplet model.
+│   ├── SU5.m                         SU(5) grand unified theory.
+│   ├── LRSymmetric.m                 Left–right symmetric model.
+│   ├── RealScalar.m                  Simple real scalar field theory.
+│   ├── ScalYukawa.m                  Scalar–Yukawa model.
+│   ├── WessZumino.m                  Wess–Zumino model.
+│   ├── dark-su2-higgs-singlet.m      Dark SU(2) model with Higgs and singlet.
+│   ├── tripletHET.m                  Higgs triplet model with heavy-field EFT matching.
+│   ├── ah_HDO.m                      Abelian Higgs model with higher-dimensional operators.
+│   ├── sm_HDO.m                      Standard Model with higher-dimensional operators.
+│   ├── ScalYukawa_HDO.m              Scalar–Yukawa model with higher-dimensional operators.
+│   ├── QCD_HDO.m                     QCD with higher-dimensional operators.
+│   └── SU2+Higgs_HDO.m               SU(2)–Higgs model with higher-dimensional operators.
+│                                     the Wolfram Repository.
+├── PacletInfo.m                      Paclet metadata (name, version, dependencies).
+│                                     the Wolfram Repository.
+├── README.md                         This file; installation and usage instructions.
+└── LICENSE                           GNU General Public License v3.
+```
 
 ## New models
 Users are encouraged to contribute their own models to the community by submitting the model file through the [Issue Tracker](https://github.com/DR-algo/DRalgo/issues) on GitHub. Submitted models will undergo verification before being added to the official model repository. 
