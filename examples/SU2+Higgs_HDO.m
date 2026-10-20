@@ -335,7 +335,7 @@ OTP[4]=SymmetrizeTensor[\[Beta][D^2 \[Phi]^4,1] SymmetrizeTensor[Transpose[Tenso
       - SymmetrizeTensor[Transpose[TensorProduct[Xb,Xb],{1,3,4,2}],{{1,2},{3,4}}]),"P"];
 OTP[5]=SymmetrizeTensor[4 \[Beta][D^2 \[Phi]^2 W0^2,1] SymmetrizeTensor[Contract[V,Vs,id,{{1,3}}],{{1,2}}],"SS"];
 OTP[6]=SymmetrizeTensor[-I \[Beta][D^2 \[Phi]^2 W0^2,2] (Zeps-Conjugate[Zeps]),"AA"];
-OTP[7]=SymmetrizeTensor[\[Beta][D^2 \[Phi]^2 W0^2,3] (SymmetrizeTensor[Transpose[TensorProduct[id,id],{1,3,4,2}],{{1,2},{3,4}}]-TensorProduct[id,id]),"P"];
+OTP[7]=SymmetrizeTensor[\[Beta][D^2 W0^4] (SymmetrizeTensor[Transpose[TensorProduct[id,id],{1,3,4,2}],{{1,2},{3,4}}]-TensorProduct[id,id]),"P"];
 OTP[8]=Factorial[6] \[Beta][\[Phi]^6] SymmetrizeTensor[Contract[V,Vs,V,Vs,V,Vs,{{1,3},{5,7},{9,11}}],{{1,2,3,4,5,6}}];
 OTP[9]=Factorial[2] Factorial[4] (
     \[Beta][\[Phi]^4 W0^2,1] SymmetrizeTensor[Contract[V,Vs,V,Vs,id,{{1,3},{5,7}}],{{1,2,3,4},{5,6}}]

@@ -122,7 +122,7 @@ OTP[4]=SymmetrizeTensor[
       - SymmetrizeTensor[Transpose[TensorProduct[Xb,Xb],{1,3,4,2}],{{1,2},{3,4}}]),"P"];
 OTP[5]=SymmetrizeTensor[4 \[Beta][D^2 \[Phi]^2 W0^2,1] SymmetrizeTensor[Contract[V,Vs,id,{{1,3}}],{{1,2}}],"SS"];
 OTP[6]=SymmetrizeTensor[-I \[Beta][D^2 \[Phi]^2 W0^2,2] (Zeps-Conjugate[Zeps]),"AA"];
-OTP[7]=SymmetrizeTensor[\[Beta][D^2 \[Phi]^2 W0^2,3] (SymmetrizeTensor[Transpose[TensorProduct[id,id],{1,3,4,2}],{{1,2},{3,4}}]-TensorProduct[id,id]),"P"];
+OTP[7]=SymmetrizeTensor[\[Beta][D^2 W0^4] (SymmetrizeTensor[Transpose[TensorProduct[id,id],{1,3,4,2}],{{1,2},{3,4}}]-TensorProduct[id,id]),"P"];
 OTP[8]=Factorial[6] \[Beta][\[Phi]^6] SymmetrizeTensor[Contract[V,Vs,V,Vs,V,Vs,{{1,3},{5,7},{9,11}}],{{1,2,3,4,5,6}}];
 OTP[9]=Factorial[2] Factorial[4] (
     \[Beta][\[Phi]^4 W0^2,1] SymmetrizeTensor[Contract[V,Vs,V,Vs,id,{{1,3},{5,7}}],{{1,2,3,4},{5,6}}]
@@ -195,7 +195,7 @@ expectedP={
  \[Beta][D^2 \[Phi]^4,2]->-(1/24) T (23 gw^4-160 gw^2 \[Lambda]1H+64 \[Lambda]1H^2) Zb[3,0],
  \[Beta][D^2 \[Phi]^2 W0^2,1]->(1/96) gw^2 T (101 gw^2-24 \[Lambda]1H) Zb[3,0],
  \[Beta][D^2 \[Phi]^2 W0^2,2]->(1/24) gw^4 T Zb[3,0],
- \[Beta][D^2 \[Phi]^2 W0^2,3]->-(1/36) gw^4 T Zb[3,0],
+ \[Beta][D^2 W0^4]->-(1/36) gw^4 T Zb[3,0],
  \[Beta][\[Phi]^6]->(1/48) T^2 (9 gw^6-84 gw^4 \[Lambda]1H+80 gw^2 \[Lambda]1H^2+1408 \[Lambda]1H^3) Zb[3,0],
  \[Beta][W0^2 \[Phi]^4,1]->(1/48) gw^2 T^2 (-101 gw^4+508 gw^2 \[Lambda]1H-544 \[Lambda]1H^2) Zb[3,0],
  \[Beta][W0^2 \[Phi]^4,2]->0,
