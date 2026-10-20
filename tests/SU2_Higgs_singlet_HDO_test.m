@@ -19,9 +19,9 @@ DRalgo`DRalgo`$GroupMathMultipleModels=True;
 
 (*
 	Regression test for the physical dimension-5 operator \[Phi]^3 W0^2,
-	ODIM5["PHYS",3,d]. The cubic couplings of the real singlet together with
-	the gauge coupling make the cubic-coupling contractions of this operator
-	nonzero.
+	ODIM5["PHYS",3,d]. The cubic couplings of the real singlet make the
+	\[Lambda]3 contributions to this operator nonzero, so that the power of T
+	multiplying them is tested.
 *)
 
 
@@ -73,10 +73,9 @@ PerformDRhard[];
 (*Nonzero components of the physical-basis tensor of \[Phi]^3 W0^2*)
 OP3=DeleteCases[Union[Flatten[Simplify[Normal[ODIM5["PHYS",3,3]]]]],0];
 
-(*Powers of Sqrt[T] in each term of these components*)
+(*Powers of T in the terms of these components*)
 TPowers=Union[Flatten[
-	Exponent[#,sT]&/@Flatten[
-		With[{e=Expand[#/.T->sT^2]},If[Head[e]===Plus,List@@e,{e}]]&/@OP3]]];
+	With[{e=Expand[#]},Exponent[If[Head[e]===Plus,List@@e,{e}],T]]&/@OP3]];
 
 
 (* ::Section:: *)
@@ -85,20 +84,21 @@ TPowers=Union[Flatten[
 
 testList={};
 
-(*The cubic-coupling contractions are nonzero in this model*)
+(*The cubic and gauge couplings both enter*)
 AppendTo[testList,
 TestCreate[
-	FreeQ[OP3,\[Mu]HS]||FreeQ[OP3,gw],
-	False
+	{FreeQ[OP3,\[Mu]HS],FreeQ[OP3,gw]},
+	{False,False}
 ]];
 
 (*Each term scales as T^(3/2)*)
 AppendTo[testList,
 TestCreate[
 	TPowers,
-	{3}
+	{3/2}
 ]];
 
+(*Gauge independence*)
 AppendTo[testList,
 TestCreate[
 	Union[Simplify[D[OP3,xi]]],
