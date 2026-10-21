@@ -1882,19 +1882,21 @@ If[CT==False,
 	ContriVV=6/(16 \[Pi]^2)Simplify[ Activate @ TensorContract[
         Inactive[TensorProduct][\[Mu]IJF,gvff,gvff], {{3,6},{1,5},{2,8}}]];
         
-        (*Anomalous-dimension contribution*)
-	ContriAnomFF=-(\[Gamma]IJF . \[Mu]IJF+Transpose[\[Gamma]IJF . \[Mu]IJF]);
+        (*Anomalous-dimension contribution: \[Mu]IJF.\[Gamma]IJF+Transpose[\[Gamma]IJF].\[Mu]IJF, as for Ysff.
+	Up to 1.5.0 this was \[Gamma]IJF.\[Mu]IJF+\[Mu]IJF.Transpose[\[Gamma]IJF], which is not covariant for complex \[Gamma]IJF*)
+	ContriAnomFF=-(\[Mu]IJF . \[Gamma]IJF+Transpose[\[Mu]IJF . \[Gamma]IJF]);
 	
 	\[Beta]\[Mu]IJF=   ContriSS+  ContriVV+  ContriAnomFF//Simplify//SparseArray; (*beta function*)
 	Z\[Mu]IJF=\[Beta]\[Mu]IJF/2//SparseArray;(*renormalization constant*)
 
 
 (*
-	Conjugated Fermion-mass renormalization.
+	Conjugated Fermion-mass renormalization: the complex conjugate of \[Beta]\[Mu]IJF
+	(\[Gamma]IJF is Hermitian). Up to 1.5.0 ContriSS had an extra overall (-1).
 *)
 	YtempMass= Simplify[ Activate @ TensorContract[
         Inactive[TensorProduct][YsffC,\[Mu]IJF], {{3, 5}}]];
-	ContriSS=(-1)2/(16 \[Pi]^2)Simplify[ Activate @ TensorContract[
+	ContriSS=2/(16 \[Pi]^2)Simplify[ Activate @ TensorContract[
         Inactive[TensorProduct][YtempMass,YsffC], {{1,4},{3,5}}]];
 	ContriVV=6/(16 \[Pi]^2)Simplify[ Activate @ TensorContract[
         Inactive[TensorProduct][\[Mu]IJFC,gvff,gvff], {{3,6},{1,5},{2,8}}]];
