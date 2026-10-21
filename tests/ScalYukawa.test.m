@@ -188,7 +188,7 @@ TestCreate[PrintCouplingsEffective[],
 
 AppendTo[testList,
 TestCreate[PrintPressure["LO"],
-	(13 \[Pi]^2 T^4)/180
+	(\[Pi]^2 T^4)/20
 ]];
 AppendTo[testList,
 TestCreate[PrintPressure["NLO"],

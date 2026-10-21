@@ -227,9 +227,16 @@ SymmetricPhaseLO[] := Module[
     CompareTensors[tensor, EmptyArray[shape]]
   );
 
+  (*
+    A sector whose couplings all vanish is a placeholder of the interface, not part
+    of the model: the U(1) of a model without gauge interactions, or the scalar
+    allocated for a model without scalars. It does not contribute.
+    gvss has the shape {nv, ns, ns}.
+  *)
+
   (* --- Scalar contribution --- *)
   scalarEmptyQ = And @@ {
-    isEmptyTensorQ[gvss, {nv, nf, nf}],
+    isEmptyTensorQ[gvss, {nv, ns, ns}],
     isEmptyTensorQ[Ysff, {ns, nf, nf}],
     isEmptyTensorQ[\[Mu]ij, {ns, ns}],
     isEmptyTensorQ[\[Lambda]4, {ns, ns, ns, ns}],
@@ -240,7 +247,7 @@ SymmetricPhaseLO[] := Module[
 
   (* --- Vector contribution --- *)
   vectorEmptyQ = And @@ {
-    isEmptyTensorQ[gvss, {nv, nf, nf}],
+    isEmptyTensorQ[gvss, {nv, ns, ns}],
     isEmptyTensorQ[gvvv, {nv, nv, nv}],
     isEmptyTensorQ[gvff, {nv, nf, nf}]
   };
