@@ -1509,7 +1509,9 @@ TadPole2Loop[] := Module[
 	ContriCTFF=1/2*2*IF1p*\[Epsilon]^-1 (-1)^2*(temp1+temp2+temp3+temp4+temp5+temp6);
 	
 	(* --- Self-Energy correction --- *)
-	ContriF=-TadPoleLO . ZijS//SimplifySparse;
+	(* The field normalisation acts on the full LO tadpole, as aS3D in ScalarMass2Loop.
+	   Up to 1.5.0 the tree-level tadpole \[Lambda]1 was missing here. *)
+	ContriF=-(\[Lambda]1+TadPoleLO) . ZijS//SimplifySparse;
 	
 	(* --- Final result --- *)
 	TotalResult = ContriF-Contri1-Contri2-Contri3-ContriCTS-Contri4-ContriCTFF-Contri5-Contri6-Contri7//Normal; (*minus signs from matching*)
