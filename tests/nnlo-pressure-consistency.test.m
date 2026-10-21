@@ -27,20 +27,15 @@ Check[
 	not depend on \[Mu] at O(g^4): its explicit \[Mu]-dependence cancels the running of the
 	NLO pressure (and of the vacuum energy, which DRalgo does not track).
 
-	Up to DRalgo 1.5.0 (issue #37, and beyond the scalar Yukawa model):
-	- the m^4 term of the one-loop diagram had the wrong sign;
-	- the fermion masses at O(m^2 g^2) were missing;
-	- the fermion loop with crossed scalar lines was missing (it vanishes for complex
-	  scalars with holomorphic Yukawa couplings, as in the SM);
-	- the running from \[Mu] to \[Mu]3 and the pole of the soft two-loop diagrams times the O(\[Epsilon])
-	  parts of the LO masses were missing. For QCD this is the term -d_A C_A \[Alpha]_E5/4
-	  of hep-ph/0211321, so that PrintPressure["NNLO"] plus PrintPressureUS["NLO"] did not
-	  agree with the g^4 term of Arnold and Zhai, hep-ph/9410360.
+	The checks concern issue #37 and models beyond the scalar Yukawa model. For QCD, the hard
+	pressure contains the term -d_A C_A \[Alpha]_E5/4 of hep-ph/0211321, the pole of the soft
+	two-loop diagram times the O(\[Epsilon]) part of the Debye mass.
 
 	Checked here:
-	- QCD with one quark flavour: hard plus soft pressure agrees with hep-ph/9410360;
-	- the SM with the top Yukawa coupling: RG invariance, and the y_t^4, y_t^2 \[Lambda] and
-	  y_t^2 \[Nu]^2 terms of Gynther and Vepsalainen, hep-ph/0510375, appendix A;
+	- QCD with one quark flavor: hard plus soft pressure agrees with hep-ph/9410360;
+	- the SM with the top Yukawa coupling: RG invariance, and the terms of Gynther and
+	  Vepsalainen, hep-ph/0510375, appendix A, with y_t^4, y_t^2 \[Lambda], and y_t^2 \[Nu]^2, and with the
+	  gauge couplings;
 	- a U(1) with a charged Dirac fermion of mass m\[Psi] and a neutral real scalar: RG
 	  invariance, which tests the fermion masses with gauge and Yukawa couplings.
 *)
@@ -61,7 +56,7 @@ betaRules[]:=BetaFunctions4D[]/.(Power[c_,2]->b_):>(c->b/(2c));
 
 
 (* ::Section:: *)
-(*QCD with one quark flavour: hard plus soft pressure*)
+(*QCD with one quark flavor: hard plus soft pressure*)
 
 
 Group={"SU3"};
@@ -165,6 +160,55 @@ VerificationTest[
 	Simplify[smCoefficient[m2^2]],
 	(L+EulerGamma)/(8\[Pi]^2),
 	TestID->"SM-scalar-mass-squared-term-of-one-loop-diagram"
+]];
+
+(*
+	The terms with gauge couplings, \[Alpha]_EA\[Lambda], \[Alpha]_EB\[Lambda], \[Alpha]_EAY, \[Alpha]_EBY, \[Alpha]_EA\[Nu], \[Alpha]_EB\[Nu], \[Alpha]_EAA,
+	and \[Alpha]_EBB of hep-ph/0510375, for one family (nF=1) and one Higgs doublet (nS=1), at \[Mu]3=\[Mu].
+	There, p_E contains the 1/\[Epsilon] poles that cancel against the soft pressure, whose 3d masses
+	contain their O(\[Epsilon]) parts. PrintPressure["NNLO"] contains the pole times these O(\[Epsilon]) parts
+	instead, that is, -x times the coefficient of 1/\[Epsilon], where x is the O(\[Epsilon]) part of the mass
+	relative to its O(\[Epsilon]^0) part. For the gauge, fermionic, and scalar parts of the Debye mass,
+	x is xB-2, xF-1, and xB-1, and for the gauge and thermal parts of the scalar mass, xB-2/3 and xB or xF.
+	In \[Alpha]_EAA, the comparison with the same terms in \[Alpha]_EBB shows two misprints: the nF^2 term
+	contains -11/30 Log[2] instead of -11/3 Log[2], and the nF nS term -83/160-49/120 Log[2]
+	instead of -83/16-49/12 Log[2].
+*)
+gaugeCoefficient[mono_]:=Coefficient[toL[pNNLO]/.\[Mu]3->\[Mu],mono]/.{gs->0,gw->0,gY->0,yt->0,\[Lambda]1H->0,m2->0};
+xB=2L+2+2z1;
+xF=2L-2Log[2]+2+2z1;
+{CA,dA,CF,dF,TF,nF,nS}={2,3,3/4,2,1/2,1,1};
+aEAl=1/36 dF (dF+1) CF nS (15L+11+3EulerGamma+12z1-3xB);
+aEBl=1/144 dF (dF+1) nS (15L+11+3EulerGamma+12z1-3xB);
+aEAY=Nc/16 (19/4 L+619/120-13/4 Log[2]+EulerGamma+7/2 z1+1/4 z3-xF);
+aEBY=Nc/48 (131/36 L+6563/1080-41/20 Log[2]+EulerGamma+23/18 z1+49/36 z3-xF);
+aEAnu=-CF dF/2 (3L+5/3+EulerGamma+2z1) nS;
+aEBnu=-dF/8 (3L+5/3+EulerGamma+2z1) nS;
+aEAA=1/12 (CA^2 dA (97/18 L+29/15+EulerGamma/3+55/9 z1-19/18 z3-(xB-2))
+	+(CA CF dF (169/72 L+1121/1440-157/120 Log[2]+EulerGamma/3+73/36 z1-1/72 z3-(xF-1)/2)+CF^2 dF (35/32-Log[2]))(1+Nc) nF
+	+CF TF dF (5/36 L+1/144-11/30 Log[2]+EulerGamma/12+z1/9-z3/18)(1+Nc)^2 nF^2
+	+CF TF dF (25/72 L-83/160-49/120 Log[2]+EulerGamma/3+z1/36-z3/72)(1+Nc) nF nS
+	+(CA CF dF (317/72 L+337/720+2/3 EulerGamma+125/36 z1+19/72 z3-(xB-1))
+		+CF^2 dF (19/2 L+881/120+3/4 EulerGamma+23/2 z1-11/4 z3-3/2 (xB-2/3))
+		+CF TF dF (23/36 L-283/360+EulerGamma/3+11/18 z1-11/36 z3)) nS);
+aEBB=1/128 ((dF (19/3 L+881/180+EulerGamma/2+23/3 z1-11/6 z3-(xB-2/3))+dF^2 (23/54 L-283/540+2/9 EulerGamma+11/27 z1-11/54 z3)) nS
+	+dF (1+5/9 Nc+dF/4 (1+Nc/9)) (25/27 L-83/60-147/135 Log[2]+8/9 EulerGamma+2/27 z1-1/27 z3) nF nS
+	+(1+17/81 Nc+dF/16 (1+Nc/81)) (35/3-32/3 Log[2]) nF
+	+((1+5/9 Nc)^2+dF/2 (1+2/3 Nc+5/81 Nc^2)+dF^2/16 (1+Nc/9)^2) (40/27 L+2/27-176/45 Log[2]+8/9 EulerGamma+32/27 z1-16/27 z3) nF^2);
+
+AppendTo[testList,
+VerificationTest[
+	FullSimplify[PowerExpand[{
+		gaugeCoefficient[gw^2 \[Lambda]1H]-T^4 aEAl/(16\[Pi]^2),
+		gaugeCoefficient[gY^2 \[Lambda]1H]-T^4 aEBl/(16\[Pi]^2),
+		gaugeCoefficient[gw^2 yt^2]-T^4 aEAY/(16\[Pi]^2),
+		gaugeCoefficient[gY^2 yt^2]-T^4 aEBY/(16\[Pi]^2),
+		gaugeCoefficient[gw^2 m2]+T^2 aEAnu/(16\[Pi]^2),
+		gaugeCoefficient[gY^2 m2]+T^2 aEBnu/(16\[Pi]^2),
+		gaugeCoefficient[gw^4]-T^4 aEAA/(16\[Pi]^2),
+		gaugeCoefficient[gY^4]-T^4 aEBB/(16\[Pi]^2)}],{T>0,\[Mu]>0}],
+	{0,0,0,0,0,0,0,0},
+	TestID->"SM-gauge-terms-agree-with-Gynther-Vepsalainen"
 ]];
 
 
