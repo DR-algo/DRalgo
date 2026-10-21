@@ -156,5 +156,42 @@ solDRalgo=sol6;
 \[Alpha][A^6,1]/.solDRalgo//Factor
 \[Alpha][A^6,2]/.solDRalgo//Factor
 
+(* ::Section:: *)
+(*Physical Dimension 6 Matching*)
 
+(*
+	We can perform the matching directly on the physical (on-shell) basis
+*)
 
+Tadj=-I gvvv/gs;
+X2=Contract[Tadj,Tadj,{{2,6},{3,5}}];
+X3=Contract[Tadj,Tadj,Tadj,{{2,9},{3,5},{6,8}}];
+X4=Contract[Tadj,Tadj,Tadj,Tadj,{{2,12},{3,5},{6,8},{9,11}}];
+X6=Contract[Tadj,Tadj,Tadj,Tadj,Tadj,Tadj,{{2,18},{3,5},{6,8},{9,11},{12,14},{15,17}}];
+
+OTP[1]  = \[Beta][F^3] X3;
+OTP[3]  = SymmetrizeTensor[\[Beta][A^2F^2,1] X4 + \[Beta][A^2F^2,2] Transpose[X4,{1,3,2,4}] + \[Beta][A^2F^2,3] TensorProduct[X2,X2], {{1,2},{3,4}}];
+OTP[7]  = SymmetrizeTensor[\[Beta][D^2A^4,1] X4 + \[Beta][D^2A^4,2] TensorProduct[X2,X2], "P"];
+OTP[11] = SymmetrizeTensor[\[Beta][A^6,1] X6 + \[Beta][A^6,2] TensorProduct[X4,X2], {{1,2,3,4,5,6}}];
+
+TensorListP={OTP[1],OTP[3],OTP[7],OTP[11]};
+NListP={1,3,7,11};
+WCsP=DeleteDuplicates[Cases[TensorListP//Normal, \[Beta][__], \[Infinity]]];
+
+sol6P=Dimension6Matching["PHYS",TensorListP,NListP,WCsP,3][[1]];
+Collect[sol6P,{_Zb,_Zf},Factor]//TableForm
+
+(*
+	In the physical basis, the results are manifestly gauge invariant
+*)
+
+(*
+	We can perform the matching directly on the physical (on-shell) basis for individual operators
+*)
+solP=Dimension6Matching["PHYS",{OTP[1]},{1},{\[Beta][F^3]},3][[1]];
+Collect[solP,{_Zb,_Zf},Factor]//TableForm
+
+(*
+	With the option "PHYS", the functions ODIM5 and ODIM6 return the group tensors of the operators of the physical basis
+*)
+ODIM6["PHYS",3,d]//MatrixForm

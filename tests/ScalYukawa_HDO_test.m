@@ -171,6 +171,18 @@ WC6 = {\[Alpha][6,1],\[Beta][6,1],\[Beta][6,2]};
 *)
 sol6=Dimension6Matching[TensorList6,NList6,WC6,d][[1]];
 
+(* ::Section:: *)
+(*Physical Dimension 5 & 6 Matching*)
+
+(*We can perform the matching directly on the physical (on-shell) basis.*)
+
+OTP[5,2]=\[Beta][\[Phi]^5]*TensorProduct[{1},{1},{1},{1},{1}];
+OTP[6,8]=\[Beta][\[Phi]^6]*TensorProduct[{1},{1},{1},{1},{1},{1}];
+
+sol5P=Dimension5Matching["PHYS",{OTP[5,2]},{2},{\[Beta][\[Phi]^5]},d][[1]];
+sol6P=Dimension6Matching["PHYS",{OTP[6,8]},{8},{\[Beta][\[Phi]^6]},d][[1]];
+
+{sol5P,sol6P}
 
 (* ::Section:: *)
 (*TESTS*)
@@ -207,6 +219,31 @@ TestCreate[HardThermal1LoopInt["B",3,0,3],
 AppendTo[testList,
 TestCreate[HardThermal1LoopInt["F",3,0,3],
 	(7 Zeta[3])/(128 \[Pi]^4 T^2)
+]];
+
+AppendTo[testList,
+TestCreate[sol5P,
+	{\[Beta][\[Phi]^5]->16 T^(3/2) \[Kappa] (2520 \[Lambda]^2 Zb[3,0]-5022 \[Kappa]^2 \[Lambda] Zb[4,0]+972 \[Kappa]^4 Zb[5,0]+25 y^4 Zf[3,0]-60 y^2 \[Lambda] Zf[3,0])}
+]];
+
+AppendTo[testList,
+TestCreate[sol6P,
+	{\[Beta][\[Phi]^6]->32 T^2 (5040 \[Lambda]^3 Zb[3,0]-71604 \[Kappa]^2 \[Lambda]^2 Zb[4,0]+155520 \[Kappa]^4 \[Lambda] Zb[5,0]-87480 \[Kappa]^6 Zb[6,0]-15 y^6 Zf[3,0]+100 y^4 \[Lambda] Zf[3,0]-120 y^2 \[Lambda]^2 Zf[3,0])}
+]];
+
+AppendTo[testList,
+TestCreate[Union[Flatten[Normal[ODIM6["PHYS",4,d]]]],
+	{0}
+]];
+
+AppendTo[testList,
+TestCreate[Simplify[(Normal[OTP[5,2]]/.sol5P)-Normal[ODIM5["PHYS",2,d]]]//Flatten//Union,
+	{0}
+]];
+
+AppendTo[testList,
+TestCreate[Simplify[(Normal[OTP[6,8]]/.sol6P)-Normal[ODIM6["PHYS",8,d]]]//Flatten//Union,
+	{0}
 ]];
 
 

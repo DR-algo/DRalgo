@@ -179,3 +179,41 @@ ODIM6[2,d]//MatrixForm
 	returned by the Dimension6Matching function agree with
 	those reported in arXiv:2503.18904
 *)
+
+(* ::Section:: *)
+(*Physical Dimension 6 Matching*)
+
+(*
+	We can perform the matching directly on the physical (on-shell) basis
+*)
+
+V=(1/Sqrt[2]){1,I};
+Vs=(1/Sqrt[2]){1,-I};
+id={1};
+
+OTP[2]  = 4 \[Beta][\[Phi]^2 F^2] SymmetrizeTensor[TensorProduct[V, Vs, id, id], {{1, 2}}];
+OTP[3]  = 4 \[Beta][B0^2 F^2] TensorProduct[id, id, id, id];
+OTP[4]  = SymmetrizeTensor[\[Beta][D^2 \[Phi]^4] SymmetrizeTensor[TensorProduct[V, Vs, V, Vs], {{1, 2}, {3, 4}}], "P"];
+OTP[5]  = SymmetrizeTensor[4 \[Beta][D^2 \[Phi]^2 B0^2] SymmetrizeTensor[TensorProduct[V, Vs, id, id], {{1, 2}}], "SS"];
+OTP[8]  = Factorial[6] \[Beta][\[Phi]^6] Symmetrize[TensorProduct[Vs, Vs, Vs, V, V, V]];
+OTP[9]  = 2 Factorial[4] \[Beta][B0^2 \[Phi]^4] TensorProduct[Symmetrize[TensorProduct[Vs, Vs, V, V]], id, id];
+OTP[10] = 2 Factorial[4] \[Beta][B0^4 \[Phi]^2] TensorProduct[Symmetrize[TensorProduct[Vs, V]], id, id, id, id];
+OTP[11] = Factorial[6] \[Beta][B0^6] TensorProduct[id, id, id, id, id, id];
+
+TensorListP={OTP[2],OTP[3],OTP[4],OTP[5],OTP[8],OTP[9],OTP[10],OTP[11]};
+NListP={2,3,4,5,8,9,10,11};
+WCsP=DeleteDuplicates[Cases[TensorListP // Normal, \[Beta][__], \[Infinity]]];
+
+sol6P=Dimension6Matching["PHYS",TensorListP,NListP,WCsP,d][[1]];
+Collect[sol6P,{_Zb,_Zf},Factor]//TableForm
+
+(*
+	In the physical basis, the results are manifestly gauge invariant
+*)
+
+(*
+	We can perform the matching directly on the physical (on-shell) basis for individual operators
+*)
+
+solP=Dimension6Matching["PHYS",{OTP[8]},{8},{\[Beta][\[Phi]^6]},3][[1]];
+Collect[solP,{_Zb,_Zf},Factor]//TableForm
