@@ -138,7 +138,7 @@ testList={};
 
 AppendTo[testList,
 TestCreate[BetaFunctions4D[],
-	{\[Lambda]->(-48 y^4+8 y^2 \[Lambda]+3 \[Lambda]^2)/(16 \[Pi]^2),\[Gamma]->(-24 m\[Psi] y^3+3 \[Gamma] (2 y^2+\[Lambda]))/(16 \[Pi]^2),y->(5 y^3)/(16 \[Pi]^2),msq->(4 (msq-6 m\[Psi]^2) y^2+\[Gamma]^2+msq \[Lambda])/(16 \[Pi]^2),m\[Psi]->(3 m\[Psi] y^2)/(16 \[Pi]^2),\[Sigma]->(-8 m\[Psi]^3 y+msq \[Gamma]+2 y^2 \[Sigma])/(16 \[Pi]^2)}
+	{\[Lambda]->(-48 y^4+8 y^2 \[Lambda]+3 \[Lambda]^2)/(16 \[Pi]^2),\[Gamma]->(-48 m\[Psi] y^3+3 \[Gamma] (2 y^2+\[Lambda]))/(16 \[Pi]^2),y->(5 y^3)/(16 \[Pi]^2),msq->(4 (msq-6 m\[Psi]^2) y^2+\[Gamma]^2+msq \[Lambda])/(16 \[Pi]^2),m\[Psi]->(3 m\[Psi] y^2)/(16 \[Pi]^2),\[Sigma]->(-8 m\[Psi]^3 y+msq \[Gamma]+2 y^2 \[Sigma])/(16 \[Pi]^2)}
 ]];
 
 

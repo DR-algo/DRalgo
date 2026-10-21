@@ -1729,9 +1729,14 @@ If[CT==False,
 
 
 (*Fermion mass contributions*)
+(*
+	Fermion loop with three Yukawa vertices and one mass insertion. In the cubic term of
+	Tr[(M M^+)^2], with M=\[Mu]IJF+Ysff.\[Phi], the mass sits on any of the four propagators,
+	which gives twice Contri1+Contri2. Up to 1.5.0 the prefactor was 3 instead of 6.
+*)
 	Contri1=Table[Tr[a . \[Mu]IJFC . b . c],{a,Ysff},{b,Ysff},{c,YsffC}];
 	Contri2=Table[Tr[a . \[Mu]IJF . b . c],{a,YsffC},{b,YsffC},{c,Ysff}];
-	ContriFF=-1/(8 \[Pi]^2) 3 Symmetrize[(Contri1+Contri2),Symmetric[{1,2,3}]]//SparseArray;
+	ContriFF=-1/(8 \[Pi]^2) 6 Symmetrize[(Contri1+Contri2),Symmetric[{1,2,3}]]//SparseArray;
 	
 (*Anomalous dimension contribution*)
 	ContriAnom=Simplify[Activate @ TensorContract[Inactive[TensorProduct][\[Gamma]ij,\[Lambda]3], {{2, 3}}]];
