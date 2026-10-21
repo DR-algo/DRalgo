@@ -228,10 +228,8 @@ SymmetricPhaseLO[] := Module[
   );
 
   (*
-    A sector whose couplings all vanish is a placeholder of the interface, not part
-    of the model: the U(1) of a model without gauge interactions, or the scalar
-    allocated for a model without scalars. It does not contribute.
-    gvss has the shape {nv, ns, ns}.
+    A sector whose couplings all vanish does not contribute. Such a sector is a placeholder,
+    either the U(1) of a model without gauge interactions or the scalar of a model without scalars.
   *)
 
   (* --- Scalar contribution --- *)
@@ -430,10 +428,10 @@ SymmetricPhaseNNLO[]:=Module[
 	KFFSFSF=-1/2*(-1)*Temp1*(     MF1M1+    MF00+(I1p-IF1p)^2 IF2p);
 
 	(*
-		Fermion loop with two crossed scalar lines (tetrahedron), Tr[Y_a.YC_b.Y_a.YC_b].
-		With the numerator reduced as in 9410360, it equals MF00-N00/2 (mixed and fermionic basketballs).
-		Each scalar line joins two Ysff (or two YsffC) vertices, so the term vanishes for complex scalars
-		with holomorphic Yukawa couplings, as in the SM. Missing up to 1.5.0.
+		Fermion loop with two crossed scalar lines, Tr[Y_a.YC_b.Y_a.YC_b].
+		Reducing the numerator as in 9410360 gives MF00-N00/2, the mixed and the fermionic basketball.
+		Since each scalar line joins two Ysff or two YsffC vertices, the diagram vanishes for complex scalars
+		with holomorphic Yukawa couplings, as in the SM.
 	*)
 	Temp1=Sum[Tr[Ysff[[a]] . YsffC[[b]] . Ysff[[a]] . YsffC[[b]]],{a,1,ns},{b,1,ns}];
 	HFFFFSS=1/2*Temp1*(MF00-1/2 N00);
@@ -596,20 +594,18 @@ SymmetricPhaseNNLO[]:=Module[
 	
 	VLOtoNLOCT=-1/2Tr[\[Beta]mij]/2*I1p*\[Epsilon]^-1*(-1);
 	
-	(*-m^4/4 Sum[1/P^4] of the one-loop diagram. Up to 1.5.0 this term had the opposite sign*)
+	(*The term -m^4/4 Sum[1/P^4] of the one-loop diagram*)
 	VLOtoNNLO=-1/4Tr[\[Mu]ij . \[Mu]ij]*1/(16 (\[Pi]^2) ) Lb;
 
 	ContriMass=VLOtoNNLO+ VLOtoNLOCT+V\[Mu]SS+V\[Mu]FFS+ V\[Mu]SV;
 
 	(* --- Fermion mass contributions --- *)
-	(*Up to 1.5.0 this term used the user's symbols \[Mu]IJ and \[Mu]IJC instead of \[Mu]IJF and \[Mu]IJFC*)
 	VLOtoNNLOF=1/2*Tr[\[Mu]IJF . \[Mu]IJFC . \[Mu]IJF . \[Mu]IJFC]*1/(16 (\[Pi]^2) ) Lf;
 
 	(*
-		Fermion masses at O(m^2 g^2), missing up to 1.5.0:
-		the mass counterterm in the one-loop diagram, and the insertions of \[Mu]IJFC.\[Mu]IJF
-		into the fermion lines of the two-loop diagrams with a scalar and with a vector.
-		The insertions of \[Mu]IJFC alone lead to the fermionic sunset, which vanishes.
+		Fermion masses at O(m^2 g^2): the mass counterterm in the one-loop diagram, and the insertions
+		of \[Mu]IJFC.\[Mu]IJF into the fermion lines of the two-loop diagrams with a scalar and with a vector.
+		The terms Tr[Ysff.\[Mu]IJFC.Ysff.\[Mu]IJFC] and their conjugates multiply the fermionic sunset, which vanishes.
 	*)
 	VLOtoNLOCTF=-Tr[Z\[Mu]IJF . \[Mu]IJFC+\[Mu]IJF . Z\[Mu]IJFC]*IF1p*\[Epsilon]^-1;
 
@@ -622,21 +618,20 @@ SymmetricPhaseNNLO[]:=Module[
 	ContriMassF=VLOtoNLOCTF+V\[Mu]FFSF+V\[Mu]FFVF;
 
 	(*
-		Two-loop vacuum diagrams of the soft theory (see SymmetricPhaseUSNLO and CalculateNNLOPotentialSS):
-		the scalar sunset with the cubics and the scalar-scalar-vector sunset with the masses of the
-		scalars and of the temporal scalars give T/(16\[Pi]^2) c (1/(4\[Epsilon])+Log[\[Mu]3]+...), with
-		c = -1/12 T Total[\[Lambda]3^2] + vacuumPole[mS^2,mV^2], evaluated with the LO parameters of the soft theory.
-		The hard pressure contains
+		Two-loop vacuum diagrams of the soft theory, see SymmetricPhaseUSNLO and CalculateNNLOPotentialSS.
+		The scalar sunset with the cubic couplings and the scalar-scalar-vector sunset with the masses of the
+		scalars and of the temporal scalars give T/(16\[Pi]^2) c (1/(4\[Epsilon])+Log[\[Mu]3]+...),
+		where c=-1/12 T Total[\[Lambda]3^2]+vacuumPole[mS^2,mV^2] contains the LO parameters of the soft theory.
+		Therefore, the hard pressure contains
 		- the running from \[Mu] to \[Mu]3, which cancels the Log[\[Mu]3] of the soft pressure;
-		- the pole times the O(\[Epsilon]) parts of the LO masses. The soft pressure uses the masses at
-		  O(\[Epsilon]^0); for QCD this is the term -d_A C_A \[Alpha]_E5/4 of hep-ph/0211321.
-		Both were missing up to 1.5.0.
+		- the pole times the O(\[Epsilon]) parts of the LO masses, since the soft pressure uses the masses at O(\[Epsilon]^0).
+		  For QCD, this is the term -d_A C_A \[Alpha]_E5/4 of hep-ph/0211321.
 	*)
 	vacuumPole[mS_,mV_]:=-T Tr[\[CapitalLambda]g . mS]-T Sum[Tr[gvvv[[a]] . gvvv[[a]] . mV],{a,1,nv}];
 	Temp1=-1/12 T Total[Flatten[\[Lambda]3]^2]+vacuumPole[aS3D,aV3D];
 	ContriSoftRunning=-rgFac T/(16 \[Pi]^2) Temp1 Log[\[Mu]3/\[Mu]];
 
-	(*LO masses in d dimensions; at D=4 they are aS3D and aV3D (without \[Lambda]6)*)
+	(*Thermal parts of the LO masses in d dimensions, which agree with aS3D-\[Mu]ij and aV3D at D=4 (without \[Lambda]6)*)
 	Temp2=Normal[1/2 \[Lambda]Help I1p-(D-1)I1p \[CapitalLambda]g-IF1p (Ysij+YsijC)]/.D->4-2\[Epsilon];
 	Temp3=Normal[-(D-2)I1p Hg+(D-2)^2 I1p TensorContract[GabcdV,{{2,4}}]
 		-2(D-2)IF1p TensorContract[HabIJF . NFMat,{{3,4}}]]/.D->4-2\[Epsilon];
@@ -1568,8 +1563,7 @@ TadPole2Loop[] := Module[
 	ContriCTFF=1/2*2*IF1p*\[Epsilon]^-1 (-1)^2*(temp1+temp2+temp3+temp4+temp5+temp6);
 	
 	(* --- Self-Energy correction --- *)
-	(* The field normalisation acts on the full LO tadpole, as aS3D in ScalarMass2Loop.
-	   Up to 1.5.0 the tree-level tadpole \[Lambda]1 was missing here. *)
+	(* The field normalization acts on the full LO tadpole, including \[Lambda]1, as for aS3D in ScalarMass2Loop *)
 	ContriF=-(\[Lambda]1+TadPoleLO) . ZijS//SimplifySparse;
 	
 	(* --- Final result --- *)
@@ -1791,9 +1785,8 @@ If[CT==False,
 
 (*Fermion mass contributions*)
 (*
-	Fermion loop with three Yukawa vertices and one mass insertion. In the cubic term of
-	Tr[(M M^+)^2], with M=\[Mu]IJF+Ysff.\[Phi], the mass sits on any of the four propagators,
-	which gives twice Contri1+Contri2. Up to 1.5.0 the prefactor was 3 instead of 6.
+	Fermion loop with three Yukawa vertices and one mass insertion. In the term of Tr[(M.M^+)^2]
+	that is cubic in \[Phi], with M=\[Mu]IJF+Ysff.\[Phi], the mass insertion appears on each of the four propagators.
 *)
 	Contri1=Table[Tr[a . \[Mu]IJFC . b . c],{a,Ysff},{b,Ysff},{c,YsffC}];
 	Contri2=Table[Tr[a . \[Mu]IJF . b . c],{a,YsffC},{b,YsffC},{c,Ysff}];
@@ -1943,8 +1936,7 @@ If[CT==False,
 	ContriVV=6/(16 \[Pi]^2)Simplify[ Activate @ TensorContract[
         Inactive[TensorProduct][\[Mu]IJF,gvff,gvff], {{3,6},{1,5},{2,8}}]];
         
-        (*Anomalous-dimension contribution: \[Mu]IJF.\[Gamma]IJF+Transpose[\[Gamma]IJF].\[Mu]IJF, as for Ysff.
-	Up to 1.5.0 this was \[Gamma]IJF.\[Mu]IJF+\[Mu]IJF.Transpose[\[Gamma]IJF], which is not covariant for complex \[Gamma]IJF*)
+        (*Anomalous-dimension contribution, \[Mu]IJF.\[Gamma]IJF+Transpose[\[Gamma]IJF].\[Mu]IJF, in the same order as for Ysff*)
 	ContriAnomFF=-(\[Mu]IJF . \[Gamma]IJF+Transpose[\[Mu]IJF . \[Gamma]IJF]);
 	
 	\[Beta]\[Mu]IJF=   ContriSS+  ContriVV+  ContriAnomFF//Simplify//SparseArray; (*beta function*)
@@ -1952,8 +1944,8 @@ If[CT==False,
 
 
 (*
-	Conjugated Fermion-mass renormalization: the complex conjugate of \[Beta]\[Mu]IJF
-	(\[Gamma]IJF is Hermitian). Up to 1.5.0 ContriSS had an extra overall (-1).
+	Conjugated Fermion-mass renormalization.
+	Since \[Gamma]IJF is Hermitian, \[Beta]\[Mu]IJFC is the complex conjugate of \[Beta]\[Mu]IJF.
 *)
 	YtempMass= Simplify[ Activate @ TensorContract[
         Inactive[TensorProduct][YsffC,\[Mu]IJF], {{3, 5}}]];
@@ -2907,8 +2899,8 @@ BetaFunctions4D[]:=Module[{},
 
 (*
 	The \[Beta]-function tensors must have the structure of the tree-level tensors.
-	Otherwise the Lagrangian is not closed under renormalisation, and the \[Beta]-functions above
-	are one of several inconsistent projections. Up to 1.5.0 this went unnoticed.
+	Otherwise, the Lagrangian is not closed under renormalization, and the \[Beta]-functions above
+	are one of several inconsistent projections.
 *)
 		NotClosedRG=Select[{
 			{"scalar quartics",\[Beta]\[Lambda]ijkl,Normal[\[Lambda]4]/.ResScal},

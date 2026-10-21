@@ -22,24 +22,18 @@ Check[
 
 
 (*
-	The model of examples/ScalYukawa.m (see 2108.04377 and 2310.02308).
+	The model of examples/ScalYukawa.m, see 2108.04377 and 2310.02308, and issues #36, #37, and #38.
 
-	The parameters of the 3d theory do not depend on the 4d scale \[Mu] at the order
-	computed: the explicit \[Mu]-dependence of the NLO terms, through Lb and Lf, cancels
-	the running of the LO terms with BetaFunctions4D[]. The 3d scale \[Mu]3 is held
-	fixed. The same holds for the hard pressure, together with the running of the
-	vacuum energy, which DRalgo does not track.
+	At the order computed, the parameters of the 3d theory do not depend on the 4d scale \[Mu]:
+	the explicit \[Mu]-dependence of the NLO terms, through Lb and Lf, cancels the running of
+	the LO terms with BetaFunctions4D[]. Here, the 3d scale \[Mu]3 is held fixed. The same holds
+	for the hard pressure, together with the running of the vacuum energy, which DRalgo does not track.
 
-	Up to DRalgo 1.5.0 this failed in four places (issues #36, #37, #38):
-	- the fermion-mass term of \[Beta]\[Gamma] was -24 m\[Psi] y^3 instead of -48 m\[Psi] y^3;
-	- the NLO tadpole lacked the field normalisation of \[Sigma] and had a wrong m\[Psi] y^3 term;
-	- the LO pressure counted the photon of the auxiliary U(1);
-	- the NNLO pressure had the wrong sign of msq^2, lacked the O(m\[Psi]^2 y^2) terms,
-	  the fermion loop with crossed scalar lines (y^4), and the running from \[Mu] to \[Mu]3 (\[Gamma]^2).
-
-	The tests check the RG invariance, and reference values for the \[Beta]-functions
-	(2310.02308, appendix D), the NLO tadpole (the one-point function \[CapitalGamma]^(1) of 2310.02308,
-	appendix B, with the field normalisation), and the LO pressure (ideal gas).
+	Checked here:
+	- the \[Beta]-functions against 2310.02308, appendix D;
+	- the RG invariance of the 3d couplings, the scalar mass, the tadpole, and the NNLO pressure;
+	- the NLO tadpole against the one-point function \[CapitalGamma]^(1) of 2310.02308, appendix B;
+	- the LO pressure of an ideal gas, and the \[Mu]3-dependence of the NNLO pressure.
 *)
 
 
@@ -148,10 +142,11 @@ VerificationTest[
 
 (*
 	\[CapitalGamma]^(1) of 2310.02308, appendix B, contains m\[Psi] T^2 y^3/(6(4\[Pi])^2) (Lf+2Lb), and \[Sigma]
-	enters only at tree level. Dividing by Sqrt[T] and by the field normalisation
-	Sqrt[1+2y^2 Lf/(4\[Pi])^2] gives the two terms below. (The field normalisation of
-	2310.02308 has an additional constant 4y^2/(3(4\[Pi])^2); averaging the fermion loop over
-	d-1 spatial directions, its p^2 term is proportional to Lf alone.)
+	enters only at tree level. Dividing by Sqrt[T] and by the field normalization
+	Sqrt[1+2y^2 Lf/(4\[Pi])^2] gives the two terms below.
+	The field normalization of 2310.02308 contains an additional constant 4y^2/(3(4\[Pi])^2).
+	Since K.P=((K+P)^2-K^2-P^2)/2, the p^2 term of the fermion loop is proportional to
+	Sum[1/K^4], and thus to Lf alone, so this constant is absent here.
 *)
 tadpoleNLO=Expand[PrintTadpoles["NLO"][[1,2]]];
 
@@ -159,7 +154,7 @@ AppendTo[testList,
 VerificationTest[
 	Coefficient[tadpoleNLO,\[Sigma]],
 	-Lf y^2/(16\[Pi]^2 Sqrt[T]),
-	TestID->"tadpole-field-normalisation-of-sigma"
+	TestID->"tadpole-field-normalization-of-sigma"
 ]];
 
 AppendTo[testList,

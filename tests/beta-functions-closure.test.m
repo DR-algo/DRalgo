@@ -18,7 +18,7 @@ Check[
 
 
 (* ::Chapter:: *)
-(*BetaFunctions4D for Lagrangians that are not closed under renormalisation*)
+(*BetaFunctions4D for Lagrangians that are not closed under renormalization*)
 
 
 (*
@@ -27,14 +27,12 @@ Check[
 
 	The Yukawa coupling breaks \[CapitalSigma](36), and the fermion loop generates (\[Phi]3^+ \[Phi]3)^2 alone,
 	which the two couplings \[Lambda]11, \[Lambda]12 cannot express. The \[Beta]-function tensor contains the
-	yt3^4 term; BetaFunctions4D projects it onto the tree-level couplings, and its
-	components are inconsistent: some contain yt3^4, others do not. Up to DRalgo 1.5.0 the
-	printed result was one of them, without any warning.
+	yt3^4 term. When BetaFunctions4D projects it onto the tree-level couplings, the
+	components are inconsistent: some contain yt3^4, others do not.
 
-	BetaFunctions4D now checks that the \[Beta]-function tensors are reproduced by the printed
-	\[Beta]-functions, and warns if not. examples/3hdm.m had the same problem: its top Yukawa
-	couplings broke \[CapitalSigma](36), and its \[Lambda]H3 term was not invariant even under the cyclic
-	permutations of the doublets.
+	BetaFunctions4D checks that the printed \[Beta]-functions reproduce the \[Beta]-function tensors,
+	and warns if not. examples/3hdm.m is closed under renormalization: its potential is
+	\[CapitalSigma](36)-invariant, and it has no Yukawa couplings.
 
 	Checked here:
 	- the issue model: BetaFunctions4D warns about the scalar quartics, and the fermion
@@ -102,7 +100,7 @@ VerificationTest[
 
 
 (* ::Section:: *)
-(*SM: closed under renormalisation*)
+(*SM: closed under renormalization*)
 
 
 RepScalar={{{{0,0},{1},1/2},"C"}};

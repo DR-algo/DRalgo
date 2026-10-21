@@ -34,13 +34,11 @@ Check[
 	where the order of Y2 and Transpose[Y2] follows from covariance under
 	unitary rotations of the fermions, as in the beta function of Ysff.
 
-	Up to DRalgo 1.5.0, CounterTerm had an extra overall (-1) in the Yukawa
-	term of beta(mC), and the field-renormalisation term of beta(m) in the
-	transposed order, 1/2 (Y2.m + m.Transpose[Y2]), which differs when Y2 is
-	not real. The counterterms Z\[Mu]IJF and Z\[Mu]IJFC enter the two-loop
-	tadpoles.
+	The transposed order of the field-renormalization term, 1/2 (Y2.m + m.Transpose[Y2]),
+	differs from this formula when Y2 is not real. The counterterms Z\[Mu]IJF and
+	Z\[Mu]IJFC enter the two-loop tadpoles.
 
-	Checked here, for two Dirac flavours with complex Yukawa and mass matrices
+	Checked here, for two Dirac flavors with complex Yukawa and mass matrices
 	(the conjugates are independent symbols yC and mC):
 	- beta(mC) is the complex conjugate of beta(m);
 	- beta(m) is the formula above;
@@ -55,7 +53,7 @@ private[name_String]:=ToExpression["DRalgo`DRalgo`Private`"<>name];
 
 
 (* ::Section:: *)
-(*Model: two Dirac flavours with complex Yukawa and mass matrices*)
+(*Model: two Dirac flavors with complex Yukawa and mass matrices*)
 
 
 (*U(1) with a neutral real scalar and two Dirac fermions of charge q: Weyl fermions L1, R1, L2, R2*)
