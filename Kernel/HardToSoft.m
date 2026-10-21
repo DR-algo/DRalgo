@@ -1550,7 +1550,7 @@ TadPole2Loop[] := Module[
 	FHelp = TensorContract[HabIJF, {1, 2}] // SimplifySparse;
 	temp1 = Contract[Ysff, \[Mu]IJFC, FHelp, {{2, 4}, {5, 6}, {3, 7}}] // SimplifySparse;
 	temp1C = Contract[YsffC, \[Mu]IJF, FHelp, {{2, 4}, {5, 6}, {3, 7}}] // SimplifySparse;
-	Contri6 = -(D - 2) * (IF1p * IF2p - IF2p * I1p) * (temp1 + temp1C) // SimplifySparse;
+	Contri6 = (D - 2) * (IF1p * IF2p - IF2p * I1p) * (temp1 + temp1C) // SimplifySparse; (*same sign as Contri5, so that the poles cancel against ContriCTFF*)
 
 	(* --- Counterterm contribution --- *)
 	
@@ -1893,7 +1893,8 @@ If[CT==False,
 (*
 	Yukawa-coupling renormalization
 *)
-	ContriSS=2/(16 \[Pi]^2)*Transpose[Transpose[Flatten[YTemp,{1,4}],{2,1,3}],{1,3,2}] . Flatten[Ysff,{1,2}];
+(*Vertex correction, in which the scalar b connects the two fermion legs*)
+	ContriSS=2/(16 \[Pi]^2)*Table[Sum[Ysff[[b]] . YsffC[[a]] . Ysff[[b]],{b,1,ns}],{a,1,ns}]//SparseArray;
 	HelpAE=Transpose[Transpose[gvff,{2,1,3}],{1,3,2}] . gvff; 
 	ContriVV=6/(16 \[Pi]^2)*Transpose[Flatten[Ysff,{2,3}]] . Flatten[HelpAE,{2,4}];
 
@@ -1908,8 +1909,7 @@ If[CT==False,
 	Yukawa-coupling renormalization for conjugated tensor.
 	A bit redundant, but it's not even close to being a bottleneck.
 *)
-	ContriSS=2/(16 \[Pi]^2)Simplify[ Activate @ TensorContract[
-        Inactive[TensorProduct][YTempC,YsffC], {{1, 5},{4,6}}]];
+	ContriSS=2/(16 \[Pi]^2)*Table[Sum[YsffC[[b]] . Ysff[[a]] . YsffC[[b]],{b,1,ns}],{a,1,ns}]//SparseArray;
 	ContriVV=6/(16 \[Pi]^2)Simplify[ Activate @ TensorContract[
         Inactive[TensorProduct][YsffC,gvff,gvff], {{4, 7},{2,6},{3,9}}]];
 	ContriAnomSS=-\[Gamma]ij . YsffC;
