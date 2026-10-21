@@ -77,7 +77,7 @@ UseSoftTheory[]:=Module[{},
 	\[Mu]ijTemp=\[Mu]ij//Normal//ReplaceAll[#,SubMass]&//SparseArray;
 
 	(*We then combine normal and temporal scalar masses*)
-	A1=ReplaceAll[Delete[\[Mu]abDef//SparseArray//ArrayRules,-1],{x_,y_}->{x+ns,y+ns}];
+	A1=ReplaceAll[Delete[Normal[\[Mu]abDef]/.SubDebyeDecoupled//SparseArray//ArrayRules,-1],{x_,y_}->{x+ns,y+ns}];
 	A2=Delete[\[Mu]ijTemp//ArrayRules,-1];
 
 	\[Mu]ijEP=SymmetrizedArray[Join[A1,A2],{nSH,nSH},Symmetric[{1,2}]]//SparseArray;

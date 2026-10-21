@@ -637,10 +637,16 @@ DefineDim6[\[Lambda]6I_]:=Module[{\[Lambda]6P=\[Lambda]6I},
 (*
 	Takes the user-defined group and names debye masses.
 *)
-DefineGroup[GroupI_]:=Module[{GroupP=GroupI},
+DefineGroup[GroupI_]:=Module[{GroupP=GroupI,decoupledVectors},
 (*The Debye mass matrix is \[Mu]abDef*)
 (*At tree-level this matrix is 0. But after DR, thermal masses are named accoording to \[Mu]abDef.*)
 	\[Mu]abDef=CreateDebyeMasses[GroupP];
+(*
+	A vector without couplings, such as the U(1) of a model without gauge interactions, has no Debye mass.
+	Therefore, its temporal scalar does not contribute to the soft and ultrasoft theories.
+*)
+	decoupledVectors=Select[Range[nv],AllTrue[Flatten[Normal[{gvvv[[#]],gvss[[#]],gvff[[#]]}]],PossibleZeroQ]&];
+	SubDebyeDecoupled=Table[c->0,{c,Variables[Normal[\[Mu]abDef[[decoupledVectors]]]]}];
 	VecMassDefined=True;
 ];
 

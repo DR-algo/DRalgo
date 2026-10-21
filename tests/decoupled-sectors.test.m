@@ -18,25 +18,19 @@ Check[
 
 
 (* ::Chapter:: *)
-(*LO pressure: sectors that couple to nothing*)
+(*Sectors that couple to nothing*)
 
 
 (*
-	The interface needs a gauge group and allocates at least one scalar, so a model
-	without gauge interactions gets a U(1) under which every field is neutral, and a
-	model without scalars gets a placeholder scalar. SymmetricPhaseLO drops such a
-	sector from the ideal-gas pressure when all its couplings vanish.
+	The interface needs a gauge group and allocates at least one scalar. Therefore, a model
+	without gauge interactions gets a U(1) under which every field is neutral, and a model
+	without scalars gets a placeholder scalar (issues #37 and #58).
 
-	The check of the vector sector, and of the scalar sector, compared gvss (shape
-	{nv,ns,ns}) with an empty array of shape {nv,nf,nf}. For ns!=nf the comparison
-	always failed, so the decoupled photon of ScalYukawa.m and WessZumino.m added
-	-Pi^2 T^4/45 to the free energy, and the placeholder scalar of a model without
-	scalars added -Pi^2 T^4/90, while the photon of RealScalar.m (ns=nf=1 after
-	padding) was dropped.
-
-	Expected: the LO pressure is the ideal gas of the fields that take part in the
-	model, Pi^2 T^4/90 (Nb + 7/8 Nf), with Nb bosonic and Nf fermionic degrees of
-	freedom (two per vector, one per real scalar, two per Weyl fermion).
+	Such a sector does not contribute when all its couplings vanish. The LO pressure is the
+	ideal gas of the fields that take part in the model, Pi^2 T^4/90 (Nb + 7/8 Nf), with Nb
+	bosonic and Nf fermionic degrees of freedom (two per vector, one per real scalar, and two
+	per Weyl fermion). Since the U(1) has no Debye mass, its temporal scalar enters neither the
+	ultrasoft pressure nor the effective potential of the soft theory nor the HET action.
 *)
 
 
@@ -170,7 +164,7 @@ AppendTo[tests, VerificationTest[
 (*A model without scalars has no scalar contribution*)
 
 
-(*QCD with one quark flavour: 8 gluons and 2x3 Weyl fermions, no scalars*)
+(*QCD with one quark flavor: 8 gluons and 2x3 Weyl fermions, no scalars*)
 Group={"SU3"};
 CouplingName={gs};
 RepAdjoint={{1,1}};
@@ -212,9 +206,56 @@ AppendTo[tests, VerificationTest[
 
 
 (* ::Section:: *)
+(*The temporal scalar of a decoupled U(1) in the soft and ultrasoft theories*)
+
+
+(*ScalYukawa.m*)
+Group={"U1"};
+CouplingName={g};
+RepAdjoint={0};
+RepScalar={{{0},"R"}};
+RepFermion={{{0},"L"},{{0},"R"}};
+{gvvv,gvff,gvss,\[Lambda]1,\[Lambda]3,\[Lambda]4,\[Mu]ij,\[Mu]IJC,\[Mu]IJ,Ysff,YsffC}=AllocateTensors[Group,RepAdjoint,CouplingName,RepFermion,RepScalar];
+realScalarPotential[];
+\[Mu]IJ=m\[Psi]*GradMassFermion[CreateInvariantFermion[Group,RepFermion,{{2,1},{False,True}}][[1]]];
+\[Mu]IJC=m\[Psi]*GradMassFermion[CreateInvariantFermion[Group,RepFermion,{{1,2},{False,True}}][[1]]];
+Ysff=y*GradYukawa[CreateInvariantYukawa[Group,RepScalar,RepFermion,{{1,2,1},{True,False,True}}][[1]]];
+YsffC=y*GradYukawa[CreateInvariantYukawa[Group,RepScalar,RepFermion,{{1,1,2},{True,False,True}}][[1]]];
+ImportModelDRalgo[Group,gvvv,gvff,gvss,\[Lambda]1,\[Lambda]3,\[Lambda]4,\[Mu]ij,\[Mu]IJ,\[Mu]IJC,Ysff,YsffC,Verbose->False];
+PerformDRhard[];
+PerformDRsoft[{}];
+
+AppendTo[tests, VerificationTest[
+	{PrintPressureUS["LO"],PrintPressureUS["NLO"]},
+	{0,0},
+	TestID->"decoupled-U1-not-in-ultrasoft-pressure"
+]];
+
+(*The soft theory has the scalar and the temporal scalar of the U(1)*)
+UseSoftTheory[];
+DefineVEVS[{\[Phi]0,0}];
+CalculatePotential[];
+AppendTo[tests, VerificationTest[
+	FreeQ[PrintEffectivePotential["All"],\[Mu]sqU1|\[Lambda]VLL],
+	True,
+	TestID->"decoupled-U1-not-in-soft-effective-potential"
+]];
+
+(*Integrating out the scalar, the temporal scalar, and the spatial vector*)
+PrepareHET[{1,2},{1}];
+CalculatePotentialHET[];
+AppendTo[tests, VerificationTest[
+	FreeQ[PrintActionHET[],\[Mu]sqU1|\[Lambda]VLL],
+	True,
+	TestID->"decoupled-U1-not-in-HET-action"
+]];
+
+
+(* ::Section:: *)
 (*Report*)
 
 
 report=TestReport[tests];
 Print[report];
+Print[Column[{#["TestID"],#["Outcome"]}&/@Values[report["TestResults"]]]];
 Exit[If[report["AllTestsSucceeded"], 0, 1]]

@@ -73,7 +73,7 @@ SymmetricPhaseUSLO[]:=Module[{ContriScalars,VLO},
 (*This just adds the m^3 term for all heavy scalars*)
 	VLO=Sum[-1/(12 \[Pi]) \[Mu]ijL[[i,i]]^3,{i,1,Length[\[Mu]ijL]}];
 
-	OutputFormatDR[VLO]
+	OutputFormatDR[VLO/.SubDebyeDecoupled]
 ];
 
 
@@ -93,7 +93,7 @@ SymmetricPhaseUSNLO[]:=Module[{fSSV,Vss,TensHelp,Vssvs,Vssv,VNLO},
 
 	VNLO= Vss+Vssv;
 
-	OutputFormatDR[VNLO]
+	OutputFormatDR[VNLO/.SubDebyeDecoupled]
 ];
 
 
