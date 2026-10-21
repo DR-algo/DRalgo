@@ -2904,6 +2904,24 @@ BetaFunctions4D[]:=Module[{},
 			QuarticVar=\[Lambda]4p//Normal//Variables;
 			ResTadpole=Solve[SolVar==0,QuarticVar]/.SubGauge2//Flatten[#,1]&;
 		];
+
+(*
+	The \[Beta]-function tensors must have the structure of the tree-level tensors.
+	Otherwise the Lagrangian is not closed under renormalisation, and the \[Beta]-functions above
+	are one of several inconsistent projections. Up to 1.5.0 this went unnoticed.
+*)
+		NotClosedRG=Select[{
+			{"scalar quartics",\[Beta]\[Lambda]ijkl,Normal[\[Lambda]4]/.ResScal},
+			{"scalar cubics",\[Beta]\[Lambda]ijk,Normal[\[Lambda]3]/.ResCubic},
+			{"Yukawa couplings",\[Beta]Ysij,Normal[Ysff]/.ResYuk},
+			{"scalar masses",\[Beta]mij,Normal[\[Mu]ij]/.ResMass},
+			{"fermion masses",\[Beta]\[Mu]IJF,Normal[\[Mu]IJF]/.ResMassF},
+			{"scalar tadpoles",\[Beta]\[Lambda]1,Normal[\[Lambda]1]/.ResTadpole}
+			},!AllTrue[Flatten[Normal[#[[2]]]-#[[3]]],PossibleZeroQ]&][[All,1]];
+		If[Length[NotClosedRG]>0,
+			Print["Detected 1-loop \[Beta]-functions not defined at tree-level: ",StringRiffle[NotClosedRG,", "]];
+			Print["Please Check if you defined all couplings allowed by symmetry"];
+		];
 (*Dim-6 couplings*)
 	If[mode>=3,
 		VarGauge=Join[\[Lambda]6//Normal//Variables]//DeleteDuplicates;
