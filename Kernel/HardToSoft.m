@@ -360,7 +360,7 @@ SymmetricPhaseNNLO[]:=Module[
 	  EPre, M00, LInt, EFPre, EFInt, N00, MF1M1, MF00, MFM2P2, N2M2, MP2M2,
 	  Temp, Temp1, Temp2, Temp3, Temp4, Temp5, 
 	  Help1, Help2, Help3, GHelp, GHelp2, I1Temp, HFab, GabV, gvffnF, gvffNf, \[Lambda]4Eff,
-	  HabIJFnF,
+	  HabIJFnF, vacuumPole,
 	  DiagramsSimplified, DiagramsTotal
 	},
 	
@@ -428,6 +428,15 @@ SymmetricPhaseNNLO[]:=Module[
 	Help1=Activate@TensorContract[Inactive@TensorProduct[Ysff,YsffC],{{1,4},{3,5}}];
 	Temp1=Activate@TensorContract[Inactive@TensorProduct[Help1,Help1],{{1,4},{2,3}}];
 	KFFSFSF=-1/2*(-1)*Temp1*(     MF1M1+    MF00+(I1p-IF1p)^2 IF2p);
+
+	(*
+		Fermion loop with two crossed scalar lines (tetrahedron), Tr[Y_a.YC_b.Y_a.YC_b].
+		With the numerator reduced as in 9410360, it equals MF00-N00/2 (mixed and fermionic basketballs).
+		Each scalar line joins two Ysff (or two YsffC) vertices, so the term vanishes for complex scalars
+		with holomorphic Yukawa couplings, as in the SM. Missing up to 1.5.0.
+	*)
+	Temp1=Sum[Tr[Ysff[[a]] . YsffC[[b]] . Ysff[[a]] . YsffC[[b]]],{a,1,ns},{b,1,ns}];
+	HFFFFSS=1/2*Temp1*(MF00-1/2 N00);
 
 	(* --- Yukawa scalar sector with Lambda4 --- *)
 	help1=TensorContract[\[Lambda]4,{{3,4}}];
@@ -587,12 +596,53 @@ SymmetricPhaseNNLO[]:=Module[
 	
 	VLOtoNLOCT=-1/2Tr[\[Beta]mij]/2*I1p*\[Epsilon]^-1*(-1);
 	
-	VLOtoNNLO=-1/4Tr[\[Mu]ij . \[Mu]ij]*1/(16 (\[Pi]^2) ) Lb*(-1);
+	(*-m^4/4 Sum[1/P^4] of the one-loop diagram. Up to 1.5.0 this term had the opposite sign*)
+	VLOtoNNLO=-1/4Tr[\[Mu]ij . \[Mu]ij]*1/(16 (\[Pi]^2) ) Lb;
 
 	ContriMass=VLOtoNNLO+ VLOtoNLOCT+V\[Mu]SS+V\[Mu]FFS+ V\[Mu]SV;
 
 	(* --- Fermion mass contributions --- *)
-	VLOtoNNLOF=1/2*Tr[\[Mu]IJ . \[Mu]IJC . \[Mu]IJ . \[Mu]IJC]*1/(16 (\[Pi]^2) ) Lf;
+	(*Up to 1.5.0 this term used the user's symbols \[Mu]IJ and \[Mu]IJC instead of \[Mu]IJF and \[Mu]IJFC*)
+	VLOtoNNLOF=1/2*Tr[\[Mu]IJF . \[Mu]IJFC . \[Mu]IJF . \[Mu]IJFC]*1/(16 (\[Pi]^2) ) Lf;
+
+	(*
+		Fermion masses at O(m^2 g^2), missing up to 1.5.0:
+		the mass counterterm in the one-loop diagram, and the insertions of \[Mu]IJFC.\[Mu]IJF
+		into the fermion lines of the two-loop diagrams with a scalar and with a vector.
+		The insertions of \[Mu]IJFC alone lead to the fermionic sunset, which vanishes.
+	*)
+	VLOtoNLOCTF=-Tr[Z\[Mu]IJF . \[Mu]IJFC+\[Mu]IJF . Z\[Mu]IJFC]*IF1p*\[Epsilon]^-1;
+
+	Temp1=Sum[Tr[YsffC[[a]] . Ysff[[a]] . \[Mu]IJFC . \[Mu]IJF],{a,1,ns}];
+	V\[Mu]FFSF=Temp1*IF2p*(I1p-IF1p);
+
+	Temp1=Sum[Tr[gvff[[a]] . gvff[[a]] . \[Mu]IJFC . \[Mu]IJF],{a,1,nv}];
+	V\[Mu]FFVF=(D-2)*Temp1*IF2p*(I1p-IF1p);
+
+	ContriMassF=VLOtoNLOCTF+V\[Mu]FFSF+V\[Mu]FFVF;
+
+	(*
+		Two-loop vacuum diagrams of the soft theory (see SymmetricPhaseUSNLO and CalculateNNLOPotentialSS):
+		the scalar sunset with the cubics and the scalar-scalar-vector sunset with the masses of the
+		scalars and of the temporal scalars give T/(16\[Pi]^2) c (1/(4\[Epsilon])+Log[\[Mu]3]+...), with
+		c = -1/12 T Total[\[Lambda]3^2] + vacuumPole[mS^2,mV^2], evaluated with the LO parameters of the soft theory.
+		The hard pressure contains
+		- the running from \[Mu] to \[Mu]3, which cancels the Log[\[Mu]3] of the soft pressure;
+		- the pole times the O(\[Epsilon]) parts of the LO masses. The soft pressure uses the masses at
+		  O(\[Epsilon]^0); for QCD this is the term -d_A C_A \[Alpha]_E5/4 of hep-ph/0211321.
+		Both were missing up to 1.5.0.
+	*)
+	vacuumPole[mS_,mV_]:=-T Tr[\[CapitalLambda]g . mS]-T Sum[Tr[gvvv[[a]] . gvvv[[a]] . mV],{a,1,nv}];
+	Temp1=-1/12 T Total[Flatten[\[Lambda]3]^2]+vacuumPole[aS3D,aV3D];
+	ContriSoftRunning=-rgFac T/(16 \[Pi]^2) Temp1 Log[\[Mu]3/\[Mu]];
+
+	(*LO masses in d dimensions; at D=4 they are aS3D and aV3D (without \[Lambda]6)*)
+	Temp2=Normal[1/2 \[Lambda]Help I1p-(D-1)I1p \[CapitalLambda]g-IF1p (Ysij+YsijC)]/.D->4-2\[Epsilon];
+	Temp3=Normal[-(D-2)I1p Hg+(D-2)^2 I1p TensorContract[GabcdV,{{2,4}}]
+		-2(D-2)IF1p TensorContract[HabIJF . NFMat,{{3,4}}]]/.D->4-2\[Epsilon];
+	Temp2=Map[Coefficient[Expand[#],\[Epsilon],1]&,Temp2,{2}];
+	Temp3=Map[Coefficient[Expand[#],\[Epsilon],1]&,Temp3,{2}];
+	ContriSoftEpsilon=T/(4*16 \[Pi]^2) vacuumPole[Temp2,Temp3];
 
 	(* Total NNLO symmetric pressure contributions, organized by sector *)
 	(* Counterterm diagrams *)
@@ -607,7 +657,7 @@ SymmetricPhaseNNLO[]:=Module[
 	DiagramsScalarVector\[Lambda] = SerEnergyHelp[LSSVS + JSSVSS] // Simplify;
 	
 	(* Yukawa: scalar couplings *)
-	DiagramsYukawaScalar = SerEnergyHelp[KSSFFFF + KFFSFSF] // Simplify;
+	DiagramsYukawaScalar = SerEnergyHelp[KSSFFFF + KFFSFSF + HFFFFSS] // Simplify;
 	
 	(* Yukawa: \[Lambda]-dependent scalar-fermion *)
 	DiagramsYukawaScalar\[Lambda] = SerEnergyHelp[JSSFFS] // Simplify;
@@ -637,12 +687,14 @@ SymmetricPhaseNNLO[]:=Module[
 	DiagramsFermionScalarVector = SerEnergyHelp[KVVFFSS] // Simplify;
 	
 	(* One-loop and mass-related term *)
-	DiagramsFermionMass = VLOtoNNLOF;
+	DiagramsFermionMass = VLOtoNNLOF + ContriMassF;
 	
 	(* Total NNLO contribution *)
 	DiagramsTotal = (
 	      DiagramsFermionMass
 	    + ContriMass
+	    + ContriSoftRunning
+	    + ContriSoftEpsilon
 	    + DiagramsCT
 	    + DiagramsFermionScalarVector
 	    + DiagramsPureVector
