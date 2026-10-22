@@ -32,13 +32,15 @@ Check[
 
 	BetaFunctions4D checks that the printed \[Beta]-functions reproduce the \[Beta]-function tensors,
 	and warns if not. examples/3hdm.m is closed under renormalization: its potential is
-	\[CapitalSigma](36)-invariant, and it has no Yukawa couplings.
+	\[CapitalSigma](36)-invariant, and it has no Yukawa couplings. The Z2-symmetric 3HDM of
+	examples/3hdm-dark-cp.m, see 2511.04636, couples the top quark to \[Phi]3 only and is closed as well.
 
 	Checked here:
 	- the issue model: BetaFunctions4D warns about the scalar quartics, and the fermion
 	  loop is present in the (\[Phi]3^+ \[Phi]3)^2 component of the \[Beta]-function tensor;
 	- the SM: no warning;
-	- examples/3hdm.m: the potential is \[CapitalSigma](36)-invariant, and no warning.
+	- examples/3hdm.m: the potential is \[CapitalSigma](36)-invariant, and no warning;
+	- examples/3hdm-dark-cp.m: the potential is Z2-invariant, no warning, and the top loop enters \[Beta](\[Lambda]33).
 *)
 
 
@@ -192,6 +194,46 @@ VerificationTest[
 	printedBy[BetaFunctions4D[]],
 	{},
 	TestID->"3hdm-beta-functions-without-warning"
+]];
+
+
+(* ::Section:: *)
+(*examples/3hdm-dark-cp.m*)
+
+
+loadExampleModel["../examples/3hdm-dark-cp.m"];
+potential=VMass+VQuartic;
+components=Cases[Variables[potential],_Symbol[__]];
+
+AppendTo[testList,
+VerificationTest[
+	invariantUnderQ[potential,DiagonalMatrix[{-1,-1,1}]],
+	True,
+	TestID->"3hdm-dark-cp-potential-invariant-under-z2"
+]];
+
+(*Control: the sign flip of \[Phi]1 alone is no symmetry of the \[Mu]12^2 term*)
+AppendTo[testList,
+VerificationTest[
+	invariantUnderQ[potential,DiagonalMatrix[{-1,1,1}]],
+	False,
+	TestID->"3hdm-dark-cp-potential-not-invariant-under-sign-flip-of-phi1"
+]];
+
+import[];
+AppendTo[testList,
+VerificationTest[
+	printedBy[betas3HDMDarkCP=BetaFunctions4D[]],
+	{},
+	TestID->"3hdm-dark-cp-beta-functions-without-warning"
+]];
+
+(*As in the SM, the top loop gives \[Beta](\[Lambda]33) = -6 yt^4/(16\[Pi]^2) for \[Lambda]33 (\[Phi]3^+\[Phi]3)^2*)
+AppendTo[testList,
+VerificationTest[
+	Coefficient[Expand[16\[Pi]^2 (\[Lambda]33/.betas3HDMDarkCP)],yt^4],
+	-6,
+	TestID->"3hdm-dark-cp-beta-contains-top-loop"
 ]];
 
 
