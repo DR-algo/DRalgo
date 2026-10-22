@@ -103,8 +103,12 @@ UpYukawas=Table[
 TopCouplings[[i,j]]CreateInvariantYukawa[Group,RepScalar,RepFermion3Gen,{{1,1+(i-1)*5,2+(j-1)*5},{False,False,True}}]//Simplify,{i,1,3},{j,1,3}];
 
 
+(*
+	CreateInvariantYukawa sets the hypercharges to zero. The up-type quarks couple to the conjugate Higgs, \[Phi]^+ QL^+ uR,
+	and the down-type quarks to the Higgs, \[Phi] QL^+ dR, so that the hypercharges add up to zero.
+*)
 DownYukawas=Table[
-DownCouplings[[i,j]]CreateInvariantYukawa[Group,RepScalar,RepFermion3Gen,{{1,1+(i-1)*5,3+(j-1)*5},{False,False,True}}]//Simplify,{i,1,3},{j,1,3}];
+DownCouplings[[i,j]]CreateInvariantYukawa[Group,RepScalar,RepFermion3Gen,{{1,1+(i-1)*5,3+(j-1)*5},{True,False,True}}]//Simplify,{i,1,3},{j,1,3}];
 
 
 Ysff=-GradYukawa[Total[UpYukawas+DownYukawas,-1]];

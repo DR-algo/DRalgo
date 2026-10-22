@@ -108,9 +108,10 @@ exampleModel[file_]:=Module[{text,start,stop},
 	StringTake[text,stop]
 ];
 
+(*xsm.m keeps the hypercharges as symbols, see ImportModelDRalgo::invariantif in tests/gauge-invariance.m*)
 AppendTo[testList,
 VerificationTest[
-	ToExpression[exampleModel["xsm.m"]],
+	Quiet[ToExpression[exampleModel["xsm.m"]],ImportModelDRalgo::invariantif],
 	Null,
 	TestID->"example-xsm-does-not-warn"
 ]];

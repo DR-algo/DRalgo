@@ -151,7 +151,7 @@ Print@Panel@Row[{
 
 ImportModelDRalgo::usage="\
 ImportModelDRalgo[Group,gvvv,gvff,gvss,\[Lambda]1,\[Lambda]3,\[Lambda]4,\[Mu]ij,\[Mu]IJ,\[Mu]IJC,Ysff,YsffC,Verbose->False,Mode->ModeNumber] \
-Loads the model and creates help tensors. Here,
+Loads the model, checks that the couplings are invariant under the gauge group, and creates help tensors. Here,
 gvvv:  structure constants
 gvff:  vector-fermion trilinear couplings
 gvss:  vector-scalar trilinear couplings
@@ -484,6 +484,14 @@ ImportModelDRalgo::reserved =
 "The model uses the symbols `1`, which also denote the temperature, the renormalization scales, \
 the constants Lb and Lf, \[Epsilon], the gauge parameter xi, or the Debye masses in the results. \
 Rename these couplings, since the results cannot distinguish them otherwise.";
+ImportModelDRalgo::noninvariant =
+"The couplings `1` are not invariant under the gauge group. CreateInvariant and CreateInvariantYukawa \
+set the U(1) charges to zero, so the conjugations of the fields must fit the charges, and in CreateInvariantYukawa \
+the left-handed fermions enter conjugated and the right-handed fermions not, as in the example sm.m. \
+For adjoint scalars of type \"A\", only the terms of CreateInvariant that are symmetric under rotations \
+of all components, such as the mass term, are invariant; use the type \"R\" instead.";
+ImportModelDRalgo::invariantif =
+"The couplings `1` are invariant under the gauge group only if `2`.";
 
 Contract::argcount = "Contract expects between 2 and 4 tensors, but `1` were provided.";
 PrintResults::badopt = "Unknown option `1`. Use \"LO\", \"NLO\", or \"All\" only.";
@@ -656,8 +664,67 @@ If[$LoadGroupMath,
 		s_Symbol/;Context[s]=!="System`",Infinity];
 	clash=Intersection[modelNames,reservedNames];
 	If[clash=!={},Message[ImportModelDRalgo::reserved,clash]];
+	CheckGaugeInvariance[];
 	GroupDR=GroupP; (*For saving purposes*)
 	CreateHelpTensors[] (*Creates recurring tensors*)
+];
+
+
+(*
+	The couplings are invariant under the gauge group if, for every generator c, the scalar tensors satisfy
+	Sum_k gvss[c] acting on index k = 0, and
+		gvss[c].Ysff+I(gvff[c].Ysff+(gvff[c].Ysff)^T)=0,
+	where gvff[c] acts on the first fermion index and the transpose is in the fermion indices.
+	Ysff and \[Mu]IJF multiply the conjugates of the fermions, and YsffC and \[Mu]IJFC the fermions,
+	which transform with the conjugate generators gvff[c]^*=gvff[c]^T.
+*)
+ActOnIndex[m_,t_,k_]:=Module[{perm=Join[Range[2,k],{1},Range[k+1,ArrayDepth[t]]]},
+	Transpose[m . Transpose[t,perm],InversePermutation[perm]]
+];
+
+GaugeVariation[t_,kind_,c_]:=Module[{tS=gvss[[c]],tF=gvff[[c]]},
+	Switch[kind,
+		"S",Sum[ActOnIndex[tS,t,k],{k,ArrayDepth[t]}],
+		"Y",ActOnIndex[tS,t,1]+I(ActOnIndex[tF,t,2]+ActOnIndex[tF,t,3]),
+		"YC",ActOnIndex[tS,t,1]-I(ActOnIndex[Transpose[tF],t,2]+ActOnIndex[Transpose[tF],t,3]),
+		"F",ActOnIndex[tF,t,1]+ActOnIndex[tF,t,2],
+		"FC",ActOnIndex[Transpose[tF],t,1]+ActOnIndex[Transpose[tF],t,2]
+	]
+];
+
+(*
+	Gives name->True for an invariant tensor, name->False for a tensor that is not invariant, and,
+	with symbolic U(1) charges, name->condition on the charges for which the tensor is invariant.
+	The charges are the symbols in gvss and gvff other than the gauge couplings.
+*)
+InvarianceConditions[]:=Module[{tensors,charges,violations,sol},
+	tensors={
+		"\[Lambda]1"->{\[Lambda]1,"S"},"\[Lambda]3"->{\[Lambda]3,"S"},"\[Lambda]4"->{\[Lambda]4,"S"},"\[Mu]ij"->{\[Mu]ij,"S"},
+		"\[Mu]IJ"->{\[Mu]IJF,"F"},"\[Mu]IJC"->{\[Mu]IJFC,"FC"},"Ysff"->{Ysff,"Y"},"YsffC"->{YsffC,"YC"}};
+	tensors=Select[tensors,Length[SparseArray[#[[2,1]]]["NonzeroValues"]]>0&];
+	charges=Complement[
+		Variables[Join[gvss["NonzeroValues"],gvff["NonzeroValues"]]],
+		If[ListQ[GaugeCouplingNames],Variables[GaugeCouplingNames],{}]];
+	Table[
+		violations=Union@Flatten@Table[SparseArray[GaugeVariation[t[[2,1]],t[[2,2]],c]]["NonzeroValues"],{c,nv}];
+		violations=Select[Union[Simplify/@violations],!PossibleZeroQ[#]&];
+		t[[1]]->Which[
+			violations==={},True,
+			charges==={},False,
+			True,
+				sol=Quiet[Solve[Thread[violations==0],charges]];
+				If[MatchQ[sol,{{__Rule}..}],Or@@(And@@(Equal@@@#)&/@sol),False]
+		],
+	{t,tensors}]
+];
+
+CheckGaugeInvariance[]:=Module[{conditions,noninvariant},
+	conditions=InvarianceConditions[];
+	noninvariant=Cases[conditions,(name_->False):>name];
+	If[noninvariant=!={},Message[ImportModelDRalgo::noninvariant,noninvariant]];
+	Do[
+		Message[ImportModelDRalgo::invariantif,group[[All,1]],group[[1,2]]],
+	{group,GatherBy[Select[conditions,!BooleanQ[Last[#]]&],Last]}];
 ];
 
 
