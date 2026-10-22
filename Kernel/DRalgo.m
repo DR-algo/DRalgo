@@ -41,7 +41,7 @@ BeginPackage["DRalgo`DRalgo`"]
 
 
 (* --- Set the version number --- *)
-$DRalgoVersion = "1.5.0";
+$DRalgoVersion = "1.6.0";
 
 
 $DRalgoVersion::usage =
@@ -88,8 +88,9 @@ pacletInfo = PacletFind["DRalgo/DRalgo"];
 If[pacletInfo =!= {},
 	DRalgoLoadImage=Import[FileNameJoin[{PacletObject["DRalgo/DRalgo"]["Location"],"FrontEnd","logo.eps"}]];
 	DRalgoLoadImage=Rasterize[DRalgoLoadImage, RasterSize -> 800, Background -> None];
+	(*the version of the loaded code, not of the installed paclet*)
 	infoTable = Normal@KeyTake[
-		      pacletInfo[[1]]["PacletInfo"],
+		      Append[pacletInfo[[1]]["PacletInfo"], "Version"->$DRalgoVersion],
 		      {"Name", "Version", "Description", "WolframVersion", "Creator", "URL"}
 		      ];
 	,
@@ -207,7 +208,10 @@ Prints the effective potential in the supersoft theory";
 PrintScalarMassUS::usage="\
 Prints scalar masses in the supersoft theory";
 AnomDim4D::usage="\
-Prints anomalous dimensions in the 4d theory";
+AnomDim4D[\"S\"|\"F\"|\"V\", {pos1, pos2}] \
+prints the one-loop anomalous dimension (Landau gauge) of the 4d scalars, fermions, or vectors \
+between the representations at the positions pos1 and pos2, \
+as given by PrintScalarRepPositions[], PrintFermionRepPositions[], or PrintGaugeRepPositions[]";
 BetaFunctions4D::usage="\
 Prints beta-functions in the 4d theory";
 BetaFunctions3DS::usage="\
@@ -637,10 +641,16 @@ DefineDim6[\[Lambda]6I_]:=Module[{\[Lambda]6P=\[Lambda]6I},
 (*
 	Takes the user-defined group and names debye masses.
 *)
-DefineGroup[GroupI_]:=Module[{GroupP=GroupI},
+DefineGroup[GroupI_]:=Module[{GroupP=GroupI,decoupledVectors},
 (*The Debye mass matrix is \[Mu]abDef*)
 (*At tree-level this matrix is 0. But after DR, thermal masses are named accoording to \[Mu]abDef.*)
 	\[Mu]abDef=CreateDebyeMasses[GroupP];
+(*
+	A vector without couplings, such as the U(1) of a model without gauge interactions, has no Debye mass.
+	Therefore, its temporal scalar does not contribute to the soft and ultrasoft theories.
+*)
+	decoupledVectors=Select[Range[nv],AllTrue[Flatten[Normal[{gvvv[[#]],gvss[[#]],gvff[[#]]}]],PossibleZeroQ]&];
+	SubDebyeDecoupled=Table[c->0,{c,Variables[Normal[\[Mu]abDef[[decoupledVectors]]]]}];
 	VecMassDefined=True;
 ];
 

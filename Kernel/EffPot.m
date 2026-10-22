@@ -77,7 +77,7 @@ UseSoftTheory[]:=Module[{},
 	\[Mu]ijTemp=\[Mu]ij//Normal//ReplaceAll[#,SubMass]&//SparseArray;
 
 	(*We then combine normal and temporal scalar masses*)
-	A1=ReplaceAll[Delete[\[Mu]abDef//SparseArray//ArrayRules,-1],{x_,y_}->{x+ns,y+ns}];
+	A1=ReplaceAll[Delete[Normal[\[Mu]abDef]/.SubDebyeDecoupled//SparseArray//ArrayRules,-1],{x_,y_}->{x+ns,y+ns}];
 	A2=Delete[\[Mu]ijTemp//ArrayRules,-1];
 
 	\[Mu]ijEP=SymmetrizedArray[Join[A1,A2],{nSH,nSH},Symmetric[{1,2}]]//SparseArray;
@@ -88,12 +88,12 @@ UseSoftTheory[]:=Module[{},
 	SubGauge=Table[c->Symbol[ToString[c]<>ToString["3d"]],{c,VarGauge}];
 	gvssTEMP=gvss//Normal//ReplaceAll[#,SubGauge]&//SparseArray;
 
-	(*we then add vector-temporal trilinear couplings*)
+	(*we then add vector-temporal trilinear couplings, with the 3d gauge couplings of gvvvEP*)
 	If[Length[gvvv//ArrayRules]==1,
 		gvssEP=SymmetrizedArray[{{1,1,1}->0},{nv,nSH,nSH},Antisymmetric[{2,3}]]//SparseArray;
 		gvssEP[[;;,1;;ns,1;;ns]]=gvssTEMP;
 	,
-		A1=ReplaceAll[Delete[gvvv//ArrayRules,-1],{x_,y_,z_}->{x,y+ns,z+ns}];
+		A1=ReplaceAll[Delete[gvvvEP//ArrayRules,-1],{x_,y_,z_}->{x,y+ns,z+ns}];
 		A2=Delete[gvssTEMP//ArrayRules,-1];
 		gvssEP=SparseArray[Join[A1,A2],{nv,nSH,nSH}];
 	];

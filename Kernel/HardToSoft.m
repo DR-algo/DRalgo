@@ -227,9 +227,14 @@ SymmetricPhaseLO[] := Module[
     CompareTensors[tensor, EmptyArray[shape]]
   );
 
+  (*
+    A sector whose couplings all vanish does not contribute. Such a sector is a placeholder,
+    either the U(1) of a model without gauge interactions or the scalar of a model without scalars.
+  *)
+
   (* --- Scalar contribution --- *)
   scalarEmptyQ = And @@ {
-    isEmptyTensorQ[gvss, {nv, nf, nf}],
+    isEmptyTensorQ[gvss, {nv, ns, ns}],
     isEmptyTensorQ[Ysff, {ns, nf, nf}],
     isEmptyTensorQ[\[Mu]ij, {ns, ns}],
     isEmptyTensorQ[\[Lambda]4, {ns, ns, ns, ns}],
@@ -240,7 +245,7 @@ SymmetricPhaseLO[] := Module[
 
   (* --- Vector contribution --- *)
   vectorEmptyQ = And @@ {
-    isEmptyTensorQ[gvss, {nv, nf, nf}],
+    isEmptyTensorQ[gvss, {nv, ns, ns}],
     isEmptyTensorQ[gvvv, {nv, nv, nv}],
     isEmptyTensorQ[gvff, {nv, nf, nf}]
   };
@@ -353,7 +358,7 @@ SymmetricPhaseNNLO[]:=Module[
 	  EPre, M00, LInt, EFPre, EFInt, N00, MF1M1, MF00, MFM2P2, N2M2, MP2M2,
 	  Temp, Temp1, Temp2, Temp3, Temp4, Temp5, 
 	  Help1, Help2, Help3, GHelp, GHelp2, I1Temp, HFab, GabV, gvffnF, gvffNf, \[Lambda]4Eff,
-	  HabIJFnF,
+	  HabIJFnF, vacuumPole,
 	  DiagramsSimplified, DiagramsTotal
 	},
 	
@@ -421,6 +426,15 @@ SymmetricPhaseNNLO[]:=Module[
 	Help1=Activate@TensorContract[Inactive@TensorProduct[Ysff,YsffC],{{1,4},{3,5}}];
 	Temp1=Activate@TensorContract[Inactive@TensorProduct[Help1,Help1],{{1,4},{2,3}}];
 	KFFSFSF=-1/2*(-1)*Temp1*(     MF1M1+    MF00+(I1p-IF1p)^2 IF2p);
+
+	(*
+		Fermion loop with two crossed scalar lines, Tr[Y_a.YC_b.Y_a.YC_b].
+		Reducing the numerator as in 9410360 gives MF00-N00/2, the mixed and the fermionic basketball.
+		Since each scalar line joins two Ysff or two YsffC vertices, the diagram vanishes for complex scalars
+		with holomorphic Yukawa couplings, as in the SM.
+	*)
+	Temp1=Sum[Tr[Ysff[[a]] . YsffC[[b]] . Ysff[[a]] . YsffC[[b]]],{a,1,ns},{b,1,ns}];
+	HFFFFSS=1/2*Temp1*(MF00-1/2 N00);
 
 	(* --- Yukawa scalar sector with Lambda4 --- *)
 	help1=TensorContract[\[Lambda]4,{{3,4}}];
@@ -580,12 +594,50 @@ SymmetricPhaseNNLO[]:=Module[
 	
 	VLOtoNLOCT=-1/2Tr[\[Beta]mij]/2*I1p*\[Epsilon]^-1*(-1);
 	
-	VLOtoNNLO=-1/4Tr[\[Mu]ij . \[Mu]ij]*1/(16 (\[Pi]^2) ) Lb*(-1);
+	(*The term -m^4/4 Sum[1/P^4] of the one-loop diagram*)
+	VLOtoNNLO=-1/4Tr[\[Mu]ij . \[Mu]ij]*1/(16 (\[Pi]^2) ) Lb;
 
 	ContriMass=VLOtoNNLO+ VLOtoNLOCT+V\[Mu]SS+V\[Mu]FFS+ V\[Mu]SV;
 
 	(* --- Fermion mass contributions --- *)
-	VLOtoNNLOF=1/2*Tr[\[Mu]IJ . \[Mu]IJC . \[Mu]IJ . \[Mu]IJC]*1/(16 (\[Pi]^2) ) Lf;
+	VLOtoNNLOF=1/2*Tr[\[Mu]IJF . \[Mu]IJFC . \[Mu]IJF . \[Mu]IJFC]*1/(16 (\[Pi]^2) ) Lf;
+
+	(*
+		Fermion masses at O(m^2 g^2): the mass counterterm in the one-loop diagram, and the insertions
+		of \[Mu]IJFC.\[Mu]IJF into the fermion lines of the two-loop diagrams with a scalar and with a vector.
+		The terms Tr[Ysff.\[Mu]IJFC.Ysff.\[Mu]IJFC] and their conjugates multiply the fermionic sunset, which vanishes.
+	*)
+	VLOtoNLOCTF=-Tr[Z\[Mu]IJF . \[Mu]IJFC+\[Mu]IJF . Z\[Mu]IJFC]*IF1p*\[Epsilon]^-1;
+
+	Temp1=Sum[Tr[YsffC[[a]] . Ysff[[a]] . \[Mu]IJFC . \[Mu]IJF],{a,1,ns}];
+	V\[Mu]FFSF=Temp1*IF2p*(I1p-IF1p);
+
+	Temp1=Sum[Tr[gvff[[a]] . gvff[[a]] . \[Mu]IJFC . \[Mu]IJF],{a,1,nv}];
+	V\[Mu]FFVF=(D-2)*Temp1*IF2p*(I1p-IF1p);
+
+	ContriMassF=VLOtoNLOCTF+V\[Mu]FFSF+V\[Mu]FFVF;
+
+	(*
+		Two-loop vacuum diagrams of the soft theory, see SymmetricPhaseUSNLO and CalculateNNLOPotentialSS.
+		The scalar sunset with the cubic couplings and the scalar-scalar-vector sunset with the masses of the
+		scalars and of the temporal scalars give T/(16\[Pi]^2) c (1/(4\[Epsilon])+Log[\[Mu]3]+...),
+		where c=-1/12 T Total[\[Lambda]3^2]+vacuumPole[mS^2,mV^2] contains the LO parameters of the soft theory.
+		Therefore, the hard pressure contains
+		- the running from \[Mu] to \[Mu]3, which cancels the Log[\[Mu]3] of the soft pressure;
+		- the pole times the O(\[Epsilon]) parts of the LO masses, since the soft pressure uses the masses at O(\[Epsilon]^0).
+		  For QCD, this is the term -d_A C_A \[Alpha]_E5/4 of hep-ph/0211321.
+	*)
+	vacuumPole[mS_,mV_]:=-T Tr[\[CapitalLambda]g . mS]-T Sum[Tr[gvvv[[a]] . gvvv[[a]] . mV],{a,1,nv}];
+	Temp1=-1/12 T Total[Flatten[\[Lambda]3]^2]+vacuumPole[aS3D,aV3D];
+	ContriSoftRunning=-rgFac T/(16 \[Pi]^2) Temp1 Log[\[Mu]3/\[Mu]];
+
+	(*Thermal parts of the LO masses in d dimensions, which agree with aS3D-\[Mu]ij and aV3D at D=4 (without \[Lambda]6)*)
+	Temp2=Normal[1/2 \[Lambda]Help I1p-(D-1)I1p \[CapitalLambda]g-IF1p (Ysij+YsijC)]/.D->4-2\[Epsilon];
+	Temp3=Normal[-(D-2)I1p Hg+(D-2)^2 I1p TensorContract[GabcdV,{{2,4}}]
+		-2(D-2)IF1p TensorContract[HabIJF . NFMat,{{3,4}}]]/.D->4-2\[Epsilon];
+	Temp2=Map[Coefficient[Expand[#],\[Epsilon],1]&,Temp2,{2}];
+	Temp3=Map[Coefficient[Expand[#],\[Epsilon],1]&,Temp3,{2}];
+	ContriSoftEpsilon=T/(4*16 \[Pi]^2) vacuumPole[Temp2,Temp3];
 
 	(* Total NNLO symmetric pressure contributions, organized by sector *)
 	(* Counterterm diagrams *)
@@ -600,7 +652,7 @@ SymmetricPhaseNNLO[]:=Module[
 	DiagramsScalarVector\[Lambda] = SerEnergyHelp[LSSVS + JSSVSS] // Simplify;
 	
 	(* Yukawa: scalar couplings *)
-	DiagramsYukawaScalar = SerEnergyHelp[KSSFFFF + KFFSFSF] // Simplify;
+	DiagramsYukawaScalar = SerEnergyHelp[KSSFFFF + KFFSFSF + HFFFFSS] // Simplify;
 	
 	(* Yukawa: \[Lambda]-dependent scalar-fermion *)
 	DiagramsYukawaScalar\[Lambda] = SerEnergyHelp[JSSFFS] // Simplify;
@@ -630,12 +682,14 @@ SymmetricPhaseNNLO[]:=Module[
 	DiagramsFermionScalarVector = SerEnergyHelp[KVVFFSS] // Simplify;
 	
 	(* One-loop and mass-related term *)
-	DiagramsFermionMass = VLOtoNNLOF;
+	DiagramsFermionMass = VLOtoNNLOF + ContriMassF;
 	
 	(* Total NNLO contribution *)
 	DiagramsTotal = (
 	      DiagramsFermionMass
 	    + ContriMass
+	    + ContriSoftRunning
+	    + ContriSoftEpsilon
 	    + DiagramsCT
 	    + DiagramsFermionScalarVector
 	    + DiagramsPureVector
@@ -1491,7 +1545,7 @@ TadPole2Loop[] := Module[
 	FHelp = TensorContract[HabIJF, {1, 2}] // SimplifySparse;
 	temp1 = Contract[Ysff, \[Mu]IJFC, FHelp, {{2, 4}, {5, 6}, {3, 7}}] // SimplifySparse;
 	temp1C = Contract[YsffC, \[Mu]IJF, FHelp, {{2, 4}, {5, 6}, {3, 7}}] // SimplifySparse;
-	Contri6 = -(D - 2) * (IF1p * IF2p - IF2p * I1p) * (temp1 + temp1C) // SimplifySparse;
+	Contri6 = (D - 2) * (IF1p * IF2p - IF2p * I1p) * (temp1 + temp1C) // SimplifySparse; (*same sign as Contri5, so that the poles cancel against ContriCTFF*)
 
 	(* --- Counterterm contribution --- *)
 	
@@ -1509,7 +1563,8 @@ TadPole2Loop[] := Module[
 	ContriCTFF=1/2*2*IF1p*\[Epsilon]^-1 (-1)^2*(temp1+temp2+temp3+temp4+temp5+temp6);
 	
 	(* --- Self-Energy correction --- *)
-	ContriF=-TadPoleLO . ZijS//SimplifySparse;
+	(* The field normalization acts on the full LO tadpole, including \[Lambda]1, as for aS3D in ScalarMass2Loop *)
+	ContriF=-(\[Lambda]1+TadPoleLO) . ZijS//SimplifySparse;
 	
 	(* --- Final result --- *)
 	TotalResult = ContriF-Contri1-Contri2-Contri3-ContriCTS-Contri4-ContriCTFF-Contri5-Contri6-Contri7//Normal; (*minus signs from matching*)
@@ -1729,9 +1784,13 @@ If[CT==False,
 
 
 (*Fermion mass contributions*)
+(*
+	Fermion loop with three Yukawa vertices and one mass insertion. In the term of Tr[(M.M^+)^2]
+	that is cubic in \[Phi], with M=\[Mu]IJF+Ysff.\[Phi], the mass insertion appears on each of the four propagators.
+*)
 	Contri1=Table[Tr[a . \[Mu]IJFC . b . c],{a,Ysff},{b,Ysff},{c,YsffC}];
 	Contri2=Table[Tr[a . \[Mu]IJF . b . c],{a,YsffC},{b,YsffC},{c,Ysff}];
-	ContriFF=-1/(8 \[Pi]^2) 3 Symmetrize[(Contri1+Contri2),Symmetric[{1,2,3}]]//SparseArray;
+	ContriFF=-1/(8 \[Pi]^2) 6 Symmetrize[(Contri1+Contri2),Symmetric[{1,2,3}]]//SparseArray;
 	
 (*Anomalous dimension contribution*)
 	ContriAnom=Simplify[Activate @ TensorContract[Inactive[TensorProduct][\[Gamma]ij,\[Lambda]3], {{2, 3}}]];
@@ -1827,7 +1886,8 @@ If[CT==False,
 (*
 	Yukawa-coupling renormalization
 *)
-	ContriSS=2/(16 \[Pi]^2)*Transpose[Transpose[Flatten[YTemp,{1,4}],{2,1,3}],{1,3,2}] . Flatten[Ysff,{1,2}];
+(*Vertex correction, in which the scalar b connects the two fermion legs*)
+	ContriSS=2/(16 \[Pi]^2)*Table[Sum[Ysff[[b]] . YsffC[[a]] . Ysff[[b]],{b,1,ns}],{a,1,ns}]//SparseArray;
 	HelpAE=Transpose[Transpose[gvff,{2,1,3}],{1,3,2}] . gvff; 
 	ContriVV=6/(16 \[Pi]^2)*Transpose[Flatten[Ysff,{2,3}]] . Flatten[HelpAE,{2,4}];
 
@@ -1842,8 +1902,7 @@ If[CT==False,
 	Yukawa-coupling renormalization for conjugated tensor.
 	A bit redundant, but it's not even close to being a bottleneck.
 *)
-	ContriSS=2/(16 \[Pi]^2)Simplify[ Activate @ TensorContract[
-        Inactive[TensorProduct][YTempC,YsffC], {{1, 5},{4,6}}]];
+	ContriSS=2/(16 \[Pi]^2)*Table[Sum[YsffC[[b]] . Ysff[[a]] . YsffC[[b]],{b,1,ns}],{a,1,ns}]//SparseArray;
 	ContriVV=6/(16 \[Pi]^2)Simplify[ Activate @ TensorContract[
         Inactive[TensorProduct][YsffC,gvff,gvff], {{4, 7},{2,6},{3,9}}]];
 	ContriAnomSS=-\[Gamma]ij . YsffC;
@@ -1877,8 +1936,8 @@ If[CT==False,
 	ContriVV=6/(16 \[Pi]^2)Simplify[ Activate @ TensorContract[
         Inactive[TensorProduct][\[Mu]IJF,gvff,gvff], {{3,6},{1,5},{2,8}}]];
         
-        (*Anomalous-dimension contribution*)
-	ContriAnomFF=-(\[Gamma]IJF . \[Mu]IJF+Transpose[\[Gamma]IJF . \[Mu]IJF]);
+        (*Anomalous-dimension contribution, \[Mu]IJF.\[Gamma]IJF+Transpose[\[Gamma]IJF].\[Mu]IJF, in the same order as for Ysff*)
+	ContriAnomFF=-(\[Mu]IJF . \[Gamma]IJF+Transpose[\[Mu]IJF . \[Gamma]IJF]);
 	
 	\[Beta]\[Mu]IJF=   ContriSS+  ContriVV+  ContriAnomFF//Simplify//SparseArray; (*beta function*)
 	Z\[Mu]IJF=\[Beta]\[Mu]IJF/2//SparseArray;(*renormalization constant*)
@@ -1886,10 +1945,11 @@ If[CT==False,
 
 (*
 	Conjugated Fermion-mass renormalization.
+	Since \[Gamma]IJF is Hermitian, \[Beta]\[Mu]IJFC is the complex conjugate of \[Beta]\[Mu]IJF.
 *)
 	YtempMass= Simplify[ Activate @ TensorContract[
         Inactive[TensorProduct][YsffC,\[Mu]IJF], {{3, 5}}]];
-	ContriSS=(-1)2/(16 \[Pi]^2)Simplify[ Activate @ TensorContract[
+	ContriSS=2/(16 \[Pi]^2)Simplify[ Activate @ TensorContract[
         Inactive[TensorProduct][YtempMass,YsffC], {{1,4},{3,5}}]];
 	ContriVV=6/(16 \[Pi]^2)Simplify[ Activate @ TensorContract[
         Inactive[TensorProduct][\[Mu]IJFC,gvff,gvff], {{3,6},{1,5},{2,8}}]];
@@ -2401,6 +2461,8 @@ PrintIdentification[]:=Module[{},
 
 (*
 	Prints anomalous dimensions of 4d fields.
+	ComponentsI={pos1,pos2} are entries of PrintScalarRepPositions[], PrintGaugeRepPositions[],
+	or PrintFermionRepPositions[]; the first index of each is used.
 *)
 AnomDim4D[ParticleI_,ComponentsI_]:=Module[
 	{
@@ -2415,13 +2477,14 @@ AnomDim4D[ParticleI_,ComponentsI_]:=Module[
 		\[Gamma]ab=EmptyArray[{nv,nv}];
 		
 	]; 
+(*No ";" inside the branches: "expr;" evaluates to Null*)
 	Ret = Switch[ParticleP,
 		"S",
-			\[Gamma]ij[[ComponentsP[[1]][[1]],ComponentsP[[2]][[1]]]];,
+			\[Gamma]ij[[ComponentsP[[1]][[1]],ComponentsP[[2]][[1]]]],
 		"F",
-			\[Gamma]IJF[[ComponentsP[[1]][[1]],ComponentsP[[2]][[1]]]];,
+			\[Gamma]IJF[[ComponentsP[[1]][[1]],ComponentsP[[2]][[1]]]],
 		"V",
-			\[Gamma]ab[[ComponentsP[[1]][[1]],ComponentsP[[2]][[1]]]];
+			\[Gamma]ab[[ComponentsP[[1]][[1]],ComponentsP[[2]][[1]]]]
 		];
 
 	OutputFormatDR[Ret]
@@ -2835,6 +2898,24 @@ BetaFunctions4D[]:=Module[{},
 			SolVar=\[Beta]\[Lambda]1-\[Lambda]4p//Normal;
 			QuarticVar=\[Lambda]4p//Normal//Variables;
 			ResTadpole=Solve[SolVar==0,QuarticVar]/.SubGauge2//Flatten[#,1]&;
+		];
+
+(*
+	The \[Beta]-function tensors must have the structure of the tree-level tensors.
+	Otherwise, the Lagrangian is not closed under renormalization, and the \[Beta]-functions above
+	are one of several inconsistent projections.
+*)
+		NotClosedRG=Select[{
+			{"scalar quartics",\[Beta]\[Lambda]ijkl,Normal[\[Lambda]4]/.ResScal},
+			{"scalar cubics",\[Beta]\[Lambda]ijk,Normal[\[Lambda]3]/.ResCubic},
+			{"Yukawa couplings",\[Beta]Ysij,Normal[Ysff]/.ResYuk},
+			{"scalar masses",\[Beta]mij,Normal[\[Mu]ij]/.ResMass},
+			{"fermion masses",\[Beta]\[Mu]IJF,Normal[\[Mu]IJF]/.ResMassF},
+			{"scalar tadpoles",\[Beta]\[Lambda]1,Normal[\[Lambda]1]/.ResTadpole}
+			},!AllTrue[Flatten[Normal[#[[2]]]-#[[3]]],PossibleZeroQ]&][[All,1]];
+		If[Length[NotClosedRG]>0,
+			Print["Detected 1-loop \[Beta]-functions not defined at tree-level: ",StringRiffle[NotClosedRG,", "]];
+			Print["Please Check if you defined all couplings allowed by symmetry"];
 		];
 (*Dim-6 couplings*)
 	If[mode>=3,
