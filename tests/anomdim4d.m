@@ -10,7 +10,7 @@
 	The tests check
 	- that a value (not Null) is returned,
 	- the Landau-gauge values: in DRalgo's convention the anomalous dimension is the
-	  1/\[Epsilon] coefficient of the one-loop field renormalisation, Z = 1 + \[Gamma]/\[Epsilon],
+	  1/\[Epsilon] coefficient of the one-loop field renormalization, Z = 1 + \[Gamma]/\[Epsilon],
 	  which is minus the usual \[Gamma] = 1/2 d log Z/d log \[Mu]; the values agree with
 	  anom_dim_4d of DRalgo 2.0 for the same model,
 	- two relations to the beta functions of BetaFunctions4D[]:
