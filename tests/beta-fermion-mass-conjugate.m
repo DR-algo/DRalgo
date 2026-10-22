@@ -153,7 +153,7 @@ VerificationTest[
 (*Textbook value for one Dirac fermion with a real Yukawa coupling*)
 
 
-(*The model of ScalYukawa.test.m: beta(m\[Psi]) = 3 m\[Psi] y^2/(16 Pi^2) (e.g. Srednicki, ch. 52), for the mass and its conjugate*)
+(*The model of tests/ScalYukawa.m: beta(m\[Psi]) = 3 m\[Psi] y^2/(16 Pi^2) (e.g. Srednicki, ch. 52), for the mass and its conjugate*)
 Group={"U1"};
 RepAdjoint={0};
 CouplingName={g};
