@@ -81,7 +81,7 @@ SymmetricPhaseUSLO[]:=Module[{ContriScalars,VLO},
 (*
 	Calculates the 2-loop pressure in the ultrasoft theory.
 *)
-SymmetricPhaseUSNLO[]:=Module[{fSSV,Vss,TensHelp,Vssvs,Vssv,VNLO},
+SymmetricPhaseUSNLO[]:=Module[{fSSV,Vss,TensHelp,Vssvs,Vssv,Vsss,heavyIndices,masses,VNLO},
 	If[verbose,Print["Calculating NLO \!\(\*SuperscriptBox[\(T\), \(4\)]\) Terms"]];
 (*Scalar-Scalar-Vector sunset diagram*)
 	fSSV[x_,y_]:=(4 (x^2+y^2) Log[\[Mu]3/(x+y)]+4 Sqrt[x^2] Sqrt[y^2]+x^2+y^2)/(32 \[Pi]^2);
@@ -91,7 +91,18 @@ SymmetricPhaseUSNLO[]:=Module[{fSSV,Vss,TensHelp,Vssvs,Vssv,VNLO},
 	TensHelp=1/4 TensorProduct[gvssVTot,gvssVTot];
 	Vssv=Sum[TensHelp[[a,i,j,a,i,j]]fSSV[\[Mu]ijL[[i,i]],\[Mu]ijL[[j,j]]],{a,nv},{i,nSH},{j,nSH}];
 
-	VNLO= Vss+Vssv;
+(*
+	Scalar sunset diagram with two cubic couplings, -1/12 \[Lambda]3^2 (1/(4\[Epsilon])+Log[\[Mu]3/(m1+m2+m3)]+1/2)/(16\[Pi]^2),
+	for the lines with at least one heavy scalar, where the light masses are zero.
+	The sunset with only light lines belongs to the ultrasoft theory.
+	The cubic couplings of two temporal scalars to a scalar are of one-loop order, and their sunset is of higher order.
+*)
+	heavyIndices=Flatten[HeavyScalars];
+	masses=Table[If[MemberQ[heavyIndices,i],Sqrt[\[Mu]ijSNLOP[[i,i]]],0],{i,1,ns}];
+	Vsss=-1/12/(16 \[Pi]^2)*Total[
+		If[ContainsAny[#[[1]],heavyIndices],#[[2]]^2 (1/2+Log[\[Mu]3/Total[masses[[#[[1]]]]]]),0]&/@Most[ArrayRules[\[Lambda]3CSRedUS]]];
+
+	VNLO= Vss+Vssv+Vsss;
 
 	OutputFormatDR[VNLO/.SubDebyeDecoupled]
 ];

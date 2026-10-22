@@ -1623,6 +1623,8 @@ RGRunningHardToSoft[]:=Module[{},
 	they need to be treated on the same footing.
 	There are ns+nv scalars in the soft theory
 	First nv indices are allocated to the temporal scalars
+	The temporal-scalar quartics \[Lambda]AAS complete the soft theory, so that the temporal block
+	gives the exact two-loop running of the Debye masses
 *)
 
 	\[Lambda]4p=\[Lambda]4//Normal//ReplaceAll[#,SubGauge]&//SparseArray; 
@@ -1637,8 +1639,9 @@ RGRunningHardToSoft[]:=Module[{},
 	\[Lambda]4Tot[[nv+1;;ns+nv,1;;nv,nv+1;;ns+nv,1;;nv]]=Transpose[Transpose[Transpose[\[Lambda]KVLight[[1;;nv,1;;nv,1;;ns,1;;ns]],{1,3,2,4}],{1,2,4,3}],{2,1,3,4}]//SparseArray;
 	\[Lambda]4Tot[[nv+1;;ns+nv,nv+1;;ns+nv,1;;nv,1;;nv]]=Transpose[Transpose[Transpose[Transpose[\[Lambda]KVLight[[1;;nv,1;;nv,1;;ns,1;;ns]],{1,3,2,4}],{1,2,4,3}],{2,1,3,4}],{1,3,2,4}]//SparseArray;
 	\[Lambda]4Tot[[nv+1;;ns+nv,nv+1;;ns+nv,nv+1;;ns+nv,nv+1;;ns+nv]]=\[Lambda]KVHeavy//SparseArray;
+	\[Lambda]4Tot[[1;;nv,1;;nv,1;;nv,1;;nv]]=\[Lambda]AAS//SparseArray;
 
-(*\[Lambda]4ijkl: S^4,\[Lambda]KVec_abij; V^2(S^2)., ab=1,nv ijkl=1, ns*)
+(*\[Lambda]4ijkl: S^4,\[Lambda]KVec_abij; V^2(S^2), \[Lambda]AAS_abcd: V^4, ab=1,nv ijkl=1, ns*)
 (*\[Lambda]4TotIJKL, I=1,...,nv,....,nv+ns*)
 
 (*Help tensors*)
@@ -1675,8 +1678,9 @@ RGRunningHardToSoft[]:=Module[{},
 	\[Delta]\[Mu]3d=Contri1RG+  Contri2RG+ Contri3RG+ Contri4RG+Contri5RG+ Contri6RG; (*All mass-counterterms in the soft theory*)       
         
 	\[Beta]\[Mu]3ij=4 \[Delta]\[Mu]3d //Simplify; (*Finds the beta function in the soft theory*)
-	Contri\[Beta]SoftToHard=\[Beta]\[Mu]3ij[[nv+1;;ns+nv,nv+1;;ns+nv]] Log[\[Mu]3/\[Mu]]//SimplifySparse;(*Running from the hard matching scale to the soft scale \[Mu]3*)
-(*In the soft theory temporal scalars don't run. So only the original-scalar running is needed*)
+(*Running from the hard matching scale to the soft scale \[Mu]3, for the scalar masses and for the Debye masses*)
+	Contri\[Beta]SoftToHard=\[Beta]\[Mu]3ij[[nv+1;;ns+nv,nv+1;;ns+nv]] Log[\[Mu]3/\[Mu]]//SimplifySparse;
+	Contri\[Beta]DebyeSoftToHard=\[Beta]\[Mu]3ij[[1;;nv,1;;nv]] Log[\[Mu]3/\[Mu]]//SimplifySparse;
 
 
 (*Tadpoles*)
@@ -1749,6 +1753,8 @@ If[CT==False,
 	ContriAnom=-\[Mu]ij . \[Gamma]ij-Transpose[\[Mu]ij . \[Gamma]ij];
 	ContriCubic=1/2*1/(16 \[Pi]^2)*2 Activate@TensorContract[Inactive@TensorProduct[\[Lambda]3,\[Lambda]3],{{2,5},{3,6}}];
 	\[Beta]mij=(\[Kappa] ContriSS+ContriAnom+ContriFFMass1+ContriFFMass2+ContriCubic)//SparseArray;
+(*The anomalous-dimension contributions \[Beta]xAnom are kept for CounterTerms4D[FieldRenormalization->True]*)
+	\[Beta]mijAnom=ContriAnom//SparseArray;
 
 (*
 	Scalar quartic renormalization
@@ -1772,6 +1778,7 @@ If[CT==False,
 	ContriAnom=ContriSETemp+Transpose[ContriSETemp,{2,1,3,4}]+Transpose[ContriSETemp,{3,1,2,4}]+Transpose[ContriSETemp,{4,1,2,3}]//Simplify;
 
 	\[Beta]\[Lambda]ijkl= ContriSS+ ContriVV+ ContriFF-  ContriAnom//Simplify//SparseArray;
+	\[Beta]\[Lambda]ijklAnom=-ContriAnom//SparseArray;
 	Z\[Lambda]ijkl=\[Beta]\[Lambda]ijkl/(2 \[Epsilon])//SparseArray;(*renormalization constants*)
 
 
@@ -1794,7 +1801,8 @@ If[CT==False,
 	
 (*Anomalous dimension contribution*)
 	ContriAnom=Simplify[Activate @ TensorContract[Inactive[TensorProduct][\[Gamma]ij,\[Lambda]3], {{2, 3}}]];
-	\[Beta]\[Lambda]ijk=(-ContriAnom-Transpose[ContriAnom,{2,1,3}]-Transpose[ContriAnom,{3,2,1}]+ContriSSC+ContriFF)//SparseArray//SimplifySparse; (*beta function*)
+	\[Beta]\[Lambda]ijkAnom=-ContriAnom-Transpose[ContriAnom,{2,1,3}]-Transpose[ContriAnom,{3,2,1}]//SparseArray;
+	\[Beta]\[Lambda]ijk=(\[Beta]\[Lambda]ijkAnom+ContriSSC+ContriFF)//SparseArray//SimplifySparse; (*beta function*)
 	Z\[Lambda]ijk=\[Beta]\[Lambda]ijk/2;(*renormalization constants*)
 
 (*
@@ -1896,6 +1904,7 @@ If[CT==False,
 	ContriAnomFF=-(Ysff . \[Gamma]IJF+Transpose[Transpose[Ysff,{1,3,2}] . \[Gamma]IJF,{1,3,2}]);
 
 	\[Beta]Ysij=   ContriSS+  ContriVV+  ContriAnomSS+ ContriAnomFF//Simplify//SparseArray; (*beta function*)
+	\[Beta]YsijAnom=ContriAnomSS+ContriAnomFF//SparseArray;
 	ZYsij=\[Beta]Ysij/2//SparseArray;(*renormalization constants*)
 
 (*
@@ -1940,6 +1949,7 @@ If[CT==False,
 	ContriAnomFF=-(\[Mu]IJF . \[Gamma]IJF+Transpose[\[Mu]IJF . \[Gamma]IJF]);
 	
 	\[Beta]\[Mu]IJF=   ContriSS+  ContriVV+  ContriAnomFF//Simplify//SparseArray; (*beta function*)
+	\[Beta]\[Mu]IJFAnom=ContriAnomFF//SparseArray;
 	Z\[Mu]IJF=\[Beta]\[Mu]IJF/2//SparseArray;(*renormalization constant*)
 
 
@@ -1977,6 +1987,7 @@ If[CT==False,
 	ContriAnom=-\[Lambda]1 . \[Gamma]ij;
 
 	\[Beta]\[Lambda]1=ContriF+ContriS+ContriAnom;
+	\[Beta]\[Lambda]1Anom=ContriAnom;
 	Z\[Lambda]1=\[Beta]\[Lambda]1/2;
 
 	If[mode>=3,
@@ -1996,8 +2007,9 @@ If[CT==False,
 		ContriSETemp=-1/2*\[Gamma]ij . \[Lambda]6;
 		ContriSE=6*Symmetrize[ContriSETemp,Symmetric]//SparseArray//SimplifySparse;
 
-(*Minus sign from matching*)
-		\[Beta]\[Lambda]6ijklnm=-2*(ContriSE+ContriSSS)//SparseArray; 
+(*As for \[Beta]\[Lambda]ijkl: 2 ContriSE is minus the sum of \[Gamma]ij over the six legs, and 2 ContriSSS the scalar loop*)
+		\[Beta]\[Lambda]6ijklnm=2*(ContriSE+ContriSSS)//SparseArray;
+		\[Beta]\[Lambda]6ijklnmAnom=2*ContriSE//SparseArray;
 	];
 
 
@@ -2143,7 +2155,8 @@ IdentifyTensorsDRalgo[]:=Module[
 	
 	(* --- Debye masses --- *)
 	If[mode>=2,
-		couplingTensor = xLO*aV3D+ xNLO*\[Mu]VabNLO;
+		RGRunningHardToSoft[]; (*Runs from the hard to the soft scale in the effective theory*)
+		couplingTensor = xLO*aV3D+ xNLO*(\[Mu]VabNLO+rgFac*Contri\[Beta]DebyeSoftToHard);
 	,
 		couplingTensor = xLO*aV3D;	
 	];
@@ -2156,7 +2169,6 @@ IdentifyTensorsDRalgo[]:=Module[
 
 	(* --- Scalar masses --- *)
 	If[mode>=2,
-		RGRunningHardToSoft[]; (*Runs from the hard to the soft scale in the effective theory*)
 		couplingTensor = xLO*aS3D+xNLO*(\[Mu]SijNLO+rgFac*Contri\[Beta]SoftToHard);
 	,
 		couplingTensor = xLO*aS3D;
@@ -2587,11 +2599,37 @@ PrintTensorDRalgo[ind_]:=Module[{},
 
 
 (*
-	Prints Counterterms of 4d couplings and masses.
+	Prints the one-loop counterterms of the 4d couplings and masses, x->\[Delta]x, in d=4-2\[Epsilon].
+
+	By default, the fields are not renormalized, and \[Delta]x=\[Beta]x/(2\[Epsilon]) are the counterterms of the bare
+	couplings, x_b=\[Mu]^(k \[Epsilon])(x+\[Delta]x), where \[Mu]^(k \[Epsilon]) keeps the mass dimension of x in d dimensions.
+
+	With FieldRenormalization->True, the fields are renormalized, \[Phi]_b=(1+\[Delta]Z)^(1/2)\[Phi], and \[Delta]x is the
+	counterterm of the term x \[Phi]1...\[Phi]n of the Lagrangian, x_b=Z1^(-1/2)...Zn^(-1/2) \[Mu]^(k \[Epsilon])(x+\[Delta]x).
+	The field counterterms \[Delta]Z/2 x of the n legs are then part of the kinetic terms: \[Delta]x follows from the
+	\[Beta]-function tensor without its anomalous-dimension contributions \[Beta]xAnom, and depends on the gauge,
+	Landau gauge here. The gauge couplings carry no Z factor, g_b=\[Mu]^\[Epsilon](g+\[Delta]g), and \[Delta]g^2 does not
+	change. These are the conventions of 1802.05056, appendix C.2.
 *)
-CounterTerms4D[]:=Module[{},
+Options[CounterTerms4D]={FieldRenormalization->False};
+
+
+CounterTerms4D[OptionsPattern[]]:=Module[
+	{
+	fieldRenormalization=OptionValue[FieldRenormalization], betaCT,
+	\[Beta]\[Lambda]4CT, \[Beta]\[Lambda]3CT, \[Beta]YCT, \[Beta]mCT, \[Beta]\[Mu]FCT, \[Beta]\[Lambda]1CT, \[Beta]\[Lambda]6CT
+	},
 	VerbosePrint["Finding \[Beta]-functions"];
 	CounterTerm[];
+
+(*The \[Beta]-function tensors from which the counterterms are solved*)
+	betaCT[tens_,tensAnom_]:=If[fieldRenormalization,SimplifySparse[SparseArray[tens-tensAnom]],tens];
+	\[Beta]\[Lambda]4CT=betaCT[\[Beta]\[Lambda]ijkl,\[Beta]\[Lambda]ijklAnom];
+	\[Beta]\[Lambda]3CT=betaCT[\[Beta]\[Lambda]ijk,\[Beta]\[Lambda]ijkAnom];
+	\[Beta]YCT=betaCT[\[Beta]Ysij,\[Beta]YsijAnom];
+	\[Beta]mCT=betaCT[\[Beta]mij,\[Beta]mijAnom];
+	\[Beta]\[Mu]FCT=betaCT[\[Beta]\[Mu]IJF,\[Beta]\[Mu]IJFAnom];
+	\[Beta]\[Lambda]1CT=betaCT[\[Beta]\[Lambda]1,\[Beta]\[Lambda]1Anom];
 
 (*To make the comparisons easier*)
 		VarGauge=GaugeCouplingNames//Variables;
@@ -2642,14 +2680,14 @@ CounterTerms4D[]:=Module[{},
 		SubGauge2=Table[Symbol[ToString[c]<>ToString["temp"]]->c,{c,VarGauge}];
 
 
-		HelpList=DeleteDuplicates@Flatten@SimplifySparse[\[Beta]\[Lambda]ijkl]//Sort;
+		HelpList=DeleteDuplicates@Flatten@SimplifySparse[\[Beta]\[Lambda]4CT]//Sort;
 		HelpVarMod=RelationsBVariables3[HelpList]//ReplaceAll[#,\[Lambda]VL[v1_]->\[Lambda]Beta[v1]]&;
 		If[HelpList[[1]]==0&&Length[HelpList]>1,
 				HelpList=Rest[HelpList];
 		];
 		HelpSolve\[Beta]=Table[{HelpList[[a]]->HelpVarMod[[a]]},{a,1,HelpList//Length}]//Flatten//Simplify;
 		HelpSolve\[Beta]2=Table[{HelpVarMod[[a]]->HelpList[[a]]},{a,1,HelpList//Length}]//Flatten//Simplify;
-		\[Lambda]4\[Beta]=\[Beta]\[Lambda]ijkl//SimplifySparse//Normal//ReplaceAll[#,HelpSolve\[Beta]]&//SparseArray;
+		\[Lambda]4\[Beta]=\[Beta]\[Lambda]4CT//SimplifySparse//Normal//ReplaceAll[#,HelpSolve\[Beta]]&//SparseArray;
 
 		\[Lambda]4p=\[Lambda]4//Normal//ReplaceAll[#,SubGauge]&;
 		SolVar=\[Lambda]4\[Beta]-\[Lambda]4p//Normal;
@@ -2666,7 +2704,7 @@ CounterTerms4D[]:=Module[{},
 		SubGauge2=Table[Symbol[ToString[c]<>ToString["temp"]]->c,{c,VarGauge}];
 
 		\[Lambda]3p=\[Lambda]3//Normal//ReplaceAll[#,SubGauge]&;
-		SolVar=\[Beta]\[Lambda]ijk-\[Lambda]3p//Normal;
+		SolVar=\[Beta]\[Lambda]3CT-\[Lambda]3p//Normal;
 		CubicVar=\[Lambda]3p//Normal//Variables;
 		ResCubic=Solve[SolVar==0,CubicVar]/.SubGauge2//Flatten[#,1]&;
 
@@ -2678,7 +2716,7 @@ CounterTerms4D[]:=Module[{},
 		SubGauge2=Table[Symbol[ToString[c]<>ToString["temp"]]->c,{c,VarGauge}];
 
 		\[Lambda]4p=Ysff//Normal//ReplaceAll[#,SubGauge]&;
-		SolVar=\[Beta]Ysij-\[Lambda]4p//Normal;
+		SolVar=\[Beta]YCT-\[Lambda]4p//Normal;
 		QuarticVar=\[Lambda]4p//Normal//Variables;
 		ResYuk=Solve[SolVar==0,QuarticVar]/.SubGauge2//Flatten[#,1]&;
 
@@ -2693,7 +2731,7 @@ CounterTerms4D[]:=Module[{},
 		SubGauge2=Table[Symbol[ToString[c]<>ToString["temp"]]->c,{c,VarGauge}];
 
 		\[Lambda]4p=\[Mu]ij//Normal//ReplaceAll[#,SubGauge]&;
-		SolVar=\[Beta]mij-\[Lambda]4p//Normal;
+		SolVar=\[Beta]mCT-\[Lambda]4p//Normal;
 		QuarticVar=\[Lambda]4p//Normal//Variables;
 		ResMass=Solve[SolVar==0,QuarticVar]/.SubGauge2//Flatten[#,1]&;
 
@@ -2706,7 +2744,7 @@ CounterTerms4D[]:=Module[{},
 		SubGauge2=Table[Symbol[ToString[c]<>ToString["temp"]]->c,{c,VarGauge}];
 
 		\[Lambda]4p=\[Mu]IJF//Normal//ReplaceAll[#,SubGauge]&;
-		SolVar=\[Beta]\[Mu]IJF-\[Lambda]4p//Normal;
+		SolVar=\[Beta]\[Mu]FCT-\[Lambda]4p//Normal;
 		QuarticVar=\[Lambda]4p//Normal//Variables;
 		ResMassF=Solve[SolVar==0,QuarticVar]/.SubGauge2//Flatten[#,1]&;
 
@@ -2725,7 +2763,7 @@ CounterTerms4D[]:=Module[{},
 		SubGauge2=Table[Symbol[ToString[c]<>ToString["temp"]]->c,{c,VarGauge}];
 
 		\[Lambda]4p=\[Lambda]1//Normal//ReplaceAll[#,SubGauge]&;
-		SolVar=\[Beta]\[Lambda]1-\[Lambda]4p//Normal;
+		SolVar=\[Beta]\[Lambda]1CT-\[Lambda]4p//Normal;
 		QuarticVar=\[Lambda]4p//Normal//Variables;
 		ResTadpole=Solve[SolVar==0,QuarticVar]/.SubGauge2//Flatten[#,1]&;
 
@@ -2740,8 +2778,9 @@ CounterTerms4D[]:=Module[{},
 			SubGauge=Table[c->Symbol[ToString[c]<>ToString["temp"]],{c,VarGauge}];
 			SubGauge2=Table[Symbol[ToString[c]<>ToString["temp"]]->c,{c,VarGauge}];
 
+			\[Beta]\[Lambda]6CT=betaCT[\[Beta]\[Lambda]6ijklnm,\[Beta]\[Lambda]6ijklnmAnom];
 			\[Lambda]6p=\[Lambda]6//Normal//ReplaceAll[#,SubGauge]&;
-			SolVar=\[Beta]\[Lambda]6ijklnm-\[Lambda]6p//Normal;
+			SolVar=\[Beta]\[Lambda]6CT-\[Lambda]6p//Normal;
 			SexticVar=\[Lambda]6p//Normal//Variables;
 			ResSextic=Solve[SolVar==0,SexticVar]/.SubGauge2//Flatten[#,1]&;
 
@@ -2757,6 +2796,15 @@ CounterTerms4D[]:=Module[{},
 		PrintPre=ReplaceAll[PrintPre,(a_->b_):>a->b/(2 \[Epsilon])];
 		OutputFormatDR[PrintPre]
 ];
+
+
+(*
+	Prints the one-loop field counterterms \[Delta]Z of the 4d fields in Landau gauge, with the bare fields
+	\[Phi]_b=(1+\[Delta]Z)^(1/2)\[Phi], such that \[Delta]Z is the counterterm of the kinetic term.
+	In DRalgo's convention, Z=1+\[Gamma]/\[Epsilon] with the anomalous dimension \[Gamma] of AnomDim4D, so \[Delta]Z=\[Gamma]/\[Epsilon].
+	The arguments are those of AnomDim4D.
+*)
+CounterTerms4D[ParticleI_String,ComponentsI_List]:=OutputFormatDR[AnomDim4D[ParticleI,ComponentsI]/\[Epsilon]];
 
 
 (* ::Subsection:: *)
@@ -2952,7 +3000,7 @@ BetaFunctions4D[]:=Module[{},
 
 
 (*
-	Prints beta-functions of the soft masses and tadpoles.
+	Prints beta-functions of the soft scalar masses, Debye masses, and tadpoles.
 *)
 BetaFunctions3DS[]:=Module[{},
 	VerbosePrint["Finding \[Beta]-functions"];
@@ -2969,6 +3017,17 @@ BetaFunctions3DS[]:=Module[{},
 		SolVar=Contri\[Beta]SoftToHard-\[Lambda]4p//Normal;
 		QuarticVar=\[Lambda]4p//Normal//Variables;
 		ResMass=Solve[SolVar==0,QuarticVar]/.SubGauge2//Flatten[#,1]&;
+(*
+	Debye masses
+*)
+		VarGauge=Join[\[Mu]abDef//Normal//Variables]//DeleteDuplicates;
+		SubGauge=Table[c->Symbol[ToString[c]<>ToString["temp"]],{c,VarGauge}];
+		SubGauge2=Table[Symbol[ToString[c]<>ToString["temp"]]->c,{c,VarGauge}];
+
+		\[Lambda]4p=\[Mu]abDef//Normal//ReplaceAll[#,SubGauge]&;
+		SolVar=Contri\[Beta]DebyeSoftToHard-\[Lambda]4p//Normal;
+		QuarticVar=\[Lambda]4p//Normal//Variables;
+		ResDebye=Solve[SolVar==0,QuarticVar]/.SubGauge2//Flatten[#,1]&;
 (* 
 	Scalar tadpoles
 *)
@@ -2985,11 +3044,12 @@ BetaFunctions3DS[]:=Module[{},
 			ResTadpole=Solve[SolVar==0,QuarticVar]/.SubGauge2//Flatten[#,1]&;
 		];
 
-		PrintPre=Join[ResMass,ResTadpole]/.\[Mu]3->\[Mu] Exp[1]//Normal//FullSimplify//DeleteDuplicates;
+		PrintPre=Join[ResMass,ResDebye,ResTadpole]/.\[Mu]3->\[Mu] Exp[1]//Normal//FullSimplify//DeleteDuplicates;
 ,
 	ResMass=#->0&/@Variables[\[Mu]ij//Normal];
+	ResDebye=#->0&/@Variables[\[Mu]abDef//Normal];
 	ResTadpole=#->0&/@Variables[\[Lambda]1//Normal];
-	PrintPre=Join[ResMass,ResTadpole]/.\[Mu]3->\[Mu] Exp[1]//Normal//FullSimplify//DeleteDuplicates;
+	PrintPre=Join[ResMass,ResDebye,ResTadpole]/.\[Mu]3->\[Mu] Exp[1]//Normal//FullSimplify//DeleteDuplicates;
 ];
 	OutputFormatDR[PrintPre]
 ];

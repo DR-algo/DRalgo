@@ -178,7 +178,12 @@ the scalars with indices \!\(\*SubscriptBox[\(s\), \(1\)]\) to \!\(\*SubscriptBo
 DefineVectorMass::usage="\
 Defines Custom Vector-Boson masses";
 PrintDebyeMass::usage="\
-Prints Debye Masses in the soft theory";
+PrintDebyeMass[\!\(\*
+StyleBox[\"Order\",\nFontSlant->\"Italic\"]\)] \
+prints the Debye masses in the soft theory at \
+\!\(\*
+StyleBox[\"Order\",\nFontSlant->\"Italic\"]\) \[Element]{\"LO\", \"NLO\", \"All\"}. \
+The NLO masses contain the two-loop running from \[Mu] to \[Mu]3 in the soft theory, unless AutoRG->False";
 PrintTemporalScalarCouplings::usage="\
 Prints Temporal-Vector Couplings in the soft theory";
 PrintIdentification::usage="\
@@ -267,7 +272,19 @@ SaveModelDRalgo::usage="Saves a model to a file";
 LoadModelDRalgo::usage="Loads a model from file";
 DefineDim6::usage="Defines a dimension 6 operator";
 PrintCouplingsEffective::usage="Prints higher-order couplings";
-CounterTerms4D::usage="Prints 4d CounterTerms";
+CounterTerms4D::usage="\
+CounterTerms4D[] prints the one-loop counterterms \[Delta]x=\[Beta]x/(2\[Epsilon]) of the 4d couplings and masses, x->\[Delta]x, \
+in d=4-2\[Epsilon], with the fields not renormalized.
+CounterTerms4D[FieldRenormalization->True] prints the counterterms when the fields are renormalized as well, \
+\[Phi]_b=(1+\[Delta]Z)^(1/2)\[Phi]: \[Delta]x is then the counterterm of the Lagrangian term x \[Phi]1...\[Phi]n, \
+x_b=Z1^(-1/2)...Zn^(-1/2) \[Mu]^(k \[Epsilon])(x+\[Delta]x), in Landau gauge. \
+The gauge couplings carry no Z factor, g_b=\[Mu]^\[Epsilon](g+\[Delta]g), and \[Delta]g^2 is the same in both cases.
+CounterTerms4D[\"S\"|\"F\"|\"V\", {pos1, pos2}] \
+prints the one-loop field counterterm \[Delta]Z (Landau gauge) of the 4d scalars, fermions, or vectors \
+between the representations at the positions pos1 and pos2, as for AnomDim4D; \[Delta]Z=AnomDim4D/\[Epsilon]";
+FieldRenormalization::usage="\
+FieldRenormalization is an option of CounterTerms4D. With FieldRenormalization->True, the counterterms are \
+those of the Lagrangian in terms of renormalized fields, and the field counterterms are part of the kinetic terms";
 UseUltraSoftTheory::usage="\
 Uses ultrasoft couplings to construct the potential";
 UseSoftTheory::usage="\
@@ -463,6 +480,11 @@ DRalgo::ImplementationFail =
 "Error! DRalgo has encountered a problem and must abort the computation. \
 The problem reads: `1`";
 
+ImportModelDRalgo::reserved =
+"The model uses the symbols `1`, which also denote the temperature, the renormalization scales, \
+the constants Lb and Lf, \[Epsilon], the gauge parameter xi, or the Debye masses in the results. \
+Rename these couplings, since the results cannot distinguish them otherwise.";
+
 Contract::argcount = "Contract expects between 2 and 4 tensors, but `1` were provided.";
 PrintResults::badopt = "Unknown option `1`. Use \"LO\", \"NLO\", or \"All\" only.";
 SymmetrizeTensor::badlabel = "Unknown label `1`. Use \"1S\", \"2S\", \"1A\", \"2A\", \"SS\", \"AS\", \"SA\", \"AA\", \"P\", or \"K\".";
@@ -584,7 +606,8 @@ ImportModelDRalgo[
 	{
 		GroupP=GroupI,
 		gvvvP=gvvvI,gvffP=gvffI,gvssP=gvssI,\[Lambda]1IP=\[Lambda]1I,\[Lambda]3P=\[Lambda]3I,\[Lambda]4P=\[Lambda]4I,
-		\[Mu]ijP=\[Mu]ijI,\[Mu]IJFP=\[Mu]IJFI,\[Mu]IJFCP=\[Mu]IJFCI,YsffP=YsffI,YsffCP=YsffCI
+		\[Mu]ijP=\[Mu]ijI,\[Mu]IJFP=\[Mu]IJFI,\[Mu]IJFCP=\[Mu]IJFCI,YsffP=YsffI,YsffCP=YsffCI,
+		reservedNames,modelNames,clash
 	},
 
 If[$LoadGroupMath,
@@ -620,6 +643,19 @@ If[$LoadGroupMath,
 
 	CT=False; (*Checks if counter-terms have already been calculated*)
 	DefineGroup[GroupP]; (*Names Debye masses*)
+
+(*
+	The couplings must not have the names of symbols in the results, for instance a cubic coupling \[Mu]3,
+	which the results could not distinguish from the 3d renormalization scale \[Mu]3.
+*)
+	reservedNames=Join[
+		{"T","\[Mu]","\[Mu]3","\[Mu]3US","\[Epsilon]","Lb","Lf","xi"},
+		SymbolName/@Variables[Normal[\[Mu]abDef]]];
+	modelNames=SymbolName/@DeleteDuplicates@Cases[
+		Normal/@{gvvv,gvff,gvss,\[Lambda]1,\[Lambda]3,\[Lambda]4,\[Mu]ij,\[Mu]IJF,\[Mu]IJFC,Ysff,YsffC},
+		s_Symbol/;Context[s]=!="System`",Infinity];
+	clash=Intersection[modelNames,reservedNames];
+	If[clash=!={},Message[ImportModelDRalgo::reserved,clash]];
 	GroupDR=GroupP; (*For saving purposes*)
 	CreateHelpTensors[] (*Creates recurring tensors*)
 ];
@@ -893,7 +929,8 @@ RelationsBVariables3[list_]:=Module[{L=list},
 (*Creates a vector-basis*)
 
 (*One could say that v3 and v2 are identical. With v3 being almost twice as identical as v2*)
-	If[L[[1]]==0&&Length[L]>1,
+(*SameQ, since L[[1]]==0 stays unevaluated for a nonzero symbolic element, as for a list without zeros*)
+	If[L[[1]]===0&&Length[L]>1,
 		Lp=Delete[L,1];
 	,
 		Lp=L;

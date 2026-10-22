@@ -357,10 +357,10 @@ OneLoopFunctions[]:=Module[{LSV,LVV,LSS,A},
 	LVV[0,x_]:=LVV[x,0];
 	LVV[0,0]:=0;
 	
-(*Scalar-scalar 2-point*)
+(*Scalar-scalar 2-point, the p^2 term of 1/(4\[Pi] p) ArcTan[p/(Sqrt[x]+Sqrt[y])]*)
 	LSS[x_,y_]:=((x+3 y) A[x]-(3 x+y) A[y]) /(3 (x-y)^3);
 	LSS[x_,x_]:=A[x]/(24 x^2);
-	LSS[x_,0]:=A[x] /(24 x^2);
+	LSS[x_,0]:=A[x] /(3 x^2);
 	LSS[0,x_]:=LSS[x,0];
 	LSS[0,0]:=0;
 	

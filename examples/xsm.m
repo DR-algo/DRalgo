@@ -86,9 +86,10 @@ InputInv={{2,2,2},{True,True,True}};
 CubicTerm2=CreateInvariant[Group,RepScalar,InputInv][[1]]//Simplify;
 
 
+(*The cubic coupling of the singlet is called c3, since \[Mu]3 denotes the 3d renormalization scale*)
 VCubic=(
 	+\[Mu]m/2*CubicTerm1
-	+\[Mu]3/3*CubicTerm2
+	+c3/3*CubicTerm2
 	);
 
 

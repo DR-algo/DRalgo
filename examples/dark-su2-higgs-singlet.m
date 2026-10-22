@@ -103,9 +103,10 @@ InputInv={{2,2,2},{True,True,True}};
 CubicTerm2=CreateInvariant[Group,RepScalar,InputInv][[1]]//Simplify;
 
 
+(*The cubic coupling of the singlet is called c3, since \[Mu]3 denotes the 3d renormalization scale*)
 VCubic=(
 	+\[Mu]m/2*CubicTerm1
-	+\[Mu]3/3*CubicTerm2
+	+c3/3*CubicTerm2
 	);
 
 
@@ -137,10 +138,10 @@ Here, we do not include them for simplicity.
 *)	
 (*
 Dim6Term=(
-	+ c1 MassTerm1[[1]]^3
-	+ c3 MassTerm1[[1]]^2 MassTerm2[[1]]
-	+ c3 MassTerm1[[1]] MassTerm2[[1]]^2
-	+ c4 MassTerm2[[1]]^3);
+	+ c61 MassTerm1[[1]]^3
+	+ c62 MassTerm1[[1]]^2 MassTerm2[[1]]
+	+ c63 MassTerm1[[1]] MassTerm2[[1]]^2
+	+ c64 MassTerm2[[1]]^3);
 \[Lambda]6=GradSextic[Dim6Term];
 *)
 

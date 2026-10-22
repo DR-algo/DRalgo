@@ -74,11 +74,16 @@ VQuartic=(
 \[Lambda]4=GradQuartic[VQuartic]//SparseArray;
 
 
-InputInv={{2,1,2},{False,True,True}};  (*H^+ Subscript[5, F] Subscript[10, F]*)
+(*
+	As in sm.m, the left-handed fermions enter conjugated.
+	For the opposite flags, Ysff is not invariant under the generators gvff of the fermions,
+	and the one-loop couplings of the temporal scalars break the gauge symmetry.
+*)
+InputInv={{2,1,2},{True,False,False}};  (*H Subscript[5, F]^+ Subscript[10, F]^+*)
 YukawaTerm1=CreateInvariantYukawa[Group,RepScalar,RepFermion3Gen,InputInv][[1]]//Simplify;
 
 
-InputInv={{2,1,1},{True,True,True}};  (*H^+ Subscript[10, F] Subscript[10, F]*)
+InputInv={{2,1,1},{False,False,False}};  (*H^+ Subscript[10, F]^+ Subscript[10, F]^+*)
 YukawaTerm2=CreateInvariantYukawa[Group,RepScalar,RepFermion3Gen,InputInv][[1]]//Simplify;
 
 
