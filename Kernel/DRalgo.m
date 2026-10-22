@@ -41,7 +41,7 @@ BeginPackage["DRalgo`DRalgo`"]
 
 
 (* --- Set the version number --- *)
-$DRalgoVersion = "1.5.0";
+$DRalgoVersion = "1.6.0";
 
 
 $DRalgoVersion::usage =
@@ -88,8 +88,9 @@ pacletInfo = PacletFind["DRalgo/DRalgo"];
 If[pacletInfo =!= {},
 	DRalgoLoadImage=Import[FileNameJoin[{PacletObject["DRalgo/DRalgo"]["Location"],"FrontEnd","logo.eps"}]];
 	DRalgoLoadImage=Rasterize[DRalgoLoadImage, RasterSize -> 800, Background -> None];
+	(*the version of the loaded code, not of the installed paclet*)
 	infoTable = Normal@KeyTake[
-		      pacletInfo[[1]]["PacletInfo"],
+		      Append[pacletInfo[[1]]["PacletInfo"], "Version"->$DRalgoVersion],
 		      {"Name", "Version", "Description", "WolframVersion", "Creator", "URL"}
 		      ];
 	,

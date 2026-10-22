@@ -3,7 +3,7 @@
 PacletObject[
   <|
     "Name" -> "DRalgo/DRalgo",
-    "Version" -> "1.5.0",
+    "Version" -> "1.6.0",
     "IsPrereleaseVersion" -> False,
     "Description" -> "DRalgo constructs an effective, dimensionally reduced, high-temperature field theory for generic models",
     "WolframVersion" -> "13.+",
