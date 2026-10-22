@@ -1624,7 +1624,7 @@ RGRunningHardToSoft[]:=Module[{},
 	There are ns+nv scalars in the soft theory
 	First nv indices are allocated to the temporal scalars
 	The temporal-scalar quartics \[Lambda]AAS complete the soft theory, so that the temporal block
-	gives the exact two-loop running of the Debye masses
+	gives the two-loop \[Beta]-functions of the Debye masses
 *)
 
 	\[Lambda]4p=\[Lambda]4//Normal//ReplaceAll[#,SubGauge]&//SparseArray; 
@@ -1678,8 +1678,11 @@ RGRunningHardToSoft[]:=Module[{},
 	\[Delta]\[Mu]3d=Contri1RG+  Contri2RG+ Contri3RG+ Contri4RG+Contri5RG+ Contri6RG; (*All mass-counterterms in the soft theory*)       
         
 	\[Beta]\[Mu]3ij=4 \[Delta]\[Mu]3d //Simplify; (*Finds the beta function in the soft theory*)
-(*Running from the hard matching scale to the soft scale \[Mu]3, for the scalar masses and for the Debye masses*)
-	Contri\[Beta]SoftToHard=\[Beta]\[Mu]3ij[[nv+1;;ns+nv,nv+1;;ns+nv]] Log[\[Mu]3/\[Mu]]//SimplifySparse;
+	Contri\[Beta]SoftToHard=\[Beta]\[Mu]3ij[[nv+1;;ns+nv,nv+1;;ns+nv]] Log[\[Mu]3/\[Mu]]//SimplifySparse;(*Running from the hard matching scale to the soft scale \[Mu]3*)
+(*
+	The running of the Debye masses vanishes at O(g^4) for the tree-level temporal-scalar couplings,
+	so it is of higher order than the NLO Debye masses and enters only BetaFunctions3DS
+*)
 	Contri\[Beta]DebyeSoftToHard=\[Beta]\[Mu]3ij[[1;;nv,1;;nv]] Log[\[Mu]3/\[Mu]]//SimplifySparse;
 
 
@@ -2155,10 +2158,9 @@ IdentifyTensorsDRalgo[]:=Module[
 	
 	(* --- Debye masses --- *)
 	If[mode>=2,
-		RGRunningHardToSoft[]; (*Runs from the hard to the soft scale in the effective theory*)
-		couplingTensor = xLO*aV3D+ xNLO*(\[Mu]VabNLO+rgFac*Contri\[Beta]DebyeSoftToHard);
+		couplingTensor = xLO*aV3D+ xNLO*\[Mu]VabNLO;
 	,
-		couplingTensor = xLO*aV3D;	
+		couplingTensor = xLO*aV3D;
 	];
 	{HelpListCleaned, HelpVar, HelpVarMod, HelpSolveVectorMass} = ProcessCoupling[couplingTensor, \[Mu]ijV];	
 	\[Mu]ijVNLO=couplingTensor//Normal//Simplify//FullSimplify//ReplaceAll[#,HelpSolveVectorMass]&//SparseArray;
@@ -2169,6 +2171,7 @@ IdentifyTensorsDRalgo[]:=Module[
 
 	(* --- Scalar masses --- *)
 	If[mode>=2,
+		RGRunningHardToSoft[]; (*Runs from the hard to the soft scale in the effective theory*)
 		couplingTensor = xLO*aS3D+xNLO*(\[Mu]SijNLO+rgFac*Contri\[Beta]SoftToHard);
 	,
 		couplingTensor = xLO*aS3D;

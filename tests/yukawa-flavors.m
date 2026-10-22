@@ -160,23 +160,21 @@ VerificationTest[
 	{
 		rgResidual[\[Lambda]3d/.couplings/.{Lb->0,Lf->0},\[Lambda]3d/.couplings],
 		rgResidual[\[Gamma]3d/.couplings/.{Lb->0,Lf->0},\[Gamma]3d/.couplings],
-		rgResidual[PrintTadpoles["LO"][[1,2]],PrintTadpoles["NLO"][[1,2]]]},
-	{0,0,0},
-	TestID->"couplings-and-tadpole-are-rg-invariant"
+		rgResidual[PrintTadpoles["LO"][[1,2]],PrintTadpoles["NLO"][[1,2]]],
+		rgResidual[PrintDebyeMass["LO"][[1,2]],PrintDebyeMass["NLO"][[1,2]]]},
+	{0,0,0,0},
+	TestID->"couplings-tadpole-and-debye-mass-are-rg-invariant"
 ]];
 
 (*
-	The running from \[Mu] to \[Mu]3 contains the square of the one-loop coupling \[Lambda]VL, and for the Debye
-	mass also the square of the one-loop temporal-scalar quartic \[Lambda]VLL. These terms of
-	O(1/(16\[Pi]^2)^3) lie beyond the order computed and remain in the residual.
+	The running from \[Mu] to \[Mu]3 contains the square of the one-loop coupling \[Lambda]VL. This term of
+	O(g1^4 y^4/(16\[Pi]^2)^3) lies beyond the order computed and remains in the residual.
 *)
 AppendTo[testList,
 VerificationTest[
-	FreeQ[Expand[{
-		rgResidual[PrintScalarMass["LO"][[1,2]],PrintScalarMass["NLO"][[1,2]]],
-		rgResidual[PrintDebyeMass["LO"][[1,2]],PrintDebyeMass["NLO"][[1,2]]]}\[Pi]^6],\[Pi]],
+	FreeQ[Expand[rgResidual[PrintScalarMass["LO"][[1,2]],PrintScalarMass["NLO"][[1,2]]]\[Pi]^6],\[Pi]],
 	True,
-	TestID->"scalar-and-debye-mass-are-rg-invariant-at-the-order-computed"
+	TestID->"scalar-mass-is-rg-invariant-at-the-order-computed"
 ]];
 
 (*The vacuum energy runs with (msq^2/2-Tr[(\[Mu]IJF.\[Mu]IJFC)^2])/(16\[Pi]^2)*)

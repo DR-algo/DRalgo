@@ -183,7 +183,7 @@ StyleBox[\"Order\",\nFontSlant->\"Italic\"]\)] \
 prints the Debye masses in the soft theory at \
 \!\(\*
 StyleBox[\"Order\",\nFontSlant->\"Italic\"]\) \[Element]{\"LO\", \"NLO\", \"All\"}. \
-The NLO masses contain the two-loop running from \[Mu] to \[Mu]3 in the soft theory, unless AutoRG->False";
+Their running in the soft theory vanishes at the order of the NLO masses and is given by BetaFunctions3DS";
 PrintTemporalScalarCouplings::usage="\
 Prints Temporal-Vector Couplings in the soft theory";
 PrintIdentification::usage="\
@@ -220,7 +220,7 @@ as given by PrintScalarRepPositions[], PrintFermionRepPositions[], or PrintGauge
 BetaFunctions4D::usage="\
 Prints beta-functions in the 4d theory";
 BetaFunctions3DS::usage="\
-Prints beta-functions in the soft theory";
+Prints the beta-functions of the scalar masses, Debye masses, and tadpoles in the soft theory";
 DefineNewTensorsUS::usage="\
 Defines Custom Tensors for Effective-Potential Computations";
 SymmetricPhaseEnergy::usage="\

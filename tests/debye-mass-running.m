@@ -23,9 +23,8 @@ Check[
 
 (*
 	Issue #59: the Debye masses of the soft theory run at two loops, as the scalar masses do.
-	The NLO Debye masses are matched at \[Mu]3=\[Mu] and contain the running from \[Mu] to \[Mu]3 with the
-	temporal block of the two-loop mass counterterm of the soft theory, which includes the
-	temporal-scalar quartics.
+	BetaFunctions3DS gives their \[Beta]-functions from the temporal block of the two-loop mass counterterm
+	of the soft theory, which includes the temporal-scalar quartics.
 
 	The lattice mass counterterms of hep-lat/9504001, appendix, contain -C/(16\[Pi]^2) Log[6/(a\[Mu])], where C is
 	the coefficient of the MSbar counterterm, so that \[Mu]3 dm^2/d\[Mu]3 = -C/(16\[Pi]^2). For the Debye mass of SU(2)
@@ -36,16 +35,17 @@ Check[
 	so that \[Lambda]A=\[Lambda]AAS_1111/6 and h3=\[Lambda]KVec_1111/2.
 
 	At the tree-level values h3=g3^2/4 and \[Lambda]A=0, the O(g^4) part of the running vanishes, as noted
-	below (A11). Therefore, the NLO Debye masses are RG invariant at O(g^4) without the running, and
-	the running is of O(g^6), like the \[Lambda]VL^2 terms in the running of the scalar masses.
+	below (A11). The running is therefore of O(g^6), beyond the order of the NLO Debye masses, which are
+	RG invariant at O(g^4) and do not depend on \[Mu]3.
 
 	Checked here:
-	- SU(2)+Higgs: the normalization of h3, the \[Mu]3-dependence of the NLO Debye mass against (A3) and (A11),
-	  BetaFunctions3DS, the RG invariance at O(g^4), AutoRG->False, and Mode->1;
-	- scalar QED: the \[Mu]3-dependence against the U(1) results of hep-lat/9504001;
+	- SU(2)+Higgs: the normalization of h3, the \[Beta]-function against (A3) and (A11), that it starts at O(g^6),
+	  the RG invariance of the NLO Debye mass at O(g^4), its independence of \[Mu]3 and AutoRG, and Mode->1;
+	- scalar QED: the \[Beta]-function against the U(1) results of hep-lat/9504001, and that it starts at O(g^6);
 	- two U(1) with a scalar of charges (1,1): the off-diagonal Debye masses and temporal-scalar quartics
 	  are those of scalar QED with ge^2=g1^2+g2^2, rotated by (g1,g2)/ge;
-	- QCD, without scalars: the \[Mu]3-dependence against the SU(N) form of (A3), 2(dA+2)\[Lambda]A(\[Lambda]A-CA g3^2).
+	- QCD, without scalars: the \[Beta]-function against the SU(N) form of (A3), 2(dA+2)\[Lambda]A(\[Lambda]A-CA g3^2),
+	  and the RG invariance of the NLO Debye mass at O(g^4).
 *)
 
 
@@ -69,8 +69,8 @@ resolve[expr_]:=expr/.PrintIdentification[];
 (*The temporal-scalar couplings in the normalization of hep-lat/9504001*)
 temporalCouplings[]:={PrintTensorDRalgo[3][[1,1,1,1]]/2,PrintTensorDRalgo[4][[1,1,1,1]]/6};
 
-(*Running of the Debye mass m: \[Mu]3 dm/d\[Mu]3*)
-mu3Running[m_]:=Simplify[\[Mu]3 D[m/.PrintDebyeMass["NLO"],\[Mu]3]];
+(*Running of the Debye mass m in the soft theory: \[Mu]3 dm/d\[Mu]3*)
+debyeBeta[m_]:=resolve[m/.BetaFunctions3DS[]];
 
 
 (* ::Section:: *)
@@ -96,8 +96,11 @@ importSU2Higgs[];
 {h3,\[Lambda]A}=temporalCouplings[];
 (*(A3) and (A11) of hep-lat/9504001*)
 betaSU2=-1/(16\[Pi]^2)((20\[Lambda]A g3^2-10\[Lambda]A^2)+(-g3^4+6h3 g3^2-8h3^2))/.g3->gw3d;
-runningSU2=resolve[mu3Running[\[Mu]sqSU2]];
-nloSU2=resolve[\[Mu]sqSU2/.PrintDebyeMass["NLO"]];
+runningSU2=debyeBeta[\[Mu]sqSU2];
+(*With the NLO gauge coupling, the coefficient of g^6 is complete*)
+runningSU2NLO=runningSU2/.gw3d->Sqrt[gw3d^2/.PrintCouplings[]];
+nloSU2Output=PrintDebyeMass["NLO"];
+nloSU2=resolve[\[Mu]sqSU2/.nloSU2Output];
 
 (*h3=g3^2/4 at tree level, see the remark below (A11)*)
 AppendTo[testList,
@@ -116,9 +119,9 @@ VerificationTest[
 
 AppendTo[testList,
 VerificationTest[
-	Simplify[resolve[(\[Mu]sqSU2/.BetaFunctions3DS[])-betaSU2]],
-	0,
-	TestID->"SU2-beta-function-of-debye-mass"
+	{order[runningSU2NLO,4,scalingSU2],order[runningSU2NLO,6,scalingSU2]===0},
+	{0,False},
+	TestID->"SU2-debye-mass-running-is-of-O(g^6)"
 ]];
 
 (*With the 3d couplings at LO, the NLO Debye mass cancels the running of the LO Debye mass at O(g^4)*)
@@ -129,15 +132,15 @@ VerificationTest[
 	TestID->"SU2-debye-mass-is-rg-invariant-at-O(g^4)"
 ]];
 
-(*AutoRG->False drops exactly the running*)
+(*The running is beyond the order of the NLO Debye mass, which therefore does not depend on \[Mu]3 or AutoRG*)
 importSU2Higgs[AutoRG->False];
 nloSU2NoRG=PrintDebyeMass["NLO"];
 
 AppendTo[testList,
 VerificationTest[
-	{FreeQ[nloSU2NoRG,\[Mu]3],Simplify[nloSU2-resolve[\[Mu]sqSU2/.nloSU2NoRG]-runningSU2 Log[\[Mu]3/\[Mu]]]},
-	{True,0},
-	TestID->"SU2-debye-mass-without-AutoRG"
+	{FreeQ[nloSU2Output,\[Mu]3],nloSU2NoRG===nloSU2Output},
+	{True,True},
+	TestID->"SU2-nlo-debye-mass-does-not-depend-on-mu3-or-AutoRG"
 ]];
 
 importSU2Higgs[Mode->1];
@@ -173,11 +176,22 @@ importU1[{1},{ge}];
 (*U(1)+fundamental Higgs+adjoint Higgs of hep-lat/9504001*)
 betaU1=-1/(16\[Pi]^2)(-6\[Lambda]A^2+4h3 e3^2-4h3^2)/.e3->ge3d;
 
+runningU1=debyeBeta[\[Mu]sqU1];
+runningU1NLO=runningU1/.ge3d->Sqrt[ge3d^2/.PrintCouplings[]];
+
 AppendTo[testList,
 VerificationTest[
-	Simplify[resolve[mu3Running[\[Mu]sqU1]-betaU1]],
+	Simplify[runningU1-resolve[betaU1]],
 	0,
 	TestID->"U1-debye-mass-runs-as-hep-lat-9504001"
+]];
+
+AppendTo[testList,
+VerificationTest[
+	With[{scaling={ge->x ge,\[Lambda]->x^2 \[Lambda],m2->x^2 m2}},
+		{order[runningU1NLO,4,scaling],order[runningU1NLO,6,scaling]===0}],
+	{0,False},
+	TestID->"U1-debye-mass-running-is-of-O(g^6)"
 ]];
 
 (*Results of scalar QED in terms of 4d parameters, for the comparison below*)
@@ -233,7 +247,7 @@ PerformDRhard[];
 (*For SU(3), (A0^a A0^a)^2 is the only quartic invariant, with dA=8 and CA=3*)
 betaQCD=2(8+2)\[Lambda]A(\[Lambda]A-3gs3d^2)/(16\[Pi]^2);
 (*Outside of the tests, since the placeholder scalar leads to messages*)
-runningQCD=resolve[mu3Running[\[Mu]sqSU3]-betaQCD];
+runningQCD=debyeBeta[\[Mu]sqSU3]-resolve[betaQCD];
 loQCD=\[Mu]sqSU3/.PrintDebyeMass["LO"];
 nloQCD=resolve[\[Mu]sqSU3/.PrintDebyeMass["NLO"]];
 betasQCD=BetaFunctions4D[];
