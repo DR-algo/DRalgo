@@ -177,7 +177,7 @@ PerformDRhard[]
 
 (*
 the Lb logarithm is defnined as
-Lb = Log[mu^2/T^2]+2*EulerGamma-2*Log[4\[Pi]];
+Lb = Log[mu4^2/T^2]+2*EulerGamma-2*Log[4\[Pi]];
 *)
 PrintConstants[]
 

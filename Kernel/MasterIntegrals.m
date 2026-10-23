@@ -95,11 +95,11 @@ TwoLoopSumIntegrals[]:=Module[{\[Kappa]=1/(16 \[Pi]^2)},<|
 	The basketball M00 and the fermionic N00, and the sum-integrals of the remaining 3-loop topologies of the pressure.
 *)
 ThreeLoopSumIntegrals[]:=Module[{prefactor,expand},
-	prefactor=T^4*(mu/(4 \[Pi] T))^(6 eps);
+	prefactor=T^4*(mu4/(4 \[Pi] T))^(6 eps);
 	expand[x_]:=Series[x,{eps,0,0}]//Normal;
 	<|
 	"M00"->expand[1/(24*16 \[Pi]^2) prefactor (1/eps+91/15+8( Derivative[1][Zeta][-1])/Zeta[-1]-2 Derivative[1][Zeta][-3]/Zeta[-3])],
-	"LInt"->(T^4 Log[Glaisher])/(48 \[Pi]^2)+(T^4 Log[mu^2])/(768 \[Pi]^2)+T^4/(2304 \[Pi]^2 eps)+(EulerGamma T^4)/(1152 \[Pi]^2)-(T^4 Log[\[Pi] T])/(384 \[Pi]^2)-(T^4 Log[2])/(192 \[Pi]^2),
+	"LInt"->(T^4 Log[Glaisher])/(48 \[Pi]^2)+(T^4 Log[mu4^2])/(768 \[Pi]^2)+T^4/(2304 \[Pi]^2 eps)+(EulerGamma T^4)/(1152 \[Pi]^2)-(T^4 Log[\[Pi] T])/(384 \[Pi]^2)-(T^4 Log[2])/(192 \[Pi]^2),
 	"N00"->expand[1/(96*16 \[Pi]^2) prefactor (1/eps+173/30-42/5 Log[2]+8( Derivative[1][Zeta][-1])/Zeta[-1]-2 Derivative[1][Zeta][-3]/Zeta[-3])]//FullSimplify//Expand,
 	"MF1M1"->expand[-1/(192*16 \[Pi]^2) prefactor (1/eps+361/60+76/5 Log[2]+6EulerGamma-4( Derivative[1][Zeta][-1])/Zeta[-1]+4Derivative[1][Zeta][-3]/Zeta[-3])],
 	"MF00"->expand[-1/(192*16 \[Pi]^2) prefactor (1/eps+179/30-34/5 Log[2]+8( Derivative[1][Zeta][-1])/Zeta[-1]-2Derivative[1][Zeta][-3]/Zeta[-3])],

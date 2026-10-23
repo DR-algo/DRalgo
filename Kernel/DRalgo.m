@@ -309,8 +309,8 @@ CounterTerms4D[] prints the one-loop counterterms \[Delta]x=\[Beta]x/(2eps) of t
 in d=4-2eps, with the fields not renormalized.
 CounterTerms4D[FieldRenormalization->True] prints the counterterms when the fields are renormalized as well, \
 \[Phi]_b=(1+\[Delta]Z)^(1/2)\[Phi]: \[Delta]x is then the counterterm of the Lagrangian term x \[Phi]1...\[Phi]n, \
-x_b=Z1^(-1/2)...Zn^(-1/2) mu^(k eps)(x+\[Delta]x), in Landau gauge. \
-The gauge couplings carry no Z factor, g_b=mu^eps(g+\[Delta]g), and \[Delta]g^2 is the same in both cases.
+x_b=Z1^(-1/2)...Zn^(-1/2) mu4^(k eps)(x+\[Delta]x), in Landau gauge. \
+The gauge couplings carry no Z factor, g_b=mu4^eps(g+\[Delta]g), and \[Delta]g^2 is the same in both cases.
 CounterTerms4D[\"S\"|\"F\"|\"V\", {pos1, pos2}] \
 prints the one-loop field counterterm \[Delta]Z (Landau gauge) of the 4d scalars, fermions, or vectors \
 between the representations at the positions pos1 and pos2, as for AnomDim4D; \[Delta]Z=AnomDim4D/eps";
@@ -697,7 +697,7 @@ If[$LoadGroupMath,
 	which the results could not distinguish from the 3d renormalization scale mu3.
 *)
 	reservedNames=Join[
-		{"T","mu","mu3","mu3US","eps","Lb","Lf","xi"},
+		{"T","mu4","mu3","mu3US","eps","Lb","Lf","xi"},
 		SymbolName/@Variables[Normal[muabDef]]];
 	modelNames=SymbolName/@DeleteDuplicates@Cases[
 		Normal/@{gvvv,gvff,gvss,lam1,lam3,lam4,muij,muIJF,muIJFC,Ysff,YsffC},
@@ -917,7 +917,7 @@ OutputFormatDR[expr_] := Module[{exprI=expr},
 	Prints constants that appear in the effective theory.
 *)
 PrintConstants[]:=Module[{constantList},
-	constantList = {Lb->(Log[mu^2/T^2]-2 Log[4 \[Pi]]+2EulerGamma),Lf->(Log[mu^2/T^2]-2 Log[4 \[Pi]]+2EulerGamma+4 Log[2])};
+	constantList = {Lb->(Log[mu4^2/T^2]-2 Log[4 \[Pi]]+2EulerGamma),Lf->(Log[mu4^2/T^2]-2 Log[4 \[Pi]]+2EulerGamma+4 Log[2])};
 	OutputFormatDR[constantList]
 ];
 
@@ -949,7 +949,7 @@ PrintGenericBasis[]:=Module[{basisReplacements},
 	The result is given in Mat. Where Mat[[i,j]]=0 if list[[i]]!=N list[[j]] where N is a number.
 	Otherwise Mat[[i,j]]=N if list[[i]]=Nlist[[j]]
 *)
-OverallFac[list_,varMat_]:=Module[{L=list,Mat=varMat},
+OverallFac[list_,varMat_]:=Module[{L=list,Mat=varMat,a}, (*a is local: otherwise it is GroupMath`a, which other functions use as a pattern name*)
 
 	For[i=1,i<Length[list],i++,
 		For[j=i+1,j<Length[list]+1,j++,

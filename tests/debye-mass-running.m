@@ -56,8 +56,8 @@ testList={};
 (*Helpers*)
 
 
-(*mu d/dmu at fixed mu3 and the 4d running with BetaFunctions4D, which gives \[Beta] of g^2 for gauge couplings*)
-explicitMu[expr_]:=Simplify[mu D[expr/.{Lb->2Log[mu/(4\[Pi] T)]+2EulerGamma,Lf->2Log[mu/(\[Pi] T)]+2EulerGamma},mu]];
+(*mu4 d/dmu4 at fixed mu3 and the 4d running with BetaFunctions4D, which gives \[Beta] of g^2 for gauge couplings*)
+explicitMu[expr_]:=Simplify[mu4 D[expr/.{Lb->2Log[mu4/(4\[Pi] T)]+2EulerGamma,Lf->2Log[mu4/(\[Pi] T)]+2EulerGamma},mu4]];
 running[expr_,betas_]:=Sum[r[[2]] D[expr,r[[1]]],{r,betas/.(Power[cc_,2]->bb_):>(cc->bb/(2cc))}];
 
 (*The coefficient of x^n, with gauge couplings of O(x) and quartics and masses of O(x^2)*)

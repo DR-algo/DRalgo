@@ -871,6 +871,14 @@ If[verbose,Print["Creating Help Tensors"]];
 
 
 (*
+	The tensor with all indices shifted by offset, in an array of dimensions dims.
+	The rules are replaced one by one, so that the list of rules itself is never matched, and dims is
+	given explicitly, since the largest index of the nonzero entries can be smaller.
+*)
+ShiftedTensorSS[tensor_,offset_,dims_]:=SparseArray[Delete[ArrayRules[SparseArray[tensor]],-1]/.(x_List->v_):>(x+offset->v),dims];
+
+
+(*
 	Prepares the reduction to the ultrasoft scale. Here scalars are divided into heavy and soft depending on the user's input.
 	Heavy scalars are then grouped with temporal scalars and integrated out.
 *)
@@ -929,8 +937,8 @@ PrepareSoftToSuperSoft[ListHardI_]:=Module[{ListP=ListHardI},
 			lam4Tot=lam3DSp//SparseArray;
 
 
-			A1=Delete[lam4Heavy//ArrayRules,-1]//ReplaceAll[#,{x_,y_,z_,w_}->{x+nv,y+nv,z+nv,w+nv}]&;
-			A2=ReplaceAll[Delete[lamKHeavy//ArrayRules,-1],({x_,y_,z_,w_}->a_)->{x,y,z+nv,w+nv}->a];
+			A1=Delete[ShiftedTensorSS[lam4Heavy,{nv,nv,nv,nv},{nSH,nSH,nSH,nSH}]//ArrayRules,-1];
+			A2=Delete[ShiftedTensorSS[lamKHeavy,{0,0,nv,nv},{nSH,nSH,nSH,nSH}]//ArrayRules,-1];
 			A3=Delete[lamAAS//ArrayRules,-1];
 			lamKTotal=SymmetrizedArray[Join[A1,A2,A3],{nSH,nSH,nSH,nSH},Symmetric[{1,2,3,4}]]//SparseArray; (*Total heavy-scalar tensors: Heavy scalars+Temporal scalars*)
 
@@ -942,28 +950,15 @@ PrepareSoftToSuperSoft[ListHardI_]:=Module[{ListP=ListHardI},
 			TadPoleTemp=Table[lam1[[a]],{a,HeavyScalars[[;;,1]]}]//ReplaceAll[#,SubTadpole]&//SparseArray;
 
 
-			If[Length[TadPoleTemp//ArrayRules]==1,
-				TadPoleHeavy=SymmetrizedArray[{{1}->0},{nSH},Symmetric[{1}]]//SparseArray;
-			,
-				TadPoleHeavy=Delete[TadPoleTemp//ArrayRules//ReplaceAll[#,{x_}->{x+nv}]&,-1]//SparseArray;
-			];
+			TadPoleHeavy=ShiftedTensorSS[TadPoleTemp,{nv},{nSH}];
 
 
 			lamx1=Table[lam3DSp[[a,b,c,d]],{a,LightScalar[[;;,1]]},{b,HeavyScalars[[;;,1]]},{c,HeavyScalars[[;;,1]]},{d,HeavyScalars[[;;,1]]}]//SparseArray;
 			lamy1=Table[lam3DSp[[a,b,c,d]],{a,LightScalar[[;;,1]]},{b,LightScalar[[;;,1]]},{c,LightScalar[[;;,1]]},{d,HeavyScalars[[;;,1]]}]//SparseArray;
 
 
-			If[Length[lamx1//ArrayRules]==1,
-				lamx=SymmetrizedArray[{{1,1,1,1}->0},{nSL,nSH,nSH,nSH},Symmetric[{2,3,4}]]//SparseArray;
-			,
-				lamx=Delete[lamx1//ArrayRules//ReplaceAll[#,{x_,y_,z_,w_}->{x,y+nv,z+nv,w+nv}]&,-1]//SparseArray;
-			];
-
-			If[Length[lamy1//ArrayRules]==1,
-				lamy=SymmetrizedArray[{{1,1,1,1}->0},{nSL,nSL,nSL,nSH},Symmetric[{1,2,3}]]//SparseArray;
-			,
-				lamy=Delete[lamy1//ArrayRules//ReplaceAll[#,{x_,y_,z_,w_}->{x,y,z,w+nv}]&,-1]//SparseArray;
-			];
+			lamx=ShiftedTensorSS[lamx1,{0,nv,nv,nv},{nSL,nSH,nSH,nSH}];
+			lamy=ShiftedTensorSS[lamy1,{0,0,0,nv},{nSL,nSL,nSL,nSH}];
 
 
 (*Mixed Cubic tensors*)
@@ -971,45 +966,26 @@ PrepareSoftToSuperSoft[ListHardI_]:=Module[{ListP=ListHardI},
 			lam3CHeavy1=Table[lam3CSRedUS[[a,b,c]],{a,HeavyScalars[[;;,1]]},{b,HeavyScalars[[;;,1]]},{c,HeavyScalars[[;;,1]]}]//SparseArray;
 			lam3CTot=lam3CSRedUS//SparseArray;
 			
-			If[Length[lam3CHeavy1//ArrayRules]==1,
-				lam3CHeavy=SymmetrizedArray[{{1,1,1}->0},{nSH,nSH,nSH},Symmetric[{2,3}]]//SparseArray;
-			,
-				lam3CHeavy=Delete[lam3CHeavy1//ArrayRules//ReplaceAll[#,{x_,y_,z_}->{x+nv,y+nv,z+nv}]&,-1]//SparseArray;
-			];
+			lam3CHeavy=ShiftedTensorSS[lam3CHeavy1,{nv,nv,nv},{nSH,nSH,nSH}];
 
 
 			lam3Cx1=Table[lam3CSRedUS[[a,b,c]],{a,LightScalar[[;;,1]]},{b,HeavyScalars[[;;,1]]},{c,HeavyScalars[[;;,1]]}]//SparseArray;
 			lam3Cy1=Table[lam3CSRedUS[[a,b,c]],{a,LightScalar[[;;,1]]},{b,LightScalar[[;;,1]]},{c,HeavyScalars[[;;,1]]}]//SparseArray;
 
 
-			If[Length[lam3Cx1//ArrayRules]==1,
-				lam3Cx=SymmetrizedArray[{{1,1,1}->0},{nSL,nSH,nSH},Symmetric[{2,3}]]//SparseArray;
-			,
-				lam3Cx=Delete[lam3Cx1//ArrayRules//ReplaceAll[#,{x_,y_,z_}->{x,y+nv,z+nv}]&,-1]//SparseArray;
-			];
-
-			If[Length[lam3Cy1//ArrayRules]==1,
-				lam3Cy=SymmetrizedArray[{{1,1,1}->0},{nSL,nSL,nSH},Symmetric[{1,2}]]//SparseArray;
-			,
-				lam3Cy=Delete[lam3Cy1//ArrayRules//ReplaceAll[#,{x_,y_,z_}->{x,y,z+nv}]&,-1]//SparseArray;
-			];
+			lam3Cx=ShiftedTensorSS[lam3Cx1,{0,nv,nv},{nSL,nSH,nSH}];
+			lam3Cy=ShiftedTensorSS[lam3Cy1,{0,0,nv},{nSL,nSL,nSH}];
 
 (*Mixed Hard-Soft mass matrix*)
 			muijMix1=Table[muij[[a,b]],{a,LightScalar[[;;,1]]},{b,HeavyScalars[[;;,1]]}]//SparseArray;
 
-			If[Length[muijMix1//ArrayRules]==1,
-				muijMix=SymmetrizedArray[{{1,1}->0},{nSL,nSH},Symmetric[{1}]]//SparseArray;
-			,
-				muijMix=Delete[muijMix1//ArrayRules//ReplaceAll[#,{x_,y_}->{x,y+nv}]&,-1]//SparseArray;
-			];
+			muijMix=ShiftedTensorSS[muijMix1,{0,nv},{nSL,nSH}];
 
 
 (*Scalar-Temporal-Vector Tensor*)
 		lamKVLight=Table[lamKVec[[a,b,c,d]],{a,1,nv},{b,1,nv},{c,LightScalar[[;;,1]]},{d,LightScalar[[;;,1]]}]//SparseArray;
 		lamKVHeavy=Table[lam3DSp[[a,b,c,d]],{a,HeavyScalars[[;;,1]]},{b,HeavyScalars[[;;,1]]},{c,LightScalar[[;;,1]]},{d,LightScalar[[;;,1]]}]//SparseArray;
-		A1=Delete[lamKVLight//ArrayRules,-1];
-		A2=Delete[lamKVHeavy//ArrayRules//ReplaceAll[#,{x_,y_,z_,w_}->{x+nv,y+nv,z,w}]&,-1];
-		lamkVTot=SparseArray[Join[A1,A2]]//SparseArray;
+		lamkVTot=ShiftedTensorSS[lamKVLight,{0,0,0,0},{nSH,nSH,nSL,nSL}]+ShiftedTensorSS[lamKVHeavy,{nv,nv,0,0},{nSH,nSH,nSL,nSL}];
 
 
 		VarGauge=GaugeCouplingNames;

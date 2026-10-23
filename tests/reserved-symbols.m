@@ -24,7 +24,7 @@ Check[
 (*
 	Issue #32: a cubic coupling mu3, as in examples/dark-su2-higgs-singlet.m and examples/xsm.m, is the
 	same symbol as the 3d renormalization scale mu3 in the results. ImportModelDRalgo warns if a coupling
-	has the name of the temperature T, of a renormalization scale mu, mu3, or mu3US, of Lb, Lf, eps,
+	has the name of the temperature T, of a renormalization scale mu4, mu3, or mu3US, of Lb, Lf, eps,
 	of the gauge parameter xi, or of a Debye mass.
 
 	Checked here:

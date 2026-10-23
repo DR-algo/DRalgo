@@ -24,7 +24,7 @@ Check[
 (*
 	PrintPressure["NNLO"] is the 3-loop pressure of the hard modes. Together with the
 	pressure of the soft theory it reproduces the full pressure, and at fixed mu3 it does
-	not depend on mu at O(g^4): its explicit mu-dependence cancels the running of the
+	not depend on mu4 at O(g^4): its explicit mu4-dependence cancels the running of the
 	NLO pressure (and of the vacuum energy, which DRalgo does not track).
 
 	The checks concern issue #37 and models beyond the scalar Yukawa model. For QCD, the hard
@@ -43,13 +43,13 @@ Check[
 
 testList={};
 
-L=Log[mu/(4\[Pi] T)];
+L=Log[mu4/(4\[Pi] T)];
 z1=Derivative[1][Zeta][-1]/Zeta[-1];
 z3=Derivative[1][Zeta][-3]/Zeta[-3];
 toL[expr_]:=Expand[expr/.{Lb->2L+2EulerGamma,Lf->2L+2EulerGamma+4Log[2]}];
 
-(*Explicit mu-dependence at fixed mu3, and running with rules coupling->beta*)
-explicitMu[expr_]:=Simplify[mu D[expr/.{Lb->2Log[mu/(4\[Pi] T)]+2EulerGamma,Lf->2Log[mu/(\[Pi] T)]+2EulerGamma},mu]];
+(*Explicit mu4-dependence at fixed mu3, and running with rules coupling->beta*)
+explicitMu[expr_]:=Simplify[mu4 D[expr/.{Lb->2Log[mu4/(4\[Pi] T)]+2EulerGamma,Lf->2Log[mu4/(\[Pi] T)]+2EulerGamma},mu4]];
 running[expr_,rules_]:=Sum[r[[2]] D[expr,r[[1]]],{r,rules}];
 (*BetaFunctions4D returns the gauge couplings as g^2->beta(g^2)*)
 betaRules[]:=BetaFunctions4D[]/.(Power[c_,2]->b_):>(c->b/(2c));
@@ -86,7 +86,7 @@ pAZ=-dA T^4 \[Pi]^2/9 (gs/(4\[Pi]))^4 (
 
 AppendTo[testList,
 VerificationTest[
-	FullSimplify[PowerExpand[toL[pHard+T pSoft-pAZ]/.mu3->mu],{gs>0,T>0,mu>0}],
+	FullSimplify[PowerExpand[toL[pHard+T pSoft-pAZ]/.mu3->mu4],{gs>0,T>0,mu4>0}],
 	0,
 	TestID->"QCD-hard-plus-soft-pressure-agrees-with-Arnold-Zhai"
 ]];
@@ -149,7 +149,7 @@ VerificationTest[
 	FullSimplify[PowerExpand[{
 		smCoefficient[yt^4]-T^4 aEYY/(16\[Pi]^2),
 		smCoefficient[yt^2 \[Lambda]1H]-T^4 aEYl/(16\[Pi]^2),
-		smCoefficient[yt^2 m2]+T^2 aEYnu/(16\[Pi]^2)}],{T>0,mu>0}],
+		smCoefficient[yt^2 m2]+T^2 aEYnu/(16\[Pi]^2)}],{T>0,mu4>0}],
 	{0,0,0},
 	TestID->"SM-top-Yukawa-terms-agree-with-Gynther-Vepsalainen"
 ]];
@@ -164,7 +164,7 @@ VerificationTest[
 
 (*
 	The terms with gauge couplings, \[Alpha]_EA\[Lambda], \[Alpha]_EB\[Lambda], \[Alpha]_EAY, \[Alpha]_EBY, \[Alpha]_EA\[Nu], \[Alpha]_EB\[Nu], \[Alpha]_EAA,
-	and \[Alpha]_EBB of hep-ph/0510375, for one family (nF=1) and one Higgs doublet (nS=1), at mu3=mu.
+	and \[Alpha]_EBB of hep-ph/0510375, for one family (nF=1) and one Higgs doublet (nS=1), at mu3=mu4.
 	There, p_E contains the 1/eps poles that cancel against the soft pressure, whose 3d masses
 	contain their O(eps) parts. PrintPressure["NNLO"] contains the pole times these O(eps) parts
 	instead, that is, -x times the coefficient of 1/eps, where x is the O(eps) part of the mass
@@ -174,7 +174,7 @@ VerificationTest[
 	contains -11/30 Log[2] instead of -11/3 Log[2], and the nF nS term -83/160-49/120 Log[2]
 	instead of -83/16-49/12 Log[2].
 *)
-gaugeCoefficient[mono_]:=Coefficient[toL[pNNLO]/.mu3->mu,mono]/.{gs->0,gw->0,gY->0,yt->0,\[Lambda]1H->0,m2->0};
+gaugeCoefficient[mono_]:=Coefficient[toL[pNNLO]/.mu3->mu4,mono]/.{gs->0,gw->0,gY->0,yt->0,\[Lambda]1H->0,m2->0};
 xB=2L+2+2z1;
 xF=2L-2Log[2]+2+2z1;
 {CA,dA,CF,dF,TF,nF,nS}={2,3,3/4,2,1/2,1,1};
@@ -206,7 +206,7 @@ VerificationTest[
 		gaugeCoefficient[gw^2 m2]+T^2 aEAnu/(16\[Pi]^2),
 		gaugeCoefficient[gY^2 m2]+T^2 aEBnu/(16\[Pi]^2),
 		gaugeCoefficient[gw^4]-T^4 aEAA/(16\[Pi]^2),
-		gaugeCoefficient[gY^4]-T^4 aEBB/(16\[Pi]^2)}],{T>0,mu>0}],
+		gaugeCoefficient[gY^4]-T^4 aEBB/(16\[Pi]^2)}],{T>0,mu4>0}],
 	{0,0,0,0,0,0,0,0},
 	TestID->"SM-gauge-terms-agree-with-Gynther-Vepsalainen"
 ]];

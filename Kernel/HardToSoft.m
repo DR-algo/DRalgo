@@ -509,7 +509,7 @@ SymmetricPhaseNNLO[]:=Module[
 	(* --- Counterterms --- *)
 	Temp=1/2*\[Gamma]ij . lam4;
 	lam4Eff=eps*Zlamijkl;
-	I1Temp=1/3 T^4 eps Log[Glaisher]+1/72 T^4 eps Log[mu^2]-1/36 T^4 eps Log[4 \[Pi] T]+T^4/144;
+	I1Temp=1/3 T^4 eps Log[Glaisher]+1/72 T^4 eps Log[mu4^2]-1/36 T^4 eps Log[4 \[Pi] T]+T^4/144;
 	VssZ=1/8* eps^-1 I1Temp*TensorContract[lam4Eff,{{1,2},{3,4}}];
 
 	V2SV=I1p^2 (D+\[Xi]-1)/.\[Xi]->1;
@@ -585,13 +585,13 @@ SymmetricPhaseNNLO[]:=Module[
 		scalars and of the temporal scalars give T/(16\[Pi]^2) c (1/(4eps)+Log[mu3]+...),
 		where c=-1/12 T Total[lam3^2]+vacuumPole[mS^2,mV^2] contains the LO parameters of the soft theory.
 		Therefore, the hard pressure contains
-		- the running from mu to mu3, which cancels the Log[mu3] of the soft pressure;
+		- the running from mu4 to mu3, which cancels the Log[mu3] of the soft pressure;
 		- the pole times the O(eps) parts of the LO masses, since the soft pressure uses the masses at O(eps^0).
 		  For QCD, this is the term -d_A C_A \[Alpha]_E5/4 of hep-ph/0211321.
 	*)
 	vacuumPole[mS_,mV_]:=-T Tr[\[CapitalLambda]g . mS]-T Sum[Tr[gvvv[[a]] . gvvv[[a]] . mV],{a,1,nv}];
 	Temp1=-1/12 T Total[Flatten[lam3]^2]+vacuumPole[aS3D,aV3D];
-	ContriSoftRunning=-rgFac T/(16 \[Pi]^2) Temp1 Log[mu3/mu];
+	ContriSoftRunning=-rgFac T/(16 \[Pi]^2) Temp1 Log[mu3/mu4];
 
 	(*Thermal parts of the LO masses in d dimensions, which agree with aS3D-muij and aV3D at D=4 (without lam6)*)
 	Temp2=Normal[1/2 lamHelp I1p-(D-1)I1p \[CapitalLambda]g-IF1p (Ysij+YsijC)]/.D->4-2eps;
@@ -1009,24 +1009,24 @@ VectorMass2Loop[] := Module[
 
   (* Contributions to the Debye mass *)
   \[CapitalPi]V = GroupFacVVVV * (
-    T^2 * (11 Log[mu/(4 \[Pi] T)] + 11 EulerGamma - 1/2) / (36 \[Pi]^2) + T^2 / (12 \[Pi]^2)
+    T^2 * (11 Log[mu4/(4 \[Pi] T)] + 11 EulerGamma - 1/2) / (36 \[Pi]^2) + T^2 / (12 \[Pi]^2)
   );
 
   \[CapitalPi]S = -GroupTheoryFaclam * T^2 / (192 \[Pi]^2) 
     - GroupTheoryFacm2 / (8 \[Pi]^2) 
-    - GroupTheoryFacTrSSTrSS * (T^2 * (Log[mu/(4 \[Pi])] - Log[T] + EulerGamma + 1)) / (288 \[Pi]^2)
+    - GroupTheoryFacTrSSTrSS * (T^2 * (Log[mu4/(4 \[Pi])] - Log[T] + EulerGamma + 1)) / (288 \[Pi]^2)
     + GroupTheoryFacSSSS * T^2 / (32 \[Pi]^2)
-    - (T^2 * (Log[mu] - Log[T] + EulerGamma - Log[\[Pi]] - 2 Log[2])) / (24 \[Pi]^2) * GroupTheoryFacVVTrSS
+    - (T^2 * (Log[mu4] - Log[T] + EulerGamma - Log[\[Pi]] - 2 Log[2])) / (24 \[Pi]^2) * GroupTheoryFacVVTrSS
     - GroupTheoryFacVVTrSS * T^2 / (48 \[Pi]^2)
-    + (T^2 * (8 Log[mu] - 8 Log[T] + 8 EulerGamma - 3 - 8 Log[\[Pi]] - 16 Log[2])) / (576 \[Pi]^2) * GroupTheoryFacTrVVTrSS;
+    + (T^2 * (8 Log[mu4] - 8 Log[T] + 8 EulerGamma - 3 - 8 Log[\[Pi]] - 16 Log[2])) / (576 \[Pi]^2) * GroupTheoryFacTrVVTrSS;
 
-  \[CapitalPi]F = (T^2 * (Log[mu] - Log[T] + EulerGamma - Log[\[Pi]] - 2 Log[2])) / (24 \[Pi]^2) * GroupTheoryFacVVTrFF
-    - (T^2 * (2 Log[mu] - 2 Log[T] + 2 EulerGamma - 1 - 2 Log[\[Pi]])) / (144 \[Pi]^2) * GroupTheoryFacTrFFTrFF
-    - (T^2 * (2 Log[mu] - 2 Log[T] + 2 EulerGamma + 3 - 2 Log[\[Pi]] - 20 Log[2])) / (576 \[Pi]^2) * GroupTheoryFacTrVVTrFF
+  \[CapitalPi]F = (T^2 * (Log[mu4] - Log[T] + EulerGamma - Log[\[Pi]] - 2 Log[2])) / (24 \[Pi]^2) * GroupTheoryFacVVTrFF
+    - (T^2 * (2 Log[mu4] - 2 Log[T] + 2 EulerGamma - 1 - 2 Log[\[Pi]])) / (144 \[Pi]^2) * GroupTheoryFacTrFFTrFF
+    - (T^2 * (2 Log[mu4] - 2 Log[T] + 2 EulerGamma + 3 - 2 Log[\[Pi]] - 20 Log[2])) / (576 \[Pi]^2) * GroupTheoryFacTrVVTrFF
     - GroupTheoryFacFFFF * T^2 / (16 \[Pi]^2)
     + GroupTheoryFacVVTrFF * T^2 / (48 \[Pi]^2);
 
-  \[CapitalPi]SF = (T^2 * (5 Log[mu/(4 \[Pi] T)] + 5 EulerGamma - 1 + 8 Log[2])) / (576 \[Pi]^2) * GroupFacTrSSTrFF
+  \[CapitalPi]SF = (T^2 * (5 Log[mu4/(4 \[Pi] T)] + 5 EulerGamma - 1 + 8 Log[2])) / (576 \[Pi]^2) * GroupFacTrSSTrFF
     - 1/(32 \[Pi]^2) * T^2 * GroupTheoryYuk1
     - T^2 / (192 \[Pi]^2) * GroupTheoryYuk2;
 
@@ -1532,7 +1532,7 @@ TadPole2Loop[] := Module[
 	Calculates counter-terms, and beta functions, in the soft theory.
 *)
 RGRunningHardToSoft[]:=Module[{},
-	VerbosePrint["RG-evolving from mu to mu3"];
+	VerbosePrint["RG-evolving from mu4 to mu3"];
 
 (*
 	All calculations are done within the 3d theory.
@@ -1616,12 +1616,12 @@ RGRunningHardToSoft[]:=Module[{},
 	\[Delta]mu3d=Contri1RG+  Contri2RG+ Contri3RG+ Contri4RG+Contri5RG+ Contri6RG; (*All mass-counterterms in the soft theory*)       
         
 	\[Beta]mu3ij=4 \[Delta]mu3d //Simplify; (*Finds the beta function in the soft theory*)
-	Contri\[Beta]SoftToHard=\[Beta]mu3ij[[nv+1;;ns+nv,nv+1;;ns+nv]] Log[mu3/mu]//SimplifySparse;(*Running from the hard matching scale to the soft scale mu3*)
+	Contri\[Beta]SoftToHard=\[Beta]mu3ij[[nv+1;;ns+nv,nv+1;;ns+nv]] Log[mu3/mu4]//SimplifySparse;(*Running from the hard matching scale to the soft scale mu3*)
 (*
 	The running of the Debye masses vanishes at O(g^4) for the tree-level temporal-scalar couplings,
 	so it is of higher order than the NLO Debye masses and enters only BetaFunctions3DS
 *)
-	Contri\[Beta]DebyeSoftToHard=\[Beta]mu3ij[[1;;nv,1;;nv]] Log[mu3/mu]//SimplifySparse;
+	Contri\[Beta]DebyeSoftToHard=\[Beta]mu3ij[[1;;nv,1;;nv]] Log[mu3/mu4]//SimplifySparse;
 
 
 (*Tadpoles*)
@@ -1641,7 +1641,7 @@ RGRunningHardToSoft[]:=Module[{},
 
 	\[Delta]muTadpole3d=Contri10RG+Contri11RG//Normal//ReplaceAll[#,SubGauge]&//SparseArray;(*Same deal for tadpoles*)
 	\[Beta]muTadpole=4  \[Delta]muTadpole3d //Simplify;
-	ContriTadPoleSoftToHard=\[Beta]muTadpole Log[mu3/mu]//SimplifySparse;
+	ContriTadPoleSoftToHard=\[Beta]muTadpole Log[mu3/mu4]//SimplifySparse;
 
 ];
 
@@ -2543,13 +2543,13 @@ PrintTensorDRalgo[ind_]:=Module[{},
 	Prints the one-loop counterterms of the 4d couplings and masses, x->\[Delta]x, in d=4-2eps.
 
 	By default, the fields are not renormalized, and \[Delta]x=\[Beta]x/(2eps) are the counterterms of the bare
-	couplings, x_b=mu^(k eps)(x+\[Delta]x), where mu^(k eps) keeps the mass dimension of x in d dimensions.
+	couplings, x_b=mu4^(k eps)(x+\[Delta]x), where mu4^(k eps) keeps the mass dimension of x in d dimensions.
 
 	With FieldRenormalization->True, the fields are renormalized, \[Phi]_b=(1+\[Delta]Z)^(1/2)\[Phi], and \[Delta]x is the
-	counterterm of the term x \[Phi]1...\[Phi]n of the Lagrangian, x_b=Z1^(-1/2)...Zn^(-1/2) mu^(k eps)(x+\[Delta]x).
+	counterterm of the term x \[Phi]1...\[Phi]n of the Lagrangian, x_b=Z1^(-1/2)...Zn^(-1/2) mu4^(k eps)(x+\[Delta]x).
 	The field counterterms \[Delta]Z/2 x of the n legs are then part of the kinetic terms: \[Delta]x follows from the
 	\[Beta]-function tensor without its anomalous-dimension contributions \[Beta]xAnom, and depends on the gauge,
-	Landau gauge here. The gauge couplings carry no Z factor, g_b=mu^eps(g+\[Delta]g), and \[Delta]g^2 does not
+	Landau gauge here. The gauge couplings carry no Z factor, g_b=mu4^eps(g+\[Delta]g), and \[Delta]g^2 does not
 	change. These are the conventions of 1802.05056, appendix C.2.
 *)
 Options[CounterTerms4D]={FieldRenormalization->False};
@@ -2985,12 +2985,12 @@ BetaFunctions3DS[]:=Module[{},
 			ResTadpole=Solve[SolVar==0,QuarticVar]/.SubGauge2//Flatten[#,1]&;
 		];
 
-		PrintPre=Join[ResMass,ResDebye,ResTadpole]/.mu3->mu Exp[1]//Normal//FullSimplify//DeleteDuplicates;
+		PrintPre=Join[ResMass,ResDebye,ResTadpole]/.mu3->mu4 Exp[1]//Normal//FullSimplify//DeleteDuplicates;
 ,
 	ResMass=#->0&/@Variables[muij//Normal];
 	ResDebye=#->0&/@Variables[muabDef//Normal];
 	ResTadpole=#->0&/@Variables[lam1//Normal];
-	PrintPre=Join[ResMass,ResDebye,ResTadpole]/.mu3->mu Exp[1]//Normal//FullSimplify//DeleteDuplicates;
+	PrintPre=Join[ResMass,ResDebye,ResTadpole]/.mu3->mu4 Exp[1]//Normal//FullSimplify//DeleteDuplicates;
 ];
 	OutputFormatDR[PrintPre]
 ];

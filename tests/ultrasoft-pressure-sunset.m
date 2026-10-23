@@ -24,7 +24,7 @@ Check[
 (*
 	Issue #66: the scalar sunset of the soft theory,
 	-1/12 \[Lambda]3^2 (1/(4eps)+Log[mu3/(m1+m2+m3)]+1/2)/(16\[Pi]^2) in the free energy,
-	contributes +T \[Lambda]3^2 Log[mu3]/(192\[Pi]^2) to the pressure, which the running from mu to mu3
+	contributes +T \[Lambda]3^2 Log[mu3]/(192\[Pi]^2) to the pressure, which the running from mu4 to mu3
 	in PrintPressure["NNLO"] cancels. When heavy scalars are integrated out, the sunsets with at least
 	one heavy line belong to the ultrasoft pressure, with the light masses set to zero, while the sunset
 	with only light lines belongs to the ultrasoft theory.

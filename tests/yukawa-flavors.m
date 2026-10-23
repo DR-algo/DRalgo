@@ -149,7 +149,7 @@ betas=Join[
 		m[[i,j]]->component[bF,3,i,j],mC[[i,j]]->component[bFC,4,i,j]},{i,2},{j,2}],
 	{\[Sigma]->bT[[1]],msq->bM[[1,1]],\[Gamma]->bC[[1,1,1]],\[Lambda]->bQ[[1,1,1,1]],g1->8/3 q^2 g1^3/(16\[Pi]^2)}];
 
-explicitMu[expr_]:=Simplify[mu D[expr/.{Lb->2Log[mu/(4\[Pi] T)]+2EulerGamma,Lf->2Log[mu/(\[Pi] T)]+2EulerGamma},mu]];
+explicitMu[expr_]:=Simplify[mu4 D[expr/.{Lb->2Log[mu4/(4\[Pi] T)]+2EulerGamma,Lf->2Log[mu4/(\[Pi] T)]+2EulerGamma},mu4]];
 running[expr_]:=Sum[r[[2]] D[expr,r[[1]]],{r,betas}];
 lo3d={\[Lambda]3d->T \[Lambda],\[Gamma]3d->Sqrt[T] \[Gamma]};
 rgResidual[lo_,nlo_]:=Expand[running[lo]+explicitMu[nlo]/.lo3d];
@@ -167,7 +167,7 @@ VerificationTest[
 ]];
 
 (*
-	The running from mu to mu3 contains the square of the one-loop coupling lamVL. This term of
+	The running from mu4 to mu3 contains the square of the one-loop coupling lamVL. This term of
 	O(g1^4 y^4/(16\[Pi]^2)^3) lies beyond the order computed and remains in the residual.
 *)
 AppendTo[testList,

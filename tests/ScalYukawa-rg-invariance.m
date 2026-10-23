@@ -24,8 +24,8 @@ Check[
 (*
 	The model of examples/ScalYukawa.m, see 2108.04377 and 2310.02308, and issues #36, #37, and #38.
 
-	At the order computed, the parameters of the 3d theory do not depend on the 4d scale mu:
-	the explicit mu-dependence of the NLO terms, through Lb and Lf, cancels the running of
+	At the order computed, the parameters of the 3d theory do not depend on the 4d scale mu4:
+	the explicit mu4-dependence of the NLO terms, through Lb and Lf, cancels the running of
 	the LO terms with BetaFunctions4D[]. Here, the 3d scale mu3 is held fixed. The same holds
 	for the hard pressure, together with the running of the vacuum energy, which DRalgo does not track.
 
@@ -70,8 +70,8 @@ testList={};
 
 betas=BetaFunctions4D[];
 
-(*Explicit mu-dependence at fixed mu3*)
-explicitMu[expr_]:=Simplify[mu D[expr/.{Lb->2Log[mu/(4\[Pi] T)]+2EulerGamma,Lf->2Log[mu/(\[Pi] T)]+2EulerGamma},mu]];
+(*Explicit mu4-dependence at fixed mu3*)
+explicitMu[expr_]:=Simplify[mu4 D[expr/.{Lb->2Log[mu4/(4\[Pi] T)]+2EulerGamma,Lf->2Log[mu4/(\[Pi] T)]+2EulerGamma},mu4]];
 running[expr_]:=Sum[r[[2]] D[expr,r[[1]]],{r,betas}];
 
 (*The 3d couplings in the logarithms of mu3 at LO*)
