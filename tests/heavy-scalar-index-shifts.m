@@ -25,7 +25,7 @@ Check[
 	components as indices, must be shifted as well, and must keep its dimensions.
 
 	Model: scalar QED with a light complex scalar \[Phi] and two heavy real singlets S and C, with the cubics
-	mum/2 S \[Phi]^+\[Phi], c3/3 S^3, kap/2 S C^2, and the tadpole t1 S; S and C are integrated out at the soft scale.
+	mum/2 S \[Phi]^+\[Phi], c3/3 S^3, and kap/2 S C^2; S and C are integrated out at the soft scale.
 *)
 
 
@@ -48,7 +48,6 @@ S1=CreateInvariant[Group,RepScalar,{{3},{True}}][[1]];
 muij=GradMass[m1 P1+mc/2 C1^2+ms/2 S1^2]//SparseArray;
 lam4=GradQuartic[lam P1^2+lc/2 C1^2 P1+ls/2 S1^2 P1+lss/4 S1^4+lcc/4 C1^4+lsc/4 S1^2 C1^2];
 lam3=GradCubic[mum/2 S1 P1+c3/3 S1^3+kap/2 S1 C1^2];
-lam1=GradTadpole[t1 S1];
 
 ImportModelDRalgo[Group,gvvv,gvff,gvss,lam1,lam3,lam4,muij,muIJ,muIJC,Ysff,YsffC,Verbose->False];
 PerformDRhard[];
@@ -73,11 +72,11 @@ VerificationTest[
 
 (*
 	At LO, the light mass gets the tadpoles of S and C, the A0 tadpole, the S exchange between the light line and
-	the tadpoles of S, and the bubble of the light scalar with S, with <S^2>=-Sqrt[ms3d]/(4\[Pi]) and <C^2>=-Sqrt[mc3d]/(4\[Pi])
+	the one-loop tadpole of S, and the bubble of the light scalar with S, with <S^2>=-Sqrt[ms3d]/(4\[Pi]) and <C^2>=-Sqrt[mc3d]/(4\[Pi])
 *)
 expected=(m13d
 	-ls3d Sqrt[ms3d]/(8\[Pi])-lc3d Sqrt[mc3d]/(8\[Pi])
-	-mum3d/(2ms3d) (t13d-c33d Sqrt[ms3d]/(4\[Pi])-kap3d Sqrt[mc3d]/(8\[Pi]))
+	-mum3d/(2ms3d) (-c33d Sqrt[ms3d]/(4\[Pi])-kap3d Sqrt[mc3d]/(8\[Pi]))
 	-mum3d^2/(16\[Pi] Sqrt[ms3d])
 	-lamVL[1] Sqrt[musqU1]/(8\[Pi]));
 

@@ -268,7 +268,7 @@ If[verbose,Print["Calculating 1-Loop Scalar Mass"]];
 (*A H^2S^2 quartic*)
 	ContriSS3=-1/2 Simplify[Table[Sum[TadpoleIntegral3d[muijL[[a,a]]^2]lamK[[a,a,i,j]],{a,1,nSH}],{i,1,nSL},{j,1,nSL}]];
 
-	muijSSLO=-ContriSS3-ContriSS-ContriSS2-ContriTadpole//SparseArray;
+	muijSSLO=-ContriSS3-ContriSS-ContriSS2-ContriTadpole+TadpoleShiftMassSS[]//SparseArray;
 (*The terms without momentum dependence, which are inserted on the light lines of the two-loop masses*)
 	muijSSLOTadpoles=-ContriSS3-ContriTadpole//SparseArray;
 
@@ -683,6 +683,32 @@ OneLoopCubicSS[list1_,list2_,list3_]:=Module[{masses,lam3All,lam4All,bubbleMat,t
 
 (*One-loop correction to the light-light-heavy cubic couplings lam3Cy*)
 VertexCorrectionLLH[]:=OneLoopCubicSS[Range[nSL],Range[nSL],nSL+Range[nSH]];
+
+
+(*
+	One-loop light masses at first order in the tree-level tadpoles of the heavy fields, which shift the heavy fields by
+	v0=-tadpole/M^2: the one-loop light-light-heavy vertex times v0, without the triangle with two light lines, which is the
+	insertion of the light mass lam3Cy.v0 in ScalarMass2LoopSS; the shift of the one-loop tadpoles of the heavy fields by
+	the one-loop heavy masses and the H^3 cubics, v01, at the H S^2 cubic; and the H^2 S^2 quartic with v0 and the shift v1
+	by the one-loop tadpoles.
+*)
+TadpoleShiftMassSS[]:=Module[{M2,v0,v1,v01,masses,lam3All,lam4All,tadpoleVec,bubbleMat,massLoop,triangle,vertex},
+	M2=Table[muijL[[h,h]]^2,{h,1,nSH}];
+	v0=-Normal[TadPoleHeavy]/M2;
+	If[nSL==0||AllTrue[v0,#===0&],Return[0]];
+	v1=-Normal[TadPoleHeavySS-TadPoleHeavy]/M2;
+
+	{masses,lam3All,lam4All}=AllScalarCouplingsSS[];
+	tadpoleVec=Table[TadpoleIntegral3d[x],{x,masses}];
+	bubbleMat=Table[BubbleIntegral3d[x,y],{x,masses},{y,masses}];
+	massLoop=Table[1/2 Total[Diagonal[lam4All[[nSL+h,nSL+k]]] tadpoleVec]-1/2 Total[lam3All[[nSL+h]] lam3All[[nSL+k]] bubbleMat,2],{h,1,nSH},{k,1,nSH}];
+	v01=-(massLoop . v0+Table[v0 . Normal[lam3CHeavy[[h]]] . v1,{h,1,nSH}])/M2;
+
+	triangle=Table[Sum[lam3Cy[[i,a,b]]lam3Cy[[j,c,b]]lam3Cy[[a,c,h]]TriangleIntegral3d[0,0,M2[[b]]],{a,1,nSL},{c,1,nSL},{b,1,nSH}],{i,1,nSL},{j,1,nSL},{h,1,nSH}];
+	vertex=Normal[VertexCorrectionLLH[]]-triangle;
+
+	SparseArray[vertex . v0+Normal[lam3Cy] . v01+Table[v0 . Normal[lamK[[;;,;;,i,j]]] . v1,{i,1,nSL},{j,1,nSL}]]//SimplifySparse
+];
 
 
 (*Mixing between light and heavy fields from the shift of the heavy fields by their tadpoles, lam3Cx.(-tadpole/M^2)*)

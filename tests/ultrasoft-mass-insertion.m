@@ -56,7 +56,10 @@ PerformDRsoft[{3}];
 
 lo=Expand[m13dUS/.PrintScalarMassUS["LO"]];
 nlo=Expand[m13dUS/.PrintScalarMassUS["NLO"]];
-temporal=Cases[lo,lamVL[_],Infinity]//Union;
+temporal=Cases[lo/.t13d->0,lamVL[_],Infinity]//Union; (*the coupling of the A0 to the light scalar*)
+
+(*The tadpole of S also enters the LO mass at one loop, with the couplings of S; only the terms without them are compared*)
+noS={ls3d->0,lss3d->0,lamVL[_]->0};
 
 (*The factor of the tree-level mass in the two-loop mass*)
 factor=Coefficient[nlo,m13d mum3d^2];
@@ -89,7 +92,7 @@ VerificationTest[
 (*The exchange of S between the light line and the tree-level tadpole of S*)
 AppendTo[tests,
 VerificationTest[
-	{Simplify[Coefficient[nlo,mum3d^3 t13d]-factor Coefficient[lo,mum3d t13d],ms3d>0],Coefficient[lo,mum3d t13d]===0},
+	{Simplify[(Coefficient[nlo,mum3d^3 t13d]-factor Coefficient[lo,mum3d t13d])/.noS,ms3d>0],(Coefficient[lo,mum3d t13d]/.noS)===0},
 	{0,False},
 	TestID->"tadpole-exchange-insertion"
 ]];
