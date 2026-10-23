@@ -100,7 +100,7 @@ CubicTerm2=CreateInvariant[Group,RepScalar,InputInv][[1]]//Simplify;
 
 VCubic=(
 	+\[Mu]m/2*CubicTerm1
-	+\[Mu]3/3*CubicTerm2
+	+c3/3*CubicTerm2
 	);
 
 
@@ -164,7 +164,7 @@ testList={};
 
 AppendTo[testList,
 TestCreate[BetaFunctions4D[],
-	{g3^2->0,g2^2->0,g1^2->0,\[Lambda]1H->0,\[Lambda]m->0,\[Lambda]\[Sigma]->0,\[Mu]3->0,\[Mu]m->0,yt1->0,m1->0,\[Mu]\[Sigma]->0,\[Mu]1->0}
+	{g3^2->0,g2^2->0,g1^2->0,\[Lambda]1H->0,\[Lambda]m->0,\[Lambda]\[Sigma]->0,c3->0,\[Mu]m->0,yt1->0,m1->0,\[Mu]\[Sigma]->0,\[Mu]1->0}
 ]];
 
 
@@ -174,13 +174,13 @@ TestCreate[BetaFunctions4D[],
 
 AppendTo[testList,
 TestCreate[PrintCouplings[],
-	{g13d^2->g1^2 T,g23d^2->g2^2 T,g33d^2->g3^2 T,\[Lambda]1H3d->T \[Lambda]1H,\[Lambda]m3d->T \[Lambda]m,\[Lambda]\[Sigma]3d->T \[Lambda]\[Sigma],\[Mu]33d->Sqrt[T] \[Mu]3,\[Mu]m3d->Sqrt[T] \[Mu]m}
+	{g13d^2->g1^2 T,g23d^2->g2^2 T,g33d^2->g3^2 T,\[Lambda]1H3d->T \[Lambda]1H,\[Lambda]m3d->T \[Lambda]m,\[Lambda]\[Sigma]3d->T \[Lambda]\[Sigma],c33d->Sqrt[T] c3,\[Mu]m3d->Sqrt[T] \[Mu]m}
 ]];
 
 
 AppendTo[testList,
 TestCreate[PrintTadpoles["LO"],
-	{\[Mu]13d->\[Mu]1/Sqrt[T]+1/12 T^(3/2) (\[Mu]3+\[Mu]m)}
+	{\[Mu]13d -> (\[Mu]1 + (T^2*(c3 + \[Mu]m))/12)/Sqrt[T]}
 ]];
 AppendTo[testList,
 TestCreate[PrintTadpoles["NLO"],
@@ -266,7 +266,7 @@ testList={};
 
 AppendTo[testList,
 TestCreate[BetaFunctions4D[]/.Replacements//DeleteCases[#,0->0]&,
-	{g1^2->(g1^2 (-18 yt1^2 (Yq-Yu)^2+(18 yt1^2+g1^2 nF (3 Yd^2+Ye^2+2 Yl^2+6 Yq^2+3 Yu^2)) Y\[Phi]^2+g1^2 Y\[Phi]^4))/(48 \[Pi]^2 Y\[Phi]^2),g2^2->(g2^4 (-43+8 nF))/(48 \[Pi]^2),g3^2->(g3^4 (-33+4 nF))/(24 \[Pi]^2),\[Lambda]1H->(9 g2^4-48 yt1^4+3 g1^4 Y\[Phi]^4+6 g2^2 (g1^2 Y\[Phi]^2-12 \[Lambda]1H)-24 g1^2 Y\[Phi]^2 \[Lambda]1H+96 \[Lambda]1H (yt1^2+2 \[Lambda]1H)+4 \[Lambda]m^2)/(128 \[Pi]^2),\[Lambda]m->(\[Lambda]m (-9 g2^2+12 yt1^2-3 g1^2 Y\[Phi]^2+24 \[Lambda]1H+8 \[Lambda]m+12 \[Lambda]\[Sigma]))/(32 \[Pi]^2),\[Lambda]\[Sigma]->(\[Lambda]m^2+9 \[Lambda]\[Sigma]^2)/(8 \[Pi]^2),\[Mu]3->(3 (6 \[Lambda]\[Sigma] \[Mu]3+\[Lambda]m \[Mu]m))/(16 \[Pi]^2),\[Mu]m->(-3 (3 g2^2-4 yt1^2+g1^2 Y\[Phi]^2-8 \[Lambda]1H) \[Mu]m+8 \[Lambda]m (\[Mu]3+\[Mu]m))/(32 \[Pi]^2),yt1->(yt1 (-9 g2^2-32 g3^2+18 yt1^2-3 g1^2 (2 Yq Yu+Y\[Phi]^2)))/(64 \[Pi]^2),m1->(-3 m1 (3 g2^2-4 yt1^2+g1^2 Y\[Phi]^2-8 \[Lambda]1H)+\[Mu]m^2+2 \[Lambda]m \[Mu]\[Sigma])/(32 \[Pi]^2),\[Mu]\[Sigma]->(4 m1 \[Lambda]m+4 \[Mu]3^2+\[Mu]m^2+6 \[Lambda]\[Sigma] \[Mu]\[Sigma])/(16 \[Pi]^2),\[Mu]1->(m1 \[Mu]m+\[Mu]3 \[Mu]\[Sigma])/(8 \[Pi]^2)}
+	{g1^2->(g1^2 (-18 yt1^2 (Yq-Yu)^2+(18 yt1^2+g1^2 nF (3 Yd^2+Ye^2+2 Yl^2+6 Yq^2+3 Yu^2)) Y\[Phi]^2+g1^2 Y\[Phi]^4))/(48 \[Pi]^2 Y\[Phi]^2),g2^2->(g2^4 (-43+8 nF))/(48 \[Pi]^2),g3^2->(g3^4 (-33+4 nF))/(24 \[Pi]^2),\[Lambda]1H->(9 g2^4-48 yt1^4+3 g1^4 Y\[Phi]^4+6 g2^2 (g1^2 Y\[Phi]^2-12 \[Lambda]1H)-24 g1^2 Y\[Phi]^2 \[Lambda]1H+96 \[Lambda]1H (yt1^2+2 \[Lambda]1H)+4 \[Lambda]m^2)/(128 \[Pi]^2),\[Lambda]m->(\[Lambda]m (-9 g2^2+12 yt1^2-3 g1^2 Y\[Phi]^2+24 \[Lambda]1H+8 \[Lambda]m+12 \[Lambda]\[Sigma]))/(32 \[Pi]^2),\[Lambda]\[Sigma]->(\[Lambda]m^2+9 \[Lambda]\[Sigma]^2)/(8 \[Pi]^2),c3->(3 (6 \[Lambda]\[Sigma] c3+\[Lambda]m \[Mu]m))/(16 \[Pi]^2),\[Mu]m->(-3 (3 g2^2-4 yt1^2+g1^2 Y\[Phi]^2-8 \[Lambda]1H) \[Mu]m+8 \[Lambda]m (c3+\[Mu]m))/(32 \[Pi]^2),yt1->(yt1 (-9 g2^2-32 g3^2+18 yt1^2-3 g1^2 (2 Yq Yu+Y\[Phi]^2)))/(64 \[Pi]^2),m1->(-3 m1 (3 g2^2-4 yt1^2+g1^2 Y\[Phi]^2-8 \[Lambda]1H)+\[Mu]m^2+2 \[Lambda]m \[Mu]\[Sigma])/(32 \[Pi]^2),\[Mu]\[Sigma]->(4 m1 \[Lambda]m+4 c3^2+\[Mu]m^2+6 \[Lambda]\[Sigma] \[Mu]\[Sigma])/(16 \[Pi]^2),\[Mu]1->(m1 \[Mu]m+c3 \[Mu]\[Sigma])/(8 \[Pi]^2)}
 ]];
 
 
@@ -276,17 +276,17 @@ TestCreate[BetaFunctions4D[]/.Replacements//DeleteCases[#,0->0]&,
 
 AppendTo[testList,
 TestCreate[PrintCouplings[]/.Replacements//Simplify,
-	{g13d^2->1/(96 \[Pi]^2 Y\[Phi]^2) g1^2 T (18 Lf yt1^2 (Yq-Yu)^2+(96 \[Pi]^2-Lf (18 yt1^2+g1^2 nF (3 Yd^2+Ye^2+2 Yl^2+6 Yq^2+3 Yu^2))) Y\[Phi]^2-g1^2 Lb Y\[Phi]^4),g23d^2->g2^2 T+(g2^4 (4+43 Lb-8 Lf nF) T)/(96 \[Pi]^2),g33d^2->g3^2 T+(g3^4 (3+33 Lb-4 Lf nF) T)/(48 \[Pi]^2),\[Lambda]1H3d->1/(256 \[Pi]^2) T (48 Lf yt1^4+(2-3 Lb) (3 g2^4+2 g1^2 g2^2 Y\[Phi]^2+g1^4 Y\[Phi]^4)+256 \[Pi]^2 \[Lambda]1H+24 (3 g2^2 Lb-4 Lf yt1^2+g1^2 Lb Y\[Phi]^2) \[Lambda]1H-4 Lb (48 \[Lambda]1H^2+\[Lambda]m^2)),\[Lambda]m3d->(T \[Lambda]m (9 g2^2 Lb+64 \[Pi]^2-12 Lf yt1^2+3 g1^2 Lb Y\[Phi]^2-4 Lb (6 \[Lambda]1H+2 \[Lambda]m+3 \[Lambda]\[Sigma])))/(64 \[Pi]^2),\[Lambda]\[Sigma]3d->T \[Lambda]\[Sigma]-(Lb T (\[Lambda]m^2+9 \[Lambda]\[Sigma]^2))/(16 \[Pi]^2),\[Mu]33d->1/2 Sqrt[T] (2 \[Mu]3-(3 Lb (6 \[Lambda]\[Sigma] \[Mu]3+\[Lambda]m \[Mu]m))/(16 \[Pi]^2)),\[Mu]m3d->(Sqrt[T] (4 (16 \[Pi]^2-3 Lf yt1^2) \[Mu]m+3 Lb (3 g2^2+g1^2 Y\[Phi]^2-8 \[Lambda]1H) \[Mu]m-8 Lb \[Lambda]m (\[Mu]3+\[Mu]m)))/(64 \[Pi]^2)}
+	{g13d^2 -> (g1^2*T*(18*Lf*yt1^2*(Yq - Yu)^2 + (96*Pi^2 - Lf*(18*yt1^2 + g1^2*nF*(3*Yd^2 + Ye^2 + 2*Yl^2 + 6*Yq^2 + 3*Yu^2)))*Y\[Phi]^2 - g1^2*Lb*Y\[Phi]^4))/(96*Pi^2*Y\[Phi]^2), g23d^2 -> g2^2*T + (g2^4*(4 + 43*Lb - 8*Lf*nF)*T)/(96*Pi^2), g33d^2 -> g3^2*T + (g3^4*(3 + 33*Lb - 4*Lf*nF)*T)/(48*Pi^2), \[Lambda]1H3d -> (T*(48*Lf*yt1^4 + (2 - 3*Lb)*(3*g2^4 + 2*g1^2*g2^2*Y\[Phi]^2 + g1^4*Y\[Phi]^4) + 256*Pi^2*\[Lambda]1H + 24*(3*g2^2*Lb - 4*Lf*yt1^2 + g1^2*Lb*Y\[Phi]^2)*\[Lambda]1H - 4*Lb*(48*\[Lambda]1H^2 + \[Lambda]m^2)))/(256*Pi^2), \[Lambda]m3d -> (T*\[Lambda]m*(9*g2^2*Lb + 64*Pi^2 - 12*Lf*yt1^2 + 3*g1^2*Lb*Y\[Phi]^2 - 4*Lb*(6*\[Lambda]1H + 2*\[Lambda]m + 3*\[Lambda]\[Sigma])))/(64*Pi^2), \[Lambda]\[Sigma]3d -> T*\[Lambda]\[Sigma] - (Lb*T*(\[Lambda]m^2 + 9*\[Lambda]\[Sigma]^2))/(16*Pi^2), c33d -> (Sqrt[T]*(2*c3 - (3*Lb*(6*c3*\[Lambda]\[Sigma] + \[Lambda]m*\[Mu]m))/(16*Pi^2)))/2, \[Mu]m3d -> (Sqrt[T]*(-8*c3*Lb*\[Lambda]m + (9*g2^2*Lb + 64*Pi^2 - 12*Lf*yt1^2 + 3*g1^2*Lb*Y\[Phi]^2 - 8*Lb*(3*\[Lambda]1H + \[Lambda]m))*\[Mu]m))/(64*Pi^2)}
 ]];
 
 
 AppendTo[testList,
 TestCreate[PrintTadpoles["LO"]/.Replacements,
-	{\[Mu]13d->\[Mu]1/Sqrt[T]+1/12 T^(3/2) (\[Mu]3+\[Mu]m)}
+	{\[Mu]13d -> (c3*T^2 + 12*\[Mu]1 + T^2*\[Mu]m)/(12*Sqrt[T])}
 ]];
 AppendTo[testList,
 TestCreate[PrintTadpoles["NLO"]/.Replacements//Expand,
-	{\[Mu]13d->1/(768 \[Pi]^2 Sqrt[T]) (-Lb (T^2 (-12 \[Lambda]\[Sigma] \[Mu]3+2 \[Lambda]m (4 \[Mu]3-5 \[Mu]m)+3 (9 g2^2+6 yt1^2+3 g1^2 Y\[Phi]^2+8 \[Lambda]1H) \[Mu]m)+48 (m1 \[Mu]m+\[Mu]3 \[Mu]\[Sigma]))+2 T^2 (3 Lf yt1^2 \[Mu]m+g1^2 Y\[Phi]^2 \[Mu]m+6 EulerGamma (-4 \[Lambda]\[Sigma] \[Mu]3+(3 g2^2+g1^2 Y\[Phi]^2-2 \[Lambda]m) \[Mu]m)+3 g2^2 \[Mu]m (1-72 Log[Glaisher])+288 \[Lambda]\[Sigma] \[Mu]3 Log[Glaisher]-72 g1^2 Y\[Phi]^2 \[Mu]m Log[Glaisher]+144 \[Lambda]m \[Mu]m Log[Glaisher])+24 Sqrt[T] (4 \[Lambda]\[Sigma]3d \[Mu]33d-(3 g23d^2+g13d^2 Y\[Phi]^2-2 \[Lambda]m3d) \[Mu]m3d) Log[\[Mu]3/\[Mu]])}//Expand
+	{\[Mu]13d->1/(768 \[Pi]^2 Sqrt[T]) (-Lb (T^2 (-12 \[Lambda]\[Sigma] c3+2 \[Lambda]m (4 c3-5 \[Mu]m)+3 (9 g2^2+6 yt1^2+3 g1^2 Y\[Phi]^2+8 \[Lambda]1H) \[Mu]m)+48 (m1 \[Mu]m+c3 \[Mu]\[Sigma]))+2 T^2 (3 Lf yt1^2 \[Mu]m+g1^2 Y\[Phi]^2 \[Mu]m+6 EulerGamma (-4 \[Lambda]\[Sigma] c3+(3 g2^2+g1^2 Y\[Phi]^2-2 \[Lambda]m) \[Mu]m)+3 g2^2 \[Mu]m (1-72 Log[Glaisher])+288 \[Lambda]\[Sigma] c3 Log[Glaisher]-72 g1^2 Y\[Phi]^2 \[Mu]m Log[Glaisher]+144 \[Lambda]m \[Mu]m Log[Glaisher])+24 Sqrt[T] (4 \[Lambda]\[Sigma]3d c33d-(3 g23d^2+g13d^2 Y\[Phi]^2-2 \[Lambda]m3d) \[Mu]m3d) Log[\[Mu]3/\[Mu]])}//Expand
 ]];
 
 
@@ -312,7 +312,7 @@ TestCreate[PrintScalarMass["LO"]/.Replacements//Simplify,
 ]];
 AppendTo[testList,
 TestCreate[PrintScalarMass["NLO"]/.Replacements//Simplify,
-	{m13d->1/(9216 \[Pi]^2) (-1728 Lf m1 yt1^2-1152 g3^2 T^2 yt1^2-384 g3^2 Lb T^2 yt1^2+1536 g3^2 Lf T^2 yt1^2-36 g1^2 T^2 Yq^2 yt1^2+18 g1^2 Lb T^2 Yq^2 yt1^2+90 g1^2 Lf T^2 Yq^2 yt1^2+216 Lb T^2 yt1^4-144 g1^2 T^2 Yq yt1^2 Yu-108 g1^2 Lb T^2 Yq yt1^2 Yu+108 g1^2 Lf T^2 Yq yt1^2 Yu-36 g1^2 T^2 yt1^2 Yu^2+18 g1^2 Lb T^2 yt1^2 Yu^2+90 g1^2 Lf T^2 yt1^2 Yu^2+432 g1^2 Lb m1 Y\[Phi]^2+6 g1^4 nF T^2 Yd^2 Y\[Phi]^2-27 g1^4 Lb nF T^2 Yd^2 Y\[Phi]^2+9 g1^4 Lf nF T^2 Yd^2 Y\[Phi]^2+2 g1^4 nF T^2 Ye^2 Y\[Phi]^2-9 g1^4 Lb nF T^2 Ye^2 Y\[Phi]^2+3 g1^4 Lf nF T^2 Ye^2 Y\[Phi]^2+4 g1^4 nF T^2 Yl^2 Y\[Phi]^2-18 g1^4 Lb nF T^2 Yl^2 Y\[Phi]^2+6 g1^4 Lf nF T^2 Yl^2 Y\[Phi]^2+12 g1^4 nF T^2 Yq^2 Y\[Phi]^2-54 g1^4 Lb nF T^2 Yq^2 Y\[Phi]^2+18 g1^4 Lf nF T^2 Yq^2 Y\[Phi]^2+108 g1^2 Lb T^2 yt1^2 Y\[Phi]^2-108 g1^2 Lf T^2 yt1^2 Y\[Phi]^2+6 g1^4 nF T^2 Yu^2 Y\[Phi]^2-27 g1^4 Lb nF T^2 Yu^2 Y\[Phi]^2+9 g1^4 Lf nF T^2 Yu^2 Y\[Phi]^2+2 g1^4 T^2 Y\[Phi]^4-126 EulerGamma g1^4 T^2 Y\[Phi]^4+66 g1^4 Lb T^2 Y\[Phi]^4-3456 Lb m1 \[Lambda]1H-1296 Lb T^2 yt1^2 \[Lambda]1H-432 Lf T^2 yt1^2 \[Lambda]1H+144 g1^2 T^2 Y\[Phi]^2 \[Lambda]1H+864 EulerGamma g1^2 T^2 Y\[Phi]^2 \[Lambda]1H-432 g1^2 Lb T^2 Y\[Phi]^2 \[Lambda]1H-3456 EulerGamma T^2 \[Lambda]1H^2-72 Lf T^2 yt1^2 \[Lambda]m+18 g1^2 Lb T^2 Y\[Phi]^2 \[Lambda]m-144 Lb T^2 \[Lambda]1H \[Lambda]m-144 EulerGamma T^2 \[Lambda]m^2+24 Lb T^2 \[Lambda]m^2-72 Lb T^2 \[Lambda]m \[Lambda]\[Sigma]-144 Lb \[Mu]m^2-288 Lb \[Lambda]m \[Mu]\[Sigma]+54 g2^2 (Lb (24 m1+T^2 (7 yt1^2+8 g1^2 Y\[Phi]^2-24 \[Lambda]1H+\[Lambda]m))-T^2 ((2+Lf) yt1^2-8 \[Lambda]1H (1+6 EulerGamma-72 Log[Glaisher])+2 g1^2 Y\[Phi]^2 (1+5 EulerGamma-60 Log[Glaisher])))+6 g2^4 T^2 (167+243 EulerGamma+8 nF+12 Lf nF-3 Lb (47+12 nF)-2916 Log[Glaisher])+1512 g1^4 T^2 Y\[Phi]^4 Log[Glaisher]-10368 g1^2 T^2 Y\[Phi]^2 \[Lambda]1H Log[Glaisher]+41472 T^2 \[Lambda]1H^2 Log[Glaisher]+1728 T^2 \[Lambda]m^2 Log[Glaisher]-36 Log[\[Mu]3/\[Mu]] (39 g23d^4-5 g13d^4 Y\[Phi]^4+48 g13d^2 Y\[Phi]^2 \[Lambda]1H3d+g23d^2 (-18 g13d^2 Y\[Phi]^2+144 \[Lambda]1H3d+96 \[Lambda]VL[3])-8 (24 \[Lambda]1H3d^2+\[Lambda]m3d^2-48 g33d^2 \[Lambda]VL[1]+8 \[Lambda]VL[1]^2+\[Lambda]VL[2]^2+3 \[Lambda]VL[3]^2+6 \[Lambda]VL[4]^2))),\[Mu]\[Sigma]3d->-(1/(384 \[Pi]^2))(Lb (48 m1 \[Lambda]m+27 g2^2 T^2 \[Lambda]m+18 T^2 yt1^2 \[Lambda]m+9 g1^2 T^2 Y\[Phi]^2 \[Lambda]m+24 T^2 \[Lambda]1H \[Lambda]m-10 T^2 \[Lambda]m^2+12 T^2 \[Lambda]m \[Lambda]\[Sigma]-18 T^2 \[Lambda]\[Sigma]^2+48 \[Mu]3^2+12 \[Mu]m^2+72 \[Lambda]\[Sigma] \[Mu]\[Sigma])-2 T^2 (3 Lf yt1^2 \[Lambda]m+g1^2 Y\[Phi]^2 \[Lambda]m+6 EulerGamma g1^2 Y\[Phi]^2 \[Lambda]m-12 EulerGamma \[Lambda]m^2-36 EulerGamma \[Lambda]\[Sigma]^2+3 g2^2 \[Lambda]m (1+6 EulerGamma-72 Log[Glaisher])-72 g1^2 Y\[Phi]^2 \[Lambda]m Log[Glaisher]+144 \[Lambda]m^2 Log[Glaisher]+432 \[Lambda]\[Sigma]^2 Log[Glaisher])+12 Log[\[Mu]3/\[Mu]] (2 g13d^2 Y\[Phi]^2 \[Lambda]m3d-4 \[Lambda]m3d^2-12 \[Lambda]\[Sigma]3d^2-3 \[Lambda]VL[5]^2+6 g23d^2 (\[Lambda]m3d+2 \[Lambda]VL[5])-\[Lambda]VL[6]^2))}
+	{m13d -> (-1728*Lf*m1*yt1^2 - 1152*g3^2*T^2*yt1^2 - 384*g3^2*Lb*T^2*yt1^2 + 1536*g3^2*Lf*T^2*yt1^2 - 36*g1^2*T^2*Yq^2*yt1^2 + 18*g1^2*Lb*T^2*Yq^2*yt1^2 + 90*g1^2*Lf*T^2*Yq^2*yt1^2 + 216*Lb*T^2*yt1^4 - 144*g1^2*T^2*Yq*yt1^2*Yu - 108*g1^2*Lb*T^2*Yq*yt1^2*Yu + 108*g1^2*Lf*T^2*Yq*yt1^2*Yu - 36*g1^2*T^2*yt1^2*Yu^2 + 18*g1^2*Lb*T^2*yt1^2*Yu^2 + 90*g1^2*Lf*T^2*yt1^2*Yu^2 + 432*g1^2*Lb*m1*Y\[Phi]^2 + 6*g1^4*nF*T^2*Yd^2*Y\[Phi]^2 - 27*g1^4*Lb*nF*T^2*Yd^2*Y\[Phi]^2 + 9*g1^4*Lf*nF*T^2*Yd^2*Y\[Phi]^2 + 2*g1^4*nF*T^2*Ye^2*Y\[Phi]^2 - 9*g1^4*Lb*nF*T^2*Ye^2*Y\[Phi]^2 + 3*g1^4*Lf*nF*T^2*Ye^2*Y\[Phi]^2 + 4*g1^4*nF*T^2*Yl^2*Y\[Phi]^2 - 18*g1^4*Lb*nF*T^2*Yl^2*Y\[Phi]^2 + 6*g1^4*Lf*nF*T^2*Yl^2*Y\[Phi]^2 + 12*g1^4*nF*T^2*Yq^2*Y\[Phi]^2 - 54*g1^4*Lb*nF*T^2*Yq^2*Y\[Phi]^2 + 18*g1^4*Lf*nF*T^2*Yq^2*Y\[Phi]^2 + 108*g1^2*Lb*T^2*yt1^2*Y\[Phi]^2 - 108*g1^2*Lf*T^2*yt1^2*Y\[Phi]^2 + 6*g1^4*nF*T^2*Yu^2*Y\[Phi]^2 - 27*g1^4*Lb*nF*T^2*Yu^2*Y\[Phi]^2 + 9*g1^4*Lf*nF*T^2*Yu^2*Y\[Phi]^2 + 2*g1^4*T^2*Y\[Phi]^4 - 126*EulerGamma*g1^4*T^2*Y\[Phi]^4 + 66*g1^4*Lb*T^2*Y\[Phi]^4 - 3456*Lb*m1*\[Lambda]1H - 1296*Lb*T^2*yt1^2*\[Lambda]1H - 432*Lf*T^2*yt1^2*\[Lambda]1H + 144*g1^2*T^2*Y\[Phi]^2*\[Lambda]1H + 864*EulerGamma*g1^2*T^2*Y\[Phi]^2*\[Lambda]1H - 432*g1^2*Lb*T^2*Y\[Phi]^2*\[Lambda]1H - 3456*EulerGamma*T^2*\[Lambda]1H^2 - 72*Lf*T^2*yt1^2*\[Lambda]m + 18*g1^2*Lb*T^2*Y\[Phi]^2*\[Lambda]m - 144*Lb*T^2*\[Lambda]1H*\[Lambda]m - 144*EulerGamma*T^2*\[Lambda]m^2 + 24*Lb*T^2*\[Lambda]m^2 - 72*Lb*T^2*\[Lambda]m*\[Lambda]\[Sigma] - 144*Lb*\[Mu]m^2 - 288*Lb*\[Lambda]m*\[Mu]\[Sigma] + 54*g2^2*(Lb*(24*m1 + T^2*(7*yt1^2 + 8*g1^2*Y\[Phi]^2 - 24*\[Lambda]1H + \[Lambda]m)) - T^2*((2 + Lf)*yt1^2 - 8*\[Lambda]1H*(1 + 6*EulerGamma - 72*Log[Glaisher]) + 2*g1^2*Y\[Phi]^2*(1 + 5*EulerGamma - 60*Log[Glaisher]))) + 6*g2^4*T^2*(167 + 243*EulerGamma + 8*nF + 12*Lf*nF - 3*Lb*(47 + 12*nF) - 2916*Log[Glaisher]) + 1512*g1^4*T^2*Y\[Phi]^4*Log[Glaisher] - 10368*g1^2*T^2*Y\[Phi]^2*\[Lambda]1H*Log[Glaisher] + 41472*T^2*\[Lambda]1H^2*Log[Glaisher] + 1728*T^2*\[Lambda]m^2*Log[Glaisher] - 36*Log[\[Mu]3/\[Mu]]*(39*g23d^4 - 5*g13d^4*Y\[Phi]^4 + 48*g13d^2*Y\[Phi]^2*\[Lambda]1H3d + g23d^2*(-18*g13d^2*Y\[Phi]^2 + 144*\[Lambda]1H3d + 96*\[Lambda]VL[3]) - 8*(24*\[Lambda]1H3d^2 + \[Lambda]m3d^2 - 48*g33d^2*\[Lambda]VL[1] + 8*\[Lambda]VL[1]^2 + \[Lambda]VL[2]^2 + 3*\[Lambda]VL[3]^2 + 6*\[Lambda]VL[4]^2)))/(9216*Pi^2), \[Mu]\[Sigma]3d -> -1/384*(48*c3^2*Lb + 48*Lb*m1*\[Lambda]m - 6*g2^2*T^2*\[Lambda]m - 36*EulerGamma*g2^2*T^2*\[Lambda]m + 27*g2^2*Lb*T^2*\[Lambda]m + 18*Lb*T^2*yt1^2*\[Lambda]m - 6*Lf*T^2*yt1^2*\[Lambda]m - 2*g1^2*T^2*Y\[Phi]^2*\[Lambda]m - 12*EulerGamma*g1^2*T^2*Y\[Phi]^2*\[Lambda]m + 9*g1^2*Lb*T^2*Y\[Phi]^2*\[Lambda]m + 24*Lb*T^2*\[Lambda]1H*\[Lambda]m + 24*EulerGamma*T^2*\[Lambda]m^2 - 10*Lb*T^2*\[Lambda]m^2 + 12*Lb*T^2*\[Lambda]m*\[Lambda]\[Sigma] + 72*EulerGamma*T^2*\[Lambda]\[Sigma]^2 - 18*Lb*T^2*\[Lambda]\[Sigma]^2 + 12*Lb*\[Mu]m^2 + 72*Lb*\[Lambda]\[Sigma]*\[Mu]\[Sigma] + 432*g2^2*T^2*\[Lambda]m*Log[Glaisher] + 144*g1^2*T^2*Y\[Phi]^2*\[Lambda]m*Log[Glaisher] - 288*T^2*\[Lambda]m^2*Log[Glaisher] - 864*T^2*\[Lambda]\[Sigma]^2*Log[Glaisher] + 12*Log[\[Mu]3/\[Mu]]*(2*g13d^2*Y\[Phi]^2*\[Lambda]m3d - 4*\[Lambda]m3d^2 - 12*\[Lambda]\[Sigma]3d^2 - 3*\[Lambda]VL[5]^2 + 6*g23d^2*(\[Lambda]m3d + 2*\[Lambda]VL[5]) - \[Lambda]VL[6]^2))/Pi^2}
 ]];
 
 
@@ -430,7 +430,7 @@ TestCreate[PrintPressure["NNLO"],
 	23040*EulerGamma*T^4*\[Lambda]1H*\[Lambda]m + 11136*T^4*\[Lambda]m^2 -
 	4800*EulerGamma*T^4*\[Lambda]m^2 - 11520*EulerGamma*T^4*\[Lambda]m*\[Lambda]\[Sigma] +
 	16704*T^4*\[Lambda]\[Sigma]^2 - 8640*EulerGamma*T^4*\[Lambda]\[Sigma]^2 -
-	46080*EulerGamma*T^2*\[Mu]3^2 + 23040*Lb*T^2*\[Mu]3^2 - 34560*EulerGamma*T^2*\[Mu]m^2 +
+	46080*EulerGamma*T^2*c3^2 + 23040*Lb*T^2*c3^2 - 34560*EulerGamma*T^2*\[Mu]m^2 +
 	17280*Lb*T^2*\[Mu]m^2 - 23040*Lb*T^2*\[Lambda]m*\[Mu]\[Sigma] -
 	34560*Lb*T^2*\[Lambda]\[Sigma]*\[Mu]\[Sigma] - 69120*Lb*\[Mu]\[Sigma]^2 +
 	3828960*g2^4*T^4*Log[2] + 17141760*g3^4*T^4*Log[2] + 2135232*g2^4*nF*T^4*Log[2] +
@@ -482,7 +482,7 @@ TestCreate[PrintPressure["NNLO"],
 	Log[Glaisher] - 3317760*T^4*\[Lambda]1H^2*Log[Glaisher] -
 	207360*g2^2*T^4*\[Lambda]m*Log[Glaisher] - 69120*g1^2*T^4*Y\[Phi]^2*\[Lambda]m*Log[Glaisher] -
 	276480*T^4*\[Lambda]m^2*Log[Glaisher] - 414720*T^4*\[Lambda]\[Sigma]^2*Log[Glaisher] +
-	552960*T^2*\[Mu]3^2*Log[Glaisher] + 414720*T^2*\[Mu]m^2*Log[Glaisher] +
+	552960*T^2*c3^2*Log[Glaisher] + 414720*T^2*\[Mu]m^2*Log[Glaisher] +
 	1914480*g2^4*T^4*Log[Pi] + 8570880*g3^4*T^4*Log[Pi] + 938880*g2^4*nF*T^4*Log[Pi] +
 	622080*g2^2*g3^2*nF*T^4*Log[Pi] + 3363840*g3^4*nF*T^4*Log[Pi] + 184320*g2^4*nF^2*T^4*Log[Pi] +
 	491520*g3^4*nF^2*T^4*Log[Pi] + 103680*g1^2*g3^2*nF*T^4*Yd^2*Log[Pi] +
@@ -561,7 +561,7 @@ TestCreate[PrintPressure["NNLO"],
 	Log[\[Mu]3/\[Mu]] - 17280*g1^4*T^4*Y\[Phi]^4*Log[\[Mu]3/\[Mu]] -
 	414720*g2^2*T^4*\[Lambda]1H*Log[\[Mu]3/\[Mu]] - 138240*g1^2*T^4*Y\[Phi]^2*\[Lambda]1H*
 	Log[\[Mu]3/\[Mu]] - 34560*g2^2*T^4*\[Lambda]m*Log[\[Mu]3/\[Mu]] -
-	11520*g1^2*T^4*Y\[Phi]^2*\[Lambda]m*Log[\[Mu]3/\[Mu]] + 92160*T^2*\[Mu]3^2*Log[\[Mu]3/\[Mu]] +
+	11520*g1^2*T^4*Y\[Phi]^2*\[Lambda]m*Log[\[Mu]3/\[Mu]] + 92160*T^2*c3^2*Log[\[Mu]3/\[Mu]] +
 	69120*T^2*\[Mu]m^2*Log[\[Mu]3/\[Mu]] + 42019200*g2^4*T^4*Derivative[1][Zeta][-3] +
 	210124800*g3^4*T^4*Derivative[1][Zeta][-3] + 576000*g2^4*nF*T^4*Derivative[1][Zeta][-3] +
 	1843200*g3^4*nF*T^4*Derivative[1][Zeta][-3] + 1843200*g2^4*nF^2*T^4*Derivative[1][Zeta][-3] +
@@ -612,7 +612,7 @@ testList={};
 
 AppendTo[testList,
 TestCreate[PrintCouplingsUS[],
-	{\[Lambda]1H3dUS -> \[Lambda]1H3d - ((8*\[Lambda]VL[1]^2)/Sqrt[\[Mu]sqSU3] + \[Lambda]VL[2]^2/Sqrt[\[Mu]sqU1] + (3*\[Lambda]VL[3]^2)/Sqrt[\[Mu]sqSU2] + (4*\[Lambda]VL[4]^2)/(Sqrt[\[Mu]sqSU2] + Sqrt[\[Mu]sqU1]))/(32*Pi), \[Lambda]m3dUS -> -1/192*(-192*Pi*\[Lambda]m3d + (36*\[Lambda]VL[3]*\[Lambda]VL[5])/Sqrt[\[Mu]sqSU2] + (3*\[Lambda]m3d*\[Lambda]VVSL[1]^2)/\[Mu]sqSU2^(3/2) + (12*\[Mu]sqU1*\[Lambda]VL[2]*\[Lambda]VL[6] + \[Lambda]m3d*\[Lambda]VVSL[2]^2)/\[Mu]sqU1^(3/2))/Pi, \[Lambda]\[Sigma]3dUS -> -1/96*(-96*Pi*\[Lambda]\[Sigma]3d + (9*\[Lambda]VL[5]^2)/Sqrt[\[Mu]sqSU2] + (3*\[Lambda]\[Sigma]3d*\[Lambda]VVSL[1]^2)/\[Mu]sqSU2^(3/2) + (3*\[Mu]sqU1*\[Lambda]VL[6]^2 + \[Lambda]\[Sigma]3d*\[Lambda]VVSL[2]^2)/\[Mu]sqU1^(3/2))/Pi, g13dUS^2 -> g13d^2, g23dUS^2 -> g23d^2 - g23d^4/(24*Pi*Sqrt[\[Mu]sqSU2]), g33dUS^2 -> g33d^2 - g33d^4/(16*Pi*Sqrt[\[Mu]sqSU3]), \[Mu]33dUS -> \[Mu]33d + (-36*\[Mu]sqSU2*\[Mu]sqU1^(3/2)*\[Lambda]VL[5]*\[Lambda]VVSL[1] + 3*\[Mu]sqU1^(3/2)*\[Lambda]VVSL[1]^2*(-\[Mu]33d + 2*\[Lambda]VVSL[1]) - \[Mu]sqSU2^(3/2)*\[Lambda]VVSL[2]*(12*\[Mu]sqU1*\[Lambda]VL[6] + (\[Mu]33d - 2*\[Lambda]VVSL[2])*\[Lambda]VVSL[2]))/(128*Pi*\[Mu]sqSU2^(3/2)*\[Mu]sqU1^(3/2)), \[Mu]m3dUS -> \[Mu]m3d - ((3*\[Lambda]VVSL[1]*(48*\[Mu]sqSU2*\[Lambda]VL[3] + \[Mu]m3d*\[Lambda]VVSL[1]))/\[Mu]sqSU2^(3/2) + (48*\[Lambda]VL[2]*\[Lambda]VVSL[2])/Sqrt[\[Mu]sqU1] + (\[Mu]m3d*\[Lambda]VVSL[2]^2)/\[Mu]sqU1^(3/2))/(384*Pi)}
+	{\[Lambda]1H3dUS -> \[Lambda]1H3d - ((8*\[Lambda]VL[1]^2)/Sqrt[\[Mu]sqSU3] + \[Lambda]VL[2]^2/Sqrt[\[Mu]sqU1] + (3*\[Lambda]VL[3]^2)/Sqrt[\[Mu]sqSU2] + (4*\[Lambda]VL[4]^2)/(Sqrt[\[Mu]sqSU2] + Sqrt[\[Mu]sqU1]))/(32*Pi), \[Lambda]m3dUS -> -1/192*(-192*Pi*\[Lambda]m3d + (36*\[Lambda]VL[3]*\[Lambda]VL[5])/Sqrt[\[Mu]sqSU2] + (3*\[Lambda]m3d*\[Lambda]VVSL[1]^2)/\[Mu]sqSU2^(3/2) + (12*\[Mu]sqU1*\[Lambda]VL[2]*\[Lambda]VL[6] + \[Lambda]m3d*\[Lambda]VVSL[2]^2)/\[Mu]sqU1^(3/2))/Pi, \[Lambda]\[Sigma]3dUS -> -1/96*(-96*Pi*\[Lambda]\[Sigma]3d + (9*\[Lambda]VL[5]^2)/Sqrt[\[Mu]sqSU2] + (3*\[Lambda]\[Sigma]3d*\[Lambda]VVSL[1]^2)/\[Mu]sqSU2^(3/2) + (3*\[Mu]sqU1*\[Lambda]VL[6]^2 + \[Lambda]\[Sigma]3d*\[Lambda]VVSL[2]^2)/\[Mu]sqU1^(3/2))/Pi, g13dUS^2 -> g13d^2, g23dUS^2 -> g23d^2 - g23d^4/(24*Pi*Sqrt[\[Mu]sqSU2]), g33dUS^2 -> g33d^2 - g33d^4/(16*Pi*Sqrt[\[Mu]sqSU3]), c33dUS -> c33d + (-36*\[Mu]sqSU2*\[Mu]sqU1^(3/2)*\[Lambda]VL[5]*\[Lambda]VVSL[1] + 3*\[Mu]sqU1^(3/2)*\[Lambda]VVSL[1]^2*(-c33d + 2*\[Lambda]VVSL[1]) - \[Mu]sqSU2^(3/2)*\[Lambda]VVSL[2]*(12*\[Mu]sqU1*\[Lambda]VL[6] + (c33d - 2*\[Lambda]VVSL[2])*\[Lambda]VVSL[2]))/(128*Pi*\[Mu]sqSU2^(3/2)*\[Mu]sqU1^(3/2)), \[Mu]m3dUS -> \[Mu]m3d - ((3*\[Lambda]VVSL[1]*(48*\[Mu]sqSU2*\[Lambda]VL[3] + \[Mu]m3d*\[Lambda]VVSL[1]))/\[Mu]sqSU2^(3/2) + (48*\[Lambda]VL[2]*\[Lambda]VVSL[2])/Sqrt[\[Mu]sqU1] + (\[Mu]m3d*\[Lambda]VVSL[2]^2)/\[Mu]sqU1^(3/2))/(384*Pi)}
 ]];
 
 
@@ -628,7 +628,7 @@ TestCreate[PrintScalarMassUS["NLO"],
 
 AppendTo[testList,
 TestCreate[BetaFunctions3DUS[],
-	{m13dUS->1/(256 \[Pi]^2) (-51 g23dUS^4+5 g13dUS^4 Y\[Phi]^4+18 g23dUS^2 (g13dUS^2 Y\[Phi]^2-8 \[Lambda]1H3dUS)-48 g13dUS^2 Y\[Phi]^2 \[Lambda]1H3dUS+8 (24 \[Lambda]1H3dUS^2+\[Lambda]m3dUS^2)),\[Mu]\[Sigma]3dUS->(-((3 g23dUS^2+g13dUS^2 Y\[Phi]^2-2 \[Lambda]m3dUS) \[Lambda]m3dUS)+6 \[Lambda]\[Sigma]3dUS^2)/(16 \[Pi]^2),\[Mu]13dUS->(4 \[Lambda]\[Sigma]3dUS \[Mu]33dUS-3 g23dUS^2 \[Mu]m3dUS-g13dUS^2 Y\[Phi]^2 \[Mu]m3dUS+2 \[Lambda]m3dUS \[Mu]m3dUS)/(32 \[Pi]^2)}
+	{m13dUS->1/(256 \[Pi]^2) (-51 g23dUS^4+5 g13dUS^4 Y\[Phi]^4+18 g23dUS^2 (g13dUS^2 Y\[Phi]^2-8 \[Lambda]1H3dUS)-48 g13dUS^2 Y\[Phi]^2 \[Lambda]1H3dUS+8 (24 \[Lambda]1H3dUS^2+\[Lambda]m3dUS^2)),\[Mu]\[Sigma]3dUS->(-((3 g23dUS^2+g13dUS^2 Y\[Phi]^2-2 \[Lambda]m3dUS) \[Lambda]m3dUS)+6 \[Lambda]\[Sigma]3dUS^2)/(16 \[Pi]^2),\[Mu]13dUS->(4 \[Lambda]\[Sigma]3dUS c33dUS-3 g23dUS^2 \[Mu]m3dUS-g13dUS^2 Y\[Phi]^2 \[Mu]m3dUS+2 \[Lambda]m3dUS \[Mu]m3dUS)/(32 \[Pi]^2)}
 ]];
 
 
@@ -654,17 +654,17 @@ testList={};
 
 AppendTo[testList,
 TestCreate[PrintCouplingsUS[],
-	{\[Lambda]1H3dUS -> (32*\[Lambda]1H3d*(12 - (5*\[Mu]m3d^2)/(Pi*\[Mu]\[Sigma]3d^(3/2))) - (48*\[Mu]m3d*(2*\[Mu]13d*\[Mu]33d*\[Mu]m3d - 4*\[Lambda]m3d*\[Mu]13d*\[Mu]\[Sigma]3d + \[Mu]m3d*\[Mu]\[Sigma]3d^2))/\[Mu]\[Sigma]3d^3 - ((8*\[Lambda]m3d*\[Mu]13d*\[Mu]m3d^3 + \[Mu]m3d^2*(-12*\[Mu]33d^2 + 12*\[Mu]33d*\[Mu]m3d - 17*\[Mu]m3d^2)*\[Mu]\[Sigma]3d + 12*\[Mu]m3d*(2*\[Lambda]m3d*\[Mu]33d - 5*\[Lambda]m3d*\[Mu]m3d + 3*\[Lambda]\[Sigma]3d*\[Mu]m3d)*\[Mu]\[Sigma]3d^2 + 12*\[Lambda]m3d^2*\[Mu]\[Sigma]3d^3)/\[Mu]\[Sigma]3d^(7/2) + 12*((8*\[Lambda]VL[1]^2)/Sqrt[\[Mu]sqSU3] + \[Lambda]VL[2]^2/Sqrt[\[Mu]sqU1] + (3*\[Lambda]VL[3]^2)/Sqrt[\[Mu]sqSU2] + (4*\[Lambda]VL[4]^2)/(Sqrt[\[Mu]sqSU2] + Sqrt[\[Mu]sqU1])))/Pi)/384, g13dUS^2 -> g13d^2, g23dUS^2 -> g23d^2 - g23d^4/(24*Pi*Sqrt[\[Mu]sqSU2]), g33dUS^2 -> g33d^2 - g33d^4/(16*Pi*Sqrt[\[Mu]sqSU3])}
+	{\[Lambda]1H3dUS -> (32*\[Lambda]1H3d*(12 - (5*\[Mu]m3d^2)/(Pi*\[Mu]\[Sigma]3d^(3/2))) - (48*\[Mu]m3d*(2*\[Mu]13d*c33d*\[Mu]m3d - 4*\[Lambda]m3d*\[Mu]13d*\[Mu]\[Sigma]3d + \[Mu]m3d*\[Mu]\[Sigma]3d^2))/\[Mu]\[Sigma]3d^3 - ((8*\[Lambda]m3d*\[Mu]13d*\[Mu]m3d^3 + \[Mu]m3d^2*(-12*c33d^2 + 12*c33d*\[Mu]m3d - 17*\[Mu]m3d^2)*\[Mu]\[Sigma]3d + 12*\[Mu]m3d*(2*\[Lambda]m3d*c33d - 5*\[Lambda]m3d*\[Mu]m3d + 3*\[Lambda]\[Sigma]3d*\[Mu]m3d)*\[Mu]\[Sigma]3d^2 + 12*\[Lambda]m3d^2*\[Mu]\[Sigma]3d^3)/\[Mu]\[Sigma]3d^(7/2) + 12*((8*\[Lambda]VL[1]^2)/Sqrt[\[Mu]sqSU3] + \[Lambda]VL[2]^2/Sqrt[\[Mu]sqU1] + (3*\[Lambda]VL[3]^2)/Sqrt[\[Mu]sqSU2] + (4*\[Lambda]VL[4]^2)/(Sqrt[\[Mu]sqSU2] + Sqrt[\[Mu]sqU1])))/Pi)/384, g13dUS^2 -> g13d^2, g23dUS^2 -> g23d^2 - g23d^4/(24*Pi*Sqrt[\[Mu]sqSU2]), g33dUS^2 -> g33d^2 - g33d^4/(16*Pi*Sqrt[\[Mu]sqSU3])}
 ]];
 
 
 AppendTo[testList,
 TestCreate[PrintScalarMassUS["LO"],
-	{m13dUS -> m13d - (8*Pi*\[Mu]13d*\[Mu]m3d - 2*\[Mu]33d*\[Mu]m3d*Sqrt[\[Mu]\[Sigma]3d] + \[Mu]m3d^2*Sqrt[\[Mu]\[Sigma]3d] + 2*\[Lambda]m3d*\[Mu]\[Sigma]3d^(3/2) + 16*Sqrt[\[Mu]sqSU3]*\[Mu]\[Sigma]3d*\[Lambda]VL[1] + 2*Sqrt[\[Mu]sqU1]*\[Mu]\[Sigma]3d*\[Lambda]VL[2] + 6*Sqrt[\[Mu]sqSU2]*\[Mu]\[Sigma]3d*\[Lambda]VL[3])/(16*Pi*\[Mu]\[Sigma]3d)}
+	{m13dUS -> m13d - (8*Pi*\[Mu]13d*\[Mu]m3d - 2*c33d*\[Mu]m3d*Sqrt[\[Mu]\[Sigma]3d] + \[Mu]m3d^2*Sqrt[\[Mu]\[Sigma]3d] + 2*\[Lambda]m3d*\[Mu]\[Sigma]3d^(3/2) + 16*Sqrt[\[Mu]sqSU3]*\[Mu]\[Sigma]3d*\[Lambda]VL[1] + 2*Sqrt[\[Mu]sqU1]*\[Mu]\[Sigma]3d*\[Lambda]VL[2] + 6*Sqrt[\[Mu]sqSU2]*\[Mu]\[Sigma]3d*\[Lambda]VL[3])/(16*Pi*\[Mu]\[Sigma]3d)}
 ]];
 AppendTo[testList,
 TestCreate[PrintScalarMassUS["NLO"],
-	{m13dUS -> (72*\[Lambda]m3d*\[Lambda]\[Sigma]3d - (4*\[Mu]m3d^3*(-4*Pi*\[Mu]13d + \[Mu]33d*Sqrt[\[Mu]\[Sigma]3d]))/\[Mu]\[Sigma]3d^(5/2) + (2*\[Mu]m3d^4)/\[Mu]\[Sigma]3d^2 - (128*m13d*Pi*\[Mu]m3d^2)/\[Mu]\[Sigma]3d^(3/2) - (144*\[Lambda]1H3d*\[Mu]m3d^2)/\[Mu]\[Sigma]3d + (6*\[Lambda]m3d*\[Mu]m3d*(\[Mu]33d + \[Mu]m3d))/\[Mu]\[Sigma]3d + (8*(4*\[Lambda]m3d*\[Mu]33d^2 + 18*\[Lambda]1H3d*\[Mu]m3d^2 + 3*\[Lambda]m3d*\[Mu]m3d^2))/\[Mu]\[Sigma]3d + (48*\[Lambda]m3d*\[Mu]m3d*(\[Mu]m3d*Log[2] + \[Mu]33d*Log[9/4]))/\[Mu]\[Sigma]3d - 72*g23d^4*Log[\[Mu]3/(2*Sqrt[\[Mu]sqSU2])] - 24*\[Lambda]m3d^2*(1 + 2*Log[\[Mu]3/(2*Sqrt[\[Mu]\[Sigma]3d])]) - (288*\[Lambda]1H3d*\[Mu]m3d^2*Log[\[Mu]3/Sqrt[\[Mu]\[Sigma]3d]])/\[Mu]\[Sigma]3d + (3*\[Mu]m3d^3*(\[Mu]m3d - 8*\[Mu]33d*Log[4/3] + \[Mu]m3d*Log[4] + 2*\[Mu]m3d*Log[\[Mu]3/Sqrt[\[Mu]\[Sigma]3d]]))/\[Mu]\[Sigma]3d^2 + 576*g33d^2*(1 + 4*Log[\[Mu]3/(2*Sqrt[\[Mu]sqSU3])])*\[Lambda]VL[1] - 192*(1 + 2*Log[\[Mu]3/(2*Sqrt[\[Mu]sqSU3])])*\[Lambda]VL[1]^2 - 24*(1 + 2*Log[\[Mu]3/(2*Sqrt[\[Mu]sqU1])])*\[Lambda]VL[2]^2 + 144*g23d^2*(1 + 4*Log[\[Mu]3/(2*Sqrt[\[Mu]sqSU2])])*\[Lambda]VL[3] - 72*(1 + 2*Log[\[Mu]3/(2*Sqrt[\[Mu]sqSU2])])*\[Lambda]VL[3]^2 + (4*\[Mu]m3d^2*(\[Lambda]m3d*Sqrt[\[Mu]\[Sigma]3d] + 8*Sqrt[\[Mu]sqSU3]*\[Lambda]VL[1] + Sqrt[\[Mu]sqU1]*\[Lambda]VL[2] + 3*Sqrt[\[Mu]sqSU2]*\[Lambda]VL[3]))/\[Mu]\[Sigma]3d^(3/2) - 144*(1 + 2*Log[\[Mu]3/(Sqrt[\[Mu]sqSU2] + Sqrt[\[Mu]sqU1])])*\[Lambda]VL[4]^2 + (32*\[Lambda]VL[1]*(9*Sqrt[\[Mu]sqSU2]*\[Lambda]VLL[1] + 10*Sqrt[\[Mu]sqSU3]*\[Lambda]VLL[2] + 3*Sqrt[\[Mu]sqU1]*\[Lambda]VLL[7]))/Sqrt[\[Mu]sqSU3] + (12*\[Lambda]VL[3]*(24*Sqrt[\[Mu]sqSU3]*\[Lambda]VLL[1] + 5*Sqrt[\[Mu]sqSU2]*\[Lambda]VLL[3] + 3*Sqrt[\[Mu]sqU1]*\[Lambda]VLL[8]))/Sqrt[\[Mu]sqSU2] + (12*\[Lambda]VL[2]*(8*Sqrt[\[Mu]sqSU3]*\[Lambda]VLL[7] + 3*Sqrt[\[Mu]sqSU2]*\[Lambda]VLL[8] + Sqrt[\[Mu]sqU1]*\[Lambda]VLL[9]))/Sqrt[\[Mu]sqU1])/(1536*Pi^2)}
+	{m13dUS -> (72*\[Lambda]m3d*\[Lambda]\[Sigma]3d - (4*\[Mu]m3d^3*(-4*Pi*\[Mu]13d + c33d*Sqrt[\[Mu]\[Sigma]3d]))/\[Mu]\[Sigma]3d^(5/2) + (2*\[Mu]m3d^4)/\[Mu]\[Sigma]3d^2 - (128*m13d*Pi*\[Mu]m3d^2)/\[Mu]\[Sigma]3d^(3/2) + (32*c33d^2*\[Lambda]m3d)/\[Mu]\[Sigma]3d - (144*\[Lambda]1H3d*\[Mu]m3d^2)/\[Mu]\[Sigma]3d + (24*(6*\[Lambda]1H3d + \[Lambda]m3d)*\[Mu]m3d^2)/\[Mu]\[Sigma]3d + (6*\[Lambda]m3d*\[Mu]m3d*(c33d + \[Mu]m3d))/\[Mu]\[Sigma]3d + (48*\[Lambda]m3d*\[Mu]m3d*(\[Mu]m3d*Log[2] + c33d*Log[9/4]))/\[Mu]\[Sigma]3d - 72*g23d^4*Log[\[Mu]3/(2*Sqrt[\[Mu]sqSU2])] - 24*\[Lambda]m3d^2*(1 + 2*Log[\[Mu]3/(2*Sqrt[\[Mu]\[Sigma]3d])]) - (288*\[Lambda]1H3d*\[Mu]m3d^2*Log[\[Mu]3/Sqrt[\[Mu]\[Sigma]3d]])/\[Mu]\[Sigma]3d + (3*\[Mu]m3d^3*(\[Mu]m3d - 8*c33d*Log[4/3] + \[Mu]m3d*Log[4] + 2*\[Mu]m3d*Log[\[Mu]3/Sqrt[\[Mu]\[Sigma]3d]]))/\[Mu]\[Sigma]3d^2 + 576*g33d^2*(1 + 4*Log[\[Mu]3/(2*Sqrt[\[Mu]sqSU3])])*\[Lambda]VL[1] - 192*(1 + 2*Log[\[Mu]3/(2*Sqrt[\[Mu]sqSU3])])*\[Lambda]VL[1]^2 - 24*(1 + 2*Log[\[Mu]3/(2*Sqrt[\[Mu]sqU1])])*\[Lambda]VL[2]^2 + 144*g23d^2*(1 + 4*Log[\[Mu]3/(2*Sqrt[\[Mu]sqSU2])])*\[Lambda]VL[3] - 72*(1 + 2*Log[\[Mu]3/(2*Sqrt[\[Mu]sqSU2])])*\[Lambda]VL[3]^2 + (4*\[Mu]m3d^2*(\[Lambda]m3d*Sqrt[\[Mu]\[Sigma]3d] + 8*Sqrt[\[Mu]sqSU3]*\[Lambda]VL[1] + Sqrt[\[Mu]sqU1]*\[Lambda]VL[2] + 3*Sqrt[\[Mu]sqSU2]*\[Lambda]VL[3]))/\[Mu]\[Sigma]3d^(3/2) - 144*(1 + 2*Log[\[Mu]3/(Sqrt[\[Mu]sqSU2] + Sqrt[\[Mu]sqU1])])*\[Lambda]VL[4]^2 + (32*\[Lambda]VL[1]*(9*Sqrt[\[Mu]sqSU2]*\[Lambda]VLL[1] + 10*Sqrt[\[Mu]sqSU3]*\[Lambda]VLL[2] + 3*Sqrt[\[Mu]sqU1]*\[Lambda]VLL[7]))/Sqrt[\[Mu]sqSU3] + (12*\[Lambda]VL[3]*(24*Sqrt[\[Mu]sqSU3]*\[Lambda]VLL[1] + 5*Sqrt[\[Mu]sqSU2]*\[Lambda]VLL[3] + 3*Sqrt[\[Mu]sqU1]*\[Lambda]VLL[8]))/Sqrt[\[Mu]sqSU2] + (12*\[Lambda]VL[2]*(8*Sqrt[\[Mu]sqSU3]*\[Lambda]VLL[7] + 3*Sqrt[\[Mu]sqSU2]*\[Lambda]VLL[8] + Sqrt[\[Mu]sqU1]*\[Lambda]VLL[9]))/Sqrt[\[Mu]sqU1])/(1536*Pi^2)}
 ]];
 
 
@@ -696,7 +696,7 @@ testList={};
 
 AppendTo[testList,
 TestCreate[PrintCouplingsUS[],
-	{\[Lambda]\[Sigma]3dUS -> -1/1536*((192*m13d^2*\[Lambda]m3d^2 + 16*m13d*(-3*\[Lambda]m3d + \[Lambda]\[Sigma]3d)*\[Mu]m3d^2 + 3*\[Mu]m3d^4)/m13d^(5/2) + 48*(-32*Pi*\[Lambda]\[Sigma]3d + (3*\[Lambda]VL[5]^2)/Sqrt[\[Mu]sqSU2] + \[Lambda]VL[6]^2/Sqrt[\[Mu]sqU1]))/Pi, g23dUS^2 -> g23d^2 - (g23d^4*(1/Sqrt[m13d] + 2/Sqrt[\[Mu]sqSU2]))/(48*Pi), g33dUS^2 -> g33d^2 - g33d^4/(16*Pi*Sqrt[\[Mu]sqSU3]), \[Mu]33dUS -> \[Mu]33d + (\[Mu]m3d*(-24*m13d*\[Lambda]m3d + \[Mu]m3d*(-\[Mu]33d + \[Mu]m3d)))/(128*m13d^(3/2)*Pi)}
+	{\[Lambda]\[Sigma]3dUS -> -1/1536*((192*m13d^2*\[Lambda]m3d^2 + 16*m13d*(-3*\[Lambda]m3d + \[Lambda]\[Sigma]3d)*\[Mu]m3d^2 + 3*\[Mu]m3d^4)/m13d^(5/2) + 48*(-32*Pi*\[Lambda]\[Sigma]3d + (3*\[Lambda]VL[5]^2)/Sqrt[\[Mu]sqSU2] + \[Lambda]VL[6]^2/Sqrt[\[Mu]sqU1]))/Pi, g23dUS^2 -> g23d^2 - (g23d^4*(1/Sqrt[m13d] + 2/Sqrt[\[Mu]sqSU2]))/(48*Pi), g33dUS^2 -> g33d^2 - g33d^4/(16*Pi*Sqrt[\[Mu]sqSU3]), c33dUS -> c33d + (\[Mu]m3d*(-24*m13d*\[Lambda]m3d + \[Mu]m3d*(-c33d + \[Mu]m3d)))/(128*m13d^(3/2)*Pi)}
 ]];
 
 
@@ -706,13 +706,13 @@ TestCreate[PrintScalarMassUS["LO"],
 ]];
 AppendTo[testList,
 TestCreate[PrintScalarMassUS["NLO"],
-	{\[Mu]\[Sigma]3dUS -> (576*\[Lambda]1H3d*\[Lambda]m3d + (12*\[Lambda]m3d*\[Mu]m3d^2)/m13d + (24*(\[Lambda]m3d + 3*\[Lambda]\[Sigma]3d)*\[Mu]m3d^2)/m13d + \[Mu]m3d^4/(2*m13d^2) + (96*\[Lambda]m3d*\[Mu]m3d*(2*\[Mu]33d + \[Mu]m3d))/m13d - (3*\[Mu]m3d^3*(8*\[Mu]33d + \[Mu]m3d))/m13d^2 - (8*Pi*\[Mu]m3d^2*\[Mu]\[Sigma]3d)/m13d^(3/2) - 96*\[Lambda]m3d^2*(1 + 2*Log[\[Mu]3/(2*Sqrt[m13d])]) + 24*(3*g23d^2 + g13d^2*Y\[Phi]^2)*\[Lambda]m3d*(1 + 4*Log[\[Mu]3/(2*Sqrt[m13d])]) + 144*g23d^2*(1 + 4*Log[\[Mu]3/(2*Sqrt[\[Mu]sqSU2])])*\[Lambda]VL[5] - 72*(1 + 2*Log[\[Mu]3/(2*Sqrt[\[Mu]sqSU2])])*\[Lambda]VL[5]^2 - 24*(1 + 2*Log[\[Mu]3/(2*Sqrt[\[Mu]sqU1])])*\[Lambda]VL[6]^2 + (\[Mu]m3d^2*(4*Sqrt[m13d]*\[Lambda]m3d + 3*Sqrt[\[Mu]sqSU2]*\[Lambda]VL[5] + Sqrt[\[Mu]sqU1]*\[Lambda]VL[6]))/m13d^(3/2) + (12*\[Lambda]VL[5]*(24*Sqrt[\[Mu]sqSU3]*\[Lambda]VLL[1] + 5*Sqrt[\[Mu]sqSU2]*\[Lambda]VLL[3] + 3*Sqrt[\[Mu]sqU1]*\[Lambda]VLL[8]))/Sqrt[\[Mu]sqSU2] + (12*\[Lambda]VL[6]*(8*Sqrt[\[Mu]sqSU3]*\[Lambda]VLL[7] + 3*Sqrt[\[Mu]sqSU2]*\[Lambda]VLL[8] + Sqrt[\[Mu]sqU1]*\[Lambda]VLL[9]))/Sqrt[\[Mu]sqU1])/(1536*Pi^2)}
+	{\[Mu]\[Sigma]3dUS -> (576*\[Lambda]1H3d*\[Lambda]m3d + (12*\[Lambda]m3d*\[Mu]m3d^2)/m13d + (24*(\[Lambda]m3d + 3*\[Lambda]\[Sigma]3d)*\[Mu]m3d^2)/m13d + \[Mu]m3d^4/(2*m13d^2) + (96*\[Lambda]m3d*\[Mu]m3d*(2*c33d + \[Mu]m3d))/m13d - (3*\[Mu]m3d^3*(8*c33d + \[Mu]m3d))/m13d^2 - (8*Pi*\[Mu]m3d^2*\[Mu]\[Sigma]3d)/m13d^(3/2) - 96*\[Lambda]m3d^2*(1 + 2*Log[\[Mu]3/(2*Sqrt[m13d])]) + 24*(3*g23d^2 + g13d^2*Y\[Phi]^2)*\[Lambda]m3d*(1 + 4*Log[\[Mu]3/(2*Sqrt[m13d])]) + 144*g23d^2*(1 + 4*Log[\[Mu]3/(2*Sqrt[\[Mu]sqSU2])])*\[Lambda]VL[5] - 72*(1 + 2*Log[\[Mu]3/(2*Sqrt[\[Mu]sqSU2])])*\[Lambda]VL[5]^2 - 24*(1 + 2*Log[\[Mu]3/(2*Sqrt[\[Mu]sqU1])])*\[Lambda]VL[6]^2 + (\[Mu]m3d^2*(4*Sqrt[m13d]*\[Lambda]m3d + 3*Sqrt[\[Mu]sqSU2]*\[Lambda]VL[5] + Sqrt[\[Mu]sqU1]*\[Lambda]VL[6]))/m13d^(3/2) + (12*\[Lambda]VL[5]*(24*Sqrt[\[Mu]sqSU3]*\[Lambda]VLL[1] + 5*Sqrt[\[Mu]sqSU2]*\[Lambda]VLL[3] + 3*Sqrt[\[Mu]sqU1]*\[Lambda]VLL[8]))/Sqrt[\[Mu]sqSU2] + (12*\[Lambda]VL[6]*(8*Sqrt[\[Mu]sqSU3]*\[Lambda]VLL[7] + 3*Sqrt[\[Mu]sqSU2]*\[Lambda]VLL[8] + Sqrt[\[Mu]sqU1]*\[Lambda]VLL[9]))/Sqrt[\[Mu]sqU1])/(1536*Pi^2)}
 ]];
 
 
 AppendTo[testList,
 TestCreate[BetaFunctions3DUS[],
-	{\[Mu]\[Sigma]3dUS->(3 \[Lambda]\[Sigma]3dUS^2)/(8 \[Pi]^2),\[Mu]13dUS->(\[Lambda]\[Sigma]3dUS \[Mu]33dUS)/(8 \[Pi]^2)}
+	{\[Mu]\[Sigma]3dUS->(3 \[Lambda]\[Sigma]3dUS^2)/(8 \[Pi]^2),\[Mu]13dUS->(\[Lambda]\[Sigma]3dUS c33dUS)/(8 \[Pi]^2)}
 ]];
 
 
@@ -728,7 +728,7 @@ TestCreate[PrintPressureUS["LO"],
 ]];
 AppendTo[testList,
 TestCreate[PrintPressureUS["NLO"],
-	-((3 g23d^2 (6 m13d+8 m13d Log[\[Mu]3/(2 Sqrt[m13d])]))/(128 \[Pi]^2))-(g13d^2 Y\[Phi]^2 (6 m13d+8 m13d Log[\[Mu]3/(2 Sqrt[m13d])]))/(128 \[Pi]^2)-(3 g23d^2 (6 \[Mu]sqSU2+8 \[Mu]sqSU2 Log[\[Mu]3/(2 Sqrt[\[Mu]sqSU2])]))/(64 \[Pi]^2)-(3 g33d^2 (6 \[Mu]sqSU3+8 \[Mu]sqSU3 Log[\[Mu]3/(2 Sqrt[\[Mu]sqSU3])]))/(16 \[Pi]^2)-1/(128 \[Pi]^2) (48 m13d \[Lambda]1H3d+48 Sqrt[\[Mu]sqSU2] Sqrt[\[Mu]sqSU3] \[Lambda]VLL[1]+80/3 \[Mu]sqSU3 \[Lambda]VLL[2]+5 \[Mu]sqSU2 \[Lambda]VLL[3]+16 Sqrt[\[Mu]sqSU3] Sqrt[\[Mu]sqU1] \[Lambda]VLL[7]+6 Sqrt[\[Mu]sqSU2] Sqrt[\[Mu]sqU1] \[Lambda]VLL[8]+\[Mu]sqU1 \[Lambda]VLL[9])
+	(\[Mu]m3d^2 (1/2+Log[\[Mu]3/(2 Sqrt[m13d])]))/(64 \[Pi]^2)-((3 g23d^2 (6 m13d+8 m13d Log[\[Mu]3/(2 Sqrt[m13d])]))/(128 \[Pi]^2))-(g13d^2 Y\[Phi]^2 (6 m13d+8 m13d Log[\[Mu]3/(2 Sqrt[m13d])]))/(128 \[Pi]^2)-(3 g23d^2 (6 \[Mu]sqSU2+8 \[Mu]sqSU2 Log[\[Mu]3/(2 Sqrt[\[Mu]sqSU2])]))/(64 \[Pi]^2)-(3 g33d^2 (6 \[Mu]sqSU3+8 \[Mu]sqSU3 Log[\[Mu]3/(2 Sqrt[\[Mu]sqSU3])]))/(16 \[Pi]^2)-1/(128 \[Pi]^2) (48 m13d \[Lambda]1H3d+48 Sqrt[\[Mu]sqSU2] Sqrt[\[Mu]sqSU3] \[Lambda]VLL[1]+80/3 \[Mu]sqSU3 \[Lambda]VLL[2]+5 \[Mu]sqSU2 \[Lambda]VLL[3]+16 Sqrt[\[Mu]sqSU3] Sqrt[\[Mu]sqU1] \[Lambda]VLL[7]+6 Sqrt[\[Mu]sqSU2] Sqrt[\[Mu]sqU1] \[Lambda]VLL[8]+\[Mu]sqU1 \[Lambda]VLL[9])
 ]];
 
 

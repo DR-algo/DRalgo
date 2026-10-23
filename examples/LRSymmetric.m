@@ -58,10 +58,11 @@ InputInv={{3,3},{True,False}}; (*Tr\[CapitalDelta]R \[CapitalDelta]R^+*)
 MassTerm5=CreateInvariant[Group,RepScalar,InputInv][[1]]//Simplify;
 
 
+(*The mass of the triplets is called \[Mu]\[CapitalDelta], since \[Mu]3 denotes the 3d renormalization scale*)
 VMass=(
 	+\[Mu]1*MassTerm1
 	+\[Mu]2(MassTerm2+MassTerm3)
-	+\[Mu]3(MassTerm4+MassTerm5)
+	+\[Mu]\[CapitalDelta](MassTerm4+MassTerm5)
 	);
 
 
@@ -146,11 +147,16 @@ VQuartic=Quartic1+Quartic2+Quartic3+Quartic4+Quartic5+Quartic6;
 \[Lambda]4=GradQuartic[VQuartic]//SparseArray;
 
 
-InputInv={{1,1,2},{True,True,False}};  
+(*
+	As in sm.m, the left-handed quarks enter conjugated and the right-handed quarks not.
+	For the opposite flags, Ysff is not invariant under the generators gvff of the fermions,
+	and the one-loop couplings of the temporal scalars break the gauge symmetry.
+*)
+InputInv={{1,1,2},{False,False,True}}; (*\[CapitalPhi]^+ QL^+ QR*)
 YukawaTerm1=CreateInvariantYukawa[Group,RepScalar,RepFermion3Gen,InputInv]//Simplify;
 
 
-InputInv={{1,1,2},{False,True,False}};  
+InputInv={{1,1,2},{True,False,True}}; (*\[CapitalPhi] QL^+ QR*)
 YukawaTerm2=CreateInvariantYukawa[Group,RepScalar,RepFermion3Gen,InputInv]//Simplify;
 
 
