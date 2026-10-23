@@ -874,14 +874,15 @@ PerformDRsoft[ListHardP_]:=Module[{ListHardI=ListHardP},
 	VectorSelfEnergySS[];
 	ScalarMassSS[];
 	
-	If[mode>=1,
+(*If all scalars are integrated out, the ultrasoft theory has no scalar couplings, and only the pressure and the gauge couplings are computed*)
+	If[mode>=1&&nSL>0,
 		ScalarVectorCouplingSS[];
 		ScalarQuarticSS[];
 		ScalarCubicsSS[];
 	];
 	
 	If[mode>=2,
-		ScalarMass2LoopSS[];
+		If[nSL>0,ScalarMass2LoopSS[]];
 		SymmetricPhaseEnergyUS[];
 	];
 
@@ -890,7 +891,7 @@ PerformDRsoft[ListHardP_]:=Module[{ListHardI=ListHardP},
 	and another 3(g^4 Lb), the function replaces element 2 by three times the first element. This also
 	works for linear combinations of elements.
 *)
-	IdentifyTensorsSSDRalgo[]
+	If[nSL>0,IdentifyTensorsSSDRalgo[]]
 ];
 
 
