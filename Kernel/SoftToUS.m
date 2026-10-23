@@ -240,8 +240,9 @@ Mixing diagram with two H^3S quartics: ----O---O------
 	muijTemp=muijLight+muijSSLO//SparseArray;
 	ContriSE=-(ZSij . muijTemp+muijTemp . ZSij);
 
-(*Bubble with one light and one heavy line, with one insertion of the light mass*)
-	ContriInsertion=Simplify[Table[Sum[lam3Cy[[i,a,hh]]muijLight[[a,b]]lam3Cy[[j,b,hh]]TriangleIntegral3d[0,0,muijL[[hh,hh]]^2],{a,1,nSL},{b,1,nSL},{hh,1,nSH}],{i,1,nSL},{j,1,nSL}]];
+(*Bubble with one light and one heavy line, with one insertion of the light mass: the tree-level mass and the momentum-independent
+	one-loop terms, from the tadpoles of the heavy fields and the temporal scalars*)
+	ContriInsertion=Simplify[Table[Sum[lam3Cy[[i,a,hh]](muijLight+muijSSLOTadpoles)[[a,b]]lam3Cy[[j,b,hh]]TriangleIntegral3d[0,0,muijL[[hh,hh]]^2],{a,1,nSL},{b,1,nSL},{hh,1,nSH}],{i,1,nSL},{j,1,nSL}]];
 
 	muijSSNLO=(Contri1+Contri2+Contri3+ Contri4+Contri5+Contri6+Contri7+ContriMix1+ContriMix2+ContriSE+ContriInsertion+muijSSCubic)//Simplify//SparseArray;
 
@@ -268,6 +269,8 @@ If[verbose,Print["Calculating 1-Loop Scalar Mass"]];
 	ContriSS3=-1/2 Simplify[Table[Sum[TadpoleIntegral3d[muijL[[a,a]]^2]lamK[[a,a,i,j]],{a,1,nSH}],{i,1,nSL},{j,1,nSL}]];
 
 	muijSSLO=-ContriSS3-ContriSS-ContriSS2-ContriTadpole//SparseArray;
+(*The terms without momentum dependence, which are inserted on the light lines of the two-loop masses*)
+	muijSSLOTadpoles=-ContriSS3-ContriTadpole//SparseArray;
 
 ];
 
