@@ -3,7 +3,10 @@
 (*Quit[];*)
 
 
-SetDirectory[NotebookDirectory[]];
+If[$InputFileName=="",
+	SetDirectory[NotebookDirectory[]],
+	SetDirectory[DirectoryName[$InputFileName]]
+];
 DRalgo`DRalgo`$LoadGroupMath=True;
 DRalgo`DRalgo`$GroupMathMultipleModels=True; (*Put this if you want to create multiple model-files with the same kernel*)
 <<../Kernel/DRalgo.m

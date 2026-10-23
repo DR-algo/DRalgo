@@ -3,7 +3,10 @@
 (*Quit[];*)
 
 
-SetDirectory[NotebookDirectory[]];
+If[$InputFileName=="",
+	SetDirectory[NotebookDirectory[]],
+	SetDirectory[DirectoryName[$InputFileName]]
+];
 DRalgo`DRalgo`$LoadGroupMath=True;
 <<../Kernel/DRalgo.m
 

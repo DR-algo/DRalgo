@@ -250,11 +250,11 @@ CalculatePotentialUS[OptionsPattern[]]:=Module[{},
 		];
 	,
 		(*We now treat off-diagonal masses as small*)
-		muijPert=ArrayRules[muij\[Phi]]/.({x_Integer,y_Integer}->a_)/;Equal[x,y]->{x,y}->0//SparseArray;
-		muij\[Phi]=ArrayRules[muij\[Phi]]/.({x_Integer,y_Integer}->a_)/;Unequal[x,y]->{x,y}->0//SparseArray;
+		muijPert=ArrayRules[muij\[Phi]]/.({x_Integer,y_Integer}->a_)/;Equal[x,y]->{x,y}->0//SparseArray[#,Dimensions[muij\[Phi]]]&;
+		muij\[Phi]=ArrayRules[muij\[Phi]]/.({x_Integer,y_Integer}->a_)/;Unequal[x,y]->{x,y}->0//SparseArray[#,Dimensions[muij\[Phi]]]&;
 		
-		muab\[Phi]Pert=ArrayRules[muab\[Phi]]/.({x_Integer,y_Integer}->a_)/;Equal[x,y]->{x,y}->0//SparseArray;
-		muab\[Phi]=ArrayRules[muab\[Phi]]/.({x_Integer,y_Integer}->a_)/;Unequal[x,y]->{x,y}->0//SparseArray;
+		muab\[Phi]Pert=ArrayRules[muab\[Phi]]/.({x_Integer,y_Integer}->a_)/;Equal[x,y]->{x,y}->0//SparseArray[#,Dimensions[muab\[Phi]]]&;
+		muab\[Phi]=ArrayRules[muab\[Phi]]/.({x_Integer,y_Integer}->a_)/;Unequal[x,y]->{x,y}->0//SparseArray[#,Dimensions[muab\[Phi]]]&;
 		
 		CalculateLOPotentialSS[];
 		CalculateNLOPotentialSS[];
@@ -292,11 +292,11 @@ CalculatePotential[OptionsPattern[]]:=Module[{},
 		];
 	,
 		(*We now treat off-diagonal masses as small*)
-		muijPert=ArrayRules[muij\[Phi]]/.({x_Integer,y_Integer}->a_)/;Equal[x,y]->{x,y}->0//SparseArray;
-		muij\[Phi]=ArrayRules[muij\[Phi]]/.({x_Integer,y_Integer}->a_)/;Unequal[x,y]->{x,y}->0//SparseArray;
+		muijPert=ArrayRules[muij\[Phi]]/.({x_Integer,y_Integer}->a_)/;Equal[x,y]->{x,y}->0//SparseArray[#,Dimensions[muij\[Phi]]]&;
+		muij\[Phi]=ArrayRules[muij\[Phi]]/.({x_Integer,y_Integer}->a_)/;Unequal[x,y]->{x,y}->0//SparseArray[#,Dimensions[muij\[Phi]]]&;
 		
-		muab\[Phi]Pert=ArrayRules[muab\[Phi]]/.({x_Integer,y_Integer}->a_)/;Equal[x,y]->{x,y}->0//SparseArray;
-		muab\[Phi]=ArrayRules[muab\[Phi]]/.({x_Integer,y_Integer}->a_)/;Unequal[x,y]->{x,y}->0//SparseArray;
+		muab\[Phi]Pert=ArrayRules[muab\[Phi]]/.({x_Integer,y_Integer}->a_)/;Equal[x,y]->{x,y}->0//SparseArray[#,Dimensions[muab\[Phi]]]&;
+		muab\[Phi]=ArrayRules[muab\[Phi]]/.({x_Integer,y_Integer}->a_)/;Unequal[x,y]->{x,y}->0//SparseArray[#,Dimensions[muab\[Phi]]]&;
 		
 		CalculateLOPotentialSS[];
 		CalculateNLOPotentialSS[];
@@ -333,19 +333,19 @@ PrintEffectivePotential[optP_]:=Module[{opt=optP},
 
 
 (*
-	Calculates the tree-level effective potential.
+	Calculates the contribution of the off-diagonal masses P to second order, the one-loop diagram with two
+	mass insertions, -1/4 Sum[BubbleIntegral3d[m_i,m_l] P_il P_li], which is the O(P^2) term of the one-loop
+	potential. Vectors give twice that in Landau gauge.
 *)
-CalculateOffDiagPotentialSS[]:=Module[{V1,V2,helpTens},
+CalculateOffDiagPotentialSS[]:=Module[{V1,V2,helpTens,a,b},
 		
 (*Scalar contribution*)
 		helpTens=Table[BubbleIntegral3d[a,b],{a,Diagonal[muij\[Phi]]},{b,Diagonal[muij\[Phi]]}]//SparseArray;
-		helpTens=TensorProduct[helpTens,muijPert]//SparseArray//DiagonalTensor2[#,1,3]&;
-		V1=Tr[helpTens . muijPert];
+		V1=-1/4 Tr[(helpTens muijPert) . muijPert];
 
 (*Vector contribution*)
 		helpTens=Table[BubbleIntegral3d[a,b],{a,Diagonal[muab\[Phi]]},{b,Diagonal[muab\[Phi]]}]//SparseArray;
-		helpTens=TensorProduct[helpTens,muab\[Phi]Pert]//SparseArray//DiagonalTensor2[#,1,3]&;
-		V2=2*Tr[helpTens . muab\[Phi]Pert];
+		V2=2*(-1/4) Tr[(helpTens muab\[Phi]Pert) . muab\[Phi]Pert];
 		
 		
 		VNNLO+=V1+V2;

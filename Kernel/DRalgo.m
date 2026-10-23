@@ -54,6 +54,12 @@ If[! ValueQ[$LoadGroupMath],
 	$LoadGroupMath = True];
 If[! ValueQ[$InstallGroupMath],
 	$InstallGroupMath = False];
+If[! ValueQ[$DRalgoBanner],
+	$DRalgoBanner = True];
+
+
+$DRalgoBanner::usage =
+"Set DRalgo`DRalgo`$DRalgoBanner=False before loading DRalgo to suppress its header and the banner of GroupMath.";
 
 
 (*Unprotect@Definition;
@@ -83,6 +89,11 @@ wrapText[text_String, maxLen_: 80] := Module[
   AppendTo[lines, current];
   StringRiffle[lines, "\n"]
 ];
+
+(*
+	The header with the logo in a notebook, and in plain text in a terminal, e.g. with wolframscript.
+*)
+If[$DRalgoBanner&&$Notebooks,
 
 pacletInfo = PacletFind["DRalgo/DRalgo"];
 If[pacletInfo =!= {},
@@ -143,6 +154,16 @@ Print@Panel@Row[{
     Style["DRDRDRDRDRDRDRDRDRDRDRDRDRDRDRDRDRDRDRDRDRDRDRDRDRDRDRDRDRDRDRDRD",Bold]
   }, Spacings -> 1]
 }];
+
+,
+	If[$DRalgoBanner,
+		Print[StringRiffle[{
+			"DRalgo "<>$DRalgoVersion<>": dimensionally reduced, high-temperature effective field theories for generic models",
+			"Authors: Andreas Ekstedt, Philipp Schicho, Tuomas V.I. Tenkanen",
+			"Reference: Comput. Phys. Commun. 288 (2023) 108725, 2205.08815 [hep-ph], 2605.15176 [hep-ph]",
+			"Repository: https://github.com/DR-algo/DRalgo"},"\n"]]
+	]
+];
 
 
 (* ::Section:: *)
@@ -248,6 +269,17 @@ CalculatePotentialUS::usage="\
 Calculates the effective potential";
 CalculatePotential::usage="\
 Calculates the effective potential";
+CustomMasses::usage="\
+CustomMasses is an option of CalculatePotential and CalculatePotentialUS. \
+CalculatePotential[ScalarMass,VectorMass,CustomMasses->True] calculates the effective potential at LO and NLO \
+with the given diagonal mass matrices";
+PerturbativeDiagonalization::usage="\
+PerturbativeDiagonalization is an option of CalculatePotential and CalculatePotentialUS. \
+With PerturbativeDiagonalization->True, the off-diagonal elements of the mass matrices are treated as \
+perturbations, which enter the two-loop potential at second order";
+FastRotation::usage="\
+FastRotation is an option of RotateTensorsCustomMass. With FastRotation->True, only the components lam4_iikk \
+of the quartic couplings, which the two-loop potential needs, are rotated, which is faster for large rotation matrices";
 CompareInvariants::usage="\
 Finds relations between couplings by calculating basis-invariant tensors";
 AllocateTensors::usage="\
@@ -550,16 +582,23 @@ If[$LoadGroupMath,
 			Print[Style["GroupMath installed.","Text", Red, Bold]];
 		]
 	];
+(*In a terminal and without the banner, the banner of GroupMath is not printed*)
 	Check[
-		Needs["GroupMath`"];,
+		If[$DRalgoBanner&&$Notebooks,Needs["GroupMath`"],Block[{Print},Needs["GroupMath`"]]];,
 		Message[Get::noopen,
 			"or outdated GroupMath` at "<>ToString[$UserBaseDirectory]<>"/Applications.\n"<>
 			"Set DRalgo`$InstallGroupMath=True for automatic installation of GroupMath"];
 		Abort[];
 	];
 	
-	Print["GroupMath is an independent package, and is not part of DRalgo."];
-	Print["Please cite GroupMath: Comput.Phys.Commun. 267 (2021) 108085 \[Bullet] e-Print: \!\(\*TemplateBox[{RowBox[{\"2011.01764\", \" \", \"[\", RowBox[{\"hep\", \"-\", \"th\"}], \"]\"}], {URL[\"https://arxiv.org/abs/2011.01764\"], None}, \"https://arxiv.org/abs/2011.01764\", \"HyperlinkActionRecycled\", {\"HyperlinkActive\"}, BaseStyle -> {\"Hyperlink\"}, HyperlinkAction -> \"Recycled\"},\n\"HyperlinkTemplate\"]\)"];
+	Which[
+		!$DRalgoBanner,Null,
+		$Notebooks,
+			Print["GroupMath is an independent package, and is not part of DRalgo."];
+			Print["Please cite GroupMath: Comput.Phys.Commun. 267 (2021) 108085 \[Bullet] e-Print: \!\(\*TemplateBox[{RowBox[{\"2011.01764\", \" \", \"[\", RowBox[{\"hep\", \"-\", \"th\"}], \"]\"}], {URL[\"https://arxiv.org/abs/2011.01764\"], None}, \"https://arxiv.org/abs/2011.01764\", \"HyperlinkActionRecycled\", {\"HyperlinkActive\"}, BaseStyle -> {\"Hyperlink\"}, HyperlinkAction -> \"Recycled\"},\n\"HyperlinkTemplate\"]\)"];,
+		True,
+			Print["GroupMath is an independent package, and is not part of DRalgo. Please cite GroupMath: Comput. Phys. Commun. 267 (2021) 108085, 2011.01764 [hep-th]"]
+	];
 
 ]
 
@@ -1179,7 +1218,10 @@ LoadModelDRalgo[fileName_]:=Module[{},
 		AppendTo[ImportFile,ConvertToSparse[i]];
 	,{i,arrImp}];
 (*Prints the info text*)
-	Print[Grid[{{Row[InfoText,"\n",BaseStyle->(FontFamily->"Consolas")]}},Alignment->{Left,Center}]];
+	If[$Notebooks,
+		Print[Grid[{{Row[InfoText,"\n",BaseStyle->(FontFamily->"Consolas")]}},Alignment->{Left,Center}]],
+		Print[StringRiffle[ToString/@(InfoText//.{Hyperlink[label_,___]:>label,Mouseover[label_,___]:>label,Style[text_,___]:>text}),"\n"]]
+	];
 (**)
 	Return[ImportFile]
 ];

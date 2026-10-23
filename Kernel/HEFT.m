@@ -213,15 +213,15 @@ If[verbose==True,Print["Calculating the 2-Loop Effective Potential"]];
 	muab\[Phi]Pert[[LightVectorHET,LightVectorHET]]=0;
 	muab\[Phi]Pert=ArrayRules[muab\[Phi]Pert]/.({x_Integer,y_Integer}->a_)/;Equal[x,y]->{x,y}->0//SparseArray[#,{nvEP,nvEP}]&;
 
+(*The one-loop diagram with two insertions of the off-diagonal masses P, -1/4 Sum[BubbleIntegral3d[m_i,m_l] P_il P_li],
+	the O(P^2) term of the one-loop potential, with massless light lines (the hard region). Vectors give twice that.*)
 (*Scalar contribution*)
 	helpTens=Table[BubbleIntegral3d[a,b],{a,asF},{b,asF}]//SparseArray;
-	helpTens=TensorProduct[helpTens,muijPert]//SparseArray//DiagonalTensor2[#,1,3]&;
-	V1=Tr[helpTens . muijPert];
+	V1=-1/4 Tr[(helpTens muijPert) . muijPert];
 
 (*Vector contribution*)
 	helpTens=Table[BubbleIntegral3d[a,b],{a,avF},{b,avF}]//SparseArray;
-	helpTens=TensorProduct[helpTens,muab\[Phi]Pert]//SparseArray//DiagonalTensor2[#,1,3]&;
-	V2=2*Tr[helpTens . muab\[Phi]Pert];
+	V2=2*(-1/4) Tr[(helpTens muab\[Phi]Pert) . muab\[Phi]Pert];
 		
 	
 (*Potential*)
