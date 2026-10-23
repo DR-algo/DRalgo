@@ -26,17 +26,7 @@ VerbosePrint[msg_] := If[verbose, Print[msg]]
 LogPrint[msg_] := If[verbose, Print[DateString[{"Hour", ":", "Minute"}], " \[LongDash] ", msg]];
 
 
-(*
-	Rewrites short-hand constants with Lb and Lf.
-*)
-ReplaceLb={
-	Lbb->2Lb+2(12Log[Glaisher]-EulerGamma),
-	Lbbb->Lb/12+1/6(12Log[Glaisher]-EulerGamma),
-	LBF->5/2Lb-1/2Lf+2(12Log[Glaisher]-EulerGamma),
-	LFF->1/2Lf+3/2Lb+2(12Log[Glaisher]-EulerGamma),
-	LFB->Lb+Lf+2(12Log[Glaisher]-EulerGamma),
-	Lfff->1/2Lf-3/2Lb-2(12Log[Glaisher]-EulerGamma),
-	LbbM->2Lb+2(12Log[Glaisher]-EulerGamma)};
+(*ReplaceLb, which rewrites short-hand constants with Lb and Lf, is defined in MasterIntegrals.m*)
 
 
 (*
@@ -353,9 +343,9 @@ SymmetricPhaseNLO[] := Module[
 *)
 SymmetricPhaseNNLO[]:=Module[
 	{
-	  \[Kappa], I1, I2M2, I1I2, dI1I2, I211M020, I2M2I2, I3M2I1, I1p, 
+	  I1, I2M2, I1I2, dI1I2, I211M020, I2M2I2, I3M2I1, I1p, 
 	  I3M2p, I2p, I4M4p, I2M2p, IF1p, IF2p, IF3M2p, IF2M2p,
-	  EPre, M00, LInt, EFPre, EFInt, N00, MF1M1, MF00, MFM2P2, N2M2, MP2M2,
+	  M00, LInt, N00, MF1M1, MF00, MFM2P2, N2M2, MP2M2,
 	  Temp, Temp1, Temp2, Temp3, Temp4, Temp5, 
 	  Help1, Help2, Help3, GHelp, GHelp2, I1Temp, HFab, GabV, gvffnF, gvffNf, \[Lambda]4Eff,
 	  HabIJFnF, vacuumPole,
@@ -366,39 +356,11 @@ SymmetricPhaseNNLO[]:=Module[
 
 	(* --- Precompute loop integrals --- *)
 	(* One- and two-loop integrals appearing in scalar, gauge and fermionic diagrams *)
-	\[Kappa]=1/(16 \[Pi]^2);
-	I1=T^2/(12 \[Epsilon])+T^2 Lbbb;
-	I2M2=T^2/(24 )(-1/\[Epsilon]-  12Lbbb+2);
-	I1I2=\[Kappa] T^2/(12 \[Epsilon]b); 
-	dI1I2=3\[Kappa] T^2/(12 \[Epsilon]b)-\[Kappa] T^2/6;
-	I211M020=T^2/(192 \[Pi]^2);
-	I2M2I2=T^2/(192 \[Pi]^2)-T^2/(384 \[Pi]^2 \[Epsilon]bbM);
-	I3M2I1=T^2/(768 \[Pi]^2 \[Epsilon]bbM)+T^2/(384 \[Pi]^2);
-	Clear[LbbM];
-	I1p=T^2/(12 )+\[Epsilon] T^2 Lbbb;
-	I3M2p=1/(64 \[Pi]^2 \[Epsilon]bp)+1/(32 \[Pi]^2);
-	I2p=1/(16 \[Pi]^2 \[Epsilon]bp);
-	I4M4p=1/(128 \[Pi]^2 \[Epsilon]bp)+1/(48 \[Pi]^2);
-	I2M2p=-T^2/24+T^2 (((-1/24)LbbM - (-1)*1/24 Lb )+1/12)\[Epsilon];
-	IF1p=-T^2/(24)+1/24 T^2 Lfff \[Epsilon];
-	IF2p=1/(16 (\[Pi]^2) ) (1/\[Epsilon]+Lf);
-	IF3M2p=1/(64 \[Pi]^2)(1/\[Epsilon]+Lf+2);
-	IF2M2p=(-T^2/24-T^2 1/48* Lfff)\[Epsilon]+T^2/48;
+	{I1,I2M2,I1p,I3M2p,I2p,I4M4p,I2M2p,IF1p,IF2p,IF3M2p,IF2M2p}=Lookup[OneLoopSumIntegrals[],{"I1","I2M2","I1p","I3M2p","I2p","I4M4p","I2M2p","IF1p","IF2p","IF3M2p","IF2M2p"}];
+	{I1I2,dI1I2,I211M020,I2M2I2,I3M2I1}=Lookup[TwoLoopSumIntegrals[],{"I1I2","dI1I2","I211M020","I2M2I2","I3M2I1"}];
 
 
-	(* These integrals are given in 9408276 and 9410360 *)
-	EPre=1/(24*16 \[Pi]^2) T^4*(\[Mu]/(4 \[Pi] T))^(6 \[Epsilon]) (1/\[Epsilon]+91/15+8( Derivative[1][Zeta][-1])/Zeta[-1]-2 Derivative[1][Zeta][-3]/Zeta[-3]);
-	Series[EPre,{\[Epsilon],0,0}]//Normal//FullSimplify;
-	M00=Series[EPre,{\[Epsilon],0,0}]//Normal;
-	LInt=(T^4 Log[Glaisher])/(48 \[Pi]^2)+(T^4 Log[\[Mu]^2])/(768 \[Pi]^2)+T^4/(2304 \[Pi]^2 \[Epsilon])+(EulerGamma T^4)/(1152 \[Pi]^2)-(T^4 Log[\[Pi] T])/(384 \[Pi]^2)-(T^4 Log[2])/(192 \[Pi]^2);
-	EFPre=1/(96*16 \[Pi]^2) T^4*(\[Mu]/(4 \[Pi] T))^(6 \[Epsilon]) (1/\[Epsilon]+173/30-42/5 Log[2]+8( Derivative[1][Zeta][-1])/Zeta[-1]-2 Derivative[1][Zeta][-3]/Zeta[-3]);
-	EFInt=Series[EFPre,{\[Epsilon],0,0}]//Normal//FullSimplify//Expand;
-	N00=EFInt;
-	MF1M1=Series[-1/(192*16 \[Pi]^2) T^4*(\[Mu]/(4 \[Pi] T))^(6 \[Epsilon]) (1/\[Epsilon]+361/60+76/5 Log[2]+6EulerGamma-4( Derivative[1][Zeta][-1])/Zeta[-1]+4Derivative[1][Zeta][-3]/Zeta[-3]),{\[Epsilon],0,0}]//Normal;
-	MF00=Series[-1/(192*16 \[Pi]^2) T^4*(\[Mu]/(4 \[Pi] T))^(6 \[Epsilon]) (1/\[Epsilon]+179/30-34/5 Log[2]+8( Derivative[1][Zeta][-1])/Zeta[-1]-2Derivative[1][Zeta][-3]/Zeta[-3]),{\[Epsilon],0,0}]//Normal;
-	MFM2P2=Series[-29/(1728*16 \[Pi]^2) T^4*(\[Mu]/(4 \[Pi] T))^(6 \[Epsilon]) (1/\[Epsilon]+89/29-90/29 Log[2]+48/29EulerGamma+136/29( Derivative[1][Zeta][-1])/Zeta[-1]-10/29Derivative[1][Zeta][-3]/Zeta[-3]),{\[Epsilon],0,0}]//Normal;
-	N2M2=Series[1/(108*16 \[Pi]^2) T^4*(\[Mu]/(4 \[Pi] T))^(6 \[Epsilon]) (1/\[Epsilon]+35/8+3/2EulerGamma-63/10 Log[2]+5( Derivative[1][Zeta][-1])/Zeta[-1]-1/2Derivative[1][Zeta][-3]/Zeta[-3]),{\[Epsilon],0,0}]//Normal;
-	MP2M2=Series[11/(216*16 \[Pi]^2) T^4*(\[Mu]/(4 \[Pi] T))^(6 \[Epsilon]) (1/\[Epsilon]+73/22+12/11EulerGamma+64/11( Derivative[1][Zeta][-1])/Zeta[-1]-10/11Derivative[1][Zeta][-3]/Zeta[-3]),{\[Epsilon],0,0}]//Normal;
+	{M00,LInt,N00,MF1M1,MF00,MFM2P2,N2M2,MP2M2}=Lookup[ThreeLoopSumIntegrals[],{"M00","LInt","N00","MF1M1","MF00","MFM2P2","N2M2","MP2M2"}];
 
 
 	(*Note that some contractions are inefficent. Will fix later but they are anyway not bottlenecks*)
@@ -811,18 +773,11 @@ ScalarMass2Loop[] := Module[
   VerbosePrint["Calculating 2-Loop Scalar Mass"];
   
   (* Constants *)
-  \[Kappa] = 1/(16 \[Pi]^2);
-  I1I2 = \[Kappa] T^2/(12 \[Epsilon]b);
-  dI1I2 = 3 \[Kappa] T^2/(12 \[Epsilon]b) - \[Kappa] T^2/6;
-  I1 = T^2/(12 \[Epsilon]) + T^2 Lbbb;
-  I2I3m1 = T^2/(512 \[Pi]^2 \[Epsilon]b) - T^2/(768 \[Pi]^2);
-  I1FI2F = -((T^2)/(384 \[Pi]^2))/\[Epsilon]F;
-  I1BI2F = ((T^2)/(192 \[Pi]^2))/\[Epsilon]FB;
-  I1FI2B = -((T^2)/(384 \[Pi]^2))/\[Epsilon]BF;
+  {I1,I1F}=Lookup[OneLoopSumIntegrals[],{"I1","I1F"}];
+  {I1I2,dI1I2,I2I3m1,I1FI2F,I1BI2F,I1FI2B}=Lookup[TwoLoopSumIntegrals[],{"I1I2","dI1I2","I2I3m1","I1FI2F","I1BI2F","I1FI2B"}];
   I1FI2FD = (3 - 2 \[Epsilon]F) I1FI2F;
   I1BI2FD = (3 - 2 \[Epsilon]FB) I1BI2F;
   I1FI2BT1 = I1FI2B(-4) - T^2/(96 \[Pi]^2);
-  I1F = -T^2/(24 \[Epsilon]) + 1/24 T^2 Lfff;
 
   (* Helper Functions *)
   simplifyContract[expr_] := Simplify[expr] // SimplifySparse;
@@ -1483,7 +1438,7 @@ TadPole[] := Module[
 TadPole2Loop[] := Module[
 	{
 	    (* General variables *)
-	    \[Kappa], I1, I2M2, I1I2, dI1I2, I211M020, I2M2I2, I3M2I1,
+	    I1, I2M2, I1I2, dI1I2, I211M020, I2M2I2, I3M2I1,
 	    I1p, I3M2p, I2p, I4M4p, I2M2p, IF1p, IF2p, IF3M2p, IF2M2p,
 	
 	    (* Contractions & results *)
@@ -1497,25 +1452,8 @@ TadPole2Loop[] := Module[
 	VerbosePrint["Calculating 2-Loop Tadpoles"];
 
 	(* --- Master integrals --- *)
-	\[Kappa]=1/(16 \[Pi]^2);
-	I1=T^2/(12 \[Epsilon])+T^2 Lbbb;
-	I2M2=T^2/(24 )(-1/\[Epsilon]-  12Lbbb+2);
-	I1I2=\[Kappa] T^2/(12 \[Epsilon]b); 
-	dI1I2=3\[Kappa] T^2/(12 \[Epsilon]b)-\[Kappa] T^2/6;
-	I211M020=T^2/(192 \[Pi]^2);
-	I2M2I2=T^2/(192 \[Pi]^2)-T^2/(384 \[Pi]^2 \[Epsilon]bbM);
-	I3M2I1=T^2/(768 \[Pi]^2 \[Epsilon]bbM)+T^2/(384 \[Pi]^2);
-	
-	Clear[LbbM];
-	I1p=T^2/(12 )+\[Epsilon] T^2 Lbbb;
-	I3M2p=1/(64 \[Pi]^2 \[Epsilon]bp)+1/(32 \[Pi]^2);
-	I2p=1/(16 \[Pi]^2 \[Epsilon]bp);
-	I4M4p=1/(128 \[Pi]^2 \[Epsilon]bp)+1/(48 \[Pi]^2);
-	I2M2p=-T^2/24+T^2 (((-1/24)LbbM - (-1)*1/24 Lb )+1/12)\[Epsilon];
-	IF1p=-T^2/(24)+1/24 T^2 Lfff \[Epsilon];
-	IF2p=1/(16 (\[Pi]^2) ) (1/\[Epsilon]+Lf);
-	IF3M2p=1/(64 \[Pi]^2)(1/\[Epsilon]+Lf+2);
-	IF2M2p=(-T^2/24-T^2 1/48* Lfff)\[Epsilon]+T^2/48;
+	{I1,I2M2,I1p,I3M2p,I2p,I4M4p,I2M2p,IF1p,IF2p,IF3M2p,IF2M2p}=Lookup[OneLoopSumIntegrals[],{"I1","I2M2","I1p","I3M2p","I2p","I4M4p","I2M2p","IF1p","IF2p","IF3M2p","IF2M2p"}];
+	{I1I2,dI1I2,I211M020,I2M2I2,I3M2I1}=Lookup[TwoLoopSumIntegrals[],{"I1I2","dI1I2","I211M020","I2M2I2","I3M2I1"}];
 
 	\[Lambda]Help=TensorContract[\[Lambda]4,{3,4}];
 
@@ -1602,7 +1540,7 @@ RGRunningHardToSoft[]:=Module[{},
 	The module finds all \[Epsilon] poles to determine the scalar-mass counterterm
 *)
 
-	I111=1/(4)1/(16 \[Pi]^2);(*All possible divergences comes from I111, which is the scalar sunset in 3-D*)
+	I111=SunsetDivergence3d;(*All possible divergences comes from I111, which is the scalar sunset in 3-D*)
 
 (*Help Tensors*)
 	VarGauge=GaugeCouplingNames//DeleteDuplicates;

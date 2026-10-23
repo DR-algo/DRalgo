@@ -81,26 +81,26 @@ SymmetricPhaseUSLO[]:=Module[{ContriScalars,VLO},
 (*
 	Calculates the 2-loop pressure in the ultrasoft theory.
 *)
-SymmetricPhaseUSNLO[]:=Module[{fSSV,Vss,TensHelp,Vssvs,Vssv,Vsss,heavyIndices,masses,VNLO},
+SymmetricPhaseUSNLO[]:=Module[{fssv,Vss,TensHelp,Vssvs,Vssv,Vsss,heavyIndices,masses,VNLO},
 	If[verbose,Print["Calculating NLO \!\(\*SuperscriptBox[\(T\), \(4\)]\) Terms"]];
 (*Scalar-Scalar-Vector sunset diagram*)
-	fSSV[x_,y_]:=(4 (x^2+y^2) Log[\[Mu]3/(x+y)]+4 Sqrt[x^2] Sqrt[y^2]+x^2+y^2)/(32 \[Pi]^2);
+	fssv=TwoLoopFunctions[\[Mu]3][[3]];
 
 	Vss=1/8/(16 \[Pi]^2)*TensorContract[\[Mu]ijL . \[Lambda]KTotal . \[Mu]ijL,{{1,2},{3,4}}];
 
 	TensHelp=1/4 TensorProduct[gvssVTot,gvssVTot];
-	Vssv=Sum[TensHelp[[a,i,j,a,i,j]]fSSV[\[Mu]ijL[[i,i]],\[Mu]ijL[[j,j]]],{a,nv},{i,nSH},{j,nSH}];
+	Vssv=Sum[TensHelp[[a,i,j,a,i,j]]fssv[\[Mu]ijL[[i,i]]^2,\[Mu]ijL[[j,j]]^2,0],{a,nv},{i,nSH},{j,nSH}];
 
 (*
-	Scalar sunset diagram with two cubic couplings, -1/12 \[Lambda]3^2 (1/(4\[Epsilon])+Log[\[Mu]3/(m1+m2+m3)]+1/2)/(16\[Pi]^2),
+	Scalar sunset diagram with two cubic couplings, -1/12 \[Lambda]3^2 times the sunset integral,
 	for the lines with at least one heavy scalar, where the light masses are zero.
 	The sunset with only light lines belongs to the ultrasoft theory.
 	The cubic couplings of two temporal scalars to a scalar are of one-loop order, and their sunset is of higher order.
 *)
 	heavyIndices=Flatten[HeavyScalars];
-	masses=Table[If[MemberQ[heavyIndices,i],Sqrt[\[Mu]ijSNLOP[[i,i]]],0],{i,1,ns}];
-	Vsss=-1/12/(16 \[Pi]^2)*Total[
-		If[ContainsAny[#[[1]],heavyIndices],#[[2]]^2 (1/2+Log[\[Mu]3/Total[masses[[#[[1]]]]]]),0]&/@Most[ArrayRules[\[Lambda]3CSRedUS]]];
+	masses=Table[If[MemberQ[heavyIndices,i],\[Mu]ijSNLOP[[i,i]],0],{i,1,ns}];
+	Vsss=-1/12*Total[
+		If[ContainsAny[#[[1]],heavyIndices],#[[2]]^2 SunsetIntegral3d[Sequence@@masses[[#[[1]]]],\[Mu]3],0]&/@Most[ArrayRules[\[Lambda]3CSRedUS]]];
 
 	VNLO= Vss+Vssv+Vsss;
 
@@ -116,14 +116,13 @@ SymmetricPhaseUSNLO[]:=Module[{fSSV,Vss,TensHelp,Vssvs,Vssv,Vsss,heavyIndices,ma
 (*
 	Scalar self-energy in the effective theory.
 *)
-ScalarSelfEnergySS[]:=Module[{SelfEnergySS,ContriSS,ContriSS2},
+ScalarSelfEnergySS[]:=Module[{ContriSS,ContriSS2},
 If[verbose,Print["Calculating Scalar Self-Energy"]];
 
-	SelfEnergySS=-1/(12\[Pi]);
-(*Two heavy lines, with symmetry factor 1/2*)
-	ContriSS=SelfEnergySS/2*Simplify[Table[Sum[\[Lambda]3Cx[[i,ii,jj]]\[Lambda]3Cx[[j,ii,jj]]/(\[Mu]ijL[[ii,ii]]+\[Mu]ijL[[jj,jj]])^3,{ii,1,nSH},{jj,1,nSH}],{i,1,nSL},{j,1,nSL}]];
+(*The p^2 terms of the bubbles; two heavy lines, with symmetry factor 1/2*)
+	ContriSS=1/2*Simplify[Table[Sum[\[Lambda]3Cx[[i,ii,jj]]\[Lambda]3Cx[[j,ii,jj]]BubbleIntegral3dP2[\[Mu]ijL[[ii,ii]]^2,\[Mu]ijL[[jj,jj]]^2],{ii,1,nSH},{jj,1,nSH}],{i,1,nSL},{j,1,nSL}]];
 (*One light and one heavy line, without symmetry factor as in ScalarMassSS*)
-	ContriSS2=SelfEnergySS*Simplify[Table[Sum[\[Lambda]3Cy[[i,ii,jj]]\[Lambda]3Cy[[j,ii,jj]]/(\[Mu]ijL[[jj,jj]])^3,{ii,1,nSL},{jj,1,nSH}],{i,1,nSL},{j,1,nSL}]];
+	ContriSS2=Simplify[Table[Sum[\[Lambda]3Cy[[i,ii,jj]]\[Lambda]3Cy[[j,ii,jj]]BubbleIntegral3dP2[0,\[Mu]ijL[[jj,jj]]^2],{ii,1,nSL},{jj,1,nSH}],{i,1,nSL},{j,1,nSL}]];
 
 (*The field normalization is 1+2 ZSij; each light leg of a coupling contributes -ZSij*)
 	ZSij=-(ContriSS+ContriSS2)/2;
@@ -135,38 +134,10 @@ If[verbose,Print["Calculating Scalar Self-Energy"]];
 *)
 
 
-ScalarMass2LoopSS[]:=Module[{MassHelpSunsetQuarCub,MassHelpSunsetCubCub,MassHelpBubble,MassHelp,TensHelp,TensHelp2,HeavyMasses,AllMasses
+ScalarMass2LoopSS[]:=Module[{MassHelp,TensHelp,TensHelp2,HeavyMasses,AllMasses
 						,ContriInsertion,Contri1,Contri2,Contri3,Contri4,Contri5,Contri6,Contri7,ContriMix1,ContriMix2,ContriSE,\[Mu]ijSSCubic,
 						ContriC1,ContriC2,ContriC3,ContriC4,\[Mu]ijTemp},
 If[verbose,Print["Calculating 2-Loop Scalar Mass"]];
-
-(*Scalar sunset diagrams with an extra propagator*)
-	MassHelpSunsetQuarCub[0,0,0,0]:=0;
-	MassHelpSunsetQuarCub[0,0,z_,t_]:=1/(16 \[Pi]^2 (t^2+z^2));
-	MassHelpSunsetQuarCub[x_,0,0,0]:=(-(2 Log[\[Mu]3/x])-1)/(32 \[Pi]^2 x^2);
-	MassHelpSunsetQuarCub[0,y_,0,0]:=(-(2 Log[\[Mu]3/y])-1)/(32 \[Pi]^2 y^2);
-	MassHelpSunsetQuarCub[y_,y_,z_,t_]:=1/(16 \[Pi]^2 (t^2+y^2+z^2));
-	MassHelpSunsetQuarCub[x_,y_,z_,t_]:=(Log[\[Mu]3/(t+y+z)]-Log[\[Mu]3/(t+x+z)])/(16 \[Pi]^2 (x^2-y^2));
-
-(*Scalar sunset diagrams with two extra propagators*)
-	MassHelpSunsetCubCub[0,0,0,0,0]:=0;
-	MassHelpSunsetCubCub[x_,0,0,0,0]:=1/(16 \[Pi]^2 x^4);
-	MassHelpSunsetCubCub[0,x_,0,0,0]:=1/(16 \[Pi]^2 x^4);
-	MassHelpSunsetCubCub[0,0,x_,0,0]:=1/(16 \[Pi]^2 x^4);
-	MassHelpSunsetCubCub[0,0,0,x_,0]:=1/(16 \[Pi]^2 x^4);
-	MassHelpSunsetCubCub[y_,y_,w_,z_,t_]:=1/(16 \[Pi]^2 (t^2+w^2+y^2) (t^2+y^2+z^2));
-	MassHelpSunsetCubCub[x_,y_,z_,z_,t_]:=1/(16 \[Pi]^2 (t^2+x^2+z^2) (t^2+y^2+z^2));
-	MassHelpSunsetCubCub[0,y_,0,0,t_]:=1/(16 \[Pi]^2 (t^2) (t^2+y^2));
-	MassHelpSunsetCubCub[x_,y_,w_,z_,t_]:=(Log[\[Mu]3/(t+w+x)]-Log[\[Mu]3/(t+w+y)]-Log[\[Mu]3/(t+x+z)]+Log[\[Mu]3/(t+y+z)])/(16 \[Pi]^2 (w^2-z^2) (x^2-y^2));
-	MassHelpSunsetCubCub[0,y_,0,z_,0]:=-((2 Log[\[Mu]3/y]-2 Log[\[Mu]3/(y+z)]+2 Log[\[Mu]3/z]+1)/(32 \[Pi]^2 y^2 z^2));
-	MassHelpSunsetCubCub[x_,0,w_,0,0]:=-((2 Log[\[Mu]3/x]-2 Log[\[Mu]3/(x+w)]+2 Log[\[Mu]3/w]+1)/(32 \[Pi]^2 x^2 w^2));
-	MassHelpSunsetCubCub[0,y_,w_,0,0]:=-((2 Log[\[Mu]3/y]-2 Log[\[Mu]3/(y+w)]+2 Log[\[Mu]3/w]+1)/(32 \[Pi]^2 y^2 w^2));
-	MassHelpSunsetCubCub[x_,0,0,z_,0]:=-((2 Log[\[Mu]3/x]-2 Log[\[Mu]3/(x+z)]+2 Log[\[Mu]3/z]+1)/(32 \[Pi]^2 x^2 z^2));
-
-(*Scalar bubble diagram with an extra propagator *)
-	MassHelpBubble[x_,y_]:=-(1/(4 \[Pi]))( x-y)/(y^2-x^2);
-	MassHelpBubble[0,0]:=0;
-	MassHelpBubble[x_,x_]:=(1/(8 \[Pi]))/x;
 
 (*List of scalar masses*)
 	HeavyMasses=Table[\[Mu]ijL[[n,n]],{n,1,nSH}]; (*A list of all the heavy-scalar masses*)
@@ -174,9 +145,9 @@ If[verbose,Print["Calculating 2-Loop Scalar Mass"]];
 
 (*Diagrams without cubic couplings*)
 (*Sunset diagram with two S^2H^2 quartic couplings*)
-	MassHelp=Table[(1/2+Log[\[Mu]3/( a+b)]),{a,HeavyMasses},{b,HeavyMasses}]//SparseArray;
+	MassHelp=Table[SunsetIntegral3d[a^2,b^2,0,\[Mu]3],{a,HeavyMasses},{b,HeavyMasses}]//SparseArray;
 	TensHelp=\[Lambda]K . Transpose[\[Lambda]K,{4,2,3,1}]//DiagonalTensor[#,1,4]&//DiagonalTensor[#,1,5]&;
-	Contri1=-1/(16 \[Pi]^2)1/2TensHelp . MassHelp//TensorContract[#,{2,4}]&;
+	Contri1=-1/2TensHelp . MassHelp//TensorContract[#,{2,4}]&;
 
 (*Sunset diagram with a S^2H^2 quartic coupling and two H^2V couplings*)
 	MassHelp=Table[(1/2+2Log[\[Mu]3/(2 a)]),{a,HeavyMasses}]//SparseArray;
@@ -202,14 +173,14 @@ If[verbose,Print["Calculating 2-Loop Scalar Mass"]];
 		Contri7=0;
 	,
 (*Sunset with two H^3S quartics*)
-		TensHelp=Table[(1/2+Log[\[Mu]3/(a+b+n)]) ,{a,HeavyMasses},{b,HeavyMasses},{n,HeavyMasses}]//SparseArray;
+		TensHelp=Table[SunsetIntegral3d[a^2,b^2,n^2,\[Mu]3],{a,HeavyMasses},{b,HeavyMasses},{n,HeavyMasses}]//SparseArray;
 		TensHelp2=TensorProduct[\[Lambda]x,\[Lambda]x]//DiagonalTensor2[#,2,6]&//DiagonalTensor2[#,3,6]&//DiagonalTensor2[#,4,6]&;
-		Contri5=-1/(16 \[Pi]^2)/3!*Total[TensHelp TensHelp2,-3];
+		Contri5=-1/3!*Total[TensHelp TensHelp2,-3];
 
 (*Sunset with two HS^3 quartics*)
-		TensHelp=Table[(1/2+Log[\[Mu]3/(a)]) ,{a,HeavyMasses}]//SparseArray;
+		TensHelp=Table[SunsetIntegral3d[a^2,0,0,\[Mu]3],{a,HeavyMasses}]//SparseArray;
 		TensHelp2=TensorProduct[\[Lambda]y,\[Lambda]y]//TensorContract[#,{2,6}]&//TensorContract[#,{2,5}]&//DiagonalTensor2[#,2,4]&;
-		Contri6=-1/(16 \[Pi]^2)/2!*Total[TensHelp TensHelp2,-3];
+		Contri6=-1/2!*Total[TensHelp TensHelp2,-3];
 
 (*Figure 8 bubbles with one HS^3quartic, and one H^3S quartic*)
 		TensHelp=Table[c/b ,{c,HeavyMasses},{b,HeavyMasses}]//SparseArray;
@@ -234,29 +205,29 @@ Mixing diagram with two H^3S quartics: ----O---O------
 	,
 (*The contribution from cubic couplings. There are so many diagrams here that it is not worth dividing the cubics into
 	H^2S HS^2 etc. Insdead \[Lambda]3CTot is a master tensor that has all scalar (heavy and light) interactions. The
-	scalar master integrals MassHelpSunsetCubCub/MassHelpSunsetQuarCub then remove the pure-light contributions.
+	sunset integrals, which vanish if all lines are massless, then remove the pure-light contributions.
 	*)
 
 (*Sunset diagram with four cubic couplings*)		
-		MassHelp=Table[MassHelpSunsetCubCub[j,i,k,l,m]  ,{j,AllMasses},{i,AllMasses},{k,AllMasses},{l,AllMasses},{m,AllMasses}]//SparseArray//SimplifySparse;
+		MassHelp=Table[SunsetIntegral3d[{j,i},{k,l},m,\[Mu]3],{j,AllMasses^2},{i,AllMasses^2},{k,AllMasses^2},{l,AllMasses^2},{m,AllMasses^2}]//SparseArray//SimplifySparse;
 		TensHelp=TensorProduct[\[Lambda]3CTot,\[Lambda]3CTot]//DiagonalTensor2[#,1,4]&//TensorProduct[#,\[Lambda]3CTot]&//DiagonalTensor2[#,2,6]&//DiagonalTensor2[#,4,6]&;
 		TensHelp=TensorProduct[TensHelp,\[Lambda]3CTot]//DiagonalTensor2[#,4,7]&//DiagonalTensor2[#,5,7]&;
 		ContriC1=-1/2*Total[MassHelp TensHelp,-3][[LightScalar[[;;,1]],LightScalar[[;;,1]]]]//SimplifySparse;
 
 (*Sunset diagram with one quartic and two cubic couplings*)		
-		MassHelp=Table[MassHelpSunsetQuarCub[i,j,m,n],{i,AllMasses},{j,AllMasses},{m,AllMasses},{n,AllMasses}]//SparseArray//SimplifySparse;
+		MassHelp=Table[SunsetIntegral3d[{i,j},m,n,\[Mu]3],{i,AllMasses^2},{j,AllMasses^2},{m,AllMasses^2},{n,AllMasses^2}]//SparseArray//SimplifySparse;
 		TensHelp=TensorProduct[\[Lambda]4Tot,\[Lambda]3CTot]//DiagonalTensor2[#,4,6]&//DiagonalTensor2[#,4,5]&;
 		TensHelp=TensorProduct[TensHelp,\[Lambda]3CTot]//DiagonalTensor2[#,4,7]&//DiagonalTensor2[#,5,7]&;
 		ContriC2=1/2*Total[MassHelp TensHelp,-3][[LightScalar[[;;,1]],LightScalar[[;;,1]]]]//SimplifySparse;
 
 (*Sunset diagram with one quartic (light scalars both connect to the same quartic) and two cubic couplings*)
-		MassHelp=Table[MassHelpSunsetQuarCub[i,j,m,n]  ,{i,AllMasses},{j,AllMasses},{m,AllMasses},{n,AllMasses}]//SparseArray//SimplifySparse;
+		MassHelp=Table[SunsetIntegral3d[{i,j},m,n,\[Mu]3],{i,AllMasses^2},{j,AllMasses^2},{m,AllMasses^2},{n,AllMasses^2}]//SparseArray//SimplifySparse;
 		TensHelp=TensorProduct[\[Lambda]3CTot,\[Lambda]3CTot]//DiagonalTensor2[#,3,4]&//DiagonalTensor2[#,3,4]&;
 		TensHelp=TensorProduct[TensHelp,\[Lambda]4Tot]//DiagonalTensor2[#,3,5]&//DiagonalTensor2[#,4,7]&;
 		ContriC3=1/4*Total[MassHelp TensHelp,-3][[LightScalar[[;;,1]],LightScalar[[;;,1]]]]//SimplifySparse;
 		
 (*Two bubbles connected in the middle by a quartic, and connecting to the external lines with a cubic coupling*)
-		MassHelp=Table[MassHelpBubble[i,j] MassHelpBubble[k,l],{i,AllMasses},{j,AllMasses},{k,AllMasses},{l,AllMasses}]//SparseArray//SimplifySparse;
+		MassHelp=Table[BubbleIntegral3d[i,j] BubbleIntegral3d[k,l],{i,AllMasses^2},{j,AllMasses^2},{k,AllMasses^2},{l,AllMasses^2}]//SparseArray//SimplifySparse;
 		TensHelp=TensorProduct[\[Lambda]3CTot,\[Lambda]4Tot]//DiagonalTensor2[#,1,4]&//DiagonalTensor2[#,2,4]&;
 		TensHelp=TensorProduct[TensHelp, \[Lambda]3CTot]//DiagonalTensor2[#,4,6]&//DiagonalTensor2[#,4,6]&;
 		ContriC4=1/8*Total[MassHelp TensHelp,-3][[LightScalar[[;;,1]],LightScalar[[;;,1]]]]//SimplifySparse;
@@ -270,7 +241,7 @@ Mixing diagram with two H^3S quartics: ----O---O------
 	ContriSE=-(ZSij . \[Mu]ijTemp+\[Mu]ijTemp . ZSij);
 
 (*Bubble with one light and one heavy line, with one insertion of the light mass*)
-	ContriInsertion=-1/(4\[Pi])Simplify[Table[Sum[\[Lambda]3Cy[[i,a,hh]]\[Mu]ijLight[[a,b]]\[Lambda]3Cy[[j,b,hh]]/\[Mu]ijL[[hh,hh]]^3,{a,1,nSL},{b,1,nSL},{hh,1,nSH}],{i,1,nSL},{j,1,nSL}]];
+	ContriInsertion=Simplify[Table[Sum[\[Lambda]3Cy[[i,a,hh]]\[Mu]ijLight[[a,b]]\[Lambda]3Cy[[j,b,hh]]TriangleIntegral3d[0,0,\[Mu]ijL[[hh,hh]]^2],{a,1,nSL},{b,1,nSL},{hh,1,nSH}],{i,1,nSL},{j,1,nSL}]];
 
 	\[Mu]ijSSNLO=(Contri1+Contri2+Contri3+ Contri4+Contri5+Contri6+Contri7+ContriMix1+ContriMix2+ContriSE+ContriInsertion+\[Mu]ijSSCubic)//Simplify//SparseArray;
 
@@ -281,21 +252,20 @@ Mixing diagram with two H^3S quartics: ----O---O------
 (*
 	Calculates the 1-loop scalar mass.
 *)
-ScalarMassSS[]:=Module[{ContriSS,ContriSS2,ContriTadpole,ContriSS3,SelfEnergySS},
+ScalarMassSS[]:=Module[{ContriSS,ContriSS2,ContriTadpole,ContriSS3},
 If[verbose,Print["Calculating 1-Loop Scalar Mass"]];
 
-	SelfEnergySS=1/(4\[Pi]);
 (*Two H^2S cubics*)
-	ContriSS=SelfEnergySS/2*Simplify[Table[Sum[\[Lambda]3Cx[[i,ii,jj]]\[Lambda]3Cx[[j,ii,jj]]/(\[Mu]ijL[[ii,ii]]+\[Mu]ijL[[jj,jj]]),{ii,1,nSH},{jj,1,nSH}],{i,1,nSL},{j,1,nSL}]];
+	ContriSS=1/2*Simplify[Table[Sum[\[Lambda]3Cx[[i,ii,jj]]\[Lambda]3Cx[[j,ii,jj]]BubbleIntegral3d[\[Mu]ijL[[ii,ii]]^2,\[Mu]ijL[[jj,jj]]^2],{ii,1,nSH},{jj,1,nSH}],{i,1,nSL},{j,1,nSL}]];
 
 (*Two HS^2 cubics*)
-	ContriSS2=SelfEnergySS*Simplify[Table[Sum[\[Lambda]3Cy[[i,ii,jj]]\[Lambda]3Cy[[j,ii,jj]]/(\[Mu]ijL[[jj,jj]]),{ii,1,nSL},{jj,1,nSH}],{i,1,nSL},{j,1,nSL}]];
+	ContriSS2=Simplify[Table[Sum[\[Lambda]3Cy[[i,ii,jj]]\[Lambda]3Cy[[j,ii,jj]]BubbleIntegral3d[0,\[Mu]ijL[[jj,jj]]^2],{ii,1,nSL},{jj,1,nSH}],{i,1,nSL},{j,1,nSL}]];
 
 (*One HS^2 cubic with the tree-level and one-loop tadpoles of the heavy fields*)
 	ContriTadpole=Table[Sum[\[Lambda]3Cy[[i,j,ll]]TadPoleHeavySS[[ll]]/(\[Mu]ijL[[ll,ll]]^2),{ll,1,nSH}],{i,1,nSL},{j,1,nSL}];
 
 (*A H^2S^2 quartic*)
-	ContriSS3=1/(4 \[Pi])/2 Simplify[Table[Sum[ \[Mu]ijL[[a,a]]\[Lambda]K[[a,a,i,j]],{a,1,nSH}],{i,1,nSL},{j,1,nSL}]];
+	ContriSS3=-1/2 Simplify[Table[Sum[TadpoleIntegral3d[\[Mu]ijL[[a,a]]^2]\[Lambda]K[[a,a,i,j]],{a,1,nSH}],{i,1,nSL},{j,1,nSL}]];
 
 	\[Mu]ijSSLO=-ContriSS3-ContriSS-ContriSS2-ContriTadpole//SparseArray;
 
@@ -407,32 +377,10 @@ If[verbose,Print["Adding tree-level Corrections to Scalar Quartics"]];
 (*
 	Calculates the scalar quartic in the ultrasoft theory.
 *)
-ScalarQuarticSS[]:=Module[{ScalarBox,ScalarTriangle,\[Lambda]3CyLoop,ContriTree,ContriTadpole,ContriMixing,\[Lambda]KEff,\[Lambda]yEff,\[Lambda]yEff2,HeavyMasses,
+ScalarQuarticSS[]:=Module[{\[Lambda]3CyLoop,ContriTree,ContriTadpole,ContriMixing,\[Lambda]KEff,\[Lambda]yEff,\[Lambda]yEff2,HeavyMasses,
 					AllMasses,TensHelp,MassHelp,HeavyScal,ContriSE,
 					ContriCubic,ContriQuarCubic,ContriSS,ContriSS2,ContriSS3,ContriTL,ContriTadpole1,ContriTadpole2},
 If[verbose,Print["Calculating Scalar Quartics"]];
-	
-(*Scalar triangle diagram*)
-		ScalarTriangle[x_,y_,z_]:=1/(4 \[Pi] (x+y) (x+z) (y+z));
-		ScalarTriangle[x_,0,0]:=-(1/(4 \[Pi] x^3));
-		ScalarTriangle[0,x_,0]:=ScalarTriangle[x,0,0];
-		ScalarTriangle[0,0,x_]:=ScalarTriangle[x,0,0];
-		ScalarTriangle[0,0,0]:=0;
-
-(*Scalar box diagram*)
-		ScalarBox[x_,y_,z_,w_]:=(w+x+y+z)/(4 \[Pi] (w+x) (w+y) (w+z) (x+y) (x+z) (y+z));	
-		ScalarBox[x_,y_,0,0]:=-((x^2+x y+y^2)/(4 \[Pi] x^3 y^3 (x+y)));	
-		ScalarBox[x_,0,y_,0]:=ScalarBox[x,y,0,0];
-		ScalarBox[x_,0,0,y_]:=ScalarBox[x,y,0,0];
-		ScalarBox[0,y_,x_,0]:=ScalarBox[x,y,0,0];
-		ScalarBox[0,y_,0,x_]:=ScalarBox[x,y,0,0];
-		ScalarBox[0,0,y_,x_]:=ScalarBox[x,y,0,0];
-		ScalarBox[x_,0,0,0]:=1/(4 \[Pi] x^5);
-		ScalarBox[0,x_,0,0]:=ScalarBox[x,0,0,0];
-		ScalarBox[0,0,x_,0]:=ScalarBox[x,0,0,0];
-		ScalarBox[0,0,0,x_]:=ScalarBox[x,0,0,0];
-		ScalarBox[0,0,0,0]:=0;
-		
 
 (*Quartics with a various number of heavy-scalar legs*)
 	\[Lambda]KEff=\[Lambda]K//SparseArray;
@@ -517,7 +465,7 @@ If[verbose,Print["Calculating Scalar Quartics"]];
 	for all the scalars and then project out the relevant contributions in the end.*)	
 
 (*A box diagram with 4 cubic couplings*)
-		MassHelp=Table[ScalarBox[n,m,l,w],{n,AllMasses},{m,AllMasses},{l,AllMasses},{w,AllMasses}]//SparseArray;	
+		MassHelp=Table[BoxIntegral3d[n,m,l,w],{n,AllMasses^2},{m,AllMasses^2},{l,AllMasses^2},{w,AllMasses^2}]//SparseArray;	
 		TensHelp=TensorProduct[\[Lambda]3CTot,\[Lambda]3CTot,\[Lambda]3CTot]//DiagonalTensor2[#,2,5]&//DiagonalTensor2[#,5,7]&;
 		TensHelp=TensorProduct[TensHelp,\[Lambda]3CTot]//DiagonalTensor2[#,4,9]&//DiagonalTensor2[#,7,8]&;
 		TensHelp=Total[MassHelp TensHelp,-5][[LightScalar[[;;,1]],LightScalar[[;;,1]],LightScalar[[;;,1]],LightScalar[[;;,1]]]];
@@ -525,7 +473,7 @@ If[verbose,Print["Calculating Scalar Quartics"]];
 		ContriCubic=3 Symmetrize[TensHelp,Symmetric[{1,2,3,4}]]//SparseArray//SimplifySparse;
 
 (*A triangle diagram with two cubic and one quartic couplings*)				
-		MassHelp=Table[ScalarTriangle[n,m,l],{n,AllMasses},{m,AllMasses},{l,AllMasses}]//SparseArray;	
+		MassHelp=Table[TriangleIntegral3d[n,m,l],{n,AllMasses^2},{m,AllMasses^2},{l,AllMasses^2}]//SparseArray;	
 		TensHelp=TensorProduct[\[Lambda]4Tot,\[Lambda]3CTot,\[Lambda]3CTot]//DiagonalTensor2[#,3,5]&//DiagonalTensor2[#,4,7]&//DiagonalTensor2[#,6,7]&;
 		TensHelp=Total[MassHelp TensHelp,-5][[LightScalar[[;;,1]],LightScalar[[;;,1]],LightScalar[[;;,1]],LightScalar[[;;,1]]]];
 		ContriQuarCubic=-3!Symmetrize[TensHelp,Symmetric[{1,2,3,4}]]//SparseArray//SimplifySparse;
@@ -682,12 +630,12 @@ TadPoleSS[]:=Module[{},
 
 
 (*
-	The masses and the cubic and quartic couplings of all scalars, light and heavy, as one tensor each.
+	The squared masses and the cubic and quartic couplings of all scalars, light and heavy, as one tensor each.
 	The light fields have the indices 1,...,nSL, the heavy fields nSL+1,...,nSL+nSH, and the light masses are zero.
 *)
 AllScalarCouplingsSS[]:=Module[{nAll,masses,blockRules,allPermutations,lam3,lam4},
 	nAll=nSL+nSH;
-	masses=Join[Table[0,{nSL}],Table[\[Mu]ijL[[n,n]],{n,1,nSH}]];
+	masses=Join[Table[0,{nSL}],Table[\[Mu]ijL[[n,n]]^2,{n,1,nSH}]];
 	blockRules[tensor_,offset_]:=Delete[SparseArray[tensor]//ArrayRules,-1]/.(x_List->v_):>(x+offset->v);
 	allPermutations[rules_]:=DeleteDuplicates[Flatten[Table[Thread[Permutations[r[[1]]]->r[[2]]],{r,rules}]],#1[[1]]==#2[[1]]&];
 	lam3=SparseArray[allPermutations[Join[
@@ -705,15 +653,6 @@ AllScalarCouplingsSS[]:=Module[{nAll,masses,blockRules,allPermutations,lam3,lam4
 ];
 
 
-(*One-loop integrals at zero external momentum, with one, two, and three propagators*)
-TadpoleIntegralSS[x_]:=-x/(4\[Pi]);
-BubbleIntegralSS[x_,y_]:=If[x===0&&y===0,0,1/(4\[Pi] (x+y))];
-TriangleIntegralSS[x_,y_,z_]:=Switch[Count[{x,y,z},0],
-	3,0,
-	2,-1/(4\[Pi] (x+y+z)^3),
-	_,1/(4\[Pi] (x+y) (x+z) (y+z))];
-
-
 (*
 	One-loop cubic couplings of the fields in list1, list2, list3, from loops with at least one heavy line.
 	It is the third derivative of 1/2 Tr ln(p^2+M^2) with respect to the fields: bubbles with one quartic and one
@@ -721,12 +660,12 @@ TriangleIntegralSS[x_,y_,z_]:=Switch[Count[{x,y,z},0],
 *)
 OneLoopCubicSS[list1_,list2_,list3_]:=Module[{masses,lam3,lam4,bubbleMat,triangle,nonzero,dLam},
 	{masses,lam3,lam4}=AllScalarCouplingsSS[];
-	bubbleMat=SparseArray[Table[BubbleIntegralSS[x,y],{x,masses},{y,masses}]];
+	bubbleMat=SparseArray[Table[BubbleIntegral3d[x,y],{x,masses},{y,masses}]];
 
 	nonzero[tensor_]:=Delete[ArrayRules[tensor],-1];
 	triangle[i_,j_,k_]:=Sum[
 		If[c[[1,1]]==0,0,
-			r[[2]]c[[2]]lam3[[k,c[[1,1]],r[[1,1]]]]TriangleIntegralSS[masses[[r[[1,1]]]],masses[[r[[1,2]]]],masses[[c[[1,1]]]]]],
+			r[[2]]c[[2]]lam3[[k,c[[1,1]],r[[1,1]]]]TriangleIntegral3d[masses[[r[[1,1]]]],masses[[r[[1,2]]]],masses[[c[[1,1]]]]]],
 		{r,nonzero[lam3[[i]]]},{c,Append[nonzero[lam3[[j,r[[1,2]]]]],{0}->0]}];
 
 	dLam[i_,j_,k_]:=-1/2*(
@@ -753,8 +692,8 @@ TadpoleShiftLH[tadpole_]:=SparseArray[Table[-Sum[\[Lambda]3Cx[[i,k,l]]tadpole[[l
 *)
 MixingLH[tadpole_]:=Module[{masses,lam3,lam4,tadpoleVec,bubbleMat,loop},
 	{masses,lam3,lam4}=AllScalarCouplingsSS[];
-	tadpoleVec=SparseArray[Table[TadpoleIntegralSS[x],{x,masses}]];
-	bubbleMat=SparseArray[Table[BubbleIntegralSS[x,y],{x,masses},{y,masses}]];
+	tadpoleVec=SparseArray[Table[TadpoleIntegral3d[x],{x,masses}]];
+	bubbleMat=SparseArray[Table[BubbleIntegral3d[x,y],{x,masses},{y,masses}]];
 	loop=Table[1/2 Total[Diagonal[lam4[[i,nSL+k]]] tadpoleVec]-1/2 Total[lam3[[i]] lam3[[nSL+k]] bubbleMat,2],{i,1,nSL},{k,1,nSH}];
 	SparseArray[loop]+TadpoleShiftLH[tadpole]//SimplifySparse
 ];

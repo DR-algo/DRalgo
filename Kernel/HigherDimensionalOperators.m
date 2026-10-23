@@ -103,26 +103,6 @@ ComposePermutation[p1_,p2_]:=p2[[p1]];
 *)
 
 
-(*
-	HardThermal1LoopInt["B", a, b, d]
-   Bosonic hard-thermal 1-loop sum-integral I_B(a,b) in d dimensions.
-   a : power of the loop momentum in the denominator (propagator power),
-   b : power of the spatial loop momentum in the numerator,
-   d : spacetime dimension (d->3 for the 3d EFT).
-   Evaluates to the closed form in terms of the Riemann Zeta function
-   and Gamma functions after performing the bosonic Matsubara frequency sum.
-*)
-HardThermal1LoopInt["B",a_,b_,d_]:=((\[CapitalLambda]^2 Exp[EulerGamma])/(4\[Pi]))^((3-d)/2) 2 T (2\[Pi] T)^(d-2a+2b)/(4\[Pi])^(d/2) Gamma[a-d/2]/Gamma[a] Zeta[2a-2b-d];
-
-(* 
-	HardThermal1LoopInt["F", a, b, d]
-   Fermionic hard-thermal 1-loop sum-integral I_F(a,b) in d dimensions.
-   Related to the bosonic case by the overall factor (2^(2a-2b-d)-1) that
-   accounts for the half-integer fermionic Matsubara frequencies.
-*)
-HardThermal1LoopInt["F",a_,b_,d_]:=(2^(2a-2b-d)-1)HardThermal1LoopInt["B",a,b,d];
-
-
 S1V2D2B[x_]:=Module[{terms},
 	terms=
 		Which[

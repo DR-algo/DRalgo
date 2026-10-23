@@ -589,6 +589,7 @@ Begin["`Private`"]
 loadModule[file_] := 
   Get[FileNameJoin[{$DRalgoDirectory, file}]];
 
+loadModule["MasterIntegrals.m"]; (* Master integrals of the hard modes and of the 3d theories *)
 loadModule["Debye.m"]; (* Additional functions for Debye mass *) 
 loadModule["HardToSoft.m"]; (* Loads Hard -> Soft functions *)
 loadModule["SoftToUS.m"]; (* Soft -> SS functions *)

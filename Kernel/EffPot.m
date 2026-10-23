@@ -335,20 +335,15 @@ PrintEffectivePotential[optP_]:=Module[{opt=optP},
 (*
 	Calculates the tree-level effective potential.
 *)
-CalculateOffDiagPotentialSS[]:=Module[{V1,V2,helpTens,AD},
+CalculateOffDiagPotentialSS[]:=Module[{V1,V2,helpTens},
 		
-(*Scalar integrals*)	
-	AD[x_,y_]:=-(1/(4 \[Pi]))( Sqrt[x]-Sqrt[y])/(y-x);
-	AD[0,0]:=0;
-	AD[x_,x_]:=(1/(8 \[Pi]))/Sqrt[x];
-	
 (*Scalar contribution*)
-		helpTens=Table[AD[a,b],{a,Diagonal[\[Mu]ij\[Phi]]},{b,Diagonal[\[Mu]ij\[Phi]]}]//SparseArray;
+		helpTens=Table[BubbleIntegral3d[a,b],{a,Diagonal[\[Mu]ij\[Phi]]},{b,Diagonal[\[Mu]ij\[Phi]]}]//SparseArray;
 		helpTens=TensorProduct[helpTens,\[Mu]ijPert]//SparseArray//DiagonalTensor2[#,1,3]&;
 		V1=Tr[helpTens . \[Mu]ijPert];
 
 (*Vector contribution*)
-		helpTens=Table[AD[a,b],{a,Diagonal[\[Mu]ab\[Phi]]},{b,Diagonal[\[Mu]ab\[Phi]]}]//SparseArray;
+		helpTens=Table[BubbleIntegral3d[a,b],{a,Diagonal[\[Mu]ab\[Phi]]},{b,Diagonal[\[Mu]ab\[Phi]]}]//SparseArray;
 		helpTens=TensorProduct[helpTens,\[Mu]ab\[Phi]Pert]//SparseArray//DiagonalTensor2[#,1,3]&;
 		V2=2*Tr[helpTens . \[Mu]ab\[Phi]Pert];
 		
@@ -374,7 +369,7 @@ If[verbose==True,Print["Calculating the 2-Loop Effective Potential"]];
 	av=Table[\[Mu]ab\[Phi][[i,i]],{i,1,nvEP}]//SparseArray;
 
 (*Loading two-loop master integrals*)
-	{fvvv,f\[Eta]\[Eta]v,fssv,fvvs,fsss,fss,fvs,fvv}=TwoLoopFunctions[];
+	{fvvv,f\[Eta]\[Eta]v,fssv,fvvs,fsss,fss,fvs,fvv}=TwoLoopFunctions[\[Mu]3US];
 (*Potential*)
 
 	If[Length[TensorDimensions[\[Lambda]4\[Phi]]]<4,
@@ -408,13 +403,11 @@ If[verbose==True,Print["Calculating the 2-Loop Effective Potential"]];
 (*
 	Calculates the one-loop effective potential.
 *)
-CalculateNLOPotentialSS[]:=Module[{ALog},
+CalculateNLOPotentialSS[]:=Module[{},
 If[verbose==True,Print["Calculating the 1-Loop Effective Potential"]];
-	
-	ALog[x_]:=-(x^(3/2)/(12 \[Pi]));
 		
-	V1=Sum[ALog[\[Mu]ij\[Phi][[i,i]]],{i,1,nsEP}];
-	V2=2*Sum[ALog[\[Mu]ab\[Phi][[i,i]]],{i,1,nvEP}];
+	V1=Sum[OneLoopPotential3d[\[Mu]ij\[Phi][[i,i]]],{i,1,nsEP}];
+	V2=2*Sum[OneLoopPotential3d[\[Mu]ab\[Phi][[i,i]]],{i,1,nvEP}];
 
 	VNLO=V1+V2;
 ];
@@ -546,81 +539,4 @@ RotateTensorsCustomMass[DScalarsp_,DVectorsp_,ScalarMass_,vectorMass_,OptionsPat
 
 ];
 
-
-(* ::Section:: *)
-(*Scalar master integrals*)
-
-
-TwoLoopFunctions[]:=Module[{f,A,I2,I2Div,AD,ALog,fvvv,f\[Eta]\[Eta]v,fssv,fvvs,fsss,fss,fvs,fvv},
-(*The notation follows Martin's convention*)
-(*Please see arXiv:1808.07615*)
-	f[x_]:=-(1/(12 \[Pi])) x^(3/2);
-	A[0]=0;
-	A[x_]:=-(1/(4 \[Pi])) Sqrt[x];
-	I2[0,0,0]=0;
-	I2[x_,y_,z_]:=1/(4 \[Pi])^2 (Log[\[Mu]3US/(Sqrt[x]+Sqrt[y]+Sqrt[z])]+1/2);
-	I2Div=1/(4 \[Pi])^2 1/4;
-
-(*Scalar integrals*)	
-	AD[x_,y_]:=-(1/(4 \[Pi]))( Sqrt[x]-Sqrt[y])/(y-x);
-	AD[0,0]:=0;
-	AD[x_,x_]:=(1/(8 \[Pi]))/Sqrt[x];
-	ALog[x_]:=-(x^(3/2)/(12 \[Pi]));
-		
-		
-(*Sunset with three vector bosons*)
-	fvvv[x_,y_,z_]:=1/(4 x y z) (1/3 (x^4 (2 I2Div-3 I2[0,0,x])+(x^2-2 x (y+z)+(y-z)^2) (-(3 (x^2+6 x (y+z)+y^2+6 y z+z^2) I2[x,y,z])
-							-I2Div (3 (-(8 x (y+z))-8 y z)-2 (x^2+6 x (y+z)+y^2+6 y z+z^2)))+(x-y)^2 (3 (x^2+6 x y+y^2) I2[0,x,y]
-							+I2Div (-(2 (x^2+6 x y+y^2))-24 x y))+(x-z)^2 (3 (x^2+6 x z+z^2) I2[0,x,z]+I2Div (-(2 (x^2+6 x z+z^2))-24 x z))
-							+y^4 (2 I2Div-3 I2[0,0,y])+(y-z)^2 (3 (y^2+6 y z+z^2) I2[0,y,z]+I2Div (-(2 (y^2+6 y z+z^2))-24 y z))+z^4 (2 I2Div-3 I2[0,0,z])
-							+x A[y] A[z] (3 x^2+15 x y+15 x z-15 y^2-26 y z-15 z^2)+z A[x] A[y] (-(15 x^2)-26 x y+15 x z-15 y^2+15 y z+3 z^2)
-							+y A[x] A[z] (-(15 x^2)+15 x y-26 x z+3 y^2+15 y z-15 z^2))+40/3 (I2Div x^2 y z+I2Div x y^2 z+I2Div x y z^2));
-	(*Special cases where some massesa are 0*)	
-		fvvv[0,0,0]:=0;
-	
-		fvvv[0,y_,z_]:=1/(6 y z) (-(6 y^3 I2[0,y,z])+6 y^3 I2[0,0,y]+30 y^2 z I2[0,y,z]-6 z^3 I2[0,y,z]+30 y z^2 I2[0,y,z]
-					+6 z^3 I2[0,0,z]-6 y^2 A[y] A[z]-6 z^2 A[y] A[z]-4 y z A[y] A[z]-57 I2Div y^2 z-57 I2Div y z^2);
-		fvvv[x_,0,z_]:=fvvv[0,x,z];
-		fvvv[x_,y_,0]:=fvvv[0,x,y];
-		fvvv[0,0,z_]:=1/4 z (20 I2[0,0,z]-46 I2Div);
-		fvvv[0,y_,0]:=fvvv[0,0,y];
-		fvvv[x_,0,0]:=fvvv[0,0,x];
-
-(*Ghost-vector sunset*)
-
-		f\[Eta]\[Eta]v[x_,y_,z_]:=((-x+y+z) A[y] A[z]+A[x] (-z A[y]+(x-y+z) A[z])-(x-y)^2 I2[0,x,y]+(y^2+(x-z)^2-2 y (x+z)) I2[x,z,y])/(2 z);
-	(*Special cases where vector-mass is zero*)
-		f\[Eta]\[Eta]v[x_,y_,0]:=1/2 (2 I2Div (x+y)-2 (A[x] A[y]+(x+y) I2[0,x,y]));
-		f\[Eta]\[Eta]v[0,0,0]:=0;
-		f\[Eta]\[Eta]v[0,0,z]:=1/2 z I2[0,0,z];
-
-(*Scalar-scalar-vector sunset*)
-	fssv[x_,y_,z_]:=1/z (-((-x+y+z) A[y] A[z])-A[x] (-z A[y]+(x-y+z) A[z])+(x-y)^2 I2[0,x,y]-((x-y)^2-2 (x+y) z+z^2) I2[x,y,z]);
-	(*Special case where vector-mass is zero*)
-		fssv[x_,y_,0]:=-2 I2Div (x+y)-2 (-A[x] A[y]-(x+y) I2[0,x,y]);
-		fssv[0,0,0]:=0;
-
-(*Vector-vector-scalar sunset*)
-	fvvs[x_,y_,z_]:=1/(4 x y) (8 I2Div x y-(x+y-z) A[x] A[y]+y A[x] A[z]+x A[y] A[z]
-						-z^2 I2[0,0,z]+(x-z)^2 I2[0,x,z]+(y-z)^2 I2[0,y,z]-(x^2+6 x y+(y-z)^2-2 x z) I2[x,y,z]);
-	(*Special case where vector-masses are zero*)
-		fvvs[0,y_,z_]:=(6 I2Div y+2 (A[y] A[z]-z I2[0,0,z]+(-3 y+z) I2[0,y,z]))/(4 y);
-		fvvs[x_,0,z_]:=fvvs[0,x,z];
-		fvvs[0,0,z_]:=1/4 (10 I2Div-6 I2[0,0,z]);
-		fvvs[0,0,0]:=0;
-		
-(*scalar-scalar-scalar sunset*)		
-	fsss[x_,y_,z_]:=-I2[x,y,z];
-	
-(*scalar-scalar bubble*)
-	fss[x_,y_]:=A[x]A[y];
-	
-(*scalar-vector bubble*)
-	fvs[x_,y_]:=2 A[x]A[y];
-	
-(*vector-vector bubble*)	
-	fvv[x_,y_]:=8/3 A[x]A[y];
-	
-	Return[{fvvv,f\[Eta]\[Eta]v,fssv,fvvs,fsss,fss,fvs,fvv}];
-]
 
