@@ -100,8 +100,8 @@ PrepareHET[HardScalarIndices_,HardVectorIndices_]:=Module[
 		LightVectorHET={};
 	];(*Trick to avoid errors in situations where all vector bosons are integrated out*)
 (*We now extract masses for the hard particles*)
-	\[Mu]ijHET=Table[\[Mu]ij\[Phi][[a,b]],{a,HeavyScalarsHET},{b,HeavyScalarsHET}]//SparseZero[#,{nHETS,nHETS}]&;
-	\[Mu]abHET=Table[\[Mu]ab\[Phi][[a,b]],{a,HeavyVectorsHET},{b,HeavyVectorsHET}]//SparseZero[#,{nHETV,nHETV}]&;
+	muijHET=Table[muij\[Phi][[a,b]],{a,HeavyScalarsHET},{b,HeavyScalarsHET}]//SparseZero[#,{nHETS,nHETS}]&;
+	muabHET=Table[muab\[Phi][[a,b]],{a,HeavyVectorsHET},{b,HeavyVectorsHET}]//SparseZero[#,{nHETV,nHETV}]&;
 	
 	
 (*Defining couplings between hard and soft particles*)
@@ -110,8 +110,8 @@ PrepareHET[HardScalarIndices_,HardVectorIndices_]:=Module[
 (*Contraction with coupling-tensors and masses*)
 (*We now have to integrate out hard particles in each topology*)
 (*We treat off-diagonal masses perturbatively, so only the diagonal elements are used here*)	
-	aS=Table[\[Mu]ijHET[[i,i]],{i,1,nHETS}]//SparseArray;
-	av=Table[\[Mu]abHET[[i,i]],{i,1,nHETV}]//SparseArray;
+	aS=Table[muijHET[[i,i]],{i,1,nHETS}]//SparseArray;
+	av=Table[muabHET[[i,i]],{i,1,nHETV}]//SparseArray;
 
 (*For the effective potential we can loop over all particles (both light and heavy) if we set the light masses to zero*)
 	avF=Table[0,{i,nvEP}]//SparseArray;
@@ -139,9 +139,9 @@ PrepareHET[HardScalarIndices_,HardVectorIndices_]:=Module[
 CalculateLOPotentialHET[]:=Module[{V1,V2,V3},
 	If[verbose==True,Print["Calculating the Tree-Level Effective Potential"]];
 	
-	V1=\[Lambda]4EP . \[Phi]Vev . \[Phi]Vev . \[Phi]Vev . \[Phi]Vev;
-	V2=\[Mu]ijEP . \[Phi]Vev . \[Phi]Vev;
-	V3=\[Lambda]3EP . \[Phi]Vev . \[Phi]Vev . \[Phi]Vev;
+	V1=lam4EP . \[Phi]Vev . \[Phi]Vev . \[Phi]Vev . \[Phi]Vev;
+	V2=muijEP . \[Phi]Vev . \[Phi]Vev;
+	V3=lam3EP . \[Phi]Vev . \[Phi]Vev . \[Phi]Vev;
 	VHETLO=1/4! V1+V2/2!+V3/3!;
 	];
 
@@ -152,8 +152,8 @@ CalculateLOPotentialHET[]:=Module[{V1,V2,V3},
 CalculateNLOPotentialHET[]:=Module[{V1,V2},
 If[verbose==True,Print["Calculating the 1-Loop Effective Potential"]];
 	
-	V1=Sum[OneLoopPotential3d[\[Mu]ijHET[[i,i]]],{i,1,nHETS}];
-	V2=2*Sum[OneLoopPotential3d[\[Mu]abHET[[i,i]]],{i,1,nHETV}];
+	V1=Sum[OneLoopPotential3d[muijHET[[i,i]]],{i,1,nHETS}];
+	V2=2*Sum[OneLoopPotential3d[muabHET[[i,i]]],{i,1,nHETV}];
 
 	VHETNLO=V1+V2;
 ];
@@ -164,18 +164,18 @@ If[verbose==True,Print["Calculating the 1-Loop Effective Potential"]];
 *)
 CalculateNNLOPotentialHET[]:=Module[{fvvv,f\[Eta]\[Eta]v,fssv,fvvs,fsss,fss,fvs,fvv,ss,sss,vs,vvs,ssv,vv,vvv,ggv,
 							Vss,Vsss,Vvs,Vvvs,Vssv,Vvvv,Vvv,V\[Eta]\[Eta]v,
-							\[Mu]ab\[Phi]Pert,\[Mu]ijPert,helpTens,V1,V2},
+							muab\[Phi]Pert,muijPert,helpTens,V1,V2},
 If[verbose==True,Print["Calculating the 2-Loop Effective Potential"]];
 
 
 	(*Loading two-loop master integrals*)
-	{fvvv,f\[Eta]\[Eta]v,fssv,fvvs,fsss,fss,fvs,fvv}=TwoLoopFunctions[\[Mu]3US];
+	{fvvv,f\[Eta]\[Eta]v,fssv,fvvs,fsss,fss,fvs,fvv}=TwoLoopFunctions[mu3US];
 (*scalar-scalar bubble*)	
-	ss=1/8 TensorProduct[\[Lambda]4\[Phi]];
+	ss=1/8 TensorProduct[lam4\[Phi]];
 	Vss=Sum[ss[[j,j,k,k]]fss[asF[[j]],asF[[k]]],{j,nsEP},{k,nsEP}];
 
 (*scalar-scalar-scalar sunset*)	
-	sss=1/12 TensorProduct[\[Lambda]3\[Phi],\[Lambda]3\[Phi]];
+	sss=1/12 TensorProduct[lam3\[Phi],lam3\[Phi]];
 	Vsss=Sum[sss[[i,j,k,i,j,k]]fsss[asF[[i]],asF[[j]],asF[[k]]],{j,nsEP},{k,nsEP},{i,nsEP}];
 	
 (*scalar-vector bubble*)
@@ -205,23 +205,23 @@ If[verbose==True,Print["Calculating the 2-Loop Effective Potential"]];
 	
 
 (*We now treat off-diagonal masses as small*)
-	\[Mu]ijPert=\[Mu]ij\[Phi];
-	\[Mu]ijPert[[LightScalarHET,LightScalarHET]]=0;
-	\[Mu]ijPert=ArrayRules[\[Mu]ijPert]/.({x_Integer,y_Integer}->a_)/;Equal[x,y]->{x,y}->0//SparseArray[#,{nsEP,nsEP}]&;
+	muijPert=muij\[Phi];
+	muijPert[[LightScalarHET,LightScalarHET]]=0;
+	muijPert=ArrayRules[muijPert]/.({x_Integer,y_Integer}->a_)/;Equal[x,y]->{x,y}->0//SparseArray[#,{nsEP,nsEP}]&;
 	
-	\[Mu]ab\[Phi]Pert=\[Mu]ab\[Phi];
-	\[Mu]ab\[Phi]Pert[[LightVectorHET,LightVectorHET]]=0;
-	\[Mu]ab\[Phi]Pert=ArrayRules[\[Mu]ab\[Phi]Pert]/.({x_Integer,y_Integer}->a_)/;Equal[x,y]->{x,y}->0//SparseArray[#,{nvEP,nvEP}]&;
+	muab\[Phi]Pert=muab\[Phi];
+	muab\[Phi]Pert[[LightVectorHET,LightVectorHET]]=0;
+	muab\[Phi]Pert=ArrayRules[muab\[Phi]Pert]/.({x_Integer,y_Integer}->a_)/;Equal[x,y]->{x,y}->0//SparseArray[#,{nvEP,nvEP}]&;
 
 (*Scalar contribution*)
 	helpTens=Table[BubbleIntegral3d[a,b],{a,asF},{b,asF}]//SparseArray;
-	helpTens=TensorProduct[helpTens,\[Mu]ijPert]//SparseArray//DiagonalTensor2[#,1,3]&;
-	V1=Tr[helpTens . \[Mu]ijPert];
+	helpTens=TensorProduct[helpTens,muijPert]//SparseArray//DiagonalTensor2[#,1,3]&;
+	V1=Tr[helpTens . muijPert];
 
 (*Vector contribution*)
 	helpTens=Table[BubbleIntegral3d[a,b],{a,avF},{b,avF}]//SparseArray;
-	helpTens=TensorProduct[helpTens,\[Mu]ab\[Phi]Pert]//SparseArray//DiagonalTensor2[#,1,3]&;
-	V2=2*Tr[helpTens . \[Mu]ab\[Phi]Pert];
+	helpTens=TensorProduct[helpTens,muab\[Phi]Pert]//SparseArray//DiagonalTensor2[#,1,3]&;
+	V2=2*Tr[helpTens . muab\[Phi]Pert];
 		
 	
 (*Potential*)
@@ -297,14 +297,14 @@ PrintScalarKineticHET[] := Module[{},
 (*
 	Scalar self-energy in the effective theory.
 *)
-ScalarSelfEnergyHET[]:=Module[{\[Lambda]3IJi,gAIj,GABi,TensHelp,ContriSV,ContriVV,ContriSS},
+ScalarSelfEnergyHET[]:=Module[{lam3IJi,gAIj,GABi,TensHelp,ContriSV,ContriVV,ContriSS},
 If[verbose,Print["Calculating Scalar Self-Energy"]];
 
 (*Scalar-scalar bubble*)
-	\[Lambda]3IJi=\[Lambda]3\[Phi][[;;,;;,LightScalarHET]]//HeavyTensor[#,{nsEP,nsEP,nHETSlight}]&;
+	lam3IJi=lam3\[Phi][[;;,;;,LightScalarHET]]//HeavyTensor[#,{nsEP,nsEP,nHETSlight}]&;
 	TensHelp=Table[BubbleIntegral3dP2[i,a],{i,asF},{a,asF}]//SparseArray;
-	TensHelp=TensorProduct[TensHelp,\[Lambda]3IJi]//DiagonalTensor[#,2,3]&//DiagonalTensor[#,2,3]&;
-	ContriSS=1/2*Contract[\[Lambda]3IJi,TensHelp,{{1,4},{2,5}}]//SimplifySparse;
+	TensHelp=TensorProduct[TensHelp,lam3IJi]//DiagonalTensor[#,2,3]&//DiagonalTensor[#,2,3]&;
+	ContriSS=1/2*Contract[lam3IJi,TensHelp,{{1,4},{2,5}}]//SimplifySparse;
 
 (*Scalar-vector bubble*)
 	gAIj=gvss\[Phi][[;;,LightScalarHET,;;]]//HeavyTensor[#,{nvEP,nHETSlight,nsEP}]&;

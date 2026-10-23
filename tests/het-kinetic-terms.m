@@ -125,12 +125,12 @@ CalculatePotentialHET[];
 kinetic=Normal[PrintScalarKineticHET[]];
 
 (*Without the couplings of the doublet to the SU(2) and U(1) temporal scalars, only the SU(3) bubble remains*)
-mGluon=\[Mu]sqSU3+\[Lambda]VL[4]\[CurlyPhi]^2/2;
+mGluon=musqSU3+lamVL[4]\[CurlyPhi]^2/2;
 AppendTo[testList,
 VerificationTest[
-	Simplify[(2Diagonal[kinetic]/.{\[Lambda]VL[5]->0,\[Lambda]VL[6]->0,\[Lambda]VL[7]->0})
+	Simplify[(2Diagonal[kinetic]/.{lamVL[5]->0,lamVL[6]->0,lamVL[7]->0})
 		-gw3d/(\[Pi] \[CurlyPhi]){-1,-1,-1,-11/16,-8/3,-8/3,-8/3}
-		-{0,0,0,1/2 8(\[Lambda]VL[4]\[CurlyPhi])^2/(96\[Pi] mGluon^(3/2)),0,0,0},Join[positive,{mGluon>0}]],
+		-{0,0,0,1/2 8(lamVL[4]\[CurlyPhi])^2/(96\[Pi] mGluon^(3/2)),0,0,0},Join[positive,{mGluon>0}]],
 	ConstantArray[0,7],
 	TestID->"heavy-SU2-vectors-and-temporal-scalars-soft"
 ]];

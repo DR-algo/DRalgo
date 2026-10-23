@@ -104,8 +104,8 @@ VerificationTest[
 (*beta(mC) is the complex conjugate of beta(m)*)
 
 
-\[Beta]Mass=Normal[private["\[Beta]\[Mu]IJF"]];
-\[Beta]MassC=Normal[private["\[Beta]\[Mu]IJFC"]];
+\[Beta]Mass=Normal[private["\[Beta]muIJF"]];
+\[Beta]MassC=Normal[private["\[Beta]muIJFC"]];
 
 AppendTo[testList,
 VerificationTest[
@@ -173,7 +173,7 @@ private["CounterTerm"][];
 
 AppendTo[testList,
 VerificationTest[
-	{Normal[private["\[Beta]\[Mu]IJF"]],Normal[private["\[Beta]\[Mu]IJFC"]]}//Expand,
+	{Normal[private["\[Beta]muIJF"]],Normal[private["\[Beta]muIJFC"]]}//Expand,
 	Table[3 m\[Psi] y^2/(16\[Pi]^2) {{0,1},{1,0}},{2}]//Expand,
 	TestID->"scalar-yukawa-mass-beta-is-textbook-value"
 ]];

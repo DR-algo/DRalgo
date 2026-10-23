@@ -23,16 +23,16 @@ Check[
 
 (*
 	Issue #66: the scalar sunset of the soft theory,
-	-1/12 \[Lambda]3^2 (1/(4\[Epsilon])+Log[\[Mu]3/(m1+m2+m3)]+1/2)/(16\[Pi]^2) in the free energy,
-	contributes +T \[Lambda]3^2 Log[\[Mu]3]/(192\[Pi]^2) to the pressure, which the running from \[Mu] to \[Mu]3
+	-1/12 \[Lambda]3^2 (1/(4eps)+Log[mu3/(m1+m2+m3)]+1/2)/(16\[Pi]^2) in the free energy,
+	contributes +T \[Lambda]3^2 Log[mu3]/(192\[Pi]^2) to the pressure, which the running from mu to mu3
 	in PrintPressure["NNLO"] cancels. When heavy scalars are integrated out, the sunsets with at least
 	one heavy line belong to the ultrasoft pressure, with the light masses set to zero, while the sunset
 	with only light lines belongs to the ultrasoft theory.
 
 	Checked here:
 	- one light and one heavy real scalar with all cubic couplings: the sunsets in PrintPressureUS["NLO"],
-	  and the \[Mu]3-dependence of the hard and ultrasoft pressure, which is that of the light sunset only;
-	- the scalar of examples/ScalYukawa.m integrated out, the example of issue #66: the \[Mu]3-dependence
+	  and the mu3-dependence of the hard and ultrasoft pressure, which is that of the light sunset only;
+	- the scalar of examples/ScalYukawa.m integrated out, the example of issue #66: the mu3-dependence
 	  of the hard pressure is cancelled.
 *)
 
@@ -60,9 +60,9 @@ PerformDRsoft[{2}];
 
 (*Sunsets with the lines sss, ffs, and fss, where the light line f is massless*)
 sunsets=1/(192\[Pi]^2)(
-	cs3d^2 (1/2+Log[\[Mu]3/(3Sqrt[ms3d])])
-	+3ya3d^2 (1/2+Log[\[Mu]3/Sqrt[ms3d]])
-	+3yb3d^2 (1/2+Log[\[Mu]3/(2Sqrt[ms3d])]));
+	cs3d^2 (1/2+Log[mu3/(3Sqrt[ms3d])])
+	+3ya3d^2 (1/2+Log[mu3/Sqrt[ms3d]])
+	+3yb3d^2 (1/2+Log[mu3/(2Sqrt[ms3d])]));
 pressureUS=PrintPressureUS["NLO"];
 
 AppendTo[testList,
@@ -76,7 +76,7 @@ VerificationTest[
 lo3d={cf3d->Sqrt[T]cf,cs3d->Sqrt[T]cs,ya3d->Sqrt[T]ya,yb3d->Sqrt[T]yb};
 AppendTo[testList,
 VerificationTest[
-	Simplify[\[Mu]3 D[PrintPressure["NNLO"]+T (PrintPressureUS["LO"]+pressureUS),\[Mu]3]/.lo3d],
+	Simplify[mu3 D[PrintPressure["NNLO"]+T (PrintPressureUS["LO"]+pressureUS),mu3]/.lo3d],
 	-T^2 cf^2/(192\[Pi]^2),
 	TestID->"light-and-heavy-scalar-mu3-dependence"
 ]];
@@ -108,7 +108,7 @@ Quiet[PerformDRsoft[{1}]];
 
 AppendTo[testList,
 VerificationTest[
-	Simplify[\[Mu]3 D[PrintPressure["NNLO"]+T (PrintPressureUS["LO"]+PrintPressureUS["NLO"]),\[Mu]3]/.\[Gamma]3d->Sqrt[T]\[Gamma]],
+	Simplify[mu3 D[PrintPressure["NNLO"]+T (PrintPressureUS["LO"]+PrintPressureUS["NLO"]),mu3]/.\[Gamma]3d->Sqrt[T]\[Gamma]],
 	0,
 	TestID->"ScalYukawa-mu3-dependence-cancels"
 ]];

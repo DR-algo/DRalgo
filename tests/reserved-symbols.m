@@ -22,14 +22,14 @@ Check[
 
 
 (*
-	Issue #32: a cubic coupling \[Mu]3, as in examples/dark-su2-higgs-singlet.m and examples/xsm.m, is the
-	same symbol as the 3d renormalization scale \[Mu]3 in the results. ImportModelDRalgo warns if a coupling
-	has the name of the temperature T, of a renormalization scale \[Mu], \[Mu]3, or \[Mu]3US, of Lb, Lf, \[Epsilon],
+	Issue #32: a cubic coupling mu3, as in examples/dark-su2-higgs-singlet.m and examples/xsm.m, is the
+	same symbol as the 3d renormalization scale mu3 in the results. ImportModelDRalgo warns if a coupling
+	has the name of the temperature T, of a renormalization scale mu, mu3, or mu3US, of Lb, Lf, eps,
 	of the gauge parameter xi, or of a Debye mass.
 
 	Checked here:
-	- a real scalar with a cubic coupling \[Mu]3 or Lb gives the warning, with c3 not;
-	- SU(2) with a Higgs doublet whose mass is called \[Mu]sqSU2, the name of the Debye mass, gives the warning;
+	- a real scalar with a cubic coupling mu3 or Lb gives the warning, with c3 not;
+	- SU(2) with a Higgs doublet whose mass is called musqSU2, the name of the Debye mass, gives the warning;
 	- the examples xsm.m and dark-su2-higgs-singlet.m, whose cubic coupling is now c3, give no warning,
 	  nor LRSymmetric.m, whose mass of the triplets is now \[Mu]\[CapitalDelta].
 *)
@@ -49,7 +49,7 @@ realScalar[cubic_]:=Module[{gvvv,gvff,gvss,\[Lambda]1,\[Lambda]3,\[Lambda]4,\[Mu
 
 AppendTo[testList,
 VerificationTest[
-	realScalar[\[Mu]3],
+	realScalar[mu3],
 	Null,
 	{ImportModelDRalgo::reserved},
 	TestID->"cubic-coupling-mu3-warns"
@@ -81,7 +81,7 @@ higgsDoublet[mass_]:=Module[{gvvv,gvff,gvss,\[Lambda]1,\[Lambda]3,\[Lambda]4,\[M
 
 AppendTo[testList,
 VerificationTest[
-	higgsDoublet[\[Mu]sqSU2],
+	higgsDoublet[musqSU2],
 	Null,
 	{ImportModelDRalgo::reserved},
 	TestID->"mass-with-the-name-of-the-Debye-mass-warns"

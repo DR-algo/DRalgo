@@ -55,38 +55,38 @@ HardThermal1LoopInt["F",a_,b_,d_]:=(2^(2a-2b-d)-1)HardThermal1LoopInt["B",a,b,d]
 
 
 (*
-	One-loop sum-integrals of the massless hard modes in d=3-2\[Epsilon], with I for bosonic and IF for fermionic ones.
+	One-loop sum-integrals of the massless hard modes in d=3-2eps, with I for bosonic and IF for fermionic ones.
 	The ones with a trailing p are those of the 3-loop pressure and the 2-loop tadpoles.
 *)
 OneLoopSumIntegrals[]:=<|
-	"I1"->T^2/(12 \[Epsilon])+T^2 Lbbb,
-	"I2M2"->T^2/(24 )(-1/\[Epsilon]-  12Lbbb+2),
-	"I1p"->T^2/(12 )+\[Epsilon] T^2 Lbbb,
-	"I3M2p"->1/(64 \[Pi]^2 \[Epsilon]bp)+1/(32 \[Pi]^2),
-	"I2p"->1/(16 \[Pi]^2 \[Epsilon]bp),
-	"I4M4p"->1/(128 \[Pi]^2 \[Epsilon]bp)+1/(48 \[Pi]^2),
-	"I2M2p"->-T^2/24+T^2 (((-1/24)LbbM - (-1)*1/24 Lb )+1/12)\[Epsilon],
-	"IF1p"->-T^2/(24)+1/24 T^2 Lfff \[Epsilon],
-	"IF2p"->1/(16 (\[Pi]^2) ) (1/\[Epsilon]+Lf),
-	"IF3M2p"->1/(64 \[Pi]^2)(1/\[Epsilon]+Lf+2),
-	"IF2M2p"->(-T^2/24-T^2 1/48* Lfff)\[Epsilon]+T^2/48,
-	"I1F"->-T^2/(24 \[Epsilon])+1/24 T^2 Lfff|>;
+	"I1"->T^2/(12 eps)+T^2 Lbbb,
+	"I2M2"->T^2/(24 )(-1/eps-  12Lbbb+2),
+	"I1p"->T^2/(12 )+eps T^2 Lbbb,
+	"I3M2p"->1/(64 \[Pi]^2 epsbp)+1/(32 \[Pi]^2),
+	"I2p"->1/(16 \[Pi]^2 epsbp),
+	"I4M4p"->1/(128 \[Pi]^2 epsbp)+1/(48 \[Pi]^2),
+	"I2M2p"->-T^2/24+T^2 (((-1/24)LbbM - (-1)*1/24 Lb )+1/12)eps,
+	"IF1p"->-T^2/(24)+1/24 T^2 Lfff eps,
+	"IF2p"->1/(16 (\[Pi]^2) ) (1/eps+Lf),
+	"IF3M2p"->1/(64 \[Pi]^2)(1/eps+Lf+2),
+	"IF2M2p"->(-T^2/24-T^2 1/48* Lfff)eps+T^2/48,
+	"I1F"->-T^2/(24 eps)+1/24 T^2 Lfff|>;
 
 
 (*
-	Two-loop sum-integrals of the massless hard modes, with the shorthand \[Epsilon]b, \[Epsilon]F, ... for their divergences,
-	1/\[Epsilon]b=1/\[Epsilon]+Lbb, see ReplaceLb.
+	Two-loop sum-integrals of the massless hard modes, with the shorthand epsb, epsF, ... for their divergences,
+	1/epsb=1/eps+Lbb, see ReplaceLb.
 *)
 TwoLoopSumIntegrals[]:=Module[{\[Kappa]=1/(16 \[Pi]^2)},<|
-	"I1I2"->\[Kappa] T^2/(12 \[Epsilon]b),
-	"dI1I2"->3\[Kappa] T^2/(12 \[Epsilon]b)-\[Kappa] T^2/6,
+	"I1I2"->\[Kappa] T^2/(12 epsb),
+	"dI1I2"->3\[Kappa] T^2/(12 epsb)-\[Kappa] T^2/6,
 	"I211M020"->T^2/(192 \[Pi]^2),
-	"I2M2I2"->T^2/(192 \[Pi]^2)-T^2/(384 \[Pi]^2 \[Epsilon]bbM),
-	"I3M2I1"->T^2/(768 \[Pi]^2 \[Epsilon]bbM)+T^2/(384 \[Pi]^2),
-	"I2I3m1"->T^2/(512 \[Pi]^2 \[Epsilon]b)-T^2/(768 \[Pi]^2),
-	"I1FI2F"->-((T^2)/(384 \[Pi]^2))/\[Epsilon]F,
-	"I1BI2F"->((T^2)/(192 \[Pi]^2))/\[Epsilon]FB,
-	"I1FI2B"->-((T^2)/(384 \[Pi]^2))/\[Epsilon]BF|>
+	"I2M2I2"->T^2/(192 \[Pi]^2)-T^2/(384 \[Pi]^2 epsbbM),
+	"I3M2I1"->T^2/(768 \[Pi]^2 epsbbM)+T^2/(384 \[Pi]^2),
+	"I2I3m1"->T^2/(512 \[Pi]^2 epsb)-T^2/(768 \[Pi]^2),
+	"I1FI2F"->-((T^2)/(384 \[Pi]^2))/epsF,
+	"I1BI2F"->((T^2)/(192 \[Pi]^2))/epsFB,
+	"I1FI2B"->-((T^2)/(384 \[Pi]^2))/epsBF|>
 ];
 
 
@@ -95,17 +95,17 @@ TwoLoopSumIntegrals[]:=Module[{\[Kappa]=1/(16 \[Pi]^2)},<|
 	The basketball M00 and the fermionic N00, and the sum-integrals of the remaining 3-loop topologies of the pressure.
 *)
 ThreeLoopSumIntegrals[]:=Module[{prefactor,expand},
-	prefactor=T^4*(\[Mu]/(4 \[Pi] T))^(6 \[Epsilon]);
-	expand[x_]:=Series[x,{\[Epsilon],0,0}]//Normal;
+	prefactor=T^4*(mu/(4 \[Pi] T))^(6 eps);
+	expand[x_]:=Series[x,{eps,0,0}]//Normal;
 	<|
-	"M00"->expand[1/(24*16 \[Pi]^2) prefactor (1/\[Epsilon]+91/15+8( Derivative[1][Zeta][-1])/Zeta[-1]-2 Derivative[1][Zeta][-3]/Zeta[-3])],
-	"LInt"->(T^4 Log[Glaisher])/(48 \[Pi]^2)+(T^4 Log[\[Mu]^2])/(768 \[Pi]^2)+T^4/(2304 \[Pi]^2 \[Epsilon])+(EulerGamma T^4)/(1152 \[Pi]^2)-(T^4 Log[\[Pi] T])/(384 \[Pi]^2)-(T^4 Log[2])/(192 \[Pi]^2),
-	"N00"->expand[1/(96*16 \[Pi]^2) prefactor (1/\[Epsilon]+173/30-42/5 Log[2]+8( Derivative[1][Zeta][-1])/Zeta[-1]-2 Derivative[1][Zeta][-3]/Zeta[-3])]//FullSimplify//Expand,
-	"MF1M1"->expand[-1/(192*16 \[Pi]^2) prefactor (1/\[Epsilon]+361/60+76/5 Log[2]+6EulerGamma-4( Derivative[1][Zeta][-1])/Zeta[-1]+4Derivative[1][Zeta][-3]/Zeta[-3])],
-	"MF00"->expand[-1/(192*16 \[Pi]^2) prefactor (1/\[Epsilon]+179/30-34/5 Log[2]+8( Derivative[1][Zeta][-1])/Zeta[-1]-2Derivative[1][Zeta][-3]/Zeta[-3])],
-	"MFM2P2"->expand[-29/(1728*16 \[Pi]^2) prefactor (1/\[Epsilon]+89/29-90/29 Log[2]+48/29EulerGamma+136/29( Derivative[1][Zeta][-1])/Zeta[-1]-10/29Derivative[1][Zeta][-3]/Zeta[-3])],
-	"N2M2"->expand[1/(108*16 \[Pi]^2) prefactor (1/\[Epsilon]+35/8+3/2EulerGamma-63/10 Log[2]+5( Derivative[1][Zeta][-1])/Zeta[-1]-1/2Derivative[1][Zeta][-3]/Zeta[-3])],
-	"MP2M2"->expand[11/(216*16 \[Pi]^2) prefactor (1/\[Epsilon]+73/22+12/11EulerGamma+64/11( Derivative[1][Zeta][-1])/Zeta[-1]-10/11Derivative[1][Zeta][-3]/Zeta[-3])]
+	"M00"->expand[1/(24*16 \[Pi]^2) prefactor (1/eps+91/15+8( Derivative[1][Zeta][-1])/Zeta[-1]-2 Derivative[1][Zeta][-3]/Zeta[-3])],
+	"LInt"->(T^4 Log[Glaisher])/(48 \[Pi]^2)+(T^4 Log[mu^2])/(768 \[Pi]^2)+T^4/(2304 \[Pi]^2 eps)+(EulerGamma T^4)/(1152 \[Pi]^2)-(T^4 Log[\[Pi] T])/(384 \[Pi]^2)-(T^4 Log[2])/(192 \[Pi]^2),
+	"N00"->expand[1/(96*16 \[Pi]^2) prefactor (1/eps+173/30-42/5 Log[2]+8( Derivative[1][Zeta][-1])/Zeta[-1]-2 Derivative[1][Zeta][-3]/Zeta[-3])]//FullSimplify//Expand,
+	"MF1M1"->expand[-1/(192*16 \[Pi]^2) prefactor (1/eps+361/60+76/5 Log[2]+6EulerGamma-4( Derivative[1][Zeta][-1])/Zeta[-1]+4Derivative[1][Zeta][-3]/Zeta[-3])],
+	"MF00"->expand[-1/(192*16 \[Pi]^2) prefactor (1/eps+179/30-34/5 Log[2]+8( Derivative[1][Zeta][-1])/Zeta[-1]-2Derivative[1][Zeta][-3]/Zeta[-3])],
+	"MFM2P2"->expand[-29/(1728*16 \[Pi]^2) prefactor (1/eps+89/29-90/29 Log[2]+48/29EulerGamma+136/29( Derivative[1][Zeta][-1])/Zeta[-1]-10/29Derivative[1][Zeta][-3]/Zeta[-3])],
+	"N2M2"->expand[1/(108*16 \[Pi]^2) prefactor (1/eps+35/8+3/2EulerGamma-63/10 Log[2]+5( Derivative[1][Zeta][-1])/Zeta[-1]-1/2Derivative[1][Zeta][-3]/Zeta[-3])],
+	"MP2M2"->expand[11/(216*16 \[Pi]^2) prefactor (1/eps+73/22+12/11EulerGamma+64/11( Derivative[1][Zeta][-1])/Zeta[-1]-10/11Derivative[1][Zeta][-3]/Zeta[-3])]
 	|>
 ];
 
@@ -116,7 +116,7 @@ ThreeLoopSumIntegrals[]:=Module[{prefactor,expand},
 
 (*
 	The arguments are the squared masses x of the propagators 1/(p^2+x), and the integrals are \[Integral]d^dp/(2\[Pi])^d
-	in d=3-2\[Epsilon] at their finite part. Light fields are massless, and scaleless integrals vanish.
+	in d=3-2eps at their finite part. Light fields are massless, and scaleless integrals vanish.
 *)
 
 
@@ -176,7 +176,7 @@ BoxIntegral3d[x_,y_,z_,w_]:=Module[{m=Sqrt[{x,y,z,w}],a,b},
 
 
 (*
-	Sunset, \[Integral]\[Integral]1/((p^2+x)(q^2+y)((p+q)^2+z)), at the renormalization scale scale. Its divergence is SunsetDivergence3d/\[Epsilon].
+	Sunset, \[Integral]\[Integral]1/((p^2+x)(q^2+y)((p+q)^2+z)), at the renormalization scale scale. Its divergence is SunsetDivergence3d/eps.
 	A list of squared masses as an argument gives several propagators on the same line, e.g. SunsetIntegral3d[{x1,x2},y,z,scale]
 	is \[Integral]\[Integral]1/((p^2+x1)(p^2+x2)(q^2+y)((p+q)^2+z)); lists are allowed on the first two lines, with at most two masses each.
 *)

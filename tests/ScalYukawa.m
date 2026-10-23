@@ -158,7 +158,7 @@ TestCreate[PrintTadpoles["LO"]//Expand,
 ]];
 AppendTo[testList,
 TestCreate[PrintTadpoles["NLO"],
-	{\[Sigma]3d -> (16*Lb*m\[Psi]*T^2*y^3 - 24*Lb*msq*\[Gamma] - 6*Lb*T^2*y^2*\[Gamma] - 4*EulerGamma*T^2*\[Gamma]*\[Lambda] + Lb*T^2*\[Gamma]*\[Lambda] - 48*Lf*y*(-4*m\[Psi]^3 + y*\[Sigma]) + 48*T^2*\[Gamma]*\[Lambda]*Log[Glaisher] + 8*Sqrt[T]*\[Gamma]3d*\[Lambda]3d*Log[\[Mu]3/\[Mu]])/(768*Pi^2*Sqrt[T])}
+	{\[Sigma]3d -> (16*Lb*m\[Psi]*T^2*y^3 - 24*Lb*msq*\[Gamma] - 6*Lb*T^2*y^2*\[Gamma] - 4*EulerGamma*T^2*\[Gamma]*\[Lambda] + Lb*T^2*\[Gamma]*\[Lambda] - 48*Lf*y*(-4*m\[Psi]^3 + y*\[Sigma]) + 48*T^2*\[Gamma]*\[Lambda]*Log[Glaisher] + 8*Sqrt[T]*\[Gamma]3d*\[Lambda]3d*Log[mu3/mu])/(768*Pi^2*Sqrt[T])}
 ]];
 
 
@@ -168,7 +168,7 @@ TestCreate[PrintScalarMass["LO"],
 ]];
 AppendTo[testList,
 TestCreate[PrintScalarMass["NLO"]//Simplify,
-	{msq3d->1/(768 \[Pi]^2) (16 Lb T^2 y^4-24 Lb \[Gamma]^2-24 Lb msq \[Lambda]-6 Lb T^2 y^2 \[Lambda]-4 EulerGamma T^2 \[Lambda]^2+Lb T^2 \[Lambda]^2-2 Lf y^2 (48 msq-288 m\[Psi]^2+T^2 (4 y^2+\[Lambda]))+48 T^2 \[Lambda]^2 Log[Glaisher]+8 \[Lambda]3d^2 Log[\[Mu]3/\[Mu]])}
+	{msq3d->1/(768 \[Pi]^2) (16 Lb T^2 y^4-24 Lb \[Gamma]^2-24 Lb msq \[Lambda]-6 Lb T^2 y^2 \[Lambda]-4 EulerGamma T^2 \[Lambda]^2+Lb T^2 \[Lambda]^2-2 Lf y^2 (48 msq-288 m\[Psi]^2+T^2 (4 y^2+\[Lambda]))+48 T^2 \[Lambda]^2 Log[Glaisher]+8 \[Lambda]3d^2 Log[mu3/mu])}
 ]];
 
 
@@ -196,7 +196,7 @@ TestCreate[PrintPressure["NLO"],
 ]];
 AppendTo[testList,
 TestCreate[PrintPressure["NNLO"],
-	-1/552960*(-8640*Lb*msq^2 + 34560*Lf*m\[Psi]^4 - 4320*Lb*msq*T^2*y^2 + 1440*Lf*msq*T^2*y^2 + 5760*Lb*m\[Psi]^2*T^2*y^2 + 2880*Lf*m\[Psi]^2*T^2*y^2 + 135*T^4*y^4 - 8280*EulerGamma*T^4*y^4 + 4200*Lb*T^4*y^4 - 300*Lf*T^4*y^4 - 1440*EulerGamma*T^2*\[Gamma]^2 + 720*Lb*T^2*\[Gamma]^2 - 720*Lb*msq*T^2*\[Lambda] + 480*EulerGamma*T^4*y^2*\[Lambda] - 420*Lb*T^4*y^2*\[Lambda] + 60*Lf*T^4*y^2*\[Lambda] + 58*T^4*\[Lambda]^2 - 30*EulerGamma*T^4*\[Lambda]^2 + 17208*T^4*y^4*Log[2] + 540*T^4*\[Lambda]^2*Log[2] - 25920*T^4*y^4*Log[Glaisher] + 17280*T^2*\[Gamma]^2*Log[Glaisher] - 1440*T^4*\[Lambda]^2*Log[Glaisher] + 6480*T^4*y^4*Log[Pi] + 180*T^4*\[Lambda]^2*Log[Pi] + 90*T^4*\[Lambda]^2*Log[Pi*T] + 60*T^4*(48*y^4 - 8*y^2*\[Lambda] - 3*\[Lambda]^2)*Log[4*Pi*T] - 6480*T^4*y^4*Log[\[Mu]/T] - 180*T^4*\[Lambda]^2*Log[\[Mu]/T] - 1440*T^4*y^4*Log[\[Mu]^2] + 240*T^4*y^2*\[Lambda]*Log[\[Mu]^2] + 45*T^4*\[Lambda]^2*Log[\[Mu]^2] + 2880*T^2*\[Gamma]^2*Log[\[Mu]3/\[Mu]] + 129600*T^4*y^4*Derivative[1][Zeta][-3] + 7200*T^4*\[Lambda]^2*Derivative[1][Zeta][-3])/Pi^2
+	-1/552960*(-8640*Lb*msq^2 + 34560*Lf*m\[Psi]^4 - 4320*Lb*msq*T^2*y^2 + 1440*Lf*msq*T^2*y^2 + 5760*Lb*m\[Psi]^2*T^2*y^2 + 2880*Lf*m\[Psi]^2*T^2*y^2 + 135*T^4*y^4 - 8280*EulerGamma*T^4*y^4 + 4200*Lb*T^4*y^4 - 300*Lf*T^4*y^4 - 1440*EulerGamma*T^2*\[Gamma]^2 + 720*Lb*T^2*\[Gamma]^2 - 720*Lb*msq*T^2*\[Lambda] + 480*EulerGamma*T^4*y^2*\[Lambda] - 420*Lb*T^4*y^2*\[Lambda] + 60*Lf*T^4*y^2*\[Lambda] + 58*T^4*\[Lambda]^2 - 30*EulerGamma*T^4*\[Lambda]^2 + 17208*T^4*y^4*Log[2] + 540*T^4*\[Lambda]^2*Log[2] - 25920*T^4*y^4*Log[Glaisher] + 17280*T^2*\[Gamma]^2*Log[Glaisher] - 1440*T^4*\[Lambda]^2*Log[Glaisher] - 15*T^4*(96*y^4 - 16*y^2*\[Lambda] - 3*\[Lambda]^2)*Log[mu^2] + 2880*T^2*\[Gamma]^2*Log[mu3/mu] + 6480*T^4*y^4*Log[Pi] + 180*T^4*\[Lambda]^2*Log[Pi] - 6480*T^4*y^4*Log[mu/T] - 180*T^4*\[Lambda]^2*Log[mu/T] + 90*T^4*\[Lambda]^2*Log[Pi*T] + 2880*T^4*y^4*Log[4*Pi*T] - 480*T^4*y^2*\[Lambda]*Log[4*Pi*T] - 180*T^4*\[Lambda]^2*Log[4*Pi*T] + 129600*T^4*y^4*Derivative[1][Zeta][-3] + 7200*T^4*\[Lambda]^2*Derivative[1][Zeta][-3])/Pi^2
 ]];
 
 

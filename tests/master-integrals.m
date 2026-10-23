@@ -174,18 +174,18 @@ VerificationTest[
 AppendTo[testList,
 VerificationTest[
 	{sunset[0,0,0,mu],sunset[{0,0},0,0,mu],sunset[{0,0},{0,0},0,mu],sunset[{0,0},{1,1},0,mu]-sunset[{1,1},{0,0},0,mu],
-		Simplify[sunset[x,y,z,\[Mu]3]-1/(16\[Pi]^2)(Log[\[Mu]3/(Sqrt[x]+Sqrt[y]+Sqrt[z])]+1/2)],
-		Simplify[sunset[{0,0},{x,0},0,\[Mu]3]-1/(32\[Pi]^2 x^2),positive]},
+		Simplify[sunset[x,y,z,mu3]-1/(16\[Pi]^2)(Log[mu3/(Sqrt[x]+Sqrt[y]+Sqrt[z])]+1/2)],
+		Simplify[sunset[{0,0},{x,0},0,mu3]-1/(32\[Pi]^2 x^2),positive]},
 	{0,0,0,0,0,0},
 	TestID->"sunset-at-zero-masses-and-symmetric"
 ]];
 
 
 (*The scalar-scalar-vector sunset of the effective potential with a massless vector, as in the NLO ultrasoft pressure*)
-fssv=DRalgo`DRalgo`Private`TwoLoopFunctions[\[Mu]3][[3]];
+fssv=DRalgo`DRalgo`Private`TwoLoopFunctions[mu3][[3]];
 AppendTo[testList,
 VerificationTest[
-	Simplify[fssv[x^2,y^2,0]-(4 (x^2+y^2) Log[\[Mu]3/(x+y)]+4 x y+x^2+y^2)/(32 \[Pi]^2),positive],
+	Simplify[fssv[x^2,y^2,0]-(4 (x^2+y^2) Log[mu3/(x+y)]+4 x y+x^2+y^2)/(32 \[Pi]^2),positive],
 	0,
 	TestID->"effective-potential-fssv-with-a-massless-vector"
 ]];
@@ -197,7 +197,7 @@ VerificationTest[
 
 AppendTo[testList,
 VerificationTest[
-	Module[{I1p=DRalgo`DRalgo`Private`OneLoopSumIntegrals[]["I1p"],eps=DRalgo`DRalgo`Private`\[Epsilon],
+	Module[{I1p=DRalgo`DRalgo`Private`OneLoopSumIntegrals[]["I1p"],eps=DRalgo`DRalgo`Private`eps,
 			Lb=DRalgo`DRalgo`Private`Lb,mu=DRalgo`DRalgo`Private`\[CapitalLambda]},
 		FullSimplify[
 			(Series[HardThermal1LoopInt["B",1,0,3-2eps],{eps,0,1}]//Normal)

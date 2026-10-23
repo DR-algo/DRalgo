@@ -32,10 +32,10 @@ CreateDebyeMasses[GroupI_]:=Module[{GroupP=GroupI},
 	If[Length[GroupP]<1,
 		Return[{}] (*No mass is created if there are no group*)
 	,
-		Debye=StringJoin["\[Mu]sq",Indexing[[1]]]IdentityMatrix[Components[[1]]]; (*names each mass \[Mu]sq+"group name"*)
+		Debye=StringJoin["musq",Indexing[[1]]]IdentityMatrix[Components[[1]]]; (*names each mass musq+"group name"*)
 		If[Length[GroupP]>1,
 			Do[
-				Temp=StringJoin["\[Mu]sq",Indexing[[i]]]IdentityMatrix[Components[[i]]];
+				Temp=StringJoin["musq",Indexing[[i]]]IdentityMatrix[Components[[i]]];
 				DebyeTemp=ArrayFlatten[{{Debye,0},{0,Temp}}]; (*Stack the masses on the diagonal*)
 				Debye=DebyeTemp;
 			,
@@ -45,8 +45,8 @@ CreateDebyeMasses[GroupI_]:=Module[{GroupP=GroupI},
 
 (*
 
-	Create off-diagonal masses. The convention is that for the group {"U1","U1","U1"}, \[Mu]sqU1Mix1 is the mixing between the first and second group.
-	\[Mu]sqU1Mix2 is the mixing between the first and third group. And \[Mu]sqU1Mix3 is the mixing between the second and third group etc.
+	Create off-diagonal masses. The convention is that for the group {"U1","U1","U1"}, musqU1Mix1 is the mixing between the first and second group.
+	musqU1Mix2 is the mixing between the first and third group. And musqU1Mix3 is the mixing between the second and third group etc.
 *)
 	PosDup=Select[positionDuplicates[GroupP],Length[#]>1&];
 	Do[
@@ -71,7 +71,7 @@ CreateDebyeMasses[GroupI_]:=Module[{GroupP=GroupI},
 			,{i,TempList}];
 			Do[
 				MixVecHelp=MixVec[[n]];
-				MatTemp=StringJoin["\[Mu]",MixVecHelp[[1]]]IdentityMatrix[MixVecHelp[[4]]];
+				MatTemp=StringJoin["mu",MixVecHelp[[1]]]IdentityMatrix[MixVecHelp[[4]]];
 
 				Debye[[MixVecHelp[[2]];;MixVecHelp[[2]]+MixVecHelp[[4]]-1,MixVecHelp[[3]];;MixVecHelp[[3]]+MixVecHelp[[4]]-1]]=MatTemp;
 				Debye[[MixVecHelp[[3]];;MixVecHelp[[3]]+MixVecHelp[[4]]-1,MixVecHelp[[2]];;MixVecHelp[[2]]+MixVecHelp[[4]]-1]]=MatTemp;
@@ -91,10 +91,10 @@ CreateDebyeMassesOld[GroupI_]:=Module[{GroupP=GroupI},
 If[Length[GroupP]<1,
 Return[{}]
 ,
-Debye=StringJoin["\[Mu]",Indexing[[1]]]IdentityMatrix[Components[[1]]];
+Debye=StringJoin["mu",Indexing[[1]]]IdentityMatrix[Components[[1]]];
 If[Length[GroupP]>1,
 Do[
-Temp=StringJoin["\[Mu]",Indexing[[i]]]IdentityMatrix[Components[[i]]];
+Temp=StringJoin["mu",Indexing[[i]]]IdentityMatrix[Components[[i]]];
 DebyeTemp=ArrayFlatten[{{Debye,0},{0,Temp}}];
 Debye=DebyeTemp;
 ,

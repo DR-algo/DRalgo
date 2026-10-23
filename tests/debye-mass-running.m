@@ -27,7 +27,7 @@ Check[
 	of the soft theory, which includes the temporal-scalar quartics.
 
 	The lattice mass counterterms of hep-lat/9504001, appendix, contain -C/(16\[Pi]^2) Log[6/(a\[Mu])], where C is
-	the coefficient of the MSbar counterterm, so that \[Mu]3 dm^2/d\[Mu]3 = -C/(16\[Pi]^2). For the Debye mass of SU(2)
+	the coefficient of the MSbar counterterm, so that mu3 dm^2/dmu3 = -C/(16\[Pi]^2). For the Debye mass of SU(2)
 	with an adjoint and a fundamental Higgs, (A3) and (A11) give C = 20\[Lambda]A g3^2-10\[Lambda]A^2-g3^4+6h3 g3^2-8h3^2,
 	and the U(1) results give C = -6\[Lambda]A^2+4h3 e3^2-4h3^2. There, the Lagrangian contains (1/4)\[Lambda]A (A0^a A0^a)^2
 	and h3 \[Phi]^\[Dagger]\[Phi] A0^a A0^a with the doublet \[Phi], or h3 \[Phi]^*\[Phi] A0^2 for U(1). The soft tensors enter as
@@ -36,11 +36,11 @@ Check[
 
 	At the tree-level values h3=g3^2/4 and \[Lambda]A=0, the O(g^4) part of the running vanishes, as noted
 	below (A11). The running is therefore of O(g^6), beyond the order of the NLO Debye masses, which are
-	RG invariant at O(g^4) and do not depend on \[Mu]3.
+	RG invariant at O(g^4) and do not depend on mu3.
 
 	Checked here:
 	- SU(2)+Higgs: the normalization of h3, the \[Beta]-function against (A3) and (A11), that it starts at O(g^6),
-	  the RG invariance of the NLO Debye mass at O(g^4), its independence of \[Mu]3 and AutoRG, and Mode->1;
+	  the RG invariance of the NLO Debye mass at O(g^4), its independence of mu3 and AutoRG, and Mode->1;
 	- scalar QED: the \[Beta]-function against the U(1) results of hep-lat/9504001, and that it starts at O(g^6);
 	- two U(1) with a scalar of charges (1,1): the off-diagonal Debye masses and temporal-scalar quartics
 	  are those of scalar QED with ge^2=g1^2+g2^2, rotated by (g1,g2)/ge;
@@ -56,8 +56,8 @@ testList={};
 (*Helpers*)
 
 
-(*\[Mu] d/d\[Mu] at fixed \[Mu]3 and the 4d running with BetaFunctions4D, which gives \[Beta] of g^2 for gauge couplings*)
-explicitMu[expr_]:=Simplify[\[Mu] D[expr/.{Lb->2Log[\[Mu]/(4\[Pi] T)]+2EulerGamma,Lf->2Log[\[Mu]/(\[Pi] T)]+2EulerGamma},\[Mu]]];
+(*mu d/dmu at fixed mu3 and the 4d running with BetaFunctions4D, which gives \[Beta] of g^2 for gauge couplings*)
+explicitMu[expr_]:=Simplify[mu D[expr/.{Lb->2Log[mu/(4\[Pi] T)]+2EulerGamma,Lf->2Log[mu/(\[Pi] T)]+2EulerGamma},mu]];
 running[expr_,betas_]:=Sum[r[[2]] D[expr,r[[1]]],{r,betas/.(Power[cc_,2]->bb_):>(cc->bb/(2cc))}];
 
 (*The coefficient of x^n, with gauge couplings of O(x) and quartics and masses of O(x^2)*)
@@ -69,7 +69,7 @@ resolve[expr_]:=expr/.PrintIdentification[];
 (*The temporal-scalar couplings in the normalization of hep-lat/9504001*)
 temporalCouplings[]:={PrintTensorDRalgo[3][[1,1,1,1]]/2,PrintTensorDRalgo[4][[1,1,1,1]]/6};
 
-(*Running of the Debye mass m in the soft theory: \[Mu]3 dm/d\[Mu]3*)
+(*Running of the Debye mass m in the soft theory: mu3 dm/dmu3*)
 debyeBeta[m_]:=resolve[m/.BetaFunctions3DS[]];
 
 
@@ -96,11 +96,11 @@ importSU2Higgs[];
 {h3,\[Lambda]A}=temporalCouplings[];
 (*(A3) and (A11) of hep-lat/9504001*)
 betaSU2=-1/(16\[Pi]^2)((20\[Lambda]A g3^2-10\[Lambda]A^2)+(-g3^4+6h3 g3^2-8h3^2))/.g3->gw3d;
-runningSU2=debyeBeta[\[Mu]sqSU2];
+runningSU2=debyeBeta[musqSU2];
 (*With the NLO gauge coupling, the coefficient of g^6 is complete*)
 runningSU2NLO=runningSU2/.gw3d->Sqrt[gw3d^2/.PrintCouplings[]];
 nloSU2Output=PrintDebyeMass["NLO"];
-nloSU2=resolve[\[Mu]sqSU2/.nloSU2Output];
+nloSU2=resolve[musqSU2/.nloSU2Output];
 
 (*h3=g3^2/4 at tree level, see the remark below (A11)*)
 AppendTo[testList,
@@ -127,18 +127,18 @@ VerificationTest[
 (*With the 3d couplings at LO, the NLO Debye mass cancels the running of the LO Debye mass at O(g^4)*)
 AppendTo[testList,
 VerificationTest[
-	order[running[\[Mu]sqSU2/.PrintDebyeMass["LO"],BetaFunctions4D[]]+explicitMu[nloSU2/.{gw3d->gw Sqrt[T],\[Lambda]3d->\[Lambda] T}],4,scalingSU2],
+	order[running[musqSU2/.PrintDebyeMass["LO"],BetaFunctions4D[]]+explicitMu[nloSU2/.{gw3d->gw Sqrt[T],\[Lambda]3d->\[Lambda] T}],4,scalingSU2],
 	0,
 	TestID->"SU2-debye-mass-is-rg-invariant-at-O(g^4)"
 ]];
 
-(*The running is beyond the order of the NLO Debye mass, which therefore does not depend on \[Mu]3 or AutoRG*)
+(*The running is beyond the order of the NLO Debye mass, which therefore does not depend on mu3 or AutoRG*)
 importSU2Higgs[AutoRG->False];
 nloSU2NoRG=PrintDebyeMass["NLO"];
 
 AppendTo[testList,
 VerificationTest[
-	{FreeQ[nloSU2Output,\[Mu]3],nloSU2NoRG===nloSU2Output},
+	{FreeQ[nloSU2Output,mu3],nloSU2NoRG===nloSU2Output},
 	{True,True},
 	TestID->"SU2-nlo-debye-mass-does-not-depend-on-mu3-or-AutoRG"
 ]];
@@ -148,7 +148,7 @@ importSU2Higgs[Mode->1];
 AppendTo[testList,
 VerificationTest[
 	PrintDebyeMass["All"],
-	{\[Mu]sqSU2->5/6 gw^2 T^2},
+	{musqSU2->5/6 gw^2 T^2},
 	TestID->"SU2-debye-mass-in-mode-1-is-LO"
 ]];
 
@@ -176,7 +176,7 @@ importU1[{1},{ge}];
 (*U(1)+fundamental Higgs+adjoint Higgs of hep-lat/9504001*)
 betaU1=-1/(16\[Pi]^2)(-6\[Lambda]A^2+4h3 e3^2-4h3^2)/.e3->ge3d;
 
-runningU1=debyeBeta[\[Mu]sqU1];
+runningU1=debyeBeta[musqU1];
 runningU1NLO=runningU1/.ge3d->Sqrt[ge3d^2/.PrintCouplings[]];
 
 AppendTo[testList,
@@ -195,7 +195,7 @@ VerificationTest[
 ]];
 
 (*Results of scalar QED in terms of 4d parameters, for the comparison below*)
-debyeQED=resolve[\[Mu]sqU1/.PrintDebyeMass["All"]];
+debyeQED=resolve[musqU1/.PrintDebyeMass["All"]];
 quarticQED=resolve[PrintTensorDRalgo[4][[1,1,1,1]]];
 
 
@@ -214,9 +214,9 @@ gList={g1,g2};
 AppendTo[testList,
 VerificationTest[
 	Simplify[{
-		resolve[\[Mu]sqU1P1/.PrintDebyeMass["All"]]-g1^2/ge^2 debyeQED,
-		resolve[\[Mu]sqU1P2/.PrintDebyeMass["All"]]-g2^2/ge^2 debyeQED,
-		resolve[\[Mu]U1Mix1/.PrintDebyeMass["All"]]-g1 g2/ge^2 debyeQED}/.rotation,
+		resolve[musqU1P1/.PrintDebyeMass["All"]]-g1^2/ge^2 debyeQED,
+		resolve[musqU1P2/.PrintDebyeMass["All"]]-g2^2/ge^2 debyeQED,
+		resolve[muU1Mix1/.PrintDebyeMass["All"]]-g1 g2/ge^2 debyeQED}/.rotation,
 		Assumptions->{g1>0,g2>0,g13d>0,g23d>0}],
 	{0,0,0},
 	TestID->"two-U1-debye-masses-are-rotated-scalar-QED"
@@ -247,9 +247,9 @@ PerformDRhard[];
 (*For SU(3), (A0^a A0^a)^2 is the only quartic invariant, with dA=8 and CA=3*)
 betaQCD=2(8+2)\[Lambda]A(\[Lambda]A-3gs3d^2)/(16\[Pi]^2);
 (*Outside of the tests, since the placeholder scalar leads to messages*)
-runningQCD=debyeBeta[\[Mu]sqSU3]-resolve[betaQCD];
-loQCD=\[Mu]sqSU3/.PrintDebyeMass["LO"];
-nloQCD=resolve[\[Mu]sqSU3/.PrintDebyeMass["NLO"]];
+runningQCD=debyeBeta[musqSU3]-resolve[betaQCD];
+loQCD=musqSU3/.PrintDebyeMass["LO"];
+nloQCD=resolve[musqSU3/.PrintDebyeMass["NLO"]];
 betasQCD=BetaFunctions4D[];
 
 AppendTo[testList,

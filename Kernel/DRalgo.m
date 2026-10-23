@@ -150,17 +150,17 @@ Print@Panel@Row[{
 
 
 ImportModelDRalgo::usage="\
-ImportModelDRalgo[Group,gvvv,gvff,gvss,\[Lambda]1,\[Lambda]3,\[Lambda]4,\[Mu]ij,\[Mu]IJ,\[Mu]IJC,Ysff,YsffC,Verbose->False,Mode->ModeNumber] \
+ImportModelDRalgo[Group,gvvv,gvff,gvss,lam1,lam3,lam4,muij,muIJ,muIJC,Ysff,YsffC,Verbose->False,Mode->ModeNumber] \
 Loads the model, checks that the couplings are invariant under the gauge group, and creates help tensors. Here,
 gvvv:  structure constants
 gvff:  vector-fermion trilinear couplings
 gvss:  vector-scalar trilinear couplings
-\[Lambda]1:    scalar tadpole couplings
-\[Lambda]3:    cubic couplings
-\[Lambda]4:    quartic couplings
-\[Mu]ij:   scalar-mass matrix
-\[Mu]IJ:   fermion-mass matrices
-\[Mu]IJC:  fermion-mass matrices
+lam1:    scalar tadpole couplings
+lam3:    cubic couplings
+lam4:    quartic couplings
+muij:   scalar-mass matrix
+muIJ:   fermion-mass matrices
+muIJC:  fermion-mass matrices
 Ysff:  Yukawa couplings
 YsffC: Yukawa couplings.
 ";
@@ -273,15 +273,15 @@ LoadModelDRalgo::usage="Loads a model from file";
 DefineDim6::usage="Defines a dimension 6 operator";
 PrintCouplingsEffective::usage="Prints higher-order couplings";
 CounterTerms4D::usage="\
-CounterTerms4D[] prints the one-loop counterterms \[Delta]x=\[Beta]x/(2\[Epsilon]) of the 4d couplings and masses, x->\[Delta]x, \
-in d=4-2\[Epsilon], with the fields not renormalized.
+CounterTerms4D[] prints the one-loop counterterms \[Delta]x=\[Beta]x/(2eps) of the 4d couplings and masses, x->\[Delta]x, \
+in d=4-2eps, with the fields not renormalized.
 CounterTerms4D[FieldRenormalization->True] prints the counterterms when the fields are renormalized as well, \
 \[Phi]_b=(1+\[Delta]Z)^(1/2)\[Phi]: \[Delta]x is then the counterterm of the Lagrangian term x \[Phi]1...\[Phi]n, \
-x_b=Z1^(-1/2)...Zn^(-1/2) \[Mu]^(k \[Epsilon])(x+\[Delta]x), in Landau gauge. \
-The gauge couplings carry no Z factor, g_b=\[Mu]^\[Epsilon](g+\[Delta]g), and \[Delta]g^2 is the same in both cases.
+x_b=Z1^(-1/2)...Zn^(-1/2) mu^(k eps)(x+\[Delta]x), in Landau gauge. \
+The gauge couplings carry no Z factor, g_b=mu^eps(g+\[Delta]g), and \[Delta]g^2 is the same in both cases.
 CounterTerms4D[\"S\"|\"F\"|\"V\", {pos1, pos2}] \
 prints the one-loop field counterterm \[Delta]Z (Landau gauge) of the 4d scalars, fermions, or vectors \
-between the representations at the positions pos1 and pos2, as for AnomDim4D; \[Delta]Z=AnomDim4D/\[Epsilon]";
+between the representations at the positions pos1 and pos2, as for AnomDim4D; \[Delta]Z=AnomDim4D/eps";
 FieldRenormalization::usage="\
 FieldRenormalization is an option of CounterTerms4D. With FieldRenormalization->True, the counterterms are \
 those of the Lagrangian in terms of renormalized fields, and the field counterterms are part of the kinetic terms";
@@ -401,8 +401,8 @@ Effect:
     heavy scalars and vectors to be integrated out.
   - Defines LightScalarHET and LightVectorHET as the remaining light 
     degrees of freedom.
-  - Constructs the diagonal mass matrices for heavy scalars (\[Mu]ijHET) 
-    and heavy vectors (\[Mu]abHET).
+  - Constructs the diagonal mass matrices for heavy scalars (muijHET) 
+    and heavy vectors (muabHET).
   - Prepares the arrays for effective potential calculations, 
     setting light particle masses to zero if needed.
 
@@ -464,7 +464,7 @@ Physics:
     The Z factor is printed, with
         PrintScalarKineticHET[][[i,j]] = \[Delta]Z^ij
     corresponding to
-        (\[Delta]^ij + 2 \[Delta]Z^ij) \[PartialD]_\[Mu] R[i] \[PartialD]^\[Mu] R[j].
+        (\[Delta]^ij + 2 \[Delta]Z^ij) \[PartialD]_mu R[i] \[PartialD]^mu R[j].
 
   - The kinetic term is different for the Higgs components, reflecting 
     that \[CurlyPhi] \[NotEqual] 0 breaks the symmetry, so the Higgs and 
@@ -482,7 +482,7 @@ The problem reads: `1`";
 
 ImportModelDRalgo::reserved =
 "The model uses the symbols `1`, which also denote the temperature, the renormalization scales, \
-the constants Lb and Lf, \[Epsilon], the gauge parameter xi, or the Debye masses in the results. \
+the constants Lb and Lf, eps, the gauge parameter xi, or the Debye masses in the results. \
 Rename these couplings, since the results cannot distinguish them otherwise.";
 ImportModelDRalgo::noninvariant =
 "The couplings `1` are not invariant under the gauge group. CreateInvariant and CreateInvariantYukawa \
@@ -609,13 +609,13 @@ loadModule["HigherDimensionalOperators.m"]; (* Loads dimension 5 and 6 higher-di
 *)
 ImportModelDRalgo[
 	GroupI_,gvvvI_,gvffI_,gvssI_,
-	\[Lambda]1I_,\[Lambda]3I_,\[Lambda]4I_,\[Mu]ijI_,\[Mu]IJFI_,\[Mu]IJFCI_,YsffI_,YsffCI_, 
+	lam1I_,lam3I_,lam4I_,muijI_,muIJFI_,muIJFCI_,YsffI_,YsffCI_, 
 	OptionsPattern[]
 	]:=Module[
 	{
 		GroupP=GroupI,
-		gvvvP=gvvvI,gvffP=gvffI,gvssP=gvssI,\[Lambda]1IP=\[Lambda]1I,\[Lambda]3P=\[Lambda]3I,\[Lambda]4P=\[Lambda]4I,
-		\[Mu]ijP=\[Mu]ijI,\[Mu]IJFP=\[Mu]IJFI,\[Mu]IJFCP=\[Mu]IJFCI,YsffP=YsffI,YsffCP=YsffCI,
+		gvvvP=gvvvI,gvffP=gvffI,gvssP=gvssI,lam1IP=lam1I,lam3P=lam3I,lam4P=lam4I,
+		muijP=muijI,muIJFP=muIJFI,muIJFCP=muIJFCI,YsffP=YsffI,YsffCP=YsffCI,
 		reservedNames,modelNames,clash
 	},
 
@@ -626,21 +626,21 @@ If[$LoadGroupMath,
 	];
 ];
 
-	\[Mu]ij=\[Mu]ijP//SparseArray//SimplifySparse;
+	muij=muijP//SparseArray//SimplifySparse;
 	gvvv=gvvvP//SparseArray//SimplifySparse;
 	gvss=gvssP//SparseArray//SimplifySparse;
-	\[Lambda]4=\[Lambda]4P//SparseArray//SimplifySparse;
-	\[Lambda]3=\[Lambda]3P//SparseArray//SimplifySparse;
+	lam4=lam4P//SparseArray//SimplifySparse;
+	lam3=lam3P//SparseArray//SimplifySparse;
 	Ysff=YsffP//SparseArray//SimplifySparse;
 	YsffC=YsffCP//SparseArray//SimplifySparse;
 	gvff=gvffP//SparseArray//SimplifySparse;
-	\[Mu]IJF=\[Mu]IJFP//SparseArray//SimplifySparse;
-	\[Mu]IJFC=\[Mu]IJFCP//SparseArray//SimplifySparse;
-	\[Lambda]1=\[Lambda]1IP//SparseArray//SimplifySparse;
+	muIJF=muIJFP//SparseArray//SimplifySparse;
+	muIJFC=muIJFCP//SparseArray//SimplifySparse;
+	lam1=lam1IP//SparseArray//SimplifySparse;
 	ns=Length[gvss[[1]]];
 	nv=Length[gvvv];
 	nf=Length[gvff[[1]]];
-	\[Lambda]6=EmptyArray[{ns,ns,ns,ns,ns,ns}];
+	lam6=EmptyArray[{ns,ns,ns,ns,ns,ns}];
 
 (*Options*)
 	verbose = OptionValue[Verbose];
@@ -654,14 +654,14 @@ If[$LoadGroupMath,
 	DefineGroup[GroupP]; (*Names Debye masses*)
 
 (*
-	The couplings must not have the names of symbols in the results, for instance a cubic coupling \[Mu]3,
-	which the results could not distinguish from the 3d renormalization scale \[Mu]3.
+	The couplings must not have the names of symbols in the results, for instance a cubic coupling mu3,
+	which the results could not distinguish from the 3d renormalization scale mu3.
 *)
 	reservedNames=Join[
-		{"T","\[Mu]","\[Mu]3","\[Mu]3US","\[Epsilon]","Lb","Lf","xi"},
-		SymbolName/@Variables[Normal[\[Mu]abDef]]];
+		{"T","mu","mu3","mu3US","eps","Lb","Lf","xi"},
+		SymbolName/@Variables[Normal[muabDef]]];
 	modelNames=SymbolName/@DeleteDuplicates@Cases[
-		Normal/@{gvvv,gvff,gvss,\[Lambda]1,\[Lambda]3,\[Lambda]4,\[Mu]ij,\[Mu]IJF,\[Mu]IJFC,Ysff,YsffC},
+		Normal/@{gvvv,gvff,gvss,lam1,lam3,lam4,muij,muIJF,muIJFC,Ysff,YsffC},
 		s_Symbol/;Context[s]=!="System`",Infinity];
 	clash=Intersection[modelNames,reservedNames];
 	If[clash=!={},Message[ImportModelDRalgo::reserved,clash]];
@@ -676,7 +676,7 @@ If[$LoadGroupMath,
 	Sum_k gvss[c] acting on index k = 0, and
 		gvss[c].Ysff+I(gvff[c].Ysff+(gvff[c].Ysff)^T)=0,
 	where gvff[c] acts on the first fermion index and the transpose is in the fermion indices.
-	Ysff and \[Mu]IJF multiply the conjugates of the fermions, and YsffC and \[Mu]IJFC the fermions,
+	Ysff and muIJF multiply the conjugates of the fermions, and YsffC and muIJFC the fermions,
 	which transform with the conjugate generators gvff[c]^*=gvff[c]^T.
 *)
 ActOnIndex[m_,t_,k_]:=Module[{perm=Join[Range[2,k],{1},Range[k+1,ArrayDepth[t]]]},
@@ -700,8 +700,8 @@ GaugeVariation[t_,kind_,c_]:=Module[{tS=gvss[[c]],tF=gvff[[c]]},
 *)
 InvarianceConditions[]:=Module[{tensors,charges,violations,sol},
 	tensors={
-		"\[Lambda]1"->{\[Lambda]1,"S"},"\[Lambda]3"->{\[Lambda]3,"S"},"\[Lambda]4"->{\[Lambda]4,"S"},"\[Mu]ij"->{\[Mu]ij,"S"},
-		"\[Mu]IJ"->{\[Mu]IJF,"F"},"\[Mu]IJC"->{\[Mu]IJFC,"FC"},"Ysff"->{Ysff,"Y"},"YsffC"->{YsffC,"YC"}};
+		"lam1"->{lam1,"S"},"lam3"->{lam3,"S"},"lam4"->{lam4,"S"},"muij"->{muij,"S"},
+		"muIJ"->{muIJF,"F"},"muIJC"->{muIJFC,"FC"},"Ysff"->{Ysff,"Y"},"YsffC"->{YsffC,"YC"}};
 	tensors=Select[tensors,Length[SparseArray[#[[2,1]]]["NonzeroValues"]]>0&];
 	charges=Complement[
 		Variables[Join[gvss["NonzeroValues"],gvff["NonzeroValues"]]],
@@ -732,9 +732,9 @@ CheckGaugeInvariance[]:=Module[{conditions,noninvariant},
 (*
 	Defines a \[Phi]^6 operator
 *)
-DefineDim6[\[Lambda]6I_]:=Module[{\[Lambda]6P=\[Lambda]6I},
+DefineDim6[lam6I_]:=Module[{lam6P=lam6I},
 	If[mode>=3,
-		\[Lambda]6=\[Lambda]6P//SparseArray;
+		lam6=lam6P//SparseArray;
 	,
 		Message[DRalgo::ImplementationFail, "Please set mode=3 to use this feature"];
 		Abort[]
@@ -746,15 +746,15 @@ DefineDim6[\[Lambda]6I_]:=Module[{\[Lambda]6P=\[Lambda]6I},
 	Takes the user-defined group and names debye masses.
 *)
 DefineGroup[GroupI_]:=Module[{GroupP=GroupI,decoupledVectors},
-(*The Debye mass matrix is \[Mu]abDef*)
-(*At tree-level this matrix is 0. But after DR, thermal masses are named accoording to \[Mu]abDef.*)
-	\[Mu]abDef=CreateDebyeMasses[GroupP];
+(*The Debye mass matrix is muabDef*)
+(*At tree-level this matrix is 0. But after DR, thermal masses are named accoording to muabDef.*)
+	muabDef=CreateDebyeMasses[GroupP];
 (*
 	A vector without couplings, such as the U(1) of a model without gauge interactions, has no Debye mass.
 	Therefore, its temporal scalar does not contribute to the soft and ultrasoft theories.
 *)
 	decoupledVectors=Select[Range[nv],AllTrue[Flatten[Normal[{gvvv[[#]],gvss[[#]],gvff[[#]]}]],PossibleZeroQ]&];
-	SubDebyeDecoupled=Table[c->0,{c,Variables[Normal[\[Mu]abDef[[decoupledVectors]]]]}];
+	SubDebyeDecoupled=Table[c->0,{c,Variables[Normal[muabDef[[decoupledVectors]]]]}];
 	VecMassDefined=True;
 ];
 
@@ -877,7 +877,7 @@ OutputFormatDR[expr_] := Module[{exprI=expr},
 	Prints constants that appear in the effective theory.
 *)
 PrintConstants[]:=Module[{constantList},
-	constantList = {Lb->(Log[\[Mu]^2/T^2]-2 Log[4 \[Pi]]+2EulerGamma),Lf->(Log[\[Mu]^2/T^2]-2 Log[4 \[Pi]]+2EulerGamma+4 Log[2])};
+	constantList = {Lb->(Log[mu^2/T^2]-2 Log[4 \[Pi]]+2EulerGamma),Lf->(Log[mu^2/T^2]-2 Log[4 \[Pi]]+2EulerGamma+4 Log[2])};
 	OutputFormatDR[constantList]
 ];
 
@@ -961,7 +961,7 @@ CreateBasisVanDeVis[]:=Module[{},
 (* This module received founding from the fish *)
 
 	FermionFamVar=Normal[NFMat]//Variables;
-	ScalVar=\[Lambda]4//Normal//Variables;
+	ScalVar=lam4//Normal//Variables;
 
 	GaugeVarPre=Join[Normal[gvvv]//Variables,Normal[gvff]//Variables,Normal[gvss]//Variables]//DeleteDuplicates; (*Includes possible non-numeric charges*)
 	GaugeCharge=Complement[GaugeVarPre,GaugeCouplingNames];(*Possible non-numeric gauge charges*)
@@ -1019,7 +1019,7 @@ Expands all elements in Lp in terms of basDR.
 	rr=DeleteCases[rr, {0 ..}, Infinity];
 (*Basis elements*)
 	basisElements = Flatten[FirstPosition[#, 1, Nothing] & /@ rr];
-	varBasis=Table[ \[Lambda]VL[a],{a,1,Length[basisElements]}];
+	varBasis=Table[ lamVL[a],{a,1,Length[basisElements]}];
 
 (*Puts everything together*)
 	LVTemp=LVTemp=ConstantArray[0,Length[Lp]];
@@ -1146,7 +1146,7 @@ SaveModelDRalgo[modelInfo_,fileName_]:=Module[{modelInfoP=modelInfo},
 	PosVector=PrintGaugeRepPositions[];
 	PosFermion=PrintFermionRepPositions[];
 	PosReps={PosScalar,PosVector,PosFermion};
-	tensP={modelInfoP,PosReps,GaugeCouplingNames,GroupDR,gvvv,gvff,gvss,\[Lambda]1,\[Lambda]3,\[Lambda]4,\[Mu]ij,\[Mu]IJFC,\[Mu]IJF,Ysff,YsffC};
+	tensP={modelInfoP,PosReps,GaugeCouplingNames,GroupDR,gvvv,gvff,gvss,lam1,lam3,lam4,muij,muIJFC,muIJF,Ysff,YsffC};
 	SaveFile={tensP[[1]],tensP[[2]],tensP[[3]],tensP[[4]]}; (*The fourth element is the group*)
 	tensP=Delete[Delete[Delete[Delete[tensP,1],1],1],1];
 
@@ -1190,31 +1190,31 @@ LoadModelDRalgo[fileName_]:=Module[{},
 *)
 
 
-{ZLij,GvvssTSS,\[Lambda]3DSS,\[Mu]ijSSLO,\[Mu]ijSSNLO,\[Mu]ijSNLOSS,\[Lambda]3DSS,\[Lambda]KVecTSS,\[Lambda]3CTot,\[Lambda]3CSSS,ZSij,\[Mu]ijSSNLO2,Ggvvv};
+{ZLij,GvvssTSS,lam3DSS,muijSSLO,muijSSNLO,muijSNLOSS,lam3DSS,lamKVecTSS,lam3CTot,lam3CSSS,ZSij,muijSSNLO2,Ggvvv};
 
 
-{TadPoleS,ContriTadPoleSoftToHard,GgvvvSS,\[Lambda]4SMod,\[Lambda]4Tot,IdentMatPre};
+{TadPoleS,ContriTadPoleSoftToHard,GgvvvSS,lam4SMod,lam4Tot,IdentMatPre};
 
 
-{\[Beta]gvff,Zgvff,\[Mu]ijEP,gvvvEP,gvssEP,\[Lambda]4EP,\[Lambda]3EP,nsEP,nvEP,CT,HelpSolveEffectiveHardM};
+{\[Beta]gvff,Zgvff,muijEP,gvvvEP,gvssEP,lam4EP,lam3EP,nsEP,nvEP,CT,HelpSolveEffectiveHardM};
 
 
-{aS3D,ZijS,aV3D,ZabT,ZabL,\[Lambda]3D,GvvssL,GvvssT,\[Lambda]AA,\[Lambda]3CS,\[Mu]SijNLO,GvvsL};(*DimRed Results*)
+{aS3D,ZijS,aV3D,ZabT,ZabL,lam3D,GvvssL,GvvssT,lamAA,lam3CS,muSijNLO,GvvsL};(*DimRed Results*)
 
 
-{\[CapitalLambda]\[Lambda],\[CapitalLambda]g,Hg,Habij,HabIJF,HabIJFC,Ysij,YsijC,YTemp,YTempC,Yhelp,YhelpC};(*Private Variables*)
+{\[CapitalLambda]lam,\[CapitalLambda]g,Hg,Habij,HabIJF,HabIJFC,Ysij,YsijC,YTemp,YTempC,Yhelp,YhelpC};(*Private Variables*)
 
 
-{\[Gamma]ij,\[Beta]mij,\[Beta]\[Lambda]ijkl,Z\[Lambda]ijkl,\[Gamma]ab,\[Beta]vvss,Zgvvss,\[Beta]gvvv,Zgvvv,\[Gamma]IJF,\[Beta]Ysij,ZYsij,\[Beta]YsijC,ZYsijC};(*CounterTerms*)
+{\[Gamma]ij,\[Beta]mij,\[Beta]lamijkl,Zlamijkl,\[Gamma]ab,\[Beta]vvss,Zgvvss,\[Beta]gvvv,Zgvvv,\[Gamma]IJF,\[Beta]Ysij,ZYsij,\[Beta]YsijC,ZYsijC};(*CounterTerms*)
 
 
-{\[Lambda]3DS,\[Lambda]KVecT,\[Lambda]KVec,\[Lambda]AAS,IdentMat,\[Mu]ijVNLO,\[Mu]ijSNLO,\[Lambda]3CSRed,\[Lambda]1IP,NFMat,NSMat};(*Private Variables*)
+{lam3DS,lamKVecT,lamKVec,lamAAS,IdentMat,muijVNLO,muijSNLO,lam3CSRed,lam1IP,NFMat,NSMat};(*Private Variables*)
 
 
-{nsH,nSl,\[Lambda]K,\[Lambda]4S,\[Lambda]4K,\[Lambda]x,\[Lambda]y,gAvss,gvssL,\[Mu]ijL,\[Mu]ijLight};
+{nsH,nSl,lamK,lam4S,lam4K,lamx,lamy,gAvss,gvssL,muijL,muijLight};
 
 
-{HabijL,HabijVL,HabijA,HabijVA,\[Lambda]3Cx,\[Lambda]3Cy,\[Lambda]3CLight,\[Lambda]3CHeavy,\[Mu]IJF,\[Mu]IJFC,\[Mu]VabNLO,\[Mu]abDef,GroupMathCleared}
+{HabijL,HabijVL,HabijA,HabijVA,lam3Cx,lam3Cy,lam3CLight,lam3CHeavy,muIJF,muIJFC,muVabNLO,muabDef,GroupMathCleared}
 
 
 End[]
