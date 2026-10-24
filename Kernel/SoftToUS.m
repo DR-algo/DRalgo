@@ -126,6 +126,31 @@ If[verbose,Print["Calculating Scalar Self-Energy"]];
 
 (*The field normalization is 1+2 ZSij; each light leg of a coupling contributes -ZSij*)
 	ZSij=-(ContriSS+ContriSS2)/2;
+	ZSijTadpole=TadpoleZSS[];
+];
+
+
+(*
+	The field normalization at first order in the tree-level tadpoles of the heavy fields, which shift the heavy fields by
+	v0=-tadpole/M^2: the cubics in the bubbles of ZSij shifted by lam4.v0, and one insertion of the shifted masses lam3.v0 on
+	a line of the bubbles, without the field-independent light mass, as in OneLoopOnePRSS. With all fields, ZSij is
+	-1/4 Sum[lam3[i,a,b]lam3[j,a,b]BubbleIntegral3dP2[a,b]].
+*)
+TadpoleZSS[]:=Module[{v0,masses,lam3All,lam4All,nAll,lam3,dLam3,dM,lineP2,z},
+	v0=-Normal[TadPoleHeavy]/Table[muijL[[h,h]]^2,{h,1,nSH}];
+	If[nSL==0||AllTrue[v0,#===0&],Return[SparseArray[{},{nSL,nSL}]]];
+	{masses,lam3All,lam4All}=AllScalarCouplingsSS[];
+	nAll=nSL+nSH;
+	lam3=Normal[lam3All];
+	dLam3=Normal[lam4All . Join[ConstantArray[0,nSL],v0]];
+	dM=Normal[lam3All . Join[ConstantArray[0,nSL],v0]];
+	dM[[1;;nSL,1;;nSL]]=0;
+(*The p^2 term of a bubble with two propagators of the squared masses x and xp on one line*)
+	lineP2[x_,xp_,y_]:=If[x===xp,-(D[BubbleIntegral3dP2[z,y],z]/.z->x),(BubbleIntegral3dP2[x,y]-BubbleIntegral3dP2[xp,y])/(xp-x)];
+	SparseArray[Table[-1/4(
+		Sum[(dLam3[[i,a,b]]lam3[[j,a,b]]+lam3[[i,a,b]]dLam3[[j,a,b]])BubbleIntegral3dP2[masses[[a]],masses[[b]]],{a,1,nAll},{b,1,nAll}]
+		-2Sum[If[dM[[a,ap]]===0,0,lam3[[i,a,b]]lam3[[j,ap,b]]dM[[a,ap]]lineP2[masses[[a]],masses[[ap]],masses[[b]]]],{a,1,nAll},{ap,1,nAll},{b,1,nAll}]),
+		{i,1,nSL},{j,1,nSL}]]//SimplifySparse
 ];
 
 
@@ -268,7 +293,10 @@ If[verbose,Print["Calculating 1-Loop Scalar Mass"]];
 (*A H^2S^2 quartic*)
 	ContriSS3=-1/2 Simplify[Table[Sum[TadpoleIntegral3d[muijL[[a,a]]^2]lamK[[a,a,i,j]],{a,1,nSH}],{i,1,nSL},{j,1,nSL}]];
 
-	muijSSLO=-ContriSS3-ContriSS-ContriSS2-ContriTadpole+TadpoleShiftMassSS[]//SparseArray;
+(*One-loop terms of first order in the tree-level tadpoles of the heavy fields, also for the quartics in ScalarQuarticSS*)
+	{muijTadpoleSS,lamTadpoleSS}=If[nSL==0,{0,0},TadpoleOnePRSS[]];
+
+	muijSSLO=-ContriSS3-ContriSS-ContriSS2-ContriTadpole+muijTadpoleSS//SparseArray;
 (*The terms without momentum dependence, which are inserted on the light lines of the two-loop masses*)
 	muijSSLOTadpoles=-ContriSS3-ContriTadpole//SparseArray;
 
@@ -380,7 +408,7 @@ If[verbose,Print["Adding tree-level Corrections to Scalar Quartics"]];
 (*
 	Calculates the scalar quartic in the ultrasoft theory.
 *)
-ScalarQuarticSS[]:=Module[{lam3CyLoop,ContriTree,ContriTadpole,ContriMixing,lamKEff,lamyEff,lamyEff2,HeavyMasses,
+ScalarQuarticSS[]:=Module[{lam3CyLoop,ContriTree,ContriTadpole,ContriMixing,ContriMassShift,lamKEff,lamyEff,lamyEff2,HeavyMasses,
 					AllMasses,TensHelp,MassHelp,HeavyScal,ContriSE,
 					ContriCubic,ContriQuarCubic,ContriSS,ContriSS2,ContriSS3,ContriTL,ContriTadpole1,ContriTadpole2},
 If[verbose,Print["Calculating Scalar Quartics"]];
@@ -456,11 +484,18 @@ If[verbose,Print["Calculating Scalar Quartics"]];
 (*One-point reducible diagrams with a light-heavy mixing from loops and from the tadpoles of the heavy fields*)
 		ContriMixing=MixingQuarticSS[MixingLH[TadPoleHeavySS]];
 
+(*The tree-level exchange of heavy fields whose masses are shifted by the tadpoles through the H^3 cubics, as in muHEff*)
+		ContriMassShift[tadpole_]:=Module[{shift},
+			shift=Table[-Sum[lam3CHeavy[[h,hp,hh]]tadpole[[hh]]/HeavyMasses[[hh]]^2,{hh,1,nSH}],{h,1,nSH},{hp,1,nSH}];
+			3 Symmetrize[Table[Sum[lam3Cy[[i,j,h]]shift[[h,hp]]lam3Cy[[k,l,hp]]/(HeavyMasses[[h]]^2 HeavyMasses[[hp]]^2),{h,1,nSH},{hp,1,nSH}],
+				{i,1,nSL},{j,1,nSL},{k,1,nSL},{l,1,nSL}],Symmetric[{1,2,3,4}]]//SparseArray//SimplifySparse
+		];
+
 (*
 	The self-energy contribution. The field normalization acts on the tree-level quartic of the light fields,
 	including the tree-level exchange of heavy fields and the tree-level tadpoles.
 *)
-		ContriSE=-ZSij . (lam4S-ContriTree-ContriTadpole[TadPoleHeavy]+MixingQuarticSS[TadpoleShiftLH[TadPoleHeavy]])//SparseArray;
+		ContriSE=-ZSij . (lam4S-ContriTree-ContriTadpole[TadPoleHeavy]+MixingQuarticSS[TadpoleShiftLH[TadPoleHeavy]]+ContriMassShift[TadPoleHeavy])-ZSijTadpole . (lam4S-ContriTree)//SparseArray;
 		ContriSE=ContriSE+Transpose[ContriSE,{2,1,3,4}]+Transpose[ContriSE,{3,1,2,4}]+Transpose[ContriSE,{4,1,2,3}]//SparseArray//SimplifySparse;
 
 	If[nSH>nv,
@@ -487,6 +522,9 @@ If[verbose,Print["Calculating Scalar Quartics"]];
 	];
 
 	];
+
+(*One-loop terms of first order in the tree-level tadpoles of the heavy fields, from TadpoleOnePRSS in ScalarMassSS*)
+	lam3DSS=lam3DSS+lamTadpoleSS;
 
 ];
 
@@ -685,29 +723,67 @@ OneLoopCubicSS[list1_,list2_,list3_]:=Module[{masses,lam3All,lam4All,bubbleMat,t
 VertexCorrectionLLH[]:=OneLoopCubicSS[Range[nSL],Range[nSL],nSL+Range[nSH]];
 
 
+(*Integral d^3p/(2Pi)^3 of Product (p^2+x_k)^-n_k, by partial fractions; massless lines are 1/p^2*)
+OneLoopIntegralSS[xs_List,ns_List]:=OneLoopIntegralSS[xs,ns]=Module[{u,tadpole},
+	tadpole[x_,k_]:=If[x===0,0,x^(3/2-k)Gamma[k-3/2]/((4\[Pi])^(3/2)Gamma[k])];
+	Expand[Apart[Product[(u+xs[[k]])^-ns[[k]],{k,Length[xs]}],u]]/.Power[u+x_.,n_Integer?Negative]:>tadpole[x,-n]
+];
+
+
 (*
-	One-loop light masses at first order in the tree-level tadpoles of the heavy fields, which shift the heavy fields by
-	v0=-tadpole/M^2: the one-loop light-light-heavy vertex times v0, without the triangle with two light lines, which is the
-	insertion of the light mass lam3Cy.v0 in ScalarMass2LoopSS; the shift of the one-loop tadpoles of the heavy fields by
-	the one-loop heavy masses and the H^3 cubics, v01, at the H S^2 cubic; and the H^2 S^2 quartic with v0 and the shift v1
-	by the one-loop tadpoles.
+	One-loop one-particle-reducible contributions to the light masses and quartics, as in 1609.06230: one-loop 1PI
+	diagrams at zero momentum whose heavy legs end on the tree-level heavy fields, i.e. on the tree-level tadpoles and on
+	the tree-level exchanges of heavy fields with light legs. The tree-level heavy fields H(l) solve the equations of motion
+	of the heavy fields with the tadpoles, the cubics, and the quartics, and the 1PI diagrams are 1/2 Tr ln(1+G dM) with
+	the vertex insertions dM=lam3.Phi+1/2 lam4.Phi.Phi along Phi=(l,H(l)). The field-independent light mass from the
+	tadpoles is left out, since its insertion is part of ScalarMass2LoopSS, like the tree-level light mass.
+	Returns {mass, quartic} as associations of the orders 0 and 1 in the tree-level tadpoles; the order 0 are the diagrams
+	of ScalarMassSS and ScalarQuarticSS.
 *)
-TadpoleShiftMassSS[]:=Module[{M2,v0,v1,v01,masses,lam3All,lam4All,tadpoleVec,bubbleMat,massLoop,triangle,vertex},
-	M2=Table[muijL[[h,h]]^2,{h,1,nSH}];
-	v0=-Normal[TadPoleHeavy]/M2;
-	If[nSL==0||AllTrue[v0,#===0&],Return[0]];
-	v1=-Normal[TadPoleHeavySS-TadPoleHeavy]/M2;
-
+OneLoopOnePRSS[]:=Module[{nAll,masses,lam3All,lam4All,M2,tadpoles,x,lightVars,e,tau,trunc,H,Phi,grad,dM,gdM,P,gamma1,integrate,coefficient},
 	{masses,lam3All,lam4All}=AllScalarCouplingsSS[];
-	tadpoleVec=Table[TadpoleIntegral3d[x],{x,masses}];
-	bubbleMat=Table[BubbleIntegral3d[x,y],{x,masses},{y,masses}];
-	massLoop=Table[1/2 Total[Diagonal[lam4All[[nSL+h,nSL+k]]] tadpoleVec]-1/2 Total[lam3All[[nSL+h]] lam3All[[nSL+k]] bubbleMat,2],{h,1,nSH},{k,1,nSH}];
-	v01=-(massLoop . v0+Table[v0 . Normal[lam3CHeavy[[h]]] . v1,{h,1,nSH}])/M2;
+	nAll=nSL+nSH;
+	M2=masses[[nSL+1;;]];
+	tadpoles=Normal[TadPoleHeavy];
+	lightVars=Table[x[i],{i,1,nSL}];
+	trunc[p_]:=Expand[p]/.{e^n_/;n>4->0,tau^n_/;n>1->0};
 
-	triangle=Table[Sum[lam3Cy[[i,a,b]]lam3Cy[[j,c,b]]lam3Cy[[a,c,h]]TriangleIntegral3d[0,0,M2[[b]]],{a,1,nSL},{c,1,nSL},{b,1,nSH}],{i,1,nSL},{j,1,nSL},{h,1,nSH}];
-	vertex=Normal[VertexCorrectionLLH[]]-triangle;
+(*Tree-level heavy fields to fourth order in the light fields e*l and first order in the tadpoles*)
+	H=ConstantArray[0,nSH];
+	Do[
+		Phi=Join[e lightVars,H];
+		grad=(1/2 (lam3All . Phi) . Phi+1/6 ((lam4All . Phi) . Phi) . Phi)[[nSL+1;;]];
+		H=trunc/@(-(tau tadpoles+grad)/M2),
+	{6}];
+	Phi=Join[e lightVars,H];
 
-	SparseArray[vertex . v0+Normal[lam3Cy] . v01+Table[v0 . Normal[lamK[[;;,;;,i,j]]] . v1,{i,1,nSL},{j,1,nSL}]]//SimplifySparse
+	dM=Map[trunc,Normal[lam3All . Phi+1/2 (lam4All . Phi) . Phi],{2}];
+	Do[dM[[i,j]]=dM[[i,j]]-(dM[[i,j]]/.e->0),{i,1,nSL},{j,1,nSL}];
+
+(*1/2 Tr ln(1+G dM) with the propagators G as symbols of the squared masses; every vertex insertion is at least of order e or tau*)
+	gdM=(prop/@masses) dM;
+	P=gdM;
+	gamma1=1/2 Tr[P];
+	Do[P=Map[trunc,P . gdM,{2}]; gamma1+=(-1)^(m+1)/(2m) Tr[P],{m,2,5}];
+	gamma1=trunc[gamma1];
+
+	integrate[expr_]:=Module[{props=Union[Cases[expr,_prop,Infinity]]},
+		If[props==={},0,Total[(#[[2]]OneLoopIntegralSS[props[[;;,1]],#[[1]]])&/@CoefficientRules[expr,props]]]];
+	coefficient[n_,t_]:=integrate[Coefficient[Coefficient[gamma1,e,n],tau,t]];
+
+	{
+	Association[Table[t->SparseArray[With[{c=coefficient[2,t]},Table[D[c,x[i],x[j]],{i,1,nSL},{j,1,nSL}]]],{t,0,1}]],
+	Association[Table[t->SparseArray[With[{c=coefficient[4,t]},Table[D[c,x[i],x[j],x[k],x[l]],{i,1,nSL},{j,1,nSL},{k,1,nSL},{l,1,nSL}]]],{t,0,1}]]
+	}//Map[SimplifySparse,#,{2}]&
+];
+
+
+(*The one-loop 1PR contributions of OneLoopOnePRSS at first order in the tree-level tadpoles, computed once for the masses and the quartics*)
+TadpoleOnePRSS[]:=Module[{v0},
+	v0=-Normal[TadPoleHeavy]/Table[muijL[[h,h]]^2,{h,1,nSH}];
+	If[nSL==0||AllTrue[v0,#===0&],
+		{SparseArray[{},{nSL,nSL}],SparseArray[{},{nSL,nSL,nSL,nSL}]},
+		#[1]&/@OneLoopOnePRSS[]]
 ];
 
 

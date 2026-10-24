@@ -1233,7 +1233,7 @@ LoadModelDRalgo[fileName_]:=Module[{},
 *)
 
 
-{ZLij,GvvssTSS,lam3DSS,muijSSLO,muijSSLOTadpoles,muijSSNLO,muijSNLOSS,lam3DSS,lamKVecTSS,lam3CTot,lam3CSSS,ZSij,muijSSNLO2,Ggvvv};
+{ZLij,GvvssTSS,lam3DSS,muijSSLO,muijSSLOTadpoles,muijTadpoleSS,lamTadpoleSS,ZSijTadpole,muijSSNLO,muijSNLOSS,lam3DSS,lamKVecTSS,lam3CTot,lam3CSSS,ZSij,muijSSNLO2,Ggvvv};
 
 
 {TadPoleS,ContriTadPoleSoftToHard,GgvvvSS,lam4SMod,lam4Tot,IdentMatPre};
