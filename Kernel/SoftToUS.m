@@ -743,39 +743,64 @@ OneLoopIntegralSS[xs_List,ns_List]:=OneLoopIntegralSS[xs,ns]=Module[{u,tadpole},
 	Returns {mass, quartic} as associations of the orders 0 and 1 in the tree-level tadpoles and light-heavy masses; the
 	order 0 are the diagrams of ScalarMassSS and ScalarQuarticSS.
 *)
-OneLoopOnePRSS[]:=Module[{nAll,masses,lam3All,lam4All,M2,tadpoles,mix,x,lightVars,e,tau,trunc,H,Phi,grad,dM,gdM,P,gamma1,integrate,coefficient},
+OneLoopOnePRSS[]:=Module[{nAll,masses,lam3All,lam4All,M2,tadpoles,mix,x,orders,splits,zero,H,Phi,m,dM,nonzero,blocks,g,A,B,P,gamma0,gamma1,integrate,coefficient},
 	{masses,lam3All,lam4All}=AllScalarCouplingsSS[];
 	nAll=nSL+nSH;
 	M2=masses[[nSL+1;;]];
 	tadpoles=Normal[TadPoleHeavy];
 	mix=Normal[muijMix];
-	lightVars=Table[x[i],{i,1,nSL}];
-	trunc[p_]:=Expand[p]/.{e^n_/;n>4->0,tau^n_/;n>1->0};
 
-(*Tree-level heavy fields to fourth order in the light fields e*l and first order in the tadpoles and light-heavy masses*)
-	H=ConstantArray[0,nSH];
+(*
+	All quantities are expanded in the orders {n,t}: n light fields and t tadpoles or light-heavy masses, with n<=4 and
+	t<=1. splits[o,k] are the ways to write the order o as a sum of k orders other than {0,0}.
+*)
+	orders=SortBy[Flatten[Table[{n,t},{n,0,4},{t,0,1}],1],Total];
+	splits[o_,k_]:=splits[o,k]=Select[Tuples[Rest[orders],k],Total[#]==o&];
+	zero=ConstantArray[0,nSH];
+
+(*Tree-level heavy fields from the equations of motion, order by order, and the fields Phi[o]=(l,H)*)
+	Phi[{0,0}]=ConstantArray[0,nAll];
 	Do[
-		Phi=Join[e lightVars,H];
-		grad=(1/2 (lam3All . Phi) . Phi+1/6 ((lam4All . Phi) . Phi) . Phi)[[nSL+1;;]];
-		H=trunc/@(-(tau (tadpoles+e lightVars . mix)+grad)/M2),
-	{6}];
-	Phi=Join[e lightVars,H];
+		H=-(If[o=={0,1},tadpoles,zero]+If[o=={1,1},Table[x[i],{i,1,nSL}] . mix,zero]
+			+Normal[1/2 Sum[(lam3All[[nSL+1;;]] . Phi[s[[1]]]) . Phi[s[[2]]],{s,splits[o,2]}]]
+			+Normal[1/6 Sum[((lam4All[[nSL+1;;]] . Phi[s[[1]]]) . Phi[s[[2]]]) . Phi[s[[3]]],{s,splits[o,3]}]])/M2;
+		Phi[o]=Join[If[o=={1,0},Table[x[i],{i,1,nSL}],ConstantArray[0,nSL]],Expand[H]],
+	{o,Rest[orders]}];
 
-	dM=Map[trunc,Normal[lam3All . Phi+1/2 (lam4All . Phi) . Phi],{2}];
-	Do[dM[[i,j]]=dM[[i,j]]-(dM[[i,j]]/.e->0),{i,1,nSL},{j,1,nSL}];
-	dM[[1;;nSL,nSL+1;;]]+=tau mix;
-	dM[[nSL+1;;,1;;nSL]]+=tau Transpose[mix];
+(*Vertex insertions dM=lam3.Phi+1/2 lam4.Phi.Phi order by order, without the field-independent light mass, and the light-heavy masses*)
+	Do[
+		m=Expand[Normal[lam3All . Phi[o]+1/2 Sum[(lam4All . Phi[s[[1]]]) . Phi[s[[2]]],{s,splits[o,2]}]]];
+		If[o[[1]]==0,m[[1;;nSL,1;;nSL]]=0];
+		If[o=={0,1},m[[1;;nSL,nSL+1;;]]+=mix; m[[nSL+1;;,1;;nSL]]+=Transpose[mix]];
+		dM[o]=m,
+	{o,Rest[orders]}];
 
-(*1/2 Tr ln(1+G dM) with the propagators G as symbols of the squared masses; every vertex insertion is at least of order e or tau*)
-	gdM=(prop/@masses) dM;
-	P=gdM;
-	gamma1=1/2 Tr[P];
-	Do[P=Map[trunc,P . gdM,{2}]; gamma1+=(-1)^(m+1)/(2m) Tr[P],{m,2,5}];
-	gamma1=trunc[gamma1];
+(*
+	1/2 Tr ln(1+G dM) with the propagators G as symbols of the squared masses, summed over the blocks of fields that dM
+	connects; blocks without vertex insertions or without heavy lines vanish. With A[n]=G dM[{n,0}] and B[n]=G dM[{n,1}],
+	the orders 0 and 1 in t are Sum[(-1)^(k+1)/(2k)Tr[A^k]] and Sum[(-1)^k/2 Tr[A^k B]]; P[k,n] is the order n of A^k,
+	and A starts at n=1, so that k<=n.
+*)
+	nonzero[o_]:=Position[dM[o],_?(#=!=0&),{2},Heads->False];
+	blocks=Select[
+		ConnectedComponents[Graph[Range[nAll],UndirectedEdge@@@Union@@(nonzero/@Rest[orders])]],
+		Function[b,Max[b]>nSL&&AnyTrue[Rest[orders],Function[o,AnyTrue[Flatten[dM[o][[b,b]]],#=!=0&]]]]];
+	gamma0=gamma1=ConstantArray[0,5];
+	Do[
+		g=prop/@masses[[b]];
+		Do[A[n]=g dM[{n,0}][[b,b]],{n,1,4}];
+		Do[B[n]=g dM[{n,1}][[b,b]],{n,0,4}];
+		Do[P[1,n]=A[n],{n,1,4}];
+		Do[P[k,n]=Expand[Sum[P[k-1,j] . A[n-j],{j,k-1,n-1}]],{k,2,4},{n,k,4}];
+		Do[
+			gamma0[[n+1]]+=Sum[(-1)^(k+1)/(2k) Tr[P[k,n]],{k,1,n}];
+			gamma1[[n+1]]+=1/2 Tr[B[n]]+Sum[(-1)^k/2 Total[P[k,j] Transpose[B[n-j]],2],{k,1,n},{j,k,n}],
+		{n,{2,4}}],
+	{b,blocks}];
 
 	integrate[expr_]:=Module[{props=Union[Cases[expr,_prop,Infinity]]},
 		If[props==={},0,Total[(#[[2]]OneLoopIntegralSS[props[[;;,1]],#[[1]]])&/@CoefficientRules[expr,props]]]];
-	coefficient[n_,t_]:=integrate[Coefficient[Coefficient[gamma1,e,n],tau,t]];
+	coefficient[n_,t_]:=integrate[Expand[If[t==0,gamma0,gamma1][[n+1]]]];
 
 	{
 	Association[Table[t->SparseArray[With[{c=coefficient[2,t]},Table[D[c,x[i],x[j]],{i,1,nSL},{j,1,nSL}]]],{t,0,1}]],
@@ -876,21 +901,22 @@ IdentifyTensorsPreSSDRalgo[]:=Module[{},
 (*
 	Writes ultrasoft parameters in terms of soft ones.
 *)
-IdentifyTensorsSSDRalgo[]:=Module[{},
+IdentifyTensorsSSDRalgo[]:=Module[{simplified},
 
 If[verbose,Print["Identifying Components"]];
 
 	If[mode>=1,
 
-(*Quartic Tensor*)
-		HelpList=SparseArray[lam4S+lam3DSS]["NonzeroValues"]//Simplify//DeleteDuplicates//Sort;
+(*Quartic Tensor; each distinct entry is simplified once*)
+		simplified=Dispatch[Thread[#->(Simplify/@#)]&@DeleteDuplicates[SparseArray[lam4S+lam3DSS]["NonzeroValues"]]];
+		HelpList=Replace[SparseArray[lam4S+lam3DSS]["NonzeroValues"],simplified,{1}]//DeleteDuplicates//Sort;
 		If[HelpList[[1]]==0&&Length[HelpList]>1,
 			HelpList=Delete[HelpList,1];
 		];
 		HelpVar=Table[lamSS[a],{a,1,HelpList//Length}];
 		HelpVarMod=RelationsBVariables[HelpList,HelpVar];
 		HelpSolveQuarticS=Table[{HelpList[[a]]->HelpVarMod[[a]]},{a,1,HelpList//Length}]//Flatten;
-		lam4US=(lam4S+lam3DSS)//Normal//Simplify//ReplaceAll[#,HelpSolveQuarticS]&//SparseArray;
+		lam4US=Replace[(lam4S+lam3DSS)//Normal,simplified,{4}]//ReplaceAll[#,HelpSolveQuarticS]&//SparseArray;
 	
 		If[Length[Variables[lam4US["NonzeroValues"]/.lamSS[x_]->0]]>0,
 			HelpSolveQuarticS2=HelpSolveQuarticS/.lamSS[x_]->lamSSS[x];
