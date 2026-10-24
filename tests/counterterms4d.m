@@ -116,13 +116,13 @@ VerificationTest[
 		\[Delta]Zt
 		}],
 	Simplify[{
-		gw^2/(16\[Pi]^2 \[Epsilon]) ((26-2)/6-4/3 nF),
-		-gY^2/(96\[Pi]^2 \[Epsilon]) (2+40/3 nF),
-		1/(16\[Pi]^2 \[Epsilon]) (9/4 gw^2+3/4 gY^2),
-		1/(16\[Pi]^2 \[Epsilon]) (9/4 gw^2+3/4 gY^2-3 yt^2),
+		gw^2/(16\[Pi]^2 eps) ((26-2)/6-4/3 nF),
+		-gY^2/(96\[Pi]^2 eps) (2+40/3 nF),
+		1/(16\[Pi]^2 eps) (9/4 gw^2+3/4 gY^2),
+		1/(16\[Pi]^2 eps) (9/4 gw^2+3/4 gY^2-3 yt^2),
 		0,
-		-yt^2/(32\[Pi]^2 \[Epsilon]),
-		-yt^2/(16\[Pi]^2 \[Epsilon])
+		-yt^2/(32\[Pi]^2 eps),
+		-yt^2/(16\[Pi]^2 eps)
 		}],
 	TestID->"2hdm-field-counterterms-agree-with-1802.05056"
 ]];
@@ -132,9 +132,9 @@ VerificationTest[
 AppendTo[testList,
 VerificationTest[
 	Simplify[{
-		CounterTerms4D["V",{posC,posC}]-AnomDim4D["V",{posC,posC}]/\[Epsilon],
-		CounterTerms4D["F",{posQ,posQ}]-AnomDim4D["F",{posQ,posQ}]/\[Epsilon],
-		CounterTerms4D["S",{pos\[Phi]2,pos\[Phi]2}]-AnomDim4D["S",{pos\[Phi]2,pos\[Phi]2}]/\[Epsilon]
+		CounterTerms4D["V",{posC,posC}]-AnomDim4D["V",{posC,posC}]/eps,
+		CounterTerms4D["F",{posQ,posQ}]-AnomDim4D["F",{posQ,posQ}]/eps,
+		CounterTerms4D["S",{pos\[Phi]2,pos\[Phi]2}]-AnomDim4D["S",{pos\[Phi]2,pos\[Phi]2}]/eps
 		}],
 	{0,0,0},
 	TestID->"field-counterterms-are-anomalous-dimensions-over-epsilon"
@@ -156,7 +156,7 @@ VerificationTest[
 
 AppendTo[testList,
 VerificationTest[
-	Simplify[(#[[1]]/.ct)-#[[2]]/(2\[Epsilon])&/@BetaFunctions4D[]],
+	Simplify[(#[[1]]/.ct)-#[[2]]/(2eps)&/@BetaFunctions4D[]],
 	ConstantArray[0,Length[ct]],
 	TestID->"2hdm-default-counterterms-are-beta-over-2-epsilon"
 ]];
@@ -188,7 +188,7 @@ paperBeta={
 
 AppendTo[testList,
 VerificationTest[
-	Simplify[(#[[1]]/.ct)-#[[2]]/(2\[Epsilon])&/@paperBeta],
+	Simplify[(#[[1]]/.ct)-#[[2]]/(2eps)&/@paperBeta],
 	ConstantArray[0,Length[paperBeta]],
 	TestID->"2hdm-default-counterterms-agree-with-1802.05056-beta-functions"
 ]];
@@ -200,20 +200,20 @@ VerificationTest[
 
 (*1802.05056, appendix C.2, with Nd=2 and \[Delta]g^2=2g \[Delta]g*)
 paperCT={
-	gw^2->2gw (-gw^3/(16\[Pi]^2 \[Epsilon]) ((44-2)/12-2/3 nF)),
-	gY^2->2gY (gY^3/(192\[Pi]^2 \[Epsilon]) (2+40/3 nF)),
-	yt->-yt/(16\[Pi]^2 \[Epsilon]) (1/3 gY^2+4 gs^2),
-	m11->\[Kappa]/\[Epsilon] (6 \[Lambda]1H m11+(2\[Lambda]3H+\[Lambda]4H) m22+6 \[Lambda]6H m12),
-	m22->\[Kappa]/\[Epsilon] (6 \[Lambda]2H m22+(2\[Lambda]3H+\[Lambda]4H) m11+6 \[Lambda]7H m12),
-	m12->\[Kappa]/\[Epsilon] (3 \[Lambda]6H m11+3 \[Lambda]7H m22+3 \[Lambda]5H m12+(2\[Lambda]4H+\[Lambda]3H) m12),
-	\[Lambda]1H->\[Kappa]/\[Epsilon]/2 (24 \[Lambda]1H^2+2 \[Lambda]3H^2+2 \[Lambda]3H \[Lambda]4H+\[Lambda]4H^2+\[Lambda]5H^2+12 \[Lambda]6H^2+3/8 (3 gw^4+gY^4+2 gw^2 gY^2)),
-	\[Lambda]2H->\[Kappa]/\[Epsilon]/2 (24 \[Lambda]2H^2+2 \[Lambda]3H^2+2 \[Lambda]3H \[Lambda]4H+\[Lambda]4H^2+\[Lambda]5H^2+12 \[Lambda]7H^2+3/8 (3 gw^4+gY^4+2 gw^2 gY^2)-6 yt^4),
-	\[Lambda]3H->\[Kappa]/\[Epsilon] (2 (\[Lambda]1H+\[Lambda]2H) (3 \[Lambda]3H+\[Lambda]4H)+2 \[Lambda]3H^2+\[Lambda]4H^2+\[Lambda]5H^2+3/8 (3 gw^4+gY^4-2 gw^2 gY^2)
+	gw^2->2gw (-gw^3/(16\[Pi]^2 eps) ((44-2)/12-2/3 nF)),
+	gY^2->2gY (gY^3/(192\[Pi]^2 eps) (2+40/3 nF)),
+	yt->-yt/(16\[Pi]^2 eps) (1/3 gY^2+4 gs^2),
+	m11->\[Kappa]/eps (6 \[Lambda]1H m11+(2\[Lambda]3H+\[Lambda]4H) m22+6 \[Lambda]6H m12),
+	m22->\[Kappa]/eps (6 \[Lambda]2H m22+(2\[Lambda]3H+\[Lambda]4H) m11+6 \[Lambda]7H m12),
+	m12->\[Kappa]/eps (3 \[Lambda]6H m11+3 \[Lambda]7H m22+3 \[Lambda]5H m12+(2\[Lambda]4H+\[Lambda]3H) m12),
+	\[Lambda]1H->\[Kappa]/eps/2 (24 \[Lambda]1H^2+2 \[Lambda]3H^2+2 \[Lambda]3H \[Lambda]4H+\[Lambda]4H^2+\[Lambda]5H^2+12 \[Lambda]6H^2+3/8 (3 gw^4+gY^4+2 gw^2 gY^2)),
+	\[Lambda]2H->\[Kappa]/eps/2 (24 \[Lambda]2H^2+2 \[Lambda]3H^2+2 \[Lambda]3H \[Lambda]4H+\[Lambda]4H^2+\[Lambda]5H^2+12 \[Lambda]7H^2+3/8 (3 gw^4+gY^4+2 gw^2 gY^2)-6 yt^4),
+	\[Lambda]3H->\[Kappa]/eps (2 (\[Lambda]1H+\[Lambda]2H) (3 \[Lambda]3H+\[Lambda]4H)+2 \[Lambda]3H^2+\[Lambda]4H^2+\[Lambda]5H^2+3/8 (3 gw^4+gY^4-2 gw^2 gY^2)
 		+2 (\[Lambda]6H^2+\[Lambda]7H^2)+8 \[Lambda]6H \[Lambda]7H),
-	\[Lambda]4H->\[Kappa]/\[Epsilon] (2 (\[Lambda]1H+\[Lambda]2H) \[Lambda]4H+2 \[Lambda]4H^2+4 \[Lambda]3H \[Lambda]4H+4 \[Lambda]5H^2+3/2 gw^2 gY^2+5 (\[Lambda]6H^2+\[Lambda]7H^2)+2 \[Lambda]6H \[Lambda]7H),
-	\[Lambda]5H->\[Kappa]/\[Epsilon] (2 (\[Lambda]1H+\[Lambda]2H+2 \[Lambda]3H+3 \[Lambda]4H) \[Lambda]5H+5 (\[Lambda]6H^2+\[Lambda]7H^2)+2 \[Lambda]6H \[Lambda]7H),
-	\[Lambda]6H->\[Kappa]/\[Epsilon] (12 \[Lambda]1H \[Lambda]6H+(3 \[Lambda]3H+2 \[Lambda]4H) \[Lambda]7H+\[Lambda]5H \[Lambda]7H+(3 \[Lambda]3H+4 \[Lambda]4H) \[Lambda]6H+5 \[Lambda]5H \[Lambda]6H),
-	\[Lambda]7H->\[Kappa]/\[Epsilon] (12 \[Lambda]2H \[Lambda]7H+(3 \[Lambda]3H+2 \[Lambda]4H) \[Lambda]6H+\[Lambda]5H \[Lambda]6H+(3 \[Lambda]3H+4 \[Lambda]4H) \[Lambda]7H+5 \[Lambda]5H \[Lambda]7H)
+	\[Lambda]4H->\[Kappa]/eps (2 (\[Lambda]1H+\[Lambda]2H) \[Lambda]4H+2 \[Lambda]4H^2+4 \[Lambda]3H \[Lambda]4H+4 \[Lambda]5H^2+3/2 gw^2 gY^2+5 (\[Lambda]6H^2+\[Lambda]7H^2)+2 \[Lambda]6H \[Lambda]7H),
+	\[Lambda]5H->\[Kappa]/eps (2 (\[Lambda]1H+\[Lambda]2H+2 \[Lambda]3H+3 \[Lambda]4H) \[Lambda]5H+5 (\[Lambda]6H^2+\[Lambda]7H^2)+2 \[Lambda]6H \[Lambda]7H),
+	\[Lambda]6H->\[Kappa]/eps (12 \[Lambda]1H \[Lambda]6H+(3 \[Lambda]3H+2 \[Lambda]4H) \[Lambda]7H+\[Lambda]5H \[Lambda]7H+(3 \[Lambda]3H+4 \[Lambda]4H) \[Lambda]6H+5 \[Lambda]5H \[Lambda]6H),
+	\[Lambda]7H->\[Kappa]/eps (12 \[Lambda]2H \[Lambda]7H+(3 \[Lambda]3H+2 \[Lambda]4H) \[Lambda]6H+\[Lambda]5H \[Lambda]6H+(3 \[Lambda]3H+4 \[Lambda]4H) \[Lambda]7H+5 \[Lambda]5H \[Lambda]7H)
 	};
 
 AppendTo[testList,
@@ -286,7 +286,7 @@ ctFR=CounterTerms4D[FieldRenormalization->True];
 AppendTo[testList,
 VerificationTest[
 	Simplify[{\[Delta]Z12,CounterTerms4D["S",{pos\[Phi]2,pos\[Phi]1}],\[Delta]Z11-(\[Delta]Z22/.{yt2->yt1})}],
-	{-3yt1 yt2/(16\[Pi]^2 \[Epsilon]),-3yt1 yt2/(16\[Pi]^2 \[Epsilon]),0},
+	{-3yt1 yt2/(16\[Pi]^2 eps),-3yt1 yt2/(16\[Pi]^2 eps),0},
 	TestID->"2hdm-mixing-field-counterterms"
 ]];
 
@@ -342,7 +342,7 @@ ctFR=CounterTerms4D[FieldRenormalization->True];
 AppendTo[testList,
 VerificationTest[
 	Simplify[{\[Delta]Z\[Phi],\[Delta]Z\[Psi]L,\[Delta]Z\[Psi]R}],
-	{-2y^2/(16\[Pi]^2 \[Epsilon]),-y^2/(32\[Pi]^2 \[Epsilon]),-y^2/(32\[Pi]^2 \[Epsilon])},
+	{-2y^2/(16\[Pi]^2 eps),-y^2/(32\[Pi]^2 eps),-y^2/(32\[Pi]^2 eps)},
 	TestID->"scalar-yukawa-field-counterterms"
 ]];
 
@@ -351,7 +351,7 @@ VerificationTest[
 AppendTo[testList,
 VerificationTest[
 	Simplify[{y,\[Lambda]}/.ctFR],
-	{y^3/(16\[Pi]^2 \[Epsilon]),(3\[Lambda]^2-48y^4)/(32\[Pi]^2 \[Epsilon])},
+	{y^3/(16\[Pi]^2 eps),(3\[Lambda]^2-48y^4)/(32\[Pi]^2 eps)},
 	TestID->"scalar-yukawa-vertex-counterterms"
 ]];
 
@@ -386,7 +386,7 @@ ctFR=CounterTerms4D[FieldRenormalization->True];
 
 AppendTo[testList,
 VerificationTest[
-	Simplify[{(c6/.BetaFunctions4D[])-(15\[Lambda]+12y^2)c6/(16\[Pi]^2),(c6/.ct)-(15\[Lambda]+12y^2)c6/(32\[Pi]^2 \[Epsilon]),(c6/.ctFR)-(c6/.ct)-3\[Delta]Z\[Phi] c6}],
+	Simplify[{(c6/.BetaFunctions4D[])-(15\[Lambda]+12y^2)c6/(16\[Pi]^2),(c6/.ct)-(15\[Lambda]+12y^2)c6/(32\[Pi]^2 eps),(c6/.ctFR)-(c6/.ct)-3\[Delta]Z\[Phi] c6}],
 	{0,0,0},
 	TestID->"sextic-beta-function-and-counterterms"
 ]];

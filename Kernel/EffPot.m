@@ -24,12 +24,12 @@
 (*
 	User-defined model.
 *)
-DefineNewTensorsUS[\[Mu]ijI_,\[Lambda]4I_,\[Lambda]3I_,gvssI_,gvvvI_]:=Module[{\[Mu]ijP=\[Mu]ijI,\[Lambda]4P=\[Lambda]4I,\[Lambda]3P=\[Lambda]3I,gvssP=gvssI,gvvvP=gvvvI},
-	\[Mu]ijEP=\[Mu]ijP//SparseArray;
+DefineNewTensorsUS[muijI_,lam4I_,lam3I_,gvssI_,gvvvI_]:=Module[{muijP=muijI,lam4P=lam4I,lam3P=lam3I,gvssP=gvssI,gvvvP=gvvvI},
+	muijEP=muijP//SparseArray;
 	gvvvEP=gvvvP//SparseArray;
 	gvssEP=gvssP//SparseArray;
-	\[Lambda]4EP=\[Lambda]4P//SparseArray;
-	\[Lambda]3EP=\[Lambda]3P//SparseArray;
+	lam4EP=lam4P//SparseArray;
+	lam3EP=lam3P//SparseArray;
 	nsEP=Length[gvssEP[[1]]];
 	nvEP=Length[gvvvEP];
 
@@ -49,38 +49,38 @@ UseSoftTheory[]:=Module[{},
 	gvvvEP=gvvv//Normal//ReplaceAll[#,SubGauge]&//SparseArray;
 
 (*We first change name of the tree-level quartic couplings*)
-	VarQuartic=Join[\[Lambda]4//Normal//Variables]//DeleteDuplicates;
+	VarQuartic=Join[lam4//Normal//Variables]//DeleteDuplicates;
 	SubQuartic=Table[c->Symbol[ToString[c]<>ToString["3d"]],{c,VarQuartic}];
-	\[Lambda]4Temp= \[Lambda]4//Normal//ReplaceAll[#,SubQuartic]&//SparseArray;
+	lam4Temp= lam4//Normal//ReplaceAll[#,SubQuartic]&//SparseArray;
 	
 	(*We then combine normal and temporal scalars*)
-	ns=(\[Lambda]4//Length);
+	ns=(lam4//Length);
 	nSH=nv+ns; (*Adds normal scalars to the temporal scalars*)
-	A1=Delete[\[Lambda]AAS//ArrayRules,-1]//ReplaceAll[#,{x_,y_,z_,w_}->{x+ns,y+ns,z+ns,w+ns}]&;
-	A2=ReplaceAll[Delete[\[Lambda]KVec//ArrayRules,-1],{x_,y_,z_,w_}->{x+ns,y+ns,z,w}];
-	A3=Delete[\[Lambda]4Temp//ArrayRules,-1];
-	\[Lambda]4EP=SymmetrizedArray[Join[A1,A2,A3],{nSH,nSH,nSH,nSH},Symmetric[{1,2,3,4}]]//SparseArray;
+	A1=Delete[lamAAS//ArrayRules,-1]//ReplaceAll[#,{x_,y_,z_,w_}->{x+ns,y+ns,z+ns,w+ns}]&;
+	A2=ReplaceAll[Delete[lamKVec//ArrayRules,-1],{x_,y_,z_,w_}->{x+ns,y+ns,z,w}];
+	A3=Delete[lam4Temp//ArrayRules,-1];
+	lam4EP=SymmetrizedArray[Join[A1,A2,A3],{nSH,nSH,nSH,nSH},Symmetric[{1,2,3,4}]]//SparseArray;
 	
 (*We first change name of the tree-level cubic couplings*)
-	VarCubic=Join[\[Lambda]3//Normal//Variables]//DeleteDuplicates;
+	VarCubic=Join[lam3//Normal//Variables]//DeleteDuplicates;
 	SubCubic=Table[c->Symbol[ToString[c]<>ToString["3d"]],{c,VarCubic}];
-	\[Lambda]3Temp= \[Lambda]3//Normal//ReplaceAll[#,SubCubic]&//SparseArray;
+	lam3Temp= lam3//Normal//ReplaceAll[#,SubCubic]&//SparseArray;
 	
 	(*We then combine normal and temporal scalars*)
-	A1=ReplaceAll[Delete[\[Lambda]vvsLS//ArrayRules,-1],{x_,y_,z_}->{x+ns,y+ns,z}];
-	A2=Delete[\[Lambda]3Temp//ArrayRules,-1];
-	\[Lambda]3EP=SymmetrizedArray[Join[A1,A2],{nSH,nSH,nSH},Symmetric[{1,2,3}]]//SparseArray;
+	A1=ReplaceAll[Delete[lamvvsLS//ArrayRules,-1],{x_,y_,z_}->{x+ns,y+ns,z}];
+	A2=Delete[lam3Temp//ArrayRules,-1];
+	lam3EP=SymmetrizedArray[Join[A1,A2],{nSH,nSH,nSH},Symmetric[{1,2,3}]]//SparseArray;
 
 (*We first change name of the tree-level masses*)
-	VarMass=Join[\[Mu]ij//Normal//Variables]//DeleteDuplicates;
+	VarMass=Join[muij//Normal//Variables]//DeleteDuplicates;
 	SubMass=Table[c->Symbol[ToString[c]<>ToString["3d"]],{c,VarMass}];
-	\[Mu]ijTemp=\[Mu]ij//Normal//ReplaceAll[#,SubMass]&//SparseArray;
+	muijTemp=muij//Normal//ReplaceAll[#,SubMass]&//SparseArray;
 
 	(*We then combine normal and temporal scalar masses*)
-	A1=ReplaceAll[Delete[Normal[\[Mu]abDef]/.SubDebyeDecoupled//SparseArray//ArrayRules,-1],{x_,y_}->{x+ns,y+ns}];
-	A2=Delete[\[Mu]ijTemp//ArrayRules,-1];
+	A1=ReplaceAll[Delete[Normal[muabDef]/.SubDebyeDecoupled//SparseArray//ArrayRules,-1],{x_,y_}->{x+ns,y+ns}];
+	A2=Delete[muijTemp//ArrayRules,-1];
 
-	\[Mu]ijEP=SymmetrizedArray[Join[A1,A2],{nSH,nSH},Symmetric[{1,2}]]//SparseArray;
+	muijEP=SymmetrizedArray[Join[A1,A2],{nSH,nSH},Symmetric[{1,2}]]//SparseArray;
 
 
 (*We first change the name of trillinear scalar-vector couplings*)
@@ -117,14 +117,14 @@ UseUltraSoftTheory[]:=Module[{},
 	gvvvEP=gvvv//Normal//ReplaceAll[#,SubGauge]&//SparseArray;
 
 (*We only need to modify the gauge couplings*)
-	SubGauge=Table[c->Symbol[ToString[c]<>ToString["US"]],{c,Variables[Normal[\[Lambda]4Light]]}];
-	\[Lambda]4EP=\[Lambda]4Light//Normal//ReplaceAll[#,SubGauge]&//SparseArray;
+	SubGauge=Table[c->Symbol[ToString[c]<>ToString["US"]],{c,Variables[Normal[lam4Light]]}];
+	lam4EP=lam4Light//Normal//ReplaceAll[#,SubGauge]&//SparseArray;
 (*We only need to modify the gauge couplings*)
-	SubGauge=Table[c->Symbol[ToString[c]<>ToString["US"]],{c,Variables[Normal[\[Lambda]3CLight]]}];
-	\[Lambda]3EP=\[Lambda]3CLight//Normal//ReplaceAll[#,SubGauge]&//SparseArray;
+	SubGauge=Table[c->Symbol[ToString[c]<>ToString["US"]],{c,Variables[Normal[lam3CLight]]}];
+	lam3EP=lam3CLight//Normal//ReplaceAll[#,SubGauge]&//SparseArray;
 (*We only need to modify the gauge couplings*)
-	SubGauge=Table[c->Symbol[ToString[c]<>ToString["US"]],{c,Variables[Normal[\[Mu]ijLight]]}];
-	\[Mu]ijEP=\[Mu]ijLight//Normal//ReplaceAll[#,SubGauge]&//SparseArray;
+	SubGauge=Table[c->Symbol[ToString[c]<>ToString["US"]],{c,Variables[Normal[muijLight]]}];
+	muijEP=muijLight//Normal//ReplaceAll[#,SubGauge]&//SparseArray;
 
 (*We only need to modify the gauge couplings*)
 	VarGauge=Table[Symbol[ToString[c]<>ToString["3d"]],{c,GaugeCouplingNames}];
@@ -151,7 +151,7 @@ DiagonalMatrixQAE[matI_]:=Module[{matP=matI},
 ];
 
 
-{\[Mu]ij\[Phi],\[Mu]ab\[Phi],Gvvs\[Phi],\[Lambda]3\[Phi],\[Lambda]4\[Phi],gvvv\[Phi],gvss\[Phi],\[Phi]Vev};
+{muij\[Phi],muab\[Phi],Gvvs\[Phi],lam3\[Phi],lam4\[Phi],gvvv\[Phi],gvss\[Phi],\[Phi]Vev};
 
 
 (*
@@ -167,20 +167,20 @@ DefineVEVS[\[Phi]Vecp_]:=Module[{\[Phi]Vec=\[Phi]Vecp},
 	
 	HabijVEP=Transpose[Activate@TensorContract[Inactive@TensorProduct[gvssEP,gvssEP],{{3,5}}],{1,3,2,4}]+Transpose[Transpose[Activate@TensorContract[Inactive@TensorProduct[gvssEP,gvssEP],{{3,5}}],{1,3,2,4}],{2,1,3,4}];
 	\[Phi]Vev=\[Phi]Vec//SparseArray;
-	\[Mu]ij\[Phi]=\[Mu]ijEP+1/2 Activate@TensorContract[Inactive@TensorProduct[\[Lambda]4EP,\[Phi]Vec,\[Phi]Vec],{{3,5},{4,6}}]+ Activate@TensorContract[Inactive@TensorProduct[\[Lambda]3EP,\[Phi]Vec],{{3,4}}]//SparseArray;
-	\[Mu]ab\[Phi]=-1/2 Activate@TensorContract[Inactive@TensorProduct[HabijVEP,\[Phi]Vec,\[Phi]Vec],{{3,5},{4,6}}]//SparseArray;
+	muij\[Phi]=muijEP+1/2 Activate@TensorContract[Inactive@TensorProduct[lam4EP,\[Phi]Vec,\[Phi]Vec],{{3,5},{4,6}}]+ Activate@TensorContract[Inactive@TensorProduct[lam3EP,\[Phi]Vec],{{3,4}}]//SparseArray;
+	muab\[Phi]=-1/2 Activate@TensorContract[Inactive@TensorProduct[HabijVEP,\[Phi]Vec,\[Phi]Vec],{{3,5},{4,6}}]//SparseArray;
 	Gvvs\[Phi]=-Activate@TensorContract[Inactive@TensorProduct[HabijVEP,\[Phi]Vec],{{4,5}}];
-	\[Lambda]3\[Phi]=\[Lambda]3EP+Activate@TensorContract[Inactive@TensorProduct[\[Lambda]4EP,\[Phi]Vec],{{4,5}}];
-	\[Lambda]4\[Phi]=\[Lambda]4EP//SparseArray;
+	lam3\[Phi]=lam3EP+Activate@TensorContract[Inactive@TensorProduct[lam4EP,\[Phi]Vec],{{4,5}}];
+	lam4\[Phi]=lam4EP//SparseArray;
 	gvvv\[Phi]=gvvvEP//SparseArray;
 	gvss\[Phi]=gvssEP//SparseArray;
 
-	If[DiagonalMatrixQAE[\[Mu]ab\[Phi]]==False,
+	If[DiagonalMatrixQAE[muab\[Phi]]==False,
 		Print["The Vector Mass-Matrix is not Diagonal"];
 	];
 
 
-	If[DiagonalMatrixQAE[\[Mu]ij\[Phi]]==False,
+	If[DiagonalMatrixQAE[muij\[Phi]]==False,
 		Print["The Scalar Mass-Matrix is not Diagonal"];
 	];
 
@@ -210,10 +210,10 @@ CalculatePotential[ScalMassI_,VecMassI_,OptionsPattern[]]:=Module[{ScalMassP=Sca
 
 	CustomMass= OptionValue[CustomMasses];
 	If[CustomMass==True,
-		\[Mu]ij\[Phi]=ScalMassP//SparseArray;
-		\[Mu]ab\[Phi]=VecMassP//SparseArray;
+		muij\[Phi]=ScalMassP//SparseArray;
+		muab\[Phi]=VecMassP//SparseArray;
 
-			If[DiagonalMatrixQAE[\[Mu]ij\[Phi]]==True && DiagonalMatrixQAE[\[Mu]ab\[Phi]]==True,
+			If[DiagonalMatrixQAE[muij\[Phi]]==True && DiagonalMatrixQAE[muab\[Phi]]==True,
 				CalculateLOPotentialSS[];
 				CalculateNLOPotentialSS[];
 				VTot={VLO,VNLO};
@@ -236,7 +236,7 @@ CalculatePotentialUS[OptionsPattern[]]:=Module[{},
 	
 	If[PertDia==False,
 		If[CustomMass==False,
-			If[DiagonalMatrixQAE[\[Mu]ij\[Phi]]==True && DiagonalMatrixQAE[\[Mu]ab\[Phi]]==True,
+			If[DiagonalMatrixQAE[muij\[Phi]]==True && DiagonalMatrixQAE[muab\[Phi]]==True,
 				CalculateLOPotentialSS[];
 				CalculateNLOPotentialSS[];
 				CalculateNNLOPotentialSS[];
@@ -250,11 +250,11 @@ CalculatePotentialUS[OptionsPattern[]]:=Module[{},
 		];
 	,
 		(*We now treat off-diagonal masses as small*)
-		\[Mu]ijPert=ArrayRules[\[Mu]ij\[Phi]]/.({x_Integer,y_Integer}->a_)/;Equal[x,y]->{x,y}->0//SparseArray;
-		\[Mu]ij\[Phi]=ArrayRules[\[Mu]ij\[Phi]]/.({x_Integer,y_Integer}->a_)/;Unequal[x,y]->{x,y}->0//SparseArray;
+		muijPert=ArrayRules[muij\[Phi]]/.({x_Integer,y_Integer}->a_)/;Equal[x,y]->{x,y}->0//SparseArray[#,Dimensions[muij\[Phi]]]&;
+		muij\[Phi]=ArrayRules[muij\[Phi]]/.({x_Integer,y_Integer}->a_)/;Unequal[x,y]->{x,y}->0//SparseArray[#,Dimensions[muij\[Phi]]]&;
 		
-		\[Mu]ab\[Phi]Pert=ArrayRules[\[Mu]ab\[Phi]]/.({x_Integer,y_Integer}->a_)/;Equal[x,y]->{x,y}->0//SparseArray;
-		\[Mu]ab\[Phi]=ArrayRules[\[Mu]ab\[Phi]]/.({x_Integer,y_Integer}->a_)/;Unequal[x,y]->{x,y}->0//SparseArray;
+		muab\[Phi]Pert=ArrayRules[muab\[Phi]]/.({x_Integer,y_Integer}->a_)/;Equal[x,y]->{x,y}->0//SparseArray[#,Dimensions[muab\[Phi]]]&;
+		muab\[Phi]=ArrayRules[muab\[Phi]]/.({x_Integer,y_Integer}->a_)/;Unequal[x,y]->{x,y}->0//SparseArray[#,Dimensions[muab\[Phi]]]&;
 		
 		CalculateLOPotentialSS[];
 		CalculateNLOPotentialSS[];
@@ -278,7 +278,7 @@ CalculatePotential[OptionsPattern[]]:=Module[{},
 	
 	If[PertDia==False,
 		If[CustomMass==False,
-			If[DiagonalMatrixQAE[\[Mu]ij\[Phi]]==True && DiagonalMatrixQAE[\[Mu]ab\[Phi]]==True,
+			If[DiagonalMatrixQAE[muij\[Phi]]==True && DiagonalMatrixQAE[muab\[Phi]]==True,
 				CalculateLOPotentialSS[];
 				CalculateNLOPotentialSS[];
 				CalculateNNLOPotentialSS[];
@@ -292,11 +292,11 @@ CalculatePotential[OptionsPattern[]]:=Module[{},
 		];
 	,
 		(*We now treat off-diagonal masses as small*)
-		\[Mu]ijPert=ArrayRules[\[Mu]ij\[Phi]]/.({x_Integer,y_Integer}->a_)/;Equal[x,y]->{x,y}->0//SparseArray;
-		\[Mu]ij\[Phi]=ArrayRules[\[Mu]ij\[Phi]]/.({x_Integer,y_Integer}->a_)/;Unequal[x,y]->{x,y}->0//SparseArray;
+		muijPert=ArrayRules[muij\[Phi]]/.({x_Integer,y_Integer}->a_)/;Equal[x,y]->{x,y}->0//SparseArray[#,Dimensions[muij\[Phi]]]&;
+		muij\[Phi]=ArrayRules[muij\[Phi]]/.({x_Integer,y_Integer}->a_)/;Unequal[x,y]->{x,y}->0//SparseArray[#,Dimensions[muij\[Phi]]]&;
 		
-		\[Mu]ab\[Phi]Pert=ArrayRules[\[Mu]ab\[Phi]]/.({x_Integer,y_Integer}->a_)/;Equal[x,y]->{x,y}->0//SparseArray;
-		\[Mu]ab\[Phi]=ArrayRules[\[Mu]ab\[Phi]]/.({x_Integer,y_Integer}->a_)/;Unequal[x,y]->{x,y}->0//SparseArray;
+		muab\[Phi]Pert=ArrayRules[muab\[Phi]]/.({x_Integer,y_Integer}->a_)/;Equal[x,y]->{x,y}->0//SparseArray[#,Dimensions[muab\[Phi]]]&;
+		muab\[Phi]=ArrayRules[muab\[Phi]]/.({x_Integer,y_Integer}->a_)/;Unequal[x,y]->{x,y}->0//SparseArray[#,Dimensions[muab\[Phi]]]&;
 		
 		CalculateLOPotentialSS[];
 		CalculateNLOPotentialSS[];
@@ -333,24 +333,19 @@ PrintEffectivePotential[optP_]:=Module[{opt=optP},
 
 
 (*
-	Calculates the tree-level effective potential.
+	Calculates the contribution of the off-diagonal masses P to second order, the one-loop diagram with two
+	mass insertions, -1/4 Sum[BubbleIntegral3d[m_i,m_l] P_il P_li], which is the O(P^2) term of the one-loop
+	potential. Vectors give twice that in Landau gauge.
 *)
-CalculateOffDiagPotentialSS[]:=Module[{V1,V2,helpTens,AD},
+CalculateOffDiagPotentialSS[]:=Module[{V1,V2,helpTens,a,b},
 		
-(*Scalar integrals*)	
-	AD[x_,y_]:=-(1/(4 \[Pi]))( Sqrt[x]-Sqrt[y])/(y-x);
-	AD[0,0]:=0;
-	AD[x_,x_]:=(1/(8 \[Pi]))/Sqrt[x];
-	
 (*Scalar contribution*)
-		helpTens=Table[AD[a,b],{a,Diagonal[\[Mu]ij\[Phi]]},{b,Diagonal[\[Mu]ij\[Phi]]}]//SparseArray;
-		helpTens=TensorProduct[helpTens,\[Mu]ijPert]//SparseArray//DiagonalTensor2[#,1,3]&;
-		V1=Tr[helpTens . \[Mu]ijPert];
+		helpTens=Table[BubbleIntegral3d[a,b],{a,Diagonal[muij\[Phi]]},{b,Diagonal[muij\[Phi]]}]//SparseArray;
+		V1=-1/4 Tr[(helpTens muijPert) . muijPert];
 
 (*Vector contribution*)
-		helpTens=Table[AD[a,b],{a,Diagonal[\[Mu]ab\[Phi]]},{b,Diagonal[\[Mu]ab\[Phi]]}]//SparseArray;
-		helpTens=TensorProduct[helpTens,\[Mu]ab\[Phi]Pert]//SparseArray//DiagonalTensor2[#,1,3]&;
-		V2=2*Tr[helpTens . \[Mu]ab\[Phi]Pert];
+		helpTens=Table[BubbleIntegral3d[a,b],{a,Diagonal[muab\[Phi]]},{b,Diagonal[muab\[Phi]]}]//SparseArray;
+		V2=2*(-1/4) Tr[(helpTens muab\[Phi]Pert) . muab\[Phi]Pert];
 		
 		
 		VNNLO+=V1+V2;
@@ -370,22 +365,22 @@ If[verbose==True,Print["Calculating the 2-Loop Effective Potential"]];
 (*Contraction with coupling-tensors and masses*)
 
 	(*Assuming that the mass matrices are diagonal*)
-	aS=Table[\[Mu]ij\[Phi][[i,i]],{i,1,nsEP}]//SparseArray;
-	av=Table[\[Mu]ab\[Phi][[i,i]],{i,1,nvEP}]//SparseArray;
+	aS=Table[muij\[Phi][[i,i]],{i,1,nsEP}]//SparseArray;
+	av=Table[muab\[Phi][[i,i]],{i,1,nvEP}]//SparseArray;
 
 (*Loading two-loop master integrals*)
-	{fvvv,f\[Eta]\[Eta]v,fssv,fvvs,fsss,fss,fvs,fvv}=TwoLoopFunctions[];
+	{fvvv,f\[Eta]\[Eta]v,fssv,fvvs,fsss,fss,fvs,fvv}=TwoLoopFunctions[mu3US];
 (*Potential*)
 
-	If[Length[TensorDimensions[\[Lambda]4\[Phi]]]<4,
+	If[Length[TensorDimensions[lam4\[Phi]]]<4,
 	(*This occurs when the FastRotation->True option is used for mass diagonalization*)
-		ss=1/8 TensorProduct[\[Lambda]4\[Phi]];
+		ss=1/8 TensorProduct[lam4\[Phi]];
 		Vss=Sum[ss[[j,k]]fss[aS[[j]],aS[[k]]],{j,nsEP},{k,nsEP}];
 	,
-		ss=1/8 TensorProduct[\[Lambda]4\[Phi]];
+		ss=1/8 TensorProduct[lam4\[Phi]];
 		Vss=Sum[ss[[j,j,k,k]]fss[aS[[j]],aS[[k]]],{j,nsEP},{k,nsEP}];
 	];
-	sss=1/12 TensorProduct[\[Lambda]3\[Phi],\[Lambda]3\[Phi]];
+	sss=1/12 TensorProduct[lam3\[Phi],lam3\[Phi]];
 	Vsss=Sum[sss[[i,j,k,i,j,k]]fsss[aS[[i]],aS[[j]],aS[[k]]],{j,nsEP},{k,nsEP},{i,nsEP}];
 	vvs=1/4 TensorProduct[Gvvs\[Phi],Gvvs\[Phi]];
 	Vvvs=Sum[vvs[[a,b,i,a,b,i]]fvvs[av[[a]],av[[b]],aS[[i]]],{a,nvEP},{b,nvEP},{i,nsEP}];
@@ -408,13 +403,11 @@ If[verbose==True,Print["Calculating the 2-Loop Effective Potential"]];
 (*
 	Calculates the one-loop effective potential.
 *)
-CalculateNLOPotentialSS[]:=Module[{ALog},
+CalculateNLOPotentialSS[]:=Module[{},
 If[verbose==True,Print["Calculating the 1-Loop Effective Potential"]];
-	
-	ALog[x_]:=-(x^(3/2)/(12 \[Pi]));
 		
-	V1=Sum[ALog[\[Mu]ij\[Phi][[i,i]]],{i,1,nsEP}];
-	V2=2*Sum[ALog[\[Mu]ab\[Phi][[i,i]]],{i,1,nvEP}];
+	V1=Sum[OneLoopPotential3d[muij\[Phi][[i,i]]],{i,1,nsEP}];
+	V2=2*Sum[OneLoopPotential3d[muab\[Phi][[i,i]]],{i,1,nvEP}];
 
 	VNLO=V1+V2;
 ];
@@ -426,9 +419,9 @@ If[verbose==True,Print["Calculating the 1-Loop Effective Potential"]];
 CalculateLOPotentialSS[]:=Module[{},
 	If[verbose==True,Print["Calculating the Tree-Level Effective Potential"]];
 
-	V1=\[Lambda]4EP . \[Phi]Vev . \[Phi]Vev . \[Phi]Vev . \[Phi]Vev;
-	V2=\[Mu]ijEP . \[Phi]Vev . \[Phi]Vev;
-	V3=\[Lambda]3EP . \[Phi]Vev . \[Phi]Vev . \[Phi]Vev;
+	V1=lam4EP . \[Phi]Vev . \[Phi]Vev . \[Phi]Vev . \[Phi]Vev;
+	V2=muijEP . \[Phi]Vev . \[Phi]Vev;
+	V3=lam3EP . \[Phi]Vev . \[Phi]Vev . \[Phi]Vev;
 	VLO=1/4! V1+V2/2!+V3/3!;
 	];
 
@@ -454,10 +447,10 @@ PrintTensorsVEV[]:="nothing"/;Print[errPrintTensVEV];
 PrintTensorsVEV[ind_]:=Module[{},	
 	
 	Switch[ind, 
-    1, Return[OutputFormatDR[\[Mu]ij\[Phi]]], 
-    2, Return[OutputFormatDR[\[Mu]ab\[Phi]]], 
-    3, Return[OutputFormatDR[\[Lambda]4\[Phi]]], 
-    4, Return[OutputFormatDR[\[Lambda]3\[Phi]]], 
+    1, Return[OutputFormatDR[muij\[Phi]]], 
+    2, Return[OutputFormatDR[muab\[Phi]]], 
+    3, Return[OutputFormatDR[lam4\[Phi]]], 
+    4, Return[OutputFormatDR[lam3\[Phi]]], 
     5, Return[OutputFormatDR[gvss\[Phi]]], 
     6, Return[OutputFormatDR[Gvvs\[Phi]]], 
     7, Return[OutputFormatDR[gvvv\[Phi]]],   
@@ -476,21 +469,21 @@ RotateTensorsUSPostVEV[DScalarsp_,DVectorsp_]:=Module[{DS=DScalarsp,DV=DVectorsp
 	DS=DS//SparseArray;
 	DV=DV//SparseArray;
 
-	\[Lambda]4\[Phi]=Transpose[DS] . \[Lambda]4\[Phi] . DS//Activate@TensorContract[Inactive@TensorProduct[DS,#],{{1,4}}]&//Transpose[#,{2,1,3,4}]&//Activate@TensorContract[Inactive@TensorProduct[DS,#],{{1,5}}]&//Transpose[#,{3,2,1,4}]&//SimplifySparse;
-	\[Lambda]3\[Phi]=Transpose[DS] . \[Lambda]3\[Phi] . DS//Activate@TensorContract[Inactive@TensorProduct[DS,#],{{1,4}}]&//Transpose[#,{2,1,3}]&//SimplifySparse;
+	lam4\[Phi]=Transpose[DS] . lam4\[Phi] . DS//Activate@TensorContract[Inactive@TensorProduct[DS,#],{{1,4}}]&//Transpose[#,{2,1,3,4}]&//Activate@TensorContract[Inactive@TensorProduct[DS,#],{{1,5}}]&//Transpose[#,{3,2,1,4}]&//SimplifySparse;
+	lam3\[Phi]=Transpose[DS] . lam3\[Phi] . DS//Activate@TensorContract[Inactive@TensorProduct[DS,#],{{1,4}}]&//Transpose[#,{2,1,3}]&//SimplifySparse;
 	gvss\[Phi]=Transpose[DV] . gvss\[Phi] . DS//Activate@TensorContract[Inactive@TensorProduct[DS,#],{{1,4}}]&//Transpose[#,{2,1,3}]&//SimplifySparse;
 	Gvvs\[Phi]=Transpose[DV] . Gvvs\[Phi] . DS//Activate@TensorContract[Inactive@TensorProduct[DV,#],{{1,4}}]&//Transpose[#,{2,1,3}]&//SimplifySparse;
 	gvvv\[Phi]=Transpose[DV] . gvvv\[Phi] . DV//Activate@TensorContract[Inactive@TensorProduct[DV,#],{{1,4}}]&//Transpose[#,{2,1,3}]&//SimplifySparse;
-	\[Mu]ab\[Phi]=Activate@TensorContract[Inactive@TensorProduct[DV,DV,\[Mu]ab\[Phi]],{{1,5},{3,6}}]//SimplifySparse;
-	\[Mu]ij\[Phi]=Activate@TensorContract[Inactive@TensorProduct[DS,DS,\[Mu]ij\[Phi]],{{1,5},{3,6}}]//SimplifySparse;
+	muab\[Phi]=Activate@TensorContract[Inactive@TensorProduct[DV,DV,muab\[Phi]],{{1,5},{3,6}}]//SimplifySparse;
+	muij\[Phi]=Activate@TensorContract[Inactive@TensorProduct[DS,DS,muij\[Phi]],{{1,5},{3,6}}]//SimplifySparse;
 
 
-	If[DiagonalMatrixQAE[\[Mu]ab\[Phi]]==False,
+	If[DiagonalMatrixQAE[muab\[Phi]]==False,
 		Print["The Vector mass-Matrix is not diagonal"];
 	];
 
 
-	If[DiagonalMatrixQAE[\[Mu]ij\[Phi]]==False,
+	If[DiagonalMatrixQAE[muij\[Phi]]==False,
 		Print["The Scalar mass-Matrix is not diagonal"];
 	];
 
@@ -509,12 +502,12 @@ RotateTensorsCustomMass[DScalarsp_,DVectorsp_,ScalarMass_,vectorMass_,OptionsPat
 	DV=DV//SparseArray;
 	
 	If[OptionValue[FastRotation],
-		(*For large rotation matrices we can simplify the two-loop calculation by only doing the rotation for Subscript[\[Lambda], iikk] components*)
+		(*For large rotation matrices we can simplify the two-loop calculation by only doing the rotation for Subscript[lam, iikk] components*)
 		RotHelp=Flatten[TensorProduct[DS,DS],{{2},{4},{1,3}}]//DiagonalTensor2[#,1,2]&;
-		\[Lambda]4\[Phi]=RotHelp . Flatten[\[Lambda]4\[Phi] ,{{1,2},{3,4}}] . Transpose[RotHelp];
+		lam4\[Phi]=RotHelp . Flatten[lam4\[Phi] ,{{1,2},{3,4}}] . Transpose[RotHelp];
 		
 		RotHelp=Flatten[TensorProduct[DS,DS,DS],{{2},{4},{6},{1,3,5}}];
-		\[Lambda]3\[Phi]=RotHelp . Flatten[\[Lambda]3\[Phi]];
+		lam3\[Phi]=RotHelp . Flatten[lam3\[Phi]];
 
 		RotHelp=Flatten[TensorProduct[DV,DS,DS],{{2},{4},{6},{1,3,5}}];
 		gvss\[Phi]=RotHelp . Flatten[gvss\[Phi]];
@@ -525,102 +518,25 @@ RotateTensorsCustomMass[DScalarsp_,DVectorsp_,ScalarMass_,vectorMass_,OptionsPat
 		RotHelp=Flatten[TensorProduct[DV,DV,DV],{{2},{4},{6},{1,3,5}}];
 		gvvv\[Phi]=RotHelp . Flatten[gvvv\[Phi]];
 	,
-		\[Lambda]4\[Phi]=Transpose[DS] . \[Lambda]4\[Phi] . DS//Activate@TensorContract[Inactive@TensorProduct[DS,#],{{1,4}}]&//Transpose[#,{2,1,3,4}]&//Activate@TensorContract[Inactive@TensorProduct[DS,#],{{1,5}}]&//Transpose[#,{3,2,1,4}]&//SimplifySparse;
-		\[Lambda]3\[Phi]=Transpose[DS] . \[Lambda]3\[Phi] . DS//Activate@TensorContract[Inactive@TensorProduct[DS,#],{{1,4}}]&//Transpose[#,{2,1,3}]&//SimplifySparse;
+		lam4\[Phi]=Transpose[DS] . lam4\[Phi] . DS//Activate@TensorContract[Inactive@TensorProduct[DS,#],{{1,4}}]&//Transpose[#,{2,1,3,4}]&//Activate@TensorContract[Inactive@TensorProduct[DS,#],{{1,5}}]&//Transpose[#,{3,2,1,4}]&//SimplifySparse;
+		lam3\[Phi]=Transpose[DS] . lam3\[Phi] . DS//Activate@TensorContract[Inactive@TensorProduct[DS,#],{{1,4}}]&//Transpose[#,{2,1,3}]&//SimplifySparse;
 		gvss\[Phi]=Transpose[DV] . gvss\[Phi] . DS//Activate@TensorContract[Inactive@TensorProduct[DS,#],{{1,4}}]&//Transpose[#,{2,1,3}]&//SimplifySparse;
 		Gvvs\[Phi]=Transpose[DV] . Gvvs\[Phi] . DS//Activate@TensorContract[Inactive@TensorProduct[DV,#],{{1,4}}]&//Transpose[#,{2,1,3}]&//SimplifySparse;
 		gvvv\[Phi]=Transpose[DV] . gvvv\[Phi] . DV//Activate@TensorContract[Inactive@TensorProduct[DV,#],{{1,4}}]&//Transpose[#,{2,1,3}]&//SimplifySparse;
 	];
 
-	\[Mu]ab\[Phi]=vectorMass//SparseArray;
-	\[Mu]ij\[Phi]=ScalarMass//SparseArray;
+	muab\[Phi]=vectorMass//SparseArray;
+	muij\[Phi]=ScalarMass//SparseArray;
 
-	If[DiagonalMatrixQAE[\[Mu]ab\[Phi]]==False,
+	If[DiagonalMatrixQAE[muab\[Phi]]==False,
 		Print["The Vector mass-Matrix is not diagonal"];
 	];
 
 
-	If[DiagonalMatrixQAE[\[Mu]ij\[Phi]]==False,
+	If[DiagonalMatrixQAE[muij\[Phi]]==False,
 		Print["The Scalar mass-Matrix is not diagonal"];
 	];
 
 ];
 
-
-(* ::Section:: *)
-(*Scalar master integrals*)
-
-
-TwoLoopFunctions[]:=Module[{f,A,I2,I2Div,AD,ALog,fvvv,f\[Eta]\[Eta]v,fssv,fvvs,fsss,fss,fvs,fvv},
-(*The notation follows Martin's convention*)
-(*Please see arXiv:1808.07615*)
-	f[x_]:=-(1/(12 \[Pi])) x^(3/2);
-	A[0]=0;
-	A[x_]:=-(1/(4 \[Pi])) Sqrt[x];
-	I2[0,0,0]=0;
-	I2[x_,y_,z_]:=1/(4 \[Pi])^2 (Log[\[Mu]3US/(Sqrt[x]+Sqrt[y]+Sqrt[z])]+1/2);
-	I2Div=1/(4 \[Pi])^2 1/4;
-
-(*Scalar integrals*)	
-	AD[x_,y_]:=-(1/(4 \[Pi]))( Sqrt[x]-Sqrt[y])/(y-x);
-	AD[0,0]:=0;
-	AD[x_,x_]:=(1/(8 \[Pi]))/Sqrt[x];
-	ALog[x_]:=-(x^(3/2)/(12 \[Pi]));
-		
-		
-(*Sunset with three vector bosons*)
-	fvvv[x_,y_,z_]:=1/(4 x y z) (1/3 (x^4 (2 I2Div-3 I2[0,0,x])+(x^2-2 x (y+z)+(y-z)^2) (-(3 (x^2+6 x (y+z)+y^2+6 y z+z^2) I2[x,y,z])
-							-I2Div (3 (-(8 x (y+z))-8 y z)-2 (x^2+6 x (y+z)+y^2+6 y z+z^2)))+(x-y)^2 (3 (x^2+6 x y+y^2) I2[0,x,y]
-							+I2Div (-(2 (x^2+6 x y+y^2))-24 x y))+(x-z)^2 (3 (x^2+6 x z+z^2) I2[0,x,z]+I2Div (-(2 (x^2+6 x z+z^2))-24 x z))
-							+y^4 (2 I2Div-3 I2[0,0,y])+(y-z)^2 (3 (y^2+6 y z+z^2) I2[0,y,z]+I2Div (-(2 (y^2+6 y z+z^2))-24 y z))+z^4 (2 I2Div-3 I2[0,0,z])
-							+x A[y] A[z] (3 x^2+15 x y+15 x z-15 y^2-26 y z-15 z^2)+z A[x] A[y] (-(15 x^2)-26 x y+15 x z-15 y^2+15 y z+3 z^2)
-							+y A[x] A[z] (-(15 x^2)+15 x y-26 x z+3 y^2+15 y z-15 z^2))+40/3 (I2Div x^2 y z+I2Div x y^2 z+I2Div x y z^2));
-	(*Special cases where some massesa are 0*)	
-		fvvv[0,0,0]:=0;
-	
-		fvvv[0,y_,z_]:=1/(6 y z) (-(6 y^3 I2[0,y,z])+6 y^3 I2[0,0,y]+30 y^2 z I2[0,y,z]-6 z^3 I2[0,y,z]+30 y z^2 I2[0,y,z]
-					+6 z^3 I2[0,0,z]-6 y^2 A[y] A[z]-6 z^2 A[y] A[z]-4 y z A[y] A[z]-57 I2Div y^2 z-57 I2Div y z^2);
-		fvvv[x_,0,z_]:=fvvv[0,x,z];
-		fvvv[x_,y_,0]:=fvvv[0,x,y];
-		fvvv[0,0,z_]:=1/4 z (20 I2[0,0,z]-46 I2Div);
-		fvvv[0,y_,0]:=fvvv[0,0,y];
-		fvvv[x_,0,0]:=fvvv[0,0,x];
-
-(*Ghost-vector sunset*)
-
-		f\[Eta]\[Eta]v[x_,y_,z_]:=((-x+y+z) A[y] A[z]+A[x] (-z A[y]+(x-y+z) A[z])-(x-y)^2 I2[0,x,y]+(y^2+(x-z)^2-2 y (x+z)) I2[x,z,y])/(2 z);
-	(*Special cases where vector-mass is zero*)
-		f\[Eta]\[Eta]v[x_,y_,0]:=1/2 (2 I2Div (x+y)-2 (A[x] A[y]+(x+y) I2[0,x,y]));
-		f\[Eta]\[Eta]v[0,0,0]:=0;
-		f\[Eta]\[Eta]v[0,0,z]:=1/2 z I2[0,0,z];
-
-(*Scalar-scalar-vector sunset*)
-	fssv[x_,y_,z_]:=1/z (-((-x+y+z) A[y] A[z])-A[x] (-z A[y]+(x-y+z) A[z])+(x-y)^2 I2[0,x,y]-((x-y)^2-2 (x+y) z+z^2) I2[x,y,z]);
-	(*Special case where vector-mass is zero*)
-		fssv[x_,y_,0]:=-2 I2Div (x+y)-2 (-A[x] A[y]-(x+y) I2[0,x,y]);
-		fssv[0,0,0]:=0;
-
-(*Vector-vector-scalar sunset*)
-	fvvs[x_,y_,z_]:=1/(4 x y) (8 I2Div x y-(x+y-z) A[x] A[y]+y A[x] A[z]+x A[y] A[z]
-						-z^2 I2[0,0,z]+(x-z)^2 I2[0,x,z]+(y-z)^2 I2[0,y,z]-(x^2+6 x y+(y-z)^2-2 x z) I2[x,y,z]);
-	(*Special case where vector-masses are zero*)
-		fvvs[0,y_,z_]:=(6 I2Div y+2 (A[y] A[z]-z I2[0,0,z]+(-3 y+z) I2[0,y,z]))/(4 y);
-		fvvs[x_,0,z_]:=fvvs[0,x,z];
-		fvvs[0,0,z_]:=1/4 (10 I2Div-6 I2[0,0,z]);
-		fvvs[0,0,0]:=0;
-		
-(*scalar-scalar-scalar sunset*)		
-	fsss[x_,y_,z_]:=-I2[x,y,z];
-	
-(*scalar-scalar bubble*)
-	fss[x_,y_]:=A[x]A[y];
-	
-(*scalar-vector bubble*)
-	fvs[x_,y_]:=2 A[x]A[y];
-	
-(*vector-vector bubble*)	
-	fvv[x_,y_]:=8/3 A[x]A[y];
-	
-	Return[{fvvv,f\[Eta]\[Eta]v,fssv,fvvs,fsss,fss,fvs,fvv}];
-]
 

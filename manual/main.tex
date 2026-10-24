@@ -1931,16 +1931,16 @@ a Lagrangian
 \begin{align}
 \mathcal{L}_{\rmi{temporal}} &=
     \frac{1}{2} (\partial_i A_0)^2
-  + \frac{1}{2} {\tt \mu sqU1} A^2_0
-  + \frac{1}{4!} \lambda\texttt{VLL[1]} A^4_0
-  + \frac{1}{2} \lambda\texttt{VL[1]} A^2_0 \phi^\dagger \phi
+  + \frac{1}{2} {\tt musqU1} A^2_0
+  + \frac{1}{4!} \texttt{lamVLL[1]} A^4_0
+  + \frac{1}{2} \texttt{lamVL[1]} A^2_0 \phi^\dagger \phi
   \;,
 \end{align}
 where indices $i\in \{1,\dots,d\}$ are spatial.
 Here,
-{\tt $\mu$sqU1} is the temporal-scalar Debye mass (squared),
-{\tt $\lambda$VLL[1]} is the self-interaction coupling, and 
-{\tt $\lambda$VL[1]} is the portal coupling to $\phi$.
+{\tt musqU1} is the temporal-scalar Debye mass (squared),
+{\tt lamVLL[1]} is the self-interaction coupling, and 
+{\tt lamVL[1]} is the portal coupling to $\phi$.
 The notation above is aligned with the systematic notation of \dralgo{}.
 For earlier studies of this model in the literature, we refer to~\cite{%
   Andersen:1996dh,Andersen:1997ba,Kajantie:1997hn,Hirvonen:2021zej,Karjalainen:1996rk}.
@@ -2103,8 +2103,8 @@ The above RG-scale $\LamD$ is the hard matching scale, and should be chosen
 as $\LamD \sim T$ to avoid large logarithms.%
 \footnote{
   In \dralgo{} the renormalization scales are denoted by
-  ${\tt \mu} = \LamD$ for the hard scale and
-  ${\tt \mu 3} = \Lamd$ for the soft scale.
+  {\tt mu4} = $\LamD$ for the hard scale and
+  {\tt mu3} = $\Lamd$ for the soft scale.
 }
 Effective mass parameters are divided into scalar and temporal-scalars.
 The scalar masses are given by
@@ -2131,9 +2131,9 @@ are printed with
 PrintTemporalScalarCouplings[]
 \end{lstlisting}
 Such temporal-scalar couplings are denoted as
-$\lambda${\verb!VLL[a]!} for $V^4$ couplings,
-$\lambda${\verb!VVSL[a]!} for $V^2 S$ couplings and
-$\lambda${\verb!VL[a]!} for $V^2S^2$ couplings,
+{\verb!lamVLL[a]!} for $V^4$ couplings,
+{\verb!lamVVSL[a]!} for $V^2 S$ couplings and
+{\verb!lamVL[a]!} for $V^2S^2$ couplings,
 where
 $S$ represents scalar fields and
 $V$ temporal scalar fields.
@@ -2258,7 +2258,7 @@ NLO to the one-loop, and
 NNLO to the two-loop effective potential.
 Note that all results are given in Landau gauge.
 In the (two-loop) NNLO part, the renormalization scale is denoted by
-${\tt \mu3}=\Lamd$.
+{\tt mu3}=$\Lamd$.
 
 This completes the first tutorial on quick installation and running.
 Output from the 3d EFT matching relations can be implemented either to
@@ -2856,9 +2856,9 @@ Group={"U1","U1","U1"};
 \end{lstlisting}
 the code creates the mixed U(1) masses with
 the convention that
-{\tt $\mu$U1Mix1} is the mixing between groups 1 and 2, 
-{\tt $\mu$U1Mix2} is the mixing between groups 1 and 3, and
-{\tt $\mu$U1Mix3} is the mixing between groups 2 and 3.
+{\tt muU1Mix1} is the mixing between groups 1 and 2, 
+{\tt muU1Mix2} is the mixing between groups 1 and 3, and
+{\tt muU1Mix3} is the mixing between groups 2 and 3.
 These masses are displayed with the {\tt PrintDebyeMass} command.
 See the {\tt ./examples/SMZp.m} for an example.
 
@@ -3037,7 +3037,7 @@ the conventions of~\cite{Kajantie:1995dw}
 by using the replacement rule
 {\tt Log[Glaisher]->-1/12(Lb+2cplus-EulerGamma)},
 where
-{\tt cplus=(c+Log[3T/$\mu$])}.
+{\tt cplus=(c+Log[3T/mu4])}.
 This rule is implemented as
 {\tt PrintGenericBasis[]} in \dralgo{}.
 

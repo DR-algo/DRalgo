@@ -3,7 +3,10 @@
 (*Quit[];*)
 
 
-SetDirectory[NotebookDirectory[]];
+If[$InputFileName=="",
+	SetDirectory[NotebookDirectory[]],
+	SetDirectory[DirectoryName[$InputFileName]]
+];
 DRalgo`DRalgo`$LoadGroupMath=True;
 <<../Kernel/DRalgo.m
 
@@ -103,7 +106,7 @@ InputInv={{2,2,2},{True,True,True}};
 CubicTerm2=CreateInvariant[Group,RepScalar,InputInv][[1]]//Simplify;
 
 
-(*The cubic coupling of the singlet is called c3, since \[Mu]3 denotes the 3d renormalization scale*)
+(*The cubic coupling of the singlet is called c3, since mu3 denotes the 3d renormalization scale*)
 VCubic=(
 	+\[Mu]m/2*CubicTerm1
 	+c3/3*CubicTerm2
@@ -174,7 +177,7 @@ PerformDRhard[]
 
 (*
 the Lb logarithm is defnined as
-Lb = Log[\[Mu]^2/T^2]+2*EulerGamma-2*Log[4\[Pi]];
+Lb = Log[mu4^2/T^2]+2*EulerGamma-2*Log[4\[Pi]];
 *)
 PrintConstants[]
 
@@ -202,7 +205,7 @@ PrintTemporalScalarCouplings[]
 
 
 (*
-(here \[Mu]sqSU2 == mD^2)
+(here musqSU2 == mD^2)
 *)
 PrintDebyeMass["LO"]
 PrintDebyeMass["NLO"]

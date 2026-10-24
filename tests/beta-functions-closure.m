@@ -92,7 +92,7 @@ VerificationTest[
 	fermion loop gives \[Beta](\[Lambda]) = -6 yt^4/(16\[Pi]^2) for \[Lambda](\[Phi]^+\[Phi])^2, whose component (a,a,a,a)
 	is 6\[Lambda]; here for \[Phi]3 only.
 *)
-\[Beta]Quartic=Normal[private["\[Beta]\[Lambda]ijkl"]];
+\[Beta]Quartic=Normal[private["\[Beta]lamijkl"]];
 AppendTo[testList,
 VerificationTest[
 	Simplify[Coefficient[Expand[{\[Beta]Quartic[[9,9,9,9]],\[Beta]Quartic[[1,1,1,1]],\[Beta]Quartic[[5,5,5,5]]}],yt3^4]],

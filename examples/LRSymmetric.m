@@ -3,7 +3,10 @@
 (*Quit[];*)
 
 
-SetDirectory[NotebookDirectory[]];
+If[$InputFileName=="",
+	SetDirectory[NotebookDirectory[]],
+	SetDirectory[DirectoryName[$InputFileName]]
+];
 DRalgo`DRalgo`$LoadGroupMath=True;
 <<../Kernel/DRalgo.m
 
@@ -58,7 +61,7 @@ InputInv={{3,3},{True,False}}; (*Tr\[CapitalDelta]R \[CapitalDelta]R^+*)
 MassTerm5=CreateInvariant[Group,RepScalar,InputInv][[1]]//Simplify;
 
 
-(*The mass of the triplets is called \[Mu]\[CapitalDelta], since \[Mu]3 denotes the 3d renormalization scale*)
+(*The mass of the triplets is called \[Mu]\[CapitalDelta], since mu3 denotes the 3d renormalization scale*)
 VMass=(
 	+\[Mu]1*MassTerm1
 	+\[Mu]2(MassTerm2+MassTerm3)

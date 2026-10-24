@@ -24,16 +24,16 @@ Check[
 (*
 	The model of examples/ScalYukawa.m, see 2108.04377 and 2310.02308, and issues #36, #37, and #38.
 
-	At the order computed, the parameters of the 3d theory do not depend on the 4d scale \[Mu]:
-	the explicit \[Mu]-dependence of the NLO terms, through Lb and Lf, cancels the running of
-	the LO terms with BetaFunctions4D[]. Here, the 3d scale \[Mu]3 is held fixed. The same holds
+	At the order computed, the parameters of the 3d theory do not depend on the 4d scale mu4:
+	the explicit mu4-dependence of the NLO terms, through Lb and Lf, cancels the running of
+	the LO terms with BetaFunctions4D[]. Here, the 3d scale mu3 is held fixed. The same holds
 	for the hard pressure, together with the running of the vacuum energy, which DRalgo does not track.
 
 	Checked here:
 	- the \[Beta]-functions against 2310.02308, appendix D;
 	- the RG invariance of the 3d couplings, the scalar mass, the tadpole, and the NNLO pressure;
 	- the NLO tadpole against the one-point function \[CapitalGamma]^(1) of 2310.02308, appendix B;
-	- the LO pressure of an ideal gas, and the \[Mu]3-dependence of the NNLO pressure.
+	- the LO pressure of an ideal gas, and the mu3-dependence of the NNLO pressure.
 *)
 
 
@@ -70,11 +70,11 @@ testList={};
 
 betas=BetaFunctions4D[];
 
-(*Explicit \[Mu]-dependence at fixed \[Mu]3*)
-explicitMu[expr_]:=Simplify[\[Mu] D[expr/.{Lb->2Log[\[Mu]/(4\[Pi] T)]+2EulerGamma,Lf->2Log[\[Mu]/(\[Pi] T)]+2EulerGamma},\[Mu]]];
+(*Explicit mu4-dependence at fixed mu3*)
+explicitMu[expr_]:=Simplify[mu4 D[expr/.{Lb->2Log[mu4/(4\[Pi] T)]+2EulerGamma,Lf->2Log[mu4/(\[Pi] T)]+2EulerGamma},mu4]];
 running[expr_]:=Sum[r[[2]] D[expr,r[[1]]],{r,betas}];
 
-(*The 3d couplings in the logarithms of \[Mu]3 at LO*)
+(*The 3d couplings in the logarithms of mu3 at LO*)
 lo3d={\[Lambda]3d->T \[Lambda],\[Gamma]3d->Sqrt[T] \[Gamma]};
 rgResidual[lo_,nlo_]:=Simplify[running[lo]+explicitMu[nlo]/.lo3d];
 
@@ -192,12 +192,12 @@ VerificationTest[
 ]];
 
 (*
-	The scalar sunset of the 3d theory, -1/12 \[Gamma]3d^2 (1/(4\[Epsilon])+Log[\[Mu]3/(3 m3)]+1/2)/(16\[Pi]^2),
-	contributes +T \[Gamma]3d^2 Log[\[Mu]3]/(192\[Pi]^2) to the pressure; the hard pressure cancels it.
+	The scalar sunset of the 3d theory, -1/12 \[Gamma]3d^2 (1/(4eps)+Log[mu3/(3 m3)]+1/2)/(16\[Pi]^2),
+	contributes +T \[Gamma]3d^2 Log[mu3]/(192\[Pi]^2) to the pressure; the hard pressure cancels it.
 *)
 AppendTo[testList,
 VerificationTest[
-	Simplify[\[Mu]3 D[PrintPressure["NNLO"],\[Mu]3]],
+	Simplify[mu3 D[PrintPressure["NNLO"],mu3]],
 	-T^2 \[Gamma]^2/(192\[Pi]^2),
 	TestID->"NNLO-pressure-cancels-mu3-of-soft-cubic-sunset"
 ]];

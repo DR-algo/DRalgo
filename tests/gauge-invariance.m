@@ -265,7 +265,7 @@ AppendTo[testList,
 VerificationTest[
 	With[{conditions=private["InvarianceConditions"][]},
 		{Cases[conditions,(name_->c_)/;!TrueQ[c]:>name],Union[Cases[conditions,(_->c_)/;!TrueQ[c]:>Simplify[c/.qR->qL]]]}],
-	{{"\[Mu]IJ","\[Mu]IJC","Ysff","YsffC"},{True}},
+	{{"muIJ","muIJC","Ysff","YsffC"},{True}},
 	TestID->"dirac-fermion-is-invariant-only-for-equal-charges"
 ]];
 
@@ -304,7 +304,7 @@ VerificationTest[
 AppendTo[testList,
 VerificationTest[
 	private["InvarianceConditions"][],
-	{"\[Lambda]3"->False,"\[Lambda]4"->True,"\[Mu]ij"->True},
+	{"lam3"->False,"lam4"->True,"muij"->True},
 	TestID->"octet-of-type-A-has-a-noninvariant-cubic"
 ]];
 

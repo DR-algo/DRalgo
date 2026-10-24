@@ -112,6 +112,11 @@ $ wolframscript -file examples/xsm.m
 ```
 
 Ensure that an active `WolframKernel` is available for the above command to work.
+Without a notebook, DRalgo prints its header and the GroupMath banner as plain text.
+To suppress both, set the following flag **before** loading DRalgo:
+```mathematica
+DRalgo`DRalgo`$DRalgoBanner = False;
+```
 
 ## Package Structure
 
@@ -124,6 +129,8 @@ DRalgo/
 │   │                                 and loads all sub-modules.
 │   ├── ModelCreation.m               Constructs representation matrices and coupling tensors from a
 │   │                                 user-supplied model file; relies on GroupMath for Lie-algebra routines.
+│   ├── MasterIntegrals.m             One-, two-, and three-loop master integrals, the sum-integrals of the
+│   │                                 hard modes and the integrals of the 3d theories, shared by all modules.
 │   ├── HardToSoft.m                  Performs the NLO hard-to-soft dimensional reduction step, computing
 │   │                                 thermal mass corrections and matching the 4d theory onto the 3d EFT.
 │   ├── SoftToUS.m                    Performs the NLO soft-to-ultrasoft dimensional reduction step,

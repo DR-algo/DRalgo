@@ -26,17 +26,7 @@ VerbosePrint[msg_] := If[verbose, Print[msg]]
 LogPrint[msg_] := If[verbose, Print[DateString[{"Hour", ":", "Minute"}], " \[LongDash] ", msg]];
 
 
-(*
-	Rewrites short-hand constants with Lb and Lf.
-*)
-ReplaceLb={
-	Lbb->2Lb+2(12Log[Glaisher]-EulerGamma),
-	Lbbb->Lb/12+1/6(12Log[Glaisher]-EulerGamma),
-	LBF->5/2Lb-1/2Lf+2(12Log[Glaisher]-EulerGamma),
-	LFF->1/2Lf+3/2Lb+2(12Log[Glaisher]-EulerGamma),
-	LFB->Lb+Lf+2(12Log[Glaisher]-EulerGamma),
-	Lfff->1/2Lf-3/2Lb-2(12Log[Glaisher]-EulerGamma),
-	LbbM->2Lb+2(12Log[Glaisher]-EulerGamma)};
+(*ReplaceLb, which rewrites short-hand constants with Lb and Lf, is defined in MasterIntegrals.m*)
 
 
 (*
@@ -155,7 +145,7 @@ CreateHelpTensors[] := Module[{},
   If[mode >= 1,
     
     (* Tensors from two scalar quartic contractions *)
-    \[CapitalLambda]\[Lambda] = Flatten[\[Lambda]4, {{1}, {2}, {3, 4}}] . Flatten[\[Lambda]4, {1, 2}] // SparseArray // SimplifySparse;
+    \[CapitalLambda]lam = Flatten[lam4, {{1}, {2}, {3, 4}}] . Flatten[lam4, {1, 2}] // SparseArray // SimplifySparse;
 
     (* Tensors from Yukawa \[Times] Yukawa\:1d9c *)
     YTemp = Ysff . Transpose[YsffC] 
@@ -236,10 +226,10 @@ SymmetricPhaseLO[] := Module[
   scalarEmptyQ = And @@ {
     isEmptyTensorQ[gvss, {nv, ns, ns}],
     isEmptyTensorQ[Ysff, {ns, nf, nf}],
-    isEmptyTensorQ[\[Mu]ij, {ns, ns}],
-    isEmptyTensorQ[\[Lambda]4, {ns, ns, ns, ns}],
-    isEmptyTensorQ[\[Lambda]3, {ns, ns, ns}],
-    isEmptyTensorQ[\[Lambda]1, {ns}]
+    isEmptyTensorQ[muij, {ns, ns}],
+    isEmptyTensorQ[lam4, {ns, ns, ns, ns}],
+    isEmptyTensorQ[lam3, {ns, ns, ns}],
+    isEmptyTensorQ[lam1, {ns}]
   };
   scalarContribution = If[scalarEmptyQ, 0, Sum[-(\[Pi]^2/90) T^4, {a, 1, ns}]];
 
@@ -255,7 +245,7 @@ SymmetricPhaseLO[] := Module[
   fermionEmptyQ = And @@ {
     isEmptyTensorQ[gvff, {nv, nf, nf}],
     isEmptyTensorQ[Ysff, {ns, nf, nf}],
-    isEmptyTensorQ[\[Mu]IJF, {nf, nf}]
+    isEmptyTensorQ[muIJF, {nf, nf}]
   };
   fermionContribution = If[
     fermionEmptyQ, 
@@ -289,7 +279,7 @@ SymmetricPhaseNLO[] := Module[
   (* --- Two-loop diagram contributions --- *)
   (* Scalar quartic self-interaction term *)
   tempCoeff = (1/144) * T^4;
-  Vss = (1/8) * tempCoeff * TensorContract[\[Lambda]4, {{1, 2}, {3, 4}}];
+  Vss = (1/8) * tempCoeff * TensorContract[lam4, {{1, 2}, {3, 4}}];
 
   (* Scalar-vector interaction (type I) *)
   tempCoeff = -(1/144) * T^4;
@@ -321,13 +311,13 @@ SymmetricPhaseNLO[] := Module[
   VFFv = (1/2) * tempCoeff * TensorContract[HabIJFnF, {{1, 2}, {3, 4}}];
 
   (* --- Mass insertions in 1-loop diagrams --- *)
-  massInsertionScalar = (1/2) * Tr[\[Mu]ij] * T^2 / 12;
-  massInsertionFermion = (1/2) * T^2 / 12 * Tr[\[Mu]IJF . \[Mu]IJFC];
+  massInsertionScalar = (1/2) * Tr[muij] * T^2 / 12;
+  massInsertionFermion = (1/2) * T^2 / 12 * Tr[muIJF . muIJFC];
 
-  (* --- Higher-dimensional operator (\[Lambda]6) contribution --- *)
+  (* --- Higher-dimensional operator (lam6) contribution --- *)
   VssLambda6 = If[
     mode >= 3,
-    (1/82944) * T^6 * TensorContract[\[Lambda]6, {{1, 2}, {3, 4}, {5, 6}}],
+    (1/82944) * T^6 * TensorContract[lam6, {{1, 2}, {3, 4}, {5, 6}}],
     0
   ];
 
@@ -353,11 +343,11 @@ SymmetricPhaseNLO[] := Module[
 *)
 SymmetricPhaseNNLO[]:=Module[
 	{
-	  \[Kappa], I1, I2M2, I1I2, dI1I2, I211M020, I2M2I2, I3M2I1, I1p, 
+	  I1, I2M2, I1I2, dI1I2, I211M020, I2M2I2, I3M2I1, I1p, 
 	  I3M2p, I2p, I4M4p, I2M2p, IF1p, IF2p, IF3M2p, IF2M2p,
-	  EPre, M00, LInt, EFPre, EFInt, N00, MF1M1, MF00, MFM2P2, N2M2, MP2M2,
+	  M00, LInt, N00, MF1M1, MF00, MFM2P2, N2M2, MP2M2,
 	  Temp, Temp1, Temp2, Temp3, Temp4, Temp5, 
-	  Help1, Help2, Help3, GHelp, GHelp2, I1Temp, HFab, GabV, gvffnF, gvffNf, \[Lambda]4Eff,
+	  Help1, Help2, Help3, GHelp, GHelp2, I1Temp, HFab, GabV, gvffnF, gvffNf, lam4Eff,
 	  HabIJFnF, vacuumPole,
 	  DiagramsSimplified, DiagramsTotal
 	},
@@ -366,57 +356,29 @@ SymmetricPhaseNNLO[]:=Module[
 
 	(* --- Precompute loop integrals --- *)
 	(* One- and two-loop integrals appearing in scalar, gauge and fermionic diagrams *)
-	\[Kappa]=1/(16 \[Pi]^2);
-	I1=T^2/(12 \[Epsilon])+T^2 Lbbb;
-	I2M2=T^2/(24 )(-1/\[Epsilon]-  12Lbbb+2);
-	I1I2=\[Kappa] T^2/(12 \[Epsilon]b); 
-	dI1I2=3\[Kappa] T^2/(12 \[Epsilon]b)-\[Kappa] T^2/6;
-	I211M020=T^2/(192 \[Pi]^2);
-	I2M2I2=T^2/(192 \[Pi]^2)-T^2/(384 \[Pi]^2 \[Epsilon]bbM);
-	I3M2I1=T^2/(768 \[Pi]^2 \[Epsilon]bbM)+T^2/(384 \[Pi]^2);
-	Clear[LbbM];
-	I1p=T^2/(12 )+\[Epsilon] T^2 Lbbb;
-	I3M2p=1/(64 \[Pi]^2 \[Epsilon]bp)+1/(32 \[Pi]^2);
-	I2p=1/(16 \[Pi]^2 \[Epsilon]bp);
-	I4M4p=1/(128 \[Pi]^2 \[Epsilon]bp)+1/(48 \[Pi]^2);
-	I2M2p=-T^2/24+T^2 (((-1/24)LbbM - (-1)*1/24 Lb )+1/12)\[Epsilon];
-	IF1p=-T^2/(24)+1/24 T^2 Lfff \[Epsilon];
-	IF2p=1/(16 (\[Pi]^2) ) (1/\[Epsilon]+Lf);
-	IF3M2p=1/(64 \[Pi]^2)(1/\[Epsilon]+Lf+2);
-	IF2M2p=(-T^2/24-T^2 1/48* Lfff)\[Epsilon]+T^2/48;
+	{I1,I2M2,I1p,I3M2p,I2p,I4M4p,I2M2p,IF1p,IF2p,IF3M2p,IF2M2p}=Lookup[OneLoopSumIntegrals[],{"I1","I2M2","I1p","I3M2p","I2p","I4M4p","I2M2p","IF1p","IF2p","IF3M2p","IF2M2p"}];
+	{I1I2,dI1I2,I211M020,I2M2I2,I3M2I1}=Lookup[TwoLoopSumIntegrals[],{"I1I2","dI1I2","I211M020","I2M2I2","I3M2I1"}];
 
 
-	(* These integrals are given in 9408276 and 9410360 *)
-	EPre=1/(24*16 \[Pi]^2) T^4*(\[Mu]/(4 \[Pi] T))^(6 \[Epsilon]) (1/\[Epsilon]+91/15+8( Derivative[1][Zeta][-1])/Zeta[-1]-2 Derivative[1][Zeta][-3]/Zeta[-3]);
-	Series[EPre,{\[Epsilon],0,0}]//Normal//FullSimplify;
-	M00=Series[EPre,{\[Epsilon],0,0}]//Normal;
-	LInt=(T^4 Log[Glaisher])/(48 \[Pi]^2)+(T^4 Log[\[Mu]^2])/(768 \[Pi]^2)+T^4/(2304 \[Pi]^2 \[Epsilon])+(EulerGamma T^4)/(1152 \[Pi]^2)-(T^4 Log[\[Pi] T])/(384 \[Pi]^2)-(T^4 Log[2])/(192 \[Pi]^2);
-	EFPre=1/(96*16 \[Pi]^2) T^4*(\[Mu]/(4 \[Pi] T))^(6 \[Epsilon]) (1/\[Epsilon]+173/30-42/5 Log[2]+8( Derivative[1][Zeta][-1])/Zeta[-1]-2 Derivative[1][Zeta][-3]/Zeta[-3]);
-	EFInt=Series[EFPre,{\[Epsilon],0,0}]//Normal//FullSimplify//Expand;
-	N00=EFInt;
-	MF1M1=Series[-1/(192*16 \[Pi]^2) T^4*(\[Mu]/(4 \[Pi] T))^(6 \[Epsilon]) (1/\[Epsilon]+361/60+76/5 Log[2]+6EulerGamma-4( Derivative[1][Zeta][-1])/Zeta[-1]+4Derivative[1][Zeta][-3]/Zeta[-3]),{\[Epsilon],0,0}]//Normal;
-	MF00=Series[-1/(192*16 \[Pi]^2) T^4*(\[Mu]/(4 \[Pi] T))^(6 \[Epsilon]) (1/\[Epsilon]+179/30-34/5 Log[2]+8( Derivative[1][Zeta][-1])/Zeta[-1]-2Derivative[1][Zeta][-3]/Zeta[-3]),{\[Epsilon],0,0}]//Normal;
-	MFM2P2=Series[-29/(1728*16 \[Pi]^2) T^4*(\[Mu]/(4 \[Pi] T))^(6 \[Epsilon]) (1/\[Epsilon]+89/29-90/29 Log[2]+48/29EulerGamma+136/29( Derivative[1][Zeta][-1])/Zeta[-1]-10/29Derivative[1][Zeta][-3]/Zeta[-3]),{\[Epsilon],0,0}]//Normal;
-	N2M2=Series[1/(108*16 \[Pi]^2) T^4*(\[Mu]/(4 \[Pi] T))^(6 \[Epsilon]) (1/\[Epsilon]+35/8+3/2EulerGamma-63/10 Log[2]+5( Derivative[1][Zeta][-1])/Zeta[-1]-1/2Derivative[1][Zeta][-3]/Zeta[-3]),{\[Epsilon],0,0}]//Normal;
-	MP2M2=Series[11/(216*16 \[Pi]^2) T^4*(\[Mu]/(4 \[Pi] T))^(6 \[Epsilon]) (1/\[Epsilon]+73/22+12/11EulerGamma+64/11( Derivative[1][Zeta][-1])/Zeta[-1]-10/11Derivative[1][Zeta][-3]/Zeta[-3]),{\[Epsilon],0,0}]//Normal;
+	{M00,LInt,N00,MF1M1,MF00,MFM2P2,N2M2,MP2M2}=Lookup[ThreeLoopSumIntegrals[],{"M00","LInt","N00","MF1M1","MF00","MFM2P2","N2M2","MP2M2"}];
 
 
 	(*Note that some contractions are inefficent. Will fix later but they are anyway not bottlenecks*)
 	(*The names of all diagrams follow Martin's notation arXiv:1709.02397*)
 
 	(* --- Pure scalar sector --- *)
-	Temp=TensorContract[\[Lambda]4,{3,4}];
+	Temp=TensorContract[lam4,{3,4}];
 	I1Temp=-LInt;
 	LSSSS=1/16  *I1Temp*Activate@TensorContract[Inactive@TensorProduct[Temp,Temp],{{1,3},{2,4}}];
 	
 	I1Temp=-M00;
-	ESSSS=1/48I1Temp*TensorContract[\[CapitalLambda]\[Lambda],{{1,3},{2,4}}];
+	ESSSS=1/48I1Temp*TensorContract[\[CapitalLambda]lam,{{1,3},{2,4}}];
 
 	(* --- Scalar vector sector --- *)
-	I1Temp=1/2Activate@TensorContract[Inactive@TensorProduct[\[CapitalLambda]g,\[Lambda]4],{{1,3},{2,4},{5,6}}];
+	I1Temp=1/2Activate@TensorContract[Inactive@TensorProduct[\[CapitalLambda]g,lam4],{{1,3},{2,4},{5,6}}];
 	LSSVS=I1Temp/2*D I1p^2 I2p;
 	
-	I1Temp= 1/2Activate@TensorContract[Inactive@TensorProduct[\[CapitalLambda]g,\[Lambda]4],{{1,3},{2,4},{5,6}}];
+	I1Temp= 1/2Activate@TensorContract[Inactive@TensorProduct[\[CapitalLambda]g,lam4],{{1,3},{2,4},{5,6}}];
 	JSSVSS=-1/2I1Temp I1p^2 I2p;
 
 	(* --- Yukawa scalar sector --- *)
@@ -437,7 +399,7 @@ SymmetricPhaseNNLO[]:=Module[
 	HFFFFSS=1/2*Temp1*(MF00-1/2 N00);
 
 	(* --- Yukawa scalar sector with Lambda4 --- *)
-	help1=TensorContract[\[Lambda]4,{{3,4}}];
+	help1=TensorContract[lam4,{{3,4}}];
 	help2=Activate@TensorContract[Inactive@TensorProduct[Ysff,YsffC],{{2,5},{3,6}}]//SparseArray;
 	Temp1=Activate@TensorContract[Inactive@TensorProduct[help1,help2],{{1,3},{2,4}}];
 	JSSFFS=1/4*2Temp1*I1p IF1p I2p;
@@ -447,16 +409,16 @@ SymmetricPhaseNNLO[]:=Module[
 	Temp1=Activate@TensorContract[Inactive@TensorProduct[Ysij,\[CapitalLambda]g],{{1,3},{2,4}}];
 	KSSSVFF=-Temp1/2*2*(MF00-I1p IF1p I2p);
 	
-	JSSFFV=-Temp1*D I1p IF1p I2p/.D->4-2\[Epsilon];
+	JSSFFV=-Temp1*D I1p IF1p I2p/.D->4-2eps;
 	
 	Help1=Flatten[Ysff,{{3},{1,2}}] . Flatten[YsffC,{1,2}];
 	Temp1=Total[Flatten[TensorContract[HabIJF,{1,2}]]Flatten[Help1]];
-	KFFFSVF=Temp1/2(2D-4)(MF1M1+MF00+(I1p-IF1p)^2 IF2p)/.D->4-2\[Epsilon];
+	KFFFSVF=Temp1/2(2D-4)(MF1M1+MF00+(I1p-IF1p)^2 IF2p)/.D->4-2eps;
 	
 	Help1=Transpose[Transpose[gvff,{2,1,3}],{1,3,2}] . gvff;
 	Help2=Transpose[Transpose[Ysff,{2,1,3}],{1,3,2}] . YsffC;
 	Temp1=Total[Flatten[Help1]Flatten[Help2,{4,1,3,2}]];
-	HFFSVFF=Temp1/2*((2D-4)MF00+(3-D)N00)/.D->4-2\[Epsilon];
+	HFFSVFF=Temp1/2*((2D-4)MF00+(3-D)N00)/.D->4-2eps;
 	
 	Help1=Flatten[TensorProduct[YsffC,Ysff],{{2},{3},{5},{6},{1,4}}] . Flatten[gvss,{2,3}];
 	Temp1=-I Flatten[Help1,{{1,4},{5,2,3}}] . Flatten[gvff]//Tr[#]&//Simplify;
@@ -469,33 +431,33 @@ SymmetricPhaseNNLO[]:=Module[
 	(***********)
 	Help1=Flatten[HabIJF,{{1},{2},{4,3}}] . Flatten[gvffnF,{2,3}];
 	Temp1=6*I/3*Total[Flatten[Help1]Flatten[gvvv]];
-	HFFFVVV=1/2(D-2)Temp1 MF00/.D->4-2\[Epsilon];
+	HFFFVVV=1/2(D-2)Temp1 MF00/.D->4-2eps;
 
 	(*General nF modification*)
 	gvffnF=gvff . NFMat;
 	(***********)
 	Temp1=8*1/4Sum[Tr[gvffnF[[a]] . gvff[[b]] . gvff[[a]] . gvff[[b]]],{a,1,nv},{b,1,nv}]//Simplify//Expand;
-	HFFVVFF=1/8*(D-2)*(2*(4-D)*MF00+(D-6)N00)*Temp1/.D->4-2\[Epsilon];
+	HFFVVFF=1/8*(D-2)*(2*(4-D)*MF00+(D-6)N00)*Temp1/.D->4-2eps;
 	GabV=TensorContract[GabcdV,{{2,4}}]//SparseArray;
 
 	(*General nF modification*)
 	HabIJFnF=HabIJF . NFMat;
 	(***********)
 	Temp1=-4*1/4*Tr[Flatten[GabV] . Flatten[HabIJFnF,{1,2}]];
-	KGaugeFF=-1/2*Temp1*(D-2)*(2 MFM2P2+MF00+2(D-6)IF1p I2p I1p)/.D->4-2\[Epsilon];
+	KGaugeFF=-1/2*Temp1*(D-2)*(2 MFM2P2+MF00+2(D-6)IF1p I2p I1p)/.D->4-2eps;
 
 	(*General nF modification*)
 	HabIJFnF=HabIJF . NFMat;
 	(***********)
 	Help1=TensorContract[HabIJFnF,{3,4}]//SparseArray;
 	Temp1=-1*Flatten[Help1] . Flatten[Help1];
-	KVVFFFF=Temp1/4*(4N2M2+(D-4)N00-4(6-D)IF1p^2 I2p)/.D->4-2\[Epsilon];
+	KVVFFFF=Temp1/4*(4N2M2+(D-4)N00-4(6-D)IF1p^2 I2p)/.D->4-2eps;
 
 	(*General nF modification*)
 	gvffNf=gvff . NFMat;
 	(***********)
 	Temp1=-1/2Sum[Tr[gvffNf[[a]] . gvff[[a]] . gvff[[b]] . gvff[[b]]],{a,1,nv},{b,1,nv}]//Simplify//Expand;
-	KFFFVVF=-(2-D)^2Temp1*(MF1M1+MF00+(IF1p-I1p)^2 IF2p)/.D->4-2\[Epsilon];
+	KFFFVVF=-(2-D)^2Temp1*(MF1M1+MF00+(IF1p-I1p)^2 IF2p)/.D->4-2eps;
 
 
 	(* --- Scalar vector sector --- *)
@@ -545,10 +507,10 @@ SymmetricPhaseNNLO[]:=Module[
 
 
 	(* --- Counterterms --- *)
-	Temp=1/2*\[Gamma]ij . \[Lambda]4;
-	\[Lambda]4Eff=\[Epsilon]*Z\[Lambda]ijkl;
-	I1Temp=1/3 T^4 \[Epsilon] Log[Glaisher]+1/72 T^4 \[Epsilon] Log[\[Mu]^2]-1/36 T^4 \[Epsilon] Log[4 \[Pi] T]+T^4/144;
-	VssZ=1/8* \[Epsilon]^-1 I1Temp*TensorContract[\[Lambda]4Eff,{{1,2},{3,4}}];
+	Temp=1/2*\[Gamma]ij . lam4;
+	lam4Eff=eps*Zlamijkl;
+	I1Temp=1/3 T^4 eps Log[Glaisher]+1/72 T^4 eps Log[mu4^2]-1/36 T^4 eps Log[4 \[Pi] T]+T^4/144;
+	VssZ=1/8* eps^-1 I1Temp*TensorContract[lam4Eff,{{1,2},{3,4}}];
 
 	V2SV=I1p^2 (D+\[Xi]-1)/.\[Xi]->1;
 	
@@ -569,74 +531,74 @@ SymmetricPhaseNNLO[]:=Module[
 	VvsZ=1/2*(-1)*2/4*V2SV*TensorContract[Zgvvss,{{1,2},{3,4}}];
 	
 	Temp=2Total[Flatten[Zgvvv]Flatten[gvvv]];
-	VvvZ=1/4*\[Epsilon]^-1 V2VV*Temp;
+	VvvZ=1/4*eps^-1 V2VV*Temp;
 	
-	VvvvZ=1/12*\[Epsilon]^-1 V2VVV*Temp;
+	VvvvZ=1/12*eps^-1 V2VVV*Temp;
 	
-	VggvZ=1/4*\[Epsilon]^-1 V2ggV*Temp;
+	VggvZ=1/4*eps^-1 V2ggV*Temp;
 	
 	Temp=Flatten[ZYsij,{{1},{2,3}}] . Flatten[YsffC,{2,3}]+Flatten[Ysff,{{1},{2,3}}] . Flatten[ZYsijC,{2,3}];
-	VFFsZ=1/2*\[Epsilon]^-1 V2FFS*Tr[Temp];
+	VFFsZ=1/2*eps^-1 V2FFS*Tr[Temp];
 
 	(*General nF modification*)
 	gvffnF=gvff . NFMat;
 	(*************************)
 	Temp=Transpose[Zgvff . Transpose[gvffnF,{2,1,3}]+gvffnF . Transpose[Zgvff,{2,1,3}],{1,3,2,4}];
-	VFFvZ=1/2*\[Epsilon]^-1*V2FFV*Tr[Flatten[Temp,{{1,3},{2,4}}]];
+	VFFvZ=1/2*eps^-1*V2FFV*Tr[Flatten[Temp,{{1,3},{2,4}}]];
 
 	(* --- Scalar mass contributions --- *)
-	\[Lambda]Help=TensorContract[\[Lambda]4,{3,4}];
-	V\[Mu]SS=Tr[\[Lambda]Help . \[Mu]ij]/4* I1p I2p*(-1);
+	lamHelp=TensorContract[lam4,{3,4}];
+	VmuSS=Tr[lamHelp . muij]/4* I1p I2p*(-1);
 	
-	V\[Mu]FFS=-2*1/2 IF1p I2p*Tr[Ysij . \[Mu]ij]*(-1);
+	VmuFFS=-2*1/2 IF1p I2p*Tr[Ysij . muij]*(-1);
 	
-	V\[Mu]SV=-2/4*(D-1)*Tr[\[Mu]ij . \[CapitalLambda]g]I2p I1p*(-1);
+	VmuSV=-2/4*(D-1)*Tr[muij . \[CapitalLambda]g]I2p I1p*(-1);
 	
-	VLOtoNLOCT=-1/2Tr[\[Beta]mij]/2*I1p*\[Epsilon]^-1*(-1);
+	VLOtoNLOCT=-1/2Tr[\[Beta]mij]/2*I1p*eps^-1*(-1);
 	
 	(*The term -m^4/4 Sum[1/P^4] of the one-loop diagram*)
-	VLOtoNNLO=-1/4Tr[\[Mu]ij . \[Mu]ij]*1/(16 (\[Pi]^2) ) Lb;
+	VLOtoNNLO=-1/4Tr[muij . muij]*1/(16 (\[Pi]^2) ) Lb;
 
-	ContriMass=VLOtoNNLO+ VLOtoNLOCT+V\[Mu]SS+V\[Mu]FFS+ V\[Mu]SV;
+	ContriMass=VLOtoNNLO+ VLOtoNLOCT+VmuSS+VmuFFS+ VmuSV;
 
 	(* --- Fermion mass contributions --- *)
-	VLOtoNNLOF=1/2*Tr[\[Mu]IJF . \[Mu]IJFC . \[Mu]IJF . \[Mu]IJFC]*1/(16 (\[Pi]^2) ) Lf;
+	VLOtoNNLOF=1/2*Tr[muIJF . muIJFC . muIJF . muIJFC]*1/(16 (\[Pi]^2) ) Lf;
 
 	(*
 		Fermion masses at O(m^2 g^2): the mass counterterm in the one-loop diagram, and the insertions
-		of \[Mu]IJFC.\[Mu]IJF into the fermion lines of the two-loop diagrams with a scalar and with a vector.
-		The terms Tr[Ysff.\[Mu]IJFC.Ysff.\[Mu]IJFC] and their conjugates multiply the fermionic sunset, which vanishes.
+		of muIJFC.muIJF into the fermion lines of the two-loop diagrams with a scalar and with a vector.
+		The terms Tr[Ysff.muIJFC.Ysff.muIJFC] and their conjugates multiply the fermionic sunset, which vanishes.
 	*)
-	VLOtoNLOCTF=-Tr[Z\[Mu]IJF . \[Mu]IJFC+\[Mu]IJF . Z\[Mu]IJFC]*IF1p*\[Epsilon]^-1;
+	VLOtoNLOCTF=-Tr[ZmuIJF . muIJFC+muIJF . ZmuIJFC]*IF1p*eps^-1;
 
-	Temp1=Sum[Tr[YsffC[[a]] . Ysff[[a]] . \[Mu]IJFC . \[Mu]IJF],{a,1,ns}];
-	V\[Mu]FFSF=Temp1*IF2p*(I1p-IF1p);
+	Temp1=Sum[Tr[YsffC[[a]] . Ysff[[a]] . muIJFC . muIJF],{a,1,ns}];
+	VmuFFSF=Temp1*IF2p*(I1p-IF1p);
 
-	Temp1=Sum[Tr[gvff[[a]] . gvff[[a]] . \[Mu]IJFC . \[Mu]IJF],{a,1,nv}];
-	V\[Mu]FFVF=(D-2)*Temp1*IF2p*(I1p-IF1p);
+	Temp1=Sum[Tr[gvff[[a]] . gvff[[a]] . muIJFC . muIJF],{a,1,nv}];
+	VmuFFVF=(D-2)*Temp1*IF2p*(I1p-IF1p);
 
-	ContriMassF=VLOtoNLOCTF+V\[Mu]FFSF+V\[Mu]FFVF;
+	ContriMassF=VLOtoNLOCTF+VmuFFSF+VmuFFVF;
 
 	(*
 		Two-loop vacuum diagrams of the soft theory, see SymmetricPhaseUSNLO and CalculateNNLOPotentialSS.
 		The scalar sunset with the cubic couplings and the scalar-scalar-vector sunset with the masses of the
-		scalars and of the temporal scalars give T/(16\[Pi]^2) c (1/(4\[Epsilon])+Log[\[Mu]3]+...),
-		where c=-1/12 T Total[\[Lambda]3^2]+vacuumPole[mS^2,mV^2] contains the LO parameters of the soft theory.
+		scalars and of the temporal scalars give T/(16\[Pi]^2) c (1/(4eps)+Log[mu3]+...),
+		where c=-1/12 T Total[lam3^2]+vacuumPole[mS^2,mV^2] contains the LO parameters of the soft theory.
 		Therefore, the hard pressure contains
-		- the running from \[Mu] to \[Mu]3, which cancels the Log[\[Mu]3] of the soft pressure;
-		- the pole times the O(\[Epsilon]) parts of the LO masses, since the soft pressure uses the masses at O(\[Epsilon]^0).
+		- the running from mu4 to mu3, which cancels the Log[mu3] of the soft pressure;
+		- the pole times the O(eps) parts of the LO masses, since the soft pressure uses the masses at O(eps^0).
 		  For QCD, this is the term -d_A C_A \[Alpha]_E5/4 of hep-ph/0211321.
 	*)
 	vacuumPole[mS_,mV_]:=-T Tr[\[CapitalLambda]g . mS]-T Sum[Tr[gvvv[[a]] . gvvv[[a]] . mV],{a,1,nv}];
-	Temp1=-1/12 T Total[Flatten[\[Lambda]3]^2]+vacuumPole[aS3D,aV3D];
-	ContriSoftRunning=-rgFac T/(16 \[Pi]^2) Temp1 Log[\[Mu]3/\[Mu]];
+	Temp1=-1/12 T Total[Flatten[lam3]^2]+vacuumPole[aS3D,aV3D];
+	ContriSoftRunning=-rgFac T/(16 \[Pi]^2) Temp1 Log[mu3/mu4];
 
-	(*Thermal parts of the LO masses in d dimensions, which agree with aS3D-\[Mu]ij and aV3D at D=4 (without \[Lambda]6)*)
-	Temp2=Normal[1/2 \[Lambda]Help I1p-(D-1)I1p \[CapitalLambda]g-IF1p (Ysij+YsijC)]/.D->4-2\[Epsilon];
+	(*Thermal parts of the LO masses in d dimensions, which agree with aS3D-muij and aV3D at D=4 (without lam6)*)
+	Temp2=Normal[1/2 lamHelp I1p-(D-1)I1p \[CapitalLambda]g-IF1p (Ysij+YsijC)]/.D->4-2eps;
 	Temp3=Normal[-(D-2)I1p Hg+(D-2)^2 I1p TensorContract[GabcdV,{{2,4}}]
-		-2(D-2)IF1p TensorContract[HabIJF . NFMat,{{3,4}}]]/.D->4-2\[Epsilon];
-	Temp2=Map[Coefficient[Expand[#],\[Epsilon],1]&,Temp2,{2}];
-	Temp3=Map[Coefficient[Expand[#],\[Epsilon],1]&,Temp3,{2}];
+		-2(D-2)IF1p TensorContract[HabIJF . NFMat,{{3,4}}]]/.D->4-2eps;
+	Temp2=Map[Coefficient[Expand[#],eps,1]&,Temp2,{2}];
+	Temp3=Map[Coefficient[Expand[#],eps,1]&,Temp3,{2}];
 	ContriSoftEpsilon=T/(4*16 \[Pi]^2) vacuumPole[Temp2,Temp3];
 
 	(* Total NNLO symmetric pressure contributions, organized by sector *)
@@ -645,17 +607,17 @@ SymmetricPhaseNNLO[]:=Module[
 	    VssvZ + VvsZ + VssZ + VvvZ + VvvvZ + VggvZ + VFFsZ + VFFvZ
 	] // Simplify;
 	
-	(* Pure scalar sector (\[Lambda]-dependent) *)
-	DiagramsScalar\[Lambda] = SerEnergyHelp[LSSSS + ESSSS] // Simplify;
+	(* Pure scalar sector (lam-dependent) *)
+	DiagramsScalarlam = SerEnergyHelp[LSSSS + ESSSS] // Simplify;
 	
-	(* Scalar-vector mixing (\[Lambda]-dependent) *)
-	DiagramsScalarVector\[Lambda] = SerEnergyHelp[LSSVS + JSSVSS] // Simplify;
+	(* Scalar-vector mixing (lam-dependent) *)
+	DiagramsScalarVectorlam = SerEnergyHelp[LSSVS + JSSVSS] // Simplify;
 	
 	(* Yukawa: scalar couplings *)
 	DiagramsYukawaScalar = SerEnergyHelp[KSSFFFF + KFFSFSF + HFFFFSS] // Simplify;
 	
-	(* Yukawa: \[Lambda]-dependent scalar-fermion *)
-	DiagramsYukawaScalar\[Lambda] = SerEnergyHelp[JSSFFS] // Simplify;
+	(* Yukawa: lam-dependent scalar-fermion *)
+	DiagramsYukawaScalarlam = SerEnergyHelp[JSSFFS] // Simplify;
 	
 	(* Yukawa: vector couplings *)
 	DiagramsYukawaVector = SerEnergyHelp[
@@ -667,7 +629,7 @@ SymmetricPhaseNNLO[]:=Module[
 	    HFFFVVV + HFFVVFF + KGaugeFF + KVVFFFF + KFFFVVF
 	] // Simplify;
 	
-	(* Scalar-vector diagrams not tied to \[Lambda] *)
+	(* Scalar-vector diagrams not tied to lam *)
 	DiagramsScalarVector = SerEnergyHelp[
 	    HSSSVVV + EVVSS + GSSVVS + KGaugeSS + KGaugeS + 
 	    KVVSSSS + JSSSVV + HSSVVSS
@@ -696,26 +658,26 @@ SymmetricPhaseNNLO[]:=Module[
 	    + DiagramsScalarVector
 	    + DiagramsFermionVector
 	    + DiagramsYukawaVector
-	    + DiagramsYukawaScalar\[Lambda]
-	    + DiagramsScalar\[Lambda]
-	    + DiagramsScalarVector\[Lambda]
+	    + DiagramsYukawaScalarlam
+	    + DiagramsScalarlam
+	    + DiagramsScalarVectorlam
 	    + DiagramsYukawaScalar
 	);
 
-	(* \[Epsilon]-expansion and simplification *)
+	(* eps-expansion and simplification *)
 	DiagramsSimplified=Series[
-		DiagramsTotal/.D->4-2\[Epsilon] 
-		/.\[Epsilon]bp->(1/\[Epsilon]+Lb)^-1
-		/.\[Epsilon]b->(1/\[Epsilon]+Lbb)^-1
-		/.\[Epsilon]BF->(1/\[Epsilon]+LBF)^-1 
-		/.\[Epsilon]F->(1/\[Epsilon]+LFF)^-1
-		/.\[Epsilon]FB->(1/\[Epsilon]+LFB)^-1
-		/.\[Epsilon]bbM->(1/\[Epsilon]+LbbM)^-1
+		DiagramsTotal/.D->4-2eps 
+		/.epsbp->(1/eps+Lb)^-1
+		/.epsb->(1/eps+Lbb)^-1
+		/.epsBF->(1/eps+LBF)^-1 
+		/.epsF->(1/eps+LFF)^-1
+		/.epsFB->(1/eps+LFB)^-1
+		/.epsbbM->(1/eps+LbbM)^-1
 		/.ReplaceLb,
-		{\[Epsilon],0,0}]//Normal;
+		{eps,0,0}]//Normal;
 
-	(* Extract \[Epsilon]^0 coefficient and clean namespace *)
-	OutputFormatDR[Coefficient[Simplify[DiagramsSimplified],\[Epsilon],0]]
+	(* Extract eps^0 coefficient and clean namespace *)
+	OutputFormatDR[Coefficient[Simplify[DiagramsSimplified],eps,0]]
 ];
 
 
@@ -741,7 +703,7 @@ ScalarMass[] := Module[
   VerbosePrint["Calculating 1-Loop Scalar Mass"];
 
   (* Scalar 4-point interaction contribution *)
-  contriSS = -T^2/24 TensorContract[\[Lambda]4, {{3, 4}}] // SimplifySparse;
+  contriSS = -T^2/24 TensorContract[lam4, {{3, 4}}] // SimplifySparse;
 
   (* Gauge boson loop contribution *)
   contriVV = T^2/4 \[CapitalLambda]g;
@@ -752,12 +714,12 @@ ScalarMass[] := Module[
 
   (* If mode \[GreaterEqual] 3, include 6-point scalar coupling contribution *)
   If[mode >= 3,
-    contriSSLambda6 = T^4/1152 TensorContract[\[Lambda]6, {{1, 2}, {3, 4}}];
-    result = \[Mu]ij - contriSS - contriVV - contriFF + contriSSLambda6,
+    contriSSLambda6 = T^4/1152 TensorContract[lam6, {{1, 2}, {3, 4}}];
+    result = muij - contriSS - contriVV - contriFF + contriSSLambda6,
     
     (* Otherwise, only include up to 4-point interactions *)
     (* Minus signs from the matching *)
-    result = \[Mu]ij - contriSS - contriVV - contriFF
+    result = muij - contriSS - contriVV - contriFF
   ];
 
   (* Store the final corrected scalar mass, fully simplified *)
@@ -811,47 +773,40 @@ ScalarMass2Loop[] := Module[
   VerbosePrint["Calculating 2-Loop Scalar Mass"];
   
   (* Constants *)
-  \[Kappa] = 1/(16 \[Pi]^2);
-  I1I2 = \[Kappa] T^2/(12 \[Epsilon]b);
-  dI1I2 = 3 \[Kappa] T^2/(12 \[Epsilon]b) - \[Kappa] T^2/6;
-  I1 = T^2/(12 \[Epsilon]) + T^2 Lbbb;
-  I2I3m1 = T^2/(512 \[Pi]^2 \[Epsilon]b) - T^2/(768 \[Pi]^2);
-  I1FI2F = -((T^2)/(384 \[Pi]^2))/\[Epsilon]F;
-  I1BI2F = ((T^2)/(192 \[Pi]^2))/\[Epsilon]FB;
-  I1FI2B = -((T^2)/(384 \[Pi]^2))/\[Epsilon]BF;
-  I1FI2FD = (3 - 2 \[Epsilon]F) I1FI2F;
-  I1BI2FD = (3 - 2 \[Epsilon]FB) I1BI2F;
+  {I1,I1F}=Lookup[OneLoopSumIntegrals[],{"I1","I1F"}];
+  {I1I2,dI1I2,I2I3m1,I1FI2F,I1BI2F,I1FI2B}=Lookup[TwoLoopSumIntegrals[],{"I1I2","dI1I2","I2I3m1","I1FI2F","I1BI2F","I1FI2B"}];
+  I1FI2FD = (3 - 2 epsF) I1FI2F;
+  I1BI2FD = (3 - 2 epsFB) I1BI2F;
   I1FI2BT1 = I1FI2B(-4) - T^2/(96 \[Pi]^2);
-  I1F = -T^2/(24 \[Epsilon]) + 1/24 T^2 Lfff;
 
   (* Helper Functions *)
   simplifyContract[expr_] := Simplify[expr] // SimplifySparse;
 
   (* Contributions *)
-  Contri1 = (1/4) I1I2 Simplify[TensorContract[\[CapitalLambda]\[Lambda], {3, 4}]];
-  Contri2 = (1/2) I1 Flatten[\[Gamma]ij] . Flatten[\[Lambda]4, {1, 2}];
-  Contri21 = (1/(16 \[Pi]^2)) Lb * (1/2) Flatten[\[Mu]ij] . Flatten[\[Lambda]4, {1, 2}];
-  Contri3 = -(1/2) I1 \[Epsilon] TensorContract[Z\[Lambda]ijkl, {3, 4}];
-  Contri31 = -(1/2) I1 Flatten[\[Gamma]ij] . Flatten[\[Lambda]4, {1, 2}];
+  Contri1 = (1/4) I1I2 Simplify[TensorContract[\[CapitalLambda]lam, {3, 4}]];
+  Contri2 = (1/2) I1 Flatten[\[Gamma]ij] . Flatten[lam4, {1, 2}];
+  Contri21 = (1/(16 \[Pi]^2)) Lb * (1/2) Flatten[muij] . Flatten[lam4, {1, 2}];
+  Contri3 = -(1/2) I1 eps TensorContract[Zlamijkl, {3, 4}];
+  Contri31 = -(1/2) I1 Flatten[\[Gamma]ij] . Flatten[lam4, {1, 2}];
   Contri32 = -(1/4) I1*(
-    + \[Gamma]ij . TensorContract[\[Lambda]4, {1, 2}]
-    + TensorContract[\[Lambda]4, {1, 2}] . \[Gamma]ij
+    + \[Gamma]ij . TensorContract[lam4, {1, 2}]
+    + TensorContract[lam4, {1, 2}] . \[Gamma]ij
     );
-  Contri4 = -(1/2) dI1I2 Flatten[\[CapitalLambda]g] . Flatten[\[Lambda]4, {1, 2}];
+  Contri4 = -(1/2) dI1I2 Flatten[\[CapitalLambda]g] . Flatten[lam4, {1, 2}];
   Contri5 = (1/2) dI1I2 Contract[Hg, HabijV, {{1, 3}, {2, 4}}] // simplifyContract;
-  Contri6 = (3 - 2 \[Epsilon]) I1 \[Epsilon] (1/2) TensorContract[Zgvvss, {1, 2}];
-  Contri61 = (3 - 2 \[Epsilon]) I1 (1/2) Contract[\[Gamma]ab, HabijV, {{1, 3}, {2, 4}}] // simplifyContract;
-  Contri62 = (3 - 2 \[Epsilon]) I1 (1/2) (
+  Contri6 = (3 - 2 eps) I1 eps (1/2) TensorContract[Zgvvss, {1, 2}];
+  Contri61 = (3 - 2 eps) I1 (1/2) Contract[\[Gamma]ab, HabijV, {{1, 3}, {2, 4}}] // simplifyContract;
+  Contri62 = (3 - 2 eps) I1 (1/2) (
      + Contract[\[Gamma]ij, Habij, {{3, 4}, {2, 5}}]
      + Contract[\[Gamma]ij, Habij, {{3, 4}, {2, 6}}]) // simplifyContract;
-  Contri7 = -(1/2) I1 (3 - 2 \[Epsilon]) Contract[\[Gamma]ab, HabijV, {{1, 3}, {2, 4}}] // simplifyContract;
+  Contri7 = -(1/2) I1 (3 - 2 eps) Contract[\[Gamma]ab, HabijV, {{1, 3}, {2, 4}}] // simplifyContract;
   Contri8 = -(1/2) I1I2 Contract[Hg, HabijV, {{1, 3}, {2, 4}}] // simplifyContract;
-  Contri9 = T^2 (1/4) (-1) (9/(8 \[Epsilon]b) - 13/8) (1/(16 \[Pi]^2)) Contract[GabcdV, HabijV, {{2, 4}, {1, 5}, {3, 6}}] // simplifyContract;
+  Contri9 = T^2 (1/4) (-1) (9/(8 epsb) - 13/8) (1/(16 \[Pi]^2)) Contract[GabcdV, HabijV, {{2, 4}, {1, 5}, {3, 6}}] // simplifyContract;
   
   help = Contract[GabcdV, HabijV, {{1, 5}, {2, 3}, {4, 6}}] // simplifyContract;
   Contri10 = (I1I2/4) help;
   
-  Contri11 = T^2 (-1) (1/4) (13/(24 \[Epsilon]b) - 7/24)/(16 \[Pi]^2) help;
+  Contri11 = T^2 (-1) (1/4) (13/(24 epsb) - 7/24)/(16 \[Pi]^2) help;
   
   Contri12 = (-1/2) (-1) 2 (I1FI2F - I1BI2F)*(
     + Flatten[TensorContract[YTemp, {1, 2}]] . Flatten[YTemp, {4, 3}]
@@ -859,8 +814,8 @@ ScalarMass2Loop[] := Module[
     );
   
   Contri13 = (-2 I1FI2B) (1/4)*(
-    + Flatten[Ysij] . Flatten[\[Lambda]4, {1, 2}]
-    + Flatten[YsijC] . Flatten[\[Lambda]4, {1, 2}]
+    + Flatten[Ysij] . Flatten[lam4, {1, 2}]
+    + Flatten[YsijC] . Flatten[lam4, {1, 2}]
     );
 
   (* Kosm or "Kos" contributions *)
@@ -884,26 +839,26 @@ ScalarMass2Loop[] := Module[
     + Flatten[help] . Flatten[YTemp, {3, 4}]
     + Flatten[help] . Flatten[YTempC, {3, 4}]
     );
-  Contri16 = (-1) (I1FI2FD - I1BI2FD) (-1) (2/3) (1 - 1 \[Epsilon]/3) help2;
+  Contri16 = (-1) (I1FI2FD - I1BI2FD) (-1) (2/3) (1 - 1 eps/3) help2;
 
   (* Self-energy contribution *)
   ContriF = -(ZijS . aS3D + Transpose[ZijS . aS3D]);
 
   (* Contribution from Cubics *)
-  ContriCubic = (1/2) (1/(16 \[Pi]^2)) Lb Contract[\[Lambda]3, \[Lambda]3, {{2, 5}, {3, 6}}] // simplifyContract;
+  ContriCubic = (1/2) (1/(16 \[Pi]^2)) Lb Contract[lam3, lam3, {{2, 5}, {3, 6}}] // simplifyContract;
 
   (* Contribution from Fermion Masses *)
   Fac = 1/(8 \[Pi]^2) Lf;
-  Temp1 = Activate @ TensorContract[Inactive @ TensorProduct[Ysff, \[Mu]IJFC, \[Mu]IJFC, Ysff], {{2, 4}, {3, 6}, {5, 9}, {7, 10}}] // Normal;
-  Temp1C = Activate @ TensorContract[Inactive @ TensorProduct[YsffC, \[Mu]IJF, \[Mu]IJF, YsffC], {{2, 4}, {3, 6}, {5, 9}, {7, 10}}] // Normal;
+  Temp1 = Activate @ TensorContract[Inactive @ TensorProduct[Ysff, muIJFC, muIJFC, Ysff], {{2, 4}, {3, 6}, {5, 9}, {7, 10}}] // Normal;
+  Temp1C = Activate @ TensorContract[Inactive @ TensorProduct[YsffC, muIJF, muIJF, YsffC], {{2, 4}, {3, 6}, {5, 9}, {7, 10}}] // Normal;
   ContriFFMass1 = -(1/2) Fac (Temp1 + Temp1C) // Simplify // PowerExpand;
   
-  Temp1 = Activate @ TensorContract[Inactive @ TensorProduct[Ysff, YsffC, \[Mu]IJFC, \[Mu]IJF], {{3, 5}, {2, 7}, {6, 10}, {8, 9}}] // Normal;
-  Temp1C = Activate @ TensorContract[Inactive @ TensorProduct[YsffC, Ysff, \[Mu]IJF, \[Mu]IJFC], {{3, 5}, {2, 7}, {6, 10}, {8, 9}}] // Normal;
+  Temp1 = Activate @ TensorContract[Inactive @ TensorProduct[Ysff, YsffC, muIJFC, muIJF], {{3, 5}, {2, 7}, {6, 10}, {8, 9}}] // Normal;
+  Temp1C = Activate @ TensorContract[Inactive @ TensorProduct[YsffC, Ysff, muIJF, muIJFC], {{3, 5}, {2, 7}, {6, 10}, {8, 9}}] // Normal;
   ContriFFMass2 = -Fac (Temp1 + Temp1C) // Simplify // PowerExpand;
 
   (* Final scalar mass *)
-  \[Mu]SijNLO = (
+  muSijNLO = (
     + SerEnergyHelp[ContriF // Normal]
     - SerEnergyHelp[ContriCubic // Normal]
     - SerEnergyHelp[(ContriFFMass1 + ContriFFMass2) // Normal]
@@ -1010,7 +965,7 @@ VectorSelfEnergy[] := Module[
 VectorMass2Loop[] := Module[
   {
     gvffnF, TrSS, TrFF, TrVV, Gabij, Gabcd, GabIJ,
-    GroupFacVVVV, GroupTheoryFacm2, GroupTheoryFac\[Lambda], 
+    GroupFacVVVV, GroupTheoryFacm2, GroupTheoryFaclam, 
     GroupTheoryFacTrSSTrSS, GroupTheoryFacSSSS, GroupTheoryFacVVTrSS, 
     GroupTheoryFacTrVVTrSS, GroupTheoryFacVVTrFF, GroupTheoryFacTrVVTrFF, 
     GroupTheoryFacFFFF, GroupFacTrSSTrFF, GroupTheoryYuk1, GroupTheoryYuk2, 
@@ -1034,8 +989,8 @@ VectorMass2Loop[] := Module[
 
   (* Group theory factors *)
   GroupFacVVVV = -Flatten[Gabcd, {{1}, {2, 3, 4}}] . Flatten[Gabcd, {1, 3, 2}];
-  GroupTheoryFacm2 = Flatten[\[Mu]ij] . Flatten[Gabij, {3, 4}];
-  GroupTheoryFac\[Lambda] = Flatten[TensorContract[\[Lambda]4, {{1, 2}}]] . Flatten[Gabij, {3, 4}];
+  GroupTheoryFacm2 = Flatten[muij] . Flatten[Gabij, {3, 4}];
+  GroupTheoryFaclam = Flatten[TensorContract[lam4, {{1, 2}}]] . Flatten[Gabij, {3, 4}];
 
   (* Various contributions based on traces and group theory *)
   GroupTheoryFacTrSSTrSS = TrSS . TrSS;
@@ -1054,29 +1009,29 @@ VectorMass2Loop[] := Module[
 
   (* Contributions to the Debye mass *)
   \[CapitalPi]V = GroupFacVVVV * (
-    T^2 * (11 Log[\[Mu]/(4 \[Pi] T)] + 11 EulerGamma - 1/2) / (36 \[Pi]^2) + T^2 / (12 \[Pi]^2)
+    T^2 * (11 Log[mu4/(4 \[Pi] T)] + 11 EulerGamma - 1/2) / (36 \[Pi]^2) + T^2 / (12 \[Pi]^2)
   );
 
-  \[CapitalPi]S = -GroupTheoryFac\[Lambda] * T^2 / (192 \[Pi]^2) 
+  \[CapitalPi]S = -GroupTheoryFaclam * T^2 / (192 \[Pi]^2) 
     - GroupTheoryFacm2 / (8 \[Pi]^2) 
-    - GroupTheoryFacTrSSTrSS * (T^2 * (Log[\[Mu]/(4 \[Pi])] - Log[T] + EulerGamma + 1)) / (288 \[Pi]^2)
+    - GroupTheoryFacTrSSTrSS * (T^2 * (Log[mu4/(4 \[Pi])] - Log[T] + EulerGamma + 1)) / (288 \[Pi]^2)
     + GroupTheoryFacSSSS * T^2 / (32 \[Pi]^2)
-    - (T^2 * (Log[\[Mu]] - Log[T] + EulerGamma - Log[\[Pi]] - 2 Log[2])) / (24 \[Pi]^2) * GroupTheoryFacVVTrSS
+    - (T^2 * (Log[mu4] - Log[T] + EulerGamma - Log[\[Pi]] - 2 Log[2])) / (24 \[Pi]^2) * GroupTheoryFacVVTrSS
     - GroupTheoryFacVVTrSS * T^2 / (48 \[Pi]^2)
-    + (T^2 * (8 Log[\[Mu]] - 8 Log[T] + 8 EulerGamma - 3 - 8 Log[\[Pi]] - 16 Log[2])) / (576 \[Pi]^2) * GroupTheoryFacTrVVTrSS;
+    + (T^2 * (8 Log[mu4] - 8 Log[T] + 8 EulerGamma - 3 - 8 Log[\[Pi]] - 16 Log[2])) / (576 \[Pi]^2) * GroupTheoryFacTrVVTrSS;
 
-  \[CapitalPi]F = (T^2 * (Log[\[Mu]] - Log[T] + EulerGamma - Log[\[Pi]] - 2 Log[2])) / (24 \[Pi]^2) * GroupTheoryFacVVTrFF
-    - (T^2 * (2 Log[\[Mu]] - 2 Log[T] + 2 EulerGamma - 1 - 2 Log[\[Pi]])) / (144 \[Pi]^2) * GroupTheoryFacTrFFTrFF
-    - (T^2 * (2 Log[\[Mu]] - 2 Log[T] + 2 EulerGamma + 3 - 2 Log[\[Pi]] - 20 Log[2])) / (576 \[Pi]^2) * GroupTheoryFacTrVVTrFF
+  \[CapitalPi]F = (T^2 * (Log[mu4] - Log[T] + EulerGamma - Log[\[Pi]] - 2 Log[2])) / (24 \[Pi]^2) * GroupTheoryFacVVTrFF
+    - (T^2 * (2 Log[mu4] - 2 Log[T] + 2 EulerGamma - 1 - 2 Log[\[Pi]])) / (144 \[Pi]^2) * GroupTheoryFacTrFFTrFF
+    - (T^2 * (2 Log[mu4] - 2 Log[T] + 2 EulerGamma + 3 - 2 Log[\[Pi]] - 20 Log[2])) / (576 \[Pi]^2) * GroupTheoryFacTrVVTrFF
     - GroupTheoryFacFFFF * T^2 / (16 \[Pi]^2)
     + GroupTheoryFacVVTrFF * T^2 / (48 \[Pi]^2);
 
-  \[CapitalPi]SF = (T^2 * (5 Log[\[Mu]/(4 \[Pi] T)] + 5 EulerGamma - 1 + 8 Log[2])) / (576 \[Pi]^2) * GroupFacTrSSTrFF
+  \[CapitalPi]SF = (T^2 * (5 Log[mu4/(4 \[Pi] T)] + 5 EulerGamma - 1 + 8 Log[2])) / (576 \[Pi]^2) * GroupFacTrSSTrFF
     - 1/(32 \[Pi]^2) * T^2 * GroupTheoryYuk1
     - T^2 / (192 \[Pi]^2) * GroupTheoryYuk2;
 
   (* Final expression for the 2-loop Debye mass *)
-  \[Mu]VabNLO = \[CapitalPi]V + \[CapitalPi]S + \[CapitalPi]F + \[CapitalPi]SF // Normal // Simplify // FullSimplify;
+  muVabNLO = \[CapitalPi]V + \[CapitalPi]S + \[CapitalPi]F + \[CapitalPi]SF // Normal // Simplify // FullSimplify;
 
 ];
 
@@ -1132,22 +1087,22 @@ ScalarCubic[] := Module[
 
   (* Scalar self-energy contribution *)
   SelfEnergySSC = 1 / (16 \[Pi]^2) * Lb * 1 / 2;
-  ContriSSCTemp = Contract[\[Lambda]4, \[Lambda]3, {{3, 5}, {4, 6}}];
+  ContriSSCTemp = Contract[lam4, lam3, {{3, 5}, {4, 6}}];
   ContriSSC = SelfEnergySSC * (
     ContriSSCTemp + Transpose[ContriSSCTemp, {1, 3, 2}] + Transpose[ContriSSCTemp, {3, 2, 1}]
   );
 
   (* Fermion mass contributions *)
-  Contri1 = Table[Tr[a . \[Mu]IJFC . b . c], {a, Ysff}, {b, Ysff}, {c, YsffC}];
-  Contri2 = Table[Tr[a . \[Mu]IJF . b . c], {a, YsffC}, {b, YsffC}, {c, Ysff}];
+  Contri1 = Table[Tr[a . muIJFC . b . c], {a, Ysff}, {b, Ysff}, {c, YsffC}];
+  Contri2 = Table[Tr[a . muIJF . b . c], {a, YsffC}, {b, YsffC}, {c, Ysff}];
   ContriFF = -1 / (8 \[Pi]^2) * Lf * 3 * Symmetrize[(Contri1 + Contri2), Symmetric[{1, 2, 3}]];
 
   (* Self-energy contribution *)
-  ContriSETemp = -ZijS . \[Lambda]3;
+  ContriSETemp = -ZijS . lam3;
   ContriSE = ContriSETemp + Transpose[ContriSETemp, {2, 1, 3}] + Transpose[ContriSETemp, {3, 1, 2}] // Simplify;
 
-  (* Final result for \[Lambda]3CS *)
-  \[Lambda]3CS = -ContriSSC - ContriFF + ContriSE // Simplify;
+  (* Final result for lam3CS *)
+  lam3CS = -ContriSSC - ContriFF + ContriSE // Simplify;
 ];
 
 
@@ -1199,7 +1154,7 @@ LongitudinalVVVV[] := Module[
     + Transpose[helpF, {1, 2, 4, 3}]) // SparseArray; (* Check this one after modification *)
 
   (* Final result with minus sign for matching *)
-  \[Lambda]AA = -(ContriSSSS + ContriVV + ContriFFFF) // SimplifySparse // SparseArray;
+  lamAA = -(ContriSSSS + ContriVV + ContriFFFF) // SimplifySparse // SparseArray;
 ];
 
 
@@ -1220,7 +1175,7 @@ LongitudinalVVS[] := Module[
 
   (* Cubic contribution with internal scalars *)
   CouplingSSSS = 1 / (8 \[Pi]^2);
-  ContriSSSSTemp = CouplingSSSS * Contract[Habij, \[Lambda]3, {{3, 5}, {4, 6}}];
+  ContriSSSSTemp = CouplingSSSS * Contract[Habij, lam3, {{3, 5}, {4, 6}}];
 
   (* Minus sign from matching *)
   GvvsL = -ContriSSSSTemp;
@@ -1237,7 +1192,7 @@ LongitudinalVVS[] := Module[
 ScalarQuartic[] := Module[
   {
     ContriSS, ContriVVTemp, ContriVVTemp2, ContriVV, 
-    CouplingFF, ContriFF, ContriSETemp, ContriSE, ContriSS\[Lambda]6
+    CouplingFF, ContriFF, ContriSETemp, ContriSE, ContriSSlam6
   },
 
   (* Verbose output for debugging *)
@@ -1245,8 +1200,8 @@ ScalarQuartic[] := Module[
 
   (* Scalar contribution to the quartic terms *)
   ContriSS = (1 / (16 \[Pi]^2)) * Lb * 1 / 2 * Simplify[
-    (\[CapitalLambda]\[Lambda] + Transpose[\[CapitalLambda]\[Lambda], {1, 4, 3, 2}] + 
-     Transpose[\[CapitalLambda]\[Lambda], {1, 3, 2, 4}])
+    (\[CapitalLambda]lam + Transpose[\[CapitalLambda]lam, {1, 4, 3, 2}] + 
+     Transpose[\[CapitalLambda]lam, {1, 3, 2, 4}])
   ];
 
   (* Temporal-vector contribution *)
@@ -1259,18 +1214,18 @@ ScalarQuartic[] := Module[
   ContriFF = CouplingFF * 12 * Symmetrize[Yhelp, Symmetric[{1, 2, 3, 4}]] // SparseArray // SimplifySparse;
 
   (* Self-energy contribution *)
-  ContriSETemp = -ZijS . \[Lambda]4;
+  ContriSETemp = -ZijS . lam4;
   ContriSE = ContriSETemp + Transpose[ContriSETemp, {2, 1, 3, 4}] + Transpose[ContriSETemp, {3, 1, 2, 4}] + 
     Transpose[ContriSETemp, {4, 1, 2, 3}] // Simplify;
 
   (* Conditional handling based on mode *)
   If[mode >= 3,
     (* Additional contribution based on the mode *)
-    ContriSS\[Lambda]6 = -T^2 / 24 * TensorContract[\[Lambda]6, {1, 2}];
-    \[Lambda]3D = -ContriSS - ContriVV + ContriSE - ContriFF - ContriSS\[Lambda]6,
+    ContriSSlam6 = -T^2 / 24 * TensorContract[lam6, {1, 2}];
+    lam3D = -ContriSS - ContriVV + ContriSE - ContriFF - ContriSSlam6,
     
     (* Default contribution *)
-    \[Lambda]3D = -ContriSS - ContriVV + ContriSE - ContriFF;
+    lam3D = -ContriSS - ContriVV + ContriSE - ContriFF;
   ];
 ];
 
@@ -1293,13 +1248,13 @@ ScalarSextic[] := Module[
   VerbosePrint["Calculating Scalar Sextic"];
 
   (* Scalar loop contributions *)
-  LambdaLambda6Temp = Flatten[\[Lambda]4 . \[Lambda]4, {{1}, {2}, {4}, {5}, {3, 6}}];
-  LambdaLambda6Tot = LambdaLambda6Temp . Flatten[\[Lambda]4, {1, 2}];
+  LambdaLambda6Temp = Flatten[lam4 . lam4, {{1}, {2}, {4}, {5}, {3, 6}}];
+  LambdaLambda6Tot = LambdaLambda6Temp . Flatten[lam4, {1, 2}];
   Prefac = -Zeta[3] * 15 / (128 \[Pi]^4 T^2);
   ContriSS = Prefac * Symmetrize[LambdaLambda6Tot, Symmetric] // SparseArray // SimplifySparse;
 
-  (* Scalar loop with mixed \[Lambda]6 and \[Lambda]4 vertices *)
-  LambdaLambda6Tot = Flatten[\[Lambda]4, {{1}, {2}, {3, 4}}] . Flatten[\[Lambda]6, {1, 2}] // SimplifySparse;
+  (* Scalar loop with mixed lam6 and lam4 vertices *)
+  LambdaLambda6Tot = Flatten[lam4, {{1}, {2}, {3, 4}}] . Flatten[lam6, {1, 2}] // SimplifySparse;
   Prefac = 15 / 2 * 1 / (16 \[Pi]^2) * Lb;
   SymHelp = Symmetrize[LambdaLambda6Tot, Symmetric] // SparseArray;
   ContriSSS = Prefac * SymHelp;
@@ -1318,11 +1273,11 @@ ScalarSextic[] := Module[
   ContriFF = Prefac * Symmetrize[LambdaLambda6TotFermion, Symmetric] // SparseArray // SimplifySparse;
 
   (* Field-strength renormalization *)
-  ContriSETemp = -ZijS . \[Lambda]6;
+  ContriSETemp = -ZijS . lam6;
   ContriSE = 6 * Symmetrize[ContriSETemp, Symmetric] // SparseArray // SimplifySparse;
 
   (* Minus sign from matching *)
-  \[Lambda]6D = ContriSE - ContriSS - ContriVV - ContriFF - ContriSSS // SparseArray;
+  lam6D = ContriSE - ContriSS - ContriVV - ContriFF - ContriSSS // SparseArray;
 ];
 
 
@@ -1404,7 +1359,7 @@ LongitudinalSSVV[] := Module[
 
   (* Scalar-Scalar coupling contribution *)
   CouplingSSS = 1 / (8 \[Pi]^2);
-  ContriSSS = CouplingSSS * Transpose[Transpose[Flatten[Habij, {3, 4}], {2, 1, 3}], {1, 3, 2}] . Flatten[\[Lambda]4, {1, 2}] // SimplifySparse;
+  ContriSSS = CouplingSSS * Transpose[Transpose[Flatten[Habij, {3, 4}], {2, 1, 3}], {1, 3, 2}] . Flatten[lam4, {1, 2}] // SimplifySparse;
 
   (* Vector-Vector coupling contribution *)
   CouplingVVVV = -((3 * Lb + 22) / (64 \[Pi]^2));
@@ -1457,13 +1412,13 @@ TadPole[] := Module[
 
   (* Scalar bubble contribution (from one-loop with cubic coupling).
      Minus sign comes from the Feynman rule. *)
-  ContriS = -1/2 * T^2 / 12 * TensorContract[\[Lambda]3, {{2, 3}}];
+  ContriS = -1/2 * T^2 / 12 * TensorContract[lam3, {{2, 3}}];
 
   (* Fermion mass-insertion contribution.
      Includes both Y and Y\[Dagger] contractions with fermion masses. *)
   fac = -(T^2 / 12);
-  Temp1 = Contract[Ysff, \[Mu]IJFC, {{2, 4}, {3, 5}}] // SimplifySparse;
-  Temp1C = Contract[YsffC, \[Mu]IJF, {{2, 4}, {3, 5}}] // SimplifySparse;
+  Temp1 = Contract[Ysff, muIJFC, {{2, 4}, {3, 5}}] // SimplifySparse;
+  Temp1C = Contract[YsffC, muIJF, {{2, 4}, {3, 5}}] // SimplifySparse;
 
   (* Symmetrized fermionic contribution; factor (-1)^2 is from Wick contraction and symmetry. *)
   ContriFF = (1/2) * fac * (Temp1 + Temp1C);
@@ -1483,11 +1438,11 @@ TadPole[] := Module[
 TadPole2Loop[] := Module[
 	{
 	    (* General variables *)
-	    \[Kappa], I1, I2M2, I1I2, dI1I2, I211M020, I2M2I2, I3M2I1,
+	    I1, I2M2, I1I2, dI1I2, I211M020, I2M2I2, I3M2I1,
 	    I1p, I3M2p, I2p, I4M4p, I2M2p, IF1p, IF2p, IF3M2p, IF2M2p,
 	
 	    (* Contractions & results *)
-	    \[Lambda]Help, Yhelp1, Yhelp2, YHelp2, YHelpC2, FHelp,
+	    lamHelp, Yhelp1, Yhelp2, YHelp2, YHelpC2, FHelp,
 	    temp1, temp1C, temp2, temp3, temp4, temp5, temp6,
 	    Contri1, Contri2, Contri3, Contri4, Contri5, Contri6,
 	    Contri7, Contri71, Contri72,
@@ -1497,40 +1452,23 @@ TadPole2Loop[] := Module[
 	VerbosePrint["Calculating 2-Loop Tadpoles"];
 
 	(* --- Master integrals --- *)
-	\[Kappa]=1/(16 \[Pi]^2);
-	I1=T^2/(12 \[Epsilon])+T^2 Lbbb;
-	I2M2=T^2/(24 )(-1/\[Epsilon]-  12Lbbb+2);
-	I1I2=\[Kappa] T^2/(12 \[Epsilon]b); 
-	dI1I2=3\[Kappa] T^2/(12 \[Epsilon]b)-\[Kappa] T^2/6;
-	I211M020=T^2/(192 \[Pi]^2);
-	I2M2I2=T^2/(192 \[Pi]^2)-T^2/(384 \[Pi]^2 \[Epsilon]bbM);
-	I3M2I1=T^2/(768 \[Pi]^2 \[Epsilon]bbM)+T^2/(384 \[Pi]^2);
-	
-	Clear[LbbM];
-	I1p=T^2/(12 )+\[Epsilon] T^2 Lbbb;
-	I3M2p=1/(64 \[Pi]^2 \[Epsilon]bp)+1/(32 \[Pi]^2);
-	I2p=1/(16 \[Pi]^2 \[Epsilon]bp);
-	I4M4p=1/(128 \[Pi]^2 \[Epsilon]bp)+1/(48 \[Pi]^2);
-	I2M2p=-T^2/24+T^2 (((-1/24)LbbM - (-1)*1/24 Lb )+1/12)\[Epsilon];
-	IF1p=-T^2/(24)+1/24 T^2 Lfff \[Epsilon];
-	IF2p=1/(16 (\[Pi]^2) ) (1/\[Epsilon]+Lf);
-	IF3M2p=1/(64 \[Pi]^2)(1/\[Epsilon]+Lf+2);
-	IF2M2p=(-T^2/24-T^2 1/48* Lfff)\[Epsilon]+T^2/48;
+	{I1,I2M2,I1p,I3M2p,I2p,I4M4p,I2M2p,IF1p,IF2p,IF3M2p,IF2M2p}=Lookup[OneLoopSumIntegrals[],{"I1","I2M2","I1p","I3M2p","I2p","I4M4p","I2M2p","IF1p","IF2p","IF3M2p","IF2M2p"}];
+	{I1I2,dI1I2,I211M020,I2M2I2,I3M2I1}=Lookup[TwoLoopSumIntegrals[],{"I1I2","dI1I2","I211M020","I2M2I2","I3M2I1"}];
 
-	\[Lambda]Help=TensorContract[\[Lambda]4,{3,4}];
+	lamHelp=TensorContract[lam4,{3,4}];
 
 	(* --- Pure diagram contributions --- *)
-	Contri1 = (1/4) * I2p * I1p * Contract[\[Lambda]3, \[Lambda]Help, {{2, 4}, {3, 5}}] // SimplifySparse;
-	Contri2 = -2/4 * (D - 1) * I2p * I1p * Contract[\[Lambda]3, \[CapitalLambda]g, {{2, 4}, {3, 5}}] // SimplifySparse;
-	Contri3 = (-2)/2 * I2p * IF1p * Contract[\[Lambda]3, Ysij, {{2, 4}, {3, 5}}] // SimplifySparse;
+	Contri1 = (1/4) * I2p * I1p * Contract[lam3, lamHelp, {{2, 4}, {3, 5}}] // SimplifySparse;
+	Contri2 = -2/4 * (D - 1) * I2p * I1p * Contract[lam3, \[CapitalLambda]g, {{2, 4}, {3, 5}}] // SimplifySparse;
+	Contri3 = (-2)/2 * I2p * IF1p * Contract[lam3, Ysij, {{2, 4}, {3, 5}}] // SimplifySparse;
 
 	(* --- Scalar Mass insertion --- *)
-	Contri4 = 1/2 * I2p * Contract[\[Lambda]3, \[Mu]ij, {{2, 4}, {3, 5}}] // SimplifySparse;
+	Contri4 = 1/2 * I2p * Contract[lam3, muij, {{2, 4}, {3, 5}}] // SimplifySparse;
 
 
 	(* --- Fermion Mass insertion --- *)
-	Yhelp1 = \[Mu]IJF . \[Mu]IJFC . \[Mu]IJF;
-	Yhelp2 = \[Mu]IJFC . \[Mu]IJF . \[Mu]IJFC;
+	Yhelp1 = muIJF . muIJFC . muIJF;
+	Yhelp2 = muIJFC . muIJF . muIJFC;
 	Contri71 = Contract[YsffC, Yhelp1, {{2, 4}, {3, 5}}] // SimplifySparse;
 	Contri72 = Contract[Ysff, Yhelp2, {{2, 4}, {3, 5}}] // SimplifySparse;
 	Contri7 = -IF2p * (Contri71 + Contri72);
@@ -1538,47 +1476,47 @@ TadPole2Loop[] := Module[
 	(* --- Fermion loop contributions --- *)
 	YHelp2 = Contract[YsffC, Ysff, {{1, 4}, {2, 5}}] // SimplifySparse;
 	YHelpC2 = Contract[Ysff, YsffC, {{1, 4}, {2, 5}}] // SimplifySparse;
-	temp1 = Contract[Ysff, \[Mu]IJFC, YHelp2, {{2, 4}, {5, 7}, {3, 6}}] // SimplifySparse;
-	temp1C = Contract[YsffC, \[Mu]IJF, YHelpC2, {{2, 4}, {5, 7}, {3, 6}}] // SimplifySparse;
+	temp1 = Contract[Ysff, muIJFC, YHelp2, {{2, 4}, {5, 7}, {3, 6}}] // SimplifySparse;
+	temp1C = Contract[YsffC, muIJF, YHelpC2, {{2, 4}, {5, 7}, {3, 6}}] // SimplifySparse;
 	Contri5 = -(-1)*(IF1p * IF2p - IF2p * I1p) * (temp1 + temp1C) // SimplifySparse;
 
 	FHelp = TensorContract[HabIJF, {1, 2}] // SimplifySparse;
-	temp1 = Contract[Ysff, \[Mu]IJFC, FHelp, {{2, 4}, {5, 6}, {3, 7}}] // SimplifySparse;
-	temp1C = Contract[YsffC, \[Mu]IJF, FHelp, {{2, 4}, {5, 6}, {3, 7}}] // SimplifySparse;
+	temp1 = Contract[Ysff, muIJFC, FHelp, {{2, 4}, {5, 6}, {3, 7}}] // SimplifySparse;
+	temp1C = Contract[YsffC, muIJF, FHelp, {{2, 4}, {5, 6}, {3, 7}}] // SimplifySparse;
 	Contri6 = (D - 2) * (IF1p * IF2p - IF2p * I1p) * (temp1 + temp1C) // SimplifySparse; (*same sign as Contri5, so that the poles cancel against ContriCTFF*)
 
 	(* --- Counterterm contribution --- *)
 	
-	ContriCTS=-1/2 I1p \[Epsilon]^-1*(
-		+ TensorContract[Z\[Lambda]ijk,{{2,3}}]
-		+ 1/2*TensorContract[\[Gamma]ij . \[Lambda]3,{2,3}]
+	ContriCTS=-1/2 I1p eps^-1*(
+		+ TensorContract[Zlamijk,{{2,3}}]
+		+ 1/2*TensorContract[\[Gamma]ij . lam3,{2,3}]
 		)//SparseArray//SimplifySparse;
 		
-	temp1=Contract[ZYsij,\[Mu]IJFC,{{2,4},{3,5}}]//SimplifySparse;
-	temp2=Contract[ZYsijC,\[Mu]IJF,{{2,4},{3,5}}]//SimplifySparse;
-	temp3=Contract[Ysff,Z\[Mu]IJFC,{{2,4},{3,5}}]//SimplifySparse;
-	temp4=Contract[YsffC,Z\[Mu]IJF,{{2,4},{3,5}}]//SimplifySparse;
-	temp5=1/2Contract[\[Gamma]ij,Ysff,\[Mu]IJFC,{{2,3},{4,6},{5,7}}]//SimplifySparse;
-	temp6=1/2Contract[\[Gamma]ij,YsffC,\[Mu]IJF,{{2,3},{4,6},{5,7}}]//SimplifySparse;
-	ContriCTFF=1/2*2*IF1p*\[Epsilon]^-1 (-1)^2*(temp1+temp2+temp3+temp4+temp5+temp6);
+	temp1=Contract[ZYsij,muIJFC,{{2,4},{3,5}}]//SimplifySparse;
+	temp2=Contract[ZYsijC,muIJF,{{2,4},{3,5}}]//SimplifySparse;
+	temp3=Contract[Ysff,ZmuIJFC,{{2,4},{3,5}}]//SimplifySparse;
+	temp4=Contract[YsffC,ZmuIJF,{{2,4},{3,5}}]//SimplifySparse;
+	temp5=1/2Contract[\[Gamma]ij,Ysff,muIJFC,{{2,3},{4,6},{5,7}}]//SimplifySparse;
+	temp6=1/2Contract[\[Gamma]ij,YsffC,muIJF,{{2,3},{4,6},{5,7}}]//SimplifySparse;
+	ContriCTFF=1/2*2*IF1p*eps^-1 (-1)^2*(temp1+temp2+temp3+temp4+temp5+temp6);
 	
 	(* --- Self-Energy correction --- *)
-	(* The field normalization acts on the full LO tadpole, including \[Lambda]1, as for aS3D in ScalarMass2Loop *)
-	ContriF=-(\[Lambda]1+TadPoleLO) . ZijS//SimplifySparse;
+	(* The field normalization acts on the full LO tadpole, including lam1, as for aS3D in ScalarMass2Loop *)
+	ContriF=-(lam1+TadPoleLO) . ZijS//SimplifySparse;
 	
 	(* --- Final result --- *)
 	TotalResult = ContriF-Contri1-Contri2-Contri3-ContriCTS-Contri4-ContriCTFF-Contri5-Contri6-Contri7//Normal; (*minus signs from matching*)
 	TadPoleNLO=Series[
 		TotalResult/.{
-			D->4-2\[Epsilon],
-			\[Epsilon]bp->(1/\[Epsilon]+Lb)^-1,
-			\[Epsilon]b->(1/\[Epsilon]+Lbb)^-1,
-			\[Epsilon]BF->(1/\[Epsilon]+LBF)^-1,
-			\[Epsilon]F->(1/\[Epsilon]+LFF)^-1,
-			\[Epsilon]FB->(1/\[Epsilon]+LFB)^-1,
-			\[Epsilon]bbM->(1/\[Epsilon]+LbbM)^-1
-		},{\[Epsilon],0,0}
-	]/.ReplaceLb//Normal//Coefficient[#,\[Epsilon],0]&//Simplify//FullSimplify;
+			D->4-2eps,
+			epsbp->(1/eps+Lb)^-1,
+			epsb->(1/eps+Lbb)^-1,
+			epsBF->(1/eps+LBF)^-1,
+			epsF->(1/eps+LFF)^-1,
+			epsFB->(1/eps+LFB)^-1,
+			epsbbM->(1/eps+LbbM)^-1
+		},{eps,0,0}
+	]/.ReplaceLb//Normal//Coefficient[#,eps,0]&//Simplify//FullSimplify;
 ];
 
 
@@ -1594,15 +1532,15 @@ TadPole2Loop[] := Module[
 	Calculates counter-terms, and beta functions, in the soft theory.
 *)
 RGRunningHardToSoft[]:=Module[{},
-	VerbosePrint["RG-evolving from \[Mu] to \[Mu]3"];
+	VerbosePrint["RG-evolving from mu4 to mu3"];
 
 (*
 	All calculations are done within the 3d theory.
 	So effective couplings are used
-	The module finds all \[Epsilon] poles to determine the scalar-mass counterterm
+	The module finds all eps poles to determine the scalar-mass counterterm
 *)
 
-	I111=1/(4)1/(16 \[Pi]^2);(*All possible divergences comes from I111, which is the scalar sunset in 3-D*)
+	I111=SunsetDivergence3d;(*All possible divergences comes from I111, which is the scalar sunset in 3-D*)
 
 (*Help Tensors*)
 	VarGauge=GaugeCouplingNames//DeleteDuplicates;
@@ -1614,7 +1552,7 @@ RGRunningHardToSoft[]:=Module[{},
 	gvssVTot=Table[ArrayFlatten[{{gvssHeavy[[a]],0},{0,gvss[[a]]//Normal//ReplaceAll[#,SubGauge]&}}],{a,1,Length[gvssHeavy]}]//SparseArray;
 (* gvssVTot combines temporal vectors with scalars into a single vector-scalar^2 coupling.*)
 
-	VarGauge=Join[\[Lambda]4//Normal//Variables]//DeleteDuplicates;
+	VarGauge=Join[lam4//Normal//Variables]//DeleteDuplicates;
 	SubGauge=Table[c->Symbol[ToString[c]<>ToString["3d"]],{c,VarGauge}];
 (*VarGauge and SubGauge are used because the running happens in the soft theory*)
 
@@ -1623,29 +1561,29 @@ RGRunningHardToSoft[]:=Module[{},
 	they need to be treated on the same footing.
 	There are ns+nv scalars in the soft theory
 	First nv indices are allocated to the temporal scalars
-	The temporal-scalar quartics \[Lambda]AAS complete the soft theory, so that the temporal block
+	The temporal-scalar quartics lamAAS complete the soft theory, so that the temporal block
 	gives the two-loop \[Beta]-functions of the Debye masses
 *)
 
-	\[Lambda]4p=\[Lambda]4//Normal//ReplaceAll[#,SubGauge]&//SparseArray; 
-(*Changes made to \[Lambda]KVLight*)
-	\[Lambda]KVLight=\[Lambda]KVec//SparseArray;(*Temporal vector^2 times scalar^2 couplings*)
-	\[Lambda]KVHeavy=\[Lambda]4p//SparseArray;(*Original scalars*)
-	\[Lambda]4Tot=SymmetrizedArray[{{1,1,1,1}->0},{nv+ns,nv+ns,nv+ns,nv+ns},Symmetric[{1,2,3,4}]]//SparseArray;
-	\[Lambda]4Tot[[1;;nv,1;;nv,nv+1;;ns+nv,nv+1;;ns+nv]]=\[Lambda]KVLight//SparseArray; (*Populates the scalar quartic and ensures the symmetry*)
-	\[Lambda]4Tot[[nv+1;;ns+nv,1;;nv,1;;nv,nv+1;;ns+nv]]=Transpose[Transpose[\[Lambda]KVLight[[1;;nv,1;;nv,1;;ns,1;;ns]],{1,3,2,4}],{2,1,3,4}]//SparseArray;
-	\[Lambda]4Tot[[1;;nv,nv+1;;ns+nv,1;;nv,nv+1;;ns+nv]]=Transpose[\[Lambda]KVLight[[1;;nv,1;;nv,1;;ns,1;;ns]],{1,3,2,4}]//SparseArray;
-	\[Lambda]4Tot[[1;;nv,nv+1;;ns+nv,nv+1;;ns+nv,1;;nv]]=Transpose[Transpose[\[Lambda]KVLight[[1;;nv,1;;nv,1;;ns,1;;ns]],{1,3,2,4}],{1,2,4,3}]//SparseArray;
-	\[Lambda]4Tot[[nv+1;;ns+nv,1;;nv,nv+1;;ns+nv,1;;nv]]=Transpose[Transpose[Transpose[\[Lambda]KVLight[[1;;nv,1;;nv,1;;ns,1;;ns]],{1,3,2,4}],{1,2,4,3}],{2,1,3,4}]//SparseArray;
-	\[Lambda]4Tot[[nv+1;;ns+nv,nv+1;;ns+nv,1;;nv,1;;nv]]=Transpose[Transpose[Transpose[Transpose[\[Lambda]KVLight[[1;;nv,1;;nv,1;;ns,1;;ns]],{1,3,2,4}],{1,2,4,3}],{2,1,3,4}],{1,3,2,4}]//SparseArray;
-	\[Lambda]4Tot[[nv+1;;ns+nv,nv+1;;ns+nv,nv+1;;ns+nv,nv+1;;ns+nv]]=\[Lambda]KVHeavy//SparseArray;
-	\[Lambda]4Tot[[1;;nv,1;;nv,1;;nv,1;;nv]]=\[Lambda]AAS//SparseArray;
+	lam4p=lam4//Normal//ReplaceAll[#,SubGauge]&//SparseArray; 
+(*Changes made to lamKVLight*)
+	lamKVLight=lamKVec//SparseArray;(*Temporal vector^2 times scalar^2 couplings*)
+	lamKVHeavy=lam4p//SparseArray;(*Original scalars*)
+	lam4Tot=SymmetrizedArray[{{1,1,1,1}->0},{nv+ns,nv+ns,nv+ns,nv+ns},Symmetric[{1,2,3,4}]]//SparseArray;
+	lam4Tot[[1;;nv,1;;nv,nv+1;;ns+nv,nv+1;;ns+nv]]=lamKVLight//SparseArray; (*Populates the scalar quartic and ensures the symmetry*)
+	lam4Tot[[nv+1;;ns+nv,1;;nv,1;;nv,nv+1;;ns+nv]]=Transpose[Transpose[lamKVLight[[1;;nv,1;;nv,1;;ns,1;;ns]],{1,3,2,4}],{2,1,3,4}]//SparseArray;
+	lam4Tot[[1;;nv,nv+1;;ns+nv,1;;nv,nv+1;;ns+nv]]=Transpose[lamKVLight[[1;;nv,1;;nv,1;;ns,1;;ns]],{1,3,2,4}]//SparseArray;
+	lam4Tot[[1;;nv,nv+1;;ns+nv,nv+1;;ns+nv,1;;nv]]=Transpose[Transpose[lamKVLight[[1;;nv,1;;nv,1;;ns,1;;ns]],{1,3,2,4}],{1,2,4,3}]//SparseArray;
+	lam4Tot[[nv+1;;ns+nv,1;;nv,nv+1;;ns+nv,1;;nv]]=Transpose[Transpose[Transpose[lamKVLight[[1;;nv,1;;nv,1;;ns,1;;ns]],{1,3,2,4}],{1,2,4,3}],{2,1,3,4}]//SparseArray;
+	lam4Tot[[nv+1;;ns+nv,nv+1;;ns+nv,1;;nv,1;;nv]]=Transpose[Transpose[Transpose[Transpose[lamKVLight[[1;;nv,1;;nv,1;;ns,1;;ns]],{1,3,2,4}],{1,2,4,3}],{2,1,3,4}],{1,3,2,4}]//SparseArray;
+	lam4Tot[[nv+1;;ns+nv,nv+1;;ns+nv,nv+1;;ns+nv,nv+1;;ns+nv]]=lamKVHeavy//SparseArray;
+	lam4Tot[[1;;nv,1;;nv,1;;nv,1;;nv]]=lamAAS//SparseArray;
 
-(*\[Lambda]4ijkl: S^4,\[Lambda]KVec_abij; V^2(S^2), \[Lambda]AAS_abcd: V^4, ab=1,nv ijkl=1, ns*)
-(*\[Lambda]4TotIJKL, I=1,...,nv,....,nv+ns*)
+(*lam4ijkl: S^4,lamKVec_abij; V^2(S^2), lamAAS_abcd: V^4, ab=1,nv ijkl=1, ns*)
+(*lam4TotIJKL, I=1,...,nv,....,nv+ns*)
 
 (*Help tensors*)
-	\[CapitalLambda]\[Lambda]RG =Transpose[Flatten[\[Lambda]4Tot,{3,4}],{3,2,1}] . Flatten[\[Lambda]4Tot,{1,2}]//SparseArray;
+	\[CapitalLambda]lamRG =Transpose[Flatten[lam4Tot,{3,4}],{3,2,1}] . Flatten[lam4Tot,{1,2}]//SparseArray;
 	HabijRG=Transpose[Activate @ TensorContract[
         Inactive[TensorProduct][gvssVTot,gvssVTot], { {3, 5}}],{1,3,2,4}]//SparseArray;
 	HabijVRG=HabijRG+Transpose[HabijRG,{2,1,3,4}]//SparseArray;
@@ -1656,14 +1594,14 @@ RGRunningHardToSoft[]:=Module[{},
 
 (**)
 	Coeff=1/2*2*I111;
-	Contri1RG=Coeff*Flatten[HijRG] . Flatten[\[Lambda]4Tot,{3,4}];
+	Contri1RG=Coeff*Flatten[HijRG] . Flatten[lam4Tot,{3,4}];
 
 	Coeff=-1/4*(-1)*I111;
 	help1=TensorContract[HabijRG,{3,4}]//SparseArray;
 	Contri2RG=Coeff*Flatten[help1] . Flatten[HabijVRG,{1,2}];
 
 	Coeff=1/3!*I111;
-	Contri3RG=Coeff *TensorContract[\[CapitalLambda]\[Lambda]RG,{{2,3}}];
+	Contri3RG=Coeff *TensorContract[\[CapitalLambda]lamRG,{{2,3}}];
 
 
 	HijV=Transpose[Transpose[Flatten[HabijVRG,{1,2}],{2,1,3}],{1,3,2}] . Flatten[HabijVRG,{1,2}];
@@ -1675,35 +1613,35 @@ RGRunningHardToSoft[]:=Module[{},
         
     Contri6RG=(-1)1/4*(20/4 I111) *(-1)*Flatten[GabcdV2] . Flatten[HabijVRG,{1,2}];
 
-	\[Delta]\[Mu]3d=Contri1RG+  Contri2RG+ Contri3RG+ Contri4RG+Contri5RG+ Contri6RG; (*All mass-counterterms in the soft theory*)       
+	\[Delta]mu3d=Contri1RG+  Contri2RG+ Contri3RG+ Contri4RG+Contri5RG+ Contri6RG; (*All mass-counterterms in the soft theory*)       
         
-	\[Beta]\[Mu]3ij=4 \[Delta]\[Mu]3d //Simplify; (*Finds the beta function in the soft theory*)
-	Contri\[Beta]SoftToHard=\[Beta]\[Mu]3ij[[nv+1;;ns+nv,nv+1;;ns+nv]] Log[\[Mu]3/\[Mu]]//SimplifySparse;(*Running from the hard matching scale to the soft scale \[Mu]3*)
+	\[Beta]mu3ij=4 \[Delta]mu3d //Simplify; (*Finds the beta function in the soft theory*)
+	Contri\[Beta]SoftToHard=\[Beta]mu3ij[[nv+1;;ns+nv,nv+1;;ns+nv]] Log[mu3/mu4]//SimplifySparse;(*Running from the hard matching scale to the soft scale mu3*)
 (*
 	The running of the Debye masses vanishes at O(g^4) for the tree-level temporal-scalar couplings,
 	so it is of higher order than the NLO Debye masses and enters only BetaFunctions3DS
 *)
-	Contri\[Beta]DebyeSoftToHard=\[Beta]\[Mu]3ij[[1;;nv,1;;nv]] Log[\[Mu]3/\[Mu]]//SimplifySparse;
+	Contri\[Beta]DebyeSoftToHard=\[Beta]mu3ij[[1;;nv,1;;nv]] Log[mu3/mu4]//SimplifySparse;
 
 
 (*Tadpoles*)
 
-	Contri10RG=1/3!*I111*Activate@TensorContract[Inactive@TensorProduct[\[Lambda]4//SparseArray,\[Lambda]3//SparseArray],{{2,5},{3,6},{4,7}}];
-	Contri11RG=1/2*I111*2Activate@TensorContract[Inactive@TensorProduct[\[Lambda]3//SparseArray,\[CapitalLambda]g//SparseArray],{{2,4},{3,5}}];
+	Contri10RG=1/3!*I111*Activate@TensorContract[Inactive@TensorProduct[lam4//SparseArray,lam3//SparseArray],{{2,5},{3,6},{4,7}}];
+	Contri11RG=1/2*I111*2Activate@TensorContract[Inactive@TensorProduct[lam3//SparseArray,\[CapitalLambda]g//SparseArray],{{2,4},{3,5}}];
 
 	VarTadpole=(Contri10RG+Contri11RG)//Normal//Variables;
 
 (*Help Tensors*)
 	VarGauge=GaugeCouplingNames//DeleteDuplicates;
-	VarQuartic=\[Lambda]4//Normal//Variables//DeleteDuplicates;
-	VarCubic=\[Lambda]3//Normal//Variables//DeleteDuplicates;
+	VarQuartic=lam4//Normal//Variables//DeleteDuplicates;
+	VarCubic=lam3//Normal//Variables//DeleteDuplicates;
 	VarTot=Join[VarGauge,VarQuartic,VarCubic];
 	SubGauge=Table[c->Symbol[ToString[c]<>ToString["3d"]],{c,VarTot}]; 
 
 
-	\[Delta]\[Mu]Tadpole3d=Contri10RG+Contri11RG//Normal//ReplaceAll[#,SubGauge]&//SparseArray;(*Same deal for tadpoles*)
-	\[Beta]\[Mu]Tadpole=4  \[Delta]\[Mu]Tadpole3d //Simplify;
-	ContriTadPoleSoftToHard=\[Beta]\[Mu]Tadpole Log[\[Mu]3/\[Mu]]//SimplifySparse;
+	\[Delta]muTadpole3d=Contri10RG+Contri11RG//Normal//ReplaceAll[#,SubGauge]&//SparseArray;(*Same deal for tadpoles*)
+	\[Beta]muTadpole=4  \[Delta]muTadpole3d //Simplify;
+	ContriTadPoleSoftToHard=\[Beta]muTadpole Log[mu3/mu4]//SimplifySparse;
 
 ];
 
@@ -1740,21 +1678,21 @@ If[CT==False,
 *)
 
 (*Scalar-quartic contribution*)
-	ContriSS=Flatten[\[Mu]ij] . Flatten[\[Lambda]4,{3,4}];
+	ContriSS=Flatten[muij] . Flatten[lam4,{3,4}];
 
 (*Fermion-mass contribution*)
 	Fac=1/(8 \[Pi]^2)*2;
-	Temp1=Contract[Ysff,\[Mu]IJFC,\[Mu]IJFC,Ysff,{{2,4},{3,6},{5,9},{7,10}}]//Normal;
-	Temp1C=Contract[YsffC,\[Mu]IJF,\[Mu]IJF,YsffC,{{2,4},{3,6},{5,9},{7,10}}]//Normal;
+	Temp1=Contract[Ysff,muIJFC,muIJFC,Ysff,{{2,4},{3,6},{5,9},{7,10}}]//Normal;
+	Temp1C=Contract[YsffC,muIJF,muIJF,YsffC,{{2,4},{3,6},{5,9},{7,10}}]//Normal;
 	ContriFFMass1=-1/2Fac*(Temp1+Temp1C)//Simplify//PowerExpand;
 	
-	Temp1=Contract[Ysff,YsffC,\[Mu]IJFC,\[Mu]IJF,{{3,5},{2,7},{6,10},{8,9}}]//Normal;
-	Temp1C=Contract[YsffC,Ysff,\[Mu]IJF,\[Mu]IJFC,{{3,5},{2,7},{6,10},{8,9}}]//Normal;
+	Temp1=Contract[Ysff,YsffC,muIJFC,muIJF,{{3,5},{2,7},{6,10},{8,9}}]//Normal;
+	Temp1C=Contract[YsffC,Ysff,muIJF,muIJFC,{{3,5},{2,7},{6,10},{8,9}}]//Normal;
 	ContriFFMass2=-Fac*(Temp1+Temp1C)//Simplify//PowerExpand;
   
 (*Cubic-coupling contribution*)
-	ContriAnom=-\[Mu]ij . \[Gamma]ij-Transpose[\[Mu]ij . \[Gamma]ij];
-	ContriCubic=1/2*1/(16 \[Pi]^2)*2 Activate@TensorContract[Inactive@TensorProduct[\[Lambda]3,\[Lambda]3],{{2,5},{3,6}}];
+	ContriAnom=-muij . \[Gamma]ij-Transpose[muij . \[Gamma]ij];
+	ContriCubic=1/2*1/(16 \[Pi]^2)*2 Activate@TensorContract[Inactive@TensorProduct[lam3,lam3],{{2,5},{3,6}}];
 	\[Beta]mij=(\[Kappa] ContriSS+ContriAnom+ContriFFMass1+ContriFFMass2+ContriCubic)//SparseArray;
 (*The anomalous-dimension contributions \[Beta]xAnom are kept for CounterTerms4D[FieldRenormalization->True]*)
 	\[Beta]mijAnom=ContriAnom//SparseArray;
@@ -1764,7 +1702,7 @@ If[CT==False,
 *)
 
 (*Scalar-quartic contribution*)
-	ContriSS=\[Kappa](\[CapitalLambda]\[Lambda]+Transpose[\[CapitalLambda]\[Lambda],{1,3,2,4}]+Transpose[\[CapitalLambda]\[Lambda],{1,4,3,2}]);
+	ContriSS=\[Kappa](\[CapitalLambda]lam+Transpose[\[CapitalLambda]lam,{1,3,2,4}]+Transpose[\[CapitalLambda]lam,{1,4,3,2}]);
 
 (*Gauge contribution*)
 	CouplingVV2=2*1/(16 \[Pi]^2)(3 1)/2 ;
@@ -1777,36 +1715,36 @@ If[CT==False,
 	ContriFF=CouplingFF*12Symmetrize[Yhelp,Symmetric[{1,2,3,4}]]//SparseArray;
 
 (*Anomalous dimension contribution*)
-	ContriSETemp=\[Gamma]ij . \[Lambda]4;
+	ContriSETemp=\[Gamma]ij . lam4;
 	ContriAnom=ContriSETemp+Transpose[ContriSETemp,{2,1,3,4}]+Transpose[ContriSETemp,{3,1,2,4}]+Transpose[ContriSETemp,{4,1,2,3}]//Simplify;
 
-	\[Beta]\[Lambda]ijkl= ContriSS+ ContriVV+ ContriFF-  ContriAnom//Simplify//SparseArray;
-	\[Beta]\[Lambda]ijklAnom=-ContriAnom//SparseArray;
-	Z\[Lambda]ijkl=\[Beta]\[Lambda]ijkl/(2 \[Epsilon])//SparseArray;(*renormalization constants*)
+	\[Beta]lamijkl= ContriSS+ ContriVV+ ContriFF-  ContriAnom//Simplify//SparseArray;
+	\[Beta]lamijklAnom=-ContriAnom//SparseArray;
+	Zlamijkl=\[Beta]lamijkl/(2 eps)//SparseArray;(*renormalization constants*)
 
 
 (*
 	Scalar cubic renormalization
 *)
 	SelfEnergySSC=1/(16 \[Pi]^2) ;
-	ContriSSCTemp=Simplify[Activate @ TensorContract[Inactive[TensorProduct][\[Lambda]4,\[Lambda]3], {{3, 5},{4,6}}]];
+	ContriSSCTemp=Simplify[Activate @ TensorContract[Inactive[TensorProduct][lam4,lam3], {{3, 5},{4,6}}]];
 	ContriSSC=SelfEnergySSC(ContriSSCTemp+Transpose[ContriSSCTemp,{1,3,2}]+Transpose[ContriSSCTemp,{3,2,1}]);
 
 
 (*Fermion mass contributions*)
 (*
 	Fermion loop with three Yukawa vertices and one mass insertion. In the term of Tr[(M.M^+)^2]
-	that is cubic in \[Phi], with M=\[Mu]IJF+Ysff.\[Phi], the mass insertion appears on each of the four propagators.
+	that is cubic in \[Phi], with M=muIJF+Ysff.\[Phi], the mass insertion appears on each of the four propagators.
 *)
-	Contri1=Table[Tr[a . \[Mu]IJFC . b . c],{a,Ysff},{b,Ysff},{c,YsffC}];
-	Contri2=Table[Tr[a . \[Mu]IJF . b . c],{a,YsffC},{b,YsffC},{c,Ysff}];
+	Contri1=Table[Tr[a . muIJFC . b . c],{a,Ysff},{b,Ysff},{c,YsffC}];
+	Contri2=Table[Tr[a . muIJF . b . c],{a,YsffC},{b,YsffC},{c,Ysff}];
 	ContriFF=-1/(8 \[Pi]^2) 6 Symmetrize[(Contri1+Contri2),Symmetric[{1,2,3}]]//SparseArray;
 	
 (*Anomalous dimension contribution*)
-	ContriAnom=Simplify[Activate @ TensorContract[Inactive[TensorProduct][\[Gamma]ij,\[Lambda]3], {{2, 3}}]];
-	\[Beta]\[Lambda]ijkAnom=-ContriAnom-Transpose[ContriAnom,{2,1,3}]-Transpose[ContriAnom,{3,2,1}]//SparseArray;
-	\[Beta]\[Lambda]ijk=(\[Beta]\[Lambda]ijkAnom+ContriSSC+ContriFF)//SparseArray//SimplifySparse; (*beta function*)
-	Z\[Lambda]ijk=\[Beta]\[Lambda]ijk/2;(*renormalization constants*)
+	ContriAnom=Simplify[Activate @ TensorContract[Inactive[TensorProduct][\[Gamma]ij,lam3], {{2, 3}}]];
+	\[Beta]lamijkAnom=-ContriAnom-Transpose[ContriAnom,{2,1,3}]-Transpose[ContriAnom,{3,2,1}]//SparseArray;
+	\[Beta]lamijk=(\[Beta]lamijkAnom+ContriSSC+ContriFF)//SparseArray//SimplifySparse; (*beta function*)
+	Zlamijk=\[Beta]lamijk/2;(*renormalization constants*)
 
 (*
 	Vector-field renormalization
@@ -1826,13 +1764,13 @@ If[CT==False,
 (*
 	Gauge-coupling renormalization
 *)
-	ContriSS=-1/(16 \[Pi]^2)1*1/2*Simplify[Transpose[Transpose[Flatten[HabijV,{3,4}],{2,1,3}],{1,3,2}] . Flatten[\[Lambda]4,{1,2}]];
+	ContriSS=-1/(16 \[Pi]^2)1*1/2*Simplify[Transpose[Transpose[Flatten[HabijV,{3,4}],{2,1,3}],{1,3,2}] . Flatten[lam4,{1,2}]];
 	CouplingSV= 1/(16 \[Pi]^2)*3/4*1 ;
 	ContriSVTemp=Transpose[Transpose[Flatten[HabijV,{2,4}],{2,1,3}],{1,3,2}] . Flatten[HabijV,{2,3}]//Transpose[#,{1,3,2,4}]&;
 	ContriSV=CouplingSV Simplify[(ContriSVTemp+Transpose[ContriSVTemp,{2,1,3,4}])];
 
 	CouplingSSS=1/(16 \[Pi]^2)1/2 1;
-	ContriSSS=2*CouplingSSS*Simplify[Transpose[Transpose[Flatten[Habij,{3,4}],{2,1,3}],{1,3,2}] . Flatten[\[Lambda]4,{1,2}]];
+	ContriSSS=2*CouplingSSS*Simplify[Transpose[Transpose[Flatten[Habij,{3,4}],{2,1,3}],{1,3,2}] . Flatten[lam4,{1,2}]];
 
 	CouplingVVV= 1/(16 \[Pi]^2)*(-1)/2(9/2 1) ;
 	ContriVVV=CouplingVVV*Simplify[Transpose[Transpose[Flatten[GabcdV,{2,4}],{2,1,3}],{1,3,2}] . Flatten[HabijV,{1,2}]];
@@ -1865,7 +1803,7 @@ If[CT==False,
 	ContriSEVector=-\[Gamma]ab . HabijV-Transpose[\[Gamma]ab . Transpose[HabijV,{2,1,3,4}],{2,1,3,4}]//SparseArray//Simplify;
 
 	\[Beta]vvss=-2(ContriSS+   ContriSV+ContriSSS+  ContriVVV+ ContriVVVV+ ContriFFFF+ContriFFFF2+   -1/2( ContriSEScalar   + ContriSEVector))//Simplify//SparseArray; (*beta function*)
-	Zgvvss=\[Beta]vvss/(2 \[Epsilon])//SparseArray;(*renormalization constant*)
+	Zgvvss=\[Beta]vvss/(2 eps)//SparseArray;(*renormalization constant*)
 
 (*
 	Ghost-field renormalization
@@ -1883,7 +1821,7 @@ If[CT==False,
 
 	\[Beta]gvvv=-ContriAnomVV//SparseArray; (*beta functions*)
 	Zgvvv=\[Beta]gvvv/2//SparseArray; (*Renormalization constants*)
-(*For some renormalization constants I decided in my infinite wisdom to not include \[Epsilon] poles. Should probably make the same convention everywhere.*)
+(*For some renormalization constants I decided in my infinite wisdom to not include eps poles. Should probably make the same convention everywhere.*)
 (*I blame this inconsistency on flouridation of water.*)
 
 (*
@@ -1924,7 +1862,7 @@ If[CT==False,
 	ZYsijC=\[Beta]YsijC/2//SparseArray;
 
 
-	Zij=2*\[Gamma]ij/\[Epsilon] /2//SparseArray  ;
+	Zij=2*\[Gamma]ij/eps /2//SparseArray  ;
 	Zmij=\[Beta]mij/2//SparseArray;
 
 (*
@@ -1942,56 +1880,56 @@ If[CT==False,
 	Fermion-mass renormalization.
 *)
 	YtempMass= Simplify[ Activate @ TensorContract[
-        Inactive[TensorProduct][Ysff,\[Mu]IJFC], {{3, 5}}]];
+        Inactive[TensorProduct][Ysff,muIJFC], {{3, 5}}]];
 	ContriSS=2/(16 \[Pi]^2)Simplify[ Activate @ TensorContract[
         Inactive[TensorProduct][YtempMass,Ysff], {{1,4},{3,5}}]];
 	ContriVV=6/(16 \[Pi]^2)Simplify[ Activate @ TensorContract[
-        Inactive[TensorProduct][\[Mu]IJF,gvff,gvff], {{3,6},{1,5},{2,8}}]];
+        Inactive[TensorProduct][muIJF,gvff,gvff], {{3,6},{1,5},{2,8}}]];
         
-        (*Anomalous-dimension contribution, \[Mu]IJF.\[Gamma]IJF+Transpose[\[Gamma]IJF].\[Mu]IJF, in the same order as for Ysff*)
-	ContriAnomFF=-(\[Mu]IJF . \[Gamma]IJF+Transpose[\[Mu]IJF . \[Gamma]IJF]);
+        (*Anomalous-dimension contribution, muIJF.\[Gamma]IJF+Transpose[\[Gamma]IJF].muIJF, in the same order as for Ysff*)
+	ContriAnomFF=-(muIJF . \[Gamma]IJF+Transpose[muIJF . \[Gamma]IJF]);
 	
-	\[Beta]\[Mu]IJF=   ContriSS+  ContriVV+  ContriAnomFF//Simplify//SparseArray; (*beta function*)
-	\[Beta]\[Mu]IJFAnom=ContriAnomFF//SparseArray;
-	Z\[Mu]IJF=\[Beta]\[Mu]IJF/2//SparseArray;(*renormalization constant*)
+	\[Beta]muIJF=   ContriSS+  ContriVV+  ContriAnomFF//Simplify//SparseArray; (*beta function*)
+	\[Beta]muIJFAnom=ContriAnomFF//SparseArray;
+	ZmuIJF=\[Beta]muIJF/2//SparseArray;(*renormalization constant*)
 
 
 (*
 	Conjugated Fermion-mass renormalization.
-	Since \[Gamma]IJF is Hermitian, \[Beta]\[Mu]IJFC is the complex conjugate of \[Beta]\[Mu]IJF.
+	Since \[Gamma]IJF is Hermitian, \[Beta]muIJFC is the complex conjugate of \[Beta]muIJF.
 *)
 	YtempMass= Simplify[ Activate @ TensorContract[
-        Inactive[TensorProduct][YsffC,\[Mu]IJF], {{3, 5}}]];
+        Inactive[TensorProduct][YsffC,muIJF], {{3, 5}}]];
 	ContriSS=2/(16 \[Pi]^2)Simplify[ Activate @ TensorContract[
         Inactive[TensorProduct][YtempMass,YsffC], {{1,4},{3,5}}]];
 	ContriVV=6/(16 \[Pi]^2)Simplify[ Activate @ TensorContract[
-        Inactive[TensorProduct][\[Mu]IJFC,gvff,gvff], {{3,6},{1,5},{2,8}}]];
-	ContriAnomFF=-(\[Gamma]IJF . \[Mu]IJFC+Transpose[\[Gamma]IJF . \[Mu]IJFC]);
+        Inactive[TensorProduct][muIJFC,gvff,gvff], {{3,6},{1,5},{2,8}}]];
+	ContriAnomFF=-(\[Gamma]IJF . muIJFC+Transpose[\[Gamma]IJF . muIJFC]);
 
-	\[Beta]\[Mu]IJFC=   ContriSS+  ContriVV+  ContriAnomFF//Simplify//SparseArray;
-	Z\[Mu]IJFC=\[Beta]\[Mu]IJFC/2//SparseArray;
+	\[Beta]muIJFC=   ContriSS+  ContriVV+  ContriAnomFF//Simplify//SparseArray;
+	ZmuIJFC=\[Beta]muIJFC/2//SparseArray;
 
 
 (*
 	Tadpole renormalization
 *)
-	Contri4=1/2*I2p*Activate@TensorContract[Inactive@TensorProduct[\[Lambda]3,\[Mu]ij],{{2,4},{3,5}}];
+	Contri4=1/2*I2p*Activate@TensorContract[Inactive@TensorProduct[lam3,muij],{{2,4},{3,5}}];
 
 
 (*Fermion Mass insertion*)
-	Yhelp1=\[Mu]IJF . \[Mu]IJFC . \[Mu]IJF;
-	Yhelp2=\[Mu]IJFC . \[Mu]IJF . \[Mu]IJFC;
+	Yhelp1=muIJF . muIJFC . muIJF;
+	Yhelp2=muIJFC . muIJF . muIJFC;
 	Contri71=Activate@TensorContract[Inactive@TensorProduct[YsffC,Yhelp1],{{2,4},{3,5}}];
 	Contri72=Activate@TensorContract[Inactive@TensorProduct[Ysff,Yhelp2],{{2,4},{3,5}}];
 	ContriF=-1/(16 \[Pi]^2)*2(Contri71+Contri72);
 
-	ContriS=1/(16 \[Pi]^2)*Activate@TensorContract[Inactive@TensorProduct[\[Lambda]3,\[Mu]ij],{{2,4},{3,5}}];
+	ContriS=1/(16 \[Pi]^2)*Activate@TensorContract[Inactive@TensorProduct[lam3,muij],{{2,4},{3,5}}];
 	
-	ContriAnom=-\[Lambda]1 . \[Gamma]ij;
+	ContriAnom=-lam1 . \[Gamma]ij;
 
-	\[Beta]\[Lambda]1=ContriF+ContriS+ContriAnom;
-	\[Beta]\[Lambda]1Anom=ContriAnom;
-	Z\[Lambda]1=\[Beta]\[Lambda]1/2;
+	\[Beta]lam1=ContriF+ContriS+ContriAnom;
+	\[Beta]lam1Anom=ContriAnom;
+	Zlam1=\[Beta]lam1/2;
 
 	If[mode>=3,
 (*Effective higher-order couplings*)
@@ -1999,20 +1937,20 @@ If[CT==False,
 (*Scalar sextic operator*)
 (*Scalar loops*)
 
-(*Scalar loop with mixed \[Lambda]6 and \[Lambda]4 vertices*)
-		\[CapitalLambda]\[Lambda]6tot=Flatten[\[Lambda]4,{{1},{2},{3,4}}] . Flatten[\[Lambda]6,{1,2}]//SimplifySparse;
+(*Scalar loop with mixed lam6 and lam4 vertices*)
+		\[CapitalLambda]lam6tot=Flatten[lam4,{{1},{2},{3,4}}] . Flatten[lam6,{1,2}]//SimplifySparse;
 		Prefac=15/2*1/(16 \[Pi]^2);
-		SymHelp=Symmetrize[\[CapitalLambda]\[Lambda]6tot,Symmetric]//SparseArray;
+		SymHelp=Symmetrize[\[CapitalLambda]lam6tot,Symmetric]//SparseArray;
 		ContriSSS=Prefac*SymHelp;
 
 (*Field-strength renormalization*)
 
-		ContriSETemp=-1/2*\[Gamma]ij . \[Lambda]6;
+		ContriSETemp=-1/2*\[Gamma]ij . lam6;
 		ContriSE=6*Symmetrize[ContriSETemp,Symmetric]//SparseArray//SimplifySparse;
 
-(*As for \[Beta]\[Lambda]ijkl: 2 ContriSE is minus the sum of \[Gamma]ij over the six legs, and 2 ContriSSS the scalar loop*)
-		\[Beta]\[Lambda]6ijklnm=2*(ContriSE+ContriSSS)//SparseArray;
-		\[Beta]\[Lambda]6ijklnmAnom=2*ContriSE//SparseArray;
+(*As for \[Beta]lamijkl: 2 ContriSE is minus the sum of \[Gamma]ij over the six legs, and 2 ContriSSS the scalar loop*)
+		\[Beta]lam6ijklnm=2*(ContriSE+ContriSSS)//SparseArray;
+		\[Beta]lam6ijklnmAnom=2*ContriSE//SparseArray;
 	];
 
 
@@ -2065,15 +2003,15 @@ IdentifyTensorsDRalgo[]:=Module[
 		(* --- Scalar quartic couplings --- *)
 		VerbosePrint["Calculating Quartic Tensor"];
 		
-		couplingTensor = Tfac(\[Lambda]4+\[Lambda]3D);
+		couplingTensor = Tfac(lam4+lam3D);
 		HelpList=DeleteDuplicates@Flatten[couplingTensor]//Sort//Simplify;
-		HelpVarMod=RelationsBVariables3[HelpList]//ReplaceAll[#,\[Lambda]VL[v1_]->\[Lambda][v1]]&;
+		HelpVarMod=RelationsBVariables3[HelpList]//ReplaceAll[#,lamVL[v1_]->lam[v1]]&;
 		HelpListCleaned=CleanedList[HelpList];
 		HelpSolveQuartic=Table[{HelpListCleaned[[a]]->HelpVarMod[[a]]},{a,1,HelpListCleaned//Length}]//Flatten//Simplify;
-		\[Lambda]3DS=couplingTensor//SimplifySparse//Normal//ReplaceAll[#,HelpSolveQuartic]&//SparseArray;
+		lam3DS=couplingTensor//SimplifySparse//Normal//ReplaceAll[#,HelpSolveQuartic]&//SparseArray;
 
 
-		If[Length[SparseArray[\[Lambda]3DS]["NonzeroValues"]]!=Length[SparseArray[\[Lambda]4]["NonzeroValues"]],
+		If[Length[SparseArray[lam3DS]["NonzeroValues"]]!=Length[SparseArray[lam4]["NonzeroValues"]],
 			Print["Detected 1-loop Scalar Quartics not defined at tree-level"];
 			Print["Please Check if you defined all couplings allowed by symmetry"];
 		];
@@ -2081,11 +2019,11 @@ IdentifyTensorsDRalgo[]:=Module[
 		(* --- Scalar cubic couplings --- *)
 		VerbosePrint["Calculating Cubic Tensor "];
 		
-		couplingTensor = Tfac^(1/2)*(\[Lambda]3CS+\[Lambda]3);
+		couplingTensor = Tfac^(1/2)*(lam3CS+lam3);
 		{HelpListCleaned, HelpVar, HelpVarMod, HelpSolveCubicS} = ProcessCoupling[couplingTensor, cSS];	
-		\[Lambda]3CSRed=couplingTensor//Normal//Simplify//FullSimplify//ReplaceAll[#,HelpSolveCubicS]&//SparseArray;
+		lam3CSRed=couplingTensor//Normal//Simplify//FullSimplify//ReplaceAll[#,HelpSolveCubicS]&//SparseArray;
 
-		If[Length[SparseArray[\[Lambda]3CSRed]["NonzeroValues"]]!=Length[SparseArray[\[Lambda]3]["NonzeroValues"]],
+		If[Length[SparseArray[lam3CSRed]["NonzeroValues"]]!=Length[SparseArray[lam3]["NonzeroValues"]],
 			Print["Detected 1-loop Scalar Cubic not defined at tree-level"];
 			Print["Please Check if you defined all couplings allowed by symmetry"];
 		];
@@ -2099,32 +2037,32 @@ IdentifyTensorsDRalgo[]:=Module[
 		If[Length[Delete[HelpList,1]]<1,(*Fix for when the tensor is empty*)
 			HelpSolveVecT={};
 		,
-			HelpVarMod=RelationsBVariables3[HelpList]//ReplaceAll[#,\[Lambda]VL[v1_]->\[Lambda]VT[v1]]&;
+			HelpVarMod=RelationsBVariables3[HelpList]//ReplaceAll[#,lamVL[v1_]->lamVT[v1]]&;
 			HelpSolveVecT=Table[{HelpListCleaned[[a]]->HelpVarMod[[a]]},{a,1,HelpListCleaned//Length}]//Flatten//Simplify;
 		];
-		\[Lambda]KVecT=couplingTensor//SimplifySparse//Normal//ReplaceAll[#,HelpSolveVecT]&//SparseArray;
+		lamKVecT=couplingTensor//SimplifySparse//Normal//ReplaceAll[#,HelpSolveVecT]&//SparseArray;
 
 		(* --- Temporal-Scalar quartics --- *)
 		VerbosePrint["Calculating Temporal-Scalar Quartics "];
 		
-		couplingTensor=Tfac*\[Lambda]AA;
+		couplingTensor=Tfac*lamAA;
 		HelpList=DeleteDuplicates@SparseArray[Flatten@Simplify[couplingTensor]]//Sort//FullSimplify;
 		HelpListCleaned=CleanedList[HelpList];
-		HelpVar=Table[\[Lambda]VLL[a],{a,1,Rest[HelpList]//Length}];
+		HelpVar=Table[lamVLL[a],{a,1,Rest[HelpList]//Length}];
 		If[Length[HelpVar]<1,
-			HelpVar=\[Lambda]VLL[1];
+			HelpVar=lamVLL[1];
 			HelpVarMod=RelationsBVariables[HelpList,HelpVar];
 			HelpSolveQuarticL={HelpList[[1]]->HelpVarMod}//Flatten;
 		,
-			HelpVarMod=RelationsBVariables3[HelpList]//ReplaceAll[#,\[Lambda]VL[v1_]->\[Lambda]VLL[v1]]&;
+			HelpVarMod=RelationsBVariables3[HelpList]//ReplaceAll[#,lamVL[v1_]->lamVLL[v1]]&;
 			HelpSolveQuarticL=Table[{HelpListCleaned[[a]]->HelpVarMod[[a]]},{a,1,HelpListCleaned//Length}]//Flatten//Simplify;
 		];
-		\[Lambda]AAS=couplingTensor//Normal//FullSimplify//ReplaceAll[#,HelpSolveQuarticL]&//SparseArray;
+		lamAAS=couplingTensor//Normal//FullSimplify//ReplaceAll[#,HelpSolveQuarticL]&//SparseArray;
 
 		(* --- Temporal-Scalar/scalar cross cubic couplings --- *)
 		couplingTensor = Sqrt[Tfac]*GvvsL;
-		{HelpListCleaned, HelpVar, HelpVarMod, HelpSolveCubicL} = ProcessCoupling[couplingTensor, \[Lambda]VVSL];	
-		\[Lambda]vvsLS=couplingTensor//Normal//Simplify//FullSimplify//ReplaceAll[#,HelpSolveCubicL]&//SparseArray;
+		{HelpListCleaned, HelpVar, HelpVarMod, HelpSolveCubicL} = ProcessCoupling[couplingTensor, lamVVSL];	
+		lamvvsLS=couplingTensor//Normal//Simplify//FullSimplify//ReplaceAll[#,HelpSolveCubicL]&//SparseArray;
 	];
 		
 	(* --- Temporal-scalar/scalar cross couplings --- *)	
@@ -2140,17 +2078,17 @@ IdentifyTensorsDRalgo[]:=Module[
 		HelpVarMod=RelationsBVariables3[HelpList];
 		HelpSolveVecL=Table[{HelpListCleaned[[a]]->HelpVarMod[[a]]},{a,1,HelpListCleaned//Length}]//Flatten//Simplify;
 	];
-	\[Lambda]KVec=couplingTensor//Normal//Simplify//ReplaceAll[#,HelpSolveVecL]&//SparseArray;
+	lamKVec=couplingTensor//Normal//Simplify//ReplaceAll[#,HelpSolveVecL]&//SparseArray;
 			
 	If[mode>=3,
 		(* --- Scalar sextic couplings --- *)
 		VerbosePrint["Calculating Sextic Tensor"];
 		
-		couplingTensor = Tfac^2*(\[Lambda]6+\[Lambda]6D);
-		{HelpListCleaned, HelpVar, HelpVarMod, HelpSolveSextic} = ProcessCoupling[couplingTensor, \[Lambda]6d];	
-		\[Lambda]6DS=couplingTensor//Normal//Simplify//ReplaceAll[#,HelpSolveSextic]&//SparseArray;
+		couplingTensor = Tfac^2*(lam6+lam6D);
+		{HelpListCleaned, HelpVar, HelpVarMod, HelpSolveSextic} = ProcessCoupling[couplingTensor, lam6d];	
+		lam6DS=couplingTensor//Normal//Simplify//ReplaceAll[#,HelpSolveSextic]&//SparseArray;
 
-		If[Length[SparseArray[\[Lambda]6DS]["NonzeroValues"]]!=Length[SparseArray[\[Lambda]6]["NonzeroValues"]],
+		If[Length[SparseArray[lam6DS]["NonzeroValues"]]!=Length[SparseArray[lam6]["NonzeroValues"]],
 			Print["Detected 1-loop Scalar Sextic not defined at tree-level"];
 			Print["Please Check if you defined all couplings allowed by symmetry"];
 		];
@@ -2158,37 +2096,37 @@ IdentifyTensorsDRalgo[]:=Module[
 	
 	(* --- Debye masses --- *)
 	If[mode>=2,
-		couplingTensor = xLO*aV3D+ xNLO*\[Mu]VabNLO;
+		couplingTensor = xLO*aV3D+ xNLO*muVabNLO;
 	,
 		couplingTensor = xLO*aV3D;
 	];
-	{HelpListCleaned, HelpVar, HelpVarMod, HelpSolveVectorMass} = ProcessCoupling[couplingTensor, \[Mu]ijV];	
-	\[Mu]ijVNLO=couplingTensor//Normal//Simplify//FullSimplify//ReplaceAll[#,HelpSolveVectorMass]&//SparseArray;
+	{HelpListCleaned, HelpVar, HelpVarMod, HelpSolveVectorMass} = ProcessCoupling[couplingTensor, muijV];	
+	muijVNLO=couplingTensor//Normal//Simplify//FullSimplify//ReplaceAll[#,HelpSolveVectorMass]&//SparseArray;
 
-	If[DiagonalMatrixQAE[Normal[\[Mu]ijVNLO]]==False,
+	If[DiagonalMatrixQAE[Normal[muijVNLO]]==False,
 		Print["Off-Diagonal Debye Matrices Detected"]
 	];
 
 	(* --- Scalar masses --- *)
 	If[mode>=2,
 		RGRunningHardToSoft[]; (*Runs from the hard to the soft scale in the effective theory*)
-		couplingTensor = xLO*aS3D+xNLO*(\[Mu]SijNLO+rgFac*Contri\[Beta]SoftToHard);
+		couplingTensor = xLO*aS3D+xNLO*(muSijNLO+rgFac*Contri\[Beta]SoftToHard);
 	,
 		couplingTensor = xLO*aS3D;
 	];
-	{HelpListCleaned, HelpVar, HelpVarMod, HelpSolveMass} = ProcessCoupling[couplingTensor, \[Mu]ijS];	
-	\[Mu]ijSNLO=couplingTensor//Normal//Simplify//ReplaceAll[#,HelpSolveMass]&//SparseArray;
+	{HelpListCleaned, HelpVar, HelpVarMod, HelpSolveMass} = ProcessCoupling[couplingTensor, muijS];	
+	muijSNLO=couplingTensor//Normal//Simplify//ReplaceAll[#,HelpSolveMass]&//SparseArray;
 
 	(* --- Scalar tadpoles --- *)
 	If[mode>=2,
-		couplingTensor = xLO*Tfac^(-1/2)(\[Lambda]1+TadPoleLO)+xNLO(TadPoleNLO*Tfac^(-1/2) +rgFac*ContriTadPoleSoftToHard);
+		couplingTensor = xLO*Tfac^(-1/2)(lam1+TadPoleLO)+xNLO(TadPoleNLO*Tfac^(-1/2) +rgFac*ContriTadPoleSoftToHard);
 	,
-		couplingTensor = xLO*Tfac^(-1/2)(\[Lambda]1+TadPoleLO);
+		couplingTensor = xLO*Tfac^(-1/2)(lam1+TadPoleLO);
 	];
 	{HelpListCleaned, HelpVar, HelpVarMod, HelpSolveTadpole} = ProcessCoupling[couplingTensor, dS];	
 	TadPoleS=couplingTensor//Normal//Simplify//ReplaceAll[#,HelpSolveTadpole]&//SparseArray;
 
-	If[Length[SparseArray[TadPoleS]["NonzeroValues"]]!=Length[SparseArray[\[Lambda]1]["NonzeroValues"]],
+	If[Length[SparseArray[TadPoleS]["NonzeroValues"]]!=Length[SparseArray[lam1]["NonzeroValues"]],
 		Print["Detected 1-loop Scalar Tadpoles not defined at tree-level"];
 		Print["Please Check if you defined all couplings allowed by symmetry"];
 	];
@@ -2225,11 +2163,11 @@ PrintCouplingsEffective[]:=Module[{},
 	VerbosePrint["Printing higher-dimension couplings"];
 
 (*Scalar Sextic*)
-	VarGauge=Join[\[Lambda]6//Normal//Variables]//DeleteDuplicates;
+	VarGauge=Join[lam6//Normal//Variables]//DeleteDuplicates;
 	SubGauge=Table[c->Symbol[ToString[c]<>ToString["3d"]],{c,VarGauge}];
-	\[Lambda]6p=\[Lambda]6//Normal//ReplaceAll[#,SubGauge]&;
-	SolVar=\[Lambda]6DS-\[Lambda]6p//Normal;
-	SexticVar=\[Lambda]6p//Normal//Variables;
+	lam6p=lam6//Normal//ReplaceAll[#,SubGauge]&;
+	SolVar=lam6DS-lam6p//Normal;
+	SexticVar=lam6p//Normal//Variables;
 	ResScalp=Reduce[SolVar==0,SexticVar]//ToRules[#]&;
 	SolveTemp=SexticVar/.ResScalp;
 	ResScal=Table[{SexticVar[[i]]->SolveTemp[[i]]},{i,1,Length@SexticVar}]//Flatten[#,1]&//ReplaceAll[#,IdentMatEff]&//Simplify;
@@ -2264,9 +2202,9 @@ PrintCouplings[]:=Module[
 	(*VarGauge denotes all possible vector couplings*)
 
 	(* --- Gauge couplings --- *)
-	If[mode==0,\[Lambda]KVecT=Tfac HabijV]; (*If mode=0 no couplings are calculated*)
+	If[mode==0,lamKVecT=Tfac HabijV]; (*If mode=0 no couplings are calculated*)
 	
-	A1=TensorContract[\[Lambda]KVecT,{{3,4}}]//Normal; 
+	A1=TensorContract[lamKVecT,{{3,4}}]//Normal; 
 	A2=TensorContract[HabijV,{{3,4}}]//Normal//ReplaceAll[#,SubGauge]&;
 	
 	(* --- Trick to avoid problems when kinetic mixing --- *)
@@ -2290,13 +2228,13 @@ PrintCouplings[]:=Module[
 	GabVLoop=TensorContract[GabcdTemp,{{2,3}}]//Normal;
 
 	HelpList=DeleteDuplicates@Flatten@FullSimplify[T (GabVTree+GabVLoop) ]//Sort;
-	HelpVar=Table[ \[Lambda]VNA[a],{a,1,Rest[HelpList]//Length}];
+	HelpVar=Table[ lamVNA[a],{a,1,Rest[HelpList]//Length}];
 	HelpVarMod=RelationsBVariables[HelpList,HelpVar];
 	HelpSolveNA=Table[{Rest[HelpList][[a]]->ReplaceAll[HelpVarMod[[a]],SubGauge]},{a,1,Rest[HelpList]//Length}]//Flatten;
-	\[Lambda]VecNA=Tfac (GabVTree+GabVLoop)//Normal//FullSimplify//ReplaceAll[#,HelpSolveNA]&//SparseArray;
+	lamVecNA=Tfac (GabVTree+GabVLoop)//Normal//FullSimplify//ReplaceAll[#,HelpSolveNA]&//SparseArray;
 	IdentMatNA=List/@Join[HelpSolveNA]/.{b_->a_}:>a->b//Flatten[#,1]&;
 
-	A1=\[Lambda]VecNA//Normal;
+	A1=lamVecNA//Normal;
 	A2=GabVTree//Normal//ReplaceAll[#,SubGauge]&;
 	Var3D=A2//Variables;
 	RepVar3D=#->Sqrt[#]&/@Var3D;
@@ -2307,17 +2245,17 @@ PrintCouplings[]:=Module[
 
 	(* --- Scalar quartics --- *)
 	(*If mode=0 no couplings are calculated*)
-	VarGauge=Join[\[Lambda]4//Normal//Variables]//DeleteDuplicates;
+	VarGauge=Join[lam4//Normal//Variables]//DeleteDuplicates;
 	SubGauge=Table[c->Symbol[ToString[c]<>ToString["3d"]],{c,VarGauge}];
 	
 	If[mode==0,
-			\[Lambda]4p= \[Lambda]4//Normal//ReplaceAll[#,SubGauge]&;
-			SolVar=Tfac*\[Lambda]4-\[Lambda]4p//Normal;
-			QuarticVar=\[Lambda]4p//Normal//Variables;
+			lam4p= lam4//Normal//ReplaceAll[#,SubGauge]&;
+			SolVar=Tfac*lam4-lam4p//Normal;
+			QuarticVar=lam4p//Normal//Variables;
 			ResQuartic=Solve[SolVar==0,QuarticVar]/.TensorIdentification//Flatten[#,1]&;
 	,
-			SolVar=SparseArray[\[Lambda]3DS-\[Lambda]4]["NonzeroValues"]//DeleteDuplicates//ReplaceAll[#,SubGauge]&;
-			QuarticVar=\[Lambda]4//Normal//ReplaceAll[#,SubGauge]&//Variables;
+			SolVar=SparseArray[lam3DS-lam4]["NonzeroValues"]//DeleteDuplicates//ReplaceAll[#,SubGauge]&;
+			QuarticVar=lam4//Normal//ReplaceAll[#,SubGauge]&//Variables;
 			ResScalp=Reduce[SolVar==0,QuarticVar]//ToRules[#]&;
 			SolveTemp=QuarticVar/.ResScalp;
 			ResQuartic=Table[{QuarticVar[[i]]->SolveTemp[[i]]},{i,1,Length@QuarticVar}]//Flatten[#,1]&//ReplaceAll[#,TensorIdentification]&//Simplify;
@@ -2326,13 +2264,13 @@ PrintCouplings[]:=Module[
 
 	(* --- Scalar Cubics --- *)
 
-	VarGauge=Join[\[Lambda]3//Normal//Variables]//DeleteDuplicates;
+	VarGauge=Join[lam3//Normal//Variables]//DeleteDuplicates;
 	SubGauge=Table[c->Symbol[ToString[c]<>ToString["3d"]],{c,VarGauge}];
 	
-	If[mode==0,\[Lambda]3CSRed=Tfac^(1/2) \[Lambda]3]; (*If mode=0 no couplings are calculated*)
-	\[Lambda]3p=\[Lambda]3//Normal//ReplaceAll[#,SubGauge]&;
-	SolVar=\[Lambda]3CSRed-\[Lambda]3p//Normal;
-	CubicVar=\[Lambda]3p//Normal//Variables;
+	If[mode==0,lam3CSRed=Tfac^(1/2) lam3]; (*If mode=0 no couplings are calculated*)
+	lam3p=lam3//Normal//ReplaceAll[#,SubGauge]&;
+	SolVar=lam3CSRed-lam3p//Normal;
+	CubicVar=lam3p//Normal//Variables;
 	ResCubic=Solve[SolVar==0,CubicVar]/.TensorIdentification//Flatten[#,1]&;
 
 	(* --- Printing Result --- *)
@@ -2426,7 +2364,7 @@ PrintingRoutine[Tensor4D_, TensorIdentity_, optP_, tagP_: ""] := Module[
 *)
 PrintDebyeMass[optP_:"All"] := Module[{opt = optP},
 	VerbosePrint["Printing Debye Masses"];
-	PrintingRoutine[\[Mu]abDef, \[Mu]ijVNLO, opt]
+	PrintingRoutine[muabDef, muijVNLO, opt]
 	]
 
 
@@ -2440,7 +2378,7 @@ PrintDebyeMass[optP_:"All"] := Module[{opt = optP},
 *)
 PrintScalarMass[optP_: "All"] := Module[{opt = optP},
 	VerbosePrint["Printing Scalar Masses"];
-	PrintingRoutine[\[Mu]ij, \[Mu]ijSNLO, opt, "3d"]
+	PrintingRoutine[muij, muijSNLO, opt, "3d"]
 	]
 
 
@@ -2454,7 +2392,7 @@ PrintScalarMass[optP_: "All"] := Module[{opt = optP},
 *)
 PrintTadpoles[optP_: "All"] := Module[{opt = optP},
 	VerbosePrint["Printing Scalar Tadpoles"];
-	PrintingRoutine[\[Lambda]1, TadPoleS, opt, "3d"]
+	PrintingRoutine[lam1, TadPoleS, opt, "3d"]
 	]
 
 
@@ -2507,11 +2445,11 @@ AnomDim4D[ParticleI_,ComponentsI_]:=Module[
 
 
 (*
-	Finds the \[Epsilon]^0 coefficient of an expression
+	Finds the eps^0 coefficient of an expression
 *)
 SerEnergyHelp[optP_]:=Module[{opt=optP},
-	HelpSE=Series[opt/.D->4-2\[Epsilon]/.\[Epsilon]bp->(1/\[Epsilon]+Lb)^-1/.\[Epsilon]b->(1/\[Epsilon]+Lbb)^-1/.\[Epsilon]BF->(1/\[Epsilon]+LBF)^-1/.\[Epsilon]F->(1/\[Epsilon]+LFF)^-1/.\[Epsilon]FB->(1/\[Epsilon]+LFB)^-1/.\[Epsilon]bbM->(1/\[Epsilon]+LbbM)^-1,{\[Epsilon],0,0}]//Normal;
-	Return[Coefficient[HelpSE//Normal//Expand,\[Epsilon],0]]
+	HelpSE=Series[opt/.D->4-2eps/.epsbp->(1/eps+Lb)^-1/.epsb->(1/eps+Lbb)^-1/.epsBF->(1/eps+LBF)^-1/.epsF->(1/eps+LFF)^-1/.epsFB->(1/eps+LFB)^-1/.epsbbM->(1/eps+LbbM)^-1,{eps,0,0}]//Normal;
+	Return[Coefficient[HelpSE//Normal//Expand,eps,0]]
 ];
 
 
@@ -2532,26 +2470,26 @@ PrintTemporalScalarCouplings[]:=Module[
 	VerbosePrint["Printing Temporal Vector Couplings"];
 	If[verbose,
 		Print[
-			"\[Lambda]VLL[a] are \!\(\*SuperscriptBox[\(V\), \(4\)]\) Couplings, ",
-			"\[Lambda]vvsLS[a] are \!\(\*SuperscriptBox[\(V\), \(2\)]\)S Couplings, ",
-			"\[Lambda]VL[a] are \!\(\*SuperscriptBox[\(V\), \(2\)]\)\!\(\*SuperscriptBox[\(S\), \(2\)]\) Couplings."
+			"lamVLL[a] are \!\(\*SuperscriptBox[\(V\), \(4\)]\) Couplings, ",
+			"lamVVSL[a] are \!\(\*SuperscriptBox[\(V\), \(2\)]\)S Couplings, ",
+			"lamVL[a] are \!\(\*SuperscriptBox[\(V\), \(2\)]\)\!\(\*SuperscriptBox[\(S\), \(2\)]\) Couplings."
 		];
 	];
 
 	(* Quartic: V^4 *)
-	If[mode==0,\[Lambda]AAS=EmptyArray[{nv,nv,nv,nv}]]; (*If mode=0 no couplings are calculated*)
-	quarticVars=\[Lambda]AAS//Normal//Variables;
+	If[mode==0,lamAAS=EmptyArray[{nv,nv,nv,nv}]]; (*If mode=0 no couplings are calculated*)
+	quarticVars=lamAAS//Normal//Variables;
 	AE=OutputFormatDR[quarticVars];
 	quarticList=#->(ReplaceAll[#,PrintIdentification[]])&/@AE;
 
 	(* Cubic: V^2S *)
-	If[mode==0,\[Lambda]vvsLS=EmptyArray[{nv,nv,ns}]]; (*If mode=0 no couplings are calculated*)
-	cubicVars=\[Lambda]vvsLS//Normal//Variables;
+	If[mode==0,lamvvsLS=EmptyArray[{nv,nv,ns}]]; (*If mode=0 no couplings are calculated*)
+	cubicVars=lamvvsLS//Normal//Variables;
 	AE=OutputFormatDR[cubicVars];
 	cubicList=#->(ReplaceAll[#,PrintIdentification[]])&/@AE;
 
 	(* Mixed: V^2S^2 *)
-	quarticTempVars=\[Lambda]KVec//Normal//Variables;
+	quarticTempVars=lamKVec//Normal//Variables;
 	AE=OutputFormatDR[quarticTempVars];
 	quarticTempList=#->(ReplaceAll[#,PrintIdentification[]])&/@AE;
 
@@ -2580,14 +2518,14 @@ PrintTensorDRalgo[]:="nothing"/;Print[errPrintTens];
 PrintTensorDRalgo[ind_]:=Module[{},	
 	
 	Switch[ind, 
-    1, Return[OutputFormatDR[\[Lambda]3DS]], 
-    2, Return[OutputFormatDR[\[Lambda]KVecT]], 
-    3, Return[OutputFormatDR[\[Lambda]KVec]], 
-    4, Return[OutputFormatDR[\[Lambda]AAS]], 
-    5, Return[OutputFormatDR[\[Mu]ijVNLO]], 
-    6, Return[OutputFormatDR[\[Mu]ijSNLO]], 
-    7, Return[OutputFormatDR[\[Lambda]3CSRed]], 
-    8, Return[OutputFormatDR[\[Lambda]vvsLS]],   
+    1, Return[OutputFormatDR[lam3DS]], 
+    2, Return[OutputFormatDR[lamKVecT]], 
+    3, Return[OutputFormatDR[lamKVec]], 
+    4, Return[OutputFormatDR[lamAAS]], 
+    5, Return[OutputFormatDR[muijVNLO]], 
+    6, Return[OutputFormatDR[muijSNLO]], 
+    7, Return[OutputFormatDR[lam3CSRed]], 
+    8, Return[OutputFormatDR[lamvvsLS]],   
     9, Return[OutputFormatDR[TadPoleS]],    
     _, 
     Print[errPrintTens];
@@ -2602,16 +2540,16 @@ PrintTensorDRalgo[ind_]:=Module[{},
 
 
 (*
-	Prints the one-loop counterterms of the 4d couplings and masses, x->\[Delta]x, in d=4-2\[Epsilon].
+	Prints the one-loop counterterms of the 4d couplings and masses, x->\[Delta]x, in d=4-2eps.
 
-	By default, the fields are not renormalized, and \[Delta]x=\[Beta]x/(2\[Epsilon]) are the counterterms of the bare
-	couplings, x_b=\[Mu]^(k \[Epsilon])(x+\[Delta]x), where \[Mu]^(k \[Epsilon]) keeps the mass dimension of x in d dimensions.
+	By default, the fields are not renormalized, and \[Delta]x=\[Beta]x/(2eps) are the counterterms of the bare
+	couplings, x_b=mu4^(k eps)(x+\[Delta]x), where mu4^(k eps) keeps the mass dimension of x in d dimensions.
 
 	With FieldRenormalization->True, the fields are renormalized, \[Phi]_b=(1+\[Delta]Z)^(1/2)\[Phi], and \[Delta]x is the
-	counterterm of the term x \[Phi]1...\[Phi]n of the Lagrangian, x_b=Z1^(-1/2)...Zn^(-1/2) \[Mu]^(k \[Epsilon])(x+\[Delta]x).
+	counterterm of the term x \[Phi]1...\[Phi]n of the Lagrangian, x_b=Z1^(-1/2)...Zn^(-1/2) mu4^(k eps)(x+\[Delta]x).
 	The field counterterms \[Delta]Z/2 x of the n legs are then part of the kinetic terms: \[Delta]x follows from the
 	\[Beta]-function tensor without its anomalous-dimension contributions \[Beta]xAnom, and depends on the gauge,
-	Landau gauge here. The gauge couplings carry no Z factor, g_b=\[Mu]^\[Epsilon](g+\[Delta]g), and \[Delta]g^2 does not
+	Landau gauge here. The gauge couplings carry no Z factor, g_b=mu4^eps(g+\[Delta]g), and \[Delta]g^2 does not
 	change. These are the conventions of 1802.05056, appendix C.2.
 *)
 Options[CounterTerms4D]={FieldRenormalization->False};
@@ -2620,19 +2558,19 @@ Options[CounterTerms4D]={FieldRenormalization->False};
 CounterTerms4D[OptionsPattern[]]:=Module[
 	{
 	fieldRenormalization=OptionValue[FieldRenormalization], betaCT,
-	\[Beta]\[Lambda]4CT, \[Beta]\[Lambda]3CT, \[Beta]YCT, \[Beta]mCT, \[Beta]\[Mu]FCT, \[Beta]\[Lambda]1CT, \[Beta]\[Lambda]6CT
+	\[Beta]lam4CT, \[Beta]lam3CT, \[Beta]YCT, \[Beta]mCT, \[Beta]muFCT, \[Beta]lam1CT, \[Beta]lam6CT
 	},
 	VerbosePrint["Finding \[Beta]-functions"];
 	CounterTerm[];
 
 (*The \[Beta]-function tensors from which the counterterms are solved*)
 	betaCT[tens_,tensAnom_]:=If[fieldRenormalization,SimplifySparse[SparseArray[tens-tensAnom]],tens];
-	\[Beta]\[Lambda]4CT=betaCT[\[Beta]\[Lambda]ijkl,\[Beta]\[Lambda]ijklAnom];
-	\[Beta]\[Lambda]3CT=betaCT[\[Beta]\[Lambda]ijk,\[Beta]\[Lambda]ijkAnom];
+	\[Beta]lam4CT=betaCT[\[Beta]lamijkl,\[Beta]lamijklAnom];
+	\[Beta]lam3CT=betaCT[\[Beta]lamijk,\[Beta]lamijkAnom];
 	\[Beta]YCT=betaCT[\[Beta]Ysij,\[Beta]YsijAnom];
 	\[Beta]mCT=betaCT[\[Beta]mij,\[Beta]mijAnom];
-	\[Beta]\[Mu]FCT=betaCT[\[Beta]\[Mu]IJF,\[Beta]\[Mu]IJFAnom];
-	\[Beta]\[Lambda]1CT=betaCT[\[Beta]\[Lambda]1,\[Beta]\[Lambda]1Anom];
+	\[Beta]muFCT=betaCT[\[Beta]muIJF,\[Beta]muIJFAnom];
+	\[Beta]lam1CT=betaCT[\[Beta]lam1,\[Beta]lam1Anom];
 
 (*To make the comparisons easier*)
 		VarGauge=GaugeCouplingNames//Variables;
@@ -2678,23 +2616,23 @@ CounterTerms4D[OptionsPattern[]]:=Module[
 	Scalar-quartic couplings
 *)
 
-		VarGauge=Join[\[Lambda]4//Normal//Variables]//DeleteDuplicates;
+		VarGauge=Join[lam4//Normal//Variables]//DeleteDuplicates;
 		SubGauge=Table[c->Symbol[ToString[c]<>ToString["temp"]],{c,VarGauge}];
 		SubGauge2=Table[Symbol[ToString[c]<>ToString["temp"]]->c,{c,VarGauge}];
 
 
-		HelpList=DeleteDuplicates@Flatten@SimplifySparse[\[Beta]\[Lambda]4CT]//Sort;
-		HelpVarMod=RelationsBVariables3[HelpList]//ReplaceAll[#,\[Lambda]VL[v1_]->\[Lambda]Beta[v1]]&;
+		HelpList=DeleteDuplicates@Flatten@SimplifySparse[\[Beta]lam4CT]//Sort;
+		HelpVarMod=RelationsBVariables3[HelpList]//ReplaceAll[#,lamVL[v1_]->lamBeta[v1]]&;
 		If[HelpList[[1]]==0&&Length[HelpList]>1,
 				HelpList=Rest[HelpList];
 		];
 		HelpSolve\[Beta]=Table[{HelpList[[a]]->HelpVarMod[[a]]},{a,1,HelpList//Length}]//Flatten//Simplify;
 		HelpSolve\[Beta]2=Table[{HelpVarMod[[a]]->HelpList[[a]]},{a,1,HelpList//Length}]//Flatten//Simplify;
-		\[Lambda]4\[Beta]=\[Beta]\[Lambda]4CT//SimplifySparse//Normal//ReplaceAll[#,HelpSolve\[Beta]]&//SparseArray;
+		lam4\[Beta]=\[Beta]lam4CT//SimplifySparse//Normal//ReplaceAll[#,HelpSolve\[Beta]]&//SparseArray;
 
-		\[Lambda]4p=\[Lambda]4//Normal//ReplaceAll[#,SubGauge]&;
-		SolVar=\[Lambda]4\[Beta]-\[Lambda]4p//Normal;
-		QuarticVar=\[Lambda]4p//Normal//Variables;
+		lam4p=lam4//Normal//ReplaceAll[#,SubGauge]&;
+		SolVar=lam4\[Beta]-lam4p//Normal;
+		QuarticVar=lam4p//Normal//Variables;
 		ResScalp=Reduce[SolVar==0,QuarticVar]//ToRules[#]&;
 		SolveTemp=QuarticVar/.ResScalp;
 		ResScal=Table[{QuarticVar[[i]]->SolveTemp[[i]]},{i,1,Length@QuarticVar}]/.SubGauge2//Flatten[#,1]&//ReplaceAll[#,HelpSolve\[Beta]2]&//Simplify;
@@ -2702,13 +2640,13 @@ CounterTerms4D[OptionsPattern[]]:=Module[
 (* 
 	Scalar-cubic couplings
 *)
-		VarGauge=Join[\[Lambda]3//Normal//Variables]//DeleteDuplicates;
+		VarGauge=Join[lam3//Normal//Variables]//DeleteDuplicates;
 		SubGauge=Table[c->Symbol[ToString[c]<>ToString["temp"]],{c,VarGauge}];
 		SubGauge2=Table[Symbol[ToString[c]<>ToString["temp"]]->c,{c,VarGauge}];
 
-		\[Lambda]3p=\[Lambda]3//Normal//ReplaceAll[#,SubGauge]&;
-		SolVar=\[Beta]\[Lambda]3CT-\[Lambda]3p//Normal;
-		CubicVar=\[Lambda]3p//Normal//Variables;
+		lam3p=lam3//Normal//ReplaceAll[#,SubGauge]&;
+		SolVar=\[Beta]lam3CT-lam3p//Normal;
+		CubicVar=lam3p//Normal//Variables;
 		ResCubic=Solve[SolVar==0,CubicVar]/.SubGauge2//Flatten[#,1]&;
 
 (* 
@@ -2718,9 +2656,9 @@ CounterTerms4D[OptionsPattern[]]:=Module[
 		SubGauge=Table[c->Symbol[ToString[c]<>ToString["temp"]],{c,VarGauge}];
 		SubGauge2=Table[Symbol[ToString[c]<>ToString["temp"]]->c,{c,VarGauge}];
 
-		\[Lambda]4p=Ysff//Normal//ReplaceAll[#,SubGauge]&;
-		SolVar=\[Beta]YCT-\[Lambda]4p//Normal;
-		QuarticVar=\[Lambda]4p//Normal//Variables;
+		lam4p=Ysff//Normal//ReplaceAll[#,SubGauge]&;
+		SolVar=\[Beta]YCT-lam4p//Normal;
+		QuarticVar=lam4p//Normal//Variables;
 		ResYuk=Solve[SolVar==0,QuarticVar]/.SubGauge2//Flatten[#,1]&;
 
 
@@ -2729,26 +2667,26 @@ CounterTerms4D[OptionsPattern[]]:=Module[
 	Scalar masses
 *)
 
-		VarGauge=Join[\[Mu]ij//Normal//Variables]//DeleteDuplicates;
+		VarGauge=Join[muij//Normal//Variables]//DeleteDuplicates;
 		SubGauge=Table[c->Symbol[ToString[c]<>ToString["temp"]],{c,VarGauge}];
 		SubGauge2=Table[Symbol[ToString[c]<>ToString["temp"]]->c,{c,VarGauge}];
 
-		\[Lambda]4p=\[Mu]ij//Normal//ReplaceAll[#,SubGauge]&;
-		SolVar=\[Beta]mCT-\[Lambda]4p//Normal;
-		QuarticVar=\[Lambda]4p//Normal//Variables;
+		lam4p=muij//Normal//ReplaceAll[#,SubGauge]&;
+		SolVar=\[Beta]mCT-lam4p//Normal;
+		QuarticVar=lam4p//Normal//Variables;
 		ResMass=Solve[SolVar==0,QuarticVar]/.SubGauge2//Flatten[#,1]&;
 
 (* 
 	Fermion masses
 *)
 
-		VarGauge=Join[\[Mu]IJF//Normal//Variables]//DeleteDuplicates;
+		VarGauge=Join[muIJF//Normal//Variables]//DeleteDuplicates;
 		SubGauge=Table[c->Symbol[ToString[c]<>ToString["temp"]],{c,VarGauge}];
 		SubGauge2=Table[Symbol[ToString[c]<>ToString["temp"]]->c,{c,VarGauge}];
 
-		\[Lambda]4p=\[Mu]IJF//Normal//ReplaceAll[#,SubGauge]&;
-		SolVar=\[Beta]\[Mu]FCT-\[Lambda]4p//Normal;
-		QuarticVar=\[Lambda]4p//Normal//Variables;
+		lam4p=muIJF//Normal//ReplaceAll[#,SubGauge]&;
+		SolVar=\[Beta]muFCT-lam4p//Normal;
+		QuarticVar=lam4p//Normal//Variables;
 		ResMassF=Solve[SolVar==0,QuarticVar]/.SubGauge2//Flatten[#,1]&;
 
 
@@ -2757,17 +2695,17 @@ CounterTerms4D[OptionsPattern[]]:=Module[
 	Scalar tadpoles
 *)
 (*Scalar Mass insertion*)
-		Contri4=1/2*I2p*Activate@TensorContract[Inactive@TensorProduct[\[Lambda]3,\[Mu]ij],{{2,4},{3,5}}];
+		Contri4=1/2*I2p*Activate@TensorContract[Inactive@TensorProduct[lam3,muij],{{2,4},{3,5}}];
 
 
 (*Fermion Mass insertion*)
-		VarGauge=Join[\[Lambda]1//Normal//Variables]//DeleteDuplicates;
+		VarGauge=Join[lam1//Normal//Variables]//DeleteDuplicates;
 		SubGauge=Table[c->Symbol[ToString[c]<>ToString["temp"]],{c,VarGauge}];
 		SubGauge2=Table[Symbol[ToString[c]<>ToString["temp"]]->c,{c,VarGauge}];
 
-		\[Lambda]4p=\[Lambda]1//Normal//ReplaceAll[#,SubGauge]&;
-		SolVar=\[Beta]\[Lambda]1CT-\[Lambda]4p//Normal;
-		QuarticVar=\[Lambda]4p//Normal//Variables;
+		lam4p=lam1//Normal//ReplaceAll[#,SubGauge]&;
+		SolVar=\[Beta]lam1CT-lam4p//Normal;
+		QuarticVar=lam4p//Normal//Variables;
 		ResTadpole=Solve[SolVar==0,QuarticVar]/.SubGauge2//Flatten[#,1]&;
 
 (*Effective couplings*)
@@ -2777,14 +2715,14 @@ CounterTerms4D[OptionsPattern[]]:=Module[
 	Scalar-cubic couplings
 *)
 
-			VarGauge=Join[\[Lambda]6//Normal//Variables]//DeleteDuplicates;
+			VarGauge=Join[lam6//Normal//Variables]//DeleteDuplicates;
 			SubGauge=Table[c->Symbol[ToString[c]<>ToString["temp"]],{c,VarGauge}];
 			SubGauge2=Table[Symbol[ToString[c]<>ToString["temp"]]->c,{c,VarGauge}];
 
-			\[Beta]\[Lambda]6CT=betaCT[\[Beta]\[Lambda]6ijklnm,\[Beta]\[Lambda]6ijklnmAnom];
-			\[Lambda]6p=\[Lambda]6//Normal//ReplaceAll[#,SubGauge]&;
-			SolVar=\[Beta]\[Lambda]6CT-\[Lambda]6p//Normal;
-			SexticVar=\[Lambda]6p//Normal//Variables;
+			\[Beta]lam6CT=betaCT[\[Beta]lam6ijklnm,\[Beta]lam6ijklnmAnom];
+			lam6p=lam6//Normal//ReplaceAll[#,SubGauge]&;
+			SolVar=\[Beta]lam6CT-lam6p//Normal;
+			SexticVar=lam6p//Normal//Variables;
 			ResSextic=Solve[SolVar==0,SexticVar]/.SubGauge2//Flatten[#,1]&;
 
 
@@ -2796,7 +2734,7 @@ CounterTerms4D[OptionsPattern[]]:=Module[
 			PrintPre=Join[ResGauge,ResGaugeNA,ResScal,ResCubic,ResYuk,ResMass,ResMassF,ResTadpole]//Normal//FullSimplify//DeleteDuplicates;
 		];
 
-		PrintPre=ReplaceAll[PrintPre,(a_->b_):>a->b/(2 \[Epsilon])];
+		PrintPre=ReplaceAll[PrintPre,(a_->b_):>a->b/(2 eps)];
 		OutputFormatDR[PrintPre]
 ];
 
@@ -2804,10 +2742,10 @@ CounterTerms4D[OptionsPattern[]]:=Module[
 (*
 	Prints the one-loop field counterterms \[Delta]Z of the 4d fields in Landau gauge, with the bare fields
 	\[Phi]_b=(1+\[Delta]Z)^(1/2)\[Phi], such that \[Delta]Z is the counterterm of the kinetic term.
-	In DRalgo's convention, Z=1+\[Gamma]/\[Epsilon] with the anomalous dimension \[Gamma] of AnomDim4D, so \[Delta]Z=\[Gamma]/\[Epsilon].
+	In DRalgo's convention, Z=1+\[Gamma]/eps with the anomalous dimension \[Gamma] of AnomDim4D, so \[Delta]Z=\[Gamma]/eps.
 	The arguments are those of AnomDim4D.
 *)
-CounterTerms4D[ParticleI_String,ComponentsI_List]:=OutputFormatDR[AnomDim4D[ParticleI,ComponentsI]/\[Epsilon]];
+CounterTerms4D[ParticleI_String,ComponentsI_List]:=OutputFormatDR[AnomDim4D[ParticleI,ComponentsI]/eps];
 
 
 (* ::Subsection:: *)
@@ -2862,24 +2800,24 @@ BetaFunctions4D[]:=Module[{},
 (* 
 	Scalar-quartic couplings
 *)
-		VarGauge=Join[\[Lambda]4//Normal//Variables]//DeleteDuplicates;
+		VarGauge=Join[lam4//Normal//Variables]//DeleteDuplicates;
 		SubGauge=Table[c->Symbol[ToString[c]<>ToString["temp"]],{c,VarGauge}];
 		SubGauge2=Table[Symbol[ToString[c]<>ToString["temp"]]->c,{c,VarGauge}];
 
 	
-		HelpList=DeleteDuplicates@Flatten@SimplifySparse[\[Beta]\[Lambda]ijkl]//Sort;
-		HelpVarMod=RelationsBVariables3[HelpList]//ReplaceAll[#,\[Lambda]VL[v1_]->\[Lambda]Beta[v1]]&;
+		HelpList=DeleteDuplicates@Flatten@SimplifySparse[\[Beta]lamijkl]//Sort;
+		HelpVarMod=RelationsBVariables3[HelpList]//ReplaceAll[#,lamVL[v1_]->lamBeta[v1]]&;
 
 		If[HelpList[[1]]==0&&Length[HelpList]>1,
 			HelpList=Rest[HelpList];
 		];
 		HelpSolve\[Beta]=Table[{HelpList[[a]]->HelpVarMod[[a]]},{a,1,HelpList//Length}]//Flatten//Simplify;
 		HelpSolve\[Beta]2=Table[{HelpVarMod[[a]]->HelpList[[a]]},{a,1,HelpList//Length}]//Flatten//Simplify;
-		\[Lambda]4\[Beta]=\[Beta]\[Lambda]ijkl//SimplifySparse//Normal//ReplaceAll[#,HelpSolve\[Beta]]&//SparseArray;
+		lam4\[Beta]=\[Beta]lamijkl//SimplifySparse//Normal//ReplaceAll[#,HelpSolve\[Beta]]&//SparseArray;
 
-		\[Lambda]4p=\[Lambda]4//Normal//ReplaceAll[#,SubGauge]&;
-		SolVar=\[Lambda]4\[Beta]-\[Lambda]4p//Normal;
-		QuarticVar=\[Lambda]4p//Normal//Variables;
+		lam4p=lam4//Normal//ReplaceAll[#,SubGauge]&;
+		SolVar=lam4\[Beta]-lam4p//Normal;
+		QuarticVar=lam4p//Normal//Variables;
 		ResScalp=Reduce[SolVar==0,QuarticVar]//ToRules[#]&;
 		SolveTemp=QuarticVar/.ResScalp;
 		ResScal=Table[{QuarticVar[[i]]->SolveTemp[[i]]},{i,1,Length@QuarticVar}]/.SubGauge2//Flatten[#,1]&//ReplaceAll[#,HelpSolve\[Beta]2]&//Simplify;
@@ -2887,14 +2825,14 @@ BetaFunctions4D[]:=Module[{},
 (* 
 	Scalar-cubic couplings
 *)
-		VarGauge=Join[\[Lambda]3//Normal//Variables]//DeleteDuplicates;
+		VarGauge=Join[lam3//Normal//Variables]//DeleteDuplicates;
 		SubGauge=Table[c->Symbol[ToString[c]<>ToString["temp"]],{c,VarGauge}];
 		SubGauge2=Table[Symbol[ToString[c]<>ToString["temp"]]->c,{c,VarGauge}];
 
 	
-		\[Lambda]3p=\[Lambda]3//Normal//ReplaceAll[#,SubGauge]&;
-		SolVar=\[Beta]\[Lambda]ijk-\[Lambda]3p//Normal;
-		CubicVar=\[Lambda]3p//Normal//Variables;
+		lam3p=lam3//Normal//ReplaceAll[#,SubGauge]&;
+		SolVar=\[Beta]lamijk-lam3p//Normal;
+		CubicVar=lam3p//Normal//Variables;
 		ResCubic=Solve[SolVar==0,CubicVar]/.SubGauge2//Flatten[#,1]&;
 
 (* 
@@ -2905,49 +2843,49 @@ BetaFunctions4D[]:=Module[{},
 		SubGauge2=Table[Symbol[ToString[c]<>ToString["temp"]]->c,{c,VarGauge}];
 
 	
-		\[Lambda]4p=Ysff//Normal//ReplaceAll[#,SubGauge]&;
-		SolVar=\[Beta]Ysij-\[Lambda]4p//Normal;
-		QuarticVar=\[Lambda]4p//Normal//Variables;
+		lam4p=Ysff//Normal//ReplaceAll[#,SubGauge]&;
+		SolVar=\[Beta]Ysij-lam4p//Normal;
+		QuarticVar=lam4p//Normal//Variables;
 		ResYuk=Solve[SolVar==0,QuarticVar]/.SubGauge2//Flatten[#,1]&;
 
 (* 
 	Scalar masses
 *)
-		VarGauge=Join[\[Mu]ij//Normal//Variables]//DeleteDuplicates;
+		VarGauge=Join[muij//Normal//Variables]//DeleteDuplicates;
 		SubGauge=Table[c->Symbol[ToString[c]<>ToString["temp"]],{c,VarGauge}];
 		SubGauge2=Table[Symbol[ToString[c]<>ToString["temp"]]->c,{c,VarGauge}];
 
-		\[Lambda]4p=\[Mu]ij//Normal//ReplaceAll[#,SubGauge]&;
-		SolVar=\[Beta]mij-\[Lambda]4p//Normal;
-		QuarticVar=\[Lambda]4p//Normal//Variables;
+		lam4p=muij//Normal//ReplaceAll[#,SubGauge]&;
+		SolVar=\[Beta]mij-lam4p//Normal;
+		QuarticVar=lam4p//Normal//Variables;
 		ResMass=Solve[SolVar==0,QuarticVar]/.SubGauge2//Flatten[#,1]&;
 
 (* 
 	Fermion masses
 *)
-		VarGauge=Join[\[Mu]IJF//Normal//Variables]//DeleteDuplicates;
+		VarGauge=Join[muIJF//Normal//Variables]//DeleteDuplicates;
 		SubGauge=Table[c->Symbol[ToString[c]<>ToString["temp"]],{c,VarGauge}];
 		SubGauge2=Table[Symbol[ToString[c]<>ToString["temp"]]->c,{c,VarGauge}];
 
 	
-		\[Lambda]4p=\[Mu]IJF//Normal//ReplaceAll[#,SubGauge]&;
-		SolVar=\[Beta]\[Mu]IJF-\[Lambda]4p//Normal;
-		QuarticVar=\[Lambda]4p//Normal//Variables;
+		lam4p=muIJF//Normal//ReplaceAll[#,SubGauge]&;
+		SolVar=\[Beta]muIJF-lam4p//Normal;
+		QuarticVar=lam4p//Normal//Variables;
 		ResMassF=Solve[SolVar==0,QuarticVar]/.SubGauge2//Flatten[#,1]&;
 
 (* 
 	Scalar tadpoles
 *)
-		If[Length[\[Lambda]1//Normal//Variables]==0,
+		If[Length[lam1//Normal//Variables]==0,
 			ResTadpole={};
 		,
-			VarGauge=Join[\[Lambda]1//Normal//Variables]//DeleteDuplicates;
+			VarGauge=Join[lam1//Normal//Variables]//DeleteDuplicates;
 			SubGauge=Table[c->Symbol[ToString[c]<>ToString["temp"]],{c,VarGauge}];
 			SubGauge2=Table[Symbol[ToString[c]<>ToString["temp"]]->c,{c,VarGauge}];
 
-			\[Lambda]4p=\[Lambda]1//Normal//ReplaceAll[#,SubGauge]&;
-			SolVar=\[Beta]\[Lambda]1-\[Lambda]4p//Normal;
-			QuarticVar=\[Lambda]4p//Normal//Variables;
+			lam4p=lam1//Normal//ReplaceAll[#,SubGauge]&;
+			SolVar=\[Beta]lam1-lam4p//Normal;
+			QuarticVar=lam4p//Normal//Variables;
 			ResTadpole=Solve[SolVar==0,QuarticVar]/.SubGauge2//Flatten[#,1]&;
 		];
 
@@ -2957,12 +2895,12 @@ BetaFunctions4D[]:=Module[{},
 	are one of several inconsistent projections.
 *)
 		NotClosedRG=Select[{
-			{"scalar quartics",\[Beta]\[Lambda]ijkl,Normal[\[Lambda]4]/.ResScal},
-			{"scalar cubics",\[Beta]\[Lambda]ijk,Normal[\[Lambda]3]/.ResCubic},
+			{"scalar quartics",\[Beta]lamijkl,Normal[lam4]/.ResScal},
+			{"scalar cubics",\[Beta]lamijk,Normal[lam3]/.ResCubic},
 			{"Yukawa couplings",\[Beta]Ysij,Normal[Ysff]/.ResYuk},
-			{"scalar masses",\[Beta]mij,Normal[\[Mu]ij]/.ResMass},
-			{"fermion masses",\[Beta]\[Mu]IJF,Normal[\[Mu]IJF]/.ResMassF},
-			{"scalar tadpoles",\[Beta]\[Lambda]1,Normal[\[Lambda]1]/.ResTadpole}
+			{"scalar masses",\[Beta]mij,Normal[muij]/.ResMass},
+			{"fermion masses",\[Beta]muIJF,Normal[muIJF]/.ResMassF},
+			{"scalar tadpoles",\[Beta]lam1,Normal[lam1]/.ResTadpole}
 			},!AllTrue[Flatten[Normal[#[[2]]]-#[[3]]],PossibleZeroQ]&][[All,1]];
 		If[Length[NotClosedRG]>0,
 			Print["Detected 1-loop \[Beta]-functions not defined at tree-level: ",StringRiffle[NotClosedRG,", "]];
@@ -2970,13 +2908,13 @@ BetaFunctions4D[]:=Module[{},
 		];
 (*Dim-6 couplings*)
 	If[mode>=3,
-		VarGauge=Join[\[Lambda]6//Normal//Variables]//DeleteDuplicates;
+		VarGauge=Join[lam6//Normal//Variables]//DeleteDuplicates;
 		SubGauge=Table[c->Symbol[ToString[c]<>ToString["temp"]],{c,VarGauge}];
 		SubGauge2=Table[Symbol[ToString[c]<>ToString["temp"]]->c,{c,VarGauge}];
 		
-		\[Lambda]6p=\[Lambda]6//Normal//ReplaceAll[#,SubGauge]&;
-		SolVar=\[Beta]\[Lambda]6ijklnm-\[Lambda]6p//Normal;
-		SexticVar=\[Lambda]6p//Normal//Variables;
+		lam6p=lam6//Normal//ReplaceAll[#,SubGauge]&;
+		SolVar=\[Beta]lam6ijklnm-lam6p//Normal;
+		SexticVar=lam6p//Normal//Variables;
 		ResSextic=Solve[SolVar==0,SexticVar]/.SubGauge2//Flatten[#,1]&;
 (*Printing Result*)
 		PrintPre=Join[ResGauge,ResGaugeNA,ResScal,ResCubic,ResYuk,ResMass,ResMassF,ResTadpole,ResSextic]//Normal//FullSimplify//DeleteDuplicates;
@@ -2986,12 +2924,12 @@ BetaFunctions4D[]:=Module[{},
 	];
 ,
 	ResGauge=#^2->0&/@GaugeCouplingNames;
-	ResScal=#->0&/@Variables[\[Lambda]4//Normal];
-	ResCubic=#->0&/@Variables[\[Lambda]3//Normal];
+	ResScal=#->0&/@Variables[lam4//Normal];
+	ResCubic=#->0&/@Variables[lam3//Normal];
 	ResYuk=#->0&/@Variables[Ysff//Normal];
-	ResMass=#->0&/@Variables[\[Mu]ij//Normal];
-	ResMassF=#->0&/@Variables[\[Mu]IJF//Normal];
-	ResTadpole=#->0&/@Variables[\[Lambda]1//Normal];
+	ResMass=#->0&/@Variables[muij//Normal];
+	ResMassF=#->0&/@Variables[muIJF//Normal];
+	ResTadpole=#->0&/@Variables[lam1//Normal];
 	PrintPre=Join[ResGauge,ResScal,ResCubic,ResYuk,ResMass,ResMassF,ResTadpole]//Normal//FullSimplify//DeleteDuplicates;
 ];
 	OutputFormatDR[PrintPre]
@@ -3012,47 +2950,47 @@ BetaFunctions3DS[]:=Module[{},
 (* 
 	Scalar masses
 *)
-		VarGauge=Join[\[Mu]ij//Normal//Variables]//DeleteDuplicates;
+		VarGauge=Join[muij//Normal//Variables]//DeleteDuplicates;
 		SubGauge=Table[c->Symbol[ToString[c]<>ToString["temp"]],{c,VarGauge}];
 		SubGauge2=Table[Symbol[ToString[c]<>ToString["temp"]]->c,{c,VarGauge}];
 
-		\[Lambda]4p=\[Mu]ij//Normal//ReplaceAll[#,SubGauge]&;
-		SolVar=Contri\[Beta]SoftToHard-\[Lambda]4p//Normal;
-		QuarticVar=\[Lambda]4p//Normal//Variables;
+		lam4p=muij//Normal//ReplaceAll[#,SubGauge]&;
+		SolVar=Contri\[Beta]SoftToHard-lam4p//Normal;
+		QuarticVar=lam4p//Normal//Variables;
 		ResMass=Solve[SolVar==0,QuarticVar]/.SubGauge2//Flatten[#,1]&;
 (*
 	Debye masses
 *)
-		VarGauge=Join[\[Mu]abDef//Normal//Variables]//DeleteDuplicates;
+		VarGauge=Join[muabDef//Normal//Variables]//DeleteDuplicates;
 		SubGauge=Table[c->Symbol[ToString[c]<>ToString["temp"]],{c,VarGauge}];
 		SubGauge2=Table[Symbol[ToString[c]<>ToString["temp"]]->c,{c,VarGauge}];
 
-		\[Lambda]4p=\[Mu]abDef//Normal//ReplaceAll[#,SubGauge]&;
-		SolVar=Contri\[Beta]DebyeSoftToHard-\[Lambda]4p//Normal;
-		QuarticVar=\[Lambda]4p//Normal//Variables;
+		lam4p=muabDef//Normal//ReplaceAll[#,SubGauge]&;
+		SolVar=Contri\[Beta]DebyeSoftToHard-lam4p//Normal;
+		QuarticVar=lam4p//Normal//Variables;
 		ResDebye=Solve[SolVar==0,QuarticVar]/.SubGauge2//Flatten[#,1]&;
 (* 
 	Scalar tadpoles
 *)
-		If[Length[\[Lambda]1//Normal//Variables]==0,
+		If[Length[lam1//Normal//Variables]==0,
 			ResTadpole={};
 		,
-			VarGauge=Join[\[Lambda]1//Normal//Variables]//DeleteDuplicates;
+			VarGauge=Join[lam1//Normal//Variables]//DeleteDuplicates;
 			SubGauge=Table[c->Symbol[ToString[c]<>ToString["temp"]],{c,VarGauge}];
 			SubGauge2=Table[Symbol[ToString[c]<>ToString["temp"]]->c,{c,VarGauge}];
 
-			\[Lambda]4p=\[Lambda]1//Normal//ReplaceAll[#,SubGauge]&;
-			SolVar=ContriTadPoleSoftToHard-\[Lambda]4p//Normal;
-			QuarticVar=\[Lambda]4p//Normal//Variables;
+			lam4p=lam1//Normal//ReplaceAll[#,SubGauge]&;
+			SolVar=ContriTadPoleSoftToHard-lam4p//Normal;
+			QuarticVar=lam4p//Normal//Variables;
 			ResTadpole=Solve[SolVar==0,QuarticVar]/.SubGauge2//Flatten[#,1]&;
 		];
 
-		PrintPre=Join[ResMass,ResDebye,ResTadpole]/.\[Mu]3->\[Mu] Exp[1]//Normal//FullSimplify//DeleteDuplicates;
+		PrintPre=Join[ResMass,ResDebye,ResTadpole]/.mu3->mu4 Exp[1]//Normal//FullSimplify//DeleteDuplicates;
 ,
-	ResMass=#->0&/@Variables[\[Mu]ij//Normal];
-	ResDebye=#->0&/@Variables[\[Mu]abDef//Normal];
-	ResTadpole=#->0&/@Variables[\[Lambda]1//Normal];
-	PrintPre=Join[ResMass,ResDebye,ResTadpole]/.\[Mu]3->\[Mu] Exp[1]//Normal//FullSimplify//DeleteDuplicates;
+	ResMass=#->0&/@Variables[muij//Normal];
+	ResDebye=#->0&/@Variables[muabDef//Normal];
+	ResTadpole=#->0&/@Variables[lam1//Normal];
+	PrintPre=Join[ResMass,ResDebye,ResTadpole]/.mu3->mu4 Exp[1]//Normal//FullSimplify//DeleteDuplicates;
 ];
 	OutputFormatDR[PrintPre]
 ];

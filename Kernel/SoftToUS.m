@@ -71,7 +71,7 @@ SymmetricPhaseUSLO[]:=Module[{ContriScalars,VLO},
 	If[verbose,Print["Calculating Leading-Order \!\(\*SuperscriptBox[\(T\), \(4\)]\) Terms"]];
 	
 (*This just adds the m^3 term for all heavy scalars*)
-	VLO=Sum[-1/(12 \[Pi]) \[Mu]ijL[[i,i]]^3,{i,1,Length[\[Mu]ijL]}];
+	VLO=Sum[-1/(12 \[Pi]) muijL[[i,i]]^3,{i,1,Length[muijL]}];
 
 	OutputFormatDR[VLO/.SubDebyeDecoupled]
 ];
@@ -81,26 +81,26 @@ SymmetricPhaseUSLO[]:=Module[{ContriScalars,VLO},
 (*
 	Calculates the 2-loop pressure in the ultrasoft theory.
 *)
-SymmetricPhaseUSNLO[]:=Module[{fSSV,Vss,TensHelp,Vssvs,Vssv,Vsss,heavyIndices,masses,VNLO},
+SymmetricPhaseUSNLO[]:=Module[{fssv,Vss,TensHelp,Vssvs,Vssv,Vsss,heavyIndices,masses,VNLO},
 	If[verbose,Print["Calculating NLO \!\(\*SuperscriptBox[\(T\), \(4\)]\) Terms"]];
 (*Scalar-Scalar-Vector sunset diagram*)
-	fSSV[x_,y_]:=(4 (x^2+y^2) Log[\[Mu]3/(x+y)]+4 Sqrt[x^2] Sqrt[y^2]+x^2+y^2)/(32 \[Pi]^2);
+	fssv=TwoLoopFunctions[mu3][[3]];
 
-	Vss=1/8/(16 \[Pi]^2)*TensorContract[\[Mu]ijL . \[Lambda]KTotal . \[Mu]ijL,{{1,2},{3,4}}];
+	Vss=1/8/(16 \[Pi]^2)*TensorContract[muijL . lamKTotal . muijL,{{1,2},{3,4}}];
 
 	TensHelp=1/4 TensorProduct[gvssVTot,gvssVTot];
-	Vssv=Sum[TensHelp[[a,i,j,a,i,j]]fSSV[\[Mu]ijL[[i,i]],\[Mu]ijL[[j,j]]],{a,nv},{i,nSH},{j,nSH}];
+	Vssv=Sum[TensHelp[[a,i,j,a,i,j]]fssv[muijL[[i,i]]^2,muijL[[j,j]]^2,0],{a,nv},{i,nSH},{j,nSH}];
 
 (*
-	Scalar sunset diagram with two cubic couplings, -1/12 \[Lambda]3^2 (1/(4\[Epsilon])+Log[\[Mu]3/(m1+m2+m3)]+1/2)/(16\[Pi]^2),
+	Scalar sunset diagram with two cubic couplings, -1/12 lam3^2 times the sunset integral,
 	for the lines with at least one heavy scalar, where the light masses are zero.
 	The sunset with only light lines belongs to the ultrasoft theory.
 	The cubic couplings of two temporal scalars to a scalar are of one-loop order, and their sunset is of higher order.
 *)
 	heavyIndices=Flatten[HeavyScalars];
-	masses=Table[If[MemberQ[heavyIndices,i],Sqrt[\[Mu]ijSNLOP[[i,i]]],0],{i,1,ns}];
-	Vsss=-1/12/(16 \[Pi]^2)*Total[
-		If[ContainsAny[#[[1]],heavyIndices],#[[2]]^2 (1/2+Log[\[Mu]3/Total[masses[[#[[1]]]]]]),0]&/@Most[ArrayRules[\[Lambda]3CSRedUS]]];
+	masses=Table[If[MemberQ[heavyIndices,i],muijSNLOP[[i,i]],0],{i,1,ns}];
+	Vsss=-1/12*Total[
+		If[ContainsAny[#[[1]],heavyIndices],#[[2]]^2 SunsetIntegral3d[Sequence@@masses[[#[[1]]]],mu3],0]&/@Most[ArrayRules[lam3CSRedUS]]];
 
 	VNLO= Vss+Vssv+Vsss;
 
@@ -116,17 +116,41 @@ SymmetricPhaseUSNLO[]:=Module[{fSSV,Vss,TensHelp,Vssvs,Vssv,Vsss,heavyIndices,ma
 (*
 	Scalar self-energy in the effective theory.
 *)
-ScalarSelfEnergySS[]:=Module[{SelfEnergySS,ContriSS,ContriSS2},
+ScalarSelfEnergySS[]:=Module[{ContriSS,ContriSS2},
 If[verbose,Print["Calculating Scalar Self-Energy"]];
 
-	SelfEnergySS=-1/(12\[Pi]);
-(*Two heavy lines, with symmetry factor 1/2*)
-	ContriSS=SelfEnergySS/2*Simplify[Table[Sum[\[Lambda]3Cx[[i,ii,jj]]\[Lambda]3Cx[[j,ii,jj]]/(\[Mu]ijL[[ii,ii]]+\[Mu]ijL[[jj,jj]])^3,{ii,1,nSH},{jj,1,nSH}],{i,1,nSL},{j,1,nSL}]];
+(*The p^2 terms of the bubbles; two heavy lines, with symmetry factor 1/2*)
+	ContriSS=1/2*Simplify[Table[Sum[lam3Cx[[i,ii,jj]]lam3Cx[[j,ii,jj]]BubbleIntegral3dP2[muijL[[ii,ii]]^2,muijL[[jj,jj]]^2],{ii,1,nSH},{jj,1,nSH}],{i,1,nSL},{j,1,nSL}]];
 (*One light and one heavy line, without symmetry factor as in ScalarMassSS*)
-	ContriSS2=SelfEnergySS*Simplify[Table[Sum[\[Lambda]3Cy[[i,ii,jj]]\[Lambda]3Cy[[j,ii,jj]]/(\[Mu]ijL[[jj,jj]])^3,{ii,1,nSL},{jj,1,nSH}],{i,1,nSL},{j,1,nSL}]];
+	ContriSS2=Simplify[Table[Sum[lam3Cy[[i,ii,jj]]lam3Cy[[j,ii,jj]]BubbleIntegral3dP2[0,muijL[[jj,jj]]^2],{ii,1,nSL},{jj,1,nSH}],{i,1,nSL},{j,1,nSL}]];
 
 (*The field normalization is 1+2 ZSij; each light leg of a coupling contributes -ZSij*)
 	ZSij=-(ContriSS+ContriSS2)/2;
+	ZSijTadpole=TadpoleZSS[];
+];
+
+
+(*
+	The field normalization at first order in the tree-level tadpoles of the heavy fields, which shift the heavy fields by
+	v0=-tadpole/M^2: the cubics in the bubbles of ZSij shifted by lam4.v0, and one insertion of the shifted masses lam3.v0 on
+	a line of the bubbles, without the field-independent light mass, as in OneLoopOnePRSS. With all fields, ZSij is
+	-1/4 Sum[lam3[i,a,b]lam3[j,a,b]BubbleIntegral3dP2[a,b]].
+*)
+TadpoleZSS[]:=Module[{v0,masses,lam3All,lam4All,nAll,lam3,dLam3,dM,lineP2,z},
+	v0=-Normal[TadPoleHeavy]/Table[muijL[[h,h]]^2,{h,1,nSH}];
+	If[nSL==0||AllTrue[v0,#===0&],Return[SparseArray[{},{nSL,nSL}]]];
+	{masses,lam3All,lam4All}=AllScalarCouplingsSS[];
+	nAll=nSL+nSH;
+	lam3=Normal[lam3All];
+	dLam3=Normal[lam4All . Join[ConstantArray[0,nSL],v0]];
+	dM=Normal[lam3All . Join[ConstantArray[0,nSL],v0]];
+	dM[[1;;nSL,1;;nSL]]=0;
+(*The p^2 term of a bubble with two propagators of the squared masses x and xp on one line*)
+	lineP2[x_,xp_,y_]:=If[x===xp,-(D[BubbleIntegral3dP2[z,y],z]/.z->x),(BubbleIntegral3dP2[x,y]-BubbleIntegral3dP2[xp,y])/(xp-x)];
+	SparseArray[Table[-1/4(
+		Sum[(dLam3[[i,a,b]]lam3[[j,a,b]]+lam3[[i,a,b]]dLam3[[j,a,b]])BubbleIntegral3dP2[masses[[a]],masses[[b]]],{a,1,nAll},{b,1,nAll}]
+		-2Sum[If[dM[[a,ap]]===0,0,lam3[[i,a,b]]lam3[[j,ap,b]]dM[[a,ap]]lineP2[masses[[a]],masses[[ap]],masses[[b]]]],{a,1,nAll},{ap,1,nAll},{b,1,nAll}]),
+		{i,1,nSL},{j,1,nSL}]]//SimplifySparse
 ];
 
 
@@ -135,85 +159,57 @@ If[verbose,Print["Calculating Scalar Self-Energy"]];
 *)
 
 
-ScalarMass2LoopSS[]:=Module[{MassHelpSunsetQuarCub,MassHelpSunsetCubCub,MassHelpBubble,MassHelp,TensHelp,TensHelp2,HeavyMasses,AllMasses
-						,ContriInsertion,Contri1,Contri2,Contri3,Contri4,Contri5,Contri6,Contri7,ContriMix1,ContriMix2,ContriSE,\[Mu]ijSSCubic,
-						ContriC1,ContriC2,ContriC3,ContriC4,\[Mu]ijTemp},
+ScalarMass2LoopSS[]:=Module[{MassHelp,TensHelp,TensHelp2,HeavyMasses,AllMasses
+						,ContriInsertion,Contri1,Contri2,Contri3,Contri4,Contri5,Contri6,Contri7,ContriMix1,ContriMix2,ContriSE,muijSSCubic,
+						ContriC1,ContriC2,ContriC3,ContriC4,muijTemp},
 If[verbose,Print["Calculating 2-Loop Scalar Mass"]];
 
-(*Scalar sunset diagrams with an extra propagator*)
-	MassHelpSunsetQuarCub[0,0,0,0]:=0;
-	MassHelpSunsetQuarCub[0,0,z_,t_]:=1/(16 \[Pi]^2 (t^2+z^2));
-	MassHelpSunsetQuarCub[x_,0,0,0]:=(-(2 Log[\[Mu]3/x])-1)/(32 \[Pi]^2 x^2);
-	MassHelpSunsetQuarCub[0,y_,0,0]:=(-(2 Log[\[Mu]3/y])-1)/(32 \[Pi]^2 y^2);
-	MassHelpSunsetQuarCub[y_,y_,z_,t_]:=1/(16 \[Pi]^2 (t^2+y^2+z^2));
-	MassHelpSunsetQuarCub[x_,y_,z_,t_]:=(Log[\[Mu]3/(t+y+z)]-Log[\[Mu]3/(t+x+z)])/(16 \[Pi]^2 (x^2-y^2));
-
-(*Scalar sunset diagrams with two extra propagators*)
-	MassHelpSunsetCubCub[0,0,0,0,0]:=0;
-	MassHelpSunsetCubCub[x_,0,0,0,0]:=1/(16 \[Pi]^2 x^4);
-	MassHelpSunsetCubCub[0,x_,0,0,0]:=1/(16 \[Pi]^2 x^4);
-	MassHelpSunsetCubCub[0,0,x_,0,0]:=1/(16 \[Pi]^2 x^4);
-	MassHelpSunsetCubCub[0,0,0,x_,0]:=1/(16 \[Pi]^2 x^4);
-	MassHelpSunsetCubCub[y_,y_,w_,z_,t_]:=1/(16 \[Pi]^2 (t^2+w^2+y^2) (t^2+y^2+z^2));
-	MassHelpSunsetCubCub[x_,y_,z_,z_,t_]:=1/(16 \[Pi]^2 (t^2+x^2+z^2) (t^2+y^2+z^2));
-	MassHelpSunsetCubCub[0,y_,0,0,t_]:=1/(16 \[Pi]^2 (t^2) (t^2+y^2));
-	MassHelpSunsetCubCub[x_,y_,w_,z_,t_]:=(Log[\[Mu]3/(t+w+x)]-Log[\[Mu]3/(t+w+y)]-Log[\[Mu]3/(t+x+z)]+Log[\[Mu]3/(t+y+z)])/(16 \[Pi]^2 (w^2-z^2) (x^2-y^2));
-	MassHelpSunsetCubCub[0,y_,0,z_,0]:=-((2 Log[\[Mu]3/y]-2 Log[\[Mu]3/(y+z)]+2 Log[\[Mu]3/z]+1)/(32 \[Pi]^2 y^2 z^2));
-	MassHelpSunsetCubCub[x_,0,w_,0,0]:=-((2 Log[\[Mu]3/x]-2 Log[\[Mu]3/(x+w)]+2 Log[\[Mu]3/w]+1)/(32 \[Pi]^2 x^2 w^2));
-	MassHelpSunsetCubCub[0,y_,w_,0,0]:=-((2 Log[\[Mu]3/y]-2 Log[\[Mu]3/(y+w)]+2 Log[\[Mu]3/w]+1)/(32 \[Pi]^2 y^2 w^2));
-	MassHelpSunsetCubCub[x_,0,0,z_,0]:=-((2 Log[\[Mu]3/x]-2 Log[\[Mu]3/(x+z)]+2 Log[\[Mu]3/z]+1)/(32 \[Pi]^2 x^2 z^2));
-
-(*Scalar bubble diagram with an extra propagator *)
-	MassHelpBubble[x_,y_]:=-(1/(4 \[Pi]))( x-y)/(y^2-x^2);
-	MassHelpBubble[0,0]:=0;
-	MassHelpBubble[x_,x_]:=(1/(8 \[Pi]))/x;
-
 (*List of scalar masses*)
-	HeavyMasses=Table[\[Mu]ijL[[n,n]],{n,1,nSH}]; (*A list of all the heavy-scalar masses*)
-	AllMasses=Table[\[Mu]ijLS[[n,n]],{n,1,ns}]; (*A list of all the scalar masses*)
+	HeavyMasses=Table[muijL[[n,n]],{n,1,nSH}]; (*A list of all the heavy-scalar masses*)
+	AllMasses=Table[muijLS[[n,n]],{n,1,ns}]; (*A list of all the scalar masses*)
 
 (*Diagrams without cubic couplings*)
 (*Sunset diagram with two S^2H^2 quartic couplings*)
-	MassHelp=Table[(1/2+Log[\[Mu]3/( a+b)]),{a,HeavyMasses},{b,HeavyMasses}]//SparseArray;
-	TensHelp=\[Lambda]K . Transpose[\[Lambda]K,{4,2,3,1}]//DiagonalTensor[#,1,4]&//DiagonalTensor[#,1,5]&;
-	Contri1=-1/(16 \[Pi]^2)1/2TensHelp . MassHelp//TensorContract[#,{2,4}]&;
+	MassHelp=Table[SunsetIntegral3d[a^2,b^2,0,mu3],{a,HeavyMasses},{b,HeavyMasses}]//SparseArray;
+	TensHelp=lamK . Transpose[lamK,{4,2,3,1}]//DiagonalTensor[#,1,4]&//DiagonalTensor[#,1,5]&;
+	Contri1=-1/2TensHelp . MassHelp//TensorContract[#,{2,4}]&;
 
 (*Sunset diagram with a S^2H^2 quartic coupling and two H^2V couplings*)
-	MassHelp=Table[(1/2+2Log[\[Mu]3/(2 a)]),{a,HeavyMasses}]//SparseArray;
+	MassHelp=Table[(1/2+2Log[mu3/(2 a)]),{a,HeavyMasses}]//SparseArray;
 	TensHelp=Transpose[Transpose[gAvss,{2,1,3}],{1,3,2}] . gAvss//TensorContract[#,{1,3}]&;
-	TensHelp=MassHelp TensHelp . \[Lambda]K//TensorContract[#,{1,2}]&;
+	TensHelp=MassHelp TensHelp . lamK//TensorContract[#,{1,2}]&;
 	Contri2=1/(16 \[Pi]^2)*(1/2)TensHelp;
 
 (*Sunset diagram with one S^2V^2 and two H^2V couplings*)
-	MassHelp=Table[(-Log[\[Mu]3/(2 a)]),{a,HeavyMasses}]//SparseArray;
+	MassHelp=Table[(-Log[mu3/(2 a)]),{a,HeavyMasses}]//SparseArray;
 	TensHelp=gAvss . Transpose[gAvss,{2,1,3}]//SparseArray //DiagonalTensor[#,2,4]&//Transpose[#,{3,2,1}]&;
 	TensHelp=TensHelp . MassHelp . HabijVL//TensorContract[#,{1,2}]&;
 	Contri3=1/(16 \[Pi]^2)*(1/4)TensHelp;
 
 (*Figure 8 diagram with two quartic couplings*)
 	MassHelp=Table[1/(a+b),{a,HeavyMasses},{b,HeavyMasses}]//SparseArray;
-	TensHelp=TensorProduct[DiagonalTensor[\[Lambda]4K,3,4] . HeavyMasses,MassHelp]//DiagonalTensor[#,1,3]&//DiagonalTensor[#,1,3]&;
-	Contri4=1/4*(1/(16 \[Pi]^2))*TensHelp . \[Lambda]K//TensorContract[#,{1,2}]&;
+	TensHelp=TensorProduct[DiagonalTensor[lam4K,3,4] . HeavyMasses,MassHelp]//DiagonalTensor[#,1,3]&//DiagonalTensor[#,1,3]&;
+	Contri4=1/4*(1/(16 \[Pi]^2))*TensHelp . lamK//TensorContract[#,{1,2}]&;
 
 
-	If[Length[\[Lambda]x//Normal//Variables]==0&&Length[\[Lambda]y//Normal//Variables]==0,
+	If[Length[lamx//Normal//Variables]==0&&Length[lamy//Normal//Variables]==0,
 		Contri5=0;
 		Contri6=0;
 		Contri7=0;
 	,
 (*Sunset with two H^3S quartics*)
-		TensHelp=Table[(1/2+Log[\[Mu]3/(a+b+n)]) ,{a,HeavyMasses},{b,HeavyMasses},{n,HeavyMasses}]//SparseArray;
-		TensHelp2=TensorProduct[\[Lambda]x,\[Lambda]x]//DiagonalTensor2[#,2,6]&//DiagonalTensor2[#,3,6]&//DiagonalTensor2[#,4,6]&;
-		Contri5=-1/(16 \[Pi]^2)/3!*Total[TensHelp TensHelp2,-3];
+		TensHelp=Table[SunsetIntegral3d[a^2,b^2,n^2,mu3],{a,HeavyMasses},{b,HeavyMasses},{n,HeavyMasses}]//SparseArray;
+		TensHelp2=TensorProduct[lamx,lamx]//DiagonalTensor2[#,2,6]&//DiagonalTensor2[#,3,6]&//DiagonalTensor2[#,4,6]&;
+		Contri5=-1/3!*Total[TensHelp TensHelp2,-3];
 
 (*Sunset with two HS^3 quartics*)
-		TensHelp=Table[(1/2+Log[\[Mu]3/(a)]) ,{a,HeavyMasses}]//SparseArray;
-		TensHelp2=TensorProduct[\[Lambda]y,\[Lambda]y]//TensorContract[#,{2,6}]&//TensorContract[#,{2,5}]&//DiagonalTensor2[#,2,4]&;
-		Contri6=-1/(16 \[Pi]^2)/2!*Total[TensHelp TensHelp2,-3];
+		TensHelp=Table[SunsetIntegral3d[a^2,0,0,mu3],{a,HeavyMasses}]//SparseArray;
+		TensHelp2=TensorProduct[lamy,lamy]//TensorContract[#,{2,6}]&//TensorContract[#,{2,5}]&//DiagonalTensor2[#,2,4]&;
+		Contri6=-1/2!*Total[TensHelp TensHelp2,-3];
 
 (*Figure 8 bubbles with one HS^3quartic, and one H^3S quartic*)
 		TensHelp=Table[c/b ,{c,HeavyMasses},{b,HeavyMasses}]//SparseArray;
-		TensHelp2=Transpose[\[Lambda]y,{1,2,4,3}] . \[Lambda]x//DiagonalTensor2[#,3,4]&//DiagonalTensor2[#,4,5]&;
+		TensHelp2=Transpose[lamy,{1,2,4,3}] . lamx//DiagonalTensor2[#,3,4]&//DiagonalTensor2[#,4,5]&;
 		Contri7=(1/(16 \[Pi]^2))/2*Total[TensHelp TensHelp2,-3];
 	];
 
@@ -223,56 +219,57 @@ If[verbose,Print["Calculating 2-Loop Scalar Mass"]];
 Mixing diagram with two H^3S quartics: ----O---O------
 													---*)
 	TensHelp=Table[n/m^2*l ,{n,HeavyMasses},{m,HeavyMasses},{l,HeavyMasses}]//SparseArray;
-	TensHelp2=TensorProduct[DiagonalTensor2[\[Lambda]x,2,3],DiagonalTensor2[\[Lambda]x,2,3]]//DiagonalTensor2[#,3,6]&//Flatten[#,{{2},{1},{4}}]&;
+	TensHelp2=TensorProduct[DiagonalTensor2[lamx,2,3],DiagonalTensor2[lamx,2,3]]//DiagonalTensor2[#,3,6]&//Flatten[#,{{2},{1},{4}}]&;
 	ContriMix1=-1/4*1/(4 \[Pi])^2*Total[TensHelp TensHelp2,-3];
 
 (*The contribution from off-diagonal HS masses*)
-	ContriMix2=-Simplify[Table[Sum[(\[Mu]ijMix[[i,m]])\[Mu]ijL[[m,m]]^-2 \[Mu]ijMix[[j,m]],{m,1,nSH}],{i,1,nSL},{j,1,nSL}]];
+	ContriMix2=-Simplify[Table[Sum[(muijMix[[i,m]])muijL[[m,m]]^-2 muijMix[[j,m]],{m,1,nSH}],{i,1,nSL},{j,1,nSL}]];
 
-	If[Length[\[Lambda]3//Normal//Variables]==0||nv>=nSH,
-		\[Mu]ijSSCubic=0;
+	If[Length[lam3//Normal//Variables]==0||nv>=nSH,
+		muijSSCubic=0;
 	,
 (*The contribution from cubic couplings. There are so many diagrams here that it is not worth dividing the cubics into
-	H^2S HS^2 etc. Insdead \[Lambda]3CTot is a master tensor that has all scalar (heavy and light) interactions. The
-	scalar master integrals MassHelpSunsetCubCub/MassHelpSunsetQuarCub then remove the pure-light contributions.
+	H^2S HS^2 etc. Insdead lam3CTot is a master tensor that has all scalar (heavy and light) interactions. The
+	sunset integrals, which vanish if all lines are massless, then remove the pure-light contributions.
 	*)
 
 (*Sunset diagram with four cubic couplings*)		
-		MassHelp=Table[MassHelpSunsetCubCub[j,i,k,l,m]  ,{j,AllMasses},{i,AllMasses},{k,AllMasses},{l,AllMasses},{m,AllMasses}]//SparseArray//SimplifySparse;
-		TensHelp=TensorProduct[\[Lambda]3CTot,\[Lambda]3CTot]//DiagonalTensor2[#,1,4]&//TensorProduct[#,\[Lambda]3CTot]&//DiagonalTensor2[#,2,6]&//DiagonalTensor2[#,4,6]&;
-		TensHelp=TensorProduct[TensHelp,\[Lambda]3CTot]//DiagonalTensor2[#,4,7]&//DiagonalTensor2[#,5,7]&;
+		MassHelp=Table[SunsetIntegral3d[{j,i},{k,l},m,mu3],{j,AllMasses^2},{i,AllMasses^2},{k,AllMasses^2},{l,AllMasses^2},{m,AllMasses^2}]//SparseArray//SimplifySparse;
+		TensHelp=TensorProduct[lam3CTot,lam3CTot]//DiagonalTensor2[#,1,4]&//TensorProduct[#,lam3CTot]&//DiagonalTensor2[#,2,6]&//DiagonalTensor2[#,4,6]&;
+		TensHelp=TensorProduct[TensHelp,lam3CTot]//DiagonalTensor2[#,4,7]&//DiagonalTensor2[#,5,7]&;
 		ContriC1=-1/2*Total[MassHelp TensHelp,-3][[LightScalar[[;;,1]],LightScalar[[;;,1]]]]//SimplifySparse;
 
 (*Sunset diagram with one quartic and two cubic couplings*)		
-		MassHelp=Table[MassHelpSunsetQuarCub[i,j,m,n],{i,AllMasses},{j,AllMasses},{m,AllMasses},{n,AllMasses}]//SparseArray//SimplifySparse;
-		TensHelp=TensorProduct[\[Lambda]4Tot,\[Lambda]3CTot]//DiagonalTensor2[#,4,6]&//DiagonalTensor2[#,4,5]&;
-		TensHelp=TensorProduct[TensHelp,\[Lambda]3CTot]//DiagonalTensor2[#,4,7]&//DiagonalTensor2[#,5,7]&;
+		MassHelp=Table[SunsetIntegral3d[{i,j},m,n,mu3],{i,AllMasses^2},{j,AllMasses^2},{m,AllMasses^2},{n,AllMasses^2}]//SparseArray//SimplifySparse;
+		TensHelp=TensorProduct[lam4Tot,lam3CTot]//DiagonalTensor2[#,4,6]&//DiagonalTensor2[#,4,5]&;
+		TensHelp=TensorProduct[TensHelp,lam3CTot]//DiagonalTensor2[#,4,7]&//DiagonalTensor2[#,5,7]&;
 		ContriC2=1/2*Total[MassHelp TensHelp,-3][[LightScalar[[;;,1]],LightScalar[[;;,1]]]]//SimplifySparse;
 
 (*Sunset diagram with one quartic (light scalars both connect to the same quartic) and two cubic couplings*)
-		MassHelp=Table[MassHelpSunsetQuarCub[i,j,m,n]  ,{i,AllMasses},{j,AllMasses},{m,AllMasses},{n,AllMasses}]//SparseArray//SimplifySparse;
-		TensHelp=TensorProduct[\[Lambda]3CTot,\[Lambda]3CTot]//DiagonalTensor2[#,3,4]&//DiagonalTensor2[#,3,4]&;
-		TensHelp=TensorProduct[TensHelp,\[Lambda]4Tot]//DiagonalTensor2[#,3,5]&//DiagonalTensor2[#,4,7]&;
+		MassHelp=Table[SunsetIntegral3d[{i,j},m,n,mu3],{i,AllMasses^2},{j,AllMasses^2},{m,AllMasses^2},{n,AllMasses^2}]//SparseArray//SimplifySparse;
+		TensHelp=TensorProduct[lam3CTot,lam3CTot]//DiagonalTensor2[#,3,4]&//DiagonalTensor2[#,3,4]&;
+		TensHelp=TensorProduct[TensHelp,lam4Tot]//DiagonalTensor2[#,3,5]&//DiagonalTensor2[#,4,7]&;
 		ContriC3=1/4*Total[MassHelp TensHelp,-3][[LightScalar[[;;,1]],LightScalar[[;;,1]]]]//SimplifySparse;
 		
 (*Two bubbles connected in the middle by a quartic, and connecting to the external lines with a cubic coupling*)
-		MassHelp=Table[MassHelpBubble[i,j] MassHelpBubble[k,l],{i,AllMasses},{j,AllMasses},{k,AllMasses},{l,AllMasses}]//SparseArray//SimplifySparse;
-		TensHelp=TensorProduct[\[Lambda]3CTot,\[Lambda]4Tot]//DiagonalTensor2[#,1,4]&//DiagonalTensor2[#,2,4]&;
-		TensHelp=TensorProduct[TensHelp, \[Lambda]3CTot]//DiagonalTensor2[#,4,6]&//DiagonalTensor2[#,4,6]&;
+		MassHelp=Table[BubbleIntegral3d[i,j] BubbleIntegral3d[k,l],{i,AllMasses^2},{j,AllMasses^2},{k,AllMasses^2},{l,AllMasses^2}]//SparseArray//SimplifySparse;
+		TensHelp=TensorProduct[lam3CTot,lam4Tot]//DiagonalTensor2[#,1,4]&//DiagonalTensor2[#,2,4]&;
+		TensHelp=TensorProduct[TensHelp, lam3CTot]//DiagonalTensor2[#,4,6]&//DiagonalTensor2[#,4,6]&;
 		ContriC4=1/8*Total[MassHelp TensHelp,-3][[LightScalar[[;;,1]],LightScalar[[;;,1]]]]//SimplifySparse;
 		
 	
-		\[Mu]ijSSCubic=(ContriC1+2*ContriC2+ContriC3+ContriC4)//Simplify//SparseArray;
+		muijSSCubic=(ContriC1+2*ContriC2+ContriC3+ContriC4)//Simplify//SparseArray;
 	];
 
 (*This is the contribution from field-renormalization, where the Z factor multiplies the entire LO (tree-level+1-loop) mass*)
-	\[Mu]ijTemp=\[Mu]ijLight+\[Mu]ijSSLO//SparseArray;
-	ContriSE=-(ZSij . \[Mu]ijTemp+\[Mu]ijTemp . ZSij);
+	muijTemp=muijLight+muijSSLO//SparseArray;
+	ContriSE=-(ZSij . muijTemp+muijTemp . ZSij);
 
-(*Bubble with one light and one heavy line, with one insertion of the light mass*)
-	ContriInsertion=-1/(4\[Pi])Simplify[Table[Sum[\[Lambda]3Cy[[i,a,hh]]\[Mu]ijLight[[a,b]]\[Lambda]3Cy[[j,b,hh]]/\[Mu]ijL[[hh,hh]]^3,{a,1,nSL},{b,1,nSL},{hh,1,nSH}],{i,1,nSL},{j,1,nSL}]];
+(*Bubble with one light and one heavy line, with one insertion of the light mass: the tree-level mass and the momentum-independent
+	one-loop terms, from the tadpoles of the heavy fields and the temporal scalars*)
+	ContriInsertion=Simplify[Table[Sum[lam3Cy[[i,a,hh]](muijLight+muijSSLOTadpoles)[[a,b]]lam3Cy[[j,b,hh]]TriangleIntegral3d[0,0,muijL[[hh,hh]]^2],{a,1,nSL},{b,1,nSL},{hh,1,nSH}],{i,1,nSL},{j,1,nSL}]];
 
-	\[Mu]ijSSNLO=(Contri1+Contri2+Contri3+ Contri4+Contri5+Contri6+Contri7+ContriMix1+ContriMix2+ContriSE+ContriInsertion+\[Mu]ijSSCubic)//Simplify//SparseArray;
+	muijSSNLO=(Contri1+Contri2+Contri3+ Contri4+Contri5+Contri6+Contri7+ContriMix1+ContriMix2+ContriSE+ContriInsertion+muijSSCubic)//Simplify//SparseArray;
 
 ];
 
@@ -281,23 +278,27 @@ Mixing diagram with two H^3S quartics: ----O---O------
 (*
 	Calculates the 1-loop scalar mass.
 *)
-ScalarMassSS[]:=Module[{ContriSS,ContriSS2,ContriTadpole,ContriSS3,SelfEnergySS},
+ScalarMassSS[]:=Module[{ContriSS,ContriSS2,ContriTadpole,ContriSS3},
 If[verbose,Print["Calculating 1-Loop Scalar Mass"]];
 
-	SelfEnergySS=1/(4\[Pi]);
 (*Two H^2S cubics*)
-	ContriSS=SelfEnergySS/2*Simplify[Table[Sum[\[Lambda]3Cx[[i,ii,jj]]\[Lambda]3Cx[[j,ii,jj]]/(\[Mu]ijL[[ii,ii]]+\[Mu]ijL[[jj,jj]]),{ii,1,nSH},{jj,1,nSH}],{i,1,nSL},{j,1,nSL}]];
+	ContriSS=1/2*Simplify[Table[Sum[lam3Cx[[i,ii,jj]]lam3Cx[[j,ii,jj]]BubbleIntegral3d[muijL[[ii,ii]]^2,muijL[[jj,jj]]^2],{ii,1,nSH},{jj,1,nSH}],{i,1,nSL},{j,1,nSL}]];
 
 (*Two HS^2 cubics*)
-	ContriSS2=SelfEnergySS*Simplify[Table[Sum[\[Lambda]3Cy[[i,ii,jj]]\[Lambda]3Cy[[j,ii,jj]]/(\[Mu]ijL[[jj,jj]]),{ii,1,nSL},{jj,1,nSH}],{i,1,nSL},{j,1,nSL}]];
+	ContriSS2=Simplify[Table[Sum[lam3Cy[[i,ii,jj]]lam3Cy[[j,ii,jj]]BubbleIntegral3d[0,muijL[[jj,jj]]^2],{ii,1,nSL},{jj,1,nSH}],{i,1,nSL},{j,1,nSL}]];
 
 (*One HS^2 cubic with the tree-level and one-loop tadpoles of the heavy fields*)
-	ContriTadpole=Table[Sum[\[Lambda]3Cy[[i,j,ll]]TadPoleHeavySS[[ll]]/(\[Mu]ijL[[ll,ll]]^2),{ll,1,nSH}],{i,1,nSL},{j,1,nSL}];
+	ContriTadpole=Table[Sum[lam3Cy[[i,j,ll]]TadPoleHeavySS[[ll]]/(muijL[[ll,ll]]^2),{ll,1,nSH}],{i,1,nSL},{j,1,nSL}];
 
 (*A H^2S^2 quartic*)
-	ContriSS3=1/(4 \[Pi])/2 Simplify[Table[Sum[ \[Mu]ijL[[a,a]]\[Lambda]K[[a,a,i,j]],{a,1,nSH}],{i,1,nSL},{j,1,nSL}]];
+	ContriSS3=-1/2 Simplify[Table[Sum[TadpoleIntegral3d[muijL[[a,a]]^2]lamK[[a,a,i,j]],{a,1,nSH}],{i,1,nSL},{j,1,nSL}]];
 
-	\[Mu]ijSSLO=-ContriSS3-ContriSS-ContriSS2-ContriTadpole//SparseArray;
+(*One-loop terms of first order in the tree-level tadpoles of the heavy fields, also for the quartics in ScalarQuarticSS*)
+	{muijTadpoleSS,lamTadpoleSS}=If[nSL==0,{0,0},TadpoleOnePRSS[]];
+
+	muijSSLO=-ContriSS3-ContriSS-ContriSS2-ContriTadpole+muijTadpoleSS//SparseArray;
+(*The terms without momentum dependence, which are inserted on the light lines of the two-loop masses*)
+	muijSSLOTadpoles=-ContriSS3-ContriTadpole//SparseArray;
 
 ];
 
@@ -307,21 +308,21 @@ If[verbose,Print["Calculating 1-Loop Scalar Mass"]];
 *)
 HeavyScalarMassSS[]:=Module[{},
 	fac=1/(4 \[Pi]);
-	Contri1=1/2  *fac*Simplify[Table[Sum[\[Lambda]3CHeavy[[i,ii,jj]]\[Lambda]3CHeavy[[j,ii,jj]]/(\[Mu]ijL[[ii,ii]]+\[Mu]ijL[[jj,jj]]),{ii,1,nSH},{jj,1,nSH}],{i,1,nSH},{j,1,nSH}]];
+	Contri1=1/2  *fac*Simplify[Table[Sum[lam3CHeavy[[i,ii,jj]]lam3CHeavy[[j,ii,jj]]/(muijL[[ii,ii]]+muijL[[jj,jj]]),{ii,1,nSH},{jj,1,nSH}],{i,1,nSH},{j,1,nSH}]];
 	fac=-1/(4 \[Pi]);
-	Contri2=-1/2*fac*Simplify[Table[Sum[\[Lambda]KTotal[[i,j,ii,ii]] \[Mu]ijL[[ii,ii]],{ii,1,nSH}],{i,1,nSH},{j,1,nSH}]]//FullSimplify;
+	Contri2=-1/2*fac*Simplify[Table[Sum[lamKTotal[[i,j,ii,ii]] muijL[[ii,ii]],{ii,1,nSH}],{i,1,nSH},{j,1,nSH}]]//FullSimplify;
 	fac=1/(4 \[Pi]);
-	Contri3=fac*Simplify[Table[Sum[\[Lambda]3Cx[[jj,ii,i]]\[Lambda]3Cx[[jj,ii,j]]/(\[Mu]ijL[[ii,ii]]),{ii,1,nSH},{jj,1,nSL}],{i,1,nSH},{j,1,nSH}]];
+	Contri3=fac*Simplify[Table[Sum[lam3Cx[[jj,ii,i]]lam3Cx[[jj,ii,j]]/(muijL[[ii,ii]]),{ii,1,nSH},{jj,1,nSL}],{i,1,nSH},{j,1,nSH}]];
 (*The tadpole shifts the heavy field by -TadPoleHeavySS/M^2; like the other terms, Contri4 is minus the mass correction*)
-	Contri4=Simplify[Table[Sum[TadPoleHeavySS[[ii]]\[Lambda]3CHeavy[[i,j,ii]]/(\[Mu]ijL[[ii,ii]]^2),{ii,1,nSH}],{i,1,nSH},{j,1,nSH}]];
+	Contri4=Simplify[Table[Sum[TadPoleHeavySS[[ii]]lam3CHeavy[[i,j,ii]]/(muijL[[ii,ii]]^2),{ii,1,nSH}],{i,1,nSH},{j,1,nSH}]];
 
 	HeavyScalarMass=Contri1+Contri2+Contri3+Contri4;
 
 	HelpList=DeleteDuplicates@Flatten@Simplify[ HeavyScalarMass]//Sort;
-	HelpVar=Table[ \[Mu]H[a],{a,1,Delete[HelpList,1]//Length}];
+	HelpVar=Table[ muH[a],{a,1,Delete[HelpList,1]//Length}];
 	HelpVarMod=RelationsBVariables[HelpList,HelpVar];
 	HelpSolveEffectiveHardM=Table[{Delete[HelpList,1][[a]]->HelpVarMod[[a]]},{a,1,Delete[HelpList,1]//Length}]//Flatten;
-	\[Mu]HEff=HeavyScalarMass//Normal//ReplaceAll[#,HelpSolveEffectiveHardM]&//SparseArray;
+	muHEff=HeavyScalarMass//Normal//ReplaceAll[#,HelpSolveEffectiveHardM]&//SparseArray;
 
 ];
 
@@ -331,16 +332,16 @@ HeavyScalarMassSS[]:=Module[{},
 
 
 (*
-	Matching of scalar-cubic couplings. \[Lambda]3Cy corresponds to light*light*heavy scalar cubic, and \[Lambda]3Cx corresponds to light*heavy*heavy scalar coupling.
+	Matching of scalar-cubic couplings. lam3Cy corresponds to light*light*heavy scalar cubic, and lam3Cx corresponds to light*heavy*heavy scalar coupling.
 *)
 
 ScalarCubicsSS[]:=Module[{HeavyMasses,ContriLoop,ContriMixed,ContriSE,cubicTree,mixingCubic,tadpoleCubic},
 If[verbose,Print["Calculating Scalar Cubic Couplings"]];
 
-	If[Length[\[Lambda]3//Normal//Variables]==0,
-		\[Lambda]3CSSS=0;
+	If[Length[lam3//Normal//Variables]==0,
+		lam3CSSS=0;
 	,
-		HeavyMasses=Table[\[Mu]ijL[[n,n]],{n,1,nSH}]; (*A list of all the heavy-particle masses*)
+		HeavyMasses=Table[muijL[[n,n]],{n,1,nSH}]; (*A list of all the heavy-particle masses*)
 
 (*Bubble and triangle diagrams with at least one heavy line*)
 		ContriLoop=OneLoopCubicSS[Range[nSL],Range[nSL],Range[nSL]];
@@ -349,15 +350,15 @@ If[verbose,Print["Calculating Scalar Cubic Couplings"]];
 	One-point reducible diagrams: a light-heavy mixing whose heavy field ends at a H^2S cubic, and the
 	tadpoles of the heavy fields at a HS^3 quartic.
 *)
-		mixingCubic[mix_]:=-3 Symmetrize[Table[Sum[mix[[i,h]]\[Lambda]3Cy[[j,k,h]]/HeavyMasses[[h]]^2,{h,1,nSH}],{i,1,nSL},{j,1,nSL},{k,1,nSL}],Symmetric[{1,2,3}]];
-		tadpoleCubic[tadpole_]:=-Table[Sum[\[Lambda]y[[i,j,k,h]]tadpole[[h]]/HeavyMasses[[h]]^2,{h,1,nSH}],{i,1,nSL},{j,1,nSL},{k,1,nSL}];
+		mixingCubic[mix_]:=-3 Symmetrize[Table[Sum[mix[[i,h]]lam3Cy[[j,k,h]]/HeavyMasses[[h]]^2,{h,1,nSH}],{i,1,nSL},{j,1,nSL},{k,1,nSL}],Symmetric[{1,2,3}]];
+		tadpoleCubic[tadpole_]:=-Table[Sum[lamy[[i,j,k,h]]tadpole[[h]]/HeavyMasses[[h]]^2,{h,1,nSH}],{i,1,nSL},{j,1,nSL},{k,1,nSL}];
 		ContriMixed=mixingCubic[MixingLH[TadPoleHeavySS]]+tadpoleCubic[TadPoleHeavySS];
 
 (*The field normalization acts on the tree-level cubic of the light fields, including the tree-level tadpoles*)
-		cubicTree=\[Lambda]3CLight+mixingCubic[TadpoleShiftLH[TadPoleHeavy]]+tadpoleCubic[TadPoleHeavy];
+		cubicTree=lam3CLight+mixingCubic[TadpoleShiftLH[TadPoleHeavy]]+tadpoleCubic[TadPoleHeavy];
 		ContriSE=-3 Symmetrize[ZSij . cubicTree,Symmetric[{1,2,3}]];
 
-		\[Lambda]3CSSS=ContriLoop+ContriMixed+ContriSE//SparseArray//SimplifySparse;
+		lam3CSSS=ContriLoop+ContriMixed+ContriSE//SparseArray//SimplifySparse;
 	];
 
 ];
@@ -369,36 +370,36 @@ If[verbose,Print["Calculating Scalar Cubic Couplings"]];
 ScalarModifiedSS[]:=Module[{},
 If[verbose,Print["Adding tree-level Corrections to Scalar Quartics"]];
 
-	ContriTLTemp=-Simplify[Table[Sum[1/(\[Mu]ijL[[n,n]]^2)\[Lambda]3Cy[[i,j,n]]\[Lambda]3Cy[[k,l,n]],{n,1,nSH}],{i,1,nSL},{j,1,nSL},{k,1,nSL},{l,1,nSL}]];
+	ContriTLTemp=-Simplify[Table[Sum[1/(muijL[[n,n]]^2)lam3Cy[[i,j,n]]lam3Cy[[k,l,n]],{n,1,nSH}],{i,1,nSL},{j,1,nSL},{k,1,nSL},{l,1,nSL}]];
 	ContriTL=Table[ContriTLTemp[[i,j,k,l]]+ContriTLTemp[[i,k,j,l]]+ContriTLTemp[[i,l,j,k]],{i,1,nSL},{j,1,nSL},{k,1,nSL},{l,1,nSL}];
-	\[Lambda]Mod=\[Lambda]4S+ContriTL;
-	\[Lambda]4S=\[Lambda]Mod;
+	lamMod=lam4S+ContriTL;
+	lam4S=lamMod;
 
-	ContriTLTemp=-Simplify[Table[Sum[1/(\[Mu]ijL[[n,n]]^2)\[Lambda]3CHeavy[[ii,jj,n]]\[Lambda]3Cy[[k,l,n]],{n,1,nSH}],{ii,1,nSH},{jj,1,nSH},{k,1,nSL},{l,1,nSL}]];
-	ContriTLTemp2=-Simplify[Table[Sum[1/(\[Mu]ijL[[n,n]]^2)\[Lambda]3Cx[[k,ii,n]]\[Lambda]3Cx[[l,jj,n]],{n,1,nSH}],{ii,1,nSH},{jj,1,nSH},{k,1,nSL},{l,1,nSL}]];
+	ContriTLTemp=-Simplify[Table[Sum[1/(muijL[[n,n]]^2)lam3CHeavy[[ii,jj,n]]lam3Cy[[k,l,n]],{n,1,nSH}],{ii,1,nSH},{jj,1,nSH},{k,1,nSL},{l,1,nSL}]];
+	ContriTLTemp2=-Simplify[Table[Sum[1/(muijL[[n,n]]^2)lam3Cx[[k,ii,n]]lam3Cx[[l,jj,n]],{n,1,nSH}],{ii,1,nSH},{jj,1,nSH},{k,1,nSL},{l,1,nSL}]];
 	ContriTL=Table[ContriTLTemp[[ii,jj,k,l]]+ContriTLTemp2[[ii,jj,k,l]]+ContriTLTemp2[[jj,ii,k,l]],{ii,1,nSH},{jj,1,nSH},{k,1,nSL},{l,1,nSL}];
-	\[Lambda]Mod=\[Lambda]K+ContriTL;
-	\[Lambda]K=\[Lambda]Mod;
+	lamMod=lamK+ContriTL;
+	lamK=lamMod;
 
-	ContriTLTemp=-Simplify[Table[Sum[1/(\[Mu]ijL[[n,n]]^2)\[Lambda]3Cx[[i,jj,n]]\[Lambda]3Cy[[k,l,n]],{n,1,nSH}],{i,1,nSL},{k,1,nSL},{l,1,nSL},{jj,1,nSH}]];
+	ContriTLTemp=-Simplify[Table[Sum[1/(muijL[[n,n]]^2)lam3Cx[[i,jj,n]]lam3Cy[[k,l,n]],{n,1,nSH}],{i,1,nSL},{k,1,nSL},{l,1,nSL},{jj,1,nSH}]];
 	ContriTL=Table[ContriTLTemp[[i,k,l,jj]]+ContriTLTemp[[k,i,l,jj]]+ContriTLTemp[[l,k,i,jj]],{i,1,nSL},{k,1,nSL},{l,1,nSL},{jj,1,nSH}];
-	\[Lambda]Mod=\[Lambda]y+ContriTL;
-	\[Lambda]y=\[Lambda]Mod;
+	lamMod=lamy+ContriTL;
+	lamy=lamMod;
 
 
-	ContriTLTemp=-Simplify[Table[Sum[1/(\[Mu]ijL[[n,n]]^2)\[Lambda]3CHeavy[[ii,jj,n]]\[Lambda]3Cx[[k,ll,n]],{n,1,nSH}],{k,1,nSL},{ii,1,nSH},{jj,1,nSH},{ll,1,nSH}]];
+	ContriTLTemp=-Simplify[Table[Sum[1/(muijL[[n,n]]^2)lam3CHeavy[[ii,jj,n]]lam3Cx[[k,ll,n]],{n,1,nSH}],{k,1,nSL},{ii,1,nSH},{jj,1,nSH},{ll,1,nSH}]];
 	ContriTL=Table[ContriTLTemp[[k,ii,jj,ll]]+ContriTLTemp[[k,ii,ll,jj]]+ContriTLTemp[[k,ll,jj,ii]],{k,1,nSL},{ii,1,nSH},{jj,1,nSH},{ll,1,nSH}];
-	\[Lambda]Mod=\[Lambda]x+ContriTL;
-	\[Lambda]x=\[Lambda]Mod;
+	lamMod=lamx+ContriTL;
+	lamx=lamMod;
 
 	MassHelp[0]:=0;
 	MassHelp[x_]:=1/(x);
 
-	ContriTLTemp=-Simplify[Table[Sum[MassHelp[\[Mu]ijLS[[n,n]]]^2 \[Lambda]3CTot[[i,j,n]]\[Lambda]3CTot[[k,l,n]],{n,1,ns}],{i,1,ns},{j,1,ns},{k,1,ns},{l,1,ns}]];
+	ContriTLTemp=-Simplify[Table[Sum[MassHelp[muijLS[[n,n]]]^2 lam3CTot[[i,j,n]]lam3CTot[[k,l,n]],{n,1,ns}],{i,1,ns},{j,1,ns},{k,1,ns},{l,1,ns}]];
 	ContriTL=Table[ContriTLTemp[[i,j,k,l]]+ContriTLTemp[[i,k,j,l]]+ContriTLTemp[[i,l,k,j]],{i,1,ns},{j,1,ns},{k,1,ns},{l,1,ns}];
-	\[Lambda]3DSp+ContriTL;
+	lam3DSp+ContriTL;
 
-	\[Lambda]4Tot[[HeavyScalars[[;;,1]],HeavyScalars[[;;,1]],HeavyScalars[[;;,1]],HeavyScalars[[;;,1]]]]=\[Lambda]3DSp[[HeavyScalars[[;;,1]],HeavyScalars[[;;,1]],HeavyScalars[[;;,1]],HeavyScalars[[;;,1]]]];
+	lam4Tot[[HeavyScalars[[;;,1]],HeavyScalars[[;;,1]],HeavyScalars[[;;,1]],HeavyScalars[[;;,1]]]]=lam3DSp[[HeavyScalars[[;;,1]],HeavyScalars[[;;,1]],HeavyScalars[[;;,1]],HeavyScalars[[;;,1]]]];
 
 
 ];
@@ -407,96 +408,74 @@ If[verbose,Print["Adding tree-level Corrections to Scalar Quartics"]];
 (*
 	Calculates the scalar quartic in the ultrasoft theory.
 *)
-ScalarQuarticSS[]:=Module[{ScalarBox,ScalarTriangle,\[Lambda]3CyLoop,ContriTree,ContriTadpole,ContriMixing,\[Lambda]KEff,\[Lambda]yEff,\[Lambda]yEff2,HeavyMasses,
+ScalarQuarticSS[]:=Module[{lam3CyLoop,ContriTree,ContriTadpole,ContriMixing,ContriMassShift,lamKEff,lamyEff,lamyEff2,HeavyMasses,
 					AllMasses,TensHelp,MassHelp,HeavyScal,ContriSE,
 					ContriCubic,ContriQuarCubic,ContriSS,ContriSS2,ContriSS3,ContriTL,ContriTadpole1,ContriTadpole2},
 If[verbose,Print["Calculating Scalar Quartics"]];
-	
-(*Scalar triangle diagram*)
-		ScalarTriangle[x_,y_,z_]:=1/(4 \[Pi] (x+y) (x+z) (y+z));
-		ScalarTriangle[x_,0,0]:=-(1/(4 \[Pi] x^3));
-		ScalarTriangle[0,x_,0]:=ScalarTriangle[x,0,0];
-		ScalarTriangle[0,0,x_]:=ScalarTriangle[x,0,0];
-		ScalarTriangle[0,0,0]:=0;
-
-(*Scalar box diagram*)
-		ScalarBox[x_,y_,z_,w_]:=(w+x+y+z)/(4 \[Pi] (w+x) (w+y) (w+z) (x+y) (x+z) (y+z));	
-		ScalarBox[x_,y_,0,0]:=-((x^2+x y+y^2)/(4 \[Pi] x^3 y^3 (x+y)));	
-		ScalarBox[x_,0,y_,0]:=ScalarBox[x,y,0,0];
-		ScalarBox[x_,0,0,y_]:=ScalarBox[x,y,0,0];
-		ScalarBox[0,y_,x_,0]:=ScalarBox[x,y,0,0];
-		ScalarBox[0,y_,0,x_]:=ScalarBox[x,y,0,0];
-		ScalarBox[0,0,y_,x_]:=ScalarBox[x,y,0,0];
-		ScalarBox[x_,0,0,0]:=1/(4 \[Pi] x^5);
-		ScalarBox[0,x_,0,0]:=ScalarBox[x,0,0,0];
-		ScalarBox[0,0,x_,0]:=ScalarBox[x,0,0,0];
-		ScalarBox[0,0,0,x_]:=ScalarBox[x,0,0,0];
-		ScalarBox[0,0,0,0]:=0;
-		
 
 (*Quartics with a various number of heavy-scalar legs*)
-	\[Lambda]KEff=\[Lambda]K//SparseArray;
-	\[Lambda]yEff=\[Lambda]y//SparseArray;
-	\[Lambda]yEff2=\[Lambda]y;
+	lamKEff=lamK//SparseArray;
+	lamyEff=lamy//SparseArray;
+	lamyEff2=lamy;
 
 (*List of scalar masses*)
-	HeavyMasses=Table[\[Mu]ijL[[n,n]],{n,1,nSH}]; (*A list of all the heavy-particle masses*)
-	HeavyScal=Table[\[Mu]ijL[[n,n]],{n,nv+1,nSH}]; (*A list of all the heavy-scalar masses*)
-	AllMasses=Table[\[Mu]ijLS[[n,n]],{n,1,ns}]; (*A list of all the scalar masses*)
+	HeavyMasses=Table[muijL[[n,n]],{n,1,nSH}]; (*A list of all the heavy-particle masses*)
+	HeavyScal=Table[muijL[[n,n]],{n,nv+1,nSH}]; (*A list of all the heavy-scalar masses*)
+	AllMasses=Table[muijLS[[n,n]],{n,1,ns}]; (*A list of all the scalar masses*)
 	
 (*A bubble with two H^2S^2 quartics*)
 	MassHelp=Table[1/(n+m),{n,HeavyMasses},{m,HeavyMasses}]//SparseArray//Flatten[#,{1,2}]&;
-	TensHelp=Flatten[\[Lambda]KEff,{{1,2}}]//SparseArray;
+	TensHelp=Flatten[lamKEff,{{1,2}}]//SparseArray;
 	TensHelp=1/2*1/(4 \[Pi])*Transpose[TensHelp,{3,2,1}] . (MassHelp\[NonBreakingSpace]TensHelp)//SparseArray;
 	ContriSS=3Symmetrize[TensHelp,Symmetric[{1,2,3,4}]]//SparseArray//SimplifySparse;
 	
 	
-	If[Length[\[Lambda]y//Normal//Variables]==0,
+	If[Length[lamy//Normal//Variables]==0,
 		ContriSS2=EmptyArray[{nSL,nSL,nSL,nSL}];
 		ContriSS3=EmptyArray[{nSL,nSL,nSL,nSL}];
 	,
 
 (*A bubble with two two HS^3 quartics*)
 		MassHelp=Table[1/(n),{n,HeavyMasses}]//SparseArray;
-		TensHelp=MassHelp Transpose[\[Lambda]yEff,{4,2,3,1 }]//Flatten[#,{2,1}]& ;
-		TensHelp=1/(4 \[Pi]) Transpose[Flatten[\[Lambda]yEff,{3,4}],{3,2,1}] . TensHelp;
+		TensHelp=MassHelp Transpose[lamyEff,{4,2,3,1 }]//Flatten[#,{2,1}]& ;
+		TensHelp=1/(4 \[Pi]) Transpose[Flatten[lamyEff,{3,4}],{3,2,1}] . TensHelp;
 		ContriSS2=3Symmetrize[TensHelp,Symmetric[{1,2,3,4}]]//SparseArray//SimplifySparse;
 
 (*A one-point reducible diagram where (for one external line) a H^3S quartic forms a bubble and where the
 	remaining H line connects to a HS^3 quartic*)
 	
 		MassHelp=Table[n/m^2,{m,HeavyMasses},{n,HeavyMasses}]//SparseArray;
-		TensHelp=Transpose[\[Lambda]x,{4,2,3,1}]//Table[i,{i,#}]&//Table[#[[i,i]],{i,1,Length[#]}]&//SparseArray;
+		TensHelp=Transpose[lamx,{4,2,3,1}]//Table[i,{i,#}]&//Table[#[[i,i]],{i,1,Length[#]}]&//SparseArray;
 		TensHelp=MassHelp . TensHelp//Table[i,{i,#}]&//Table[#[[i,i]],{i,1,Length[#]}]&//SparseArray;
-		ContriSS3=-1/(4 \[Pi])*1/2*4*Symmetrize[\[Lambda]yEff2 . TensHelp,Symmetric[{1,2,3,4}]]//SparseArray//SimplifySparse;
+		ContriSS3=-1/(4 \[Pi])*1/2*4*Symmetrize[lamyEff2 . TensHelp,Symmetric[{1,2,3,4}]]//SparseArray//SimplifySparse;
 	];
 
 
 	
-	If[Length[\[Lambda]3//Normal//Variables]==0,
-		\[Lambda]3DSS=-ContriSS-ContriSS2-ContriSS3;
+	If[Length[lam3//Normal//Variables]==0,
+		lam3DSS=-ContriSS-ContriSS2-ContriSS3;
 	,
 (*A tree-level two-cubic diagram*)
 		MassHelp=Table[1/(n^2),{n,HeavyMasses}]//SparseArray;
-		TensHelp=TensorProduct[\[Lambda]3Cy,\[Lambda]3Cy]//DiagonalTensor2[#,3,6]&;
+		TensHelp=TensorProduct[lam3Cy,lam3Cy]//DiagonalTensor2[#,3,6]&;
 		TensHelp=MassHelp . TensHelp;
 		ContriTree=3 Symmetrize[TensHelp,Symmetric[{1,2,3,4}]]//SparseArray//SimplifySparse;
 		
 (*A tree-level two-cubic diagram with a loop correction*)		
 		MassHelp=Table[1/(n^2*m^2),{n,HeavyMasses},{m,HeavyMasses}]//SparseArray;
-		MassHelp=\[Mu]HEff MassHelp;
-		TensHelp+=\[Lambda]3Cy . MassHelp . Transpose[\[Lambda]3Cy,{3,2,1}];
+		MassHelp=muHEff MassHelp;
+		TensHelp+=lam3Cy . MassHelp . Transpose[lam3Cy,{3,2,1}];
 
 (*A tree-level two-cubic diagram with a loop correction to one of the light-light-heavy vertices*)
-		\[Lambda]3CyLoop=VertexCorrectionLLH[];
+		lam3CyLoop=VertexCorrectionLLH[];
 		MassHelp=DiagonalMatrix[Table[1/(n^2),{n,HeavyMasses}]]//SparseArray;
-		TensHelp+=\[Lambda]3CyLoop . MassHelp . Transpose[\[Lambda]3Cy,{3,2,1}]+\[Lambda]3Cy . MassHelp . Transpose[\[Lambda]3CyLoop,{3,2,1}];
+		TensHelp+=lam3CyLoop . MassHelp . Transpose[lam3Cy,{3,2,1}]+lam3Cy . MassHelp . Transpose[lam3CyLoop,{3,2,1}];
 		ContriTL=3 Symmetrize[TensHelp,Symmetric[{1,2,3,4}]]//SparseArray//SimplifySparse;
 
 (*A one-point reducible diagram where one leg has a tadpole insertion, with HS^2 and H^2S^2 couplings*)
 		ContriTadpole[tadpole_]:=Module[{help},
 			MassHelp=Table[1/(n^2*m^2),{n,HeavyMasses},{m,HeavyMasses}]//SparseArray;
-			help=TensorProduct[\[Lambda]K,\[Lambda]3Cy,tadpole]//DiagonalTensor2[#,1,7]&//DiagonalTensor2[#,2,7]&;
+			help=TensorProduct[lamK,lam3Cy,tadpole]//DiagonalTensor2[#,1,7]&//DiagonalTensor2[#,2,7]&;
 			help=-MassHelp . help//TensorContract[#,{1,2}]&;
 			2*3 Symmetrize[help,Symmetric[{1,2,3,4}]]//SparseArray//SimplifySparse
 		];
@@ -505,11 +484,18 @@ If[verbose,Print["Calculating Scalar Quartics"]];
 (*One-point reducible diagrams with a light-heavy mixing from loops and from the tadpoles of the heavy fields*)
 		ContriMixing=MixingQuarticSS[MixingLH[TadPoleHeavySS]];
 
+(*The tree-level exchange of heavy fields whose masses are shifted by the tadpoles through the H^3 cubics, as in muHEff*)
+		ContriMassShift[tadpole_]:=Module[{shift},
+			shift=Table[-Sum[lam3CHeavy[[h,hp,hh]]tadpole[[hh]]/HeavyMasses[[hh]]^2,{hh,1,nSH}],{h,1,nSH},{hp,1,nSH}];
+			3 Symmetrize[Table[Sum[lam3Cy[[i,j,h]]shift[[h,hp]]lam3Cy[[k,l,hp]]/(HeavyMasses[[h]]^2 HeavyMasses[[hp]]^2),{h,1,nSH},{hp,1,nSH}],
+				{i,1,nSL},{j,1,nSL},{k,1,nSL},{l,1,nSL}],Symmetric[{1,2,3,4}]]//SparseArray//SimplifySparse
+		];
+
 (*
 	The self-energy contribution. The field normalization acts on the tree-level quartic of the light fields,
 	including the tree-level exchange of heavy fields and the tree-level tadpoles.
 *)
-		ContriSE=-ZSij . (\[Lambda]4S-ContriTree-ContriTadpole[TadPoleHeavy]+MixingQuarticSS[TadpoleShiftLH[TadPoleHeavy]])//SparseArray;
+		ContriSE=-ZSij . (lam4S-ContriTree-ContriTadpole[TadPoleHeavy]+MixingQuarticSS[TadpoleShiftLH[TadPoleHeavy]]+ContriMassShift[TadPoleHeavy])-ZSijTadpole . (lam4S-ContriTree)//SparseArray;
 		ContriSE=ContriSE+Transpose[ContriSE,{2,1,3,4}]+Transpose[ContriSE,{3,1,2,4}]+Transpose[ContriSE,{4,1,2,3}]//SparseArray//SimplifySparse;
 
 	If[nSH>nv,
@@ -517,25 +503,28 @@ If[verbose,Print["Calculating Scalar Quartics"]];
 	for all the scalars and then project out the relevant contributions in the end.*)	
 
 (*A box diagram with 4 cubic couplings*)
-		MassHelp=Table[ScalarBox[n,m,l,w],{n,AllMasses},{m,AllMasses},{l,AllMasses},{w,AllMasses}]//SparseArray;	
-		TensHelp=TensorProduct[\[Lambda]3CTot,\[Lambda]3CTot,\[Lambda]3CTot]//DiagonalTensor2[#,2,5]&//DiagonalTensor2[#,5,7]&;
-		TensHelp=TensorProduct[TensHelp,\[Lambda]3CTot]//DiagonalTensor2[#,4,9]&//DiagonalTensor2[#,7,8]&;
+		MassHelp=Table[BoxIntegral3d[n,m,l,w],{n,AllMasses^2},{m,AllMasses^2},{l,AllMasses^2},{w,AllMasses^2}]//SparseArray;	
+		TensHelp=TensorProduct[lam3CTot,lam3CTot,lam3CTot]//DiagonalTensor2[#,2,5]&//DiagonalTensor2[#,5,7]&;
+		TensHelp=TensorProduct[TensHelp,lam3CTot]//DiagonalTensor2[#,4,9]&//DiagonalTensor2[#,7,8]&;
 		TensHelp=Total[MassHelp TensHelp,-5][[LightScalar[[;;,1]],LightScalar[[;;,1]],LightScalar[[;;,1]],LightScalar[[;;,1]]]];
 (*The three orderings of the external legs; the box enters with the opposite sign of the triangle*)
 		ContriCubic=3 Symmetrize[TensHelp,Symmetric[{1,2,3,4}]]//SparseArray//SimplifySparse;
 
 (*A triangle diagram with two cubic and one quartic couplings*)				
-		MassHelp=Table[ScalarTriangle[n,m,l],{n,AllMasses},{m,AllMasses},{l,AllMasses}]//SparseArray;	
-		TensHelp=TensorProduct[\[Lambda]4Tot,\[Lambda]3CTot,\[Lambda]3CTot]//DiagonalTensor2[#,3,5]&//DiagonalTensor2[#,4,7]&//DiagonalTensor2[#,6,7]&;
+		MassHelp=Table[TriangleIntegral3d[n,m,l],{n,AllMasses^2},{m,AllMasses^2},{l,AllMasses^2}]//SparseArray;	
+		TensHelp=TensorProduct[lam4Tot,lam3CTot,lam3CTot]//DiagonalTensor2[#,3,5]&//DiagonalTensor2[#,4,7]&//DiagonalTensor2[#,6,7]&;
 		TensHelp=Total[MassHelp TensHelp,-5][[LightScalar[[;;,1]],LightScalar[[;;,1]],LightScalar[[;;,1]],LightScalar[[;;,1]]]];
 		ContriQuarCubic=-3!Symmetrize[TensHelp,Symmetric[{1,2,3,4}]]//SparseArray//SimplifySparse;
 		
-		\[Lambda]3DSS=  ContriSE-ContriTL-ContriTadpole2+ContriMixing- ContriSS-ContriSS2- ContriQuarCubic- ContriCubic;
+		lam3DSS=  ContriSE-ContriTL-ContriTadpole2+ContriMixing- ContriSS-ContriSS2- ContriQuarCubic- ContriCubic;
 	,
-		\[Lambda]3DSS=ContriSE-ContriTL-ContriTadpole2+ContriMixing- ContriSS-ContriSS2;
+		lam3DSS=ContriSE-ContriTL-ContriTadpole2+ContriMixing- ContriSS-ContriSS2;
 	];
 
 	];
+
+(*One-loop terms of first order in the tree-level tadpoles of the heavy fields, from TadpoleOnePRSS in ScalarMassSS*)
+	lam3DSS=lam3DSS+lamTadpoleSS;
 
 ];
 
@@ -574,7 +563,7 @@ VectorSelfEnergySS[]:=Module[{},
 If[verbose,Print["Calculating Vector Self-Energy"]];
 
 	SelfEnergySS=-1/2*(-1/(24 \[Pi]));
-	ContriSS=SelfEnergySS*Simplify[Table[Sum[HabijA[[a,b,i,i]]/\[Mu]ijL[[i,i]],{i,1,nSH}],{a,1,nv},{b,1,nv}]];
+	ContriSS=SelfEnergySS*Simplify[Table[Sum[HabijA[[a,b,i,i]]/muijL[[i,i]],{i,1,nSH}],{a,1,nv},{b,1,nv}]];
 	ZLij=-ContriSS/2;
 ];
 
@@ -586,20 +575,20 @@ BetaFunctions3DUS[]:=Module[{},
 If[verbose,Print["Finding SuperSoft \[Beta]-functions"]];
 
 
-	VarGauge=Join[\[Mu]ijLight//Normal//Variables]//DeleteDuplicates;
+	VarGauge=Join[muijLight//Normal//Variables]//DeleteDuplicates;
 	SubGauge=Table[c->Symbol[ToString[c]<>ToString["US"]],{c,VarGauge}];
 
 (*This is the epsilon pole of the 3d sunset diagram. This is the only divergence in 3d.*)
 	I111=1/(4)1/(16 \[Pi]^2);
 
 	Coeff=1/2*2;
-	Contri1=Coeff*Flatten[TensorContract[HabijL,{1,2}]] . Flatten[\[Lambda]4Light,{1,2}];
+	Contri1=Coeff*Flatten[TensorContract[HabijL,{1,2}]] . Flatten[lam4Light,{1,2}];
 
 	Coeff=-1/4*(-1);
 	Contri2=Coeff*Flatten[TensorContract[HabijL,{3,4}]] . Flatten[HabijVL,{1,2}];
 
 	Coeff=1/3!;
-	Contri3=Coeff *Flatten[\[Lambda]4Light,{{1},{2,3,4}}] . Flatten[\[Lambda]4Light,{{1,2,3}}];
+	Contri3=Coeff *Flatten[lam4Light,{{1},{2,3,4}}] . Flatten[lam4Light,{{1,2,3}}];
 
 	Coeff=1/2*((1+1/2));
 	Contri4=Coeff *Flatten[HabijVL,{{3},{1,2,4}}] . Flatten[HabijVL,{{1,2,4},{3}}];
@@ -613,22 +602,22 @@ If[verbose,Print["Finding SuperSoft \[Beta]-functions"]];
 
 	SubGauge=Table[c->Symbol[ToString[c]<>ToString["3d"]],{c,GaugeCouplingNames}];
 
-	\[Delta]\[Mu]3dS=Contri1+   Contri2+ Contri3+  Contri4+ Contri5+  Contri6;(*Sum of all the diagrams*)
-	\[Beta]\[Mu]3ijS=4*I111* \[Delta]\[Mu]3dS//Normal //ReplaceAll[#,SubGauge]&//Simplify; (*The scalar-mass counter-term*)
+	\[Delta]mu3dS=Contri1+   Contri2+ Contri3+  Contri4+ Contri5+  Contri6;(*Sum of all the diagrams*)
+	\[Beta]mu3ijS=4*I111* \[Delta]mu3dS//Normal //ReplaceAll[#,SubGauge]&//Simplify; (*The scalar-mass counter-term*)
 
 (*Printing Result*)
 (* Scalar Mass*)
-	VarGauge=Join[\[Mu]ijLight//Normal//Variables]//DeleteDuplicates;
+	VarGauge=Join[muijLight//Normal//Variables]//DeleteDuplicates;
 	SubGauge=Table[c->Symbol[ToString[c]<>ToString["temp"]],{c,VarGauge}];
 	SubGauge2=Table[Symbol[ToString[c]<>ToString["temp"]]->Symbol[ToString[c]<>ToString["US"]],{c,VarGauge}];
 
 	GaugeHelp=Table[Symbol[ToString[c]<>ToString["3d"]],{c,GaugeCouplingNames}];
-	VarUS=Join[{\[Lambda]3CLight//Normal//Variables,\[Lambda]4Light//Normal//Variables,GaugeHelp//Normal//Variables}]//DeleteDuplicates//Flatten[#,1]&;
+	VarUS=Join[{lam3CLight//Normal//Variables,lam4Light//Normal//Variables,GaugeHelp//Normal//Variables}]//DeleteDuplicates//Flatten[#,1]&;
 	SubUS=Table[c->Symbol[ToString[c]<>ToString["US"]],{c,VarUS}];
 
-	\[Lambda]4p=\[Mu]ijLight//Normal//ReplaceAll[#,SubGauge]&//SparseArray;
-	SolVar=\[Beta]\[Mu]3ijS-\[Lambda]4p//Normal;
-	QuarticVar=\[Lambda]4p//Normal//Variables;
+	lam4p=muijLight//Normal//ReplaceAll[#,SubGauge]&//SparseArray;
+	SolVar=\[Beta]mu3ijS-lam4p//Normal;
+	QuarticVar=lam4p//Normal//Variables;
 	ResMass=Solve[SolVar==0,QuarticVar]/.SubGauge2/.SubUS//Flatten[#,1]&; (*Finds the beta-function for each scalar mass*)
 
 (*Printing Result*)
@@ -636,22 +625,22 @@ If[verbose,Print["Finding SuperSoft \[Beta]-functions"]];
 	
 (*Tadpoles*)
 	\[CapitalLambda]gHelp=TensorContract[HabijL,{{1,2}}]//SimplifySparse; 
-	Contri10=1/3!*I111*Activate@TensorContract[Inactive@TensorProduct[\[Lambda]4Light//SparseArray,\[Lambda]3CLight//SparseArray],{{2,5},{3,6},{4,7}}];
-	Contri11=1/2*I111*2Activate@TensorContract[Inactive@TensorProduct[\[Lambda]3CLight//SparseArray,\[CapitalLambda]gHelp//SparseArray],{{2,4},{3,5}}];
+	Contri10=1/3!*I111*Activate@TensorContract[Inactive@TensorProduct[lam4Light//SparseArray,lam3CLight//SparseArray],{{2,5},{3,6},{4,7}}];
+	Contri11=1/2*I111*2Activate@TensorContract[Inactive@TensorProduct[lam3CLight//SparseArray,\[CapitalLambda]gHelp//SparseArray],{{2,4},{3,5}}];
 
 	VarGauge=GaugeCouplingNames;
 	SubGauge=Table[c->Symbol[ToString[c]<>ToString["3d"]],{c,VarGauge}];
 
-	\[Delta]\[Mu]Tadpole3dUS=Contri10+Contri11//Normal//ReplaceAll[#,SubGauge]&//SparseArray;(*Same deal for tadpoles*)
-	\[Beta]\[Mu]TadpoleUS=4*\[Delta]\[Mu]Tadpole3dUS //Simplify;
+	\[Delta]muTadpole3dUS=Contri10+Contri11//Normal//ReplaceAll[#,SubGauge]&//SparseArray;(*Same deal for tadpoles*)
+	\[Beta]muTadpoleUS=4*\[Delta]muTadpole3dUS //Simplify;
 
 	VarGauge=Join[TadPoleLight//Normal//Variables]//DeleteDuplicates;
 	SubGauge=Table[c->Symbol[ToString[c]<>ToString["temp"]],{c,VarGauge}];
 	SubGauge2=Table[Symbol[ToString[c]<>ToString["temp"]]->Symbol[ToString[c]<>ToString["US"]],{c,VarGauge}];
 
-	\[Lambda]4p=TadPoleLight//Normal//ReplaceAll[#,SubGauge]&//SparseArray;
-	SolVar=\[Beta]\[Mu]TadpoleUS-\[Lambda]4p//Normal;
-	QuarticVar=\[Lambda]4p//Normal//Variables;
+	lam4p=TadPoleLight//Normal//ReplaceAll[#,SubGauge]&//SparseArray;
+	SolVar=\[Beta]muTadpoleUS-lam4p//Normal;
+	QuarticVar=lam4p//Normal//Variables;
 	ResTadpole=Solve[SolVar==0,QuarticVar]/.SubGauge2/.SubUS//Flatten[#,1]&; (*Finds the beta-function for each scalar mass*)
 
 	PrintPre=Join[PrintPre,ResTadpole]//Normal//FullSimplify//DeleteDuplicates;
@@ -666,12 +655,12 @@ If[verbose,Print["Finding SuperSoft \[Beta]-functions"]];
 TadPoleSS[]:=Module[{},
 	If[verbose,Print["Calculating 1-Loop Tadpoles"]];
 	fac=-1/(4 \[Pi]);
-	ContriL1=-fac/2*Simplify[Table[Sum[\[Mu]ijL[[ii,ii]] \[Lambda]3Cx[[i,ii,ii]],{ii,1,nSH}],{i,1,nSL}]];
+	ContriL1=-fac/2*Simplify[Table[Sum[muijL[[ii,ii]] lam3Cx[[i,ii,ii]],{ii,1,nSH}],{i,1,nSL}]];
 	ContriLSE=-ZSij . TadPoleLight;
 
 	TadPoleLightSS=TadPoleLight+ContriLSE-ContriL1;
 
-	ContriH1=-fac/2*Simplify[Table[Sum[\[Mu]ijL[[ii,ii]] \[Lambda]3CHeavy[[i,ii,ii]],{ii,1,nSH}],{i,1,nSH}]];
+	ContriH1=-fac/2*Simplify[Table[Sum[muijL[[ii,ii]] lam3CHeavy[[i,ii,ii]],{ii,1,nSH}],{i,1,nSH}]];
 
 	TadPoleHeavySS=TadPoleHeavy-ContriH1;
 ];
@@ -682,80 +671,135 @@ TadPoleSS[]:=Module[{},
 
 
 (*
-	The masses and the cubic and quartic couplings of all scalars, light and heavy, as one tensor each.
+	The squared masses and the cubic and quartic couplings of all scalars, light and heavy, as one tensor each.
 	The light fields have the indices 1,...,nSL, the heavy fields nSL+1,...,nSL+nSH, and the light masses are zero.
 *)
-AllScalarCouplingsSS[]:=Module[{nAll,masses,blockRules,allPermutations,lam3,lam4},
+AllScalarCouplingsSS[]:=Module[{nAll,masses,blockRules,allPermutations,lam3All,lam4All},
 	nAll=nSL+nSH;
-	masses=Join[Table[0,{nSL}],Table[\[Mu]ijL[[n,n]],{n,1,nSH}]];
+	masses=Join[Table[0,{nSL}],Table[muijL[[n,n]]^2,{n,1,nSH}]];
 	blockRules[tensor_,offset_]:=Delete[SparseArray[tensor]//ArrayRules,-1]/.(x_List->v_):>(x+offset->v);
 	allPermutations[rules_]:=DeleteDuplicates[Flatten[Table[Thread[Permutations[r[[1]]]->r[[2]]],{r,rules}]],#1[[1]]==#2[[1]]&];
-	lam3=SparseArray[allPermutations[Join[
-		blockRules[\[Lambda]3CLight,{0,0,0}],
-		blockRules[\[Lambda]3Cy,{0,0,nSL}],
-		blockRules[\[Lambda]3Cx,{0,nSL,nSL}],
-		blockRules[\[Lambda]3CHeavy,{nSL,nSL,nSL}]]],{nAll,nAll,nAll}];
-	lam4=SparseArray[allPermutations[Join[
-		blockRules[\[Lambda]4Light,{0,0,0,0}],
-		blockRules[\[Lambda]y,{0,0,0,nSL}],
-		blockRules[\[Lambda]K,{nSL,nSL,0,0}],
-		blockRules[\[Lambda]x,{0,nSL,nSL,nSL}],
-		blockRules[\[Lambda]KTotal,{nSL,nSL,nSL,nSL}]]],{nAll,nAll,nAll,nAll}];
-	{masses,lam3,lam4}
+	lam3All=SparseArray[allPermutations[Join[
+		blockRules[lam3CLight,{0,0,0}],
+		blockRules[lam3Cy,{0,0,nSL}],
+		blockRules[lam3Cx,{0,nSL,nSL}],
+		blockRules[lam3CHeavy,{nSL,nSL,nSL}]]],{nAll,nAll,nAll}];
+	lam4All=SparseArray[allPermutations[Join[
+		blockRules[lam4Light,{0,0,0,0}],
+		blockRules[lamy,{0,0,0,nSL}],
+		blockRules[lamK,{nSL,nSL,0,0}],
+		blockRules[lamx,{0,nSL,nSL,nSL}],
+		blockRules[lamKTotal,{nSL,nSL,nSL,nSL}]]],{nAll,nAll,nAll,nAll}];
+	{masses,lam3All,lam4All}
 ];
-
-
-(*One-loop integrals at zero external momentum, with one, two, and three propagators*)
-TadpoleIntegralSS[x_]:=-x/(4\[Pi]);
-BubbleIntegralSS[x_,y_]:=If[x===0&&y===0,0,1/(4\[Pi] (x+y))];
-TriangleIntegralSS[x_,y_,z_]:=Switch[Count[{x,y,z},0],
-	3,0,
-	2,-1/(4\[Pi] (x+y+z)^3),
-	_,1/(4\[Pi] (x+y) (x+z) (y+z))];
 
 
 (*
 	One-loop cubic couplings of the fields in list1, list2, list3, from loops with at least one heavy line.
 	It is the third derivative of 1/2 Tr ln(p^2+M^2) with respect to the fields: bubbles with one quartic and one
-	cubic coupling, -1/2 \[Lambda]4.\[Lambda]3 B for each choice of the two legs at the quartic, and triangles with three cubic couplings, \[Lambda]3.\[Lambda]3.\[Lambda]3 T.
+	cubic coupling, -1/2 lam4.lam3 B for each choice of the two legs at the quartic, and triangles with three cubic couplings, lam3.lam3.lam3 T.
 *)
-OneLoopCubicSS[list1_,list2_,list3_]:=Module[{masses,lam3,lam4,bubbleMat,triangle,nonzero,dLam},
-	{masses,lam3,lam4}=AllScalarCouplingsSS[];
-	bubbleMat=SparseArray[Table[BubbleIntegralSS[x,y],{x,masses},{y,masses}]];
+OneLoopCubicSS[list1_,list2_,list3_]:=Module[{masses,lam3All,lam4All,bubbleMat,triangle,nonzero,dLam},
+	{masses,lam3All,lam4All}=AllScalarCouplingsSS[];
+	bubbleMat=SparseArray[Table[BubbleIntegral3d[x,y],{x,masses},{y,masses}]];
 
 	nonzero[tensor_]:=Delete[ArrayRules[tensor],-1];
 	triangle[i_,j_,k_]:=Sum[
 		If[c[[1,1]]==0,0,
-			r[[2]]c[[2]]lam3[[k,c[[1,1]],r[[1,1]]]]TriangleIntegralSS[masses[[r[[1,1]]]],masses[[r[[1,2]]]],masses[[c[[1,1]]]]]],
-		{r,nonzero[lam3[[i]]]},{c,Append[nonzero[lam3[[j,r[[1,2]]]]],{0}->0]}];
+			r[[2]]c[[2]]lam3All[[k,c[[1,1]],r[[1,1]]]]TriangleIntegral3d[masses[[r[[1,1]]]],masses[[r[[1,2]]]],masses[[c[[1,1]]]]]],
+		{r,nonzero[lam3All[[i]]]},{c,Append[nonzero[lam3All[[j,r[[1,2]]]]],{0}->0]}];
 
 	dLam[i_,j_,k_]:=-1/2*(
-			Total[lam4[[i,j]] lam3[[k]] bubbleMat,2]
-			+Total[lam4[[i,k]] lam3[[j]] bubbleMat,2]
-			+Total[lam4[[j,k]] lam3[[i]] bubbleMat,2])
+			Total[lam4All[[i,j]] lam3All[[k]] bubbleMat,2]
+			+Total[lam4All[[i,k]] lam3All[[j]] bubbleMat,2]
+			+Total[lam4All[[j,k]] lam3All[[i]] bubbleMat,2])
 		+triangle[i,j,k];
 
 	SparseArray[Table[dLam[i,j,k],{i,list1},{j,list2},{k,list3}]]//SimplifySparse
 ];
 
 
-(*One-loop correction to the light-light-heavy cubic couplings \[Lambda]3Cy*)
+(*One-loop correction to the light-light-heavy cubic couplings lam3Cy*)
 VertexCorrectionLLH[]:=OneLoopCubicSS[Range[nSL],Range[nSL],nSL+Range[nSH]];
 
 
-(*Mixing between light and heavy fields from the shift of the heavy fields by their tadpoles, \[Lambda]3Cx.(-tadpole/M^2)*)
-TadpoleShiftLH[tadpole_]:=SparseArray[Table[-Sum[\[Lambda]3Cx[[i,k,l]]tadpole[[l]]/\[Mu]ijL[[l,l]]^2,{l,1,nSH}],{i,1,nSL},{k,1,nSH}]];
+(*Integral d^3p/(2Pi)^3 of Product (p^2+x_k)^-n_k, by partial fractions; massless lines are 1/p^2*)
+OneLoopIntegralSS[xs_List,ns_List]:=OneLoopIntegralSS[xs,ns]=Module[{u,tadpole},
+	tadpole[x_,k_]:=If[x===0,0,x^(3/2-k)Gamma[k-3/2]/((4\[Pi])^(3/2)Gamma[k])];
+	Expand[Apart[Product[(u+xs[[k]])^-ns[[k]],{k,Length[xs]}],u]]/.Power[u+x_.,n_Integer?Negative]:>tadpole[x,-n]
+];
+
+
+(*
+	One-loop one-particle-reducible contributions to the light masses and quartics, as in 1609.06230: one-loop 1PI
+	diagrams at zero momentum whose heavy legs end on the tree-level heavy fields, i.e. on the tree-level tadpoles and on
+	the tree-level exchanges of heavy fields with light legs. The tree-level heavy fields H(l) solve the equations of motion
+	of the heavy fields with the tadpoles, the cubics, and the quartics, and the 1PI diagrams are 1/2 Tr ln(1+G dM) with
+	the vertex insertions dM=lam3.Phi+1/2 lam4.Phi.Phi along Phi=(l,H(l)). The field-independent light mass from the
+	tadpoles is left out, since its insertion is part of ScalarMass2LoopSS, like the tree-level light mass.
+	Returns {mass, quartic} as associations of the orders 0 and 1 in the tree-level tadpoles; the order 0 are the diagrams
+	of ScalarMassSS and ScalarQuarticSS.
+*)
+OneLoopOnePRSS[]:=Module[{nAll,masses,lam3All,lam4All,M2,tadpoles,x,lightVars,e,tau,trunc,H,Phi,grad,dM,gdM,P,gamma1,integrate,coefficient},
+	{masses,lam3All,lam4All}=AllScalarCouplingsSS[];
+	nAll=nSL+nSH;
+	M2=masses[[nSL+1;;]];
+	tadpoles=Normal[TadPoleHeavy];
+	lightVars=Table[x[i],{i,1,nSL}];
+	trunc[p_]:=Expand[p]/.{e^n_/;n>4->0,tau^n_/;n>1->0};
+
+(*Tree-level heavy fields to fourth order in the light fields e*l and first order in the tadpoles*)
+	H=ConstantArray[0,nSH];
+	Do[
+		Phi=Join[e lightVars,H];
+		grad=(1/2 (lam3All . Phi) . Phi+1/6 ((lam4All . Phi) . Phi) . Phi)[[nSL+1;;]];
+		H=trunc/@(-(tau tadpoles+grad)/M2),
+	{6}];
+	Phi=Join[e lightVars,H];
+
+	dM=Map[trunc,Normal[lam3All . Phi+1/2 (lam4All . Phi) . Phi],{2}];
+	Do[dM[[i,j]]=dM[[i,j]]-(dM[[i,j]]/.e->0),{i,1,nSL},{j,1,nSL}];
+
+(*1/2 Tr ln(1+G dM) with the propagators G as symbols of the squared masses; every vertex insertion is at least of order e or tau*)
+	gdM=(prop/@masses) dM;
+	P=gdM;
+	gamma1=1/2 Tr[P];
+	Do[P=Map[trunc,P . gdM,{2}]; gamma1+=(-1)^(m+1)/(2m) Tr[P],{m,2,5}];
+	gamma1=trunc[gamma1];
+
+	integrate[expr_]:=Module[{props=Union[Cases[expr,_prop,Infinity]]},
+		If[props==={},0,Total[(#[[2]]OneLoopIntegralSS[props[[;;,1]],#[[1]]])&/@CoefficientRules[expr,props]]]];
+	coefficient[n_,t_]:=integrate[Coefficient[Coefficient[gamma1,e,n],tau,t]];
+
+	{
+	Association[Table[t->SparseArray[With[{c=coefficient[2,t]},Table[D[c,x[i],x[j]],{i,1,nSL},{j,1,nSL}]]],{t,0,1}]],
+	Association[Table[t->SparseArray[With[{c=coefficient[4,t]},Table[D[c,x[i],x[j],x[k],x[l]],{i,1,nSL},{j,1,nSL},{k,1,nSL},{l,1,nSL}]]],{t,0,1}]]
+	}//Map[SimplifySparse,#,{2}]&
+];
+
+
+(*The one-loop 1PR contributions of OneLoopOnePRSS at first order in the tree-level tadpoles, computed once for the masses and the quartics*)
+TadpoleOnePRSS[]:=Module[{v0},
+	v0=-Normal[TadPoleHeavy]/Table[muijL[[h,h]]^2,{h,1,nSH}];
+	If[nSL==0||AllTrue[v0,#===0&],
+		{SparseArray[{},{nSL,nSL}],SparseArray[{},{nSL,nSL,nSL,nSL}]},
+		#[1]&/@OneLoopOnePRSS[]]
+];
+
+
+(*Mixing between light and heavy fields from the shift of the heavy fields by their tadpoles, lam3Cx.(-tadpole/M^2)*)
+TadpoleShiftLH[tadpole_]:=SparseArray[Table[-Sum[lam3Cx[[i,k,l]]tadpole[[l]]/muijL[[l,l]]^2,{l,1,nSH}],{i,1,nSL},{k,1,nSH}]];
 
 
 (*
 	Mixing between light and heavy fields, as a correction to the mass matrix at zero momentum: the one-loop
-	diagrams with at least one heavy line, 1/2 \[Lambda]4.A-1/2 \[Lambda]3.\[Lambda]3 B, and the shift of the heavy fields by their tadpoles.
+	diagrams with at least one heavy line, 1/2 lam4.A-1/2 lam3.lam3 B, and the shift of the heavy fields by their tadpoles.
 *)
-MixingLH[tadpole_]:=Module[{masses,lam3,lam4,tadpoleVec,bubbleMat,loop},
-	{masses,lam3,lam4}=AllScalarCouplingsSS[];
-	tadpoleVec=SparseArray[Table[TadpoleIntegralSS[x],{x,masses}]];
-	bubbleMat=SparseArray[Table[BubbleIntegralSS[x,y],{x,masses},{y,masses}]];
-	loop=Table[1/2 Total[Diagonal[lam4[[i,nSL+k]]] tadpoleVec]-1/2 Total[lam3[[i]] lam3[[nSL+k]] bubbleMat,2],{i,1,nSL},{k,1,nSH}];
+MixingLH[tadpole_]:=Module[{masses,lam3All,lam4All,tadpoleVec,bubbleMat,loop},
+	{masses,lam3All,lam4All}=AllScalarCouplingsSS[];
+	tadpoleVec=SparseArray[Table[TadpoleIntegral3d[x],{x,masses}]];
+	bubbleMat=SparseArray[Table[BubbleIntegral3d[x,y],{x,masses},{y,masses}]];
+	loop=Table[1/2 Total[Diagonal[lam4All[[i,nSL+k]]] tadpoleVec]-1/2 Total[lam3All[[i]] lam3All[[nSL+k]] bubbleMat,2],{i,1,nSL},{k,1,nSH}];
 	SparseArray[loop]+TadpoleShiftLH[tadpole]//SimplifySparse
 ];
 
@@ -766,9 +810,9 @@ MixingLH[tadpole_]:=Module[{masses,lam3,lam4,tadpoleVec,bubbleMat,loop},
 	that is connected to a H S^2 cubic by the tree-level exchange of a heavy field.
 *)
 MixingQuarticSS[mix_]:=Module[{inv,help1,help2,result},
-	inv=DiagonalMatrix[Table[1/\[Mu]ijL[[n,n]]^2,{n,1,nSH}]]//SparseArray;
-	help1=Table[Sum[mix[[i,k]]inv[[k,k]]\[Lambda]y[[j,l,m,k]],{k,1,nSH}],{i,1,nSL},{j,1,nSL},{l,1,nSL},{m,1,nSL}];
-	help2=Table[Sum[mix[[i,k]]inv[[k,k]]\[Lambda]3Cx[[j,k,kk]]inv[[kk,kk]]\[Lambda]3Cy[[l,m,kk]],{k,1,nSH},{kk,1,nSH}],{i,1,nSL},{j,1,nSL},{l,1,nSL},{m,1,nSL}];
+	inv=DiagonalMatrix[Table[1/muijL[[n,n]]^2,{n,1,nSH}]]//SparseArray;
+	help1=Table[Sum[mix[[i,k]]inv[[k,k]]lamy[[j,l,m,k]],{k,1,nSH}],{i,1,nSL},{j,1,nSL},{l,1,nSL},{m,1,nSL}];
+	help2=Table[Sum[mix[[i,k]]inv[[k,k]]lam3Cx[[j,k,kk]]inv[[kk,kk]]lam3Cy[[l,m,kk]],{k,1,nSH},{kk,1,nSH}],{i,1,nSL},{j,1,nSL},{l,1,nSL},{m,1,nSL}];
 	result=-4 Symmetrize[help1,Symmetric[{1,2,3,4}]]+12 Symmetrize[help2,Symmetric[{1,2,3,4}]];
 	result//SparseArray//SimplifySparse
 ];
@@ -782,35 +826,35 @@ MixingQuarticSS[mix_]:=Module[{inv,help1,help2,result},
 IdentifyTensorsPreSSDRalgo[]:=Module[{},
 
 (*Quartic Tensor*)
-	HelpList=DeleteDuplicates@SparseArray[Flatten@Simplify[ (\[Lambda]4S)]]//Sort//FullSimplify;
-	HelpVar=Table[\[Lambda]PSS[a],{a,1,Delete[HelpList,1]//Length}];
+	HelpList=DeleteDuplicates@SparseArray[Flatten@Simplify[ (lam4S)]]//Sort//FullSimplify;
+	HelpVar=Table[lamPSS[a],{a,1,Delete[HelpList,1]//Length}];
 	HelpVarMod=RelationsBVariables[HelpList,HelpVar];
 	HelpSolveQuarticPreS=Table[{Delete[HelpList,1][[a]]->HelpVarMod[[a]]},{a,1,Delete[HelpList,1]//Length}]//Flatten;
-	\[Lambda]4S=(\[Lambda]4S)//Normal//Simplify//FullSimplify//ReplaceAll[#,HelpSolveQuarticPreS]&//SparseArray;
+	lam4S=(lam4S)//Normal//Simplify//FullSimplify//ReplaceAll[#,HelpSolveQuarticPreS]&//SparseArray;
 
-	HelpList=DeleteDuplicates@SparseArray[Flatten@Simplify[ (\[Lambda]K)]]//Sort//FullSimplify;
-	HelpVar=Table[\[Lambda]PSK[a],{a,1,Delete[HelpList,1]//Length}];
+	HelpList=DeleteDuplicates@SparseArray[Flatten@Simplify[ (lamK)]]//Sort//FullSimplify;
+	HelpVar=Table[lamPSK[a],{a,1,Delete[HelpList,1]//Length}];
 	HelpVarMod=RelationsBVariables[HelpList,HelpVar];
 	HelpSolveQuarticPreK=Table[{Delete[HelpList,1][[a]]->HelpVarMod[[a]]},{a,1,Delete[HelpList,1]//Length}]//Flatten;
-	\[Lambda]K=(\[Lambda]K)//Normal//Simplify//FullSimplify//ReplaceAll[#,HelpSolveQuarticPreK]&//SparseArray;
+	lamK=(lamK)//Normal//Simplify//FullSimplify//ReplaceAll[#,HelpSolveQuarticPreK]&//SparseArray;
 
-	HelpList=DeleteDuplicates@SparseArray[Flatten@Simplify[ (\[Lambda]y)]]//Sort//FullSimplify;
-	HelpVar=Table[\[Lambda]PSY[a],{a,1,Delete[HelpList,1]//Length}];
+	HelpList=DeleteDuplicates@SparseArray[Flatten@Simplify[ (lamy)]]//Sort//FullSimplify;
+	HelpVar=Table[lamPSY[a],{a,1,Delete[HelpList,1]//Length}];
 	HelpVarMod=RelationsBVariables[HelpList,HelpVar];
 	HelpSolveQuarticPreY=Table[{Delete[HelpList,1][[a]]->HelpVarMod[[a]]},{a,1,Delete[HelpList,1]//Length}]//Flatten;
-	\[Lambda]y=(\[Lambda]y)//Normal//Simplify//FullSimplify//ReplaceAll[#,HelpSolveQuarticPreY]&//SparseArray;
+	lamy=(lamy)//Normal//Simplify//FullSimplify//ReplaceAll[#,HelpSolveQuarticPreY]&//SparseArray;
 
-	HelpList=DeleteDuplicates@SparseArray[Flatten@Simplify[ \[Lambda]x]]//Sort//FullSimplify;
-	HelpVar=Table[\[Lambda]PSX[a],{a,1,Delete[HelpList,1]//Length}];
+	HelpList=DeleteDuplicates@SparseArray[Flatten@Simplify[ lamx]]//Sort//FullSimplify;
+	HelpVar=Table[lamPSX[a],{a,1,Delete[HelpList,1]//Length}];
 	HelpVarMod=RelationsBVariables[HelpList,HelpVar];
 	HelpSolveQuarticPreX=Table[{Delete[HelpList,1][[a]]->HelpVarMod[[a]]},{a,1,Delete[HelpList,1]//Length}]//Flatten;
-	\[Lambda]x=(\[Lambda]x)//Normal//Simplify//FullSimplify//ReplaceAll[#,HelpSolveQuarticPreX]&//SparseArray;
+	lamx=(lamx)//Normal//Simplify//FullSimplify//ReplaceAll[#,HelpSolveQuarticPreX]&//SparseArray;
 	
-	HelpList=DeleteDuplicates@SparseArray[Flatten@Simplify[ \[Lambda]4Tot]]//Sort//FullSimplify;
-	HelpVar=Table[\[Lambda]PST[a],{a,1,Delete[HelpList,1]//Length}];
+	HelpList=DeleteDuplicates@SparseArray[Flatten@Simplify[ lam4Tot]]//Sort//FullSimplify;
+	HelpVar=Table[lamPST[a],{a,1,Delete[HelpList,1]//Length}];
 	HelpVarMod=RelationsBVariables[HelpList,HelpVar];
 	HelpSolveQuarticPreTot=Table[{Delete[HelpList,1][[a]]->HelpVarMod[[a]]},{a,1,Delete[HelpList,1]//Length}]//Flatten;
-	(\[Lambda]4Tot)//Normal//Simplify//FullSimplify//ReplaceAll[#,HelpSolveQuarticPreTot]&//SparseArray;
+	(lam4Tot)//Normal//Simplify//FullSimplify//ReplaceAll[#,HelpSolveQuarticPreTot]&//SparseArray;
 
 	IdentMatPre=List/@Join[HelpSolveQuarticPreS,HelpSolveQuarticPreK,HelpSolveQuarticPreY,HelpSolveQuarticPreX,HelpSolveQuarticPreTot]/.{b_->a_}:>a->b//Flatten[#,1]&;
 
@@ -827,69 +871,69 @@ If[verbose,Print["Identifying Components"]];
 	If[mode>=1,
 
 (*Quartic Tensor*)
-		HelpList=SparseArray[\[Lambda]4S+\[Lambda]3DSS]["NonzeroValues"]//Simplify//DeleteDuplicates//Sort;
+		HelpList=SparseArray[lam4S+lam3DSS]["NonzeroValues"]//Simplify//DeleteDuplicates//Sort;
 		If[HelpList[[1]]==0&&Length[HelpList]>1,
 			HelpList=Delete[HelpList,1];
 		];
-		HelpVar=Table[\[Lambda]SS[a],{a,1,HelpList//Length}];
+		HelpVar=Table[lamSS[a],{a,1,HelpList//Length}];
 		HelpVarMod=RelationsBVariables[HelpList,HelpVar];
 		HelpSolveQuarticS=Table[{HelpList[[a]]->HelpVarMod[[a]]},{a,1,HelpList//Length}]//Flatten;
-		\[Lambda]4US=(\[Lambda]4S+\[Lambda]3DSS)//Normal//Simplify//ReplaceAll[#,HelpSolveQuarticS]&//SparseArray;
+		lam4US=(lam4S+lam3DSS)//Normal//Simplify//ReplaceAll[#,HelpSolveQuarticS]&//SparseArray;
 	
-		If[Length[Variables[\[Lambda]4US["NonzeroValues"]/.\[Lambda]SS[x_]->0]]>0,
-			HelpSolveQuarticS2=HelpSolveQuarticS/.\[Lambda]SS[x_]->\[Lambda]SSS[x];
-			HelpList=DeleteDuplicates[\[Lambda]4US["NonzeroValues"]//Simplify]/.\[Lambda]SS[x_]->\[Lambda]SSS[x]//Sort;
+		If[Length[Variables[lam4US["NonzeroValues"]/.lamSS[x_]->0]]>0,
+			HelpSolveQuarticS2=HelpSolveQuarticS/.lamSS[x_]->lamSSS[x];
+			HelpList=DeleteDuplicates[lam4US["NonzeroValues"]//Simplify]/.lamSS[x_]->lamSSS[x]//Sort;
 			If[HelpList[[1]]==0&&Length[HelpList]>1,
 				HelpList=Delete[HelpList,1];
 			];
-			HelpVar=Table[\[Lambda]SS[a],{a,1,HelpList//Length}];
+			HelpVar=Table[lamSS[a],{a,1,HelpList//Length}];
 			HelpVarMod=RelationsBVariables[HelpList,HelpVar];
 			HelpSolveQuarticS=Table[{HelpList[[a]]->HelpVarMod[[a]]},{a,1,HelpList//Length}]//Flatten;
-			\[Lambda]4US=Normal[\[Lambda]4US]/.\[Lambda]SS[x_]->\[Lambda]SSS[x]//Simplify//ReplaceAll[#,HelpSolveQuarticS]&//SparseArray;
+			lam4US=Normal[lam4US]/.lamSS[x_]->lamSSS[x]//Simplify//ReplaceAll[#,HelpSolveQuarticS]&//SparseArray;
 			
 			HelpSolveQuarticS=HelpSolveQuarticS//ReplaceAll[#,HelpSolveQuarticS2/.(b_->a_):>a->b]&
 		];
 	
 	
 (*Cubic Tensor*)
-		HelpList=DeleteDuplicates@SparseArray[Flatten@Simplify[(\[Lambda]3CSSS+\[Lambda]3CLight)]]//Sort//FullSimplify;
+		HelpList=DeleteDuplicates@SparseArray[Flatten@Simplify[(lam3CSSS+lam3CLight)]]//Sort//FullSimplify;
 		If[HelpList[[1]]==0&&Length[HelpList]>1,
 			HelpList=Delete[HelpList,1];
 		];
 		HelpVar=Table[cSSSS[a],{a,1,HelpList//Length}];
 		HelpVarMod=RelationsBVariables[HelpList,HelpVar];
 		HelpSolveCubicSSS=Table[{HelpList[[a]]->HelpVarMod[[a]]},{a,1,HelpList//Length}]//Flatten//Simplify;
-		\[Lambda]3CSRedSS=(\[Lambda]3CSSS+\[Lambda]3CLight)//Normal//Simplify//FullSimplify//ReplaceAll[#,HelpSolveCubicSSS]&//SparseArray;
+		lam3CSRedSS=(lam3CSSS+lam3CLight)//Normal//Simplify//FullSimplify//ReplaceAll[#,HelpSolveCubicSSS]&//SparseArray;
 (*Scalar-Vector Tensor*)
 
 		HelpList=DeleteDuplicates@Simplify@Flatten[(HabijVL+GvvssTSS)]//Sort;
 		If[HelpList[[1]]==0&&Length[HelpList]>1,
 			HelpList=Delete[HelpList,1];
 		];
-		HelpVar=Table[ \[Lambda]VTSS[a],{a,1,HelpList//Length}];
+		HelpVar=Table[ lamVTSS[a],{a,1,HelpList//Length}];
 		HelpVarMod=RelationsBVariables[HelpList,HelpVar];
 		HelpSolveVecTS=Table[{HelpList[[a]]->HelpVarMod[[a]]},{a,1,HelpList//Length}]//Flatten;
-		\[Lambda]KVecTSS= (HabijVL+GvvssTSS)//Normal//Simplify//ReplaceAll[#,HelpSolveVecTS]&//SparseArray;		
+		lamKVecTSS= (HabijVL+GvvssTSS)//Normal//Simplify//ReplaceAll[#,HelpSolveVecTS]&//SparseArray;		
 	];
 (*Scalar Mass*)
 	If[mode>=2,
-		HelpList=DeleteDuplicates@Flatten@Simplify[ xLO \[Mu]ijLight+xLO \[Mu]ijSSLO+xNLO \[Mu]ijSSNLO]//Sort;
+		HelpList=DeleteDuplicates@Flatten@Simplify[ xLO muijLight+xLO muijSSLO+xNLO muijSSNLO]//Sort;
 		If[HelpList[[1]]==0&&Length[HelpList]>1,
 				HelpList=Delete[HelpList,1];
 			];
-		HelpVar=Table[ \[Mu]ijSS[a],{a,1,HelpList//Length}];
+		HelpVar=Table[ muijSS[a],{a,1,HelpList//Length}];
 		HelpVarMod=RelationsBVariables[HelpList,HelpVar];
 		HelpSolveMassS=Table[{HelpList[[a]]->HelpVarMod[[a]]},{a,1,HelpList//Length}]//Simplify//Flatten;
-		\[Mu]ijSNLOSS=xLO \[Mu]ijLight+xLO \[Mu]ijSSLO+xNLO \[Mu]ijSSNLO//Normal//Simplify//ReplaceAll[#,HelpSolveMassS]&//SparseArray;
+		muijSNLOSS=xLO muijLight+xLO muijSSLO+xNLO muijSSNLO//Normal//Simplify//ReplaceAll[#,HelpSolveMassS]&//SparseArray;
 	,
-		HelpList=DeleteDuplicates@Flatten@Simplify[ xLO \[Mu]ijLight+xLO \[Mu]ijSSLO]//Sort;
+		HelpList=DeleteDuplicates@Flatten@Simplify[ xLO muijLight+xLO muijSSLO]//Sort;
 		If[HelpList[[1]]==0&&Length[HelpList]>1,
 			HelpList=Delete[HelpList,1];
 		];
-		HelpVar=Table[ \[Mu]ijSS[a],{a,1,HelpList//Length}];
+		HelpVar=Table[ muijSS[a],{a,1,HelpList//Length}];
 		HelpVarMod=RelationsBVariables[HelpList,HelpVar];
 		HelpSolveMassS=Table[{HelpList[[a]]->HelpVarMod[[a]]},{a,1,HelpList//Length}]//Simplify//Flatten;
-		\[Mu]ijSNLOSS=xLO \[Mu]ijLight+xLO \[Mu]ijSSLO//Normal//Simplify//ReplaceAll[#,HelpSolveMassS]&//SparseArray;
+		muijSNLOSS=xLO muijLight+xLO muijSSLO//Normal//Simplify//ReplaceAll[#,HelpSolveMassS]&//SparseArray;
 	];
 
 (*Scalar Tadpoles*)
@@ -932,6 +976,14 @@ If[verbose,Print["Creating Help Tensors"]];
 
 
 (*
+	The tensor with all indices shifted by offset, in an array of dimensions dims.
+	The rules are replaced one by one, so that the list of rules itself is never matched, and dims is
+	given explicitly, since the largest index of the nonzero entries can be smaller.
+*)
+ShiftedTensorSS[tensor_,offset_,dims_]:=SparseArray[Delete[ArrayRules[SparseArray[tensor]],-1]/.(x_List->v_):>(x+offset->v),dims];
+
+
+(*
 	Prepares the reduction to the ultrasoft scale. Here scalars are divided into heavy and soft depending on the user's input.
 	Heavy scalars are then grouped with temporal scalars and integrated out.
 *)
@@ -950,17 +1002,17 @@ PrepareSoftToSuperSoft[ListHardI_]:=Module[{ListP=ListHardI},
 	Renames 4d couplings to 3d ones
 *)
 
-	VarQuartic=Join[\[Lambda]4//Normal//Variables]//DeleteDuplicates;
+	VarQuartic=Join[lam4//Normal//Variables]//DeleteDuplicates;
 	SubQuartic=Table[c->Symbol[ToString[c]<>ToString["3d"]],{c,VarQuartic}];
-	\[Lambda]3DSp= \[Lambda]4//Normal//ReplaceAll[#,SubQuartic]&//SparseArray;
+	lam3DSp= lam4//Normal//ReplaceAll[#,SubQuartic]&//SparseArray;
 
-	VarCubic=Join[\[Lambda]3//Normal//Variables]//DeleteDuplicates;
+	VarCubic=Join[lam3//Normal//Variables]//DeleteDuplicates;
 	SubCubic=Table[c->Symbol[ToString[c]<>ToString["3d"]],{c,VarCubic}];
-	\[Lambda]3CSRedUS=\[Lambda]3//Normal//ReplaceAll[#,SubCubic]&//SparseArray;
+	lam3CSRedUS=lam3//Normal//ReplaceAll[#,SubCubic]&//SparseArray;
 
-	VarMass=Join[\[Mu]ij//Normal//Variables]//DeleteDuplicates;
+	VarMass=Join[muij//Normal//Variables]//DeleteDuplicates;
 	SubMass=Table[c->Symbol[ToString[c]<>ToString["3d"]],{c,VarMass}];
-	\[Mu]ijSNLOP=\[Mu]ij//Normal//ReplaceAll[#,SubMass]&//SparseArray;
+	muijSNLOP=muij//Normal//ReplaceAll[#,SubMass]&//SparseArray;
 
 
 
@@ -971,8 +1023,8 @@ PrepareSoftToSuperSoft[ListHardI_]:=Module[{ListP=ListHardI},
 	nSH=nv+(HeavyScalars//Length); (*Adds heavy scalars to the temporal scalars*)
 	nSL=ns-(HeavyScalars//Length); (*Removes heavy scalars from the scalars*)
 
-	\[Mu]ijLS=Sqrt[\[Mu]ijSNLOP]//SparseArray; (*Rewrites squared masses as masses. Just a trick to make things easier.*)
-	\[Mu]ijLS[[LightScalar[[;;,1]],LightScalar[[;;,1]]]]=0;
+	muijLS=Sqrt[muijSNLOP]//SparseArray; (*Rewrites squared masses as masses. Just a trick to make things easier.*)
+	muijLS[[LightScalar[[;;,1]],LightScalar[[;;,1]]]]=0;
 
 	VarGauge=GaugeCouplingNames;
 	SubGauge=Table[c->Symbol[ToString[c]<>ToString["3d"]],{c,VarGauge}];
@@ -984,93 +1036,61 @@ PrepareSoftToSuperSoft[ListHardI_]:=Module[{ListP=ListHardI},
 (*
 	Here we create couplings between light and heavy scalarws.
 *)
-			\[Lambda]4Light=Table[\[Lambda]3DSp[[a,b,c,d]],{a,LightScalar[[;;,1]]},{b,LightScalar[[;;,1]]},{c,LightScalar[[;;,1]]},{d,LightScalar[[;;,1]]}]//SparseArray; (*Light-scalar part of scalar quartic*)
-			\[Lambda]4Heavy=Table[\[Lambda]3DSp[[a,b,c,d]],{a,HeavyScalars[[;;,1]]},{b,HeavyScalars[[;;,1]]},{c,HeavyScalars[[;;,1]]},{d,HeavyScalars[[;;,1]]}]//SparseArray; (*Heavy-scalar part of scalar quartic*)
-			\[Lambda]KHeavy=Table[\[Lambda]KVec[[a,b,c,d]],{a,1,nv},{b,1,nv},{c,HeavyScalars[[;;,1]]},{d,HeavyScalars[[;;,1]]}]//SparseArray;  (*Heavy-scalar part of the scalar-temporalScal couplings*)
-			\[Lambda]4Tot=\[Lambda]3DSp//SparseArray;
+			lam4Light=Table[lam3DSp[[a,b,c,d]],{a,LightScalar[[;;,1]]},{b,LightScalar[[;;,1]]},{c,LightScalar[[;;,1]]},{d,LightScalar[[;;,1]]}]//SparseArray; (*Light-scalar part of scalar quartic*)
+			lam4Heavy=Table[lam3DSp[[a,b,c,d]],{a,HeavyScalars[[;;,1]]},{b,HeavyScalars[[;;,1]]},{c,HeavyScalars[[;;,1]]},{d,HeavyScalars[[;;,1]]}]//SparseArray; (*Heavy-scalar part of scalar quartic*)
+			lamKHeavy=Table[lamKVec[[a,b,c,d]],{a,1,nv},{b,1,nv},{c,HeavyScalars[[;;,1]]},{d,HeavyScalars[[;;,1]]}]//SparseArray;  (*Heavy-scalar part of the scalar-temporalScal couplings*)
+			lam4Tot=lam3DSp//SparseArray;
 
 
-			A1=Delete[\[Lambda]4Heavy//ArrayRules,-1]//ReplaceAll[#,{x_,y_,z_,w_}->{x+nv,y+nv,z+nv,w+nv}]&;
-			A2=ReplaceAll[Delete[\[Lambda]KHeavy//ArrayRules,-1],({x_,y_,z_,w_}->a_)->{x,y,z+nv,w+nv}->a];
-			A3=Delete[\[Lambda]AAS//ArrayRules,-1];
-			\[Lambda]KTotal=SymmetrizedArray[Join[A1,A2,A3],{nSH,nSH,nSH,nSH},Symmetric[{1,2,3,4}]]//SparseArray; (*Total heavy-scalar tensors: Heavy scalars+Temporal scalars*)
+			A1=Delete[ShiftedTensorSS[lam4Heavy,{nv,nv,nv,nv},{nSH,nSH,nSH,nSH}]//ArrayRules,-1];
+			A2=Delete[ShiftedTensorSS[lamKHeavy,{0,0,nv,nv},{nSH,nSH,nSH,nSH}]//ArrayRules,-1];
+			A3=Delete[lamAAS//ArrayRules,-1];
+			lamKTotal=SymmetrizedArray[Join[A1,A2,A3],{nSH,nSH,nSH,nSH},Symmetric[{1,2,3,4}]]//SparseArray; (*Total heavy-scalar tensors: Heavy scalars+Temporal scalars*)
 
 (*TadPoles*)
-			VarTadpole=Join[\[Lambda]1//Normal//Variables]//DeleteDuplicates;
+			VarTadpole=Join[lam1//Normal//Variables]//DeleteDuplicates;
 			SubTadpole=Table[c->Symbol[ToString[c]<>ToString["3d"]],{c,VarTadpole}];
 
-			TadPoleLight=Table[\[Lambda]1[[a]],{a,LightScalar[[;;,1]]}]//ReplaceAll[#,SubTadpole]&//SparseArray;
-			TadPoleTemp=Table[\[Lambda]1[[a]],{a,HeavyScalars[[;;,1]]}]//ReplaceAll[#,SubTadpole]&//SparseArray;
+			TadPoleLight=Table[lam1[[a]],{a,LightScalar[[;;,1]]}]//ReplaceAll[#,SubTadpole]&//SparseArray;
+			TadPoleTemp=Table[lam1[[a]],{a,HeavyScalars[[;;,1]]}]//ReplaceAll[#,SubTadpole]&//SparseArray;
 
 
-			If[Length[TadPoleTemp//ArrayRules]==1,
-				TadPoleHeavy=SymmetrizedArray[{{1}->0},{nSH},Symmetric[{1}]]//SparseArray;
-			,
-				TadPoleHeavy=Delete[TadPoleTemp//ArrayRules//ReplaceAll[#,{x_}->{x+nv}]&,-1]//SparseArray;
-			];
+			TadPoleHeavy=ShiftedTensorSS[TadPoleTemp,{nv},{nSH}];
 
 
-			\[Lambda]x1=Table[\[Lambda]3DSp[[a,b,c,d]],{a,LightScalar[[;;,1]]},{b,HeavyScalars[[;;,1]]},{c,HeavyScalars[[;;,1]]},{d,HeavyScalars[[;;,1]]}]//SparseArray;
-			\[Lambda]y1=Table[\[Lambda]3DSp[[a,b,c,d]],{a,LightScalar[[;;,1]]},{b,LightScalar[[;;,1]]},{c,LightScalar[[;;,1]]},{d,HeavyScalars[[;;,1]]}]//SparseArray;
+			lamx1=Table[lam3DSp[[a,b,c,d]],{a,LightScalar[[;;,1]]},{b,HeavyScalars[[;;,1]]},{c,HeavyScalars[[;;,1]]},{d,HeavyScalars[[;;,1]]}]//SparseArray;
+			lamy1=Table[lam3DSp[[a,b,c,d]],{a,LightScalar[[;;,1]]},{b,LightScalar[[;;,1]]},{c,LightScalar[[;;,1]]},{d,HeavyScalars[[;;,1]]}]//SparseArray;
 
 
-			If[Length[\[Lambda]x1//ArrayRules]==1,
-				\[Lambda]x=SymmetrizedArray[{{1,1,1,1}->0},{nSL,nSH,nSH,nSH},Symmetric[{2,3,4}]]//SparseArray;
-			,
-				\[Lambda]x=Delete[\[Lambda]x1//ArrayRules//ReplaceAll[#,{x_,y_,z_,w_}->{x,y+nv,z+nv,w+nv}]&,-1]//SparseArray;
-			];
-
-			If[Length[\[Lambda]y1//ArrayRules]==1,
-				\[Lambda]y=SymmetrizedArray[{{1,1,1,1}->0},{nSL,nSL,nSL,nSH},Symmetric[{1,2,3}]]//SparseArray;
-			,
-				\[Lambda]y=Delete[\[Lambda]y1//ArrayRules//ReplaceAll[#,{x_,y_,z_,w_}->{x,y,z,w+nv}]&,-1]//SparseArray;
-			];
+			lamx=ShiftedTensorSS[lamx1,{0,nv,nv,nv},{nSL,nSH,nSH,nSH}];
+			lamy=ShiftedTensorSS[lamy1,{0,0,0,nv},{nSL,nSL,nSL,nSH}];
 
 
 (*Mixed Cubic tensors*)
-			\[Lambda]3CLight=Table[\[Lambda]3CSRedUS[[a,b,c]],{a,LightScalar[[;;,1]]},{b,LightScalar[[;;,1]]},{c,LightScalar[[;;,1]]}]//SparseArray;
-			\[Lambda]3CHeavy1=Table[\[Lambda]3CSRedUS[[a,b,c]],{a,HeavyScalars[[;;,1]]},{b,HeavyScalars[[;;,1]]},{c,HeavyScalars[[;;,1]]}]//SparseArray;
-			\[Lambda]3CTot=\[Lambda]3CSRedUS//SparseArray;
+			lam3CLight=Table[lam3CSRedUS[[a,b,c]],{a,LightScalar[[;;,1]]},{b,LightScalar[[;;,1]]},{c,LightScalar[[;;,1]]}]//SparseArray;
+			lam3CHeavy1=Table[lam3CSRedUS[[a,b,c]],{a,HeavyScalars[[;;,1]]},{b,HeavyScalars[[;;,1]]},{c,HeavyScalars[[;;,1]]}]//SparseArray;
+			lam3CTot=lam3CSRedUS//SparseArray;
 			
-			If[Length[\[Lambda]3CHeavy1//ArrayRules]==1,
-				\[Lambda]3CHeavy=SymmetrizedArray[{{1,1,1}->0},{nSH,nSH,nSH},Symmetric[{2,3}]]//SparseArray;
-			,
-				\[Lambda]3CHeavy=Delete[\[Lambda]3CHeavy1//ArrayRules//ReplaceAll[#,{x_,y_,z_}->{x+nv,y+nv,z+nv}]&,-1]//SparseArray;
-			];
+			lam3CHeavy=ShiftedTensorSS[lam3CHeavy1,{nv,nv,nv},{nSH,nSH,nSH}];
 
 
-			\[Lambda]3Cx1=Table[\[Lambda]3CSRedUS[[a,b,c]],{a,LightScalar[[;;,1]]},{b,HeavyScalars[[;;,1]]},{c,HeavyScalars[[;;,1]]}]//SparseArray;
-			\[Lambda]3Cy1=Table[\[Lambda]3CSRedUS[[a,b,c]],{a,LightScalar[[;;,1]]},{b,LightScalar[[;;,1]]},{c,HeavyScalars[[;;,1]]}]//SparseArray;
+			lam3Cx1=Table[lam3CSRedUS[[a,b,c]],{a,LightScalar[[;;,1]]},{b,HeavyScalars[[;;,1]]},{c,HeavyScalars[[;;,1]]}]//SparseArray;
+			lam3Cy1=Table[lam3CSRedUS[[a,b,c]],{a,LightScalar[[;;,1]]},{b,LightScalar[[;;,1]]},{c,HeavyScalars[[;;,1]]}]//SparseArray;
 
 
-			If[Length[\[Lambda]3Cx1//ArrayRules]==1,
-				\[Lambda]3Cx=SymmetrizedArray[{{1,1,1}->0},{nSL,nSH,nSH},Symmetric[{2,3}]]//SparseArray;
-			,
-				\[Lambda]3Cx=Delete[\[Lambda]3Cx1//ArrayRules//ReplaceAll[#,{x_,y_,z_}->{x,y+nv,z+nv}]&,-1]//SparseArray;
-			];
-
-			If[Length[\[Lambda]3Cy1//ArrayRules]==1,
-				\[Lambda]3Cy=SymmetrizedArray[{{1,1,1}->0},{nSL,nSL,nSH},Symmetric[{1,2}]]//SparseArray;
-			,
-				\[Lambda]3Cy=Delete[\[Lambda]3Cy1//ArrayRules//ReplaceAll[#,{x_,y_,z_}->{x,y,z+nv}]&,-1]//SparseArray;
-			];
+			lam3Cx=ShiftedTensorSS[lam3Cx1,{0,nv,nv},{nSL,nSH,nSH}];
+			lam3Cy=ShiftedTensorSS[lam3Cy1,{0,0,nv},{nSL,nSL,nSH}];
 
 (*Mixed Hard-Soft mass matrix*)
-			\[Mu]ijMix1=Table[\[Mu]ij[[a,b]],{a,LightScalar[[;;,1]]},{b,HeavyScalars[[;;,1]]}]//SparseArray;
+			muijMix1=Table[muij[[a,b]],{a,LightScalar[[;;,1]]},{b,HeavyScalars[[;;,1]]}]//SparseArray;
 
-			If[Length[\[Mu]ijMix1//ArrayRules]==1,
-				\[Mu]ijMix=SymmetrizedArray[{{1,1}->0},{nSL,nSH},Symmetric[{1}]]//SparseArray;
-			,
-				\[Mu]ijMix=Delete[\[Mu]ijMix1//ArrayRules//ReplaceAll[#,{x_,y_}->{x,y+nv}]&,-1]//SparseArray;
-			];
+			muijMix=ShiftedTensorSS[muijMix1,{0,nv},{nSL,nSH}];
 
 
 (*Scalar-Temporal-Vector Tensor*)
-		\[Lambda]KVLight=Table[\[Lambda]KVec[[a,b,c,d]],{a,1,nv},{b,1,nv},{c,LightScalar[[;;,1]]},{d,LightScalar[[;;,1]]}]//SparseArray;
-		\[Lambda]KVHeavy=Table[\[Lambda]3DSp[[a,b,c,d]],{a,HeavyScalars[[;;,1]]},{b,HeavyScalars[[;;,1]]},{c,LightScalar[[;;,1]]},{d,LightScalar[[;;,1]]}]//SparseArray;
-		A1=Delete[\[Lambda]KVLight//ArrayRules,-1];
-		A2=Delete[\[Lambda]KVHeavy//ArrayRules//ReplaceAll[#,{x_,y_,z_,w_}->{x+nv,y+nv,z,w}]&,-1];
-		\[Lambda]kVTot=SparseArray[Join[A1,A2]]//SparseArray;
+		lamKVLight=Table[lamKVec[[a,b,c,d]],{a,1,nv},{b,1,nv},{c,LightScalar[[;;,1]]},{d,LightScalar[[;;,1]]}]//SparseArray;
+		lamKVHeavy=Table[lam3DSp[[a,b,c,d]],{a,HeavyScalars[[;;,1]]},{b,HeavyScalars[[;;,1]]},{c,LightScalar[[;;,1]]},{d,LightScalar[[;;,1]]}]//SparseArray;
+		lamkVTot=ShiftedTensorSS[lamKVLight,{0,0,0,0},{nSH,nSH,nSL,nSL}]+ShiftedTensorSS[lamKVHeavy,{nv,nv,0,0},{nSH,nSH,nSL,nSL}];
 
 
 		VarGauge=GaugeCouplingNames;
@@ -1085,41 +1105,41 @@ PrepareSoftToSuperSoft[ListHardI_]:=Module[{ListP=ListHardI},
 		gvssL=Table[gvss[[a,c,d]],{a,1,nv},{c,LightScalar[[;;,1]]},{d,LightScalar[[;;,1]]}]//Normal//ReplaceAll[#,SubGauge]&//SparseArray;
 
 (*Heavy-Mass matrix*)
-		MassHeavy=Table[\[Mu]ijSNLOP[[a,b]],{a,HeavyScalars[[;;,1]]},{b,HeavyScalars[[;;,1]]}]//SparseArray;
-		\[Mu]ijL=ArrayFlatten[{{Sqrt[\[Mu]abDef],0},{0,Sqrt[MassHeavy]}}]//SparseArray;
+		MassHeavy=Table[muijSNLOP[[a,b]],{a,HeavyScalars[[;;,1]]},{b,HeavyScalars[[;;,1]]}]//SparseArray;
+		muijL=ArrayFlatten[{{Sqrt[muabDef],0},{0,Sqrt[MassHeavy]}}]//SparseArray;
 
 (*Light-Mass matrix*)
-		MassLight=Table[\[Mu]ijSNLOP[[a,b]],{a,LightScalar[[;;,1]]},{b,LightScalar[[;;,1]]}]//SparseArray;
-		\[Mu]ijLight=ArrayFlatten[MassLight]//SparseArray;
+		MassLight=Table[muijSNLOP[[a,b]],{a,LightScalar[[;;,1]]},{b,LightScalar[[;;,1]]}]//SparseArray;
+		muijLight=ArrayFlatten[MassLight]//SparseArray;
 
-		\[Lambda]K=\[Lambda]kVTot//SparseArray;
-		\[Lambda]4S=\[Lambda]4Light//SparseArray;
-		\[Lambda]4K=\[Lambda]KTotal//SparseArray;
+		lamK=lamkVTot//SparseArray;
+		lam4S=lam4Light//SparseArray;
+		lam4K=lamKTotal//SparseArray;
 		gAvss=gvssVTot//SparseArray;
-		OutputFormatDR[Join[\[Lambda]K,\[Lambda]4S,\[Lambda]4K,\[Lambda]x,\[Lambda]y,gAvss,gvssL,\[Mu]ijL]];
+		OutputFormatDR[Join[lamK,lam4S,lam4K,lamx,lamy,gAvss,gvssL,muijL]];
 	,
-		\[Lambda]3CTot=\[Lambda]3CSRedUS//SparseArray;
-		A3=Delete[\[Lambda]AAS//ArrayRules,-1];
-		\[Lambda]KTotal=SymmetrizedArray[A3,{nSH,nSH,nSH,nSH},Symmetric[{1,2,3,4}]]//SparseArray;
-		\[Lambda]3Cx=SymmetrizedArray[{{1,1,1}->0},{nSL,nSH,nSH},Symmetric[{2,3}]]//SparseArray;
-		\[Lambda]3Cx=Table[\[Lambda]vvsLS[[b,c,a]],{a,LightScalar[[;;,1]]},{b,1,nv},{c,nv}]//SparseArray;
-		\[Lambda]3CHeavy=SymmetrizedArray[{{1,1,1}->0},{nSH,nSH,nSH},Symmetric[{1,2,3}]]//SparseArray;
-		\[Lambda]3Cy=SymmetrizedArray[{{1,1,1}->0},{nSL,nSL,nSH},Symmetric[{1,2}]]//SparseArray;
-		\[Lambda]x=SymmetrizedArray[{{1,1,1,1}->0},{nSL,nSH,nSH,nSH},Symmetric[{2,3,4}]]//SparseArray;
-		\[Lambda]y=SymmetrizedArray[{{1,1,1,1}->0},{nSL,nSL,nSL,nSH},Symmetric[{1,2,3}]]//SparseArray;
-		\[Mu]ijMix=SymmetrizedArray[{{1,1}->0},{nSL,nSH},Symmetric[{1}]]//SparseArray;
-		\[Lambda]3CLight=Table[\[Lambda]3CSRedUS[[a,b,c]],{a,LightScalar[[;;,1]]},{b,LightScalar[[;;,1]]},{c,LightScalar[[;;,1]]}]//SparseArray;
-		\[Lambda]4Light=Table[\[Lambda]3DSp[[a,b,c,d]],{a,LightScalar[[;;,1]]},{b,LightScalar[[;;,1]]},{c,LightScalar[[;;,1]]},{d,LightScalar[[;;,1]]}]//SparseArray;
+		lam3CTot=lam3CSRedUS//SparseArray;
+		A3=Delete[lamAAS//ArrayRules,-1];
+		lamKTotal=SymmetrizedArray[A3,{nSH,nSH,nSH,nSH},Symmetric[{1,2,3,4}]]//SparseArray;
+		lam3Cx=SymmetrizedArray[{{1,1,1}->0},{nSL,nSH,nSH},Symmetric[{2,3}]]//SparseArray;
+		lam3Cx=Table[lamvvsLS[[b,c,a]],{a,LightScalar[[;;,1]]},{b,1,nv},{c,nv}]//SparseArray;
+		lam3CHeavy=SymmetrizedArray[{{1,1,1}->0},{nSH,nSH,nSH},Symmetric[{1,2,3}]]//SparseArray;
+		lam3Cy=SymmetrizedArray[{{1,1,1}->0},{nSL,nSL,nSH},Symmetric[{1,2}]]//SparseArray;
+		lamx=SymmetrizedArray[{{1,1,1,1}->0},{nSL,nSH,nSH,nSH},Symmetric[{2,3,4}]]//SparseArray;
+		lamy=SymmetrizedArray[{{1,1,1,1}->0},{nSL,nSL,nSL,nSH},Symmetric[{1,2,3}]]//SparseArray;
+		muijMix=SymmetrizedArray[{{1,1}->0},{nSL,nSH},Symmetric[{1}]]//SparseArray;
+		lam3CLight=Table[lam3CSRedUS[[a,b,c]],{a,LightScalar[[;;,1]]},{b,LightScalar[[;;,1]]},{c,LightScalar[[;;,1]]}]//SparseArray;
+		lam4Light=Table[lam3DSp[[a,b,c,d]],{a,LightScalar[[;;,1]]},{b,LightScalar[[;;,1]]},{c,LightScalar[[;;,1]]},{d,LightScalar[[;;,1]]}]//SparseArray;
 
 (*TadPoles*)
-		VarTadpole=Join[\[Lambda]1//Normal//Variables]//DeleteDuplicates;
+		VarTadpole=Join[lam1//Normal//Variables]//DeleteDuplicates;
 		SubTadpole=Table[c->Symbol[ToString[c]<>ToString["3d"]],{c,VarTadpole}];
 
-		TadPoleLight=Table[\[Lambda]1[[a]],{a,LightScalar[[;;,1]]}]//ReplaceAll[#,SubTadpole]&//SparseArray;
+		TadPoleLight=Table[lam1[[a]],{a,LightScalar[[;;,1]]}]//ReplaceAll[#,SubTadpole]&//SparseArray;
 		TadPoleHeavy=SymmetrizedArray[{{1}->0},{nSH},Symmetric[{1}]]//SparseArray;
 
-		\[Lambda]KVLight=Table[\[Lambda]KVec[[a,b,c,d]],{a,1,nv},{b,1,nv},{c,LightScalar[[;;,1]]},{d,LightScalar[[;;,1]]}]//SparseArray;
-		\[Lambda]kVTot=\[Lambda]KVLight//SparseArray;
+		lamKVLight=Table[lamKVec[[a,b,c,d]],{a,1,nv},{b,1,nv},{c,LightScalar[[;;,1]]},{d,LightScalar[[;;,1]]}]//SparseArray;
+		lamkVTot=lamKVLight//SparseArray;
 
 		VarGauge=GaugeCouplingNames;
 		SubGauge=Table[c->Symbol[ToString[c]<>ToString["3d"]],{c,VarGauge}];
@@ -1128,12 +1148,12 @@ PrepareSoftToSuperSoft[ListHardI_]:=Module[{ListP=ListHardI},
 		gvssVTot=gvssVec//SparseArray; 
 		gvssL=Table[gvss[[a,c,d]],{a,1,nv},{c,LightScalar[[;;,1]]},{d,LightScalar[[;;,1]]}]//Normal//ReplaceAll[#,SubGauge]&//SparseArray;
 
-		\[Mu]ijL=Sqrt[\[Mu]abDef]//Normal//SparseArray;
-		\[Mu]ijLight=\[Mu]ijSNLOP//Normal//SparseArray;
+		muijL=Sqrt[muabDef]//Normal//SparseArray;
+		muijLight=muijSNLOP//Normal//SparseArray;
 
-		\[Lambda]K=\[Lambda]kVTot//SparseArray;
-		\[Lambda]4S=\[Lambda]4Light//SparseArray;
-		\[Lambda]4K=\[Lambda]KTotal//SparseArray;
+		lamK=lamkVTot//SparseArray;
+		lam4S=lam4Light//SparseArray;
+		lam4K=lamKTotal//SparseArray;
 		gAvss=gvssVTot//SparseArray;
 
 	];
@@ -1186,12 +1206,12 @@ If[a==1,
 PrintScalarMassUS[optP_]:=Module[{opt=optP},
 If[verbose,Print["Printing Scalar Masses"]];
 
-	VarGauge=Join[\[Mu]ijLight//Normal//Variables]//DeleteDuplicates;
+	VarGauge=Join[muijLight//Normal//Variables]//DeleteDuplicates;
 	SubGauge=Table[c->Symbol[ToString[c]<>ToString["US"]],{c,VarGauge}];
 
-	\[Mu]ijp=\[Mu]ijLight//Normal//ReplaceAll[#,SubGauge]&;
-	var=Normal[\[Mu]ijp]//Variables;
-	helpMass=Normal[\[Mu]ijp-\[Mu]ijSNLOSS];
+	muijp=muijLight//Normal//ReplaceAll[#,SubGauge]&;
+	var=Normal[muijp]//Variables;
+	helpMass=Normal[muijp-muijSNLOSS];
 	ResScalp=Reduce[helpMass==0,var]//ToRules[#]&;
 	SolveTemp=var/.ResScalp;
 	SolMassPre=Table[{var[[i]]->SolveTemp[[i]]},{i,1,Length@var}]//Flatten[#,1]&//ReplaceAll[#,IdentMatSS]&;
@@ -1208,12 +1228,12 @@ If[verbose,Print["Printing Scalar Masses"]];
 PrintScalarMassUS[]:=Module[{},
 If[verbose,Print["Printing Scalar Masses"]];
 
-	VarGauge=Join[\[Mu]ijLight//Normal//Variables]//DeleteDuplicates;
+	VarGauge=Join[muijLight//Normal//Variables]//DeleteDuplicates;
 	SubGauge=Table[c->Symbol[ToString[c]<>ToString["US"]],{c,VarGauge}];
 
-	\[Mu]ijp=\[Mu]ijLight//Normal//ReplaceAll[#,SubGauge]&;
-	var=Normal[\[Mu]ijp]//Variables;
-	helpMass=Normal[\[Mu]ijp-\[Mu]ijSNLOSS];
+	muijp=muijLight//Normal//ReplaceAll[#,SubGauge]&;
+	var=Normal[muijp]//Variables;
+	helpMass=Normal[muijp-muijSNLOSS];
 	ResScalp=Reduce[helpMass==0,var]//ToRules[#]&;
 	SolveTemp=var/.ResScalp;
 	SolMassPre=Table[{var[[i]]->SolveTemp[[i]]},{i,1,Length@var}]//Flatten[#,1]&//ReplaceAll[#,IdentMatSS]&;
@@ -1242,17 +1262,17 @@ PrintCouplingsUS[]:=Module[{},
 	GabVLoop=TensorContract[GabcdTemp,{{2,3}}]//Normal;
 
 	HelpList=DeleteDuplicates@Flatten@FullSimplify[GabVTree+GabVLoop ]//Sort; (*Adds the tree-level result*)
-	HelpVar=Table[ \[Lambda]VNASS[a],{a,1,Delete[HelpList,1]//Length}];
+	HelpVar=Table[ lamVNASS[a],{a,1,Delete[HelpList,1]//Length}];
 	HelpVarMod=RelationsBVariables[HelpList,HelpVar]; (*Finds a minimal basis of couplings*)
 	HelpSolveNASS=Table[{Delete[HelpList,1][[a]]->HelpVarMod[[a]]},{a,1,Delete[HelpList,1]//Length}]//Flatten;
-	\[Lambda]VecNASS=GabVTree+GabVLoop//Normal//FullSimplify//ReplaceAll[#,HelpSolveNASS]&//SparseArray;
+	lamVecNASS=GabVTree+GabVLoop//Normal//FullSimplify//ReplaceAll[#,HelpSolveNASS]&//SparseArray;
 	IdentMatNASS=List/@HelpSolveNASS/.{b_->a_}:>a->b//Flatten[#,1]&;
 
 	VarGauge=Table[Symbol[ToString[c]<>ToString["3d"]],{c,GaugeCouplingNames}];
 	SubGauge=Table[c->Symbol[ToString[c]<>ToString["US"]],{c,VarGauge}];
 
 
-	A1=\[Lambda]VecNASS//Normal;
+	A1=lamVecNASS//Normal;
 	A2=GabVTree//Normal//ReplaceAll[#,SubGauge]&;
 	Var3D=A2//Variables;
 	RepVar3D=#->Sqrt[#]&/@Var3D;
@@ -1261,8 +1281,8 @@ PrintCouplingsUS[]:=Module[{},
 	ResGaugeNASS=Table[List[Sol1[[c]]]/.{b_->a_}:>b^2->a,{c,1,Length[Sol1]}]//Simplify;
 
 (* Gauge couplings*)
-	If[mode==0,\[Lambda]KVecTSS=HabijVL];
-	A1=TensorContract[\[Lambda]KVecTSS,{{3,4}}]//Normal;
+	If[mode==0,lamKVecTSS=HabijVL];
+	A1=TensorContract[lamKVecTSS,{{3,4}}]//Normal;
 	A2=TensorContract[HabijVL,{{3,4}}]//Normal//ReplaceAll[#,SubGauge]&;
 (*Trick to avoid problems when kinetic mixing*)
 	A1=DiagonalMatrix[Diagonal[A1]];
@@ -1276,23 +1296,23 @@ PrintCouplingsUS[]:=Module[{},
 	ResGauge=Table[List[Sol1[[c]]]/.{b_->a_}:>b^2->a,{c,1,Length[Sol1]}];
 
 (* Scalar Quartics*)
-	If[mode==0,\[Lambda]4US=\[Lambda]4S];
-	QuarticVar=\[Lambda]4S//Normal//Variables;
+	If[mode==0,lam4US=lam4S];
+	QuarticVar=lam4S//Normal//Variables;
 	SubGauge=Table[c->Symbol[ToString[c]<>ToString["US"]],{c,QuarticVar}];
-	NonZeroPos=SparseArray[\[Lambda]4S]["NonzeroPositions"];
-	SolVar=Extract[\[Lambda]4S-\[Lambda]4US,{#}]&/@NonZeroPos//DeleteDuplicates;
+	NonZeroPos=SparseArray[lam4S]["NonzeroPositions"];
+	SolVar=Extract[lam4S-lam4US,{#}]&/@NonZeroPos//DeleteDuplicates;
 	ResScalp=Reduce[SolVar==0,QuarticVar]//ToRules[#]&;
 	SolveTemp=QuarticVar/.ResScalp;
 	ResScal=Table[{ReplaceAll[QuarticVar[[i]],SubGauge]->SolveTemp[[i]]},{i,1,Length@QuarticVar}]//Flatten[#,1]&//ReplaceAll[#,IdentMatSS]&;
 
 
 (* Scalar Cubics*)
-	If[mode==0,\[Lambda]3CSRedSS=\[Lambda]3CLight];
-	VarGauge=Join[\[Lambda]3CLight//Normal//Variables]//DeleteDuplicates;
+	If[mode==0,lam3CSRedSS=lam3CLight];
+	VarGauge=Join[lam3CLight//Normal//Variables]//DeleteDuplicates;
 	SubGauge=Table[c->Symbol[ToString[c]<>ToString["US"]],{c,VarGauge}];
-	\[Lambda]3p=\[Lambda]3CLight//Normal//ReplaceAll[#,SubGauge]&;
-	SolVar=\[Lambda]3CSRedSS-\[Lambda]3p//Normal;
-	CubicVar=\[Lambda]3p//Normal//Variables;
+	lam3p=lam3CLight//Normal//ReplaceAll[#,SubGauge]&;
+	SolVar=lam3CSRedSS-lam3p//Normal;
+	CubicVar=lam3p//Normal//Variables;
 	ResCubicSS=Solve[SolVar==0,CubicVar]/.IdentMatSS//Flatten[#,1]&;
 
 (*Printing Result*)
@@ -1312,9 +1332,9 @@ If[verbose,Print["Printing Scalar Masses"]];
 	VarGauge=Join[TadPoleLight//Normal//Variables]//DeleteDuplicates;
 	SubGauge=Table[c->Symbol[ToString[c]<>ToString["US"]],{c,VarGauge}];
 
-	\[Lambda]1p=TadPoleLight//Normal//ReplaceAll[#,SubGauge]&;
-	var=Normal[\[Lambda]1p]//Variables;
-	helpMass=Normal[\[Lambda]1p-TadPoleSSSLO];
+	lam1p=TadPoleLight//Normal//ReplaceAll[#,SubGauge]&;
+	var=Normal[lam1p]//Variables;
+	helpMass=Normal[lam1p-TadPoleSSSLO];
 	ResScalp=Reduce[helpMass==0,var]//ToRules[#]&;
 	SolveTemp=var/.ResScalp;
 	SolTadpole=Table[{var[[i]]->SolveTemp[[i]]},{i,1,Length@var}]//Flatten[#,1]&//ReplaceAll[#,IdentMatSS]&;
@@ -1337,9 +1357,9 @@ PrintTensorUSDRalgo[]:="nothing"/;Print[errPrintTensUS];
 PrintTensorUSDRalgo[ind_]:=Module[{},	
 	
 	Switch[ind, 
-    1, Return[OutputFormatDR[\[Lambda]4US]], 
-    2, Return[OutputFormatDR[\[Lambda]KVecTSS]], 
-    3, Return[OutputFormatDR[\[Mu]ijSNLOSS]], 
+    1, Return[OutputFormatDR[lam4US]], 
+    2, Return[OutputFormatDR[lamKVecTSS]], 
+    3, Return[OutputFormatDR[muijSNLOSS]], 
     _, 
     Print[errPrintTensUS];
   ];

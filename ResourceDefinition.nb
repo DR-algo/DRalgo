@@ -8602,7 +8602,7 @@ Cell[BoxData["\<\"Calculating Temporal-Scalar Quartics \"\>"], "Print",
  CellLabel->"During evaluation of In[16]:=",
  CellID->561126988,ExpressionUUID->"77e5d742-aa94-4707-a889-2337aa0163db"],
 
-Cell[BoxData["\<\"RG-evolving from \[Mu] to \[Mu]3\"\>"], "Print",
+Cell[BoxData["\<\"RG-evolving from mu to mu3\"\>"], "Print",
  TaggingRules->{},
  CellChangeTimes->{3.956224897360695*^9, 3.956224968801614*^9, 
   3.9562251678770514`*^9, 3.956225342977853*^9},
@@ -8704,7 +8704,7 @@ Cell[BoxData[
        RowBox[{"4", " ", "\[Pi]"}], "]"}]}], "+", 
      RowBox[{"Log", "[", 
       FractionBox[
-       SuperscriptBox["\[Mu]", "2"], 
+       SuperscriptBox["mu4", "2"], 
        SuperscriptBox["T", "2"]], "]"}]}]}], ",", 
    RowBox[{"Lf", "\[Rule]", 
     RowBox[{
@@ -8716,7 +8716,7 @@ Cell[BoxData[
        RowBox[{"4", " ", "\[Pi]"}], "]"}]}], "+", 
      RowBox[{"Log", "[", 
       FractionBox[
-       SuperscriptBox["\[Mu]", "2"], 
+       SuperscriptBox["mu4", "2"], 
        SuperscriptBox["T", "2"]], "]"}]}]}]}], "}"}]], "Output",
  TaggingRules->{},
  CellChangeTimes->{
@@ -8835,7 +8835,7 @@ Cell[BoxData[
           RowBox[{"Log", "[", "Glaisher", "]"}]}]}], ")"}]}], "+", 
       RowBox[{"18", " ", 
        RowBox[{"Log", "[", 
-        FractionBox["\[Mu]3", "\[Mu]"], "]"}], " ", 
+        FractionBox["mu3", "mu4"], "]"}], " ", 
        RowBox[{"(", 
         RowBox[{
          RowBox[{"8", " ", 
@@ -8847,7 +8847,7 @@ Cell[BoxData[
          RowBox[{"16", " ", 
           SuperscriptBox["\[Lambda]3d", "2"]}], "+", 
          SuperscriptBox[
-          RowBox[{"\[Lambda]VL", "[", "1", "]"}], "2"]}], ")"}]}]}], 
+          RowBox[{"lamVL", "[", "1", "]"}], "2"]}], ")"}]}]}], 
      ")"}]}]}], "}"}]], "Output",
  TaggingRules->{},
  CellChangeTimes->{
@@ -8880,7 +8880,7 @@ Cell[BoxData["\<\"Printing Debye Masses\"\>"], "Print",
 
 Cell[BoxData[
  RowBox[{"{", 
-  RowBox[{"\[Mu]sqU1", "\[Rule]", 
+  RowBox[{"musqU1", "\[Rule]", 
    RowBox[{
     FractionBox["1", "3"], " ", 
     SuperscriptBox["g1", "2"], " ", 
@@ -8901,7 +8901,7 @@ Cell[BoxData["\<\"Printing Debye Masses\"\>"], "Print",
 
 Cell[BoxData[
  RowBox[{"{", 
-  RowBox[{"\[Mu]sqU1", "\[Rule]", 
+  RowBox[{"musqU1", "\[Rule]", 
    FractionBox[
     RowBox[{
      SuperscriptBox["g1", "2"], " ", 
@@ -8929,7 +8929,7 @@ Cell[BoxData[
         SuperscriptBox["g1", "2"], " ", 
         SuperscriptBox["T", "2"], " ", 
         SuperscriptBox["Y\[Phi]", "2"], " ", 
-        RowBox[{"Log", "[", "\[Mu]", "]"}]}]}], ")"}]}], 
+        RowBox[{"Log", "[", "mu4", "]"}]}]}], ")"}]}], 
     RowBox[{"144", " ", 
      SuperscriptBox["\[Pi]", "2"]}]]}], "}"}]], "Output",
  TaggingRules->{},
@@ -9273,29 +9273,29 @@ Cell[BoxData[
       SuperscriptBox["T", "4"], " ", 
       SuperscriptBox["Y\[Phi]", "4"], " ", 
       RowBox[{"Log", "[", 
-       FractionBox["\[Mu]", "T"], "]"}]}], "-", 
+       FractionBox["mu4", "T"], "]"}]}], "-", 
      RowBox[{"2160", " ", 
       SuperscriptBox["T", "4"], " ", 
       SuperscriptBox["\[Lambda]", "2"], " ", 
       RowBox[{"Log", "[", 
-       FractionBox["\[Mu]", "T"], "]"}]}], "+", 
+       FractionBox["mu4", "T"], "]"}]}], "+", 
      RowBox[{"360", " ", 
       SuperscriptBox["g1", "4"], " ", 
       SuperscriptBox["T", "4"], " ", 
       SuperscriptBox["Y\[Phi]", "4"], " ", 
       RowBox[{"Log", "[", 
-       SuperscriptBox["\[Mu]", "2"], "]"}]}], "-", 
+       SuperscriptBox["mu4", "2"], "]"}]}], "-", 
      RowBox[{"720", " ", 
       SuperscriptBox["g1", "2"], " ", 
       SuperscriptBox["T", "4"], " ", 
       SuperscriptBox["Y\[Phi]", "2"], " ", "\[Lambda]", " ", 
       RowBox[{"Log", "[", 
-       SuperscriptBox["\[Mu]", "2"], "]"}]}], "+", 
+       SuperscriptBox["mu4", "2"], "]"}]}], "+", 
      RowBox[{"480", " ", 
       SuperscriptBox["T", "4"], " ", 
       SuperscriptBox["\[Lambda]", "2"], " ", 
       RowBox[{"Log", "[", 
-       SuperscriptBox["\[Mu]", "2"], "]"}]}], "+", 
+       SuperscriptBox["mu4", "2"], "]"}]}], "+", 
      RowBox[{"132000", " ", 
       SuperscriptBox["g1", "4"], " ", 
       SuperscriptBox["T", "4"], " ", 
@@ -9510,9 +9510,9 @@ Cell[BoxData[
     RowBox[{"\[Lambda]3d", "-", 
      FractionBox[
       SuperscriptBox[
-       RowBox[{"\[Lambda]VL", "[", "1", "]"}], "2"], 
+       RowBox[{"lamVL", "[", "1", "]"}], "2"], 
       RowBox[{"32", " ", "\[Pi]", " ", 
-       SqrtBox["\[Mu]sqU1"]}]]}]}], ",", 
+       SqrtBox["musqU1"]}]]}]}], ",", 
    RowBox[{
     SuperscriptBox["g13dUS", "2"], "\[Rule]", 
     SuperscriptBox["g13d", "2"]}]}], "}"}]], "Output",
@@ -9553,8 +9553,8 @@ Cell[BoxData[
    RowBox[{"msq3d", "-", 
     FractionBox[
      RowBox[{
-      SqrtBox["\[Mu]sqU1"], " ", 
-      RowBox[{"\[Lambda]VL", "[", "1", "]"}]}], 
+      SqrtBox["musqU1"], " ", 
+      RowBox[{"lamVL", "[", "1", "]"}]}], 
      RowBox[{"8", " ", "\[Pi]"}]]}]}], "}"}]], "Output",
  TaggingRules->{},
  CellChangeTimes->{
@@ -9574,19 +9574,19 @@ Cell[BoxData[
   RowBox[{"msq3dUS", "\[Rule]", 
    FractionBox[
     RowBox[{
-     RowBox[{"\[Lambda]VL", "[", "1", "]"}], " ", 
+     RowBox[{"lamVL", "[", "1", "]"}], " ", 
      RowBox[{"(", 
       RowBox[{
        RowBox[{
         RowBox[{"-", "2"}], " ", 
-        RowBox[{"\[Lambda]VL", "[", "1", "]"}]}], "-", 
+        RowBox[{"lamVL", "[", "1", "]"}]}], "-", 
        RowBox[{"4", " ", 
         RowBox[{"Log", "[", 
-         FractionBox["\[Mu]3", 
+         FractionBox["mu3", 
           RowBox[{"2", " ", 
-           SqrtBox["\[Mu]sqU1"]}]], "]"}], " ", 
-        RowBox[{"\[Lambda]VL", "[", "1", "]"}]}], "+", 
-       RowBox[{"\[Lambda]VLL", "[", "1", "]"}]}], ")"}]}], 
+           SqrtBox["musqU1"]}]], "]"}], " ", 
+        RowBox[{"lamVL", "[", "1", "]"}]}], "+", 
+       RowBox[{"lamVLL", "[", "1", "]"}]}], ")"}]}], 
     RowBox[{"128", " ", 
      SuperscriptBox["\[Pi]", "2"]}]]}], "}"}]], "Output",
  TaggingRules->{},
@@ -9616,7 +9616,7 @@ Cell[BoxData[
 
 Cell[BoxData[
  FractionBox[
-  SuperscriptBox["\[Mu]sqU1", 
+  SuperscriptBox["musqU1", 
    RowBox[{"3", "/", "2"}]], 
   RowBox[{"12", " ", "\[Pi]"}]]], "Output",
  TaggingRules->{},
@@ -9638,8 +9638,8 @@ Cell[BoxData[
 Cell[BoxData[
  RowBox[{"-", 
   FractionBox[
-   RowBox[{"\[Mu]sqU1", " ", 
-    RowBox[{"\[Lambda]VLL", "[", "1", "]"}]}], 
+   RowBox[{"musqU1", " ", 
+    RowBox[{"lamVLL", "[", "1", "]"}]}], 
    RowBox[{"128", " ", 
     SuperscriptBox["\[Pi]", "2"]}]]}]], "Output",
  TaggingRules->{},
@@ -9965,7 +9965,7 @@ Cell[BoxData[
      RowBox[{
       FractionBox["1", "2"], "+", 
       RowBox[{"Log", "[", 
-       FractionBox["\[Mu]3US", 
+       FractionBox["mu3US", 
         RowBox[{"3", " ", 
          SqrtBox[
           RowBox[{"msq3dUS", "+", 
@@ -10029,7 +10029,7 @@ Cell[BoxData[
         RowBox[{
          FractionBox["1", "2"], "+", 
          RowBox[{"Log", "[", 
-          FractionBox["\[Mu]3US", 
+          FractionBox["mu3US", 
            SqrtBox[
             RowBox[{"msq3dUS", "+", 
              RowBox[{"3", " ", "\[Lambda]3dUS", " ", 
@@ -10052,7 +10052,7 @@ Cell[BoxData[
         RowBox[{
          FractionBox["1", "2"], "+", 
          RowBox[{"Log", "[", 
-          FractionBox["\[Mu]3US", 
+          FractionBox["mu3US", 
            RowBox[{
             SqrtBox[
              RowBox[{
@@ -10098,7 +10098,7 @@ Cell[BoxData[
         RowBox[{
          FractionBox["1", "2"], "+", 
          RowBox[{"Log", "[", 
-          FractionBox["\[Mu]3US", 
+          FractionBox["mu3US", 
            RowBox[{
             RowBox[{"2", " ", 
              SqrtBox[
@@ -10182,7 +10182,7 @@ Cell[BoxData[
         RowBox[{
          FractionBox["1", "2"], "+", 
          RowBox[{"Log", "[", 
-          FractionBox["\[Mu]3US", 
+          FractionBox["mu3US", 
            RowBox[{
             SqrtBox[
              RowBox[{"msq3dUS", "+", 
@@ -10221,7 +10221,7 @@ Cell[BoxData[
         RowBox[{
          FractionBox["1", "2"], "+", 
          RowBox[{"Log", "[", 
-          FractionBox["\[Mu]3US", 
+          FractionBox["mu3US", 
            RowBox[{
             SqrtBox[
              RowBox[{
@@ -10309,7 +10309,7 @@ Cell[BoxData[
         RowBox[{
          FractionBox["1", "2"], "+", 
          RowBox[{"Log", "[", 
-          FractionBox["\[Mu]3US", 
+          FractionBox["mu3US", 
            RowBox[{
             SqrtBox[
              RowBox[{"msq3dUS", "+", 
@@ -10348,7 +10348,7 @@ Cell[BoxData[
         RowBox[{
          FractionBox["1", "2"], "+", 
          RowBox[{"Log", "[", 
-          FractionBox["\[Mu]3US", 
+          FractionBox["mu3US", 
            RowBox[{
             SqrtBox[
              RowBox[{
@@ -10372,7 +10372,7 @@ Cell[BoxData[
      RowBox[{
       FractionBox["1", "2"], "+", 
       RowBox[{"Log", "[", 
-       FractionBox["\[Mu]3US", 
+       FractionBox["mu3US", 
         RowBox[{
          RowBox[{"2", " ", 
           SqrtBox[
@@ -10635,11 +10635,11 @@ Cell[BoxData[
   FractionBox[
    SuperscriptBox[
     RowBox[{"(", 
-     RowBox[{"\[Mu]sqU1", "+", 
+     RowBox[{"musqU1", "+", 
       RowBox[{
        FractionBox["1", "2"], " ", 
        SuperscriptBox["\[CurlyPhi]", "2"], " ", 
-       RowBox[{"\[Lambda]VL", "[", "1", "]"}]}]}], ")"}], 
+       RowBox[{"lamVL", "[", "1", "]"}]}]}], ")"}], 
     RowBox[{"3", "/", "2"}]], 
    RowBox[{"12", " ", "\[Pi]"}]]}]], "Output",
  TaggingRules->{},
@@ -10670,7 +10670,7 @@ Cell[BoxData[
       RowBox[{
        FractionBox["1", "2"], "+", 
        RowBox[{"Log", "[", 
-        FractionBox["\[Mu]3US", 
+        FractionBox["mu3US", 
          SqrtBox[
           RowBox[{
            SuperscriptBox["g13d", "2"], " ", 
@@ -10690,7 +10690,7 @@ Cell[BoxData[
         RowBox[{
          FractionBox["1", "2"], "+", 
          RowBox[{"Log", "[", 
-          FractionBox["\[Mu]3US", 
+          FractionBox["mu3US", 
            RowBox[{"2", " ", 
             SqrtBox[
              RowBox[{
@@ -10708,7 +10708,7 @@ Cell[BoxData[
        RowBox[{
         FractionBox["1", "2"], "+", 
         RowBox[{"Log", "[", 
-         FractionBox["\[Mu]3US", 
+         FractionBox["mu3US", 
           SqrtBox[
            RowBox[{
             SuperscriptBox["g13d", "2"], " ", 
@@ -10725,27 +10725,27 @@ Cell[BoxData[
      RowBox[{
       FractionBox["1", "2"], "+", 
       RowBox[{"Log", "[", 
-       FractionBox["\[Mu]3US", 
+       FractionBox["mu3US", 
         RowBox[{"2", " ", 
          SqrtBox[
-          RowBox[{"\[Mu]sqU1", "+", 
+          RowBox[{"musqU1", "+", 
            RowBox[{
             FractionBox["1", "2"], " ", 
             SuperscriptBox["\[CurlyPhi]", "2"], " ", 
-            RowBox[{"\[Lambda]VL", "[", "1", "]"}]}]}]]}]], "]"}]}], ")"}], " ", 
+            RowBox[{"lamVL", "[", "1", "]"}]}]}]]}]], "]"}]}], ")"}], " ", 
     SuperscriptBox[
-     RowBox[{"\[Lambda]VL", "[", "1", "]"}], "2"]}], 
+     RowBox[{"lamVL", "[", "1", "]"}], "2"]}], 
    RowBox[{"64", " ", 
     SuperscriptBox["\[Pi]", "2"]}]], "+", 
   FractionBox[
    RowBox[{
     RowBox[{"(", 
-     RowBox[{"\[Mu]sqU1", "+", 
+     RowBox[{"musqU1", "+", 
       RowBox[{
        FractionBox["1", "2"], " ", 
        SuperscriptBox["\[CurlyPhi]", "2"], " ", 
-       RowBox[{"\[Lambda]VL", "[", "1", "]"}]}]}], ")"}], " ", 
-    RowBox[{"\[Lambda]VLL", "[", "1", "]"}]}], 
+       RowBox[{"lamVL", "[", "1", "]"}]}]}], ")"}], " ", 
+    RowBox[{"lamVLL", "[", "1", "]"}]}], 
    RowBox[{"128", " ", 
     SuperscriptBox["\[Pi]", "2"]}]]}]], "Output",
  TaggingRules->{},
@@ -10814,15 +10814,15 @@ Cell[BoxData[
          RowBox[{
           SuperscriptBox["\[CurlyPhi]", "2"], " ", 
           SuperscriptBox[
-           RowBox[{"\[Lambda]VL", "[", "1", "]"}], "2"]}], 
+           RowBox[{"lamVL", "[", "1", "]"}], "2"]}], 
          RowBox[{"192", " ", "\[Pi]", " ", 
           SuperscriptBox[
            RowBox[{"(", 
-            RowBox[{"\[Mu]sqU1", "+", 
+            RowBox[{"musqU1", "+", 
              RowBox[{
               FractionBox["1", "2"], " ", 
               SuperscriptBox["\[CurlyPhi]", "2"], " ", 
-              RowBox[{"\[Lambda]VL", "[", "1", "]"}]}]}], ")"}], 
+              RowBox[{"lamVL", "[", "1", "]"}]}]}], ")"}], 
            RowBox[{"3", "/", "2"}]]}]]}], ")"}]}]}], "}"}]}], "}"}]], "Output",
  TaggingRules->{},
  CellChangeTimes->{
