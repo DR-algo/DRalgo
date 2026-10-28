@@ -1996,18 +1996,13 @@ CleanedList[list_] := If[
 	Delete[list,1],
 	list];
 
-MakeReplacementRules[list_, vars_] := Module[{modVars},
-  modVars = RelationsBVariables[list, vars];
-  Table[Delete[list, 1][[a]] -> modVars[[a]], {a, Length[Delete[list, 1]]}] // Flatten // Simplify
-];
-
 ProcessCoupling[expr_, sym_] := Module[{flat, cleaned, vars, mods, rules},
   flat = DeleteDuplicates@Flatten@Simplify[expr] // Sort;
   cleaned = CleanedList[flat];
   vars = Table[sym[a], {a, Length[cleaned]}];
   mods = RelationsBVariables[flat, vars];
-  (*The rules of MakeReplacementRules[flat, vars], without finding the relations again*)
-  rules = Table[Delete[flat, 1][[a]] -> mods[[a]], {a, Length[Delete[flat, 1]]}] // Flatten // Simplify;
+  (*RelationsBVariables drops the leading 0 as CleanedList does, so that mods are the variables of cleaned; a single entry keeps its form*)
+  rules = If[Length[flat] < 2, {}, Thread[cleaned -> mods]] // Simplify;
   {cleaned, vars, mods, rules}
 ];
 

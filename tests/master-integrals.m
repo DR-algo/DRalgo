@@ -119,7 +119,7 @@ VerificationTest[
 (*
 	Numerical sunsets at the scale mu: the q-line and the (p+q)-line give the bubble of the external momentum p,
 	and two propagators on the q-line its divided difference. Two massless propagators on a line give the hard part,
-	where the IR power divergence \[Integral]1/p^4 vanishes, and for the q-line the coefficient of w^2 of the bubble,
+	where the IR power divergence \[Integral]1/p^4 vanishes, and for the q-line minus the coefficient of w^2 of the bubble,
 	which is even in w. A line with two massless propagators is taken as the p-line, since the q-integral alone
 	vanishes for a massless (p+q)-line, while the p-integral then has an IR divergence.
 *)
@@ -130,7 +130,7 @@ qLine[p_,{c1_,c2_},t_]:=Which[
 	c1!=c2,(bubbleNum[p,c2,t]-bubbleNum[p,c1,t])/(c1^2-c2^2),
 	c1!=0,-1/(2c1) D[bubbleNum[p,cc,t],cc]/.cc->c1,
 	True,-t/(4\[Pi] (t^2+p^2)^2)];
-sunsetNum[{a__},{c__},t_]:=Module[{f,lines={a}},
+sunsetNum[{a__},{c__},t_]:=Module[{f,x,lines={a}},
 	f[p_]:=qLine[p,{c},t];
 	Which[
 		Length[lines]==1,
@@ -140,7 +140,8 @@ sunsetNum[{a__},{c__},t_]:=Module[{f,lines={a}},
 		lines[[1]]!=0,
 			NIntegrate[p^2/(2\[Pi]^2) f[p]/(p^2+lines[[1]]^2)^2,{p,0,Infinity},WorkingPrecision->20,PrecisionGoal->10],
 		True,
-			NIntegrate[p^2/(2\[Pi]^2) (f[p]-f[10^-12])/p^4,{p,0,Infinity},WorkingPrecision->20,PrecisionGoal->10]]
+			With[{f0=Limit[f[x],x->0]},
+				NIntegrate[p^2/(2\[Pi]^2) (f[p]-f0)/p^4,{p,0,Infinity},WorkingPrecision->20,PrecisionGoal->10]]]
 ];
 
 (*Linear masses {line 1}, {line 2}, line 3, as rationals for the numerical integration*)

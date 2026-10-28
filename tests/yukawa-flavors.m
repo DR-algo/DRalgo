@@ -177,7 +177,7 @@ VerificationTest[
 	TestID->"scalar-mass-is-rg-invariant-at-the-order-computed"
 ]];
 
-(*The vacuum energy runs with (msq^2/2-Tr[(\[Mu]IJF.\[Mu]IJFC)^2])/(16\[Pi]^2)*)
+(*The vacuum energy runs with (msq^2/2-Tr[(muIJF.muIJFC)^2])/(16\[Pi]^2)*)
 mmC=mT . mCT;
 pressureNNLO=PrintPressure["NNLO"];
 AppendTo[testList,

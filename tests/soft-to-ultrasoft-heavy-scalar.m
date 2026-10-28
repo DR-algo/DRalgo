@@ -114,7 +114,7 @@ VerificationTest[
 
 
 (*The four components of the doublet with phi^+phi = h^2/2 along the background, and the singlet s*)
-VxSM[hh_,s_]:=w m1 hh^2/2+lh hh^4/4+mus/2 s^2+mu3/3 s^3+ls/4 s^4+mum/4 s hh^2+lm/4 s^2 hh^2;
+VxSM[hh_,s_]:=w m1 hh^2/2+lh hh^4/4+mus/2 s^2+cs/3 s^3+ls/4 s^4+mum/4 s hh^2+lm/4 s^2 hh^2;
 (*Only the (h,s) block has a hard region; the Goldstone modes contain light lines only*)
 Veff=effectivePotential[VxSM];
 dZ=(mum/2)^2/(12Pi mus^(3/2));
@@ -126,13 +126,13 @@ components=Table[CreateInvariant[Group,RepScalar,{{i},{True}}][[1]],{i,5}];
 phiSq=Total[components[[1;;4]]^2]/2;
 sField=components[[5]];
 \[Mu]ij=GradMass[m1 phiSq+mus/2 sField^2]//SparseArray;
-\[Lambda]3=GradCubic[mum/2 sField phiSq+mu3/3 sField^3];
+\[Lambda]3=GradCubic[mum/2 sField phiSq+cs/3 sField^3];
 \[Lambda]4=GradQuartic[lh phiSq^2+lm/2 sField^2 phiSq+ls/4 sField^4];
 ImportModelDRalgo[Group,gvvv,gvff,gvss,\[Lambda]1,\[Lambda]3,\[Lambda]4,\[Mu]ij,\[Mu]IJ,\[Mu]IJC,Ysff,YsffC,Verbose->False];
 Quiet[PerformDRhard[]];
 PerformDRsoft[{5}];
 
-to3d={m1->m13d,lh->lh3d,mus->mus3d,mu3->mu33d,ls->ls3d,mum->mum3d,lm->lm3d};
+to3d={m1->m13d,lh->lh3d,mus->mus3d,cs->cs3d,ls->ls3d,mum->mum3d,lm->lm3d};
 quarticUS=lh3dUS/.PrintCouplingsUS[];
 {massExp,quarticExp}={massExp,quarticExp}/.to3d;
 

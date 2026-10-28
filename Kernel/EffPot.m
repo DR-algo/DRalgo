@@ -56,8 +56,8 @@ UseSoftTheory[]:=Module[{},
 	(*We then combine normal and temporal scalars*)
 	ns=(lam4//Length);
 	nSH=nv+ns; (*Adds normal scalars to the temporal scalars*)
-	A1=Delete[lamAAS//ArrayRules,-1]//ReplaceAll[#,{x_,y_,z_,w_}->{x+ns,y+ns,z+ns,w+ns}]&;
-	A2=ReplaceAll[Delete[lamKVec//ArrayRules,-1],{x_,y_,z_,w_}->{x+ns,y+ns,z,w}];
+	A1=Delete[ShiftedTensorSS[lamAAS,{ns,ns,ns,ns},{nSH,nSH,nSH,nSH}]//ArrayRules,-1];
+	A2=Delete[ShiftedTensorSS[lamKVec,{ns,ns,0,0},{nSH,nSH,nSH,nSH}]//ArrayRules,-1];
 	A3=Delete[lam4Temp//ArrayRules,-1];
 	lam4EP=SymmetrizedArray[Join[A1,A2,A3],{nSH,nSH,nSH,nSH},Symmetric[{1,2,3,4}]]//SparseArray;
 	
@@ -67,7 +67,7 @@ UseSoftTheory[]:=Module[{},
 	lam3Temp= lam3//Normal//ReplaceAll[#,SubCubic]&//SparseArray;
 	
 	(*We then combine normal and temporal scalars*)
-	A1=ReplaceAll[Delete[lamvvsLS//ArrayRules,-1],{x_,y_,z_}->{x+ns,y+ns,z}];
+	A1=Delete[ShiftedTensorSS[lamvvsLS,{ns,ns,0},{nSH,nSH,nSH}]//ArrayRules,-1];
 	A2=Delete[lam3Temp//ArrayRules,-1];
 	lam3EP=SymmetrizedArray[Join[A1,A2],{nSH,nSH,nSH},Symmetric[{1,2,3}]]//SparseArray;
 
@@ -77,7 +77,7 @@ UseSoftTheory[]:=Module[{},
 	muijTemp=muij//Normal//ReplaceAll[#,SubMass]&//SparseArray;
 
 	(*We then combine normal and temporal scalar masses*)
-	A1=ReplaceAll[Delete[Normal[muabDef]/.SubDebyeDecoupled//SparseArray//ArrayRules,-1],{x_,y_}->{x+ns,y+ns}];
+	A1=Delete[ShiftedTensorSS[Normal[muabDef]/.SubDebyeDecoupled,{ns,ns},{nSH,nSH}]//ArrayRules,-1];
 	A2=Delete[muijTemp//ArrayRules,-1];
 
 	muijEP=SymmetrizedArray[Join[A1,A2],{nSH,nSH},Symmetric[{1,2}]]//SparseArray;
@@ -93,7 +93,7 @@ UseSoftTheory[]:=Module[{},
 		gvssEP=SymmetrizedArray[{{1,1,1}->0},{nv,nSH,nSH},Antisymmetric[{2,3}]]//SparseArray;
 		gvssEP[[;;,1;;ns,1;;ns]]=gvssTEMP;
 	,
-		A1=ReplaceAll[Delete[gvvvEP//ArrayRules,-1],{x_,y_,z_}->{x,y+ns,z+ns}];
+		A1=Delete[ShiftedTensorSS[gvvvEP,{0,ns,ns},{nv,nSH,nSH}]//ArrayRules,-1];
 		A2=Delete[gvssTEMP//ArrayRules,-1];
 		gvssEP=SparseArray[Join[A1,A2],{nv,nSH,nSH}];
 	];
@@ -250,11 +250,11 @@ CalculatePotentialUS[OptionsPattern[]]:=Module[{},
 		];
 	,
 		(*We now treat off-diagonal masses as small*)
-		muijPert=ArrayRules[muij\[Phi]]/.({x_Integer,y_Integer}->a_)/;Equal[x,y]->{x,y}->0//SparseArray[#,Dimensions[muij\[Phi]]]&;
-		muij\[Phi]=ArrayRules[muij\[Phi]]/.({x_Integer,y_Integer}->a_)/;Unequal[x,y]->{x,y}->0//SparseArray[#,Dimensions[muij\[Phi]]]&;
+		muijPert=ArrayRules[muij\[Phi]]/.({x_Integer,y_Integer}->a_)/;Equal[x,y]:>{x,y}->0//SparseArray[#,Dimensions[muij\[Phi]]]&;
+		muij\[Phi]=ArrayRules[muij\[Phi]]/.({x_Integer,y_Integer}->a_)/;Unequal[x,y]:>{x,y}->0//SparseArray[#,Dimensions[muij\[Phi]]]&;
 		
-		muab\[Phi]Pert=ArrayRules[muab\[Phi]]/.({x_Integer,y_Integer}->a_)/;Equal[x,y]->{x,y}->0//SparseArray[#,Dimensions[muab\[Phi]]]&;
-		muab\[Phi]=ArrayRules[muab\[Phi]]/.({x_Integer,y_Integer}->a_)/;Unequal[x,y]->{x,y}->0//SparseArray[#,Dimensions[muab\[Phi]]]&;
+		muab\[Phi]Pert=ArrayRules[muab\[Phi]]/.({x_Integer,y_Integer}->a_)/;Equal[x,y]:>{x,y}->0//SparseArray[#,Dimensions[muab\[Phi]]]&;
+		muab\[Phi]=ArrayRules[muab\[Phi]]/.({x_Integer,y_Integer}->a_)/;Unequal[x,y]:>{x,y}->0//SparseArray[#,Dimensions[muab\[Phi]]]&;
 		
 		CalculateLOPotentialSS[];
 		CalculateNLOPotentialSS[];
@@ -292,11 +292,11 @@ CalculatePotential[OptionsPattern[]]:=Module[{},
 		];
 	,
 		(*We now treat off-diagonal masses as small*)
-		muijPert=ArrayRules[muij\[Phi]]/.({x_Integer,y_Integer}->a_)/;Equal[x,y]->{x,y}->0//SparseArray[#,Dimensions[muij\[Phi]]]&;
-		muij\[Phi]=ArrayRules[muij\[Phi]]/.({x_Integer,y_Integer}->a_)/;Unequal[x,y]->{x,y}->0//SparseArray[#,Dimensions[muij\[Phi]]]&;
+		muijPert=ArrayRules[muij\[Phi]]/.({x_Integer,y_Integer}->a_)/;Equal[x,y]:>{x,y}->0//SparseArray[#,Dimensions[muij\[Phi]]]&;
+		muij\[Phi]=ArrayRules[muij\[Phi]]/.({x_Integer,y_Integer}->a_)/;Unequal[x,y]:>{x,y}->0//SparseArray[#,Dimensions[muij\[Phi]]]&;
 		
-		muab\[Phi]Pert=ArrayRules[muab\[Phi]]/.({x_Integer,y_Integer}->a_)/;Equal[x,y]->{x,y}->0//SparseArray[#,Dimensions[muab\[Phi]]]&;
-		muab\[Phi]=ArrayRules[muab\[Phi]]/.({x_Integer,y_Integer}->a_)/;Unequal[x,y]->{x,y}->0//SparseArray[#,Dimensions[muab\[Phi]]]&;
+		muab\[Phi]Pert=ArrayRules[muab\[Phi]]/.({x_Integer,y_Integer}->a_)/;Equal[x,y]:>{x,y}->0//SparseArray[#,Dimensions[muab\[Phi]]]&;
+		muab\[Phi]=ArrayRules[muab\[Phi]]/.({x_Integer,y_Integer}->a_)/;Unequal[x,y]:>{x,y}->0//SparseArray[#,Dimensions[muab\[Phi]]]&;
 		
 		CalculateLOPotentialSS[];
 		CalculateNLOPotentialSS[];

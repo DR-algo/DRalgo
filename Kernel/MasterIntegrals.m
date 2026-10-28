@@ -36,10 +36,10 @@ ReplaceLb={
 
 (*
 	HardThermal1LoopInt["B", a, b, d]
-   Bosonic hard-thermal 1-loop sum-integral I_B(a,b) in d dimensions.
-   a : power of the loop momentum in the denominator (propagator power),
-   b : power of the spatial loop momentum in the numerator,
-   d : spacetime dimension (d->3 for the 3d EFT).
+   Bosonic hard-thermal 1-loop sum-integral I_B(a,b) = Sum-Integral (P_0^2)^b/(P^2)^a in d spatial dimensions.
+   a : power of P^2 in the denominator (propagator power),
+   b : power of P_0^2, the squared Matsubara frequency, in the numerator,
+   d : number of spatial dimensions (d->3-2eps).
    Evaluates to the closed form in terms of the Riemann Zeta function
    and Gamma functions after performing the bosonic Matsubara frequency sum.
 *)
@@ -144,7 +144,7 @@ BubbleIntegral3dP2[x_,y_]:=-1/(12 \[Pi] (Sqrt[x]+Sqrt[y])^3);
 
 (*
 	The k^2 terms of the scalar self-energy in HEFT from a bubble with one scalar and one vector line
-	and with two vector lines, with the coupling-independent factors of the diagrams. A massless vector line gives no contribution.
+	and with two vector lines, with the coupling-independent factors of the diagrams. A massless line gives no contribution to the bubble with two vector lines.
 *)
 BubbleIntegral3dP2SV[0,0]=0;
 BubbleIntegral3dP2SV[x_,y_]:=2/(3 \[Pi] (Sqrt[x]+Sqrt[y]));
@@ -191,7 +191,7 @@ SunsetIntegral3d[x_,y_List,z_,scale_]:=SunsetIntegral3d[y,x,z,scale];
 	The sunset with the masses a and c, and the lists of masses {a1,a2} and {c1,c2} of the propagators on one line.
 	Distinct masses on a line are separated by partial fractions, 1/((p^2+a1^2)(p^2+a2^2))=(1/(p^2+a2^2)-1/(p^2+a1^2))/(a1^2-a2^2),
 	and equal ones are a derivative with respect to the squared mass. Two massless propagators on a line give the hard
-	part of the integral, the coefficient of a^2 in its expansion in the mass a, which is even in a.
+	part of the integral, minus the coefficient of a^2 in the expansion in the mass a on this line, which is even in a.
 *)
 sunsetDoubled[{a_},{c_},t_,scale_]:=If[a===0&&c===0&&t===0,0,1/(4 \[Pi])^2 (Log[scale/(a+c+t)]+1/2)];
 

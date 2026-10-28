@@ -8602,7 +8602,7 @@ Cell[BoxData["\<\"Calculating Temporal-Scalar Quartics \"\>"], "Print",
  CellLabel->"During evaluation of In[16]:=",
  CellID->561126988,ExpressionUUID->"77e5d742-aa94-4707-a889-2337aa0163db"],
 
-Cell[BoxData["\<\"RG-evolving from mu to mu3\"\>"], "Print",
+Cell[BoxData["\<\"RG-evolving from mu4 to mu3\"\>"], "Print",
  TaggingRules->{},
  CellChangeTimes->{3.956224897360695*^9, 3.956224968801614*^9, 
   3.9562251678770514`*^9, 3.956225342977853*^9},

@@ -207,11 +207,11 @@ If[verbose==True,Print["Calculating the 2-Loop Effective Potential"]];
 (*We now treat off-diagonal masses as small*)
 	muijPert=muij\[Phi];
 	muijPert[[LightScalarHET,LightScalarHET]]=0;
-	muijPert=ArrayRules[muijPert]/.({x_Integer,y_Integer}->a_)/;Equal[x,y]->{x,y}->0//SparseArray[#,{nsEP,nsEP}]&;
+	muijPert=ArrayRules[muijPert]/.({x_Integer,y_Integer}->a_)/;Equal[x,y]:>{x,y}->0//SparseArray[#,{nsEP,nsEP}]&;
 	
 	muab\[Phi]Pert=muab\[Phi];
 	muab\[Phi]Pert[[LightVectorHET,LightVectorHET]]=0;
-	muab\[Phi]Pert=ArrayRules[muab\[Phi]Pert]/.({x_Integer,y_Integer}->a_)/;Equal[x,y]->{x,y}->0//SparseArray[#,{nvEP,nvEP}]&;
+	muab\[Phi]Pert=ArrayRules[muab\[Phi]Pert]/.({x_Integer,y_Integer}->a_)/;Equal[x,y]:>{x,y}->0//SparseArray[#,{nvEP,nvEP}]&;
 
 (*The one-loop diagram with two insertions of the off-diagonal masses P, -1/4 Sum[BubbleIntegral3d[m_i,m_l] P_il P_li],
 	the O(P^2) term of the one-loop potential, with massless light lines (the hard region). Vectors give twice that.*)

@@ -52,7 +52,7 @@ RepFermion3Gen={RepFermion1Gen,RepFermion1Gen,RepFermion1Gen}//Flatten[#,1]&;
 (*
 	The potential of Eq. (2.1) of 2511.04636. Under Z2 = diag(-1,-1,1), the inert doublets \[Phi]1, \[Phi]2 are odd and \[Phi]3 is even.
 	The complex parameters \[Mu]12^2, \[Lambda]1, \[Lambda]2, \[Lambda]3 of the paper are split into real and imaginary parts, \[Mu]12sqR+I \[Mu]12sqI etc.
-	The names \[Lambda]1R, \[Lambda]3R, ... avoid the tensors \[Lambda]1 and \[Lambda]3, and \[Mu]3sq avoids the 3d scale mu3.
+	The names \[Lambda]1R, \[Lambda]3R, ... avoid the tensors \[Lambda]1 and \[Lambda]3, and \[Mu]3sq stands for \[Mu]3^2.
 	The dark democracy limit of the paper is \[Mu]2sq=\[Mu]1sq, \[Lambda]3=\[Lambda]2, \[Lambda]31=\[Lambda]23, and \[Lambda]31p=\[Lambda]23p.
 *)
 (*bilinear[i,j] = \[Phi]i^+ \[Phi]j*)

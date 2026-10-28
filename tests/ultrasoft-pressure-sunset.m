@@ -103,8 +103,7 @@ YsffC=y GradYukawa[CreateInvariantYukawa[Group,RepScalar,RepFermion,{{1,1,2},{Tr
 
 ImportModelDRalgo[Group,gvvv,gvff,gvss,\[Lambda]1,\[Lambda]3,\[Lambda]4,\[Mu]ij,\[Mu]IJ,\[Mu]IJC,Ysff,YsffC,Verbose->False];
 PerformDRhard[];
-(*Without light scalars, the matching of the light sector emits messages, which do not affect the pressure*)
-Quiet[PerformDRsoft[{1}]];
+PerformDRsoft[{1}];
 
 AppendTo[testList,
 VerificationTest[

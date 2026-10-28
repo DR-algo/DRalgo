@@ -112,7 +112,7 @@ $ wolframscript -file examples/xsm.m
 ```
 
 Ensure that an active `WolframKernel` is available for the above command to work.
-Without a notebook, DRalgo prints its header and the GroupMath banner as plain text.
+Without a notebook, DRalgo prints its header and the citation of GroupMath as plain text, without the GroupMath banner.
 To suppress both, set the following flag **before** loading DRalgo:
 ```mathematica
 DRalgo`DRalgo`$DRalgoBanner = False;

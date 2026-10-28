@@ -31,8 +31,8 @@ Check[
 	with an adjoint and a fundamental Higgs, (A3) and (A11) give C = 20\[Lambda]A g3^2-10\[Lambda]A^2-g3^4+6h3 g3^2-8h3^2,
 	and the U(1) results give C = -6\[Lambda]A^2+4h3 e3^2-4h3^2. There, the Lagrangian contains (1/4)\[Lambda]A (A0^a A0^a)^2
 	and h3 \[Phi]^\[Dagger]\[Phi] A0^a A0^a with the doublet \[Phi], or h3 \[Phi]^*\[Phi] A0^2 for U(1). The soft tensors enter as
-	(1/4!)\[Lambda]AAS_abcd A0^a A0^b A0^c A0^d and (1/4)\[Lambda]KVec_abij A0^a A0^b \[Phi]_i \[Phi]_j with real components \[Phi]_i,
-	so that \[Lambda]A=\[Lambda]AAS_1111/6 and h3=\[Lambda]KVec_1111/2.
+	(1/4!)lamAAS_abcd A0^a A0^b A0^c A0^d and (1/4)lamKVec_abij A0^a A0^b \[Phi]_i \[Phi]_j with real components \[Phi]_i,
+	so that \[Lambda]A=lamAAS_1111/6 and h3=lamKVec_1111/2.
 
 	At the tree-level values h3=g3^2/4 and \[Lambda]A=0, the O(g^4) part of the running vanishes, as noted
 	below (A11). The running is therefore of O(g^6), beyond the order of the NLO Debye masses, which are

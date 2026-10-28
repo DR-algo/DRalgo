@@ -276,7 +276,9 @@ with the given diagonal mass matrices";
 PerturbativeDiagonalization::usage="\
 PerturbativeDiagonalization is an option of CalculatePotential and CalculatePotentialUS. \
 With PerturbativeDiagonalization->True, the off-diagonal elements of the mass matrices are treated as \
-perturbations, which enter the two-loop potential at second order";
+perturbations: the one-loop diagram with two insertions of them is added to the NNLO potential. \
+The mass matrices of DefineVEVS are then replaced by their diagonals, so that DefineVEVS is called again before \
+the next calculation";
 FastRotation::usage="\
 FastRotation is an option of RotateTensorsCustomMass. With FastRotation->True, only the components lam4_iikk \
 of the quartic couplings, which the two-loop potential needs, are rotated, which is faster for large rotation matrices";
@@ -496,7 +498,7 @@ Physics:
     The Z factor is printed, with
         PrintScalarKineticHET[][[i,j]] = \[Delta]Z^ij
     corresponding to
-        (\[Delta]^ij + 2 \[Delta]Z^ij) \[PartialD]_mu R[i] \[PartialD]^mu R[j].
+        (\[Delta]^ij + 2 \[Delta]Z^ij) \[PartialD]_\[Mu] R[i] \[PartialD]^\[Mu] R[j].
 
   - The kinetic term is different for the Higgs components, reflecting 
     that \[CurlyPhi] \[NotEqual] 0 breaks the symmetry, so the Higgs and 
@@ -872,9 +874,9 @@ PerformDRsoft[ListHardP_]:=Module[{ListHardI=ListHardP},
 	TadPoleSS[];(*Calculates tadpoles*)
 	HeavyScalarMassSS[];(*Includes self-energies for heavy-lines with soft momenta*)
 	VectorSelfEnergySS[];
-	ScalarMassSS[];
-	
+
 (*If all scalars are integrated out, the ultrasoft theory has no scalar couplings, and only the pressure and the gauge couplings are computed*)
+	If[nSL>0,ScalarMassSS[]];
 	If[mode>=1&&nSL>0,
 		ScalarVectorCouplingSS[];
 		ScalarQuarticSS[];
@@ -891,7 +893,12 @@ PerformDRsoft[ListHardP_]:=Module[{ListHardI=ListHardP},
 	and another 3(g^4 Lb), the function replaces element 2 by three times the first element. This also
 	works for linear combinations of elements.
 *)
-	If[nSL>0,IdentifyTensorsSSDRalgo[]]
+	If[nSL>0,
+		IdentifyTensorsSSDRalgo[]
+	,
+(*Removes the scalar couplings and masses of an earlier reduction*)
+		{lam4US,lamKVecTSS,lam3CSRedSS,muijSNLOSS,TadPoleSSSLO,IdentMatSS}=ConstantArray[{},6];
+	]
 ];
 
 
@@ -954,7 +961,7 @@ OverallFac[list_,varMat_]:=Module[{L=list,Mat=varMat,a}, (*a is local: otherwise
 	For[i=1,i<Length[list],i++,
 		For[j=i+1,j<Length[list]+1,j++,
 			(*Solve only if the ratio can be a number; Together cancels the common factors*)
-			help=If[NumericQ[Together[list[[j]]/list[[i]]]],CompExp2[list[[i]],list[[j]]],{}];
+			help=If[list[[i]]=!=0&&NumericQ[Together[list[[j]]/list[[i]]]],CompExp2[list[[i]],list[[j]]],{}];
 			TempIf=If[Length[help]>0,{NumericQ/@help}[[1,1]]&&Equal@@NumericQ/@help,False];
 			If[TempIf,a=help[[1]],a=0];
 				Mat[[i,j]]=a;

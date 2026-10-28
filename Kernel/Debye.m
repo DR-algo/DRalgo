@@ -45,8 +45,8 @@ CreateDebyeMasses[GroupI_]:=Module[{GroupP=GroupI},
 
 (*
 
-	Create off-diagonal masses. The convention is that for the group {"U1","U1","U1"}, musqU1Mix1 is the mixing between the first and second group.
-	musqU1Mix2 is the mixing between the first and third group. And musqU1Mix3 is the mixing between the second and third group etc.
+	Create off-diagonal masses. The convention is that for the group {"U1","U1","U1"}, muU1Mix1 is the mixing between the first and second group.
+	muU1Mix2 is the mixing between the first and third group. And muU1Mix3 is the mixing between the second and third group etc.
 *)
 	PosDup=Select[positionDuplicates[GroupP],Length[#]>1&];
 	Do[
