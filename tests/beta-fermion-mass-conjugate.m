@@ -35,8 +35,8 @@ Check[
 	unitary rotations of the fermions, as in the beta function of Ysff.
 
 	The transposed order of the field-renormalization term, 1/2 (Y2.m + m.Transpose[Y2]),
-	differs from this formula when Y2 is not real. The counterterms Z\[Mu]IJF and
-	Z\[Mu]IJFC enter the two-loop tadpoles.
+	differs from this formula when Y2 is not real. The counterterms ZmuIJF and
+	ZmuIJFC enter the two-loop tadpoles.
 
 	Checked here, for two Dirac flavors with complex Yukawa and mass matrices
 	(the conjugates are independent symbols yC and mC):
@@ -104,8 +104,8 @@ VerificationTest[
 (*beta(mC) is the complex conjugate of beta(m)*)
 
 
-\[Beta]Mass=Normal[private["\[Beta]\[Mu]IJF"]];
-\[Beta]MassC=Normal[private["\[Beta]\[Mu]IJFC"]];
+\[Beta]Mass=Normal[private["\[Beta]muIJF"]];
+\[Beta]MassC=Normal[private["\[Beta]muIJFC"]];
 
 AppendTo[testList,
 VerificationTest[
@@ -138,7 +138,7 @@ VerificationTest[
 (*The two-loop tadpole of the real scalar is real*)
 
 
-(*The counterterms Z\[Mu]IJF and Z\[Mu]IJFC enter the two-loop tadpole TadPoleNLO*)
+(*The counterterms ZmuIJF and ZmuIJFC enter the two-loop tadpole TadPoleNLO*)
 tadpoleNLO=Normal[private["TadPoleNLO"]];
 
 AppendTo[testList,
@@ -173,7 +173,7 @@ private["CounterTerm"][];
 
 AppendTo[testList,
 VerificationTest[
-	{Normal[private["\[Beta]\[Mu]IJF"]],Normal[private["\[Beta]\[Mu]IJFC"]]}//Expand,
+	{Normal[private["\[Beta]muIJF"]],Normal[private["\[Beta]muIJFC"]]}//Expand,
 	Table[3 m\[Psi] y^2/(16\[Pi]^2) {{0,1},{1,0}},{2}]//Expand,
 	TestID->"scalar-yukawa-mass-beta-is-textbook-value"
 ]];

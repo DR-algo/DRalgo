@@ -3,7 +3,10 @@
 (*Quit[];*)
 
 
-SetDirectory[NotebookDirectory[]];
+If[$InputFileName=="",
+	SetDirectory[NotebookDirectory[]],
+	SetDirectory[DirectoryName[$InputFileName]]
+];
 DRalgo`DRalgo`$LoadGroupMath=True;
 <<../Kernel/DRalgo.m
 
@@ -172,6 +175,7 @@ PrintPressureUS["NLO"]
 (*Saving the model*)
 
 
+TexFor[text_]:=Style[text,{GrayLevel[0.3]}];
 result={};
 AppendTo[result,Row[{
 	TexFor["DRDRDRDRDRDRDRDRDRDRDRDRDRDR "],

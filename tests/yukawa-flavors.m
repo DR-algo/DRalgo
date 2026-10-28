@@ -82,8 +82,8 @@ import[{sig_,msq_,gam_,lam_},{mm_,mmC_}]:=ImportModelDRalgo[Group,gvvv0,gvff0,gv
 (*The \[Beta]-function tensors of the tadpole, scalar mass, cubic, quartic, fermion masses, and Yukawa couplings*)
 betaTensors[]:=(
 	private["CounterTerm"][];
-	Normal/@{private["\[Beta]\[Lambda]1"],private["\[Beta]mij"],private["\[Beta]\[Lambda]ijk"],private["\[Beta]\[Lambda]ijkl"],
-		private["\[Beta]\[Mu]IJF"],private["\[Beta]\[Mu]IJFC"],private["\[Beta]Ysij"],private["\[Beta]YsijC"],private["\[Gamma]ij"]}
+	Normal/@{private["\[Beta]lam1"],private["\[Beta]mij"],private["\[Beta]lamijk"],private["\[Beta]lamijkl"],
+		private["\[Beta]muIJF"],private["\[Beta]muIJFC"],private["\[Beta]Ysij"],private["\[Beta]YsijC"],private["\[Gamma]ij"]}
 );
 
 
@@ -149,7 +149,7 @@ betas=Join[
 		m[[i,j]]->component[bF,3,i,j],mC[[i,j]]->component[bFC,4,i,j]},{i,2},{j,2}],
 	{\[Sigma]->bT[[1]],msq->bM[[1,1]],\[Gamma]->bC[[1,1,1]],\[Lambda]->bQ[[1,1,1,1]],g1->8/3 q^2 g1^3/(16\[Pi]^2)}];
 
-explicitMu[expr_]:=Simplify[\[Mu] D[expr/.{Lb->2Log[\[Mu]/(4\[Pi] T)]+2EulerGamma,Lf->2Log[\[Mu]/(\[Pi] T)]+2EulerGamma},\[Mu]]];
+explicitMu[expr_]:=Simplify[mu4 D[expr/.{Lb->2Log[mu4/(4\[Pi] T)]+2EulerGamma,Lf->2Log[mu4/(\[Pi] T)]+2EulerGamma},mu4]];
 running[expr_]:=Sum[r[[2]] D[expr,r[[1]]],{r,betas}];
 lo3d={\[Lambda]3d->T \[Lambda],\[Gamma]3d->Sqrt[T] \[Gamma]};
 rgResidual[lo_,nlo_]:=Expand[running[lo]+explicitMu[nlo]/.lo3d];
@@ -167,7 +167,7 @@ VerificationTest[
 ]];
 
 (*
-	The running from \[Mu] to \[Mu]3 contains the square of the one-loop coupling \[Lambda]VL. This term of
+	The running from mu4 to mu3 contains the square of the one-loop coupling lamVL. This term of
 	O(g1^4 y^4/(16\[Pi]^2)^3) lies beyond the order computed and remains in the residual.
 *)
 AppendTo[testList,
@@ -177,7 +177,7 @@ VerificationTest[
 	TestID->"scalar-mass-is-rg-invariant-at-the-order-computed"
 ]];
 
-(*The vacuum energy runs with (msq^2/2-Tr[(\[Mu]IJF.\[Mu]IJFC)^2])/(16\[Pi]^2)*)
+(*The vacuum energy runs with (msq^2/2-Tr[(muIJF.muIJFC)^2])/(16\[Pi]^2)*)
 mmC=mT . mCT;
 pressureNNLO=PrintPressure["NNLO"];
 AppendTo[testList,

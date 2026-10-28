@@ -100,8 +100,8 @@ PrepareHET[HardScalarIndices_,HardVectorIndices_]:=Module[
 		LightVectorHET={};
 	];(*Trick to avoid errors in situations where all vector bosons are integrated out*)
 (*We now extract masses for the hard particles*)
-	\[Mu]ijHET=Table[\[Mu]ij\[Phi][[a,b]],{a,HeavyScalarsHET},{b,HeavyScalarsHET}]//SparseZero[#,{nHETS,nHETS}]&;
-	\[Mu]abHET=Table[\[Mu]ab\[Phi][[a,b]],{a,HeavyVectorsHET},{b,HeavyVectorsHET}]//SparseZero[#,{nHETV,nHETV}]&;
+	muijHET=Table[muij\[Phi][[a,b]],{a,HeavyScalarsHET},{b,HeavyScalarsHET}]//SparseZero[#,{nHETS,nHETS}]&;
+	muabHET=Table[muab\[Phi][[a,b]],{a,HeavyVectorsHET},{b,HeavyVectorsHET}]//SparseZero[#,{nHETV,nHETV}]&;
 	
 	
 (*Defining couplings between hard and soft particles*)
@@ -110,8 +110,8 @@ PrepareHET[HardScalarIndices_,HardVectorIndices_]:=Module[
 (*Contraction with coupling-tensors and masses*)
 (*We now have to integrate out hard particles in each topology*)
 (*We treat off-diagonal masses perturbatively, so only the diagonal elements are used here*)	
-	aS=Table[\[Mu]ijHET[[i,i]],{i,1,nHETS}]//SparseArray;
-	av=Table[\[Mu]abHET[[i,i]],{i,1,nHETV}]//SparseArray;
+	aS=Table[muijHET[[i,i]],{i,1,nHETS}]//SparseArray;
+	av=Table[muabHET[[i,i]],{i,1,nHETV}]//SparseArray;
 
 (*For the effective potential we can loop over all particles (both light and heavy) if we set the light masses to zero*)
 	avF=Table[0,{i,nvEP}]//SparseArray;
@@ -139,9 +139,9 @@ PrepareHET[HardScalarIndices_,HardVectorIndices_]:=Module[
 CalculateLOPotentialHET[]:=Module[{V1,V2,V3},
 	If[verbose==True,Print["Calculating the Tree-Level Effective Potential"]];
 	
-	V1=\[Lambda]4EP . \[Phi]Vev . \[Phi]Vev . \[Phi]Vev . \[Phi]Vev;
-	V2=\[Mu]ijEP . \[Phi]Vev . \[Phi]Vev;
-	V3=\[Lambda]3EP . \[Phi]Vev . \[Phi]Vev . \[Phi]Vev;
+	V1=lam4EP . \[Phi]Vev . \[Phi]Vev . \[Phi]Vev . \[Phi]Vev;
+	V2=muijEP . \[Phi]Vev . \[Phi]Vev;
+	V3=lam3EP . \[Phi]Vev . \[Phi]Vev . \[Phi]Vev;
 	VHETLO=1/4! V1+V2/2!+V3/3!;
 	];
 
@@ -149,13 +149,11 @@ CalculateLOPotentialHET[]:=Module[{V1,V2,V3},
 (*
 	Calculates the one-loop effective potential.
 *)
-CalculateNLOPotentialHET[]:=Module[{V1,V2,ALog},
+CalculateNLOPotentialHET[]:=Module[{V1,V2},
 If[verbose==True,Print["Calculating the 1-Loop Effective Potential"]];
-	(*Log integral*)
-	ALog[x_]:=-(x^(3/2)/(12 \[Pi]));
 	
-	V1=Sum[ALog[\[Mu]ijHET[[i,i]]],{i,1,nHETS}];
-	V2=2*Sum[ALog[\[Mu]abHET[[i,i]]],{i,1,nHETV}];
+	V1=Sum[OneLoopPotential3d[muijHET[[i,i]]],{i,1,nHETS}];
+	V2=2*Sum[OneLoopPotential3d[muabHET[[i,i]]],{i,1,nHETV}];
 
 	VHETNLO=V1+V2;
 ];
@@ -166,18 +164,18 @@ If[verbose==True,Print["Calculating the 1-Loop Effective Potential"]];
 *)
 CalculateNNLOPotentialHET[]:=Module[{fvvv,f\[Eta]\[Eta]v,fssv,fvvs,fsss,fss,fvs,fvv,ss,sss,vs,vvs,ssv,vv,vvv,ggv,
 							Vss,Vsss,Vvs,Vvvs,Vssv,Vvvv,Vvv,V\[Eta]\[Eta]v,
-							\[Mu]ab\[Phi]Pert,\[Mu]ijPert,helpTens,V1,V2,AD},
+							muab\[Phi]Pert,muijPert,helpTens,V1,V2},
 If[verbose==True,Print["Calculating the 2-Loop Effective Potential"]];
 
 
 	(*Loading two-loop master integrals*)
-	{fvvv,f\[Eta]\[Eta]v,fssv,fvvs,fsss,fss,fvs,fvv}=TwoLoopFunctions[];
+	{fvvv,f\[Eta]\[Eta]v,fssv,fvvs,fsss,fss,fvs,fvv}=TwoLoopFunctions[mu3US];
 (*scalar-scalar bubble*)	
-	ss=1/8 TensorProduct[\[Lambda]4\[Phi]];
+	ss=1/8 TensorProduct[lam4\[Phi]];
 	Vss=Sum[ss[[j,j,k,k]]fss[asF[[j]],asF[[k]]],{j,nsEP},{k,nsEP}];
 
 (*scalar-scalar-scalar sunset*)	
-	sss=1/12 TensorProduct[\[Lambda]3\[Phi],\[Lambda]3\[Phi]];
+	sss=1/12 TensorProduct[lam3\[Phi],lam3\[Phi]];
 	Vsss=Sum[sss[[i,j,k,i,j,k]]fsss[asF[[i]],asF[[j]],asF[[k]]],{j,nsEP},{k,nsEP},{i,nsEP}];
 	
 (*scalar-vector bubble*)
@@ -207,28 +205,23 @@ If[verbose==True,Print["Calculating the 2-Loop Effective Potential"]];
 	
 
 (*We now treat off-diagonal masses as small*)
-	\[Mu]ijPert=\[Mu]ij\[Phi];
-	\[Mu]ijPert[[LightScalarHET,LightScalarHET]]=0;
-	\[Mu]ijPert=ArrayRules[\[Mu]ijPert]/.({x_Integer,y_Integer}->a_)/;Equal[x,y]->{x,y}->0//SparseArray[#,{nsEP,nsEP}]&;
+	muijPert=muij\[Phi];
+	muijPert[[LightScalarHET,LightScalarHET]]=0;
+	muijPert=ArrayRules[muijPert]/.({x_Integer,y_Integer}->a_)/;Equal[x,y]:>{x,y}->0//SparseArray[#,{nsEP,nsEP}]&;
 	
-	\[Mu]ab\[Phi]Pert=\[Mu]ab\[Phi];
-	\[Mu]ab\[Phi]Pert[[LightVectorHET,LightVectorHET]]=0;
-	\[Mu]ab\[Phi]Pert=ArrayRules[\[Mu]ab\[Phi]Pert]/.({x_Integer,y_Integer}->a_)/;Equal[x,y]->{x,y}->0//SparseArray[#,{nvEP,nvEP}]&;
+	muab\[Phi]Pert=muab\[Phi];
+	muab\[Phi]Pert[[LightVectorHET,LightVectorHET]]=0;
+	muab\[Phi]Pert=ArrayRules[muab\[Phi]Pert]/.({x_Integer,y_Integer}->a_)/;Equal[x,y]:>{x,y}->0//SparseArray[#,{nvEP,nvEP}]&;
 
-(*One-loop integrals*)	
-	AD[x_,y_]:=-(1/(4 \[Pi]))( Sqrt[x]-Sqrt[y])/(y-x);
-	AD[0,0]:=0;
-	AD[x_,x_]:=(1/(8 \[Pi]))/Sqrt[x];
-
+(*The one-loop diagram with two insertions of the off-diagonal masses P, -1/4 Sum[BubbleIntegral3d[m_i,m_l] P_il P_li],
+	the O(P^2) term of the one-loop potential, with massless light lines (the hard region). Vectors give twice that.*)
 (*Scalar contribution*)
-	helpTens=Table[AD[a,b],{a,asF},{b,asF}]//SparseArray;
-	helpTens=TensorProduct[helpTens,\[Mu]ijPert]//SparseArray//DiagonalTensor2[#,1,3]&;
-	V1=Tr[helpTens . \[Mu]ijPert];
+	helpTens=Table[BubbleIntegral3d[a,b],{a,asF},{b,asF}]//SparseArray;
+	V1=-1/4 Tr[(helpTens muijPert) . muijPert];
 
 (*Vector contribution*)
-	helpTens=Table[AD[a,b],{a,avF},{b,avF}]//SparseArray;
-	helpTens=TensorProduct[helpTens,\[Mu]ab\[Phi]Pert]//SparseArray//DiagonalTensor2[#,1,3]&;
-	V2=2*Tr[helpTens . \[Mu]ab\[Phi]Pert];
+	helpTens=Table[BubbleIntegral3d[a,b],{a,avF},{b,avF}]//SparseArray;
+	V2=2*(-1/4) Tr[(helpTens muab\[Phi]Pert) . muab\[Phi]Pert];
 		
 	
 (*Potential*)
@@ -304,27 +297,24 @@ PrintScalarKineticHET[] := Module[{},
 (*
 	Scalar self-energy in the effective theory.
 *)
-ScalarSelfEnergyHET[]:=Module[{LSV,LVV,LSS,\[Lambda]3IJi,gAIj,GABi,TensHelp,ContriSV,ContriVV,ContriSS},
+ScalarSelfEnergyHET[]:=Module[{lam3IJi,gAIj,GABi,TensHelp,ContriSV,ContriVV,ContriSS},
 If[verbose,Print["Calculating Scalar Self-Energy"]];
 
-(*One-loop master integrals*)
-	{LSV,LVV,LSS}=OneLoopFunctions[];
-	
 (*Scalar-scalar bubble*)
-	\[Lambda]3IJi=\[Lambda]3\[Phi][[;;,;;,LightScalarHET]]//HeavyTensor[#,{nsEP,nsEP,nHETSlight}]&;
-	TensHelp=Table[LSS[i,a],{i,asF},{a,asF}]//SparseArray;
-	TensHelp=TensorProduct[TensHelp,\[Lambda]3IJi]//DiagonalTensor[#,2,3]&//DiagonalTensor[#,2,3]&;
-	ContriSS=1/2*Contract[\[Lambda]3IJi,TensHelp,{{1,4},{2,5}}]//SimplifySparse;
+	lam3IJi=lam3\[Phi][[;;,;;,LightScalarHET]]//HeavyTensor[#,{nsEP,nsEP,nHETSlight}]&;
+	TensHelp=Table[BubbleIntegral3dP2[i,a],{i,asF},{a,asF}]//SparseArray;
+	TensHelp=TensorProduct[TensHelp,lam3IJi]//DiagonalTensor[#,2,3]&//DiagonalTensor[#,2,3]&;
+	ContriSS=1/2*Contract[lam3IJi,TensHelp,{{1,4},{2,5}}]//SimplifySparse;
 
 (*Scalar-vector bubble*)
 	gAIj=gvss\[Phi][[;;,LightScalarHET,;;]]//HeavyTensor[#,{nvEP,nHETSlight,nsEP}]&;
-	TensHelp=Table[LSV[i,a],{i,asF},{a,avF}]//SparseArray;
+	TensHelp=Table[BubbleIntegral3dP2SV[i,a],{i,asF},{a,avF}]//SparseArray;
 	TensHelp=TensorProduct[TensHelp,gAIj]//DiagonalTensor[#,2,3]&//DiagonalTensor[#,2,4]&;
 	ContriSV=TensorContract[gAIj . TensHelp,{1,3}];
 
 (*Vector-vector bubble*)	
 	GABi=Gvvs\[Phi][[;;,;;,LightScalarHET]]//HeavyTensor[#,{nvEP,nvEP,nHETSlight}]&;
-	TensHelp=Table[LVV[i,a],{i,avF},{a,avF}]//SparseArray;
+	TensHelp=Table[BubbleIntegral3dP2VV[i,a],{i,avF},{a,avF}]//SparseArray;
 	TensHelp=TensorProduct[TensHelp,GABi]//DiagonalTensor[#,2,3]&//DiagonalTensor[#,2,3]&;
 	ContriVV=1/2*Contract[GABi,TensHelp,{{1,4},{2,5}}]//SimplifySparse;
 	
@@ -333,35 +323,4 @@ If[verbose,Print["Calculating Scalar Self-Energy"]];
 
 ];
 
-
-(* ::Section:: *)
-(*Scalar master integrals*)
-
-
-OneLoopFunctions[]:=Module[{LSV,LVV,LSS,A},
-
-(*One-loop bubble*)
-	A[0]=0;
-	A[x_]:=-(1/(4 \[Pi])) Sqrt[x];
-	
-(*scalar-vector 2-point*)
-	LSV[x_,y_]:=(8 (-A[x]+A[y]))/(3 (x-y));
-	LSV[x_,x_]:=-((4 A[x] )/(3 x));
-	LSV[x_,0]:=-((8 A[x] )/(3 x));
-	LSV[0,0]=0;
-	
-(*vector-vector 2-point*)
-	LVV[x_,y_]:=(2 ((5 x-y) y^2 A[x]+x^2 (x-5 y) A[y]) )/(3 x (x-y)^3 y) ;
-	LVV[x_,x_]:=(5 A[x] )/(12 x^2);
-	LVV[x_,0]:=0;
-	LVV[0,x_]:=LVV[x,0];
-	LVV[0,0]:=0;
-	
-(*Scalar-scalar 2-point, the p^2 term of 1/(4\[Pi] p) ArcTan[p/(Sqrt[x]+Sqrt[y])]*)
-	LSS[x_,y_]:=((x+3 y) A[x]-(3 x+y) A[y]) /(3 (x-y)^3);
-	LSS[x_,x_]:=A[x]/(24 x^2);
-	LSS[0,0]:=0;
-	
-	Return[{LSV,LVV,LSS}];
-]
 

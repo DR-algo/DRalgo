@@ -37,7 +37,7 @@ AllocateTensors[GroupI_,RepNameI_,CouplingNameI_,FermionRepI_,ScalarRepI_]:=Modu
 
 	GaugeIndices[[1]]=1;;SizeGroupsMod[[1]];
 	Do[
-		helpInd=GaugeIndices[[i-1]]/.(a_;;b_)-> b;
+		helpInd=GaugeIndices[[i-1]]/.(a_;;b_):>b;
 		GaugeIndices[[i]]=(helpInd+1);;(helpInd+SizeGroupsMod[[i]]);
 	,{i,2,Length[GroupP]}
 	];
@@ -194,12 +194,12 @@ AllocateTensors[GroupI_,RepNameI_,CouplingNameI_,FermionRepI_,ScalarRepI_]:=Modu
 	nsP=Length[gvssP[[1]]];
 	nvP=Length[fabc];
 	nfP=Length[gvffP[[1]]];
-	\[Lambda]1P=EmptyArray[{nsP}];
-	\[Lambda]3P=EmptyArray[{nsP,nsP,nsP}];
-	\[Lambda]4P=EmptyArray[{nsP,nsP,nsP,nsP}];
-	\[Mu]ijP=EmptyArray[{nsP,nsP}];
-	\[Mu]IJCP=EmptyArray[{nfP,nfP}];
-	\[Mu]IJP=EmptyArray[{nfP,nfP}];
+	lam1P=EmptyArray[{nsP}];
+	lam3P=EmptyArray[{nsP,nsP,nsP}];
+	lam4P=EmptyArray[{nsP,nsP,nsP,nsP}];
+	muijP=EmptyArray[{nsP,nsP}];
+	muIJCP=EmptyArray[{nfP,nfP}];
+	muIJP=EmptyArray[{nfP,nfP}];
 	YsffP=EmptyArray[{nsP,nfP,nfP}];
 	YsffCP=EmptyArray[{nsP,nfP,nfP}];
 (* Returns*)
@@ -210,7 +210,7 @@ AllocateTensors[GroupI_,RepNameI_,CouplingNameI_,FermionRepI_,ScalarRepI_]:=Modu
 
 	GaugeCouplingNames=CouplingNameI;
 
-	Return[Join[{fabc//SparseArray//SimplifySparse,gvffP//SparseArray//SimplifySparse,gvssP//SparseArray//SimplifySparse,\[Lambda]1P//SparseArray,\[Lambda]3P//SparseArray,\[Lambda]4P//SparseArray,\[Mu]ijP//SparseArray,\[Mu]IJP//SparseArray,\[Mu]IJCP//SparseArray,YsffP//SparseArray,YsffCP//SparseArray}]];
+	Return[Join[{fabc//SparseArray//SimplifySparse,gvffP//SparseArray//SimplifySparse,gvssP//SparseArray//SimplifySparse,lam1P//SparseArray,lam3P//SparseArray,lam4P//SparseArray,muijP//SparseArray,muIJP//SparseArray,muIJCP//SparseArray,YsffP//SparseArray,YsffCP//SparseArray}]];
 ];
 
 
@@ -331,11 +331,11 @@ CreateScalarComponents[GroupI_,ScalarRepI_]:=Module[{GroupP=GroupI,ScalarRepP=Sc
 (*\[Phi] are real components and \[Psi] ar the imagionary ones*)
 			ScalarComponents[[i]]=Array[a[##]->1/Sqrt[2]Symbol[ToString[\[Phi]]<>ToString[i]][##]+I 1/Sqrt[2] Symbol[ToString[\[Psi]]<>ToString[i]][##]&,SizeRep]//Flatten[#]&;
 			ScalarComponentsC[[i]]=Array[a[##]->1/Sqrt[2] Symbol[ ToString[\[Phi]]<>ToString[i]][##]-I 1/Sqrt[2] Symbol[ToString[\[Psi]]<>ToString[i]][##]&,SizeRep]//Flatten[#]&;
-			ScalarVariables[[i]]={#}&/@Flatten[ScalarComponents[[i]]]/.{a_->b_}->b//Variables;
+			ScalarVariables[[i]]={#}&/@Flatten[ScalarComponents[[i]]]/.{a_->b_}:>b//Variables;
 			If[i==1,
 				ScalarVariablesIndices[[i]]=1;;(Length[ScalarVariables[[i]]]);
 			,
-				helpInd=ScalarVariablesIndices[[i-1]]/.(a_;;b_)-> b;
+				helpInd=ScalarVariablesIndices[[i-1]]/.(a_;;b_):>b;
 				ScalarVariablesIndices[[i]]=(helpInd+1);;(helpInd+Length[ScalarVariables[[i]]]);
 			];
 		,
@@ -346,11 +346,11 @@ CreateScalarComponents[GroupI_,ScalarRepI_]:=Module[{GroupP=GroupI,ScalarRepP=Sc
 			
 			ScalarComponents[[i]]=Array[a[##]->Symbol[ToString[\[Phi]]<>ToString[i]][##]&,SizeRep]//Flatten[#]&//ReplaceAll[#,BasisChange]&;
 			ScalarComponentsC[[i]]=Array[a[##]->Symbol[ToString[\[Phi]]<>ToString[i]][##]&,SizeRep]//Flatten[#]&//ReplaceAll[#,BasisChange]&;
-			ScalarVariables[[i]]={#}&/@Flatten[ScalarComponents[[i]]]/.{a_->b_}->b//Variables;
+			ScalarVariables[[i]]={#}&/@Flatten[ScalarComponents[[i]]]/.{a_->b_}:>b//Variables;
 			If[i==1,
 					ScalarVariablesIndices[[i]]=1;;(Length[ScalarVariables[[i]]]);
 			,
-				helpInd=ScalarVariablesIndices[[i-1]]/.(a_;;b_)-> b;
+				helpInd=ScalarVariablesIndices[[i-1]]/.(a_;;b_):>b;
 				ScalarVariablesIndices[[i]]=(helpInd+1);;(helpInd+Length[ScalarVariables[[i]]]);
 			];
 		];
@@ -385,11 +385,11 @@ CreateFermionComponents[GroupI_,FermionRepI_]:=Module[{GroupP=GroupI,FermionRepP
 	Do[
 		SizeRep=DimR[GroupHelp,FermionRepP[[i]][[1]]//Delete[#,PosU1]&];
 		FermionComponents[[i]]=Array[a[##]->Symbol[ToString[\[CapitalPsi]]<>ToString[i]][##]&,SizeRep]//Flatten[#]&;
-		FermionVariables[[i]]={#}&/@Flatten[FermionComponents[[i]]]/.{a_->b_}->b//Variables;
+		FermionVariables[[i]]={#}&/@Flatten[FermionComponents[[i]]]/.{a_->b_}:>b//Variables;
 		If[i==1,
 			FermionVariablesIndices[[i]]=1;;(Length[FermionVariables[[i]]]);
 		,
-		helpInd=FermionVariablesIndices[[i-1]]/.(a_;;b_)-> b;
+		helpInd=FermionVariablesIndices[[i-1]]/.(a_;;b_):>b;
 		FermionVariablesIndices[[i]]=(helpInd+1);;(helpInd+Length[FermionVariables[[i]]]);
 	];
 	,

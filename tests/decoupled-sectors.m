@@ -236,7 +236,7 @@ UseSoftTheory[];
 DefineVEVS[{\[Phi]0,0}];
 CalculatePotential[];
 AppendTo[tests, VerificationTest[
-	FreeQ[PrintEffectivePotential["All"],\[Mu]sqU1|\[Lambda]VLL],
+	FreeQ[PrintEffectivePotential["All"],musqU1|lamVLL],
 	True,
 	TestID->"decoupled-U1-not-in-soft-effective-potential"
 ]];
@@ -245,7 +245,7 @@ AppendTo[tests, VerificationTest[
 PrepareHET[{1,2},{1}];
 CalculatePotentialHET[];
 AppendTo[tests, VerificationTest[
-	FreeQ[PrintActionHET[],\[Mu]sqU1|\[Lambda]VLL],
+	FreeQ[PrintActionHET[],musqU1|lamVLL],
 	True,
 	TestID->"decoupled-U1-not-in-HET-action"
 ]];

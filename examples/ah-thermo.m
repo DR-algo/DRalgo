@@ -3,7 +3,10 @@
 (*Quit[];*)
 
 
-SetDirectory[NotebookDirectory[]];
+If[$InputFileName=="",
+	SetDirectory[NotebookDirectory[]],
+	SetDirectory[DirectoryName[$InputFileName]]
+];
 DRalgo`DRalgo`$LoadGroupMath=True;
 <<../Kernel/DRalgo.m
 
@@ -249,11 +252,11 @@ gsq3d=g13d^2/.PrintCouplings[]/.sub2;
 msq3dLO=msq3d/.PrintScalarMass["LO"]/.sub2;
 msq3dNLO=msq3d/.PrintScalarMass["NLO"]/.sub2;
 \[Mu]hsq3d=msq3dLO+msq3dNLO;
-\[Mu]sqU1LO=\[Mu]sqU1/.PrintDebyeMass["LO"]/.sub2;
-\[Mu]sqU1NLO=\[Mu]sqU1/.PrintDebyeMass["NLO"]/.sub2;
-mDsq3d=\[Mu]sqU1LO+\[Mu]sqU1NLO;
-\[Kappa]33d=\[Lambda]VLL/.PrintTemporalScalarCouplings[]/.sub2;
-h33d=\[Lambda]VL[1]/.PrintTemporalScalarCouplings[]/.sub2;
+musqU1LO=musqU1/.PrintDebyeMass["LO"]/.sub2;
+musqU1NLO=musqU1/.PrintDebyeMass["NLO"]/.sub2;
+mDsq3d=musqU1LO+musqU1NLO;
+\[Kappa]33d=lamVLL/.PrintTemporalScalarCouplings[]/.sub2;
+h33d=lamVL[1]/.PrintTemporalScalarCouplings[]/.sub2;
 
 (*
 In a similar manner, we can use 
@@ -265,15 +268,15 @@ PrintScalarMassUS[]
 
 (* to get ultra soft theory parameters: *)
 
-bar\[Lambda]h3d=\[Lambda]3dUS/.PrintCouplingsUS[]/.\[Lambda]3d->\[Lambda]h3d/.\[Lambda]VL[1]->h33d/.\[Mu]sqU1->mDsq3d/.sub2;
+bar\[Lambda]h3d=\[Lambda]3dUS/.PrintCouplingsUS[]/.\[Lambda]3d->\[Lambda]h3d/.lamVL[1]->h33d/.musqU1->mDsq3d/.sub2;
 bargsq3d=g13dUS^2/.PrintCouplingsUS[]/.g13d^2->gsq3d;
 
 PrintScalarMassUS["LO"];
 
-msq3dUSLO=msq3dUS/.PrintScalarMassUS["LO"]/.\[Lambda]3d->\[Lambda]h3d/.\[Lambda]VL[1]->h33d/.\[Mu]sqU1->mDsq3d/.sub2;
-msq3dUSNLO=msq3dUS/.PrintScalarMassUS["NLO"]/.\[Lambda]3d->\[Lambda]h3d/.\[Lambda]VL[1]->h33d/.\[Mu]sqU1->mDsq3d/.sub2;
+msq3dUSLO=msq3dUS/.PrintScalarMassUS["LO"]/.\[Lambda]3d->\[Lambda]h3d/.lamVL[1]->h33d/.musqU1->mDsq3d/.sub2;
+msq3dUSNLO=msq3dUS/.PrintScalarMassUS["NLO"]/.\[Lambda]3d->\[Lambda]h3d/.lamVL[1]->h33d/.musqU1->mDsq3d/.sub2;
 
-bar\[Mu]hsq3d=msq3dSSLO+msq3dSSNLO/.msq3d->\[Mu]hsq3d/.g13d->Sqrt[gsq3d]/.\[Lambda]3d->\[Lambda]h3d/.\[Lambda]VL[1]->h33d/.\[Mu]sqU1->mDsq3d/.sub2;
+bar\[Mu]hsq3d=msq3dSSLO+msq3dSSNLO/.msq3d->\[Mu]hsq3d/.g13d->Sqrt[gsq3d]/.\[Lambda]3d->\[Lambda]h3d/.lamVL[1]->h33d/.musqU1->mDsq3d/.sub2;
 
 (* Expressions for ultra soft theory parameters bargsq3d, bar\[Lambda]h3d and bar\[Mu]hsq3d are implemented below in DRstep[].  *)
 
@@ -296,11 +299,11 @@ gsq3d=g13d^2/.PrintCouplings[]/.sub2;
 msq3dLO=msq3d/.PrintScalarMass["LO"]/.sub2;
 msq3dNLO=msq3d/.PrintScalarMass["NLO"]/.sub2;
 \[Mu]hsq3d=msq3dLO+msq3dNLO;
-\[Mu]sqU1LO=\[Mu]sqU1/.PrintDebyeMass["LO"]/.sub2;
-\[Mu]sqU1NLO=\[Mu]sqU1/.PrintDebyeMass["NLO"]/.sub2;
-mDsq3d=\[Mu]sqU1LO+\[Mu]sqU1NLO;
-\[Kappa]33d=\[Lambda]VLL/.PrintTemporalScalarCouplings[]/.sub2;
-h33d=\[Lambda]VL[1]/.PrintTemporalScalarCouplings[]/.sub2;
+musqU1LO=musqU1/.PrintDebyeMass["LO"]/.sub2;
+musqU1NLO=musqU1/.PrintDebyeMass["NLO"]/.sub2;
+mDsq3d=musqU1LO+musqU1NLO;
+\[Kappa]33d=lamVLL/.PrintTemporalScalarCouplings[]/.sub2;
+h33d=lamVL[1]/.PrintTemporalScalarCouplings[]/.sub2;
 
 (*
 In a similar manner, we can use 
@@ -312,18 +315,18 @@ PrintScalarMassUS[]
 
 (* to get ultra soft theory parameters: *)
 
-bar\[Lambda]h3d=\[Lambda]3dUS/.PrintCouplingsUS[]/.\[Lambda]3d->\[Lambda]h3d/.\[Lambda]VL[1]->h33d/.\[Mu]sqU1->mDsq3d/.sub2;
+bar\[Lambda]h3d=\[Lambda]3dUS/.PrintCouplingsUS[]/.\[Lambda]3d->\[Lambda]h3d/.lamVL[1]->h33d/.musqU1->mDsq3d/.sub2;
 bargsq3d=g13dUS^2/.PrintCouplingsUS[]/.g13d^2->gsq3d;
 
 PrintScalarMassUS["LO"];
 
-msq3dSSLO=msq3dUS/.PrintScalarMassUS["LO"]/.\[Lambda]3d->\[Lambda]h3d/.\[Lambda]VL[1]->h33d/.\[Mu]sqU1->mDsq3d/.sub2;
-msq3dSSNLO=msq3dUS/.PrintScalarMassUS["NLO"]/.\[Lambda]3d->\[Lambda]h3d/.\[Lambda]VL[1]->h33d/.\[Mu]sqU1->mDsq3d/.sub2;
+msq3dSSLO=msq3dUS/.PrintScalarMassUS["LO"]/.\[Lambda]3d->\[Lambda]h3d/.lamVL[1]->h33d/.musqU1->mDsq3d/.sub2;
+msq3dSSNLO=msq3dUS/.PrintScalarMassUS["NLO"]/.\[Lambda]3d->\[Lambda]h3d/.lamVL[1]->h33d/.musqU1->mDsq3d/.sub2;
 
-(*We choose \[Mu]3=mD to minimize logarithms*)
-bar\[Mu]hsq3dpre=msq3dSSLO+msq3dSSNLO/.msq3d->\[Mu]hsq3d/.g13d->Sqrt[gsq3d]/.\[Lambda]3d->\[Lambda]h3d/.\[Lambda]VL[1]->h33d/.\[Mu]sqU1->mDsq3d/.sub2/.\[Mu]3->Sqrt[mDsq3d];
-bar\[Mu]hsq3dRG=(msq3dUS/.BetaFunctions3DUS[])Log[\[Mu]3US/Sqrt[mDsq3d]]/.g13dUS^4->(g13dUS^2)^a/.PrintCouplingsUS[]/.a->1/.\[Lambda]3d->\[Lambda]h3d/.\[Lambda]VL[1]->h33d/.\[Mu]sqU1->mDsq3d/.sub2/.\[Mu]3->Sqrt[mDsq3d];
-bar\[Mu]hsq3d=bar\[Mu]hsq3dpre+bar\[Mu]hsq3dRG/.PrintTemporalScalarCouplings[]/.g13d->Sqrt[gsq3d]/.\[Lambda]3d->\[Lambda]h3d/.\[Lambda]VL[1]->h33d/.\[Mu]sqU1->mDsq3d/.sub2;
+(*We choose mu3=mD to minimize logarithms*)
+bar\[Mu]hsq3dpre=msq3dSSLO+msq3dSSNLO/.msq3d->\[Mu]hsq3d/.g13d->Sqrt[gsq3d]/.\[Lambda]3d->\[Lambda]h3d/.lamVL[1]->h33d/.musqU1->mDsq3d/.sub2/.mu3->Sqrt[mDsq3d];
+bar\[Mu]hsq3dRG=(msq3dUS/.BetaFunctions3DUS[])Log[mu3US/Sqrt[mDsq3d]]/.g13dUS^4->(g13dUS^2)^a/.PrintCouplingsUS[]/.a->1/.\[Lambda]3d->\[Lambda]h3d/.lamVL[1]->h33d/.musqU1->mDsq3d/.sub2/.mu3->Sqrt[mDsq3d];
+bar\[Mu]hsq3d=bar\[Mu]hsq3dpre+bar\[Mu]hsq3dRG/.PrintTemporalScalarCouplings[]/.g13d->Sqrt[gsq3d]/.\[Lambda]3d->\[Lambda]h3d/.lamVL[1]->h33d/.musqU1->mDsq3d/.sub2;
 (* Expressions for ultra soft theory parameters bargsq3d, bar\[Lambda]h3d and bar\[Mu]hsq3d are implemented below in DRstep[].  *)
 
 (* Two-loop effective potential in 3d EFT can be directly read from: *)
@@ -341,15 +344,15 @@ PrintEffectivePotential["NNLO"];
 	NLO dimensional reduction for the Abelian Higgs Model
 *)
 (* 
-	Here function arguments are temperature T and 4d renormalisation scale (denoted herein by \[Mu]), 
+	Here function arguments are temperature T and 4d renormalisation scale (denoted herein by mu4), 
 	given as numbers, and MSbar parameters as outputted by solveBetas[]. 
 *)
-DRstep[T_,\[Mu]_,gsq_,\[Mu]hsq_,\[Lambda]h_]:=Module[{Lb,\[Mu]3US,bargsq3,bar\[Mu]hsq3,bar\[Lambda]h3,Y\[Phi],Y\[Phi]3d},
+DRstep[T_,mu4_,gsq_,\[Mu]hsq_,\[Lambda]h_]:=Module[{Lb,mu3US,bargsq3,bar\[Mu]hsq3,bar\[Lambda]h3,Y\[Phi],Y\[Phi]3d},
 
 Y\[Phi]=1;
 Y\[Phi]3d=1;
 
-Lb=2 Log[\[Mu]/T]-2(Log[4\[Pi]]-EulerGamma); 
+Lb=2 Log[mu4/T]-2(Log[4\[Pi]]-EulerGamma); 
 
 bargsq3=
 	+gsq*T
@@ -358,14 +361,14 @@ bar\[Lambda]h3=
 	+(T(gsq^2 (2-3 Lb) Y\[Phi]^4+6 gsq Lb Y\[Phi]^2 \[Lambda]h+2 \[Lambda]h (8 \[Pi]^2-5 Lb \[Lambda]h)))/(16 \[Pi]^2)
 	-(gsq^2 T^2 Y\[Phi]^4 (48 \[Pi]^2-gsq (-4+Lb) Y\[Phi]^2+24 \[Lambda]h)^2)/(18432 \[Pi]^5 Sqrt[1/3 gsq T^2 Y\[Phi]^2+(gsq Y\[Phi]^2 (T^2 (-2 gsq (-7+Lb) Y\[Phi]^2+24 \[Lambda]h)+72 \[Mu]hsq))/(288 \[Pi]^2)]);
 	
-\[Mu]3US=bargsq3;
+mu3US=bargsq3;
 
 
-bar\[Mu]hsq3=1/12 T^2 (3 gsq Y\[Phi]^2+4 \[Lambda]h)+\[Mu]hsq-(gsq T Y\[Phi]^2 (48 \[Pi]^2-gsq (-4+Lb) Y\[Phi]^2+24 \[Lambda]h) Sqrt[1/3 gsq T^2 Y\[Phi]^2+(gsq Y\[Phi]^2 (T^2 (-2 gsq (-7+Lb) Y\[Phi]^2+24 \[Lambda]h)+72 \[Mu]hsq))/(288 \[Pi]^2)])/(192 \[Pi]^3)+(gsq T Y\[Phi]^2 (48 \[Pi]^2-gsq (-4+Lb) Y\[Phi]^2+24 \[Lambda]h) ((gsq^2 T Y\[Phi]^4)/\[Pi]^2-(gsq T Y\[Phi]^2 (48 \[Pi]^2-gsq (-4+Lb) Y\[Phi]^2+24 \[Lambda]h))/(12 \[Pi]^2)+(gsq T Y\[Phi]^2 (48 \[Pi]^2-gsq (-4+Lb) Y\[Phi]^2+24 \[Lambda]h) Log[2])/(6 \[Pi]^2)))/(3072 \[Pi]^4)+1/(4 \[Pi]^2) (Y\[Phi]^4 (gsq T-(gsq^2 Lb T Y\[Phi]^2)/(48 \[Pi]^2))-2 Y\[Phi]^2 (gsq T-(gsq^2 Lb T Y\[Phi]^2)/(48 \[Pi]^2)) ((T (gsq^2 (2-3 Lb) Y\[Phi]^4+6 gsq Lb Y\[Phi]^2 \[Lambda]h+2 \[Lambda]h (8 \[Pi]^2-5 Lb \[Lambda]h)))/(16 \[Pi]^2)-(gsq^2 T^2 Y\[Phi]^4 (48 \[Pi]^2-gsq (-4+Lb) Y\[Phi]^2+24 \[Lambda]h)^2)/(18432 \[Pi]^5 Sqrt[1/3 gsq T^2 Y\[Phi]^2+(gsq Y\[Phi]^2 (T^2 (-2 gsq (-7+Lb) Y\[Phi]^2+24 \[Lambda]h)+72 \[Mu]hsq))/(288 \[Pi]^2)]))+2 ((T (gsq^2 (2-3 Lb) Y\[Phi]^4+6 gsq Lb Y\[Phi]^2 \[Lambda]h+2 \[Lambda]h (8 \[Pi]^2-5 Lb \[Lambda]h)))/(16 \[Pi]^2)-(gsq^2 T^2 Y\[Phi]^4 (48 \[Pi]^2-gsq (-4+Lb) Y\[Phi]^2+24 \[Lambda]h)^2)/(18432 \[Pi]^5 Sqrt[1/3 gsq T^2 Y\[Phi]^2+(gsq Y\[Phi]^2 (T^2 (-2 gsq (-7+Lb) Y\[Phi]^2+24 \[Lambda]h)+72 \[Mu]hsq))/(288 \[Pi]^2)]))^2) Log[\[Mu]3US/Sqrt[1/3 gsq T^2 Y\[Phi]^2+(gsq Y\[Phi]^2 (T^2 (-2 gsq (-7+Lb) Y\[Phi]^2+24 \[Lambda]h)+72 \[Mu]hsq))/(288 \[Pi]^2)]]+1/(576 \[Pi]^2) (12 gsq Y\[Phi]^2 (Lb (-6 T^2 \[Lambda]h+9 \[Mu]hsq)+2 T^2 \[Lambda]h (1+6 EulerGamma-72 Log[Glaisher]))+24 \[Lambda]h (Lb (T^2 \[Lambda]h-6 \[Mu]hsq)-6 T^2 \[Lambda]h (EulerGamma-12 Log[Glaisher]))+gsq^2 T^2 Y\[Phi]^4 (-8-108 EulerGamma+69 Lb+1296 Log[Glaisher])+18 (8 Y\[Phi]^4 (gsq T-(gsq^2 Lb T Y\[Phi]^2)/(48 \[Pi]^2))^2+(gsq^2 T^2 Y\[Phi]^4 (48 \[Pi]^2-gsq (-4+Lb) Y\[Phi]^2+24 \[Lambda]h)^2)/(576 \[Pi]^4)-(T Y\[Phi]^2 (gsq T-(gsq^2 Lb T Y\[Phi]^2)/(48 \[Pi]^2)) (gsq^2 (2-3 Lb) Y\[Phi]^4+6 gsq Lb Y\[Phi]^2 \[Lambda]h+2 \[Lambda]h (8 \[Pi]^2-5 Lb \[Lambda]h)))/\[Pi]^2+(T^2 (gsq^2 (2-3 Lb) Y\[Phi]^4+6 gsq Lb Y\[Phi]^2 \[Lambda]h+2 \[Lambda]h (8 \[Pi]^2-5 Lb \[Lambda]h))^2)/(16 \[Pi]^4)) Log[Sqrt[1/3 gsq T^2 Y\[Phi]^2+(gsq Y\[Phi]^2 (T^2 (-2 gsq (-7+Lb) Y\[Phi]^2+24 \[Lambda]h)+72 \[Mu]hsq))/(288 \[Pi]^2)]/\[Mu]]);(* return *)
+bar\[Mu]hsq3=1/12 T^2 (3 gsq Y\[Phi]^2+4 \[Lambda]h)+\[Mu]hsq-(gsq T Y\[Phi]^2 (48 \[Pi]^2-gsq (-4+Lb) Y\[Phi]^2+24 \[Lambda]h) Sqrt[1/3 gsq T^2 Y\[Phi]^2+(gsq Y\[Phi]^2 (T^2 (-2 gsq (-7+Lb) Y\[Phi]^2+24 \[Lambda]h)+72 \[Mu]hsq))/(288 \[Pi]^2)])/(192 \[Pi]^3)+(gsq T Y\[Phi]^2 (48 \[Pi]^2-gsq (-4+Lb) Y\[Phi]^2+24 \[Lambda]h) ((gsq^2 T Y\[Phi]^4)/\[Pi]^2-(gsq T Y\[Phi]^2 (48 \[Pi]^2-gsq (-4+Lb) Y\[Phi]^2+24 \[Lambda]h))/(12 \[Pi]^2)+(gsq T Y\[Phi]^2 (48 \[Pi]^2-gsq (-4+Lb) Y\[Phi]^2+24 \[Lambda]h) Log[2])/(6 \[Pi]^2)))/(3072 \[Pi]^4)+1/(4 \[Pi]^2) (Y\[Phi]^4 (gsq T-(gsq^2 Lb T Y\[Phi]^2)/(48 \[Pi]^2))-2 Y\[Phi]^2 (gsq T-(gsq^2 Lb T Y\[Phi]^2)/(48 \[Pi]^2)) ((T (gsq^2 (2-3 Lb) Y\[Phi]^4+6 gsq Lb Y\[Phi]^2 \[Lambda]h+2 \[Lambda]h (8 \[Pi]^2-5 Lb \[Lambda]h)))/(16 \[Pi]^2)-(gsq^2 T^2 Y\[Phi]^4 (48 \[Pi]^2-gsq (-4+Lb) Y\[Phi]^2+24 \[Lambda]h)^2)/(18432 \[Pi]^5 Sqrt[1/3 gsq T^2 Y\[Phi]^2+(gsq Y\[Phi]^2 (T^2 (-2 gsq (-7+Lb) Y\[Phi]^2+24 \[Lambda]h)+72 \[Mu]hsq))/(288 \[Pi]^2)]))+2 ((T (gsq^2 (2-3 Lb) Y\[Phi]^4+6 gsq Lb Y\[Phi]^2 \[Lambda]h+2 \[Lambda]h (8 \[Pi]^2-5 Lb \[Lambda]h)))/(16 \[Pi]^2)-(gsq^2 T^2 Y\[Phi]^4 (48 \[Pi]^2-gsq (-4+Lb) Y\[Phi]^2+24 \[Lambda]h)^2)/(18432 \[Pi]^5 Sqrt[1/3 gsq T^2 Y\[Phi]^2+(gsq Y\[Phi]^2 (T^2 (-2 gsq (-7+Lb) Y\[Phi]^2+24 \[Lambda]h)+72 \[Mu]hsq))/(288 \[Pi]^2)]))^2) Log[mu3US/Sqrt[1/3 gsq T^2 Y\[Phi]^2+(gsq Y\[Phi]^2 (T^2 (-2 gsq (-7+Lb) Y\[Phi]^2+24 \[Lambda]h)+72 \[Mu]hsq))/(288 \[Pi]^2)]]+1/(576 \[Pi]^2) (12 gsq Y\[Phi]^2 (Lb (-6 T^2 \[Lambda]h+9 \[Mu]hsq)+2 T^2 \[Lambda]h (1+6 EulerGamma-72 Log[Glaisher]))+24 \[Lambda]h (Lb (T^2 \[Lambda]h-6 \[Mu]hsq)-6 T^2 \[Lambda]h (EulerGamma-12 Log[Glaisher]))+gsq^2 T^2 Y\[Phi]^4 (-8-108 EulerGamma+69 Lb+1296 Log[Glaisher])+18 (8 Y\[Phi]^4 (gsq T-(gsq^2 Lb T Y\[Phi]^2)/(48 \[Pi]^2))^2+(gsq^2 T^2 Y\[Phi]^4 (48 \[Pi]^2-gsq (-4+Lb) Y\[Phi]^2+24 \[Lambda]h)^2)/(576 \[Pi]^4)-(T Y\[Phi]^2 (gsq T-(gsq^2 Lb T Y\[Phi]^2)/(48 \[Pi]^2)) (gsq^2 (2-3 Lb) Y\[Phi]^4+6 gsq Lb Y\[Phi]^2 \[Lambda]h+2 \[Lambda]h (8 \[Pi]^2-5 Lb \[Lambda]h)))/\[Pi]^2+(T^2 (gsq^2 (2-3 Lb) Y\[Phi]^4+6 gsq Lb Y\[Phi]^2 \[Lambda]h+2 \[Lambda]h (8 \[Pi]^2-5 Lb \[Lambda]h))^2)/(16 \[Pi]^4)) Log[Sqrt[1/3 gsq T^2 Y\[Phi]^2+(gsq Y\[Phi]^2 (T^2 (-2 gsq (-7+Lb) Y\[Phi]^2+24 \[Lambda]h)+72 \[Mu]hsq))/(288 \[Pi]^2)]/mu4]);(* return *)
 {bargsq3,bar\[Mu]hsq3,bar\[Lambda]h3} 
 (* 
 Function returns numeric values for ultra soft scale theory parameters, at fixed input temperature T 
-and renormalisation scale \[Mu].
+and renormalisation scale mu4.
  *)
 
 ];
@@ -378,14 +381,14 @@ for example for Veff at 1-loop level one sets LO=1, NLO=1 and NNLO=0.
 Background field \[Phi] is assumed to be given as undetermined variable, 
 and resulting function is a single-variable function of \[Phi].
 *)
-Veff3d[\[Phi]_,bargsq3_,bar\[Mu]hsq3_,bar\[Lambda]h3_,LO_,NLO_,NNLO_]:=Module[{veff,veffLO,veffNLO,veffNNLO,msq,\[Lambda],g1,\[Mu]3US, Y\[Phi]},
+Veff3d[\[Phi]_,bargsq3_,bar\[Mu]hsq3_,bar\[Lambda]h3_,LO_,NLO_,NNLO_]:=Module[{veff,veffLO,veffNLO,veffNNLO,msq,\[Lambda],g1,mu3US, Y\[Phi]},
 
 Y\[Phi]=1;
 (*
-	for simplicity, we hardcode here 3d RG scale to be fixed as \[Mu]3US = bargsq3.
+	for simplicity, we hardcode here 3d RG scale to be fixed as mu3US = bargsq3.
 	Naturally, other options are possible.
 *)
-\[Mu]3US=bargsq3; 
+mu3US=bargsq3; 
 
 g1=Sqrt[bargsq3];
 \[Lambda]=bar\[Lambda]h3;
@@ -407,10 +410,10 @@ veffNNLO=
 	+(g1^2 Y\[Phi]^2 Sqrt[g1^2 Y\[Phi]^2 \[Phi]^2] Sqrt[msq+3 \[Lambda] \[Phi]^2])/(16 \[Pi]^2)
 	+(\[Lambda] Sqrt[msq+\[Lambda] \[Phi]^2] Sqrt[msq+3 \[Lambda] \[Phi]^2])/(32 \[Pi]^2)
 	+(3 \[Lambda] (msq+3 \[Lambda] \[Phi]^2))/(64 \[Pi]^2)
-	-(3 \[Lambda]^2 \[Phi]^2 (1/2+Log[\[Mu]3US/(3 Sqrt[msq+3 \[Lambda] \[Phi]^2])]))/(16 \[Pi]^2)
+	-(3 \[Lambda]^2 \[Phi]^2 (1/2+Log[mu3US/(3 Sqrt[msq+3 \[Lambda] \[Phi]^2])]))/(16 \[Pi]^2)
 	+g1^4 Y\[Phi]^4 \[Phi]^2 (1/(32 \[Pi]^2)
-	-(1/2+Log[\[Mu]3US/(2 Sqrt[g1^2 Y\[Phi]^2 \[Phi]^2]+Sqrt[msq+3 \[Lambda] \[Phi]^2])])/(16 \[Pi]^2)
-	+1/(4 g1^4 Y\[Phi]^4 \[Phi]^4) ((g1^2 Y\[Phi]^2 \[Phi]^2 Sqrt[g1^2 Y\[Phi]^2 \[Phi]^2] Sqrt[msq+3 \[Lambda] \[Phi]^2])/(8 \[Pi]^2)+(g1^2 Y\[Phi]^2 \[Phi]^2 (msq-2 g1^2 Y\[Phi]^2 \[Phi]^2+3 \[Lambda] \[Phi]^2))/(16 \[Pi]^2)-((msq+3 \[Lambda] \[Phi]^2)^2 (1/2+Log[\[Mu]3US/Sqrt[msq+3 \[Lambda] \[Phi]^2]]))/(16 \[Pi]^2)+((-msq+g1^2 Y\[Phi]^2 \[Phi]^2-3 \[Lambda] \[Phi]^2)^2 (1/2+Log[\[Mu]3US/(Sqrt[g1^2 Y\[Phi]^2 \[Phi]^2]+Sqrt[msq+3 \[Lambda] \[Phi]^2])]))/(8 \[Pi]^2)-((-msq+2 g1^2 Y\[Phi]^2 \[Phi]^2-3 \[Lambda] \[Phi]^2)^2 (1/2+Log[\[Mu]3US/(2 Sqrt[g1^2 Y\[Phi]^2 \[Phi]^2]+Sqrt[msq+3 \[Lambda] \[Phi]^2])]))/(16 \[Pi]^2)))+1/(2 \[Phi]^2) ((Sqrt[g1^2 Y\[Phi]^2 \[Phi]^2] Sqrt[msq+\[Lambda] \[Phi]^2] (-g1^2 Y\[Phi]^2 \[Phi]^2+2 \[Lambda] \[Phi]^2))/(16 \[Pi]^2)+(Sqrt[g1^2 Y\[Phi]^2 \[Phi]^2] (-g1^2 Y\[Phi]^2 \[Phi]^2-2 \[Lambda] \[Phi]^2) Sqrt[msq+3 \[Lambda] \[Phi]^2])/(16 \[Pi]^2)+(g1^2 Y\[Phi]^2 \[Phi]^2 Sqrt[msq+\[Lambda] \[Phi]^2] Sqrt[msq+3 \[Lambda] \[Phi]^2])/(16 \[Pi]^2)+(\[Lambda]^2 \[Phi]^4 (1/2+Log[\[Mu]3US/(Sqrt[msq+\[Lambda] \[Phi]^2]+Sqrt[msq+3 \[Lambda] \[Phi]^2])]))/(4 \[Pi]^2)-((g1^4 Y\[Phi]^4 \[Phi]^4-2 g1^2 Y\[Phi]^2 \[Phi]^2 (msq+\[Lambda] \[Phi]^2)+(msq+\[Lambda] \[Phi]^2)^2-2 g1^2 Y\[Phi]^2 \[Phi]^2 (msq+3 \[Lambda] \[Phi]^2)-2 (msq+\[Lambda] \[Phi]^2) (msq+3 \[Lambda] \[Phi]^2)+(msq+3 \[Lambda] \[Phi]^2)^2) (1/2+Log[\[Mu]3US/(Sqrt[g1^2 Y\[Phi]^2 \[Phi]^2]+Sqrt[msq+\[Lambda] \[Phi]^2]+Sqrt[msq+3 \[Lambda] \[Phi]^2])]))/(16 \[Pi]^2))-(\[Lambda]^2 \[Phi]^2 (1/2+Log[\[Mu]3US/(2 Sqrt[msq+\[Lambda] \[Phi]^2]+Sqrt[msq+3 \[Lambda] \[Phi]^2])]))/(16 \[Pi]^2) ;
+	-(1/2+Log[mu3US/(2 Sqrt[g1^2 Y\[Phi]^2 \[Phi]^2]+Sqrt[msq+3 \[Lambda] \[Phi]^2])])/(16 \[Pi]^2)
+	+1/(4 g1^4 Y\[Phi]^4 \[Phi]^4) ((g1^2 Y\[Phi]^2 \[Phi]^2 Sqrt[g1^2 Y\[Phi]^2 \[Phi]^2] Sqrt[msq+3 \[Lambda] \[Phi]^2])/(8 \[Pi]^2)+(g1^2 Y\[Phi]^2 \[Phi]^2 (msq-2 g1^2 Y\[Phi]^2 \[Phi]^2+3 \[Lambda] \[Phi]^2))/(16 \[Pi]^2)-((msq+3 \[Lambda] \[Phi]^2)^2 (1/2+Log[mu3US/Sqrt[msq+3 \[Lambda] \[Phi]^2]]))/(16 \[Pi]^2)+((-msq+g1^2 Y\[Phi]^2 \[Phi]^2-3 \[Lambda] \[Phi]^2)^2 (1/2+Log[mu3US/(Sqrt[g1^2 Y\[Phi]^2 \[Phi]^2]+Sqrt[msq+3 \[Lambda] \[Phi]^2])]))/(8 \[Pi]^2)-((-msq+2 g1^2 Y\[Phi]^2 \[Phi]^2-3 \[Lambda] \[Phi]^2)^2 (1/2+Log[mu3US/(2 Sqrt[g1^2 Y\[Phi]^2 \[Phi]^2]+Sqrt[msq+3 \[Lambda] \[Phi]^2])]))/(16 \[Pi]^2)))+1/(2 \[Phi]^2) ((Sqrt[g1^2 Y\[Phi]^2 \[Phi]^2] Sqrt[msq+\[Lambda] \[Phi]^2] (-g1^2 Y\[Phi]^2 \[Phi]^2+2 \[Lambda] \[Phi]^2))/(16 \[Pi]^2)+(Sqrt[g1^2 Y\[Phi]^2 \[Phi]^2] (-g1^2 Y\[Phi]^2 \[Phi]^2-2 \[Lambda] \[Phi]^2) Sqrt[msq+3 \[Lambda] \[Phi]^2])/(16 \[Pi]^2)+(g1^2 Y\[Phi]^2 \[Phi]^2 Sqrt[msq+\[Lambda] \[Phi]^2] Sqrt[msq+3 \[Lambda] \[Phi]^2])/(16 \[Pi]^2)+(\[Lambda]^2 \[Phi]^4 (1/2+Log[mu3US/(Sqrt[msq+\[Lambda] \[Phi]^2]+Sqrt[msq+3 \[Lambda] \[Phi]^2])]))/(4 \[Pi]^2)-((g1^4 Y\[Phi]^4 \[Phi]^4-2 g1^2 Y\[Phi]^2 \[Phi]^2 (msq+\[Lambda] \[Phi]^2)+(msq+\[Lambda] \[Phi]^2)^2-2 g1^2 Y\[Phi]^2 \[Phi]^2 (msq+3 \[Lambda] \[Phi]^2)-2 (msq+\[Lambda] \[Phi]^2) (msq+3 \[Lambda] \[Phi]^2)+(msq+3 \[Lambda] \[Phi]^2)^2) (1/2+Log[mu3US/(Sqrt[g1^2 Y\[Phi]^2 \[Phi]^2]+Sqrt[msq+\[Lambda] \[Phi]^2]+Sqrt[msq+3 \[Lambda] \[Phi]^2])]))/(16 \[Pi]^2))-(\[Lambda]^2 \[Phi]^2 (1/2+Log[mu3US/(2 Sqrt[msq+\[Lambda] \[Phi]^2]+Sqrt[msq+3 \[Lambda] \[Phi]^2])]))/(16 \[Pi]^2) ;
 
 veff=
 	+LO*veffLO
