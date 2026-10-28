@@ -54,6 +54,32 @@ Contract[tensors__, indices_] := Module[
 
 
 (*
+  SimplifyEntries:
+  Applies simplify, e.g. Simplify or FullSimplify, to the entries of a list or of a tensor in Normal form.
+  Each distinct entry is simplified once; this equals simplify of the whole list, since Simplify and
+  FullSimplify act on each element of a list.
+*)
+SimplifyEntries[list_List, simplify_] := Module[{distinct, rules, apply},
+  distinct = DeleteDuplicates[Flatten[list]];
+  rules = Dispatch[Thread[distinct -> (simplify /@ distinct)]];
+  apply[l_List] := apply /@ l;
+  apply[x_] := Replace[x, rules];
+  apply[list]
+];
+SimplifyEntries[expr_, simplify_] := simplify[expr];
+
+
+(*
+  FullSimplifyEntries:
+  FullSimplify of the entries of a list, e.g. of the printed matching relations. Entries with more than
+  fullSimplifyMaxLeafCount leaves are only simplified with Simplify: for the long first-order tadpole terms of
+  models with several heavy scalars, FullSimplify takes very long and shortens them only slightly.
+*)
+fullSimplifyMaxLeafCount = 4000;
+FullSimplifyEntries[list_List] := If[LeafCount[#] > fullSimplifyMaxLeafCount, Simplify[#], FullSimplify[#]]& /@ list;
+
+
+(*
   SimplifySparse:
   Simplifies the non-zero elements of a SparseArray.
   Useful workaround for limitations in Simplify behavior with SparseArray in Mathematica 13.
@@ -64,9 +90,9 @@ SimplifySparse[s_SparseArray] := Module[
     positions,
     shape
   },
-  
-  (* Extract and simplify the non-zero values *)
-  simplifiedValues = Simplify[s["NonzeroValues"]];
+
+  (* Extract and simplify the non-zero values; each distinct value is simplified once *)
+  simplifiedValues = SimplifyEntries[s["NonzeroValues"], Simplify];
   
   (* Extract positions and array dimensions *)
   positions = s["NonzeroPositions"];
@@ -723,7 +749,7 @@ ScalarMass[] := Module[
   ];
 
   (* Store the final corrected scalar mass, fully simplified *)
-  aS3D = result // Normal // FullSimplify // Expand;
+  aS3D = result // Normal // SimplifyEntries[#, FullSimplify]& // Expand;
 ];
 
 
@@ -901,7 +927,7 @@ VectorMass[] := Module[
   ContriFF = SelfEnergyFF Simplify[TensorContract[HabIJFnF, {{3, 4}}] // Normal];
 
   (* Result: Minus sign due to matching convention *)
-  aV3D = -ContriSS - ContriVV - ContriVVV - ContriFF // Normal // FullSimplify // Expand;
+  aV3D = -ContriSS - ContriVV - ContriVVV - ContriFF // Normal // SimplifyEntries[#, FullSimplify]& // Expand;
 ];
 
 
@@ -934,7 +960,7 @@ VectorSelfEnergy[] := Module[
   ContriFF = SelfEnergyFF * Simplify[TensorContract[HabIJFnF, {{3, 4}}] // Normal];
 
   (* Transverse vector contribution *)
-  ZabT = -(ContriSS + ContriVVV + ContriFF)/2 // Normal // Simplify;
+  ZabT = -(ContriSS + ContriVVV + ContriFF)/2 // Normal // SimplifyEntries[#, Simplify]&;
 
   (* Contribution from scalar self-energy (longitudinal part) *)
   SelfEnergySS = -1/2 * 1/(16 \[Pi]^2) * (-1) * (1/3 Lb + 2/3);
@@ -950,7 +976,7 @@ VectorSelfEnergy[] := Module[
   ContriFF = SelfEnergyFF * Simplify[TensorContract[HabIJFnF, {{3, 4}}] // Normal];
 
   (* Longitudinal vector contribution *)
-  ZabL = -(ContriSS + ContriVVV + ContriFF)/2 // Normal // Simplify;
+  ZabL = -(ContriSS + ContriVVV + ContriFF)/2 // Normal // SimplifyEntries[#, Simplify]&;
 
 ];
 
@@ -1031,7 +1057,7 @@ VectorMass2Loop[] := Module[
     - T^2 / (192 \[Pi]^2) * GroupTheoryYuk2;
 
   (* Final expression for the 2-loop Debye mass *)
-  muVabNLO = \[CapitalPi]V + \[CapitalPi]S + \[CapitalPi]F + \[CapitalPi]SF // Normal // Simplify // FullSimplify;
+  muVabNLO = \[CapitalPi]V + \[CapitalPi]S + \[CapitalPi]F + \[CapitalPi]SF // Normal // SimplifyEntries[#, FullSimplify@*Simplify]&;
 
 ];
 
@@ -1980,7 +2006,8 @@ ProcessCoupling[expr_, sym_] := Module[{flat, cleaned, vars, mods, rules},
   cleaned = CleanedList[flat];
   vars = Table[sym[a], {a, Length[cleaned]}];
   mods = RelationsBVariables[flat, vars];
-  rules = MakeReplacementRules[flat, vars];
+  (*The rules of MakeReplacementRules[flat, vars], without finding the relations again*)
+  rules = Table[Delete[flat, 1][[a]] -> mods[[a]], {a, Length[Delete[flat, 1]]}] // Flatten // Simplify;
   {cleaned, vars, mods, rules}
 ];
 
@@ -2021,7 +2048,7 @@ IdentifyTensorsDRalgo[]:=Module[
 		
 		couplingTensor = Tfac^(1/2)*(lam3CS+lam3);
 		{HelpListCleaned, HelpVar, HelpVarMod, HelpSolveCubicS} = ProcessCoupling[couplingTensor, cSS];	
-		lam3CSRed=couplingTensor//Normal//Simplify//FullSimplify//ReplaceAll[#,HelpSolveCubicS]&//SparseArray;
+		lam3CSRed=couplingTensor//Normal//SimplifyEntries[#,FullSimplify@*Simplify]&//ReplaceAll[#,HelpSolveCubicS]&//SparseArray;
 
 		If[Length[SparseArray[lam3CSRed]["NonzeroValues"]]!=Length[SparseArray[lam3]["NonzeroValues"]],
 			Print["Detected 1-loop Scalar Cubic not defined at tree-level"];
@@ -2057,12 +2084,12 @@ IdentifyTensorsDRalgo[]:=Module[
 			HelpVarMod=RelationsBVariables3[HelpList]//ReplaceAll[#,lamVL[v1_]->lamVLL[v1]]&;
 			HelpSolveQuarticL=Table[{HelpListCleaned[[a]]->HelpVarMod[[a]]},{a,1,HelpListCleaned//Length}]//Flatten//Simplify;
 		];
-		lamAAS=couplingTensor//Normal//FullSimplify//ReplaceAll[#,HelpSolveQuarticL]&//SparseArray;
+		lamAAS=couplingTensor//Normal//SimplifyEntries[#,FullSimplify]&//ReplaceAll[#,HelpSolveQuarticL]&//SparseArray;
 
 		(* --- Temporal-Scalar/scalar cross cubic couplings --- *)
 		couplingTensor = Sqrt[Tfac]*GvvsL;
 		{HelpListCleaned, HelpVar, HelpVarMod, HelpSolveCubicL} = ProcessCoupling[couplingTensor, lamVVSL];	
-		lamvvsLS=couplingTensor//Normal//Simplify//FullSimplify//ReplaceAll[#,HelpSolveCubicL]&//SparseArray;
+		lamvvsLS=couplingTensor//Normal//SimplifyEntries[#,FullSimplify@*Simplify]&//ReplaceAll[#,HelpSolveCubicL]&//SparseArray;
 	];
 		
 	(* --- Temporal-scalar/scalar cross couplings --- *)	
@@ -2078,7 +2105,7 @@ IdentifyTensorsDRalgo[]:=Module[
 		HelpVarMod=RelationsBVariables3[HelpList];
 		HelpSolveVecL=Table[{HelpListCleaned[[a]]->HelpVarMod[[a]]},{a,1,HelpListCleaned//Length}]//Flatten//Simplify;
 	];
-	lamKVec=couplingTensor//Normal//Simplify//ReplaceAll[#,HelpSolveVecL]&//SparseArray;
+	lamKVec=couplingTensor//Normal//SimplifyEntries[#,Simplify]&//ReplaceAll[#,HelpSolveVecL]&//SparseArray;
 			
 	If[mode>=3,
 		(* --- Scalar sextic couplings --- *)
@@ -2086,7 +2113,7 @@ IdentifyTensorsDRalgo[]:=Module[
 		
 		couplingTensor = Tfac^2*(lam6+lam6D);
 		{HelpListCleaned, HelpVar, HelpVarMod, HelpSolveSextic} = ProcessCoupling[couplingTensor, lam6d];	
-		lam6DS=couplingTensor//Normal//Simplify//ReplaceAll[#,HelpSolveSextic]&//SparseArray;
+		lam6DS=couplingTensor//Normal//SimplifyEntries[#,Simplify]&//ReplaceAll[#,HelpSolveSextic]&//SparseArray;
 
 		If[Length[SparseArray[lam6DS]["NonzeroValues"]]!=Length[SparseArray[lam6]["NonzeroValues"]],
 			Print["Detected 1-loop Scalar Sextic not defined at tree-level"];
@@ -2101,7 +2128,7 @@ IdentifyTensorsDRalgo[]:=Module[
 		couplingTensor = xLO*aV3D;
 	];
 	{HelpListCleaned, HelpVar, HelpVarMod, HelpSolveVectorMass} = ProcessCoupling[couplingTensor, muijV];	
-	muijVNLO=couplingTensor//Normal//Simplify//FullSimplify//ReplaceAll[#,HelpSolveVectorMass]&//SparseArray;
+	muijVNLO=couplingTensor//Normal//SimplifyEntries[#,FullSimplify@*Simplify]&//ReplaceAll[#,HelpSolveVectorMass]&//SparseArray;
 
 	If[DiagonalMatrixQAE[Normal[muijVNLO]]==False,
 		Print["Off-Diagonal Debye Matrices Detected"]
@@ -2115,7 +2142,7 @@ IdentifyTensorsDRalgo[]:=Module[
 		couplingTensor = xLO*aS3D;
 	];
 	{HelpListCleaned, HelpVar, HelpVarMod, HelpSolveMass} = ProcessCoupling[couplingTensor, muijS];	
-	muijSNLO=couplingTensor//Normal//Simplify//ReplaceAll[#,HelpSolveMass]&//SparseArray;
+	muijSNLO=couplingTensor//Normal//SimplifyEntries[#,Simplify]&//ReplaceAll[#,HelpSolveMass]&//SparseArray;
 
 	(* --- Scalar tadpoles --- *)
 	If[mode>=2,
@@ -2124,7 +2151,7 @@ IdentifyTensorsDRalgo[]:=Module[
 		couplingTensor = xLO*Tfac^(-1/2)(lam1+TadPoleLO);
 	];
 	{HelpListCleaned, HelpVar, HelpVarMod, HelpSolveTadpole} = ProcessCoupling[couplingTensor, dS];	
-	TadPoleS=couplingTensor//Normal//Simplify//ReplaceAll[#,HelpSolveTadpole]&//SparseArray;
+	TadPoleS=couplingTensor//Normal//SimplifyEntries[#,Simplify]&//ReplaceAll[#,HelpSolveTadpole]&//SparseArray;
 
 	If[Length[SparseArray[TadPoleS]["NonzeroValues"]]!=Length[SparseArray[lam1]["NonzeroValues"]],
 		Print["Detected 1-loop Scalar Tadpoles not defined at tree-level"];
@@ -2174,7 +2201,7 @@ PrintCouplingsEffective[]:=Module[{},
 
 
 (*Printing Result*)
-	PrintPre=Join[ResScal]//Normal//FullSimplify//DeleteDuplicates;
+	PrintPre=Join[ResScal]//Normal//FullSimplifyEntries//DeleteDuplicates;
 	OutputFormatDR[PrintPre]
 ];
 
@@ -2231,7 +2258,7 @@ PrintCouplings[]:=Module[
 	HelpVar=Table[ lamVNA[a],{a,1,Rest[HelpList]//Length}];
 	HelpVarMod=RelationsBVariables[HelpList,HelpVar];
 	HelpSolveNA=Table[{Rest[HelpList][[a]]->ReplaceAll[HelpVarMod[[a]],SubGauge]},{a,1,Rest[HelpList]//Length}]//Flatten;
-	lamVecNA=Tfac (GabVTree+GabVLoop)//Normal//FullSimplify//ReplaceAll[#,HelpSolveNA]&//SparseArray;
+	lamVecNA=Tfac (GabVTree+GabVLoop)//Normal//SimplifyEntries[#,FullSimplify]&//ReplaceAll[#,HelpSolveNA]&//SparseArray;
 	IdentMatNA=List/@Join[HelpSolveNA]/.{b_->a_}:>a->b//Flatten[#,1]&;
 
 	A1=lamVecNA//Normal;
@@ -2274,7 +2301,7 @@ PrintCouplings[]:=Module[
 	ResCubic=Solve[SolVar==0,CubicVar]/.TensorIdentification//Flatten[#,1]&;
 
 	(* --- Printing Result --- *)
-	PrintPre=Join[ResGauge,ResGaugeNA,ResQuartic,ResCubic]//Normal//FullSimplify//DeleteDuplicates;
+	PrintPre=Join[ResGauge,ResGaugeNA,ResQuartic,ResCubic]//Normal//FullSimplifyEntries//DeleteDuplicates;
 	OutputFormatDR[PrintPre]
 ];
 
@@ -2728,10 +2755,10 @@ CounterTerms4D[OptionsPattern[]]:=Module[
 
 
 (*Printing Result*)
-			PrintPre=Join[ResGauge,ResGaugeNA,ResScal,ResCubic,ResYuk,ResMass,ResMassF,ResTadpole,ResSextic]//Normal//FullSimplify//DeleteDuplicates;
+			PrintPre=Join[ResGauge,ResGaugeNA,ResScal,ResCubic,ResYuk,ResMass,ResMassF,ResTadpole,ResSextic]//Normal//FullSimplifyEntries//DeleteDuplicates;
 		,
 (*Printing Result*)
-			PrintPre=Join[ResGauge,ResGaugeNA,ResScal,ResCubic,ResYuk,ResMass,ResMassF,ResTadpole]//Normal//FullSimplify//DeleteDuplicates;
+			PrintPre=Join[ResGauge,ResGaugeNA,ResScal,ResCubic,ResYuk,ResMass,ResMassF,ResTadpole]//Normal//FullSimplifyEntries//DeleteDuplicates;
 		];
 
 		PrintPre=ReplaceAll[PrintPre,(a_->b_):>a->b/(2 eps)];
@@ -2917,10 +2944,10 @@ BetaFunctions4D[]:=Module[{},
 		SexticVar=lam6p//Normal//Variables;
 		ResSextic=Solve[SolVar==0,SexticVar]/.SubGauge2//Flatten[#,1]&;
 (*Printing Result*)
-		PrintPre=Join[ResGauge,ResGaugeNA,ResScal,ResCubic,ResYuk,ResMass,ResMassF,ResTadpole,ResSextic]//Normal//FullSimplify//DeleteDuplicates;
+		PrintPre=Join[ResGauge,ResGaugeNA,ResScal,ResCubic,ResYuk,ResMass,ResMassF,ResTadpole,ResSextic]//Normal//FullSimplifyEntries//DeleteDuplicates;
 	,
 (*Printing Result*)
-		PrintPre=Join[ResGauge,ResGaugeNA,ResScal,ResCubic,ResYuk,ResMass,ResMassF,ResTadpole]//Normal//FullSimplify//DeleteDuplicates;
+		PrintPre=Join[ResGauge,ResGaugeNA,ResScal,ResCubic,ResYuk,ResMass,ResMassF,ResTadpole]//Normal//FullSimplifyEntries//DeleteDuplicates;
 	];
 ,
 	ResGauge=#^2->0&/@GaugeCouplingNames;
@@ -2930,7 +2957,7 @@ BetaFunctions4D[]:=Module[{},
 	ResMass=#->0&/@Variables[muij//Normal];
 	ResMassF=#->0&/@Variables[muIJF//Normal];
 	ResTadpole=#->0&/@Variables[lam1//Normal];
-	PrintPre=Join[ResGauge,ResScal,ResCubic,ResYuk,ResMass,ResMassF,ResTadpole]//Normal//FullSimplify//DeleteDuplicates;
+	PrintPre=Join[ResGauge,ResScal,ResCubic,ResYuk,ResMass,ResMassF,ResTadpole]//Normal//FullSimplifyEntries//DeleteDuplicates;
 ];
 	OutputFormatDR[PrintPre]
 ];
@@ -2985,12 +3012,12 @@ BetaFunctions3DS[]:=Module[{},
 			ResTadpole=Solve[SolVar==0,QuarticVar]/.SubGauge2//Flatten[#,1]&;
 		];
 
-		PrintPre=Join[ResMass,ResDebye,ResTadpole]/.mu3->mu4 Exp[1]//Normal//FullSimplify//DeleteDuplicates;
+		PrintPre=Join[ResMass,ResDebye,ResTadpole]/.mu3->mu4 Exp[1]//Normal//FullSimplifyEntries//DeleteDuplicates;
 ,
 	ResMass=#->0&/@Variables[muij//Normal];
 	ResDebye=#->0&/@Variables[muabDef//Normal];
 	ResTadpole=#->0&/@Variables[lam1//Normal];
-	PrintPre=Join[ResMass,ResDebye,ResTadpole]/.mu3->mu4 Exp[1]//Normal//FullSimplify//DeleteDuplicates;
+	PrintPre=Join[ResMass,ResDebye,ResTadpole]/.mu3->mu4 Exp[1]//Normal//FullSimplifyEntries//DeleteDuplicates;
 ];
 	OutputFormatDR[PrintPre]
 ];

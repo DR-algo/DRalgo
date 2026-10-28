@@ -953,7 +953,8 @@ OverallFac[list_,varMat_]:=Module[{L=list,Mat=varMat,a}, (*a is local: otherwise
 
 	For[i=1,i<Length[list],i++,
 		For[j=i+1,j<Length[list]+1,j++,
-			help=CompExp2[list[[i]],list[[j]]];
+			(*Solve only if the ratio can be a number; Together cancels the common factors*)
+			help=If[NumericQ[Together[list[[j]]/list[[i]]]],CompExp2[list[[i]],list[[j]]],{}];
 			TempIf=If[Length[help]>0,{NumericQ/@help}[[1,1]]&&Equal@@NumericQ/@help,False];
 			If[TempIf,a=help[[1]],a=0];
 				Mat[[i,j]]=a;
