@@ -189,8 +189,8 @@ TestCreate[
 expectedP={
  \[Beta][W^3]->gw^3 Sqrt[T] Zb[3,0]/36,
  \[Beta][\[Phi]^2 W^2]->(101 gw^4 T Zb[3,0]-24 gw^2 T \[Lambda]1H Zb[3,0])/96,
- \[Beta][W0^2 W^2,1]->-(29/12) gw^4 Zb[3,0],
- \[Beta][W0^2 W^2,2]->-(39/8) gw^4 Zb[3,0],
+ \[Beta][W0^2 W^2,1]->-(29/12) gw^4 T Zb[3,0],
+ \[Beta][W0^2 W^2,2]->-(39/8) gw^4 T Zb[3,0],
  \[Beta][D^2 \[Phi]^4,1]->-(1/96) T (23 gw^4-160 gw^2 \[Lambda]1H+64 \[Lambda]1H^2) Zb[3,0],
  \[Beta][D^2 \[Phi]^4,2]->-(1/24) T (23 gw^4-160 gw^2 \[Lambda]1H+64 \[Lambda]1H^2) Zb[3,0],
  \[Beta][D^2 \[Phi]^2 W0^2,1]->(1/96) gw^2 T (101 gw^2-24 \[Lambda]1H) Zb[3,0],

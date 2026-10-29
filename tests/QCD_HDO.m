@@ -124,8 +124,8 @@ TestCreate[
 	solWithoutA6,
 	{
 		\[Alpha][F^3]->-(2/45) I (3 gs^3 Sqrt[T] Zb[3,0]-gs^3 Sqrt[T] Zf[3,0]),
-		\[Alpha][A^2 F^2,1]->-(2/405) (1971 gs^4 Zb[3,0]-37 gs^4 Zf[3,0]),
-		\[Alpha][A^2 F^2,2]->-(2/405) (999 gs^4 Zb[3,0]-23 gs^4 Zf[3,0]),
+		\[Alpha][A^2 F^2,1]->-(2/405) (1971 gs^4 T Zb[3,0]-37 gs^4 T Zf[3,0]),
+		\[Alpha][A^2 F^2,2]->-(2/405) (999 gs^4 T Zb[3,0]-23 gs^4 T Zf[3,0]),
 		\[Alpha][A^2 F^2,3]->0,
 		\[Alpha][A^4 D^2,1]->1/81 (-1215 gs^4 T Zb[3,0]+54 gs^4 T xi Zb[3,0]-27 gs^4 T xi^2 Zb[3,0]+8 gs^4 T Zf[3,0]),
 		\[Alpha][A^4 D^2,2]->1/81 (-1161 gs^4 T Zb[3,0]-54 gs^4 T xi Zb[3,0]+27 gs^4 T xi^2 Zb[3,0]+40 gs^4 T Zf[3,0]),
@@ -163,8 +163,8 @@ TestCreate[
 AppendTo[testList,
 TestCreate[sol6PWithoutA6,
 	{	\[Beta][F^3]->-(2/45) I (3 gs^3 Sqrt[T] Zb[3,0]-gs^3 Sqrt[T] Zf[3,0]),
-		\[Beta][A^2 F^2,1]->-(2/405) (1971 gs^4 Zb[3,0]-37 gs^4 Zf[3,0]),
-		\[Beta][A^2 F^2,2]->-(2/405) (999 gs^4 Zb[3,0]-23 gs^4 Zf[3,0]),
+		\[Beta][A^2 F^2,1]->-(2/405) (1971 gs^4 T Zb[3,0]-37 gs^4 T Zf[3,0]),
+		\[Beta][A^2 F^2,2]->-(2/405) (999 gs^4 T Zb[3,0]-23 gs^4 T Zf[3,0]),
 		\[Beta][A^2 F^2,3]->0,
 		\[Beta][A^4 D^2,1]->1/45 (3 gs^4 T Zb[3,0]-gs^4 T Zf[3,0]),
 		\[Beta][A^4 D^2,2]->0}

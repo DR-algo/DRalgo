@@ -272,7 +272,8 @@ Calculates the effective potential";
 CustomMasses::usage="\
 CustomMasses is an option of CalculatePotential and CalculatePotentialUS. \
 CalculatePotential[ScalarMass,VectorMass,CustomMasses->True] calculates the effective potential at LO and NLO \
-with the given diagonal mass matrices";
+with the given diagonal mass matrices. The NNLO potential needs the couplings in the basis of these masses: \
+RotateTensorsCustomMass rotates them and sets the masses, after which CalculatePotential[] calculates it";
 PerturbativeDiagonalization::usage="\
 PerturbativeDiagonalization is an option of CalculatePotential and CalculatePotentialUS. \
 With PerturbativeDiagonalization->True, the off-diagonal elements of the mass matrices are treated as \

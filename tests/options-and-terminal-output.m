@@ -33,7 +33,8 @@ Check[
 	- the options are in the context DRalgo`DRalgo` and have usage messages;
 	- PerturbativeDiagonalization->True changes the effective potential of a model with off-diagonal masses,
 	  and the option given as a string gives the same potential;
-	- CustomMasses->True given as a string gives the same potential as the symbol;
+	- CustomMasses->True given as a string gives the same potential as the symbol, and PrintEffectivePotential
+	  gives the LO and NLO potentials, which are the ones calculated with custom masses;
 	- loading DRalgo with wolframscript prints a few lines of plain text, and nothing with $DRalgoBanner=False.
 *)
 
@@ -89,6 +90,15 @@ VerificationTest[
 	{FreeQ[custom,m123d],Simplify[PrintEffectivePotential["NLO"]-custom],Simplify[custom+(m13d+l13d v^2/2)^(3/2)/(12\[Pi])+m23d^(3/2)/(12\[Pi])]},
 	{True,0,0},
 	TestID->"custom-masses-as-symbol-and-string"
+]];
+
+(*Custom masses give only the LO and NLO potentials, so that the NNLO potential is 0 with a message*)
+AppendTo[testList,
+VerificationTest[
+	{Simplify[PrintEffectivePotential[]-PrintEffectivePotential["LO"]-custom],PrintEffectivePotential["NNLO"]},
+	{0,0},
+	{PrintEffectivePotential::nonnlo,PrintEffectivePotential::nonnlo},
+	TestID->"custom-masses-without-NNLO-potential"
 ]];
 
 

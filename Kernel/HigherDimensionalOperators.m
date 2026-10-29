@@ -16171,7 +16171,7 @@ ODIM6[x_,d_]:=Module[{terms},
 			-(1/2)*S2V2D2[5]T^(4/2-1),
 			
 			x==3,
-			1/2 (Transpose[V4D2[2],{3,4,1,2}]-Transpose[Contract[V2D4[1],gvvv,gvvv,{{1,5},{2,8}}],{4,1,3,2}]-Transpose[Contract[V2D4[1],gvvv,gvvv,{{1,5},{2,8}}],{4,2,3,1}]),
+			1/2 (Transpose[V4D2[2],{3,4,1,2}]-Transpose[Contract[V2D4[1],gvvv,gvvv,{{1,5},{2,8}}],{4,1,3,2}]-Transpose[Contract[V2D4[1],gvvv,gvvv,{{1,5},{2,8}}],{4,2,3,1}])T^(4/2-1),
 			
 			x==4,
 			-Transpose[S4D2[1]T^(4/2-1),{1,3,4,2}],

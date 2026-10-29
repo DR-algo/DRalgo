@@ -174,7 +174,7 @@ TadpoleZSS[]:=Module[{v0,masses,lam3All,lam4All,nAll,dLam3,dM,lineP2,z,mixT,loop
 
 ScalarMass2LoopSS[]:=Module[{MassHelp,TensHelp,TensHelp2,HeavyMasses,AllMasses
 						,ContriInsertion,Contri1,Contri2,Contri3,Contri4,Contri5,Contri6,Contri7,ContriMix1,ContriMix2,ContriSE,muijSSCubic,
-						ContriC1,ContriC2,ContriC3,ContriC4,muijTemp},
+						ContriC1,ContriC2,ContriC3,ContriC4,muijTemp,heavyMass,heavyExchangeMass,ContriInsertionHeavy},
 If[verbose,Print["Calculating 2-Loop Scalar Mass"]];
 
 (*List of scalar masses*)
@@ -264,11 +264,14 @@ Mixing diagram with two H^3S quartics: ----O---O------
 		TensHelp=TensorProduct[TensHelp,lam4Tot]//DiagonalTensor2[#,3,5]&//DiagonalTensor2[#,4,7]&;
 		ContriC3=1/4*Total[MassHelp TensHelp,-3][[LightScalar[[;;,1]],LightScalar[[;;,1]]]]//SimplifySparse;
 		
-(*Two bubbles connected in the middle by a quartic, and connecting to the external lines with a cubic coupling*)
-		MassHelp=Table[BubbleIntegral3d[i,j] BubbleIntegral3d[k,l],{i,AllMasses^2},{j,AllMasses^2},{k,AllMasses^2},{l,AllMasses^2}]//SparseArray//SimplifySparse;
-		TensHelp=TensorProduct[lam3CTot,lam4Tot]//DiagonalTensor2[#,1,4]&//DiagonalTensor2[#,2,4]&;
-		TensHelp=TensorProduct[TensHelp, lam3CTot]//DiagonalTensor2[#,4,6]&//DiagonalTensor2[#,4,6]&;
-		ContriC4=1/8*Total[MassHelp TensHelp,-3][[LightScalar[[;;,1]],LightScalar[[;;,1]]]]//SimplifySparse;
+(*
+	Two bubbles connected in the middle by a quartic, and connecting to the external lines with a cubic coupling,
+	1/4 lam3[i,a,b]B[a,b]lam4[a,b,c,d]B[c,d]lam3[c,d,j], from the two derivatives of the bubbles of the figure-8 diagram
+*)
+		MassHelp=Table[BubbleIntegral3d[i,j],{i,AllMasses^2},{j,AllMasses^2}]//SparseArray;
+		TensHelp=Flatten[Table[lam3CTot[[i]] MassHelp,{i,1,ns}]//SparseArray,{{1},{2,3}}];
+		ContriC4=1/4*TensHelp . Flatten[lam4Tot,{{1,2},{3,4}}] . Transpose[TensHelp];
+		ContriC4=ContriC4[[LightScalar[[;;,1]],LightScalar[[;;,1]]]]//SparseArray//SimplifySparse;
 		
 	
 		muijSSCubic=(ContriC1+2*ContriC2+ContriC3+ContriC4)//Simplify//SparseArray;
@@ -282,7 +285,22 @@ Mixing diagram with two H^3S quartics: ----O---O------
 	one-loop terms, from the tadpoles of the heavy fields and the temporal scalars*)
 	ContriInsertion=Simplify[Table[Sum[lam3Cy[[i,a,hh]](muijLight+muijSSLOTadpoles)[[a,b]]lam3Cy[[j,b,hh]]TriangleIntegral3d[0,0,muijL[[hh,hh]]^2],{a,1,nSL},{b,1,nSL},{hh,1,nSH}],{i,1,nSL},{j,1,nSL}]];
 
-	muijSSNLO=(Contri1+Contri2+Contri3+ Contri4+Contri5+Contri6+Contri7+ContriMix1+ContriMix2+ContriSE+ContriInsertion+muijSSCubic)//Simplify//SparseArray;
+(*
+	The same on the heavy-scalar lines: the momentum-independent one-loop heavy mass, from the tadpoles of the heavy fields and
+	the temporal scalars and the exchange of a heavy field with its one-loop tadpole, on a heavy line of the bubbles with one light
+	and one heavy line and with two heavy lines, and the exchange on the line of the heavy tadpole, whose tadpole terms are in Contri4.
+	The heavy masses shifted by the tree-level tadpoles are part of the LO masses, from OneLoopOnePRSS.
+*)
+	heavyExchangeMass=Table[-Sum[lam3CHeavy[[h,hp,x]](TadPoleHeavySS-TadPoleHeavy)[[x]]/muijL[[x,x]]^2,{x,1,nSH}],{h,1,nSH},{hp,1,nSH}];
+	heavyMass=heavyExchangeMass+Table[Sum[1/2 lamKTotal[[h,hp,x,x]]TadpoleIntegral3d[muijL[[x,x]]^2],{x,1,nSH}],{h,1,nSH},{hp,1,nSH}];
+	ContriInsertionHeavy=Simplify[Table[Sum[
+		If[heavyMass[[h,hp]]===0,0,heavyMass[[h,hp]](
+			Sum[lam3Cy[[i,a,h]]lam3Cy[[j,a,hp]],{a,1,nSL}]TriangleIntegral3d[0,muijL[[h,h]]^2,muijL[[hp,hp]]^2]
+			+Sum[lam3Cx[[i,h,hh]]lam3Cx[[j,hp,hh]]TriangleIntegral3d[muijL[[h,h]]^2,muijL[[hp,hp]]^2,muijL[[hh,hh]]^2],{hh,nv+1,nSH}])]
+		+If[heavyExchangeMass[[h,hp]]===0,0,-1/2 lamK[[h,hp,i,j]]heavyExchangeMass[[h,hp]]BubbleIntegral3d[muijL[[h,h]]^2,muijL[[hp,hp]]^2]],
+		{h,nv+1,nSH},{hp,nv+1,nSH}],{i,1,nSL},{j,1,nSL}]];
+
+	muijSSNLO=(Contri1+Contri2+Contri3+ Contri4+Contri5+Contri6+Contri7+ContriMix1+ContriMix2+ContriSE+ContriInsertion+ContriInsertionHeavy+muijSSCubic)//Simplify//SparseArray;
 
 ];
 
