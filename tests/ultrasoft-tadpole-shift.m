@@ -24,9 +24,9 @@ Check[
 	(OneLoopOnePRSS), and the quartic contains the field normalization at first order in v0 (TadpoleZSS).
 
 	The shift S -> S+s of the 3d theory changes the parameters and creates the tadpole t1=ms s+c3 s^2+lss s^3 from t1=0.
-	The ultrasoft theory does not depend on s, so that the LO ultrasoft mass and quartic have no terms linear in s. The
-	couplings of the temporal scalars are set to zero, since the one-loop couplings of two temporal scalars to a heavy scalar
-	are not shifted.
+	The ultrasoft theory does not depend on s, so that the LO ultrasoft mass and quartic have no terms linear in s. This is
+	checked without the couplings of the temporal scalar, and with them, where the shift also changes the coupling of two
+	temporal scalars to S, which arises at one loop, and the Debye mass.
 
 	The 1PR diagrams are also compared with the one-loop effective potential of the hard modes of \[Phi]1 and S, with S
 	eliminated at tree level, computed here from 1/2 Tr ln of the mass matrix with the light line expanded in the mixing.
@@ -101,6 +101,25 @@ VerificationTest[
 	Simplify[D[quartic/.shift,s]/.s->0,ms3d>0],
 	0,
 	TestID->"quartic-is-invariant-under-a-shift-of-the-heavy-scalar"
+]];
+
+
+(*
+	With the couplings of the temporal scalar A0: under S -> S+s, the coupling A0^2 S, the entry lamvvsLS[1,1,3], gets the
+	coupling A0^2 S^2, lamKVec[1,1,3,3], times s, and the Debye mass the coupling A0^2 S times s
+*)
+{cubicA0,quarticA0}={Normal[DRalgo`DRalgo`Private`lamvvsLS][[1,1,3]],Normal[DRalgo`DRalgo`Private`lamKVec][[1,1,3,3]]}/.{
+	DRalgo`DRalgo`Private`lamVVSL->lamVVSL,DRalgo`DRalgo`Private`lamVL->lamVL};
+cubicA0Symbol=First[Cases[cubicA0,_lamVVSL,{0,Infinity}]];
+shiftTemporal={cubicA0Symbol->cubicA0Symbol+quarticA0 s/D[cubicA0,cubicA0Symbol],musqU1->musqU1+cubicA0 s};
+loTemporal=m13dUS/.PrintScalarMassUS["LO"];
+quarticTemporal=lam3dUS/.PrintCouplingsUS[];
+
+AppendTo[tests,
+VerificationTest[
+	{FreeQ[loTemporal,lamVVSL],Simplify[D[loTemporal/.Join[shift,shiftTemporal],s]/.s->0,ms3d>0],Simplify[D[quarticTemporal/.Join[shift,shiftTemporal],s]/.s->0,ms3d>0]},
+	{False,0,0},
+	TestID->"LO-mass-and-quartic-with-the-temporal-scalar-are-invariant-under-a-shift-of-the-heavy-scalar"
 ]];
 
 

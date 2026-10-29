@@ -58,8 +58,8 @@ lo=Expand[m13dUS/.PrintScalarMassUS["LO"]];
 nlo=Expand[m13dUS/.PrintScalarMassUS["NLO"]];
 temporal=Cases[lo/.t13d->0,lamVL[_],Infinity]//Union; (*the coupling of the A0 to the light scalar*)
 
-(*The tadpole of S also enters the LO mass at one loop, with the couplings of S; only the terms without them are compared*)
-noS={ls3d->0,lss3d->0,lamVL[_]->0};
+(*The tadpole of S also enters the LO mass at one loop, with the couplings of S, also to two A0; only the terms without them are compared*)
+noS={ls3d->0,lss3d->0,lamVL[_]->0,lamVVSL[_]->0};
 
 (*The factor of the tree-level mass in the two-loop mass*)
 factor=Coefficient[nlo,m13d mum3d^2];

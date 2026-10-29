@@ -172,6 +172,39 @@ VerificationTest[
 ]];
 
 
+(*
+	Three propagators on the p-line and one on the q-line, as in the two-loop masses with a bubble on a line: with n0 massless
+	propagators on the p-line, the Taylor terms of order below p^(2 n0-2) of the rest of the integrand are scaleless and make
+	the integral IR divergent, and are dropped.
+*)
+sunsetNum3[{a__},{c_},t_]:=Module[{x,lines={a},n0,massive,rest,taylor},
+	n0=Count[lines,0];
+	massive=DeleteCases[lines,0];
+	rest[p_]:=qLine[p,{c},t] Times@@(1/(p^2+#^2)&/@massive);
+	taylor=If[n0<2,0,Normal[Series[rest[x],{x,0,2n0-4}]]];
+	NIntegrate[p^2/(2\[Pi]^2) (rest[p]-(taylor/.x->p))/p^(2n0),{p,0,Infinity},WorkingPrecision->20,PrecisionGoal->10]
+];
+
+casesTripled={
+	{{1,3/5,1/2},{7/10},3/10},
+	{{1,1,3/5},{1/2},3/10},
+	{{1,1,1},{1/2},3/10},
+	{{0,1,3/5},{1/2},3/10},
+	{{0,1,1},{1/2},0},
+	{{0,0,1},{1/2},3/10},
+	{{0,0,1},{1},0},
+	{{0,0,0},{1/2},3/10}};
+
+sunsetError3[{a_,c_,t_}]:=Abs[N[sunset[a^2,c^2,t^2,mu],20]-sunsetNum3[a,c,t]]/Abs[sunsetNum3[a,c,t]];
+
+AppendTo[testList,
+VerificationTest[
+	Max[Quiet[sunsetError3/@casesTripled]]<10^-7,
+	True,
+	TestID->"sunsets-with-three-propagators-on-a-line-numerically"
+]];
+
+
 AppendTo[testList,
 VerificationTest[
 	{sunset[0,0,0,mu],sunset[{0,0},0,0,mu],sunset[{0,0},{0,0},0,mu],sunset[{0,0},{1,1},0,mu]-sunset[{1,1},{0,0},0,mu],

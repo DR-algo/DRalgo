@@ -990,7 +990,8 @@ RelationsBVariables[list_,listVar_]:=Module[{L=list,LV=listVar},
 	TempVar=ConstantArray[0,{Length[LV]}];
 	For[i=1,i<Length[LV],i++,
 		For[j=i+1,j<Length[LV]+1,j++,
-			IfTemp=Mat1[[1;;i,j]]//DeleteDuplicates//DeleteCases[#,0,Infinity]&; (*Removes cases when the numerical factor is 0 or infinity*)
+			(*The relation to the first related variable; entries equal in value but not in form would otherwise give the factor of a later one*)
+			IfTemp=Mat1[[1;;i,j]]//DeleteCases[#,0,Infinity]&; (*Removes cases when the numerical factor is 0 or infinity*)
 			If[Length[IfTemp]==1&&Mat1[[i,j]]!=0,
 				LVTemp[[j]]=Mat1[[i,j]]LV[[i]];(*Creates a list with all linear relations*)
 			];
@@ -1124,7 +1125,8 @@ OverallFac2[list_,varMat_]:=Module[{L=list,Mat=varMat},
 	TempVar=ConstantArray[0,{Length[LV]}];
 	For[i=1,i<Length[LV],i++,
 		For[j=i+1,j<Length[LV]+1,j++,
-			IfTemp=Mat1[[1;;i,j]]//DeleteDuplicates//DeleteCases[#,0,Infinity]&; (*Removes cases when the numerical factor is 0 or infinity*)
+			(*The relation to the first related variable; entries equal in value but not in form would otherwise give the factor of a later one*)
+			IfTemp=Mat1[[1;;i,j]]//DeleteCases[#,0,Infinity]&; (*Removes cases when the numerical factor is 0 or infinity*)
 			If[Length[IfTemp]==1&&Mat1[[i,j]]!=0,
 				LVTemp[[j]]=Mat1[[i,j]]LV[[i]](*Creates a list with all linear relations*)
 			];

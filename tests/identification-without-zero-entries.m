@@ -99,6 +99,23 @@ VerificationTest[
 
 
 (* ::Section:: *)
+(*Entries equal in value but not in form*)
+
+
+(*
+	RelationsBVariables (DRalgo.m) relates each entry to the first earlier one that is a number times it. With two entries equal
+	in value but not in form, the third entry got the factor of the second one, whose variable is not an independent one, which
+	left the variable in the ultrasoft quartics of examples/2hdm.m.
+*)
+AppendTo[testList,
+VerificationTest[
+	DRalgo`DRalgo`Private`RelationsBVariables[{0,x(1+y),x+x y,3x+3x y},{v1,v2,v3}],
+	{v1,v1,3v1},
+	TestID->"relations-with-entries-equal-in-value"
+]];
+
+
+(* ::Section:: *)
 (*Report*)
 
 

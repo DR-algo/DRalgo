@@ -72,11 +72,13 @@ VerificationTest[
 
 (*
 	At LO, the light mass gets the tadpoles of S and C, the A0 tadpole, the S exchange between the light line and
-	the one-loop tadpole of S, and the bubble of the light scalar with S, with <S^2>=-Sqrt[ms3d]/(4\[Pi]) and <C^2>=-Sqrt[mc3d]/(4\[Pi])
+	the one-loop tadpole of S, and the bubble of the light scalar with S, with <S^2>=-Sqrt[ms3d]/(4\[Pi]) and <C^2>=-Sqrt[mc3d]/(4\[Pi]).
+	The tadpole of S has the loop of the A0, with the coupling kapA/2 A0^2 S of the soft theory, which arises at one loop.
 *)
+kapA=Normal[DRalgo`DRalgo`Private`lamvvsLS][[1,1,4]]/.DRalgo`DRalgo`Private`lamVVSL->lamVVSL;
 expected=(m13d
 	-ls3d Sqrt[ms3d]/(8\[Pi])-lc3d Sqrt[mc3d]/(8\[Pi])
-	-mum3d/(2ms3d) (-c33d Sqrt[ms3d]/(4\[Pi])-kap3d Sqrt[mc3d]/(8\[Pi]))
+	-mum3d/(2ms3d) (-c33d Sqrt[ms3d]/(4\[Pi])-kap3d Sqrt[mc3d]/(8\[Pi])-kapA Sqrt[musqU1]/(8\[Pi]))
 	-mum3d^2/(16\[Pi] Sqrt[ms3d])
 	-lamVL[1] Sqrt[musqU1]/(8\[Pi]));
 
