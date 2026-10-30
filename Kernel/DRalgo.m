@@ -272,7 +272,8 @@ Calculates the effective potential";
 CustomMasses::usage="\
 CustomMasses is an option of CalculatePotential and CalculatePotentialUS. \
 CalculatePotential[ScalarMass,VectorMass,CustomMasses->True] calculates the effective potential at LO and NLO \
-with the given diagonal mass matrices";
+with the given diagonal mass matrices. The NNLO potential needs the couplings in the basis of these masses: \
+RotateTensorsCustomMass rotates them and sets the masses, after which CalculatePotential[] calculates it";
 PerturbativeDiagonalization::usage="\
 PerturbativeDiagonalization is an option of CalculatePotential and CalculatePotentialUS. \
 With PerturbativeDiagonalization->True, the off-diagonal elements of the mass matrices are treated as \
@@ -989,7 +990,8 @@ RelationsBVariables[list_,listVar_]:=Module[{L=list,LV=listVar},
 	TempVar=ConstantArray[0,{Length[LV]}];
 	For[i=1,i<Length[LV],i++,
 		For[j=i+1,j<Length[LV]+1,j++,
-			IfTemp=Mat1[[1;;i,j]]//DeleteDuplicates//DeleteCases[#,0,Infinity]&; (*Removes cases when the numerical factor is 0 or infinity*)
+			(*The relation to the first related variable; entries equal in value but not in form would otherwise give the factor of a later one*)
+			IfTemp=Mat1[[1;;i,j]]//DeleteCases[#,0,Infinity]&; (*Removes cases when the numerical factor is 0 or infinity*)
 			If[Length[IfTemp]==1&&Mat1[[i,j]]!=0,
 				LVTemp[[j]]=Mat1[[i,j]]LV[[i]];(*Creates a list with all linear relations*)
 			];
@@ -1061,6 +1063,8 @@ Expands all elements in Lp in terms of basDR.
 	setVecs=Table[Coefficient[i,basDR],{i,Lp}]/.varFix;  
 (*Delete columns with only 0s*)
 	setVecs=Transpose[DeleteCases[Transpose[setVecs], {0 ..}, Infinity]];
+(*Without nonzero entries, as for the quartics of a model without scalars or quartics, all entries stay zero*)
+	If[setVecs==={},Return[ConstantArray[0,Length[Lp]]]];
 
 (*Finds independent basis*)
 	rr = setVecs // Transpose // RowReduce;
@@ -1123,7 +1127,8 @@ OverallFac2[list_,varMat_]:=Module[{L=list,Mat=varMat},
 	TempVar=ConstantArray[0,{Length[LV]}];
 	For[i=1,i<Length[LV],i++,
 		For[j=i+1,j<Length[LV]+1,j++,
-			IfTemp=Mat1[[1;;i,j]]//DeleteDuplicates//DeleteCases[#,0,Infinity]&; (*Removes cases when the numerical factor is 0 or infinity*)
+			(*The relation to the first related variable; entries equal in value but not in form would otherwise give the factor of a later one*)
+			IfTemp=Mat1[[1;;i,j]]//DeleteCases[#,0,Infinity]&; (*Removes cases when the numerical factor is 0 or infinity*)
 			If[Length[IfTemp]==1&&Mat1[[i,j]]!=0,
 				LVTemp[[j]]=Mat1[[i,j]]LV[[i]](*Creates a list with all linear relations*)
 			];

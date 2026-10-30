@@ -314,15 +314,14 @@ CalculatePotential[OptionsPattern[]]:=Module[{},
 (*
 	Prints the effective potential.
 *)
-PrintEffectivePotential[]:=Module[{},
-	EffPotPrint=VTot[[1]]+VTot[[2]]+VTot[[3]];
+PrintEffectivePotential::nonnlo="The NNLO potential is not calculated with CustomMasses->True, since the couplings are not rotated to the basis of the given masses. After RotateTensorsCustomMass, which rotates them, CalculatePotential[] and CalculatePotentialUS[] calculate it.";
 
-(*Printing Result*)
-	OutputFormatDR[EffPotPrint]
-];
+PrintEffectivePotential[]:=PrintEffectivePotential["All"];
 
+(*With CustomMasses->True, VTot contains only the LO and NLO potentials*)
 PrintEffectivePotential[optP_]:=Module[{opt=optP},
-	EffPotPrint=Switch[opt,"LO",VTot[[1]],"NLO",VTot[[2]],"NNLO",VTot[[3]],__,VTot[[1]]+VTot[[2]]+VTot[[3]]];
+	If[Length[VTot]<3&&!MemberQ[{"LO","NLO"},opt],Message[PrintEffectivePotential::nonnlo]];
+	EffPotPrint=Switch[opt,"LO",VTot[[1]],"NLO",VTot[[2]],"NNLO",If[Length[VTot]<3,0,VTot[[3]]],__,Total[VTot]];
 
 (*Printing Result*)
 	OutputFormatDR[EffPotPrint]

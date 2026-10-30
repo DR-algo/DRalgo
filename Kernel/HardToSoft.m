@@ -72,11 +72,28 @@ SimplifyEntries[expr_, simplify_] := simplify[expr];
 (*
   FullSimplifyEntries:
   FullSimplify of the entries of a list, e.g. of the printed matching relations. Entries with more than
-  fullSimplifyMaxLeafCount leaves are only simplified with Simplify: for the long first-order tadpole terms of
-  models with several heavy scalars, FullSimplify takes very long and shortens them only slightly.
+  fullSimplifyMaxLeafCount leaves are only simplified with Simplify: e.g. for the ultrasoft quartics of models with
+  heavy scalars, cubics, and couplings of the temporal scalars, FullSimplify takes a minute or more for each
+  relation of a thousand leaves and shortens it by a few per cent.
 *)
-fullSimplifyMaxLeafCount = 4000;
+fullSimplifyMaxLeafCount = 500;
 FullSimplifyEntries[list_List] := If[LeafCount[#] > fullSimplifyMaxLeafCount, Simplify[#], FullSimplify[#]]& /@ list;
+
+
+(*
+  SimplifyLarge, SimplifySmall:
+  Simplify of a tensor, e.g. of the sum of the two-loop masses, if no entry has more than simplifyMaxLeafCount
+  leaves, and of an expression with at most simplifyMaxLeafCount leaves. Larger entries are sums of simplified
+  terms, which Simplify shortens only slightly and very slowly, e.g. for the two-loop masses of models with several
+  heavy scalars and couplings of the temporal scalars; they are kept.
+*)
+simplifyMaxLeafCount = 4000;
+SimplifySmall[x_] := If[LeafCount[x] > simplifyMaxLeafCount, x, Simplify[x]];
+SimplifyLarge[tensor_] := Module[{entries = Flatten[{Normal[tensor]}]},
+  If[Max[LeafCount /@ entries] > simplifyMaxLeafCount,
+    SimplifyEntries[Normal[tensor], SimplifySmall],
+    Simplify[tensor]]
+];
 
 
 (*

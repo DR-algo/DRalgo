@@ -95,11 +95,10 @@ Collect[sol6,{_Zb,_Zf},Factor]//TableForm
 
 
 (*
-	The matching of the tensor Tens12 takes approximately 10 minutes to complete,
-	as it entails handling an 8\[Times]8\[Times]8\[Times]8\[Times]8\[Times]8 tensor.
-	It is thus advantageous to first perform 
-	the matching for the remaining tensors and subsequently address the A0^6 operator separately.
-	This procedure can be implemented as follows
+	The tensor of the A0^6 operator has 8\[Times]8\[Times]8\[Times]8\[Times]8\[Times]8 components,
+	and its matching takes most of the running time.
+	The matching can be performed for the remaining tensors
+	and for the A0^6 operator separately as follows
 *)
 TensorListWithoutA6={OT[6,1],OT[6,3],OT[6,8],OT[6,13],OT[6,16],OT[6,17]};
 NListWithoutA6={1,3,8,13,16,17};

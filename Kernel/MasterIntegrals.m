@@ -178,7 +178,8 @@ BoxIntegral3d[x_,y_,z_,w_]:=Module[{m=Sqrt[{x,y,z,w}],a,b},
 (*
 	Sunset, \[Integral]\[Integral]1/((p^2+x)(q^2+y)((p+q)^2+z)), at the renormalization scale scale. Its divergence is SunsetDivergence3d/eps.
 	A list of squared masses as an argument gives several propagators on the same line, e.g. SunsetIntegral3d[{x1,x2},y,z,scale]
-	is \[Integral]\[Integral]1/((p^2+x1)(p^2+x2)(q^2+y)((p+q)^2+z)); lists are allowed on the first two lines, with at most two masses each.
+	is \[Integral]\[Integral]1/((p^2+x1)(p^2+x2)(q^2+y)((p+q)^2+z)); lists are allowed on the first two lines, with at most two masses each,
+	or with three masses on the first line and none on the second.
 *)
 SunsetDivergence3d=1/(4 \[Pi])^2 1/4;
 
@@ -214,6 +215,40 @@ sunsetDoubled[{a1_,a2_},{c1_,c2_},t_,scale_]:=Module[{u},
 		c1=!=c2||c1=!=0,sunsetDoubled[{c1,c2},{a1,a2},t,scale],
 		t=!=0,3/(32 \[Pi]^2 t^4),
 		True,0]
+];
+
+(*
+	Three propagators on one line, by partial fractions and derivatives as for two. Three massless propagators give minus 1/2 the
+	derivative of two with respect to the squared mass, which is the coefficient of a^4 of the sunset with the mass a on this line.
+*)
+sunsetDoubled[{a1_,a2_,a3_},{c_},t_,scale_]:=Module[{u,s=c+t},
+	Which[
+		a1=!=a2,(sunsetDoubled[{a2,a3},{c},t,scale]-sunsetDoubled[{a1,a3},{c},t,scale])/(a1^2-a2^2),
+		a1=!=a3,(sunsetDoubled[{a3,a2},{c},t,scale]-sunsetDoubled[{a1,a2},{c},t,scale])/(a1^2-a3^2),
+		a1=!=0,-D[sunsetDoubled[{u,u},{c},t,scale],u]/(4u)/.u->a1,
+		s=!=0,1/(64 \[Pi]^2 s^4),
+		True,0]
+];
+
+
+(*
+	The divided difference f[x1,...,xn] of a function f of a squared mass: in a two-loop function f of the squared mass of a line,
+	n propagators with the squared masses x1,...,xn on this line give f[x1,...,xn], by partial fractions. Equal squared masses give
+	derivatives, and for a massless line the derivatives of the hard part, the coefficients of the even powers of the mass, which
+	vanish if they contain the logarithm of the mass, i.e. if the other lines are massless as well.
+*)
+HardDividedDifference[f_,nodes_List]:=Module[{pair},
+	pair=FirstCase[Subsets[Range[Length[nodes]],{2}],{i_,j_}/;nodes[[i]]=!=nodes[[j]],None];
+	If[pair===None,
+		hardDerivative[f,First[nodes],Length[nodes]-1],
+		(HardDividedDifference[f,Delete[nodes,pair[[2]]]]-HardDividedDifference[f,Delete[nodes,pair[[1]]]])/(nodes[[pair[[1]]]]-nodes[[pair[[2]]]])]
+];
+
+hardDerivative[f_,x_,n_]:=Module[{u,a,c},
+	If[x=!=0,
+		D[f[u],{u,n}]/n!/.u->x,
+		c=SeriesCoefficient[f[a^2]/.Power[a^2,k_]:>a^(2k),{a,0,2n}];
+		If[FreeQ[c,a],c,0]]
 ];
 
 
