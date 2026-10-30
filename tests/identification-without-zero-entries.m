@@ -73,8 +73,7 @@ VerificationTest[
 \[Lambda]1=GradTadpole[t1 f1+t2 f2];
 \[Lambda]3=GradCubic[c1/6 f1^3+c2/2 f1^2 f2+c3/2 f1 f2^2+c4/6 f2^3];
 ImportModelDRalgo[Group,gvvv,gvff,gvss,\[Lambda]1,\[Lambda]3,\[Lambda]4,\[Mu]ij,\[Mu]IJ,\[Mu]IJC,Ysff,YsffC,Verbose->False];
-(*Without quartics, the identification of the quartics emits messages, which do not affect the other couplings*)
-Quiet[PerformDRhard[]];
+PerformDRhard[];
 
 AppendTo[testList,
 VerificationTest[
@@ -112,6 +111,29 @@ VerificationTest[
 	DRalgo`DRalgo`Private`RelationsBVariables[{0,x(1+y),x+x y,3x+3x y},{v1,v2,v3}],
 	{v1,v1,3v1},
 	TestID->"relations-with-entries-equal-in-value"
+]];
+
+
+(* ::Section:: *)
+(*Without scalars*)
+
+
+(*
+	Without scalars, the quartics are a placeholder with a single vanishing entry. RelationsBVariables3 (DRalgo.m)
+	must keep it zero; with no nonzero entry to expand, RowReduce got an empty matrix, emitted messages, and the
+	quartic became an unevaluated expression.
+*)
+Group={"SU3"};RepAdjoint={{1,1}};CouplingName={gs};
+RepScalar={};RepFermion={{{{1,0}},"L"},{{{1,0}},"R"}};
+{gvvv,gvff,gvss,\[Lambda]1,\[Lambda]3,\[Lambda]4,\[Mu]ij,\[Mu]IJ,\[Mu]IJC,Ysff,YsffC}=AllocateTensors[Group,RepAdjoint,CouplingName,RepFermion,RepScalar];
+ImportModelDRalgo[Group,gvvv,gvff,gvss,\[Lambda]1,\[Lambda]3,\[Lambda]4,\[Mu]ij,\[Mu]IJ,\[Mu]IJC,Ysff,YsffC,Verbose->False];
+
+AppendTo[testList,
+VerificationTest[
+	PerformDRhard[];
+	Normal[DRalgo`DRalgo`Private`lam3DS],
+	{{{{0}}}},
+	TestID->"quartics-without-scalars"
 ]];
 
 

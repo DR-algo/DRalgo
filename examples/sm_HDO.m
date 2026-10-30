@@ -107,6 +107,13 @@ YsffC=Conjugate[Ysff];*)
 HYPERCHARGE={Yq->1/3,Yu->4/3,Yd->-2/3,Yl->-1,Ye->-2};
 
 
+(*
+	With symbolic hypercharges, ImportModelDRalgo prints the message
+	ImportModelDRalgo::invariantif, since the top Yukawa coupling is invariant under the
+	gauge group only if Yu == 1 + Yq. The physical hypercharges HYPERCHARGE fulfill this condition.
+*)
+
+
 (* ::Section:: *)
 (*Dimensional Reduction*)
 
@@ -134,7 +141,7 @@ PerformDRhard[]
 	the identity projected on the hypercharge gauge field B idB,
 	the vector of the field B ProjB,
 	the Pauli matrices (namely the generators in the fundamental representation of SU(2)),
-	the group structure constants of SU(2)_L \[Epsilon]W,
+	the group structure constants of SU(2)_L fW,
 	the group structure constants of SU(3)_c fG, and
 	the structure constants d^{abc} of SU(3) dG
 *)
@@ -173,7 +180,7 @@ Sigma = Table[
    {i, 12}
 ];
 
-\[Epsilon]W=Coefficient[gvvv,gw];
+fW=Coefficient[gvvv,gw];
 fG=Coefficient[gvvv,gs];
 
 HdH=Contract[Vs,V,{{1,3}}];
@@ -216,16 +223,17 @@ OT[6,18]=(
 	+I \[Alpha][B0 W^2 D]TensorProduct[ProjB,idW]
 	+I \[Alpha][W0 B W D,1]Transpose[TensorProduct[ProjB,idW],{2,1,3}]
 	+I \[Alpha][W0 B W D,2]TensorProduct[idW,ProjB]
-	+I \[Alpha][W0 W^2 D]\[Epsilon]W
-	+\[Alpha][B0 G^2 D]TensorProduct[ProjB,idG]
+	+I \[Alpha][W0 W^2 D]fW
+	+I \[Alpha][B0 G^2 D]TensorProduct[ProjB,idG]
 	+I \[Alpha][G0 B G D,1]Transpose[TensorProduct[ProjB,idG],{2,1,3}]
 	+I \[Alpha][G0 B G D,2]TensorProduct[idG,ProjB]
-	+I \[Alpha][G0 G^2 D,1]fG+\[Alpha][G0 G^2 D,2]dG
+	+I \[Alpha][G0 G^2 D,1]fG
+	+I \[Alpha][G0 G^2 D,2]dG
 	);	
 
-WCs = Cases[OT[6,18]//Normal, \[Alpha][__], \[Infinity]];
+WCs = DeleteDuplicates[Cases[OT[6,18]//Normal, \[Alpha][__], \[Infinity]]];
 
-sol=Dimension6Matching[{OT[6,18]},{18},3][[1]];
+sol=Dimension6Matching[{OT[6,18]},{18},WCs,3][[1]];
 Collect[sol,{_Zb,_Zf},Factor]//TableForm
 
 
@@ -244,7 +252,7 @@ X6=Contract[TGadj,TGadj,TGadj,TGadj,TGadj,TGadj,{{2,18},{3,5},{6,8},{9,11},{12,1
 (*
 	We define \[Alpha][__] our Wilson coefficients
 *)
-Tens1=Factorial[3](\[Alpha][W^3]\[Epsilon]W+\[Alpha][G^3]fG);
+Tens1=Factorial[3](\[Alpha][W^3]fW+\[Alpha][G^3]fG);
 
 Tens2=Factorial[2]^2 SymmetrizeTensor[
 	+\[Alpha][H^2B^2]TensorProduct[HdH,idB]
@@ -292,8 +300,8 @@ Tens6=(
 	+\[Alpha][H^2 B0^2 D^2,3]TensorProduct[Im[HdH],idB]
 	+\[Alpha][H^2 W0^2 D^2,2]TensorProduct[Re[HdH],idW]
 	+\[Alpha][H^2 W0^2 D^2,3]TensorProduct[Im[HdH],idW]
-	+\[Alpha][H^2 W0^2 D^2,4]Contract[Re[Hd\[Sigma]H],\[Epsilon]W,{{3,4}}]
-	+\[Alpha][H^2 W0^2 D^2,5]Contract[Im[Hd\[Sigma]H],\[Epsilon]W,{{3,4}}]
+	+\[Alpha][H^2 W0^2 D^2,4]Contract[Re[Hd\[Sigma]H],fW,{{3,4}}]
+	+\[Alpha][H^2 W0^2 D^2,5]Contract[Im[Hd\[Sigma]H],fW,{{3,4}}]
 	+\[Alpha][H^2 B0 W0 D^2,2]TensorProduct[Re[Hd\[Sigma]H],ProjB]
 	+\[Alpha][H^2 B0 W0 D^2,3]TensorProduct[Im[Hd\[Sigma]H],ProjB]
 	+\[Alpha][H^2 B0 W0 D^2,4]Transpose[TensorProduct[Re[Hd\[Sigma]H],ProjB],{1,2,4,3}]
@@ -386,7 +394,7 @@ Tens14=(
 Tens15=Factorial[2]\[Alpha][H^2 D^4]SymmetrizeTensor[HdH,{{1,2}}];
 
 Tens16=(
-	+\[Alpha][W0^2 W D^2]\[Epsilon]W
+	+\[Alpha][W0^2 W D^2]fW
 	+Factorial[2]\[Alpha][W0 B0 W D^2](TensorProduct[idW,ProjB]-Transpose[TensorProduct[idW,ProjB],{1,3,2}])
 	+\[Alpha][G0^2 G D^2]fG+Factorial[2]\[Alpha][G0 B0 G D^2](TensorProduct[idG,ProjB]-Transpose[TensorProduct[idG,ProjB],{1,3,2}])
 	);
@@ -402,11 +410,12 @@ Tens18=(
 	+I \[Alpha][B0 W^2 D]TensorProduct[ProjB,idW]
 	+I \[Alpha][W0 B W D,1]Transpose[TensorProduct[ProjB,idW],{2,1,3}]
 	+I \[Alpha][W0 B W D,2]TensorProduct[idW,ProjB]
-	+I \[Alpha][W0 W^2 D]\[Epsilon]W
-	+\[Alpha][B0 G^2 D]TensorProduct[ProjB,idG]
+	+I \[Alpha][W0 W^2 D]fW
+	+I \[Alpha][B0 G^2 D]TensorProduct[ProjB,idG]
 	+I \[Alpha][G0 B G D,1]Transpose[TensorProduct[ProjB,idG],{2,1,3}]
 	+I \[Alpha][G0 B G D,2]TensorProduct[idG,ProjB]
-	+I \[Alpha][G0 G^2 D,1]fG+\[Alpha][G0 G^2 D,2]dG
+	+I \[Alpha][G0 G^2 D,1]fG
+	+I \[Alpha][G0 G^2 D,2]dG
 	);	
 
 Tens19=(
@@ -418,8 +427,8 @@ Tens19=(
 	+I \[Alpha][H^2 W0 B D,2]TensorProduct[Im[Hd\[Sigma]H],ProjB]
 	+I \[Alpha][H^2 W0 W D,1]TensorProduct[Re[HdH],idW]
 	+I \[Alpha][H^2 W0 W D,2]TensorProduct[Im[HdH],idW]
-	+I \[Alpha][H^2 W0 W D,3]Contract[Re[Hd\[Sigma]H],\[Epsilon]W,{{3,4}}]
-	+I \[Alpha][H^2 W0 W D,4]Contract[Im[Hd\[Sigma]H],\[Epsilon]W,{{3,4}}]
+	+I \[Alpha][H^2 W0 W D,3]Contract[Re[Hd\[Sigma]H],fW,{{3,4}}]
+	+I \[Alpha][H^2 W0 W D,4]Contract[Im[Hd\[Sigma]H],fW,{{3,4}}]
 	+I \[Alpha][H^2 G0 G D,1]TensorProduct[Re[HdH],idG]
 	+I \[Alpha][H^2 G0 G D,2]TensorProduct[Im[HdH],idG]
 	);
@@ -427,7 +436,7 @@ Tens19=(
 Tens20NS=(
 	+I \[Alpha][B0^2 W0 W D]TensorProduct[idB,idW]
 	+I \[Alpha][B0 W0^2 B D]Transpose[TensorProduct[idB,idW],{1,4,3,2}]
-	+I \[Alpha][B0 W0^2 W D]TensorProduct[ProjB,\[Epsilon]W]
+	+I \[Alpha][B0 W0^2 W D]TensorProduct[ProjB,fW]
 	+I \[Alpha][W0^3 W D]TensorProduct[idW,idW]
 	+I \[Alpha][B0^2 G0 G D]TensorProduct[idB,idG]
 	+I \[Alpha][B0 G0^2 G D,1]Transpose[TensorProduct[idB,idG],{1,4,3,2}]
@@ -462,10 +471,10 @@ NList={1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20};
 WC = DeleteDuplicates[Cases[TensorList//Normal, \[Alpha][__], \[Infinity]]];
 
 (*
-	The matching of operators with 6 fields, namely
+	The tensors of the operators with 6 fields, namely
 	phi^6, phi^4 B0^2, phi^2 B0^4, and B0^6,
-	requires a significant amount of running time.
-	It is therefore convenient to perform the matching of these operators separately.
+	have up to 12^6 components, and their matching takes most of the running time.
+	The matching of these operators can be performed separately.
 *)
 n={1,2,3,4,5,6,7,8,13,14,15,16,17,18,19,20};
 sol=Dimension6Matching[TensorList[[n]],NList[[n]],WC,3][[1]];

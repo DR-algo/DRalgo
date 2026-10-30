@@ -85,6 +85,81 @@ GeneratePairPermutations[rank_,pairGroup_]:=Module[{perms,nPairs,tempPerm,swappe
 ComposePermutation[p1_,p2_]:=p2[[p1]];
 
 
+(*
+	SymmetricTensorSum[groups, sum]:
+	The sum of terms c Contract[t1,...,tn,pairs] and c Transpose[Contract[t1,...,tn,pairs],perm], projected onto
+	the tensors that are symmetric within each group of indices in groups. The operators with six fields are
+	symmetric under the permutations of their scalars and of their temporal scalars, so that only this projection
+	enters, e.g. SymmetricTensorSum[{{1,2,3,4},{5,6}},...] for phi^4 A0^2.
+	The sum is held, and each term is split into its coefficient c and its contraction. A contraction is computed
+	once up to the relabeling of identical tensors among t1,...,tn: the 804 contractions of six gvvv in V6B are 4
+	distinct ones. The projections of the terms with the same contraction are equal if the terms map the indices
+	of the contraction into the same groups. Hence the coefficients are summed for each distinct projection,
+	instead of the tensors of all terms, e.g. the 1194 terms of V6B with 8^6 components for QCD.
+*)
+SetAttributes[SymmetricTensorSum, HoldRest];
+SymmetricTensorSum[groups_List, sum_] := Module[
+	{
+		rank = Length[Flatten[groups]], groupOf, relabelings = <||>, contractions = <||>, projections = <||>,
+		symmetrize, relabelingMaps, contraction, projectionKey, termKey, terms
+	},
+	groupOf = ConstantArray[0, rank];
+	Do[groupOf[[groups[[g]]]] = g, {g, Length[groups]}];
+	symmetrize[tensor_] := SparseArray[Fold[Symmetrize[#1, Symmetric[#2]] &, tensor, Select[groups, Length[#] > 1 &]]];
+
+	(*The slots of the tensor product for each relabeling of identical tensors*)
+	relabelingMaps[tensors_List] := Module[{ranks, starts, tensorOf, classes, permutations},
+		ranks = TensorRank /@ tensors;
+		starts = Accumulate[Prepend[Most[ranks], 0]];
+		tensorOf = Flatten[MapIndexed[ConstantArray[First[#2], #1] &, ranks]];
+		classes = GatherBy[Range[Length[tensors]], Hash[tensors[[#]]] &];
+		permutations = ReplacePart[Range[Length[tensors]], Thread[Flatten[classes] -> Flatten[#]]] & /@ Tuples[Permutations /@ classes];
+		(starts[[#]] & /@ permutations[[All, tensorOf]]) + ConstantArray[Range[Total[ranks]] - starts[[tensorOf]], Length[permutations]]
+	];
+
+	(*{key, perm}, with the contraction equal to Transpose[contractions[key], perm] for the relabeling whose sorted pairs come first*)
+	contraction[tensors_List, pairs_List] := Module[{hash = Hash[tensors], maps, base, first, second, codes, best, canonical, key},
+		If[!KeyExistsQ[relabelings, hash], relabelings[hash] = relabelingMaps[tensors]];
+		maps = relabelings[hash];
+		(*Each relabeled pair {i,j} with i<j as the integer i base+j, and the pairs in increasing order*)
+		base = Length[First[maps]] + 1;
+		first = maps[[All, pairs[[All, 1]]]];
+		second = maps[[All, pairs[[All, 2]]]];
+		codes = Sort /@ (Quotient[first + second - Abs[first - second], 2] base + Quotient[first + second + Abs[first - second], 2]);
+		best = First[Ordering[codes, 1]];
+		canonical = Transpose[{Quotient[codes[[best]], base], Mod[codes[[best]], base]}];
+		key = {hash, canonical};
+		If[!KeyExistsQ[contractions, key], contractions[key] = Contract[Sequence @@ tensors, canonical]];
+		{key, Ordering[maps[[best, Complement[Range[base - 1], Flatten[pairs]]]]]}
+	];
+
+	(*The projections of the terms with the same contraction and with the same groups of its indices are equal*)
+	projectionKey[tensors_List, pairs_List, perm_] := Module[{key, order, composite, pattern, representative},
+		{key, order} = contraction[tensors, pairs];
+		composite = If[perm === Automatic, order, perm[[order]]];
+		pattern = groupOf[[composite]];
+		If[!KeyExistsQ[projections, {key, pattern}],
+			representative = ConstantArray[0, rank];
+			Do[representative[[Flatten[Position[pattern, g]]]] = groups[[g]], {g, Length[groups]}];
+			projections[{key, pattern}] = symmetrize[Transpose[contractions[key], representative]]
+		];
+		{key, pattern}
+	];
+
+	termKey[Hold[Times[c___, Transpose[Contract[t__, pairs_List], perm_List]]]] := {Times[c], projectionKey[{t}, pairs, perm]};
+	termKey[Hold[Times[c___, Contract[t__, pairs_List]]]] := {Times[c], projectionKey[{t}, pairs, Automatic]};
+	termKey[Hold[Transpose[Contract[t__, pairs_List], perm_List]]] := {1, projectionKey[{t}, pairs, perm]};
+	termKey[Hold[Contract[t__, pairs_List]]] := {1, projectionKey[{t}, pairs, Automatic]};
+	termKey[Hold[term_]] := Module[{key = {Hash[Hold[term]]}},
+		If[!KeyExistsQ[projections, key], projections[key] = symmetrize[term]];
+		{1, key}
+	];
+
+	terms = Replace[Hold[sum], {Hold[Plus[t___]] :> List @@ (Hold /@ Hold[t]), h_ :> {h}}];
+	Total[KeyValueMap[Together[Total[#2]] projections[#1] &, GroupBy[termKey /@ terms, Last -> First]]]
+];
+
+
 (* ::Section:: *)
 (*HIGHER DIMENSIONAL OPERATORS GROUP TENSORS *)
 
@@ -1789,7 +1864,7 @@ S6B[x_]:=Module[{terms},
 	terms=
 		Which[
 			x==1,
-			(
+			SymmetricTensorSum[{{1,2,3,4,5,6}},
 				+xi Contract[gvss,gvss,lam4,lam4,{{10,14},{6,11},{3,7},{1,4}}]
 				+xi^2 Contract[HabijV,gvss,gvss,lam4,{{10,14},{6,11},{2,8},{1,5}}]
 				+xi^3 Contract[HabijV,HabijV,gvss,gvss,{{10,13},{5,12},{2,6},{1,9}}]
@@ -2585,8 +2660,8 @@ S6B[x_]:=Module[{terms},
 				-xi^3 Transpose[Contract[gvss,gvss,gvss,gvss,gvss,gvss,{{13,16},{11,15},{7,10},{6,9},{3,18},{1,4}}],{4,5,2,6,1,3}]
 				-xi^3 Transpose[Contract[gvss,gvss,gvss,gvss,gvss,gvss,{{13,16},{11,15},{7,10},{6,9},{3,18},{1,4}}],{4,6,2,5,1,3}]
 				+xi^3 Transpose[Contract[gvss,gvss,gvss,gvss,gvss,gvss,{{13,16},{11,15},{7,10},{6,17},{3,9},{1,4}}],{3,4,2,6,1,5}]
-			) Zb[3,0]
-			+ (
+			] Zb[3,0]
+			+ SymmetricTensorSum[{{1,2,3,4,5,6}},
 				+Contract[lam3,lam3,lam4,lam4,{{6,14},{5,10},{3,11},{2,7}}]
 				+Contract[lam3,lam3,lam4,lam4,{{10,14},{6,11},{3,7},{2,5}}]
 				-xi^2 Contract[gvss,lam3,lam3,HabijV,gvss,{{10,14},{6,15},{5,7},{3,9},{1,11}}]
@@ -3982,8 +4057,8 @@ S6B[x_]:=Module[{terms},
 				-xi^2 Transpose[Contract[lam3,lam3,gvss,gvss,gvss,gvss,{{13,16},{12,18},{7,10},{6,15},{3,8},{2,5}}],{1,2,6,3,4,5}]
 				-xi^2 Transpose[Contract[lam3,lam3,gvss,gvss,gvss,gvss,{{13,16},{12,18},{7,10},{6,15},{3,8},{2,5}}],{1,2,6,4,3,5}]
 				-xi^2 Transpose[Contract[lam3,lam3,gvss,gvss,gvss,gvss,{{13,16},{12,18},{7,10},{6,15},{3,8},{2,5}}],{1,2,6,5,3,4}]
-			) Zb[4,0]
-			+ (
+			] Zb[4,0]
+			+ SymmetricTensorSum[{{1,2,3,4,5,6}},
 				-Transpose[Contract[lam3,lam3,lam4,lam3,lam3,{{10,13},{6,9},{4,15},{2,12},{1,14}}],{5,3,1,6,2,4}]
 				-Transpose[Contract[lam3,lam3,lam4,lam3,lam3,{{10,13},{6,9},{4,15},{2,12},{1,14}}],{5,3,2,6,1,4}]
 				-Transpose[Contract[lam3,lam3,lam4,lam3,lam3,{{10,13},{6,9},{4,15},{2,12},{1,14}}],{5,4,1,6,2,3}]
@@ -4524,8 +4599,8 @@ S6B[x_]:=Module[{terms},
 				+xi Transpose[Contract[lam3,lam3,gvss,gvss,lam3,lam3,{{15,17},{9,14},{7,10},{5,18},{3,6},{2,12}}],{4,6,1,5,2,3}]
 				+xi Transpose[Contract[lam3,lam3,gvss,gvss,lam3,lam3,{{15,17},{9,14},{7,10},{5,18},{3,6},{2,12}}],{5,6,1,3,2,4}]
 				+xi Transpose[Contract[lam3,lam3,gvss,gvss,lam3,lam3,{{15,17},{9,14},{7,10},{5,18},{3,6},{2,12}}],{5,6,1,4,2,3}]
-			) Zb[5,0]
-			+ (
+			] Zb[5,0]
+			+ SymmetricTensorSum[{{1,2,3,4,5,6}},
 				+Transpose[Contract[lam3,lam3,lam3,lam3,lam3,lam3,{{9,13},{8,11},{6,17},{4,12},{3,18},{2,15}}],{4,5,1,2,6,3}]
 				+Transpose[Contract[lam3,lam3,lam3,lam3,lam3,lam3,{{9,13},{8,11},{6,17},{4,12},{3,18},{2,15}}],{4,6,1,2,5,3}]
 				+Transpose[Contract[lam3,lam3,lam3,lam3,lam3,lam3,{{9,13},{8,11},{6,18},{5,15},{3,17},{1,12}}],{5,6,1,2,3,4}]
@@ -4586,7 +4661,7 @@ S6B[x_]:=Module[{terms},
 				+Transpose[Contract[lam3,lam3,lam3,lam3,lam3,lam3,{{15,17},{9,13},{8,11},{6,18},{3,5},{1,12}}],{6,5,1,2,4,3}]
 				+Transpose[Contract[lam3,lam3,lam3,lam3,lam3,lam3,{{15,17},{9,13},{8,11},{6,18},{3,5},{2,12}}],{4,5,1,2,6,3}]
 				+Transpose[Contract[lam3,lam3,lam3,lam3,lam3,lam3,{{15,17},{9,13},{8,11},{6,18},{3,5},{2,12}}],{4,6,1,2,5,3}]
-			) Zb[6,0],
+			] Zb[6,0],
 			
 			True, "NOT ALLOWED X VALUE"
 			];
@@ -4597,7 +4672,7 @@ S6F[x_]:=Module[{terms},
 	terms=
 		Which[
 			x==1,
-			2 (
+			2 SymmetricTensorSum[{{1,2,3,4,5,6}},
 				+Transpose[Contract[Ysff,Ysff,YsffC,YsffC,YsffC,Ysff,{{11,18},{8,17},{6,14},{5,9},{3,15},{2,12}}],{2,3,4,5,6,1}]
 				+Transpose[Contract[Ysff,Ysff,YsffC,YsffC,YsffC,Ysff,{{11,18},{8,17},{6,14},{5,9},{3,15},{2,12}}],{2,4,3,5,6,1}]
 				+Transpose[Contract[Ysff,Ysff,YsffC,YsffC,YsffC,Ysff,{{11,18},{8,17},{6,14},{5,9},{3,15},{2,12}}],{2,5,3,4,6,1}]
@@ -4718,7 +4793,7 @@ S6F[x_]:=Module[{terms},
 				+Transpose[Contract[Ysff,Ysff,YsffC,YsffC,YsffC,Ysff,{{15,18},{12,17},{6,14},{5,9},{3,11},{2,8}}],{5,6,1,2,3,4}]
 				+Transpose[Contract[Ysff,Ysff,YsffC,YsffC,YsffC,Ysff,{{15,18},{12,17},{6,14},{5,9},{3,11},{2,8}}],{5,6,1,2,4,3}]
 				+Transpose[Contract[Ysff,Ysff,YsffC,YsffC,YsffC,Ysff,{{15,18},{12,17},{6,14},{5,9},{3,11},{2,8}}],{5,6,1,3,4,2}]
-			) Zf[3,0],
+			] Zf[3,0],
 			
 			True, "NOT ALLOWED X VALUE"
 			];
@@ -4732,7 +4807,7 @@ S4V2B[x_]:=Module[{terms},
 	terms=
 		Which[
 			x==1,
-			1/(6 xi) (
+			1/(6 xi) SymmetricTensorSum[{{1,2,3,4},{5,6}},
 				+N Contract[HabijV,HabijV,gvvv,gvvv,{{10,14},{5,11},{2,6},{1,13}}]
 				+5 N xi Contract[HabijV,HabijV,gvvv,gvvv,{{10,14},{5,11},{2,6},{1,13}}]
 				+6 xi^3 Contract[HabijV,HabijV,gvvv,gvvv,{{10,14},{5,11},{2,6},{1,13}}]
@@ -6731,8 +6806,8 @@ S4V2B[x_]:=Module[{terms},
 				-6 xi^3 Transpose[Contract[gvss,gvss,gvvv,gvvv,gvss,gvss,{{15,18},{12,13},{8,11},{4,9},{3,6},{1,16}}],{4,3,5,6,2,1}]
 				+N xi^3 Transpose[Contract[gvss,gvss,gvvv,gvvv,gvss,gvss,{{15,18},{12,13},{8,11},{4,9},{3,6},{1,16}}],{4,3,5,6,2,1}]
 				-N xi^4 Transpose[Contract[gvss,gvss,gvvv,gvvv,gvss,gvss,{{15,18},{12,13},{8,11},{4,9},{3,6},{1,16}}],{4,3,5,6,2,1}]
-			) Zb[3,0]
-			+1/8 (
+			] Zb[3,0]
+			+1/8 SymmetricTensorSum[{{1,2,3,4},{5,6}},
 				-32 Contract[lam3,lam3,lam4,gvss,gvss,{{9,13},{6,10},{5,16},{3,12},{2,15}}]
 				+4 N Contract[lam3,lam3,lam4,gvss,gvss,{{9,13},{6,10},{5,16},{3,12},{2,15}}]
 				-32 Contract[lam3,lam3,lam4,gvss,gvss,{{9,13},{6,12},{5,15},{3,10},{2,16}}]
@@ -8035,8 +8110,8 @@ S4V2B[x_]:=Module[{terms},
 				-8 xi Transpose[Contract[lam3,lam3,gvvv,gvvv,gvss,gvss,{{12,16},{9,13},{8,11},{6,18},{3,15},{2,4}}],{2,4,5,6,1,3}]
 				+N xi Transpose[Contract[lam3,lam3,gvvv,gvvv,gvss,gvss,{{12,16},{9,13},{8,11},{6,18},{3,15},{2,4}}],{2,4,5,6,1,3}]
 				-N xi^2 Transpose[Contract[lam3,lam3,gvvv,gvvv,gvss,gvss,{{12,16},{9,13},{8,11},{6,18},{3,15},{2,4}}],{2,4,5,6,1,3}]
-			) Zb[4,0]
-			+1/5 (
+			] Zb[4,0]
+			+1/5 SymmetricTensorSum[{{1,2,3,4},{5,6}},
 				+5 Transpose[Contract[lam3,lam3,lam3,HabijV,lam3,{{9,12},{7,16},{4,15},{3,13},{2,6}}],{2,3,4,5,6,1}]
 				+5 Transpose[Contract[lam3,lam3,lam3,HabijV,lam3,{{9,12},{7,16},{4,15},{3,13},{2,6}}],{2,4,3,5,6,1}]
 				+5 Transpose[Contract[lam3,lam3,lam3,HabijV,lam3,{{9,13},{6,8},{4,15},{3,12},{2,16}}],{2,3,4,5,6,1}]
@@ -8169,7 +8244,7 @@ S4V2B[x_]:=Module[{terms},
 				-2 N Transpose[Contract[lam3,lam3,gvss,gvss,lam3,lam3,{{14,17},{11,18},{8,15},{5,9},{3,6},{2,12}}],{3,4,5,6,1,2}]
 				+20 Transpose[Contract[lam3,lam3,gvss,gvss,lam3,lam3,{{14,17},{11,18},{8,15},{5,12},{3,6},{2,9}}],{3,4,5,6,1,2}]
 				-2 N Transpose[Contract[lam3,lam3,gvss,gvss,lam3,lam3,{{14,17},{11,18},{8,15},{5,12},{3,6},{2,9}}],{3,4,5,6,1,2}]
-			) Zb[5,0],
+			] Zb[5,0],
 			
 			True, "NOT ALLOWED X VALUE"
 			];
@@ -8180,7 +8255,7 @@ S4V2F[x_]:=Module[{terms},
 	terms=
 		Which[
 			x==1,
-			2/3 (
+			2/3 SymmetricTensorSum[{{1,2,3,4},{5,6}},
 				+3 Transpose[Contract[gvff,gvff,YsffC,YsffC,Ysff,Ysff,{{9,17},{8,14},{6,15},{5,11},{3,18},{2,12}}],{5,6,1,2,3,4}]
 				+3 Transpose[Contract[gvff,gvff,YsffC,YsffC,Ysff,Ysff,{{9,17},{8,14},{6,15},{5,11},{3,18},{2,12}}],{5,6,1,3,2,4}]
 				+3 Transpose[Contract[gvff,gvff,YsffC,YsffC,Ysff,Ysff,{{9,17},{8,14},{6,15},{5,11},{3,18},{2,12}}],{5,6,1,4,2,3}]
@@ -8373,7 +8448,7 @@ S4V2F[x_]:=Module[{terms},
 				+3 Transpose[Contract[gvff,gvff,YsffC,YsffC,Ysff,Ysff,{{12,18},{11,15},{6,17},{5,9},{3,14},{2,8}}],{5,6,1,2,3,4}]
 				+3 Transpose[Contract[gvff,gvff,YsffC,YsffC,Ysff,Ysff,{{12,18},{11,15},{6,17},{5,9},{3,14},{2,8}}],{5,6,1,3,2,4}]
 				+3 Transpose[Contract[gvff,gvff,YsffC,YsffC,Ysff,Ysff,{{12,18},{11,15},{6,17},{5,9},{3,14},{2,8}}],{5,6,1,4,2,3}]
-			) Zf[3,0],
+			] Zf[3,0],
 			
 			True, "NOT ALLOWED X VALUE"
 			];
@@ -8387,7 +8462,7 @@ S2V4B[x_]:=Module[{terms},
 	terms=
 		Which[
 			x==1,
-			-(1/(48 xi^2)) (
+			-(1/(48 xi^2)) SymmetricTensorSum[{{1,2},{3,4,5,6}},
 				+48 xi^2 Contract[lam4,HabijV,HabijV,{{8,12},{4,11},{3,7}}]
 				-192 xi^3 Contract[gvss,gvss,gvss,HabijV,gvvv,{{9,12},{6,13},{4,16},{3,8},{1,15}}]
 				+32 N xi^3 Contract[gvss,gvss,gvss,HabijV,gvvv,{{9,12},{6,13},{4,16},{3,8},{1,15}}]
@@ -14157,8 +14232,8 @@ S2V4B[x_]:=Module[{terms},
 				+11 N^2 xi^4 Transpose[Contract[gvss,gvss,gvvv,gvvv,gvvv,gvvv,{{15,18},{12,17},{8,14},{4,11},{3,6},{1,9}}],{2,1,3,4,5,6}]
 				-2 N xi^5 Transpose[Contract[gvss,gvss,gvvv,gvvv,gvvv,gvvv,{{15,18},{12,17},{8,14},{4,11},{3,6},{1,9}}],{2,1,3,4,5,6}]
 				-N^2 xi^5 Transpose[Contract[gvss,gvss,gvvv,gvvv,gvvv,gvvv,{{15,18},{12,17},{8,14},{4,11},{3,6},{1,9}}],{2,1,3,4,5,6}]
-			) Zb[3,0]
-			+1/10 (
+			] Zb[3,0]
+			+1/10 SymmetricTensorSum[{{1,2},{3,4,5,6}},
 				-160 Contract[lam3,lam3,gvss,gvss,gvss,gvss,{{9,11},{8,15},{6,12},{5,18},{3,17},{2,14}}]
 				+36 N Contract[lam3,lam3,gvss,gvss,gvss,gvss,{{9,11},{8,15},{6,12},{5,18},{3,17},{2,14}}]
 				-2 N^2 Contract[lam3,lam3,gvss,gvss,gvss,gvss,{{9,11},{8,15},{6,12},{5,18},{3,17},{2,14}}]
@@ -14492,7 +14567,7 @@ S2V4B[x_]:=Module[{terms},
 				-5 N Transpose[Contract[gvss,lam3,lam3,HabijV,gvss,{{13,16},{9,15},{5,8},{3,12},{2,6}}],{6,1,2,3,5,4}]
 				+40 Transpose[Contract[gvss,lam3,lam3,HabijV,gvss,{{13,16},{9,15},{5,8},{3,12},{2,6}}],{6,1,2,4,5,3}]
 				-5 N Transpose[Contract[gvss,lam3,lam3,HabijV,gvss,{{13,16},{9,15},{5,8},{3,12},{2,6}}],{6,1,2,4,5,3}]
-			) Zb[4,0],
+			] Zb[4,0],
 			
 			True, "NOT ALLOWED X VALUE"
 			];
@@ -14503,7 +14578,7 @@ S2V4F[x_]:=Module[{terms},
 	terms=
 		Which[
 			x==1,
-			1/3 (
+			1/3 SymmetricTensorSum[{{1,2},{3,4,5,6}},
 				+6 Transpose[Contract[gvff,gvff,YsffC,Ysff,gvff,gvff,{{9,14},{8,11},{6,12},{5,18},{3,17},{2,15}}],{5,6,1,2,3,4}]
 				-6 N Transpose[Contract[gvff,gvff,YsffC,Ysff,gvff,gvff,{{9,14},{8,11},{6,12},{5,18},{3,17},{2,15}}],{5,6,1,2,3,4}]
 				+(N^2) Transpose[Contract[gvff,gvff,YsffC,Ysff,gvff,gvff,{{9,14},{8,11},{6,12},{5,18},{3,17},{2,15}}],{5,6,1,2,3,4}]
@@ -14768,7 +14843,7 @@ S2V4F[x_]:=Module[{terms},
 				+6 Transpose[Contract[gvff,gvff,YsffC,Ysff,gvff,gvff,{{15,17},{12,18},{8,11},{6,14},{3,5},{2,9}}],{5,6,2,1,3,4}]
 				-6 N Transpose[Contract[gvff,gvff,YsffC,Ysff,gvff,gvff,{{15,17},{12,18},{8,11},{6,14},{3,5},{2,9}}],{5,6,2,1,3,4}]
 				+N^2 Transpose[Contract[gvff,gvff,YsffC,Ysff,gvff,gvff,{{15,17},{12,18},{8,11},{6,14},{3,5},{2,9}}],{5,6,2,1,3,4}]
-			) Zf[3,0],
+			] Zf[3,0],
 			
 			True, "NOT ALLOWED X VALUE"
 			];
@@ -14782,7 +14857,7 @@ V6B[x_]:=Module[{terms},
 	terms=
 		Which[
 			x==1,
-			(
+			SymmetricTensorSum[{{1,2,3,4,5,6}},
 				+1/3 (12-2 N) Contract[HabijV,HabijV,gvss,gvss,{{8,14},{7,11},{4,13},{3,10}}]
 				+1/3 (12-2 N) Contract[HabijV,HabijV,gvss,gvss,{{10,13},{7,11},{4,8},{3,14}}]
 				+1/3 (12-2 N) Contract[HabijV,HabijV,gvss,gvss,{{10,13},{7,14},{4,8},{3,11}}]
@@ -15977,7 +16052,7 @@ V6B[x_]:=Module[{terms},
 				+1/(480 xi^3) (-8 N-6 N^2-N^3-472 N xi-144 N^2 xi+46 N^3 xi-4760 N xi^2+2230 N^2 xi^2-255 N^3 xi^2+7680 xi^3+560 N xi^3-1760 N^2 xi^3+260 N^3 xi^3-4760 N xi^4+2230 N^2 xi^4-255 N^3 xi^4-472 N xi^5-144 N^2 xi^5+46 N^3 xi^5-8 N xi^6-6 N^2 xi^6-N^3 xi^6) Transpose[Contract[gvvv,gvvv,gvvv,gvvv,gvvv,gvvv,{{15,18},{12,17},{8,14},{6,9},{3,5},{2,11}}],{5,6,1,2,3,4}]
 				+1/(480 xi^3) (-8 N-6 N^2-N^3-72 N xi-24 N^2 xi+6 N^3 xi-360 N xi^2+150 N^2 xi^2-15 N^3 xi^2+480 xi^3+400 N xi^3-240 N^2 xi^3+20 N^3 xi^3-360 N xi^4+150 N^2 xi^4-15 N^3 xi^4-72 N xi^5-24 N^2 xi^5+6 N^3 xi^5-8 N xi^6-6 N^2 xi^6-N^3 xi^6) Transpose[Contract[gvvv,gvvv,gvvv,gvvv,gvvv,gvvv,{{15,18},{12,17},{9,14},{6,8},{3,11},{2,5}}],{5,6,1,2,3,4}]
 				+1/(480 xi^3) (-8 N-6 N^2-N^3-72 N xi-24 N^2 xi+6 N^3 xi-360 N xi^2+150 N^2 xi^2-15 N^3 xi^2+480 xi^3+400 N xi^3-240 N^2 xi^3+20 N^3 xi^3-360 N xi^4+150 N^2 xi^4-15 N^3 xi^4-72 N xi^5-24 N^2 xi^5+6 N^3 xi^5-8 N xi^6-6 N^2 xi^6-N^3 xi^6) Transpose[Contract[gvvv,gvvv,gvvv,gvvv,gvvv,gvvv,{{15,18},{12,17},{9,14},{6,11},{3,8},{2,5}}],{5,6,1,2,3,4}]
-			) Zb[3,0],
+			] Zb[3,0],
 			
 			True, "NOT ALLOWED X VALUE"
 			];
@@ -15988,7 +16063,7 @@ V6F[x_]:=Module[{terms},
 	terms=
 		Which[
 			x==1,
-			2/15 (-5+N) (-3+N) (-1+N) (
+			2/15 (-5+N) (-3+N) (-1+N) SymmetricTensorSum[{{1,2,3,4,5,6}},
 				+Transpose[Contract[gvff,gvff,gvff,gvff,gvff,gvff,{{9,11},{8,15},{6,14},{5,18},{3,17},{2,12}}],{5,6,1,2,3,4}]
 				+Transpose[Contract[gvff,gvff,gvff,gvff,gvff,gvff,{{9,11},{8,15},{6,17},{5,12},{3,14},{2,18}}],{5,6,1,2,3,4}]
 				+Transpose[Contract[gvff,gvff,gvff,gvff,gvff,gvff,{{9,11},{8,18},{6,14},{5,12},{3,17},{2,15}}],{5,6,1,2,3,4}]
@@ -16109,7 +16184,7 @@ V6F[x_]:=Module[{terms},
 				+Transpose[Contract[gvff,gvff,gvff,gvff,gvff,gvff,{{15,17},{12,14},{8,18},{6,11},{3,5},{2,9}}],{5,6,1,2,3,4}]
 				+Transpose[Contract[gvff,gvff,gvff,gvff,gvff,gvff,{{15,17},{12,14},{9,11},{5,18},{3,8},{2,6}}],{5,6,1,2,3,4}]
 				+Transpose[Contract[gvff,gvff,gvff,gvff,gvff,gvff,{{15,17},{12,14},{9,11},{6,8},{3,5},{2,18}}],{5,6,1,2,3,4}]
-			) Zf[3,0],
+			] Zf[3,0],
 			
 			True, "NOT ALLOWED X VALUE"
 			];
@@ -16240,15 +16315,24 @@ ODIM6[x_,d_]:=Module[{terms},
 	linear equations needed for matching. The companion list n assigns each
 	tensor in O to its internal basis label. Missing labels are skipped, which
 	lets callers solve for only the subset of operators they care about.
+	Only the components in which a tensor is nonzero give equations, and the
+	components related by index symmetries give the same equation, which is
+	kept once: e.g. the tensors of A0^6 of QCD have 8^6 components, of which a
+	tenth are nonzero.
 *)
 MatchingEquations[operator_, max_Integer, O_List, n_List, d_] := Module[{positions},
 	positions = PositionIndex[n];
-	Flatten@Table[
+	DeleteDuplicates@Flatten@Table[
 		With[{position = Lookup[positions, i, {}]},
-			If[position === {}, {}, Thread[Flatten[O[[First[position]]]] == Flatten[operator[i, d]]]]
+			If[position === {}, {}, ComponentEquations[O[[First[position]]], operator[i, d]]]
 		],
 		{i, max}
 	]
+];
+
+ComponentEquations[o_, op_] := Module[{so = Flatten[SparseArray[o]], sop = Flatten[SparseArray[op]], positions},
+	positions = Union[so["NonzeroPositions"], sop["NonzeroPositions"]];
+	DeleteDuplicates[MapThread[Equal, {Extract[so, positions], Extract[sop, positions]}]]
 ];
 
 
@@ -16268,11 +16352,12 @@ Dimension5Matching[O_List,n_List,\[Alpha]_List,d_]:=Module[{eqns},
 	Dimension6Matching:
 	Dimension-6 matching on the 20-element basis encoded in ODIM6. Duplicate
 	equations are removed after simplification because index symmetries can make
-	several tensor components equivalent.
+	several tensor components equivalent. FullSimplify acts on each equation:
+	of the list as a whole, it takes a hundred times longer.
 *)
 Dimension6Matching[O_List,n_List,\[Alpha]_List,d_]:=Module[{eqns},
 	CreateHelpTensors[];
-	eqns = DeleteDuplicates[FullSimplify[MatchingEquations[ODIM6, 20, O, n, d]]];
+	eqns = DeleteDuplicates[FullSimplify /@ MatchingEquations[ODIM6, 20, O, n, d]];
 	Solve[eqns,\[Alpha]]
 ];
 

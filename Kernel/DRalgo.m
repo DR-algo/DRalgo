@@ -1063,6 +1063,8 @@ Expands all elements in Lp in terms of basDR.
 	setVecs=Table[Coefficient[i,basDR],{i,Lp}]/.varFix;  
 (*Delete columns with only 0s*)
 	setVecs=Transpose[DeleteCases[Transpose[setVecs], {0 ..}, Infinity]];
+(*Without nonzero entries, as for the quartics of a model without scalars or quartics, all entries stay zero*)
+	If[setVecs==={},Return[ConstantArray[0,Length[Lp]]]];
 
 (*Finds independent basis*)
 	rr = setVecs // Transpose // RowReduce;
