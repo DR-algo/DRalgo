@@ -16291,17 +16291,27 @@ ODIM6[x_,d_]:=Module[{terms},
 			x==17,
 			-V2D4[1]T^(2/2-1),
 			
+			(*
+				the parity-violating operators contain Ftilde_i = (1/2) eps_ijk F_jk, so that their coefficients are
+				twice those of eps_ijk F_jk = 2 Ftilde_i
+			*)
 			x==18,
-			-I/2 V3D3[3]T^(3/2-1),
+			-I V3D3[3]T^(3/2-1),
 			
 			x==19,
-			-1/2 (S2V2D2[4])T^(4/2-1),
+			-(S2V2D2[4])T^(4/2-1),
 			
 			x==20,
-			(1/6)(V4D2[3])T^(4/2-1),		
+			(1/3)(V4D2[3])T^(4/2-1),		
 			
 			True, "NOT ALLOWED X VALUE"
 			];
+	(*
+		The two scalars of O(6,2), O(6,5) and O(6,7) enter symmetrically. Away from d = 3, the fermion loops of
+		S2V2D2F have parts antisymmetric in them, which do not contribute to the operators and are removed, so that
+		the matching onto symmetric tensors has a solution for any d.
+	*)
+	If[MemberQ[{2,5,7},x],terms=(terms+Transpose[terms,{2,1,3,4}])/2];
 	Normal[terms]/.{N->d}// SparseArray // SimplifySparse
 ];
 
