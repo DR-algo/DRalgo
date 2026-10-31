@@ -191,9 +191,13 @@ sol6P=Dimension6Matching["PHYS",{OTP[6,8]},{8},{\[Beta][\[Phi]^6]},d][[1]];
 testList={};
 
 
+(*
+	The terms with m\[Psi] in the dimension-5 coefficients are the fermion loops with one insertion of the
+	fermion mass, which agree with the matching of Matchotter (2604.21972) off-shell and on-shell.
+*)
 AppendTo[testList,
 TestCreate[sol5,
-	{\[Alpha][5,1]->10368 T^(3/2) (5 \[Kappa] \[Lambda]^2 Zb[3,0]-15 \[Kappa]^3 \[Lambda] Zb[4,0]+9 \[Kappa]^5 Zb[5,0]),\[Beta][5,1]->6 Sqrt[T] (-4 \[Kappa] \[Lambda] Zb[3,0]+9 \[Kappa]^3 Zb[4,0])}
+	{\[Alpha][5,1]->96 T^(3/2) (540 \[Kappa] \[Lambda]^2 Zb[3,0]-1620 \[Kappa]^3 \[Lambda] Zb[4,0]+972 \[Kappa]^5 Zb[5,0]-5 m\[Psi] y^5 Zf[3,0]),\[Beta][5,1]->2/3 Sqrt[T] (-36 \[Kappa] \[Lambda] Zb[3,0]+81 \[Kappa]^3 Zb[4,0]+10 m\[Psi] y^3 Zf[3,0])}
 ]];
 
 AppendTo[testList,
@@ -203,7 +207,7 @@ TestCreate[sol6,
 
 AppendTo[testList,
 TestCreate[ODIM5[5,d][[1,1,1]],
-	6 Sqrt[T] (-4 \[Kappa] \[Lambda] Zb[3,0]+9 \[Kappa]^3 Zb[4,0])
+	2/3 Sqrt[T] (-36 \[Kappa] \[Lambda] Zb[3,0]+81 \[Kappa]^3 Zb[4,0]+10 m\[Psi] y^3 Zf[3,0])
 ]];
 
 AppendTo[testList,
@@ -223,7 +227,7 @@ TestCreate[HardThermal1LoopInt["F",3,0,3],
 
 AppendTo[testList,
 TestCreate[sol5P,
-	{\[Beta][\[Phi]^5]->16 T^(3/2) \[Kappa] (2520 \[Lambda]^2 Zb[3,0]-5022 \[Kappa]^2 \[Lambda] Zb[4,0]+972 \[Kappa]^4 Zb[5,0]+25 y^4 Zf[3,0]-60 y^2 \[Lambda] Zf[3,0])}
+	{\[Beta][\[Phi]^5]->16 T^(3/2) (2520 \[Kappa] \[Lambda]^2 Zb[3,0]-5022 \[Kappa]^3 \[Lambda] Zb[4,0]+972 \[Kappa]^5 Zb[5,0]-30 m\[Psi] y^5 Zf[3,0]+25 y^4 \[Kappa] Zf[3,0]+100 m\[Psi] y^3 \[Lambda] Zf[3,0]-60 y^2 \[Kappa] \[Lambda] Zf[3,0])}
 ]];
 
 AppendTo[testList,

@@ -16199,7 +16199,8 @@ V6[x_]:=V6B[x]+V6F[x];
 	matching. Each case in the Which statement selects one canonically
 	normalized operator representative, evaluates the necessary helper tensors,
 	and finally substitutes N -> d so the result can be compared against a basis
-	defined in the requested spacetime dimension.
+	defined in the requested spacetime dimension. The fermion loops of ODIM5 need
+	an insertion of the fermion masses and are added by ODIM5Fermion.
 *)
 ODIM5[x_,d_]:=Module[{terms},
 	CreateHelpTensors[];
@@ -16231,7 +16232,7 @@ ODIM5[x_,d_]:=Module[{terms},
 			
 			True, "NOT ALLOWED X VALUE"			
 			];
-	Normal[terms]/.{N->d}// SparseArray // SimplifySparse
+	(Normal[terms]/.{N->d})+Normal[ODIM5Fermion[x,d]]// SparseArray // SimplifySparse
 ];
 
 
@@ -16302,6 +16303,70 @@ ODIM6[x_,d_]:=Module[{terms},
 			True, "NOT ALLOWED X VALUE"
 			];
 	Normal[terms]/.{N->d}// SparseArray // SimplifySparse
+];
+
+
+(*
+	The fermion loops depend on the scalars R only through the field-dependent masses muIJF + Ysff.R and
+	muIJFC + YsffC.R. An insertion of the fermion masses is therefore a scalar R_s = 1 whose Yukawa couplings are
+	muIJF and muIJFC. For the operators with scalars, ODIM6Spurion[x, d] is the fermionic part of ODIM6[x, d] with
+	the scalars extended by s = NS + 1, so that its components with one index s are the operators with one mass
+	insertion.
+*)
+ODIM6Spurion[x_,d_]:=Block[
+	{
+		Ysff=SparseArray[Append[Normal[Ysff],Normal[muIJF]]],
+		YsffC=SparseArray[Append[Normal[YsffC],Normal[muIJFC]]],
+		S2V1D3=S2V1D3F,S2V2D2=S2V2D2F,S4D2=S4D2F,S6=S6F,S4V2=S4V2F,S2V4=S2V4F,
+		CreateHelpTensors=Null&
+	},
+	ODIM6[x,d]
+];
+
+
+(*
+	ODIM5Fermion[x, d]: the fermion loops of ODIM5[x, d], with one insertion of the fermion masses. With R_s = 1,
+	the operators of ODIM6Spurion with one index s have five fields. Since D_i R_s = 0 and D_i Ftilde_i = 0, they
+	reduce by integrations by parts to the operators of ODIM5:
+		O(6,2), O(6,9), O(6,10), O(6,11) give O(5,1), O(5,2), O(5,3), O(5,4);
+		O(6,4) gives (D_iR)_1 (D_iR)_2 R_3 P_123 = -(1/2)(P_123+P_132-P_231) (D_jD_jR)_1 R_2 R_3 for P symmetric
+		in 1,2, i.e. O(5,5);
+		O(6,6) and O(6,7) give (D_iR)_1 (D_iA0)^2 A0^3 and R_1 (D_iA0)^2 (D_iA0)^3, i.e. O(5,6) and O(5,7);
+		O(6,19) gives R_s (D_iR)_1 A0^2 Ftilde^3_i = -R_1 (D_iA0)^2 Ftilde^3_i, i.e. O(5,8).
+	O(6,14) gives (D_iR)_a (D_jF_ij)^c = -(1/2) g^b_ad F^b_ij F^c_ij R_d, whose tensor is antisymmetric in b, c by
+	gauge invariance and does not contribute to O(5,1).
+	A 3d field is the 4d one divided by T^(1/2), hence the factor T^(-1/2) between five and six fields.
+*)
+ODIM5Fermion[x_,d_]:=Module[{s=NS+1,r=Range[NS],p,b,c},
+	If[SparseArray[muIJF]["NonzeroPositions"]==={},Return[0]];
+	T^(-1/2) Which[
+		x==1,
+		ODIM6Spurion[2,d][[r,s,All,All]],
+
+		x==2,
+		ODIM6Spurion[9,d][[r,r,r,r,r,s]],
+
+		x==3,
+		ODIM6Spurion[10,d][[r,r,r,s,All,All]],
+
+		x==4,
+		ODIM6Spurion[11,d][[r,s,All,All,All,All]],
+
+		x==5,
+		p=ODIM6Spurion[4,d][[r,r,r,s]];
+		-(p+Transpose[p,{1,3,2}]-Transpose[p,{2,3,1}])/2,
+
+		x==6||x==7,
+		b=ODIM6Spurion[6,d][[r,s,All,All]];
+		c=ODIM6Spurion[7,d][[r,s,All,All]];
+		c=(c+Transpose[c,{1,3,2}])/2;
+		If[x==6,-(b+Transpose[b,{1,3,2}])/2+c/2,-(b-Transpose[b,{1,3,2}])/2-c/2],
+
+		x==8,
+		-ODIM6Spurion[19,d][[s,r,All,All]],
+
+		True, "NOT ALLOWED X VALUE"
+		]
 ];
 
 
