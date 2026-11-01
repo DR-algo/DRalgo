@@ -16201,7 +16201,13 @@ V6[x_]:=V6B[x]+V6F[x];
 	and finally substitutes N -> d so the result can be compared against a basis
 	defined in the requested spacetime dimension. The fermion loops of ODIM5 need
 	an insertion of the fermion masses and are added by ODIM5Fermion.
+	The substitution acts on the rules of the sparse tensors, since the dense
+	tensors of the operators with six fields have NS^6 components.
 *)
+SubstituteSparse[tensor_,rules_]:=Module[{t=SparseArray[tensor]},
+	SparseArray[ArrayRules[t]/.rules,Dimensions[t]]
+];
+
 ODIM5[x_,d_]:=Module[{terms},
 	CreateHelpTensors[];
 	terms=
@@ -16232,11 +16238,16 @@ ODIM5[x_,d_]:=Module[{terms},
 			
 			True, "NOT ALLOWED X VALUE"			
 			];
-	(Normal[terms]/.{N->d})+Normal[ODIM5Fermion[x,d]]// SparseArray // SimplifySparse
+	SubstituteSparse[terms,N->d]+ODIM5Fermion[x,d]// SimplifySparse
 ];
 
 
-ODIM6[x_,d_]:=Module[{terms},
+(*
+	ODIM6Terms[x] is the sparse tensor of ODIM6[x, d] before the substitution N -> d.
+*)
+ODIM6[x_,d_]:=SubstituteSparse[ODIM6Terms[x],N->d]// SimplifySparse;
+
+ODIM6Terms[x_]:=Module[{terms},
 	CreateHelpTensors[];
 	terms=
 		Which[
@@ -16312,25 +16323,25 @@ ODIM6[x_,d_]:=Module[{terms},
 		the matching onto symmetric tensors has a solution for any d.
 	*)
 	If[MemberQ[{2,5,7},x],terms=(terms+Transpose[terms,{2,1,3,4}])/2];
-	Normal[terms]/.{N->d}// SparseArray // SimplifySparse
+	terms
 ];
 
 
 (*
 	The fermion loops depend on the scalars R only through the field-dependent masses muIJF + Ysff.R and
 	muIJFC + YsffC.R. An insertion of the fermion masses is therefore a scalar R_s = 1 whose Yukawa couplings are
-	muIJF and muIJFC. For the operators with scalars, ODIM6Spurion[x, d] is the fermionic part of ODIM6[x, d] with
+	muIJF and muIJFC. For the operators with scalars, ODIM6Spurion[x] is the fermionic part of ODIM6Terms[x] with
 	the scalars extended by s = NS + 1, so that its components with one index s are the operators with one mass
-	insertion.
+	insertion. It stays sparse, and only these components are converted.
 *)
-ODIM6Spurion[x_,d_]:=Block[
+ODIM6Spurion[x_]:=Block[
 	{
-		Ysff=SparseArray[Append[Normal[Ysff],Normal[muIJF]]],
-		YsffC=SparseArray[Append[Normal[YsffC],Normal[muIJFC]]],
+		Ysff=Join[SparseArray[Ysff],SparseArray[{muIJF}]],
+		YsffC=Join[SparseArray[YsffC],SparseArray[{muIJFC}]],
 		S2V1D3=S2V1D3F,S2V2D2=S2V2D2F,S4D2=S4D2F,S6=S6F,S4V2=S4V2F,S2V4=S2V4F,
 		CreateHelpTensors=Null&
 	},
-	ODIM6[x,d]
+	ODIM6Terms[x]
 ];
 
 
@@ -16349,34 +16360,34 @@ ODIM6Spurion[x_,d_]:=Block[
 *)
 ODIM5Fermion[x_,d_]:=Module[{s=NS+1,r=Range[NS],p,b,c},
 	If[SparseArray[muIJF]["NonzeroPositions"]==={},Return[0]];
-	T^(-1/2) Which[
+	SubstituteSparse[T^(-1/2) Which[
 		x==1,
-		ODIM6Spurion[2,d][[r,s,All,All]],
+		ODIM6Spurion[2][[r,s,All,All]],
 
 		x==2,
-		ODIM6Spurion[9,d][[r,r,r,r,r,s]],
+		ODIM6Spurion[9][[r,r,r,r,r,s]],
 
 		x==3,
-		ODIM6Spurion[10,d][[r,r,r,s,All,All]],
+		ODIM6Spurion[10][[r,r,r,s,All,All]],
 
 		x==4,
-		ODIM6Spurion[11,d][[r,s,All,All,All,All]],
+		ODIM6Spurion[11][[r,s,All,All,All,All]],
 
 		x==5,
-		p=ODIM6Spurion[4,d][[r,r,r,s]];
+		p=ODIM6Spurion[4][[r,r,r,s]];
 		-(p+Transpose[p,{1,3,2}]-Transpose[p,{2,3,1}])/2,
 
 		x==6||x==7,
-		b=ODIM6Spurion[6,d][[r,s,All,All]];
-		c=ODIM6Spurion[7,d][[r,s,All,All]];
+		b=ODIM6Spurion[6][[r,s,All,All]];
+		c=ODIM6Spurion[7][[r,s,All,All]];
 		c=(c+Transpose[c,{1,3,2}])/2;
 		If[x==6,-(b+Transpose[b,{1,3,2}])/2+c/2,-(b-Transpose[b,{1,3,2}])/2-c/2],
 
 		x==8,
-		-ODIM6Spurion[19,d][[s,r,All,All]],
+		-ODIM6Spurion[19][[s,r,All,All]],
 
 		True, "NOT ALLOWED X VALUE"
-		]
+		],N->d]
 ];
 
 
@@ -16503,7 +16514,7 @@ ODIM5["PHYS",x_,d_]:=Module[{terms},
 			
 			True, "NOT ALLOWED X VALUE"			
 			];
-	Normal[terms]/.{N->d}// SparseArray // SimplifySparse
+	SubstituteSparse[terms,N->d]// SimplifySparse
 ];
 
 ODIM6["PHYS",x_,d_]:=Module[{terms},
@@ -16548,7 +16559,7 @@ ODIM6["PHYS",x_,d_]:=Module[{terms},
 			
 			True, "NOT ALLOWED X VALUE"			
 			];
-	Normal[terms]/.{N->d}// SparseArray // SimplifySparse
+	SubstituteSparse[terms,N->d]// SimplifySparse
 ];
 
 
