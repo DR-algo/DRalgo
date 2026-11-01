@@ -22,7 +22,7 @@ Check[
 
 
 (*
-	The model of examples/ScalYukawa.m, see 2108.04377 and 2310.02308, and issues #36, #37, and #38.
+	The model of examples/03_scalar_yukawa.m, see 2108.04377 and 2310.02308, and issues #36, #37, and #38.
 
 	At the order computed, the parameters of the 3d theory do not depend on the 4d scale mu4:
 	the explicit mu4-dependence of the NLO terms, through Lb and Lf, cancels the running of

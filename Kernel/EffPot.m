@@ -371,14 +371,8 @@ If[verbose==True,Print["Calculating the 2-Loop Effective Potential"]];
 	{fvvv,f\[Eta]\[Eta]v,fssv,fvvs,fsss,fss,fvs,fvv}=TwoLoopFunctions[mu3US];
 (*Potential*)
 
-	If[Length[TensorDimensions[lam4\[Phi]]]<4,
-	(*This occurs when the FastRotation->True option is used for mass diagonalization*)
-		ss=1/8 TensorProduct[lam4\[Phi]];
-		Vss=Sum[ss[[j,k]]fss[aS[[j]],aS[[k]]],{j,nsEP},{k,nsEP}];
-	,
-		ss=1/8 TensorProduct[lam4\[Phi]];
-		Vss=Sum[ss[[j,j,k,k]]fss[aS[[j]],aS[[k]]],{j,nsEP},{k,nsEP}];
-	];
+	ss=1/8 TensorProduct[lam4\[Phi]];
+	Vss=Sum[ss[[j,j,k,k]]fss[aS[[j]],aS[[k]]],{j,nsEP},{k,nsEP}];
 	sss=1/12 TensorProduct[lam3\[Phi],lam3\[Phi]];
 	Vsss=Sum[sss[[i,j,k,i,j,k]]fsss[aS[[i]],aS[[j]],aS[[k]]],{j,nsEP},{k,nsEP},{i,nsEP}];
 	vvs=1/4 TensorProduct[Gvvs\[Phi],Gvvs\[Phi]];
@@ -495,7 +489,7 @@ RotateTensorsUSPostVEV[DScalarsp_,DVectorsp_]:=Module[{DS=DScalarsp,DV=DVectorsp
 (*
 	Rotates to a diagonal-mass basis.
 *)
-RotateTensorsCustomMass[DScalarsp_,DVectorsp_,ScalarMass_,vectorMass_,OptionsPattern[]]:=Module[{DS=DScalarsp,DV=DVectorsp},
+RotateTensorsCustomMass[DScalarsp_,DVectorsp_,ScalarMass_,vectorMass_,OptionsPattern[]]:=Module[{DS=DScalarsp,DV=DVectorsp,lam4Diagonal},
 	
 	DS=DS//SparseArray;
 	DV=DV//SparseArray;
@@ -503,7 +497,11 @@ RotateTensorsCustomMass[DScalarsp_,DVectorsp_,ScalarMass_,vectorMass_,OptionsPat
 	If[OptionValue[FastRotation],
 		(*For large rotation matrices we can simplify the two-loop calculation by only doing the rotation for Subscript[lam, iikk] components*)
 		RotHelp=Flatten[TensorProduct[DS,DS],{{2},{4},{1,3}}]//DiagonalTensor2[#,1,2]&;
-		lam4\[Phi]=RotHelp . Flatten[lam4\[Phi] ,{{1,2},{3,4}}] . Transpose[RotHelp];
+		lam4Diagonal=RotHelp . Flatten[lam4\[Phi] ,{{1,2},{3,4}}] . Transpose[RotHelp];
+		(*The rotated quartic stays a rank-4 tensor, whose only non-zero components are Subscript[lam, iikk]*)
+		lam4\[Phi]=SparseArray[
+			Cases[ArrayRules[lam4Diagonal],({i_Integer,k_Integer}->x_):>({i,i,k,k}->x)],
+			Table[Length[DS],4]];
 		
 		RotHelp=Flatten[TensorProduct[DS,DS,DS],{{2},{4},{6},{1,3,5}}];
 		lam3\[Phi]=RotHelp . Flatten[lam3\[Phi]];
