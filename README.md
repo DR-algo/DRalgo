@@ -108,7 +108,7 @@ These examples can be executed directly within a Mathematica notebook or via [Wo
 To run an example file using Wolframscript, use the following command:
 
 ```bash
-$ wolframscript -file examples/xsm.m
+$ wolframscript -file examples/15_smRealSinglet.m
 ```
 
 Ensure that an active `WolframKernel` is available for the above command to work.
@@ -144,30 +144,33 @@ DRalgo/
 │                                     of dimension-5 and dimension-6 operators; exposes the public
 │                                     routines Dimension5Matching and Dimension6Matching.
 ├── examples/
-│   ├── xsm.m                         Real singlet extension of the Standard Model (xSM).
-│   ├── cxsm.m                        Complex singlet extension of the Standard Model (CxSM).
-│   ├── 2xsm.m                        Two real singlet extensions of the Standard Model.
-│   ├── ah.m                          Abelian Higgs model.
-│   ├── ah-thermo.m                   Abelian Higgs model with thermodynamic output.
-│   ├── sm.m                          Standard Model.
-│   ├── smCKM.m                       Standard Model with CKM mixing.
-│   ├── smDim6.m                      Standard Model with dimension-6 operators.
-│   ├── smZp.m                        Standard Model extended with a Z′ boson.
-│   ├── 2hdm.m                        Two-Higgs-doublet model (2HDM).
-│   ├── 3hdm.m                        Three-Higgs-doublet model (3HDM).
-│   ├── htm.m                         Higgs triplet model.
-│   ├── SU5.m                         SU(5) grand unified theory.
-│   ├── LRSymmetric.m                 Left–right symmetric model.
-│   ├── RealScalar.m                  Simple real scalar field theory.
-│   ├── ScalYukawa.m                  Scalar–Yukawa model.
-│   ├── WessZumino.m                  Wess–Zumino model.
-│   ├── dark-su2-higgs-singlet.m      Dark SU(2) model with Higgs and singlet.
-│   ├── tripletHET.m                  Higgs triplet model with heavy-field EFT matching.
-│   ├── ah_HDO.m                      Abelian Higgs model with higher-dimensional operators.
-│   ├── sm_HDO.m                      Standard Model with higher-dimensional operators.
-│   ├── ScalYukawa_HDO.m              Scalar–Yukawa model with higher-dimensional operators.
-│   ├── QCD_HDO.m                     QCD with higher-dimensional operators.
-│   └── SU2+Higgs_HDO.m               SU(2)–Higgs model with higher-dimensional operators.
+│   ├── 01_abelianHiggs.m             Abelian Higgs model.
+│   ├── 02_abelianHiggsDimension6.m   Abelian Higgs model with dimension-6 operators.
+│   ├── 03_scalarYukawa.m             Scalar–Yukawa model.
+│   ├── 04_scalarYukawaDimension56.m  Scalar–Yukawa model with dimension-5 and dimension-6 operators.
+│   ├── 05_twoHiggsDoublet.m          Two-Higgs-doublet model (2HDM).
+│   ├── 06_abelianHiggsThermodynamics.m
+│   │                                 Abelian Higgs model with thermodynamic output.
+│   ├── 07_su5GUT.m                   SU(5) grand unified theory.
+│   ├── 08_su2Higgs.m                 SU(2)–Higgs model with dimension-6 operators.
+│   ├── 09_qcd.m                      QCD with dimension-6 operators.
+│   ├── 10_realScalar.m               Simple real scalar field theory.
+│   ├── 11_wessZumino.m               Wess–Zumino model.
+│   ├── 12_standardModel.m            Standard Model.
+│   ├── 13_smCKM.m                    Standard Model with CKM mixing.
+│   ├── 14_smZPrime.m                 Standard Model extended with a Z′ boson.
+│   ├── 15_smRealSinglet.m            Real singlet extension of the Standard Model (xSM).
+│   ├── 16_smTwoSinglets.m            Two real singlet extensions of the Standard Model.
+│   ├── 17_smComplexSinglet.m         Complex singlet extension of the Standard Model (CxSM).
+│   ├── 18_threeHiggsDoublets.m       Three-Higgs-doublet model (3HDM).
+│   ├── 19_threeHiggsDoubletsDarkCP.m Z2-symmetric 3HDM with a CP-violating dark sector.
+│   ├── 20_higgsTriplet.m             Higgs triplet model.
+│   ├── 21_leftRightSymmetric.m       Left–right symmetric model.
+│   ├── 22_smDimension6.m             Standard Model with dimension-6 operators.
+│   ├── 23_smSextic.m                 Standard Model with a dimension-6 Higgs self-coupling.
+│   ├── 24_darkSU2HiggsSinglet.m      Dark SU(2) model with Higgs and singlet.
+│   ├── 25_tripletHET.m               Higgs triplet model with heavy-field EFT matching.
+│   └── 26_scotogenic.m               Scotogenic model with heavy-field EFT matching.
 │                                     the Wolfram Repository.
 ├── PacletInfo.m                      Paclet metadata (name, version, dependencies).
 │                                     the Wolfram Repository.
