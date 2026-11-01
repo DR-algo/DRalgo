@@ -108,7 +108,7 @@ exampleModel[file_]:=Module[{text,start,stop},
 	StringTake[text,stop]
 ];
 
-(*15_smRealSinglet.m keeps the hypercharges as symbols, see ImportModelDRalgo::invariantif in tests/gauge-invariance.m*)
+(*15_smRealSinglet.m keeps the hypercharges as symbols, see ImportModelDRalgo::invariantif in tests/gaugeInvariance.m*)
 AppendTo[testList,
 VerificationTest[
 	Quiet[ToExpression[exampleModel["15_smRealSinglet.m"]],ImportModelDRalgo::invariantif],
