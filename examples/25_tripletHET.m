@@ -241,9 +241,9 @@ PrintTensorsVEV[1]//Normal
 (*
 In our case
 SU(2) bosons live on 9,10,11
-U(1) temporal scalars on 8
-SU(2) temporal scalars on 9,10,11
-SU(3) temporal scalars on 12,...,19
+SU(3) temporal scalars on 8,...,15
+SU(2) temporal scalars on 16,17,18
+U(1) temporal scalars on 19
 *)
 
 

@@ -282,7 +282,8 @@ The mass matrices of DefineVEVS are then replaced by their diagonals, so that De
 the next calculation";
 FastRotation::usage="\
 FastRotation is an option of RotateTensorsCustomMass. With FastRotation->True, only the components lam4_iikk \
-of the quartic couplings, which the two-loop potential needs, are rotated, which is faster for large rotation matrices";
+of the quartic couplings, which the two-loop potential needs, are rotated, which is faster for large rotation matrices. \
+The other components of the rotated quartic tensor are zero";
 CompareInvariants::usage="\
 Finds relations between couplings by calculating basis-invariant tensors";
 AllocateTensors::usage="\
@@ -522,7 +523,7 @@ Rename these couplings, since the results cannot distinguish them otherwise.";
 ImportModelDRalgo::noninvariant =
 "The couplings `1` are not invariant under the gauge group. CreateInvariant and CreateInvariantYukawa \
 set the U(1) charges to zero, so the conjugations of the fields must fit the charges, and in CreateInvariantYukawa \
-the left-handed fermions enter conjugated and the right-handed fermions not, as in the example sm.m. \
+the left-handed fermions enter conjugated and the right-handed fermions not, as in the example 12_standardModel.m. \
 For adjoint scalars of type \"A\", only the terms of CreateInvariant that are symmetric under rotations \
 of all components, such as the mass term, are invariant; use the type \"R\" instead.";
 ImportModelDRalgo::invariantif =

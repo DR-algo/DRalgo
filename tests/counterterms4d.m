@@ -38,7 +38,7 @@ Check[
 	  the relation \[Delta]x(FieldRenormalization->True) = \[Delta]x + \[Sum]_legs \[Delta]Z/2 x;
 	- a 2HDM with the top quark coupled to both doublets, which mixes the doublets, \[Delta]Z_12!=0:
 	  the same relation for the masses and the Yukawa couplings;
-	- the real scalar and Dirac fermion of examples/ScalYukawa.m: \[Delta]Z of Yukawa theory, and the
+	- the real scalar and Dirac fermion of examples/03_scalarYukawa.m: \[Delta]Z of Yukawa theory, and the
 	  same relation for the tadpole, the scalar mass, the cubic and quartic couplings, the Yukawa
 	  coupling, and the fermion mass.
 
@@ -307,7 +307,7 @@ VerificationTest[
 
 
 (* ::Section:: *)
-(*Real scalar and Dirac fermion of examples/ScalYukawa.m*)
+(*Real scalar and Dirac fermion of examples/03_scalarYukawa.m*)
 
 
 Group={"U1"};

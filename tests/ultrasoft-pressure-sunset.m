@@ -32,7 +32,7 @@ Check[
 	Checked here:
 	- one light and one heavy real scalar with all cubic couplings: the sunsets in PrintPressureUS["NLO"],
 	  and the mu3-dependence of the hard and ultrasoft pressure, which is that of the light sunset only;
-	- the scalar of examples/ScalYukawa.m integrated out, the example of issue #66: the mu3-dependence
+	- the scalar of examples/03_scalarYukawa.m integrated out, the example of issue #66: the mu3-dependence
 	  of the hard pressure is cancelled.
 *)
 
@@ -86,7 +86,7 @@ VerificationTest[
 (*Scalar Yukawa model with the scalar integrated out*)
 
 
-(*The model of examples/ScalYukawa.m, see tests/ScalYukawa-rg-invariance.m*)
+(*The model of examples/03_scalarYukawa.m, see tests/ScalYukawa-rg-invariance.m*)
 RepScalar={{{0},"R"}};
 RepFermion={{{0},"L"},{{0},"R"}};
 {gvvv,gvff,gvss,\[Lambda]1,\[Lambda]3,\[Lambda]4,\[Mu]ij,\[Mu]IJC,\[Mu]IJ,Ysff,YsffC}=AllocateTensors[Group,RepAdjoint,CouplingName,RepFermion,RepScalar];
