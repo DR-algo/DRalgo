@@ -22,7 +22,7 @@ Check[
 
 
 (*
-	Issue #32: a cubic coupling mu3, as in examples/24_dark_su2_higgs_singlet.m and examples/15_sm_real_singlet.m, is the
+	Issue #32: a cubic coupling mu3, as in examples/24_darkSU2HiggsSinglet.m and examples/15_smRealSinglet.m, is the
 	same symbol as the 3d renormalization scale mu3 in the results. ImportModelDRalgo warns if a coupling
 	has the name of the temperature T, of a renormalization scale mu4, mu3, or mu3US, of Lb, Lf, eps,
 	of the gauge parameter xi, or of a Debye mass.
@@ -30,8 +30,8 @@ Check[
 	Checked here:
 	- a real scalar with a cubic coupling mu3 or Lb gives the warning, with c3 not;
 	- SU(2) with a Higgs doublet whose mass is called musqSU2, the name of the Debye mass, gives the warning;
-	- the examples 15_sm_real_singlet.m and 24_dark_su2_higgs_singlet.m, whose cubic coupling is now c3, give no warning,
-	  nor 21_left_right_symmetric.m, whose mass of the triplets is now \[Mu]\[CapitalDelta].
+	- the examples 15_smRealSinglet.m and 24_darkSU2HiggsSinglet.m, whose cubic coupling is now c3, give no warning,
+	  nor 21_leftRightSymmetric.m, whose mass of the triplets is now \[Mu]\[CapitalDelta].
 *)
 
 
@@ -108,24 +108,24 @@ exampleModel[file_]:=Module[{text,start,stop},
 	StringTake[text,stop]
 ];
 
-(*15_sm_real_singlet.m keeps the hypercharges as symbols, see ImportModelDRalgo::invariantif in tests/gauge-invariance.m*)
+(*15_smRealSinglet.m keeps the hypercharges as symbols, see ImportModelDRalgo::invariantif in tests/gauge-invariance.m*)
 AppendTo[testList,
 VerificationTest[
-	Quiet[ToExpression[exampleModel["15_sm_real_singlet.m"]],ImportModelDRalgo::invariantif],
+	Quiet[ToExpression[exampleModel["15_smRealSinglet.m"]],ImportModelDRalgo::invariantif],
 	Null,
 	TestID->"example-xsm-does-not-warn"
 ]];
 
 AppendTo[testList,
 VerificationTest[
-	ToExpression[exampleModel["24_dark_su2_higgs_singlet.m"]],
+	ToExpression[exampleModel["24_darkSU2HiggsSinglet.m"]],
 	Null,
 	TestID->"example-dark-su2-higgs-singlet-does-not-warn"
 ]];
 
 AppendTo[testList,
 VerificationTest[
-	ToExpression[exampleModel["21_left_right_symmetric.m"]],
+	ToExpression[exampleModel["21_leftRightSymmetric.m"]],
 	Null,
 	TestID->"example-LRSymmetric-does-not-warn"
 ]];

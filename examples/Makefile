@@ -1,11 +1,11 @@
 # List of filenames
 FILES := \
-	01_abelian_higgs.m 03_scalar_yukawa.m 05_two_higgs_doublet.m \
-	06_ah_thermodynamics.m 07_su5_gut.m 10_real_scalar.m 11_wess_zumino.m \
-	12_standard_model.m 13_sm_ckm.m 14_sm_z_prime.m 15_sm_real_singlet.m \
-	16_sm_two_singlets.m 17_sm_complex_singlet.m 18_three_higgs_doublets.m \
-	20_higgs_triplet.m 21_left_right_symmetric.m 23_sm_sextic.m \
-	24_dark_su2_higgs_singlet.m 25_triplet_het.m 26_scotogenic.m
+	01_abelianHiggs.m 03_scalarYukawa.m 05_twoHiggsDoublet.m \
+	06_abelianHiggsThermodynamics.m 07_su5GUT.m 10_realScalar.m 11_wessZumino.m \
+	12_standardModel.m 13_smCKM.m 14_smZPrime.m 15_smRealSinglet.m \
+	16_smTwoSinglets.m 17_smComplexSinglet.m 18_threeHiggsDoublets.m \
+	20_higgsTriplet.m 21_leftRightSymmetric.m 23_smSextic.m \
+	24_darkSU2HiggsSinglet.m 25_tripletHET.m 26_scotogenic.m
 
 # Target: test
 test: make

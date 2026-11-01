@@ -22,16 +22,16 @@ Check[
 
 
 (*
-	Issue #42: PrintScalarKineticHET[] for examples/25_triplet_het.m, with the field normalization from the
+	Issue #42: PrintScalarKineticHET[] for examples/25_tripletHET.m, with the field normalization from the
 	scalar-scalar, scalar-vector, and vector-vector bubbles of ScalarSelfEnergyHET[]. The kinetic term is
 	(1+2 \[Delta]Z) (\[PartialD]R)^2/2 with \[Delta]Z=PrintScalarKineticHET[], in Landau gauge.
 
 	Checked here:
-	- 25_triplet_het.m with the SU(2) vectors integrated out: for the Higgs, 2\[Delta]Z=-11 g/(16\[Pi] \[CurlyPhi]) is the
+	- 25_tripletHET.m with the SU(2) vectors integrated out: for the Higgs, 2\[Delta]Z=-11 g/(16\[Pi] \[CurlyPhi]) is the
 	  term Z_NLO of 2512.05565 at g'=0; for the Goldstone modes and the triplet, the scalar-vector bubble
 	  with a massless scalar gives 2\[Delta]Z=-g/(\[Pi] \[CurlyPhi]) and -8g/(3\[Pi] \[CurlyPhi]);
-	- 25_triplet_het.m with the triplet integrated out: the scalar-scalar bubble with two heavy lines;
-	- 25_triplet_het.m in the soft theory with the SU(2) vectors and the temporal scalars integrated out,
+	- 25_tripletHET.m with the triplet integrated out: the scalar-scalar bubble with two heavy lines;
+	- 25_tripletHET.m in the soft theory with the SU(2) vectors and the temporal scalars integrated out,
 	  also with the vev {0,0,0,\[CurlyPhi]} of the 4d doublet only, as in issue #42, which DefineVEVS pads with zeros;
 	- the scalar-scalar bubble with one light and one heavy line, -1/(12\[Pi] M^3) in the p^2 term of
 	  1/(4\[Pi] p) ArcTan[p/M], for three real scalars with the cubic coupling c h \[Chi] s.
@@ -42,7 +42,7 @@ testList={};
 
 
 (* ::Section:: *)
-(*25_triplet_het.m*)
+(*25_tripletHET.m*)
 
 
 Group={"SU3","SU2","U1"};

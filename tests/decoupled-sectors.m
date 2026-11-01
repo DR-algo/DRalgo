@@ -37,7 +37,7 @@ Check[
 idealGas[nb_, nf_] := Pi^2 T^4/90 (nb + 7/8 nf);
 
 
-(*The potential of 10_real_scalar.m and 03_scalar_yukawa.m for the first scalar*)
+(*The potential of 10_realScalar.m and 03_scalarYukawa.m for the first scalar*)
 realScalarPotential[] := Module[{MassTerm},
 	\[Lambda]1=GradTadpole[\[Sigma] CreateInvariant[Group,RepScalar,{{1},{True}}][[1]]];
 	MassTerm=CreateInvariant[Group,RepScalar,{{1,1},{True,True}}][[1]];
@@ -66,7 +66,7 @@ tests={};
 (*A U(1) that couples to nothing does not contribute (ns!=nf)*)
 
 
-(*03_scalar_yukawa.m: a real scalar and a Dirac fermion (ns=1, nf=2)*)
+(*03_scalarYukawa.m: a real scalar and a Dirac fermion (ns=1, nf=2)*)
 Group={"U1"};
 CouplingName={g};
 RepAdjoint={0};
@@ -100,7 +100,7 @@ AppendTo[tests, VerificationTest[
 ]];
 
 
-(*11_wess_zumino.m: two real scalars and one Weyl fermion (ns=2, nf=1)*)
+(*11_wessZumino.m: two real scalars and one Weyl fermion (ns=2, nf=1)*)
 Group={"U1"};
 CouplingName={gY};
 RepAdjoint={0};
@@ -135,7 +135,7 @@ AppendTo[tests, VerificationTest[
 (*The result does not depend on whether ns equals nf*)
 
 
-(*10_real_scalar.m: a real scalar and no fermions (ns=nf=1 after padding)*)
+(*10_realScalar.m: a real scalar and no fermions (ns=nf=1 after padding)*)
 Group={"U1"};
 CouplingName={g};
 RepAdjoint={0};
@@ -209,7 +209,7 @@ AppendTo[tests, VerificationTest[
 (*The temporal scalar of a decoupled U(1) in the soft and ultrasoft theories*)
 
 
-(*03_scalar_yukawa.m*)
+(*03_scalarYukawa.m*)
 Group={"U1"};
 CouplingName={g};
 RepAdjoint={0};

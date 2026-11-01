@@ -22,7 +22,7 @@ Check[
 
 
 (*
-	Issue #54: a 3HDM with the \[CapitalSigma](36)-symmetric potential of examples/18_three_higgs_doublets.m in which
+	Issue #54: a 3HDM with the \[CapitalSigma](36)-symmetric potential of examples/18_threeHiggsDoublets.m in which
 	the top quark couples only to \[Phi]3. BetaFunctions4D gave \[Beta](\[Lambda]11) without a term yt3^4.
 
 	The Yukawa coupling breaks \[CapitalSigma](36), and the fermion loop generates (\[Phi]3^+ \[Phi]3)^2 alone,
@@ -31,16 +31,16 @@ Check[
 	components are inconsistent: some contain yt3^4, others do not.
 
 	BetaFunctions4D checks that the printed \[Beta]-functions reproduce the \[Beta]-function tensors,
-	and warns if not. examples/18_three_higgs_doublets.m is closed under renormalization: its potential is
+	and warns if not. examples/18_threeHiggsDoublets.m is closed under renormalization: its potential is
 	\[CapitalSigma](36)-invariant, and it has no Yukawa couplings. The Z2-symmetric 3HDM of
-	examples/19_three_higgs_doublets_dark_cp.m, see 2511.04636, couples the top quark to \[Phi]3 only and is closed as well.
+	examples/19_threeHiggsDoubletsDarkCP.m, see 2511.04636, couples the top quark to \[Phi]3 only and is closed as well.
 
 	Checked here:
 	- the issue model: BetaFunctions4D warns about the scalar quartics, and the fermion
 	  loop is present in the (\[Phi]3^+ \[Phi]3)^2 component of the \[Beta]-function tensor;
 	- the SM: no warning;
-	- examples/18_three_higgs_doublets.m: the potential is \[CapitalSigma](36)-invariant, and no warning;
-	- examples/19_three_higgs_doublets_dark_cp.m: the potential is Z2-invariant, no warning, and the top loop enters \[Beta](\[Lambda]33).
+	- examples/18_threeHiggsDoublets.m: the potential is \[CapitalSigma](36)-invariant, and no warning;
+	- examples/19_threeHiggsDoubletsDarkCP.m: the potential is Z2-invariant, no warning, and the top loop enters \[Beta](\[Lambda]33).
 *)
 
 
@@ -123,7 +123,7 @@ VerificationTest[
 
 
 (* ::Section:: *)
-(*examples/18_three_higgs_doublets.m*)
+(*examples/18_threeHiggsDoublets.m*)
 
 
 (*Evaluates the model part of an example file, without the lines that load DRalgo*)
@@ -137,7 +137,7 @@ loadExampleModel[file_String]:=Module[{text,lines,tmp},
 	Get[tmp];
 	DeleteFile[tmp];
 ];
-loadExampleModel["../examples/18_three_higgs_doublets.m"];
+loadExampleModel["../examples/18_threeHiggsDoublets.m"];
 
 (*
 	Generators of \[CapitalSigma](36) on the doublets (\[Phi]1,\[Phi]2,\[Phi]3), see 1410.6139: the cyclic
@@ -198,10 +198,10 @@ VerificationTest[
 
 
 (* ::Section:: *)
-(*examples/19_three_higgs_doublets_dark_cp.m*)
+(*examples/19_threeHiggsDoubletsDarkCP.m*)
 
 
-loadExampleModel["../examples/19_three_higgs_doublets_dark_cp.m"];
+loadExampleModel["../examples/19_threeHiggsDoubletsDarkCP.m"];
 potential=VMass+VQuartic;
 components=Cases[Variables[potential],_Symbol[__]];
 

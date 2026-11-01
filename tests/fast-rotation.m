@@ -24,7 +24,7 @@ Check[
 	whose only non-zero components are lam4_iikk, which CalculatePotentialUS[] and CalculatePotentialHET[]
 	take as they take the fully rotated one.
 
-	Checked here, for the model of examples/25_triplet_het.m in the ultrasoft theory and an exact orthogonal
+	Checked here, for the model of examples/25_tripletHET.m in the ultrasoft theory and an exact orthogonal
 	rotation that mixes the doublet, the triplet, and the neutral vectors:
 	- the rotated quartic is a rank-4 tensor, and its components lam4_iikk agree with the full rotation;
 	- the two-loop potential of CalculatePotentialUS[] agrees with the full rotation;

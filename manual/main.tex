@@ -1843,18 +1843,18 @@ The required source files are outlined in fig.~\ref{fig:DirectoryTree}.
     .2 ModelCreation.m
     \DTcomment{Creating a model}.
     .2 examples/\DTcomment{Model example library}.
-    .3 {\color{red} 01\_abelian\_higgs.m}\DTcomment{Abelian-Higgs model}.
-    .3 12\_standard\_model.m\DTcomment{Standard Model}.
-    .3 15\_sm\_real\_singlet.m\DTcomment{Standard Model and one real scalars}.
-    .3 16\_sm\_two\_singlets.m\DTcomment{Standard Model and two real scalars}.
-    .3 17\_sm\_complex\_singlet.m\DTcomment{Standard Model and one complex scalar}.
-    .3 {\color{red} 05\_two\_higgs\_doublet.m}\DTcomment{Two-Higgs Doublet model}.
-    .3 18\_three\_higgs\_doublets.m\DTcomment{Three-Higgs Doublet model}.
-    .3 20\_higgs\_triplet.m\DTcomment{Standard Model and one real SU(2) triplet}.
-    .3 07\_su5\_gut.m\DTcomment{SU(5) model}.
-    .3 21\_left\_right\_symmetric.m\DTcomment{Left-Right symmetric model}.
-    .3 11\_wess\_zumino.m\DTcomment{Wess-Zumino model}.
-    .3 14\_sm\_z\_prime.m\DTcomment{Standard Model and $Z'$-bosons}.
+    .3 {\color{red} 01\_abelianHiggs.m}\DTcomment{Abelian-Higgs model}.
+    .3 12\_standardModel.m\DTcomment{Standard Model}.
+    .3 15\_smRealSinglet.m\DTcomment{Standard Model and one real scalars}.
+    .3 16\_smTwoSinglets.m\DTcomment{Standard Model and two real scalars}.
+    .3 17\_smComplexSinglet.m\DTcomment{Standard Model and one complex scalar}.
+    .3 {\color{red} 05\_twoHiggsDoublet.m}\DTcomment{Two-Higgs Doublet model}.
+    .3 18\_threeHiggsDoublets.m\DTcomment{Three-Higgs Doublet model}.
+    .3 20\_higgsTriplet.m\DTcomment{Standard Model and one real SU(2) triplet}.
+    .3 07\_su5GUT.m\DTcomment{SU(5) model}.
+    .3 21\_leftRightSymmetric.m\DTcomment{Left-Right symmetric model}.
+    .3 11\_wessZumino.m\DTcomment{Wess-Zumino model}.
+    .3 14\_smZPrime.m\DTcomment{Standard Model and $Z'$-bosons}.
     .2 README.md.
     .2 LICENSE.
   }
@@ -1866,9 +1866,9 @@ The required source files are outlined in fig.~\ref{fig:DirectoryTree}.
   The most relevant files for this article are highlighted.
   Specific models are discussed in
   sec.~\ref{sec:speedrun} for
-  {\tt 01\_abelian\_higgs.m} and
+  {\tt 01\_abelianHiggs.m} and
   sec.~\ref{sec:BSM} for
-  {\tt 05\_two\_higgs\_doublet.m}.
+  {\tt 05\_twoHiggsDoublet.m}.
 }
 \label{fig:DirectoryTree}
 \end{figure}
@@ -1897,7 +1897,7 @@ the definition of models,
 the dimensional reduction, and
 the calculation of the two-loop effective potential.
 All steps are mirrored in the accompanying
-{\tt ./examples/01\_abelian\_higgs.m}.
+{\tt ./examples/01\_abelianHiggs.m}.
 
 \subsection{Model implementation}
 
@@ -2754,8 +2754,8 @@ the authors,
 \dralgo{} version, and
 citations to relevant articles.
 See
-{\tt ./examples/01\_abelian\_higgs.m} or
-{\tt ./examples/05\_two\_higgs\_doublet.m}
+{\tt ./examples/01\_abelianHiggs.m} or
+{\tt ./examples/05\_twoHiggsDoublet.m}
 for some examples.
 To load the model write
 \begin{lstlisting}[language=Mathematica,mathescape=true]
@@ -2989,7 +2989,7 @@ the effective model and compare to its Lagrangian.
 This procedure is analogous to creating the fundamental model where
 invariants can be compared using the command
 {\tt CompareInvariants[]}.
-See the {\tt 20\_higgs\_triplet.m} file for a worked example of
+See the {\tt 20\_higgsTriplet.m} file for a worked example of
 the Higgs triplet model (HTM).
 
 The matching of all possible allowed operators in the EFT is automatic
@@ -3005,7 +3005,7 @@ The output from \dralgo{} gives
 $\kappa \propto (2\Yq + \Yd + \Yu)$.
 See
 eq.~\eqref{eq:hypercharge} for the corresponding hypercharges and
-the {\tt 05\_two\_higgs\_doublet.m} example file for the full expression
+the {\tt 05\_twoHiggsDoublet.m} example file for the full expression
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%% SUBSUBSECTION %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %
@@ -3064,7 +3064,7 @@ $\lambda$3=GradCubic[VCubic];
 \end{lstlisting}
 Tadpoles are defined analogously.
 See the
-{\tt 16\_sm\_two\_singlets.m}
+{\tt 16\_smTwoSinglets.m}
 file for a worked example with two real scalars.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%% SUBSUBSECTION %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -3103,7 +3103,7 @@ FermionMasses=1/2*m1*MassTerm1+1/2*m2*MassTerm2+mD MassTerm3;
 $\mu$IJ=GradMassFermion[FermionMasses];
 $\mu$IJC=SparseArray[Simplify[Conjugate[$\mu$IJ]//Normal,Assumptions->{m1>0,m2>0,mD>0}]];
 \end{lstlisting}
-See the {\tt 11\_wess\_zumino.m} notebook for a worked example.
+See the {\tt 11\_wessZumino.m} notebook for a worked example.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%% SUBSUBSECTION %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %
@@ -3249,7 +3249,7 @@ Comparing the invariants one finds
 \end{align}
 The above procedure works for any representation as long as
 the user can write the quartic operator from \dralgo{} in their preferred form.
-See {\tt 07\_su5\_gut.m} for a concrete example.
+See {\tt 07\_su5GUT.m} for a concrete example.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%% SUBSUBSECTION %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %
@@ -3278,9 +3278,9 @@ $\mathrm{SU}(5)$,
 left-right symmetric model --
 even with 20--30 free parameters in the potential.
 See
-{\tt{07\_su5\_gut.m}},
-{\tt{18\_three\_higgs\_doublets.m}}, and
-{\tt{21\_left\_right\_symmetric.m}} 
+{\tt{07\_su5GUT.m}},
+{\tt{18\_threeHiggsDoublets.m}}, and
+{\tt{21\_leftRightSymmetric.m}} 
 for explicit implementations.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%% SUBSUBSECTION %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -3417,7 +3417,7 @@ we collect additional material that is not part of the package itself.
 A possible interface between
 the output of \dralgo{}, in the 3-dimensional theory, and
 the determination of thermodynamic quantities 
-is implemented in {\tt ./examples/06\_ah\_thermodynamics.m}.
+is implemented in {\tt ./examples/06\_abelianHiggsThermodynamics.m}.
 This implementation comes with a disclaimer:
 we present a simplified algorithm suitable for the simple case of
 the Abelian-Higgs model (cf.~eq.~\eqref{eq:L:ah}) but this
@@ -3432,7 +3432,7 @@ The algorithm~\ref{alg:thermo} illustrates our implementation.
 \caption{
 \label{alg:thermo}
   The \dralgo{} algorithm output is interfaced in
-  {\tt ./examples/06\_ah\_thermodynamics.m} with functions
+  {\tt ./examples/06\_abelianHiggsThermodynamics.m} with functions
   {\tt solveBetas[]},
   {\tt DRstep[]} and
   {\tt Veff3d[]}, which are called by
@@ -3466,7 +3466,7 @@ Thermodynamics as function of $\{c_{1},\dots,c_{n}\}$
 \State Plot by Python: {\tt .examples/ah-thermo-python-plots/plot.py}
 \end{algorithmic}
 \end{algorithm}
-In the simplified algorithm {\tt 06\_ah\_thermodynamics.m}
+In the simplified algorithm {\tt 06\_abelianHiggsThermodynamics.m}
 the loop over 4-dimensional variables $c_i$ contains only a single $\lambda$ and
 for simplicity and faster running time
 $M=100$ and
@@ -3505,7 +3505,7 @@ The $T$-derivative is approximated as a finite difference ${\rm d}T = 0.1$.
 The symmetric-phase part does not contribute here since we normalized
 the effective potential to zero at all $T$ at the origin.
 For a commented documentation of the technicalities of this implementation
-see directly the source {\tt 06\_ah\_thermodynamics.m}.       
+see directly the source {\tt 06\_abelianHiggsThermodynamics.m}.       
 
 The described perturbative determination is done in Landau gauge
 with $\xi = 0$ in eq.~\eqref{eq:prop:gauge} and
@@ -3531,7 +3531,7 @@ shown in fig.~\ref{fig:ah-thermo}.
   $g^2=0.42$ and
   $M=100$
   as obtained in
-  {\tt ./examples/06\_ah\_thermodynamics.m}.
+  {\tt ./examples/06\_abelianHiggsThermodynamics.m}.
   Both $M$ and $T$ are in arbitrary units of mass.
   The RG-scale is varied at the edges of the interval
   $\bmu = (0.5\dots2.0)\pi T$.

@@ -24,7 +24,7 @@ Check[
 (*
 	DRalgo converts right-handed fermions to left-handed ones with the conjugate generators, and Ysff
 	multiplies the conjugates of these fields. In CreateInvariantYukawa, left-handed fermions enter
-	conjugated and right-handed fermions not, as in 12_standard_model.m with {False,False,True} for (\[Phi],QL,tR).
+	conjugated and right-handed fermions not, as in 12_standardModel.m with {False,False,True} for (\[Phi],QL,tR).
 	Then gvss[c].Ysff+I(gvff[c].Ysff+(gvff[c].Ysff)^T)=0 for every generator c, where gvff[c] acts on the
 	first fermion index and the transpose is in the fermion indices.
 
@@ -38,14 +38,14 @@ Check[
 	With symbolic U(1) charges, it gives the condition on the charges with ImportModelDRalgo::invariantif.
 
 	Checked here:
-	- the Yukawa couplings of 12_standard_model.m, 07_su5_gut.m, and 21_left_right_symmetric.m are invariant, the conjugate ones of 21_left_right_symmetric.m not;
+	- the Yukawa couplings of 12_standardModel.m, 07_su5GUT.m, and 21_leftRightSymmetric.m are invariant, the conjugate ones of 21_leftRightSymmetric.m not;
 	- in the Standard Model with top and bottom quarks, BetaFunctions4D gives the one-loop \[Beta]-functions
 	  of the Yukawa couplings;
-	- 13_sm_ckm.m imports without a warning, but with the flags of the up-type quarks for the down-type quarks not;
-	- 21_left_right_symmetric.m with the conjugate flags gives the warning;
-	- the one-loop couplings of the temporal scalars to the scalars of 21_left_right_symmetric.m are gauge invariant,
+	- 13_smCKM.m imports without a warning, but with the flags of the up-type quarks for the down-type quarks not;
+	- 21_leftRightSymmetric.m with the conjugate flags gives the warning;
+	- the one-loop couplings of the temporal scalars to the scalars of 21_leftRightSymmetric.m are gauge invariant,
 	  and PrintDebyeMass gives one Debye mass per group without messages;
-	- 15_sm_real_singlet.m, with symbolic hypercharges, is invariant only for Yu=Yq+Y\[Phi];
+	- 15_smRealSinglet.m, with symbolic hypercharges, is invariant only for Yu=Yq+Y\[Phi];
 	- a Dirac fermion with a mass and a Yukawa coupling to a real scalar is invariant if both chiralities
 	  have the same U(1) charge, and, with symbolic charges qL and qR, only for qL=qR;
 	- the cubic coupling d_abc of an SU(3) octet is invariant for the type "R", but not for the type "A",
@@ -84,7 +84,7 @@ temporalVariation[g_,c_]:=Module[{gN=Normal[g],f=Normal[gvvv][[c]],s=Normal[gvss
 (*Standard Model*)
 
 
-ToExpression[exampleModel["12_standard_model.m"]];
+ToExpression[exampleModel["12_standardModel.m"]];
 
 AppendTo[testList,
 VerificationTest[
@@ -125,7 +125,7 @@ VerificationTest[
 (*SU(5)*)
 
 
-ToExpression[exampleModel["07_su5_gut.m"]];
+ToExpression[exampleModel["07_su5GUT.m"]];
 
 AppendTo[testList,
 VerificationTest[
@@ -141,14 +141,14 @@ VerificationTest[
 
 AppendTo[testList,
 VerificationTest[
-	ToExpression[exampleModel["13_sm_ckm.m"]],
+	ToExpression[exampleModel["13_smCKM.m"]],
 	Null,
 	TestID->"smCKM-imports-without-warning"
 ]];
 
 AppendTo[testList,
 VerificationTest[
-	ToExpression[StringReplace[exampleModel["13_sm_ckm.m"],
+	ToExpression[StringReplace[exampleModel["13_smCKM.m"],
 		"{{1,1+(i-1)*5,3+(j-1)*5},{True,False,True}}"->"{{1,1+(i-1)*5,3+(j-1)*5},{False,False,True}}"]],
 	Null,
 	{ImportModelDRalgo::noninvariant},
@@ -162,7 +162,7 @@ VerificationTest[
 
 AppendTo[testList,
 VerificationTest[
-	ToExpression[StringReplace[exampleModel["21_left_right_symmetric.m"],{
+	ToExpression[StringReplace[exampleModel["21_leftRightSymmetric.m"],{
 		"InputInv={{1,1,2},{False,False,True}};"->"InputInv={{1,1,2},{True,True,False}};",
 		"InputInv={{1,1,2},{True,False,True}};"->"InputInv={{1,1,2},{False,True,False}};"}]],
 	Null,
@@ -170,7 +170,7 @@ VerificationTest[
 	TestID->"LRSymmetric-with-the-conjugate-flags-warns"
 ]];
 
-ToExpression[exampleModel["21_left_right_symmetric.m"]];
+ToExpression[exampleModel["21_leftRightSymmetric.m"]];
 
 AppendTo[testList,
 VerificationTest[
@@ -209,7 +209,7 @@ VerificationTest[
 
 AppendTo[testList,
 VerificationTest[
-	ToExpression[exampleModel["15_sm_real_singlet.m"]],
+	ToExpression[exampleModel["15_smRealSinglet.m"]],
 	Null,
 	{ImportModelDRalgo::invariantif},
 	TestID->"xsm-warns-with-the-condition-on-the-hypercharges"

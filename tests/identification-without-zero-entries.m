@@ -104,7 +104,7 @@ VerificationTest[
 (*
 	RelationsBVariables (DRalgo.m) relates each entry to the first earlier one that is a number times it. With two entries equal
 	in value but not in form, the third entry got the factor of the second one, whose variable is not an independent one, which
-	left the variable in the ultrasoft quartics of examples/05_two_higgs_doublet.m.
+	left the variable in the ultrasoft quartics of examples/05_twoHiggsDoublet.m.
 *)
 AppendTo[testList,
 VerificationTest[
