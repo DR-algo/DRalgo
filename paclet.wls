@@ -50,7 +50,9 @@ Commands:
                     --dry-run stops before the submission, --yes skips the
                     confirmation. Without a cloud login, the publisher token in
                     the environment variable RESOURCE_PUBLISHER_TOKEN is used.
-  release [--yes]   Run build, check and submit in this order.
+  release [--dry-run] [--yes]
+                    Run build, check and submit in this order; the options are
+                    those of submit.
 ";
 
 
@@ -162,7 +164,10 @@ buildCommand[] := Module[{version, files, result, archive},
 ];
 
 
-(* Loads the built archive in a fresh kernel and checks that DRalgo comes from it. *)
+(*
+	Loads the built archive in a fresh kernel and checks that DRalgo comes from it.
+	A message or an abort while loading ends the kernel with a nonzero exit code.
+*)
 loadTest[archive_, version_] := Module[{dir, code, r},
 	dir = FileNameJoin[{$buildDirectory, "loadTest"}];
 	Quiet[DeleteDirectory[dir, DeleteContents -> True]];
@@ -171,7 +176,7 @@ loadTest[archive_, version_] := Module[{dir, code, r},
 	code = StringJoin[
 		"PacletDirectoryLoad[", ToString[dir, InputForm], "];",
 		"DRalgo`DRalgo`$InstallGroupMath = True;",
-		"Block[{Print}, Needs[\"DRalgo`DRalgo`\"]];",
+		"CheckAbort[Check[Block[{Print}, Needs[\"DRalgo`DRalgo`\"]], Exit[1]], Exit[2]];",
 		"Print[FindFile[\"DRalgo`DRalgo`\"]];"
 	];
 	r = Quiet[RunProcess[{"wolframscript", "-code", code}]];
@@ -211,11 +216,17 @@ exampleCells[] := Module[{cells},
 ];
 
 
-(* DRalgo is loaded from the staging directory, so the examples test the paclet that is submitted. *)
+(*
+	DRalgo is loaded from the staging directory, so the examples test the paclet
+	that is submitted; a message or an abort while loading stops the script.
+*)
 loadStagedDRalgo[] := Module[{loaded},
 	PacletDirectoryLoad[$stagingDirectory];
 	DRalgo`DRalgo`$InstallGroupMath = True;
-	Block[{Print}, Needs["DRalgo`DRalgo`"]];
+	CheckAbort[
+		Check[Block[{Print}, Needs["DRalgo`DRalgo`"]], die["loading DRalgo from ", relative[$stagingDirectory], " issued the messages above."]],
+		die["loading DRalgo from ", relative[$stagingDirectory], " was aborted."]
+	];
 	loaded = FindFile["DRalgo`DRalgo`"];
 	If[!StringQ[loaded] || !StringStartsQ[loaded, $stagingDirectory],
 		die["the examples need DRalgo from ", relative[$stagingDirectory], " but load ", loaded, "."]
@@ -265,9 +276,12 @@ runLine[box_, extra_] := Module[{held, result, n = ++$line},
 	If[!MatchQ[held, _HoldComplete], die["cannot parse the input ", ToString[box, InputForm]]];
 	If[held === HoldComplete[], Return[{}]];
 	$log = {};
+	(* An aborted example stops the script, so that no incomplete examples are submitted. *)
 	result = Internal`HandlerBlock[{"Message", messageHandler[n, extra]},
 		Block[{Print = printHandler[n, extra], $Messages = {}},
-			CheckAbort[ReleaseHold[held], $Aborted]
+			CheckAbort[ReleaseHold[held],
+				die["the example In[", n, "] was aborted: ", StringTake[ToString[held /. HoldComplete[e___] :> HoldForm[CompoundExpression[e]], InputForm], UpTo[200]]]
+			]
 		]
 	];
 	If[result === Null, $log, Append[$log, outputCell[n, extra, result]]]
@@ -655,15 +669,31 @@ main[{"version"}] := versionCommand[];
 main[{"build"}] := buildCommand[];
 main[{"examples"}] := examplesCommand[];
 main[{"notebook"}] := notebookCommand[];
-main[{"check", opts___}] := checkOrDie[MemberQ[{opts}, "--all"]];
-main[{"submit", opts___}] := submitCommand[MemberQ[{opts}, "--dry-run"], MemberQ[{opts}, "--yes"]];
-main[{"release", opts___}] := (
+main[{"check", opts___}] := With[{o = options["check", {opts}, {"--all"}]},
+	checkOrDie[MemberQ[o, "--all"]]
+];
+main[{"submit", opts___}] := With[{o = options["submit", {opts}, {"--dry-run", "--yes"}]},
+	submitCommand[MemberQ[o, "--dry-run"], MemberQ[o, "--yes"]]
+];
+main[{"release", opts___}] := With[{o = options["release", {opts}, {"--dry-run", "--yes"}]},
 	buildCommand[];
 	checkOrDie[False];
-	submitCommand[False, MemberQ[{opts}, "--yes"]]
-);
+	submitCommand[MemberQ[o, "--dry-run"], MemberQ[o, "--yes"]]
+];
 main[{"help" | "--help" | "-h"} | {}] := say[$usage];
-main[args_] := (WriteString["stderr", "Unknown arguments: ", StringRiffle[args, " "], "\n\n", $usage]; Exit[2]);
+main[args_] := usageError["Unknown arguments: " <> StringRiffle[args, " "]];
+
+
+(* Options that a command does not know stop the script before it builds or submits anything. *)
+options[command_, opts_List, allowed_List] := (
+	If[!SubsetQ[allowed, opts],
+		usageError["Unknown options for " <> command <> ": " <> StringRiffle[Complement[opts, allowed], " "]]
+	];
+	opts
+);
+
+
+usageError[text_String] := (WriteString["stderr", text, "\n\n", $usage]; Exit[2]);
 
 
 End[];
