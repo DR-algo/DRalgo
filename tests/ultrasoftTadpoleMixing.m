@@ -83,7 +83,7 @@ shift={
 
 (*
 	The tree-level mass, and the one-loop mass and quartic of the tensors, d^2/ds^2 and d^4/ds^4, as in
-	ultrasoft-tadpole-shift.m; t counts the order of the tadpole and the mixing
+	ultrasoftTadpoleShift.m; t counts the order of the tadpole and the mixing
 *)
 {treeMass,loopMass,loopQuartic}=Module[{int,V0,ans,eqs,cs,star,Mss,Msf,Mff,V1,L,trunc,tree,tot,t,f,sv,c},
 	int[a_,b_,A_]:=A^(3/2-a-b) Gamma[3/2-a]Gamma[a+b-3/2]/((4Pi)^(3/2)Gamma[3/2]Gamma[b]);

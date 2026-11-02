@@ -86,7 +86,7 @@ VerificationTest[
 (*Scalar Yukawa model with the scalar integrated out*)
 
 
-(*The model of examples/03_scalarYukawa.m, see tests/ScalYukawa-rg-invariance.m*)
+(*The model of examples/03_scalarYukawa.m, see tests/scalarYukawaRGInvariance.m*)
 RepScalar={{{0},"R"}};
 RepFermion={{{0},"L"},{{0},"R"}};
 {gvvv,gvff,gvss,\[Lambda]1,\[Lambda]3,\[Lambda]4,\[Mu]ij,\[Mu]IJC,\[Mu]IJ,Ysff,YsffC}=AllocateTensors[Group,RepAdjoint,CouplingName,RepFermion,RepScalar];

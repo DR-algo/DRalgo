@@ -16199,8 +16199,15 @@ V6[x_]:=V6B[x]+V6F[x];
 	matching. Each case in the Which statement selects one canonically
 	normalized operator representative, evaluates the necessary helper tensors,
 	and finally substitutes N -> d so the result can be compared against a basis
-	defined in the requested spacetime dimension.
+	defined in the requested spacetime dimension. The fermion loops of ODIM5 need
+	an insertion of the fermion masses and are added by ODIM5Fermion.
+	The substitution acts on the rules of the sparse tensors, since the dense
+	tensors of the operators with six fields have NS^6 components.
 *)
+SubstituteSparse[tensor_,rules_]:=Module[{t=SparseArray[tensor]},
+	SparseArray[ArrayRules[t]/.rules,Dimensions[t]]
+];
+
 ODIM5[x_,d_]:=Module[{terms},
 	CreateHelpTensors[];
 	terms=
@@ -16231,11 +16238,16 @@ ODIM5[x_,d_]:=Module[{terms},
 			
 			True, "NOT ALLOWED X VALUE"			
 			];
-	Normal[terms]/.{N->d}// SparseArray // SimplifySparse
+	SubstituteSparse[terms,N->d]+ODIM5Fermion[x,d]// SimplifySparse
 ];
 
 
-ODIM6[x_,d_]:=Module[{terms},
+(*
+	ODIM6Terms[x] is the sparse tensor of ODIM6[x, d] before the substitution N -> d.
+*)
+ODIM6[x_,d_]:=SubstituteSparse[ODIM6Terms[x],N->d]// SimplifySparse;
+
+ODIM6Terms[x_]:=Module[{terms},
 	CreateHelpTensors[];
 	terms=
 		Which[
@@ -16290,18 +16302,92 @@ ODIM6[x_,d_]:=Module[{terms},
 			x==17,
 			-V2D4[1]T^(2/2-1),
 			
+			(*
+				the parity-violating operators contain Ftilde_i = (1/2) eps_ijk F_jk, so that their coefficients are
+				twice those of eps_ijk F_jk = 2 Ftilde_i
+			*)
 			x==18,
-			-I/2 V3D3[3]T^(3/2-1),
+			-I V3D3[3]T^(3/2-1),
 			
 			x==19,
-			-1/2 (S2V2D2[4])T^(4/2-1),
+			-(S2V2D2[4])T^(4/2-1),
 			
 			x==20,
-			(1/6)(V4D2[3])T^(4/2-1),		
+			(1/3)(V4D2[3])T^(4/2-1),		
 			
 			True, "NOT ALLOWED X VALUE"
 			];
-	Normal[terms]/.{N->d}// SparseArray // SimplifySparse
+	(*
+		The two scalars of O(6,2), O(6,5) and O(6,7) enter symmetrically. Away from d = 3, the fermion loops of
+		S2V2D2F have parts antisymmetric in them, which do not contribute to the operators and are removed, so that
+		the matching onto symmetric tensors has a solution for any d.
+	*)
+	If[MemberQ[{2,5,7},x],terms=(terms+Transpose[terms,{2,1,3,4}])/2];
+	terms
+];
+
+
+(*
+	The fermion loops depend on the scalars R only through the field-dependent masses muIJF + Ysff.R and
+	muIJFC + YsffC.R. An insertion of the fermion masses is therefore a scalar R_s = 1 whose Yukawa couplings are
+	muIJF and muIJFC. For the operators with scalars, ODIM6Spurion[x] is the fermionic part of ODIM6Terms[x] with
+	the scalars extended by s = NS + 1, so that its components with one index s are the operators with one mass
+	insertion. It stays sparse, and only these components are converted.
+*)
+ODIM6Spurion[x_]:=Block[
+	{
+		Ysff=Join[SparseArray[Ysff],SparseArray[{muIJF}]],
+		YsffC=Join[SparseArray[YsffC],SparseArray[{muIJFC}]],
+		S2V1D3=S2V1D3F,S2V2D2=S2V2D2F,S4D2=S4D2F,S6=S6F,S4V2=S4V2F,S2V4=S2V4F,
+		CreateHelpTensors=Null&
+	},
+	ODIM6Terms[x]
+];
+
+
+(*
+	ODIM5Fermion[x, d]: the fermion loops of ODIM5[x, d], with one insertion of the fermion masses. With R_s = 1,
+	the operators of ODIM6Spurion with one index s have five fields. Since D_i R_s = 0 and D_i Ftilde_i = 0, they
+	reduce by integrations by parts to the operators of ODIM5:
+		O(6,2), O(6,9), O(6,10), O(6,11) give O(5,1), O(5,2), O(5,3), O(5,4);
+		O(6,4) gives (D_iR)_1 (D_iR)_2 R_3 P_123 = -(1/2)(P_123+P_132-P_231) (D_jD_jR)_1 R_2 R_3 for P symmetric
+		in 1,2, i.e. O(5,5);
+		O(6,6) and O(6,7) give (D_iR)_1 (D_iA0)^2 A0^3 and R_1 (D_iA0)^2 (D_iA0)^3, i.e. O(5,6) and O(5,7);
+		O(6,19) gives R_s (D_iR)_1 A0^2 Ftilde^3_i = -R_1 (D_iA0)^2 Ftilde^3_i, i.e. O(5,8).
+	O(6,14) gives (D_iR)_a (D_jF_ij)^c = -(1/2) g^b_ad F^b_ij F^c_ij R_d, whose tensor is antisymmetric in b, c by
+	gauge invariance and does not contribute to O(5,1).
+	A 3d field is the 4d one divided by T^(1/2), hence the factor T^(-1/2) between five and six fields.
+*)
+ODIM5Fermion[x_,d_]:=Module[{s=NS+1,r=Range[NS],p,b,c},
+	If[SparseArray[muIJF]["NonzeroPositions"]==={},Return[0]];
+	SubstituteSparse[T^(-1/2) Which[
+		x==1,
+		ODIM6Spurion[2][[r,s,All,All]],
+
+		x==2,
+		ODIM6Spurion[9][[r,r,r,r,r,s]],
+
+		x==3,
+		ODIM6Spurion[10][[r,r,r,s,All,All]],
+
+		x==4,
+		ODIM6Spurion[11][[r,s,All,All,All,All]],
+
+		x==5,
+		p=ODIM6Spurion[4][[r,r,r,s]];
+		-(p+Transpose[p,{1,3,2}]-Transpose[p,{2,3,1}])/2,
+
+		x==6||x==7,
+		b=ODIM6Spurion[6][[r,s,All,All]];
+		c=ODIM6Spurion[7][[r,s,All,All]];
+		c=(c+Transpose[c,{1,3,2}])/2;
+		If[x==6,-(b+Transpose[b,{1,3,2}])/2+c/2,-(b-Transpose[b,{1,3,2}])/2-c/2],
+
+		x==8,
+		-ODIM6Spurion[19][[s,r,All,All]],
+
+		True, "NOT ALLOWED X VALUE"
+		],N->d]
 ];
 
 
@@ -16428,7 +16514,7 @@ ODIM5["PHYS",x_,d_]:=Module[{terms},
 			
 			True, "NOT ALLOWED X VALUE"			
 			];
-	Normal[terms]/.{N->d}// SparseArray // SimplifySparse
+	SubstituteSparse[terms,N->d]// SimplifySparse
 ];
 
 ODIM6["PHYS",x_,d_]:=Module[{terms},
@@ -16473,7 +16559,7 @@ ODIM6["PHYS",x_,d_]:=Module[{terms},
 			
 			True, "NOT ALLOWED X VALUE"			
 			];
-	Normal[terms]/.{N->d}// SparseArray // SimplifySparse
+	SubstituteSparse[terms,N->d]// SimplifySparse
 ];
 
 
