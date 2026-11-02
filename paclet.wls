@@ -289,9 +289,13 @@ runLine[box_, extra_] := Module[{held, result, n = ++$line},
 
 
 printHandler[n_, extra_][args___] := ($log = Append[$log,
-	Cell[BoxData[ToBoxes[If[Length[{args}] === 1, args, SequenceForm[args]], StandardForm]], "Print",
-		Sequence @@ extra, CellLabel -> duringLabel[n]]
+	Cell[BoxData[printBoxes[args]], "Print", Sequence @@ extra, CellLabel -> duringLabel[n]]
 ]; Null);
+
+
+(* Print with several arguments concatenates them, as SequenceForm does. *)
+printBoxes[arg_] := ToBoxes[arg, StandardForm];
+printBoxes[args___] := ToBoxes[SequenceForm[args], StandardForm];
 
 
 messageHandler[n_, extra_][Hold[Message[MessageName[s_, t_String], args___], True]] := ($log = Append[$log,
