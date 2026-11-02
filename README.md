@@ -171,12 +171,22 @@ DRalgo/
 │   ├── 24_darkSU2HiggsSinglet.m      Dark SU(2) model with Higgs and singlet.
 │   ├── 25_tripletHET.m               Higgs triplet model with heavy-field EFT matching.
 │   └── 26_scotogenic.m               Scotogenic model with heavy-field EFT matching.
-│                                     the Wolfram Repository.
+├── paclet/
+│   ├── Resource.m                    Landing page in the Wolfram Language Paclet Repository: details,
+│   │                                 links, keywords and contributors.
+│   └── Examples.m                    Examples of the landing page, evaluated at each release.
+├── paclet.wls                        Builds, checks and submits the paclet; see Releases.
 ├── PacletInfo.m                      Paclet metadata (name, version, dependencies).
-│                                     the Wolfram Repository.
 ├── README.md                         This file; installation and usage instructions.
 └── LICENSE                           GNU General Public License v3.
 ```
+
+## Releases
+A release carries the version set in `PacletInfo.m` and `Kernel/DRalgo.m`. Pushing the tag `vX.Y.Z` creates the GitHub release with `DRalgo.paclet` and `DRalgo.zip`, built from the files that git tracks in `Kernel/` and `FrontEnd/`. The same version reaches the Wolfram Language Paclet Repository through
+```bash
+wolframscript -file paclet.wls release
+```
+which builds the paclet, evaluates the examples in `paclet/Examples.m` with it, runs the checks of the repository and submits the paclet after a confirmation. The landing page is defined by `paclet/Resource.m` and `paclet/Examples.m`; its definition notebook is generated in `build/` and needs no editing. `wolframscript -file paclet.wls help` lists the individual steps. Once the repository secrets `WOLFRAMSCRIPT_ENTITLEMENTID` and `RESOURCE_PUBLISHER_TOKEN` are set, the GitHub workflow submits the paclet as well.
 
 ## New models
 Users are encouraged to contribute their own models to the community by submitting the model file through the [Issue Tracker](https://github.com/DR-algo/DRalgo/issues) on GitHub. Submitted models will undergo verification before being added to the official model repository. 

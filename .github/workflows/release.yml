@@ -1,65 +1,116 @@
-permissions:
-  contents: write
-  deployments: write
+# A tag vX.Y.Z creates the GitHub release of DRalgo with the paclet DRalgo.paclet
+# and the archive DRalgo.zip of the kernel files. The paclet contains PacletInfo.m
+# and the files in Kernel/ and FrontEnd/ of the tagged commit; the tag has to
+# match the version in PacletInfo.m and Kernel/DRalgo.m.
+#
+# The job "submit" then submits the version to the Wolfram Language Paclet
+# Repository with paclet.wls. It runs only if the repository secrets
+# WOLFRAMSCRIPT_ENTITLEMENTID (an on-demand license of the Wolfram Engine,
+# created with CreateLicenseEntitlement and billed in Service Credits) and
+# RESOURCE_PUBLISHER_TOKEN (a publisher token of the publisher DRalgo, created
+# with CreatePublisherToken of the paclet Wolfram/PacletCICD) are set. Without
+# them, the version is submitted locally with
+#   wolframscript -file paclet.wls submit
 
-name: Build and release
+name: Release
+
 on:
   push:
     tags:
       - "v*.*.*"
   workflow_dispatch:
 
+permissions:
+  contents: write
+
 jobs:
   release:
+    name: Build the paclet and create the GitHub release
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout code
+      - name: Check out the repository
         uses: actions/checkout@v4
 
-      - name: Get the latest tag and date
-        id: version_info
+      - name: Check the version
+        id: version
         run: |
-          echo "tag=$(echo $GITHUB_REF | sed 's/refs\/tags\///')" >> $GITHUB_ENV
-          echo "date=$(date +"(%d-%m-%Y)")" >> $GITHUB_ENV
+          version=$(sed -n 's/^[[:space:]]*"Version" -> "\([0-9.]*\)",.*$/\1/p' PacletInfo.m)
+          kernel=$(sed -n 's/^\$DRalgoVersion = "\([0-9.]*\)";.*$/\1/p' Kernel/DRalgo.m)
+          echo "PacletInfo.m: $version, Kernel/DRalgo.m: $kernel, ref: $GITHUB_REF_NAME"
+          if [ -z "$version" ] || [ "$version" != "$kernel" ]; then
+            echo "::error::PacletInfo.m ($version) and Kernel/DRalgo.m ($kernel) disagree on the version."
+            exit 1
+          fi
+          if [ "$GITHUB_REF_TYPE" = "tag" ] && [ "v$version" != "$GITHUB_REF_NAME" ]; then
+            echo "::error::The tag $GITHUB_REF_NAME does not match the version $version."
+            exit 1
+          fi
+          echo "version=$version" >> "$GITHUB_OUTPUT"
 
-      - name: Check if DRalgo version matches GitHub tag
+      - name: Build the paclet
+        env:
+          VERSION: ${{ steps.version.outputs.version }}
         run: |
-          DRalgoVersion=$(sed -n 's/^\([[:space:]]*\)"Version" -> "\([^.]*\)\.\([^.]*\)\.\([^.]\)",/v\2.\3.\4/p' PacletInfo.m)
+          dir="DRalgo__DRalgo-$VERSION"
+          mkdir -p build/DRalgo
+          git archive --format=tar --prefix="$dir/" HEAD Kernel FrontEnd | tar -x -C build
+          git show HEAD:PacletInfo.m > "build/$dir/PacletInfo.wl"
+          (cd build && zip -qr DRalgo.paclet "$dir")
+          git archive --format=tar HEAD Kernel | tar -x -C build/DRalgo --strip-components=1
+          (cd build && zip -qr DRalgo.zip DRalgo)
+          unzip -l build/DRalgo.paclet
 
-          if [ "$DRalgoVersion" == "${{ env.tag }}" ]; then
-              echo "DRalgoVersion matches the tag"
+      - name: Keep the build for runs without a tag
+        uses: actions/upload-artifact@v4
+        with:
+          name: DRalgo-${{ steps.version.outputs.version }}
+          path: |
+            build/DRalgo.paclet
+            build/DRalgo.zip
+
+      - name: Create the GitHub release
+        if: github.ref_type == 'tag'
+        uses: softprops/action-gh-release@v2
+        with:
+          files: |
+            build/DRalgo.paclet
+            build/DRalgo.zip
+          generate_release_notes: true
+          fail_on_unmatched_files: true
+
+  submit:
+    name: Submit to the Wolfram Language Paclet Repository
+    needs: release
+    if: github.ref_type == 'tag'
+    runs-on: ubuntu-latest
+    container:
+      image: wolframresearch/wolframengine:latest
+      options: --user root
+    env:
+      WOLFRAMSCRIPT_ENTITLEMENTID: ${{ secrets.WOLFRAMSCRIPT_ENTITLEMENTID }}
+      RESOURCE_PUBLISHER_TOKEN: ${{ secrets.RESOURCE_PUBLISHER_TOKEN }}
+    steps:
+      - name: Check the secrets
+        id: secrets
+        run: |
+          if [ -n "$WOLFRAMSCRIPT_ENTITLEMENTID" ] && [ -n "$RESOURCE_PUBLISHER_TOKEN" ]; then
+            echo "available=true" >> "$GITHUB_OUTPUT"
           else
-              echo "Error: DRalgoVersion ($DRalgoVersion) does not match tag (${{ env.tag }})" 1>&2
-              exit 64
+            echo "::notice::WOLFRAMSCRIPT_ENTITLEMENTID or RESOURCE_PUBLISHER_TOKEN is not set; submit with 'wolframscript -file paclet.wls submit'."
           fi
 
-      - name: Create Release
-        id: create_release
-        uses: actions/create-release@v1
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          tag_name: ${{ github.ref }}
-          release_name: Release ${{ github.ref }}
-          draft: false
-          prerelease: false
+      - name: Install git
+        if: steps.secrets.outputs.available == 'true'
+        run: apt-get update && apt-get install -y --no-install-recommends git ca-certificates
 
-      - name: Build Release Asset
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - name: Check out the repository
+        if: steps.secrets.outputs.available == 'true'
+        uses: actions/checkout@v4
+
+      # The entitlement runs one kernel; "submit" needs no second kernel, unlike the
+      # load test of "release".
+      - name: Submit the paclet
+        if: steps.secrets.outputs.available == 'true'
         run: |
-          mkdir -p DRalgo
-          cp Kernel/*.m DRalgo
-          zip -r DRalgo.zip DRalgo/*
-          rm -r DRalgo
-          ls -a
-
-      - name: Upload Release Asset
-        uses: actions/upload-release-asset@v1
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: ./DRalgo.zip
-          asset_name: DRalgo.zip
-          asset_content_type: application/zip
+          git config --global --add safe.directory "$GITHUB_WORKSPACE"
+          wolframscript -file paclet.wls submit --yes
