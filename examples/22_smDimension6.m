@@ -1,6 +1,6 @@
 (* ::Package:: *)
 
-Quit[];
+(*Quit[];*)
 
 
 If[$InputFileName=="",
