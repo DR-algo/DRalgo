@@ -24,16 +24,17 @@ Public release of
 
 **DRalgo** can be installed as a Wolfram Paclet by running one of the following commands in Mathematica:
 
-<!-- #### From the Wolfram Repository
+#### From the Wolfram Language Paclet Repository
 ```mathematica
 PacletInstall["DRalgo/DRalgo"]
 ```
-[Visit the Wolfram Repository](https://resources.wolframcloud.com/PacletRepository/resources/DRalgo/DRalgo/) -->
+[Visit the Wolfram Language Paclet Repository](https://resources.wolframcloud.com/PacletRepository/resources/DRalgo/DRalgo/)
 
 #### From the GitHub Repository
 ```mathematica
 PacletInstall["https://github.com/DR-algo/DRalgo/releases/latest/download/DRalgo.paclet"]
 ```
+A new version is available on GitHub as soon as it is released, and in the Paclet Repository once Wolfram Research has reviewed it. `PacletObject["DRalgo/DRalgo"]["Version"]` shows the installed version.
 
 > **Note:** Ensure that all dependencies of **DRalgo** are installed. Refer to the [Requirements section](#requirements) for details.
 
@@ -171,9 +172,13 @@ DRalgo/
 │   ├── 24_darkSU2HiggsSinglet.m      Dark SU(2) model with Higgs and singlet.
 │   ├── 25_tripletHET.m               Higgs triplet model with heavy-field EFT matching.
 │   └── 26_scotogenic.m               Scotogenic model with heavy-field EFT matching.
-│                                     the Wolfram Repository.
+├── paclet/
+│   ├── Resource.m                    Landing page in the Wolfram Language Paclet Repository: details,
+│   │                                 links, keywords and contributors.
+│   └── Examples.m                    Examples of the landing page, evaluated at each release.
+├── paclet.wls                        Builds, checks and submits the paclet to the Wolfram Language
+│                                     Paclet Repository; wolframscript -file paclet.wls help.
 ├── PacletInfo.m                      Paclet metadata (name, version, dependencies).
-│                                     the Wolfram Repository.
 ├── README.md                         This file; installation and usage instructions.
 └── LICENSE                           GNU General Public License v3.
 ```
