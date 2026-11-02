@@ -24,16 +24,17 @@ Public release of
 
 **DRalgo** can be installed as a Wolfram Paclet by running one of the following commands in Mathematica:
 
-<!-- #### From the Wolfram Repository
+#### From the Wolfram Language Paclet Repository
 ```mathematica
 PacletInstall["DRalgo/DRalgo"]
 ```
-[Visit the Wolfram Repository](https://resources.wolframcloud.com/PacletRepository/resources/DRalgo/DRalgo/) -->
+[Visit the Wolfram Language Paclet Repository](https://resources.wolframcloud.com/PacletRepository/resources/DRalgo/DRalgo/)
 
 #### From the GitHub Repository
 ```mathematica
 PacletInstall["https://github.com/DR-algo/DRalgo/releases/latest/download/DRalgo.paclet"]
 ```
+A new version is available on GitHub as soon as it is released, and in the Paclet Repository once Wolfram Research has reviewed it. `PacletObject["DRalgo/DRalgo"]["Version"]` shows the installed version.
 
 > **Note:** Ensure that all dependencies of **DRalgo** are installed. Refer to the [Requirements section](#requirements) for details.
 
