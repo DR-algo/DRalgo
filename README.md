@@ -16,7 +16,7 @@ Public release of
 
 [![license: GPLv3](https://img.shields.io/badge/license-GPLv3-brightgreen.svg)](https://github.com/DR-algo/DRalgo/blob/master/LICENSE)
 [![Version](https://img.shields.io/github/v/tag/DR-algo/DRalgo?label=Version)](https://github.com/DR-algo/DRalgo/releases/latest/)
-![compatibility](https://img.shields.io/badge/Mathematica-12.x_13.x_14.x-brightgreen.svg)
+![compatibility](https://img.shields.io/badge/Mathematica-12.x_13.x_14.x_15.x-brightgreen.svg)
 
 ## Installation
 
@@ -72,7 +72,7 @@ Ensure that the **DRalgo** package is placed in the appropriate directory for yo
 
 **DRalgo** is written in the *Wolfram Mathematica* language and relies on the external package **GroupMath**, available here:  
 
-- [**Mathematica**](https://www.wolfram.com/mathematica/): versions 12.x, 13.x, and 14.x  
+- [**Mathematica**](https://www.wolfram.com/mathematica/): versions 12.x, 13.x, 14.x, and 15.x  
 - [**GroupMath**](https://renatofonseca.net/groupmath): version 1.1.3
 
 GroupMath can be installed manually from the link above or automatically by setting the following flag **before** loading DRalgo in Mathematica:
