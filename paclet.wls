@@ -360,7 +360,7 @@ fillTemplate[nb0_, info_, resource_, examples_] := Module[{nb = nb0},
 		Cell[info["Description"], "Text", Sequence @@ withoutDefaultTag[{opts}]];
 	nb = fillGroup[nb, "HeroImage", {Cell[BoxData[ToBoxes[heroImage[FileNameJoin[{$root, resource["HeroImage"]}]]]], "Input"]}];
 	nb = fillGroup[nb, "LongDescription", {Cell[resource["LongDescription"], "Text"]}];
-	nb = fillGroup[nb, "Details", {Cell[TextData[Flatten[Riffle[markdownText /@ resource["Details"], "\n\n"]]], "Notes"]}];
+	nb = fillGroup[nb, "Details", {Cell[TextData[Flatten[Riffle[markdownText /@ details[resource], "\n\n"]]], "Notes"]}];
 	nb = fillGroup[nb, "PrimaryContext", {Cell[info["PrimaryContext"], "Text"]}];
 	nb = fillGroup[nb, "Contributed By", {Cell[StringRiffle[resource["ContributedBy"], "\n"], "Text"]}];
 	nb = fillGroup[nb, "SourceControlURL", {Cell[resource["Source"], "Text"]}];
@@ -383,16 +383,34 @@ addCellIDs[Notebook[cells_, opts___]] := Module[{next},
 
 (*
 	The Paclet Repository expects a headline image of 400 to 1500 pixels with an
-	aspect ratio between 0.75 and 1.25; the logo is rendered 600 pixels high and
-	padded to a white square.
+	aspect ratio between 0.75 and 1.25. The logo is rasterized 520 pixels high,
+	with the resolution set from its size in points, since an ImageSize is
+	rasterized at the resolution of the screen, and centered on a white square of
+	600 pixels, which the notebook displays at the size of the placeholder of the
+	template.
 *)
-heroImage[file_String] := Module[{logo = Import[file], image},
+heroImage[file_String] := Module[{logo = Import[file], image, height},
 	image = Switch[logo,
-		_Graphics, Rasterize[Show[logo, ImageSize -> {Automatic, 600}], Background -> White],
-		_Image, ImageResize[logo, {Automatic, 600}],
+		_Graphics,
+			height = Last[ImageDimensions[Rasterize[logo, ImageResolution -> 72]]];
+			Rasterize[logo, ImageResolution -> 72*520/height, Background -> White],
+		_Image, ImageResize[logo, {Automatic, 520}],
 		_, die["cannot import the headline image ", relative[file], "."]
 	];
-	ImageCrop[RemoveAlphaChannel[image, White], {600, 600}, Padding -> White]
+	Image[ImageCrop[RemoveAlphaChannel[image, White], {600, 600}, Padding -> White], ImageSize -> 250]
+];
+
+
+(*
+	The creators of the paclet fill the "Contributed By" field, which has to agree
+	with PacletInfo.m. Since paclets publish neither Author Notes nor further
+	contributor fields, the list of all contributors closes the Details.
+*)
+details[resource_] := With[{contributors = Lookup[resource, "Contributors", {}]},
+	If[contributors === {},
+		resource["Details"],
+		Append[resource["Details"], "Contributors: " <> StringRiffle[contributors, ", "] <> "."]
+	]
 ];
 
 

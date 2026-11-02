@@ -3,8 +3,11 @@
 (*
 	Landing page of DRalgo in the Wolfram Language Paclet Repository, read by
 	paclet.wls. The name, version, description, publisher, primary context,
-	license and Wolfram Language version are taken from PacletInfo.m. In
-	"Details", [text](url) is a hyperlink and *text* is set in italics.
+	license and Wolfram Language version are taken from PacletInfo.m. The
+	creators of the paclet are listed in "ContributedBy", all contributors in
+	"Contributors", which the last paragraph of the details names. In
+	"Details", [text](url) is a hyperlink, `code` is set as code and *text* in
+	italics.
 *)
 <|
 	"LongDescription" -> "DRalgo is an algorithmic implementation that constructs an effective, dimensionally reduced, high-temperature field theory for generic models.",
@@ -14,6 +17,7 @@
 		"R. M. Fonseca, GroupMath: *A Mathematica package for group theory calculations*, Comput. Phys. Commun. 267 (2021) 108085, [arXiv:2011.01764](https://arxiv.org/abs/2011.01764)."
 	},
 	"ContributedBy" -> {"Andreas Ekstedt", "Philipp Schicho", "Tuomas V.I. Tenkanen", "Fabio Bernardo"},
+	"Contributors" -> {"Andreas Ekstedt", "Philipp Schicho", "Tuomas V.I. Tenkanen", "Fabio Bernardo", "Romain Guillermo Reinle"},
 	"Categories" -> {"Symbolic & Numeric Computation"},
 	"Keywords" -> {"Dimensional reduction", "Thermal field theory"},
 	"Links" -> {
