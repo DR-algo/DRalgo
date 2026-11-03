@@ -190,8 +190,9 @@ VNNLO=PrintEffectivePotential["NNLO"];
 (*
 	The temporal scalars, the W bosons, and the Z boson are integrated out
 	with their field-dependent masses. The photon is massless.
+	VectorMassDiag is a SparseArray, which Position treats as atomic, so the diagonal is converted to a list.
 *)
-HeavyVectors=Flatten@Position[Diagonal[VectorMassDiag],m_/;m=!=0,{1},Heads->False]
+HeavyVectors=Flatten@Position[Normal[Diagonal[VectorMassDiag]],m_/;m=!=0,{1},Heads->False]
 
 
 PrepareHET[Range[9,20],HeavyVectors];
