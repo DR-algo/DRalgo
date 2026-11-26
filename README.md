@@ -171,7 +171,11 @@ DRalgo/
 │   ├── 23_smSextic.m                 Standard Model with a dimension-6 Higgs self-coupling.
 │   ├── 24_darkSU2HiggsSinglet.m      Dark SU(2) model with Higgs and singlet.
 │   ├── 25_tripletHET.m               Higgs triplet model with heavy-field EFT matching.
-│   └── 26_scotogenic.m               Scotogenic model with heavy-field EFT matching.
+│   ├── 26_scotogenic.m               Scotogenic model with heavy-field EFT matching.
+│   ├── 27_typeIISeesaw.m             Type-II seesaw model with a complex Higgs triplet.
+│   └── 28_threeHiggsDoubletsDimension6.m
+│                                     3HDM with a general quartic: the dimension-6 operator H^6 in the
+│                                     physical basis, matched onto its flavor structures.
 ├── paclet/
 │   ├── Resource.m                    Landing page in the Wolfram Language Paclet Repository: details,
 │   │                                 links, keywords and contributors.

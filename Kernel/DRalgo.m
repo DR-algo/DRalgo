@@ -406,6 +406,9 @@ matching of dimension-6 operators and returns the Wilson coefficients.
 Dimension6Matching[\"PHYS\", TensorList, NList, WC, d] matches onto the \
 physical (on-shell) basis ODIM6[\"PHYS\", n, d]; the Wilson coefficients \
 are gauge independent.
+The tensors of the operators with six fields are symmetric in their scalars \
+and in their temporal scalars: a given tensor with the same symmetry is \
+compared at its components with sorted indices only.
 Arguments:
   TensorList: list of group-tensor structures for each operator
   NList:      list of operator indices corresponding to TensorList
