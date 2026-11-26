@@ -86,6 +86,62 @@ ComposePermutation[p1_,p2_]:=p2[[p1]];
 
 
 (*
+	SymmetrizeSparse[t, groups]:
+	The mean of t over the permutations of the indices within each group, as a SymmetrizedArray, which stores one
+	component of each orbit. Each nonzero component of t is added to its representative, whose indices are sorted
+	within each group, and the sum of an orbit is divided by the length of the orbit. Symmetrize sums the permuted
+	tensors instead, and the SparseArray of its result holds every component of an orbit: the operators with six
+	scalars of three Higgs doublets have 12376 orbits and 12^6 components.
+	A SymmetrizedArray with this symmetry is returned as it is.
+	SymmetryGenerators[groups] is the symmetry of the result and OrbitLengths[representatives, groups] the lengths
+	of the orbits of a list of representatives.
+*)
+SymmetryGenerators[groups_List] := With[{nontrivial = Select[groups, Length[#] > 1 &]},
+	If[Length[nontrivial] == 1,
+		Symmetric[First[nontrivial]],
+		Flatten[Table[{{Cycles[{g[[{1, 2}]]}], 1}, {Cycles[{g}], 1}}, {g, nontrivial}], 1]
+	]
+];
+
+OrbitLengths[representatives_List, groups_List] := Times @@ Table[
+	Module[{block = representatives[[All, g]], run, stabilizer, equal},
+		run = ConstantArray[1, Length[block]];
+		stabilizer = run;
+		Do[
+			equal = UnitStep[-Abs[block[[All, k]] - block[[All, k - 1]]]];
+			run = (run + 1) equal + 1 - equal;
+			stabilizer *= run,
+			{k, 2, Length[g]}
+		];
+		Length[g]!/stabilizer
+	],
+	{g, groups}
+];
+
+SymmetricQ[t_SymmetrizedArray, groups_List] :=
+	TensorSymmetry[t] === TensorSymmetry[SymmetrizedArray[{}, Dimensions[t], SymmetryGenerators[groups]]];
+SymmetricQ[_, _] := False;
+
+SymmetrizeSparse[t_, groups_List] := Module[
+	{nontrivial = Select[groups, Length[#] > 1 &], s, positions, canonical, sums, keys},
+	If[nontrivial === {}, Return[t]];
+	If[SymmetricQ[t, nontrivial], Return[t]];
+	s = SparseArray[t];
+	positions = s["NonzeroPositions"];
+	If[positions === {}, Return[SymmetrizedArray[{}, Dimensions[s], SymmetryGenerators[nontrivial]]]];
+	canonical = positions;
+	Do[canonical[[All, g]] = Sort /@ canonical[[All, g]], {g, nontrivial}];
+	sums = GroupBy[Transpose[{canonical, s["NonzeroValues"]}], First -> Last, Total];
+	keys = Keys[sums];
+	SymmetrizedArray[
+		Thread[keys -> Values[sums]/OrbitLengths[keys, nontrivial]],
+		Dimensions[s],
+		SymmetryGenerators[nontrivial]
+	]
+];
+
+
+(*
 	SymmetricTensorSum[groups, sum]:
 	The sum of terms c Contract[t1,...,tn,pairs] and c Transpose[Contract[t1,...,tn,pairs],perm], projected onto
 	the tensors that are symmetric within each group of indices in groups. The operators with six fields are
@@ -96,16 +152,17 @@ ComposePermutation[p1_,p2_]:=p2[[p1]];
 	distinct ones. The projections of the terms with the same contraction are equal if the terms map the indices
 	of the contraction into the same groups. Hence the coefficients are summed for each distinct projection,
 	instead of the tensors of all terms, e.g. the 1194 terms of V6B with 8^6 components for QCD.
+	The projections and the sum are SymmetrizedArrays (SymmetrizeSparse).
 *)
 SetAttributes[SymmetricTensorSum, HoldRest];
 SymmetricTensorSum[groups_List, sum_] := Module[
 	{
 		rank = Length[Flatten[groups]], groupOf, relabelings = <||>, contractions = <||>, projections = <||>,
-		symmetrize, relabelingMaps, contraction, projectionKey, termKey, terms
+		uses, symmetrize, relabelingMaps, contraction, projectionKey, termKey, contractionKey, terms
 	},
 	groupOf = ConstantArray[0, rank];
 	Do[groupOf[[groups[[g]]]] = g, {g, Length[groups]}];
-	symmetrize[tensor_] := SparseArray[Fold[Symmetrize[#1, Symmetric[#2]] &, tensor, Select[groups, Length[#] > 1 &]]];
+	symmetrize[tensor_] := SymmetrizeSparse[tensor, groups];
 
 	(*The slots of the tensor product for each relabeling of identical tensors*)
 	relabelingMaps[tensors_List] := Module[{ranks, starts, tensorOf, classes, permutations},
@@ -117,7 +174,8 @@ SymmetricTensorSum[groups_List, sum_] := Module[
 		(starts[[#]] & /@ permutations[[All, tensorOf]]) + ConstantArray[Range[Total[ranks]] - starts[[tensorOf]], Length[permutations]]
 	];
 
-	(*{key, perm}, with the contraction equal to Transpose[contractions[key], perm] for the relabeling whose sorted pairs come first*)
+	(*{key, perm, canonical}, with the contraction equal to Transpose[Contract[tensors, canonical], perm] for the relabeling
+	whose sorted pairs come first*)
 	contraction[tensors_List, pairs_List] := Module[{hash = Hash[tensors], maps, base, first, second, codes, best, canonical, key},
 		If[!KeyExistsQ[relabelings, hash], relabelings[hash] = relabelingMaps[tensors]];
 		maps = relabelings[hash];
@@ -129,20 +187,24 @@ SymmetricTensorSum[groups_List, sum_] := Module[
 		best = First[Ordering[codes, 1]];
 		canonical = Transpose[{Quotient[codes[[best]], base], Mod[codes[[best]], base]}];
 		key = {hash, canonical};
-		If[!KeyExistsQ[contractions, key], contractions[key] = Contract[Sequence @@ tensors, canonical]];
-		{key, Ordering[maps[[best, Complement[Range[base - 1], Flatten[pairs]]]]]}
+		{key, Ordering[maps[[best, Complement[Range[base - 1], Flatten[pairs]]]]], canonical}
 	];
 
-	(*The projections of the terms with the same contraction and with the same groups of its indices are equal*)
-	projectionKey[tensors_List, pairs_List, perm_] := Module[{key, order, composite, pattern, representative},
-		{key, order} = contraction[tensors, pairs];
+	(*The projections of the terms with the same contraction and with the same groups of its indices are equal. A
+	contraction is computed for its first projection and dropped after its last term, since the contractions with six
+	free indices have up to NS^6 components.*)
+	projectionKey[tensors_List, pairs_List, perm_] := Module[{key, order, canonical, composite, pattern, representative},
+		{key, order, canonical} = contraction[tensors, pairs];
 		composite = If[perm === Automatic, order, perm[[order]]];
 		pattern = groupOf[[composite]];
 		If[!KeyExistsQ[projections, {key, pattern}],
+			If[!KeyExistsQ[contractions, key], contractions[key] = Contract[Sequence @@ tensors, canonical]];
 			representative = ConstantArray[0, rank];
 			Do[representative[[Flatten[Position[pattern, g]]]] = groups[[g]], {g, Length[groups]}];
 			projections[{key, pattern}] = symmetrize[Transpose[contractions[key], representative]]
 		];
+		uses[key] -= 1;
+		If[uses[key] == 0, KeyDropFrom[contractions, key]];
 		{key, pattern}
 	];
 
@@ -155,7 +217,15 @@ SymmetricTensorSum[groups_List, sum_] := Module[
 		{1, key}
 	];
 
+	(*The number of terms of each contraction*)
+	contractionKey[Hold[Times[c___, Transpose[Contract[t__, pairs_List], perm_List]]]] := First[contraction[{t}, pairs]];
+	contractionKey[Hold[Times[c___, Contract[t__, pairs_List]]]] := First[contraction[{t}, pairs]];
+	contractionKey[Hold[Transpose[Contract[t__, pairs_List], perm_List]]] := First[contraction[{t}, pairs]];
+	contractionKey[Hold[Contract[t__, pairs_List]]] := First[contraction[{t}, pairs]];
+	contractionKey[_] := Nothing;
+
 	terms = Replace[Hold[sum], {Hold[Plus[t___]] :> List @@ (Hold /@ Hold[t]), h_ :> {h}}];
+	uses = Counts[contractionKey /@ terms];
 	Total[KeyValueMap[Together[Total[#2]] projections[#1] &, GroupBy[termKey /@ terms, Last -> First]]]
 ];
 
@@ -16202,8 +16272,12 @@ V6[x_]:=V6B[x]+V6F[x];
 	defined in the requested spacetime dimension. The fermion loops of ODIM5 need
 	an insertion of the fermion masses and are added by ODIM5Fermion.
 	The substitution acts on the rules of the sparse tensors, since the dense
-	tensors of the operators with six fields have NS^6 components.
+	tensors of the operators with six fields have NS^6 components; for the
+	SymmetrizedArrays of these operators, on their independent components.
 *)
+SubstituteSparse[tensor_SymmetrizedArray,rules_]:=Module[{r=Most[SymmetrizedArrayRules[tensor]]},
+	If[r==={},tensor,SymmetrizedArray[Thread[r[[All,1]]->(r[[All,2]]/.rules)],Dimensions[tensor],TensorSymmetry[tensor]]]
+];
 SubstituteSparse[tensor_,rules_]:=Module[{t=SparseArray[tensor]},
 	SparseArray[ArrayRules[t]/.rules,Dimensions[t]]
 ];
@@ -16243,9 +16317,12 @@ ODIM5[x_,d_]:=Module[{terms},
 
 
 (*
-	ODIM6Terms[x] is the sparse tensor of ODIM6[x, d] before the substitution N -> d.
+	ODIM6Terms[x] is the sparse tensor of ODIM6[x, d] before the substitution N -> d. For the operators with six
+	fields, ODIM6Symmetric[x, d] is the SymmetrizedArray of ODIM6[x, d], which stores its independent components.
 *)
-ODIM6[x_,d_]:=SubstituteSparse[ODIM6Terms[x],N->d]// SimplifySparse;
+ODIM6[x_,d_]:=SparseArray[ODIM6Symmetric[x,d]];
+
+ODIM6Symmetric[x_,d_]:=SubstituteSparse[ODIM6Terms[x],N->d]// SimplifySparse;
 
 ODIM6Terms[x_]:=Module[{terms},
 	CreateHelpTensors[];
@@ -16405,20 +16482,148 @@ ODIM5Fermion[x_,d_]:=Module[{s=NS+1,r=Range[NS],p,b,c},
 	components related by index symmetries give the same equation, which is
 	kept once: e.g. the tensors of A0^6 of QCD have 8^6 components, of which a
 	tenth are nonzero.
+	groups[i] are the groups of indices in which the tensor of operator i is
+	symmetric (OperatorGroups). If the tensor in O has the same symmetry, only
+	the components with sorted indices within each group give equations: the
+	operators with six scalars of three Higgs doublets have 12^6 components and
+	12376 sorted ones.
 *)
-MatchingEquations[operator_, max_Integer, O_List, n_List, d_] := Module[{positions},
+MatchingEquations[operator_, max_Integer, O_List, n_List, d_, groups_:<||>] := Module[{positions},
 	positions = PositionIndex[n];
 	DeleteDuplicates@Flatten@Table[
 		With[{position = Lookup[positions, i, {}]},
-			If[position === {}, {}, ComponentEquations[O[[First[position]]], operator[i, d]]]
+			If[position === {}, {},
+				ComponentEquations[O[[First[position]]], operator[i, d], Lookup[groups, i, {}]]]
 		],
 		{i, max}
 	]
 ];
 
-ComponentEquations[o_, op_] := Module[{so = Flatten[SparseArray[o]], sop = Flatten[SparseArray[op]], positions},
+ComponentEquations[o_, op_, groups_List] := Module[{user, positions},
+	user = If[groups === {} || Dimensions[o] =!= Dimensions[op], $Failed, Representatives[o, groups, True]];
+	If[user === $Failed,
+		AllComponentEquations[o, op],
+		positions = Union[user, Representatives[op, groups, False]];
+		If[positions === {}, {}, DeleteDuplicates[MapThread[Equal, {Extract[o, positions], Extract[op, positions]}]]]
+	]
+];
+
+AllComponentEquations[o_, op_] := Module[{so = Flatten[SparseArray[o]], sop = Flatten[SparseArray[op]], positions},
 	positions = Union[so["NonzeroPositions"], sop["NonzeroPositions"]];
 	DeleteDuplicates[MapThread[Equal, {Extract[so, positions], Extract[sop, positions]}]]
+];
+
+
+(*
+	Representatives[t, groups, check]:
+	The nonzero components of t with sorted indices within each group. With check, $Failed unless t is symmetric
+	within the groups: every component of an orbit is nonzero and equals its representative. A SymmetrizedArray
+	with this symmetry is not checked.
+*)
+Representatives[t_, groups_List, check_] := Module[{s, positions, values, canonical, counts, reference},
+	If[SymmetricQ[t, groups],
+		positions = Select[Most[SymmetrizedArrayRules[t]], #[[2]] =!= 0 &][[All, 1]];
+		Do[positions[[All, g]] = Sort /@ positions[[All, g]], {g, groups}];
+		Return[Union[positions]]
+	];
+	s = SparseArray[t];
+	positions = s["NonzeroPositions"];
+	If[positions === {}, Return[{}]];
+	canonical = positions;
+	Do[canonical[[All, g]] = Sort /@ canonical[[All, g]], {g, groups}];
+	If[check,
+		counts = Counts[canonical];
+		If[Values[counts] =!= OrbitLengths[Keys[counts], groups], Return[$Failed]];
+		values = s["NonzeroValues"];
+		reference = Extract[s, canonical];
+		If[reference =!= values && Union[Expand[reference - values]] =!= {0}, Return[$Failed]]
+	];
+	Union[canonical]
+];
+
+
+(*
+	OperatorGroups[basis]: the groups of indices in which the operator tensors are symmetric, those of the
+	operators with five and six fields (scalars and temporal scalars) and their projections in the physical basis.
+*)
+OperatorGroups["ODIM5"] = <|2 -> {{1,2,3,4,5}}, 3 -> {{1,2,3},{4,5}}, 4 -> {{2,3,4,5}}|>;
+OperatorGroups["ODIM6"] = <|9 -> {{1,2,3,4,5,6}}, 10 -> {{1,2,3,4},{5,6}}, 11 -> {{1,2},{3,4,5,6}}, 12 -> {{1,2,3,4,5,6}}|>;
+OperatorGroups["ODIM5PHYS"] = OperatorGroups["ODIM5"];
+OperatorGroups["ODIM6PHYS"] = <|8 -> {{1,2,3,4,5,6}}, 9 -> {{1,2,3,4},{5,6}}, 10 -> {{1,2},{3,4,5,6}}, 11 -> {{1,2,3,4,5,6}}, 13 -> {{1,2}}|>;
+
+
+(*
+	MatchingSolve[eqns, coefficients]:
+	The solution of the linear matching equations, in the form of Solve[eqns, coefficients]. If the coefficient of
+	each Wilson coefficient c_j is a number times one monomial mu_j of the couplings, the equations for y_j = mu_j c_j
+	have a numerical matrix, and RowReduce solves them for all monomials of the operators at once; the solution is
+	factored, as Solve's. Solve row-reduces the matrix together with the symbolic right-hand sides, which takes hours
+	and tens of gigabytes for the thousand equations of the operators with six scalars of three Higgs doublets.
+	Otherwise, and if the equations have no solution for a monomial but the monomials may be linearly dependent
+	(1/(d-1), d/(d-1)), Solve solves them, as well as up to solveMaxRank independent equations: Solve is fast for
+	them, and the form of its solution follows that of the equations.
+*)
+solveMaxRank = 32;
+MatchingSolve[eqns_List, coefficients_List] := Module[{exact = ExactMatchingSolve[eqns, coefficients]},
+	If[exact === $Failed, Solve[eqns, coefficients], exact]
+];
+
+(*the terms of a polynomial and the number and the monomial of a term*)
+TermsOf[expr_] := Replace[Expand[expr], {s_Plus :> List @@ s, 0 -> {}, s_ :> {s}}];
+NumberAndMonomial[term_] := With[{factors = Replace[term, {t_Times :> List @@ t, t_ :> {t}}]},
+	{Times @@ Select[factors, NumericQ], Times @@ Select[factors, !NumericQ[#] &]}
+];
+(*a product of powers of symbols and of functions such as Zb[3,0]: distinct ones are linearly independent*)
+PlainMonomialQ[monomial_] := AllTrue[Replace[monomial, {t_Times :> List @@ t, t_ :> {t}}],
+	With[{base = If[Head[#] === Power, First[#], #]},
+		Head[base] === Symbol || (!AtomQ[base] && !MemberQ[{Plus, Times, Power, Complex, Rational}, Head[base]])] &
+];
+
+(*
+	ExactMatchingSolve[eqns, coefficients]: the solution {{c -> value, ...}} with the coefficients left free by the
+	equations missing, {} if the equations have no solution, $Failed if the matrix is not numerical up to a monomial
+	in each column, has at most solveMaxRank independent rows, or the monomials may be linearly dependent.
+*)
+ExactMatchingSolve[eqns_List, coefficients_List] := Module[
+	{arrays, b0, a, n = Length[coefficients], pairs, factors, numeric, rhsTerms, monomials, index, rhs, reduced,
+	 pivotOf, pivotRows, pivots, free, yFree},
+	If[eqns === {} || !AllTrue[eqns, Head[#] === Equal &], Return[$Failed]];
+	arrays = CoefficientArrays[Expand[eqns /. Equal[l_, r_] :> l - r], coefficients];
+	If[Length[arrays] != 2, Return[$Failed]];
+	{b0, a} = Normal /@ arrays;
+	(*the monomial of each column*)
+	factors = Table[
+		pairs = NumberAndMonomial /@ Flatten[TermsOf /@ a[[All, j]]];
+		Which[
+			pairs === {}, 1,
+			Length[DeleteDuplicates[pairs[[All, 2]]]] == 1 && AllTrue[a[[All, j]], Length[TermsOf[#]] <= 1 &], pairs[[1, 2]],
+			True, $Failed
+		],
+		{j, n}
+	];
+	If[MemberQ[factors, $Failed], Return[$Failed]];
+	numeric = Expand[a . DiagonalMatrix[1/factors]];
+	If[!MatrixQ[numeric, NumericQ] || MatrixRank[numeric] <= solveMaxRank, Return[$Failed]];
+	(*the right-hand sides by monomial*)
+	rhsTerms = NumberAndMonomial /@ TermsOf[-#] & /@ b0;
+	monomials = DeleteDuplicates[Flatten[rhsTerms, 1][[All, 2]]];
+	index = AssociationThread[monomials -> Range[Length[monomials]]];
+	rhs = ConstantArray[0, {Length[b0], Length[monomials]}];
+	Do[Do[rhs[[i, index[term[[2]]]]] += term[[1]], {term, rhsTerms[[i]]}], {i, Length[b0]}];
+	reduced = RowReduce[Join[numeric, rhs, 2]];
+	pivotOf[row_] := First[FirstPosition[row[[;; n]], x_ /; x =!= 0, {0}, {1}, Heads -> False]];
+	(*no solution if a row without a pivot in the matrix has a right-hand side*)
+	If[AnyTrue[Select[reduced, pivotOf[#] == 0 &], AnyTrue[#[[n + 1 ;;]], # =!= 0 &] &],
+		Return[If[AllTrue[Join[monomials, factors], PlainMonomialQ], {}, $Failed]]
+	];
+	pivotRows = Select[reduced, pivotOf[#] > 0 &];
+	pivots = pivotOf /@ pivotRows;
+	free = Complement[Range[n], pivots];
+	yFree = factors[[free]] coefficients[[free]];
+	{Table[
+		coefficients[[pivots[[k]]]] -> Factor[(pivotRows[[k, n + 1 ;;]] . monomials - pivotRows[[k, free]] . yFree)/factors[[pivots[[k]]]]],
+		{k, Length[pivots]}
+	]}
 ];
 
 
@@ -16429,8 +16634,8 @@ ComponentEquations[o_, op_] := Module[{so = Flatten[SparseArray[o]], sop = Flatt
 *)
 Dimension5Matching[O_List,n_List,\[Alpha]_List,d_]:=Module[{eqns},
 	CreateHelpTensors[];
-	eqns = MatchingEquations[ODIM5, 8, O, n, d];
-	Solve[eqns,\[Alpha]]
+	eqns = MatchingEquations[ODIM5, 8, O, n, d, OperatorGroups["ODIM5"]];
+	MatchingSolve[eqns,\[Alpha]]
 ];
 
 
@@ -16443,8 +16648,8 @@ Dimension5Matching[O_List,n_List,\[Alpha]_List,d_]:=Module[{eqns},
 *)
 Dimension6Matching[O_List,n_List,\[Alpha]_List,d_]:=Module[{eqns},
 	CreateHelpTensors[];
-	eqns = DeleteDuplicates[FullSimplify /@ MatchingEquations[ODIM6, 20, O, n, d]];
-	Solve[eqns,\[Alpha]]
+	eqns = DeleteDuplicates[FullSimplify /@ MatchingEquations[ODIM6Symmetric, 20, O, n, d, OperatorGroups["ODIM6"]]];
+	MatchingSolve[eqns,\[Alpha]]
 ];
 
 
@@ -16493,7 +16698,20 @@ SymmetrizeTensor[O_,P_String]:=Module[{S},
 	eliminated, projected onto the index symmetry of the physical operator.
 	The resulting Wilson coefficients are gauge independent.
 *)
-ODIM5["PHYS",x_,d_]:=Module[{terms},
+ODIM5["PHYS",x_,d_]:=SparseArray[ODIM5PhysicalSymmetric[x,d]];
+ODIM6["PHYS",x_,d_]:=SparseArray[ODIM6PhysicalSymmetric[x,d]];
+
+(*
+	SymmetrizedTerms[groups, terms]: the sum of the terms symmetrized within the groups (SymmetrizeSparse), term by
+	term, so that the sum stays a SymmetrizedArray; a SymmetrizedArray plus a SparseArray is a full List.
+*)
+SymmetrizedTerms[groups_List, terms_List] := Total[SymmetrizeSparse[#, groups] & /@ terms];
+
+(*
+	ODIM5PhysicalSymmetric[x, d] and ODIM6PhysicalSymmetric[x, d] are ODIM5["PHYS", x, d] and ODIM6["PHYS", x, d],
+	as SymmetrizedArrays for the operators with five and six fields.
+*)
+ODIM5PhysicalSymmetric[x_,d_]:=Module[{terms},
 	CreateHelpTensors[];
 	terms=
 		Which[
@@ -16501,13 +16719,13 @@ ODIM5["PHYS",x_,d_]:=Module[{terms},
 			ODIM5[1,d],
 			
 			x==2,
-			SymmetrizeTensor[ODIM5[2,d]+10 Contract[lam4,ODIM5[5,d],{{4,5}}]T+10 Contract[lam3,lam4,ODIM6[15,d],{{1,8},{4,9}}]T^(3/2)-5 Contract[lam3,SymmetrizeTensor[ODIM6[4,d],"K"],{{1,4}}]T^(1/2),{{1,2,3,4,5}}],
+			SymmetrizedTerms[{{1,2,3,4,5}},{ODIM5[2,d],10 Contract[lam4,ODIM5[5,d],{{4,5}}]T,10 Contract[lam3,lam4,ODIM6[15,d],{{1,8},{4,9}}]T^(3/2),-5 Contract[lam3,SymmetrizeTensor[ODIM6[4,d],"K"],{{1,4}}]T^(1/2)}],
 			
 			x==3,
-			SymmetrizeTensor[ODIM5[3,d]+12Transpose[Contract[-HabijV/4,ODIM5[5,d],{{4,5}}],{4,5,1,2,3}]T+Contract[lam4,ODIM5[6,d],{{4,5}}]T+24Transpose[Contract[-HabijV/4,ODIM5[7,d],{{2,6}}],{4,1,2,3,5}]T+12 Transpose[Contract[-HabijV/4,lam3,ODIM6[15,d],{{3,8},{5,9}}],{4,5,1,2,3}]T^(3/2)-(3/2) Contract[lam3,SymmetrizeTensor[ODIM6[5,d],"SS"],{{1,4}}]T^(1/2)-3 Contract[lam3,SymmetrizeTensor[ODIM6[6,d],"AS"],{{1,4}}]T^(1/2),{{1,2,3},{4,5}}],
+			SymmetrizedTerms[{{1,2,3},{4,5}},{ODIM5[3,d],12Transpose[Contract[-HabijV/4,ODIM5[5,d],{{4,5}}],{4,5,1,2,3}]T,Contract[lam4,ODIM5[6,d],{{4,5}}]T,24Transpose[Contract[-HabijV/4,ODIM5[7,d],{{2,6}}],{4,1,2,3,5}]T,12 Transpose[Contract[-HabijV/4,lam3,ODIM6[15,d],{{3,8},{5,9}}],{4,5,1,2,3}]T^(3/2),-(3/2) Contract[lam3,SymmetrizeTensor[ODIM6[5,d],"SS"],{{1,4}}]T^(1/2),-3 Contract[lam3,SymmetrizeTensor[ODIM6[6,d],"AS"],{{1,4}}]T^(1/2)}],
 			
 			x==4,
-			SymmetrizeTensor[ODIM5[4,d]+24Transpose[Contract[-HabijV/4,ODIM5[6,d],{{4,5}}],{2,3,1,4,5}]T,{{2,3,4,5}}],
+			SymmetrizedTerms[{{2,3,4,5}},{ODIM5[4,d],24Transpose[Contract[-HabijV/4,ODIM5[6,d],{{4,5}}],{2,3,1,4,5}]T}],
 			
 			x==5,
 			ODIM5[8,d],
@@ -16517,7 +16735,7 @@ ODIM5["PHYS",x_,d_]:=Module[{terms},
 	SubstituteSparse[terms,N->d]// SimplifySparse
 ];
 
-ODIM6["PHYS",x_,d_]:=Module[{terms},
+ODIM6PhysicalSymmetric[x_,d_]:=Module[{terms},
 	CreateHelpTensors[];
 	terms=
 		Which[
@@ -16540,16 +16758,16 @@ ODIM6["PHYS",x_,d_]:=Module[{terms},
 			(1/4) SymmetrizeTensor[ODIM6[8,d]+2 T Transpose[Contract[gvvv,gvvv,ODIM6[13,d],{{1,7},{4,8}}],{1,3,2,4}]+4T^(1/2) Transpose[Contract[gvvv,ODIM6[16,d],{{3,4}}],{2,4,1,3}],"P"],
 			
 			x==8,
-			SymmetrizeTensor[ODIM6[9,d]+10 T^2 Contract[lam4,lam4,ODIM6[15,d],{{4,9},{8,10}}]-10 T Contract[lam4,SymmetrizeTensor[ODIM6[4,d],"K"],{{1,5}}],{{1,2,3,4,5,6}}],
+			SymmetrizedTerms[{{1,2,3,4,5,6}},{ODIM6Symmetric[9,d],10 T^2 Contract[lam4,lam4,ODIM6[15,d],{{4,9},{8,10}}],-10 T Contract[lam4,SymmetrizeTensor[ODIM6[4,d],"K"],{{1,5}}]}],
 			
 			x==9,
-			SymmetrizeTensor[ODIM6[10,d]+16 T^2 Transpose[Contract[-HabijV/4,lam4,ODIM6[15,d],{{4,9},{8,10}}],{5,6,1,2,3,4}]+96 T^2 Transpose[Contract[-HabijV/4,-HabijV/4,ODIM6[17,d],{{2,9},{6,10}}],{5,1,2,6,3,4}]-8 T Transpose[Contract[-HabijV/4,SymmetrizeTensor[ODIM6[4,d],"K"],{{3,5}}],{5,6,1,2,3,4}]-2T Contract[lam4,SymmetrizeTensor[ODIM6[5,d],"SS"],{{1,5}}]-4T Contract[lam4,SymmetrizeTensor[ODIM6[6,d],"AS"],{{1,5}}]+48T Transpose[Contract[-HabijV/4,SymmetrizeTensor[ODIM6[6,d],"SA"],{{1,8}}],{5,1,2,3,4,6}]-24T Transpose[Contract[-HabijV/4,SymmetrizeTensor[ODIM6[7,d],"SS"],{{1,8}}],{5,1,2,3,4,6}],{{1,2,3,4},{5,6}}],
+			SymmetrizedTerms[{{1,2,3,4},{5,6}},{ODIM6Symmetric[10,d],16 T^2 Transpose[Contract[-HabijV/4,lam4,ODIM6[15,d],{{4,9},{8,10}}],{5,6,1,2,3,4}],96 T^2 Transpose[Contract[-HabijV/4,-HabijV/4,ODIM6[17,d],{{2,9},{6,10}}],{5,1,2,6,3,4}],-8 T Transpose[Contract[-HabijV/4,SymmetrizeTensor[ODIM6[4,d],"K"],{{3,5}}],{5,6,1,2,3,4}],-2T Contract[lam4,SymmetrizeTensor[ODIM6[5,d],"SS"],{{1,5}}],-4T Contract[lam4,SymmetrizeTensor[ODIM6[6,d],"AS"],{{1,5}}],48T Transpose[Contract[-HabijV/4,SymmetrizeTensor[ODIM6[6,d],"SA"],{{1,8}}],{5,1,2,3,4,6}],-24T Transpose[Contract[-HabijV/4,SymmetrizeTensor[ODIM6[7,d],"SS"],{{1,8}}],{5,1,2,3,4,6}]}],
 			
 			x==10,
-			SymmetrizeTensor[ODIM6[11,d]+96 T^2 Transpose[Contract[-HabijV/4,-HabijV/4,ODIM6[15,d],{{4,9},{8,10}}],{3,4,1,5,6,2}]-24T Transpose[Contract[-HabijV/4,SymmetrizeTensor[ODIM6[5,d],"SS"],{{3,5}}],{3,4,1,2,5,6}]-48T Transpose[Contract[-HabijV/4,SymmetrizeTensor[ODIM6[6,d],"AS"],{{3,5}}],{3,4,1,2,5,6}]-8T Transpose[Contract[-HabijV/4,SymmetrizeTensor[ODIM6[8,d],"K"],{{1,5}}],{3,1,2,4,5,6}],{{1,2},{3,4,5,6}}],
+			SymmetrizedTerms[{{1,2},{3,4,5,6}},{ODIM6Symmetric[11,d],96 T^2 Transpose[Contract[-HabijV/4,-HabijV/4,ODIM6[15,d],{{4,9},{8,10}}],{3,4,1,5,6,2}],-24T Transpose[Contract[-HabijV/4,SymmetrizeTensor[ODIM6[5,d],"SS"],{{3,5}}],{3,4,1,2,5,6}],-48T Transpose[Contract[-HabijV/4,SymmetrizeTensor[ODIM6[6,d],"AS"],{{3,5}}],{3,4,1,2,5,6}],-8T Transpose[Contract[-HabijV/4,SymmetrizeTensor[ODIM6[8,d],"K"],{{1,5}}],{3,1,2,4,5,6}]}],
 			
 			x==11,
-			ODIM6[12,d],
+			ODIM6Symmetric[12,d],
 			
 			x==12,
 			ODIM6[19,d]+T^(1/2) Contract[gvss,ODIM6[18,d],{{1,6}}],
@@ -16570,18 +16788,18 @@ ODIM6["PHYS",x_,d_]:=Module[{terms},
 (*
 	Physical-basis matching: same logic as Dimension5Matching/Dimension6Matching,
 	reusing MatchingEquations with the "PHYS" tensors ODIM5["PHYS",i,d] and
-	ODIM6["PHYS",i,d]. Normal makes sure the tensors are plain lists, so that
-	Flatten/Thread produce one equation per component.
+	ODIM6["PHYS",i,d], as SymmetrizedArrays for the operators with five and six
+	fields.
 	Physical classes: 5 in dimension 5, 13 in dimension 6.
 *)
 Dimension5Matching["PHYS",O_List,n_List,\[Alpha]_List,d_]:=Module[{eqns},
 	CreateHelpTensors[];
-	eqns = MatchingEquations[Normal@ODIM5["PHYS",#1,#2]&, 5, O, n, d];
-	Solve[eqns,\[Alpha]]
+	eqns = MatchingEquations[ODIM5PhysicalSymmetric, 5, O, n, d, OperatorGroups["ODIM5PHYS"]];
+	MatchingSolve[eqns,\[Alpha]]
 ];
 
 Dimension6Matching["PHYS",O_List,n_List,\[Alpha]_List,d_]:=Module[{eqns},
 	CreateHelpTensors[];
-	eqns = MatchingEquations[Normal@ODIM6["PHYS",#1,#2]&, 13, O, n, d];
-	Solve[eqns,\[Alpha]]
+	eqns = MatchingEquations[ODIM6PhysicalSymmetric, 13, O, n, d, OperatorGroups["ODIM6PHYS"]];
+	MatchingSolve[eqns,\[Alpha]]
 ];

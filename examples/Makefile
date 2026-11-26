@@ -5,7 +5,8 @@ FILES := \
 	12_standardModel.m 13_smCKM.m 14_smZPrime.m 15_smRealSinglet.m \
 	16_smTwoSinglets.m 17_smComplexSinglet.m 18_threeHiggsDoublets.m \
 	20_higgsTriplet.m 21_leftRightSymmetric.m 23_smSextic.m \
-	24_darkSU2HiggsSinglet.m 25_tripletHET.m 26_scotogenic.m
+	24_darkSU2HiggsSinglet.m 25_tripletHET.m 26_scotogenic.m \
+	27_typeIISeesaw.m
 
 # Target: test
 test: make

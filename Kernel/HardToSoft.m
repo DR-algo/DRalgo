@@ -98,9 +98,14 @@ SimplifyLarge[tensor_] := Module[{entries = Flatten[{Normal[tensor]}]},
 
 (*
   SimplifySparse:
-  Simplifies the non-zero elements of a SparseArray.
+  Simplifies the non-zero elements of a SparseArray, or the independent components of a SymmetrizedArray.
   Useful workaround for limitations in Simplify behavior with SparseArray in Mathematica 13.
 *)
+SimplifySparse[s_SymmetrizedArray] := Module[{rules = Most[SymmetrizedArrayRules[s]]},
+  If[rules === {}, s,
+    SymmetrizedArray[Thread[rules[[All, 1]] -> SimplifyEntries[rules[[All, 2]], Simplify]], Dimensions[s], TensorSymmetry[s]]]
+];
+
 SimplifySparse[s_SparseArray] := Module[
   {
     simplifiedValues,
